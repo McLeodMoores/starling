@@ -104,10 +104,10 @@ public class CancelExecutionTest {
   private static final int JOB_SIZE = 100;
   private static final int JOB_FINISH_TIME = (int) Timeout.standardTimeoutMillis();
   private static final int SLEEP_TIME = JOB_FINISH_TIME / 10;
-  private static final Logger s_logger = LoggerFactory.getLogger(CancelExecutionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CancelExecutionTest.class);
 
   @DataProvider(name = "executors")
-  Object[][] data_executors() {
+  Object[][] dataExecutors() {
     return new Object[][] { {multipleNodeExecutorFactoryManyJobs() }, {multipleNodeExecutorFactoryOneJob() }, {new SingleNodeExecutorFactory() }, };
   }
 
@@ -135,7 +135,8 @@ public class CancelExecutionTest {
 
   private DependencyGraphExecutionFuture executeTestJob(final DependencyGraphExecutorFactory factory) {
     final InMemoryLKVMarketDataProvider marketDataProvider = new InMemoryLKVMarketDataProvider();
-    final MarketDataProviderResolver marketDataProviderResolver = new SingleMarketDataProviderResolver(new SingletonMarketDataProviderFactory(marketDataProvider));
+    final MarketDataProviderResolver marketDataProviderResolver =
+        new SingleMarketDataProviderResolver(new SingletonMarketDataProviderFactory(marketDataProvider));
     final InMemoryFunctionRepository functionRepository = new InMemoryFunctionRepository();
     _functionCount.set(0);
     final MockFunction mockFunction = new MockFunction(ComputationTarget.NULL) {
@@ -153,7 +154,8 @@ public class CancelExecutionTest {
     };
     functionRepository.addFunction(mockFunction);
     final FunctionCompilationContext compilationContext = new FunctionCompilationContext();
-    final CompiledFunctionService compilationService = new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), compilationContext);
+    final CompiledFunctionService compilationService =
+        new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), compilationContext);
     compilationService.initialize();
     final FunctionResolver functionResolver = new DefaultFunctionResolver(compilationService);
     final InMemorySecuritySource securitySource = new InMemorySecuritySource();
@@ -162,7 +164,8 @@ public class CancelExecutionTest {
     final ViewComputationCacheSource computationCacheSource = new InMemoryViewComputationCacheSource(FudgeContext.GLOBAL_DEFAULT);
     final FunctionInvocationStatisticsGatherer functionInvocationStatistics = new DiscardingInvocationStatisticsGatherer();
     final FunctionExecutionContext executionContext = new FunctionExecutionContext();
-    final JobDispatcher jobDispatcher = new JobDispatcher(new LocalNodeJobInvoker(new SimpleCalculationNode(computationCacheSource, compilationService, executionContext, "node",
+    final JobDispatcher jobDispatcher =
+        new JobDispatcher(new LocalNodeJobInvoker(new SimpleCalculationNode(computationCacheSource, compilationService, executionContext, "node",
         Executors.newCachedThreadPool(), functionInvocationStatistics, new CalculationNodeLogEventListener(new ThreadLocalLogEventListener()))));
     final ViewPermissionProvider viewPermissionProvider = new DefaultViewPermissionProvider();
     final GraphExecutorStatisticsGathererProvider graphExecutorStatisticsProvider = new DiscardingGraphStatisticsGathererProvider();
@@ -170,10 +173,11 @@ public class CancelExecutionTest {
     viewDefinition.addViewCalculationConfiguration(new ViewCalculationConfiguration(viewDefinition, "default"));
     final MockConfigSource configSource = new MockConfigSource();
     configSource.put(viewDefinition);
-    final ViewProcessContext vpc = new ViewProcessContext(UniqueId.of("Process", "Test"), configSource, viewPermissionProvider, new DefaultViewPortfolioPermissionProvider(),
+    final ViewProcessContext vpc =
+        new ViewProcessContext(UniqueId.of("Process", "Test"), configSource, viewPermissionProvider, new DefaultViewPortfolioPermissionProvider(),
         marketDataProviderResolver, compilationService, functionResolver, computationCacheSource, jobDispatcher, new SingleThreadViewProcessWorkerFactory(),
-        new DependencyGraphBuilderFactory(), factory, graphExecutorStatisticsProvider, new DummyOverrideOperationCompiler(), new EngineResourceManagerImpl<SingleComputationCycle>(),
-        new VersionedUniqueIdSupplier("Test", "1"), new InMemoryViewExecutionCache());
+        new DependencyGraphBuilderFactory(), factory, graphExecutorStatisticsProvider, new DummyOverrideOperationCompiler(),
+        new EngineResourceManagerImpl<SingleComputationCycle>(), new VersionedUniqueIdSupplier("Test", "1"), new InMemoryViewExecutionCache());
     DependencyNode previousNode = null;
     ValueSpecification previousValue = null;
     for (int i = 0; i < JOB_SIZE; i++) {
@@ -183,14 +187,19 @@ public class CancelExecutionTest {
       } else {
         inputs = Collections.emptyMap();
       }
-      previousValue = new ValueSpecification(Integer.toString(i), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+      previousValue =
+          new ValueSpecification(Integer.toString(i), ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
       mockFunction.addResult(new ComputedValue(previousValue, "Mock"));
-      final DependencyNode node = new DependencyNodeImpl(DependencyNodeFunctionImpl.of(mockFunction), ComputationTargetSpecification.NULL, Collections.singleton(previousValue), inputs);
+      final DependencyNode node =
+          new DependencyNodeImpl(DependencyNodeFunctionImpl.of(mockFunction), ComputationTargetSpecification.NULL,
+              Collections.singleton(previousValue), inputs);
       previousNode = node;
     }
-    final DependencyGraph graph = new DependencyGraphImpl("Test", Collections.singleton(previousNode), JOB_SIZE, Collections.<ValueSpecification, Set<ValueRequirement>>emptyMap());
+    final DependencyGraph graph =
+        new DependencyGraphImpl("Test", Collections.singleton(previousNode), JOB_SIZE, Collections.<ValueSpecification, Set<ValueRequirement>>emptyMap());
     final Instant now = Instant.now();
-    final CompiledViewDefinitionWithGraphsImpl viewEvaluationModel = new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(now, now), "", viewDefinition,
+    final CompiledViewDefinitionWithGraphsImpl viewEvaluationModel =
+        new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(now, now), "", viewDefinition,
         Collections.singleton(graph), Collections.<ComputationTargetReference, UniqueId>emptyMap(), new SimplePortfolio("Test Portfolio"), 0,
         Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
     final ViewCycleExecutionOptions cycleOptions = ViewCycleExecutionOptions.builder().setValuationTime(Instant.ofEpochMilli(1))
@@ -201,7 +210,8 @@ public class CancelExecutionTest {
         //ignore
       }
     }, vpc, viewEvaluationModel, cycleOptions, VersionCorrection.of(Instant.ofEpochMilli(1), Instant.ofEpochMilli(1)));
-    return factory.createExecutor(cycle).execute(graph, Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification, FunctionParameters>emptyMap());
+    return factory.createExecutor(cycle).execute(graph, Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification, FunctionParameters>emptyMap());
   }
 
   private boolean jobFinished() {
@@ -213,7 +223,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobFinish(final DependencyGraphExecutorFactory factory) throws Exception {
-    s_logger.info("testJobFinish");
+    LOGGER.info("testJobFinish");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     for (int i = 0; i < JOB_FINISH_TIME / SLEEP_TIME; i++) {
@@ -221,7 +231,7 @@ public class CancelExecutionTest {
         job.get(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
         assertFalse(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         return;
       }
       sleep();
@@ -234,7 +244,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobCancelWithInterrupt(final DependencyGraphExecutorFactory factory) {
-    s_logger.info("testJobCancelWithInterrupt");
+    LOGGER.info("testJobCancelWithInterrupt");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     job.cancel(true);
@@ -242,7 +252,7 @@ public class CancelExecutionTest {
       if (jobFinished()) {
         assertTrue(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         Assert.fail("Job finished normally despite cancel");
         return;
       }
@@ -255,7 +265,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobCancelWithoutInterrupt(final DependencyGraphExecutorFactory factory) {
-    s_logger.info("testJobCancelWithoutInterrupt");
+    LOGGER.info("testJobCancelWithoutInterrupt");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     job.cancel(false);
@@ -263,7 +273,7 @@ public class CancelExecutionTest {
       if (jobFinished()) {
         assertTrue(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         Assert.fail("Job finished normally despite cancel");
         return;
       }

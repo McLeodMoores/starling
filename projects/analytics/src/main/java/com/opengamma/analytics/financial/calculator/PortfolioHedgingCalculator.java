@@ -24,7 +24,7 @@ import com.opengamma.util.tuple.Pair;
  * Computes the optimal hedging portfolio made of reference instruments to hedge a given sensitivity.
  * <p> Reference: Portfolio hedging with reference securities, version 1.0, OG notes, October 2010.
  */
-public class PortfolioHedgingCalculator {
+public final class PortfolioHedgingCalculator {
 
   /**
    * The matrix algebra used (mainly multiplying matrices and solving systems).
@@ -93,4 +93,6 @@ public class PortfolioHedgingCalculator {
     return new DoubleMatrix1D(psArray);
   }
 
+  private PortfolioHedgingCalculator() {
+  }
 }

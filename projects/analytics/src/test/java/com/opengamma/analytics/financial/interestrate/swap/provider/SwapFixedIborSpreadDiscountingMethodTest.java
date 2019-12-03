@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIborMaster;
@@ -25,7 +27,6 @@ import com.opengamma.analytics.financial.provider.description.MulticurveProvider
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -42,11 +43,13 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
   private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountDataSets.createMulticurveEurUsd();
   private static final IborIndex[] INDEX_LIST = MulticurveProviderDiscountDataSets.getIndexesIborMulticurveEurUsd();
   private static final IborIndex EURIBOR3M = INDEX_LIST[0];
-  private static final Calendar TARGET = MulticurveProviderDiscountDataSets.getEURCalendar();
+  private static final WorkingDayCalendar TARGET = MulticurveProviderDiscountDataSets.getEURCalendar();
   private static final Currency EUR = EURIBOR3M.getCurrency();
 
-  private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR3M", TARGET);
-  private static final GeneratorSwapFixedIbor EUR3MEURIBOR3M = new GeneratorSwapFixedIbor("EUR3MEURIBOR3M", EURIBOR3M.getTenor(), EURIBOR3M.getDayCount(), EURIBOR3M, TARGET);
+  private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR3M",
+      TARGET);
+  private static final GeneratorSwapFixedIbor EUR3MEURIBOR3M = new GeneratorSwapFixedIbor("EUR3MEURIBOR3M", EURIBOR3M.getTenor(),
+      EURIBOR3M.getDayCount(), EURIBOR3M, TARGET);
 
   private static final Period START_TENOR = Period.ofMonths(6);
   private static final Period SWAP_TENOR = Period.ofYears(5);
@@ -57,10 +60,11 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
   private static final boolean IS_PAYER = false;
 
   private static final SwapFixedIborSpreadDefinition SWAP_SPREAD_EUR1Y3M_DEFINITION = SwapFixedIborSpreadDefinition
-      .from(START_DATE, SWAP_TENOR, EUR1YEURIBOR3M, NOTIONAL, FIXED_RATE, SPREAD, IS_PAYER, TARGET);
+      .from(START_DATE, SWAP_TENOR, EUR1YEURIBOR3M, NOTIONAL, FIXED_RATE, SPREAD, IS_PAYER, CalendarAdapter.of(TARGET));
   private static final SwapFixedIborSpreadDefinition SWAP_SPREAD_EUR3M3M_DEFINITION = SwapFixedIborSpreadDefinition
-      .from(START_DATE, SWAP_TENOR, EUR3MEURIBOR3M, NOTIONAL, FIXED_RATE, SPREAD, IS_PAYER, TARGET);
-  private static final AnnuityCouponFixedDefinition ANNUITY_SPREAD_DEFINITION = AnnuityCouponFixedDefinition.from(EUR, START_DATE, SWAP_TENOR, EURIBOR3M.getTenor(), TARGET, EURIBOR3M.getDayCount(),
+      .from(START_DATE, SWAP_TENOR, EUR3MEURIBOR3M, NOTIONAL, FIXED_RATE, SPREAD, IS_PAYER, CalendarAdapter.of(TARGET));
+  private static final AnnuityCouponFixedDefinition ANNUITY_SPREAD_DEFINITION = AnnuityCouponFixedDefinition.from(EUR, START_DATE,
+      SWAP_TENOR, EURIBOR3M.getTenor(), CalendarAdapter.of(TARGET), EURIBOR3M.getDayCount(),
       EURIBOR3M.getBusinessDayConvention(), EURIBOR3M.isEndOfMonth(), NOTIONAL, SPREAD, !IS_PAYER);
 
   private static final SwapFixedCoupon<Coupon> SWAP_SPREAD_EUR1Y3M = SWAP_SPREAD_EUR1Y3M_DEFINITION.toDerivative(REFERENCE_DATE);
@@ -69,11 +73,15 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
 
   private static final SwapFixedIborSpreadDiscountingMethod METHOD_SWAP_SPREAD = SwapFixedIborSpreadDiscountingMethod.getInstance();
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
 
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_RATE = 1.0E-8;
 
+  /**
+   *
+   */
   @Test
   public void couponEquivalentSpreadModified() {
     final double pvbp3MMod = METHOD_SWAP_SPREAD.presentValueBasisPoint(SWAP_SPREAD_EUR3M3M, EURIBOR3M.getDayCount(), MULTICURVES);
@@ -86,21 +94,30 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
     final double cesm1Y = METHOD_SWAP_SPREAD.couponEquivalentSpreadModified(SWAP_SPREAD_EUR1Y3M, pvbp1Y, MULTICURVES);
     final double pvFixed = SWAP_SPREAD_EUR1Y3M.getFixedLeg().accept(PVDC, MULTICURVES).getAmount(EUR);
     final double pvAnnuitySpread = ANNUITY_SPREAD.accept(PVDC, MULTICURVES).getAmount(EUR);
-    final CurrencyAmount pvIborNoSpread = METHOD_SWAP_SPREAD.presentValueIborNoSpreadPositiveNotional(SWAP_SPREAD_EUR1Y3M.getSecondLeg(), MULTICURVES);
+    final CurrencyAmount pvIborNoSpread = METHOD_SWAP_SPREAD.presentValueIborNoSpreadPositiveNotional(SWAP_SPREAD_EUR1Y3M.getSecondLeg(),
+        MULTICURVES);
     final double cesm1YExpected = (pvFixed + pvAnnuitySpread) / pvbp1Y;
     assertEquals("SwapFixedIborSpreadDiscountingMethod: couponEquivalentSpreadModified", cesm1YExpected, cesm1Y, TOLERANCE_RATE);
     final double pvIbor = SWAP_SPREAD_EUR1Y3M.getSecondLeg().accept(PVDC, MULTICURVES).getAmount(EUR);
     final double pvIborNoSpreadExpected = -(pvIbor - pvAnnuitySpread);
-    assertEquals("SwapFixedIborSpreadDiscountingMethod: presentValueIborNoSpreadPositiveNotional", pvIborNoSpreadExpected, pvIborNoSpread.getAmount(), TOLERANCE_PV);
+    assertEquals("SwapFixedIborSpreadDiscountingMethod: presentValueIborNoSpreadPositiveNotional", pvIborNoSpreadExpected,
+        pvIborNoSpread.getAmount(), TOLERANCE_PV);
   }
 
+  /**
+   *
+   */
   @Test
   public void presentValueIborNoSpreadPositiveNotional() {
     final CurrencyAmount pvs = METHOD_SWAP_SPREAD.presentValueSpreadPositiveNotional(SWAP_SPREAD_EUR1Y3M.getSecondLeg(), MULTICURVES);
     final MultipleCurrencyAmount pvAnnuitySpread = ANNUITY_SPREAD.accept(PVDC, MULTICURVES); // Should be negative: pay float
-    assertEquals("SwapFixedIborSpreadDiscountingMethod: presentValueIborNoSpreadPositiveNotional", -pvAnnuitySpread.getAmount(EUR), pvs.getAmount(), TOLERANCE_PV);
+    assertEquals("SwapFixedIborSpreadDiscountingMethod: presentValueIborNoSpreadPositiveNotional", -pvAnnuitySpread.getAmount(EUR),
+        pvs.getAmount(), TOLERANCE_PV);
   }
 
+  /**
+   *
+   */
   @Test
   public void forwardSwapSpreadModified() {
     final double pvbp1Y = METHOD_SWAP_SPREAD.presentValueBasisPoint(SWAP_SPREAD_EUR3M3M, MULTICURVES);
@@ -111,11 +128,11 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
     assertEquals("SwapFixedIborSpreadDiscountingMethod: forwardSwapSpreadModified", forwardExpected, forwardComputed, TOLERANCE_RATE);
   }
 
-  @SuppressWarnings("unused")
-  @Test(enabled = false)
   /**
    * Test the performance of building swaps and computing their PV and delta.
    */
+  @SuppressWarnings("unused")
+  @Test(enabled = false)
   public void performanceBuildPV() {
     final int nbSwap = 2500;
     long startTime, endTime;
@@ -126,11 +143,12 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
     final double[] pv = new double[nbSwap + 1];
 
     startTime = System.currentTimeMillis();
-    for (int loopswap = 0; loopswap <= nbSwap; loopswap++) {
-      final double strike = strikeMin + loopswap * (strikeMax - strikeMin) / nbSwap;
-      swapDefinition[loopswap] = SwapFixedIborSpreadDefinition.from(START_DATE, tenor, EUR1YEURIBOR3M, NOTIONAL, strike, SPREAD, IS_PAYER, TARGET);
-      final SwapFixedCoupon<Coupon> swap = swapDefinition[loopswap].toDerivative(REFERENCE_DATE);
-      pv[loopswap] = swap.accept(PVDC, MULTICURVES).getAmount(EUR);
+    for (int i = 0; i <= nbSwap; i++) {
+      final double strike = strikeMin + i * (strikeMax - strikeMin) / nbSwap;
+      swapDefinition[i] = SwapFixedIborSpreadDefinition.from(START_DATE, tenor, EUR1YEURIBOR3M, NOTIONAL, strike, SPREAD, IS_PAYER,
+          CalendarAdapter.of(TARGET));
+      final SwapFixedCoupon<Coupon> swap = swapDefinition[i].toDerivative(REFERENCE_DATE);
+      pv[i] = swap.accept(PVDC, MULTICURVES).getAmount(EUR);
       final MultipleCurrencyMulticurveSensitivity pvcs = swap.accept(PVCSDC, MULTICURVES);
     }
     endTime = System.currentTimeMillis();
@@ -138,11 +156,12 @@ public class SwapFixedIborSpreadDiscountingMethodTest {
     // Performance note: build/pv/delta: 22-Dec-2012: On Mac Air 1.86 GHz Core 2 Duo: 900 ms for 1250 swaps.
 
     startTime = System.currentTimeMillis();
-    for (int loopswap = 0; loopswap <= nbSwap; loopswap++) {
-      final double strike = strikeMin + loopswap * (strikeMax - strikeMin) / nbSwap;
-      swapDefinition[loopswap] = SwapFixedIborSpreadDefinition.from(START_DATE, tenor, EUR1YEURIBOR3M, NOTIONAL, strike, SPREAD, IS_PAYER, TARGET);
-      final SwapFixedCoupon<Coupon> swap = swapDefinition[loopswap].toDerivative(REFERENCE_DATE);
-      pv[loopswap] = swap.accept(PVDC, MULTICURVES).getAmount(EUR);
+    for (int i = 0; i <= nbSwap; i++) {
+      final double strike = strikeMin + i * (strikeMax - strikeMin) / nbSwap;
+      swapDefinition[i] = SwapFixedIborSpreadDefinition.from(START_DATE, tenor, EUR1YEURIBOR3M, NOTIONAL, strike, SPREAD, IS_PAYER,
+          CalendarAdapter.of(TARGET));
+      final SwapFixedCoupon<Coupon> swap = swapDefinition[i].toDerivative(REFERENCE_DATE);
+      pv[i] = swap.accept(PVDC, MULTICURVES).getAmount(EUR);
       final MultipleCurrencyMulticurveSensitivity pvcs = swap.accept(PVCSDC, MULTICURVES);
     }
     endTime = System.currentTimeMillis();

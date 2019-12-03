@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pairs;
 public final class SecurityLinkResolver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityLinkResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityLinkResolver.class);
 
   /**
    * The executor service.
@@ -63,7 +63,7 @@ public final class SecurityLinkResolver {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param executorService the threading service, not null
    * @param securitySource the security source, not null
    * @param versionCorrection the version correction, not null
@@ -78,12 +78,13 @@ public final class SecurityLinkResolver {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param viewCompilationContext the context, not null
    * @param versionCorrection the version-correction, not null
    */
-  public SecurityLinkResolver(final ViewCompilationContext viewCompilationContext, VersionCorrection versionCorrection) {
-    this(viewCompilationContext.getServices().getExecutorService().asService(), viewCompilationContext.getServices().getFunctionCompilationContext().getSecuritySource(),
+  public SecurityLinkResolver(final ViewCompilationContext viewCompilationContext, final VersionCorrection versionCorrection) {
+    this(viewCompilationContext.getServices().getExecutorService().asService(),
+        viewCompilationContext.getServices().getFunctionCompilationContext().getSecuritySource(),
         versionCorrection);
   }
 
@@ -92,16 +93,16 @@ public final class SecurityLinkResolver {
    * Resolves security links in bulk.
    * <p>
    * Some caching of securities occurs within this instance.
-   * 
+   *
    * @param securityLinks the bundles to lookup, not null
    * @throws RuntimeException if unable to resolve all the securities
    */
   @SuppressWarnings("unchecked")
   public void resolveSecurities(final Collection<SecurityLink> securityLinks) {
     ArgumentChecker.noNulls(securityLinks, "securityLinks");
-    final ExecutorCompletionService<Pair<ObjectId, ExternalIdBundle>> completionService = new ExecutorCompletionService<Pair<ObjectId, ExternalIdBundle>>(_executorService);
+    final ExecutorCompletionService<Pair<ObjectId, ExternalIdBundle>> completionService = new ExecutorCompletionService<>(_executorService);
     // Filter the links down to collections of "identical" ones; resolving the same underlying.
-    final Map<Pair<ObjectId, ExternalIdBundle>, Object> securityLinkMap = new HashMap<Pair<ObjectId, ExternalIdBundle>, Object>();
+    final Map<Pair<ObjectId, ExternalIdBundle>, Object> securityLinkMap = new HashMap<>();
     for (SecurityLink link : securityLinks) {
       final Security security = link.getTarget();
       if (security == null) {
@@ -110,7 +111,7 @@ public final class SecurityLinkResolver {
           final Object sameLinkObject = securityLinkMap.get(key);
           if (sameLinkObject instanceof Collection<?>) {
             final Collection<SecurityLink> sameLinks = (Collection<SecurityLink>) sameLinkObject;
-            for (SecurityLink sameLink : sameLinks) {
+            for (final SecurityLink sameLink : sameLinks) {
               if (sameLink == link) {
                 link = null;
                 break;
@@ -121,7 +122,7 @@ public final class SecurityLinkResolver {
             }
           } else {
             if (sameLinkObject != link) {
-              final Collection<SecurityLink> sameLinks = new ArrayList<SecurityLink>();
+              final Collection<SecurityLink> sameLinks = new ArrayList<>();
               final SecurityLink sameLink = (SecurityLink) sameLinkObject;
               sameLinks.add(sameLink);
               sameLinks.add(link);
@@ -135,10 +136,10 @@ public final class SecurityLinkResolver {
         _securitySource.addToCache(security);
       }
     }
-    s_logger.debug("Submitting {} resolution jobs for {} links", securityLinkMap.size(), securityLinks.size());
+    LOGGER.debug("Submitting {} resolution jobs for {} links", securityLinkMap.size(), securityLinks.size());
     // Submit a job for each "unique" link. The job will serially resolve all "identical" links as they will
     // be in the cache at that point.
-    for (Map.Entry<Pair<ObjectId, ExternalIdBundle>, Object> linkEntry : securityLinkMap.entrySet()) {
+    for (final Map.Entry<Pair<ObjectId, ExternalIdBundle>, Object> linkEntry : securityLinkMap.entrySet()) {
       final Callable<Pair<ObjectId, ExternalIdBundle>> job;
       if (linkEntry.getValue() instanceof Collection<?>) {
         job = new MultipleSecurityResolutionJob(linkEntry.getKey(), (Collection<SecurityLink>) linkEntry.getValue(), _securitySource, _versionCorrection);
@@ -153,20 +154,20 @@ public final class SecurityLinkResolver {
         final Future<Pair<ObjectId, ExternalIdBundle>> future = completionService.take();
         final Pair<ObjectId, ExternalIdBundle> key = future.get();
         if (securityLinkMap.remove(key) == null) {
-          s_logger.warn("Completion key {} wasn't in the job map {}", key, securityLinkMap);
+          LOGGER.warn("Completion key {} wasn't in the job map {}", key, securityLinkMap);
           throw new OpenGammaRuntimeException("Internal error resolving securities");
         }
-      } catch (InterruptedException ex) {
+      } catch (final InterruptedException ex) {
         Thread.interrupted();
-        s_logger.warn("Interrupted, so didn't finish resolution");
+        LOGGER.warn("Interrupted, so didn't finish resolution");
         break;
-      } catch (Exception ex) {
-        s_logger.warn("Unable to resolve security", ex);
+      } catch (final Exception ex) {
+        LOGGER.warn("Unable to resolve security", ex);
         break;
       }
     }
     if (!securityLinkMap.isEmpty()) {
-      for (Object future : securityLinkMap.values()) {
+      for (final Object future : securityLinkMap.values()) {
         ((Future<SecurityLink>) future).cancel(false);
       }
       throw new OpenGammaRuntimeException("Unable to resolve all securities. Missing: " + securityLinkMap);
@@ -178,7 +179,7 @@ public final class SecurityLinkResolver {
    * Resolves a security link making use of the caching of this instance.
    * <p>
    * Underlying securities are not resolved.
-   * 
+   *
    * @param link the link to resolve, not null
    * @return the resolved security, not null
    * @throws RuntimeException if unable to resolve the security
@@ -191,22 +192,22 @@ public final class SecurityLinkResolver {
    * Resolves security links on a position and associated trades.
    * <p>
    * Underlying securities are not resolved. Some caching of securities occurs within this instance.
-   * 
+   *
    * @param position the position to resolve, not null
    * @throws RuntimeException if unable to resolve all the securities
    */
   public void resolveSecurities(final Position position) {
-    Collection<SecurityLink> links = new ArrayList<SecurityLink>(position.getTrades().size() + 1);
+    final Collection<SecurityLink> links = new ArrayList<>(position.getTrades().size() + 1);
     if (LinkUtils.isValid(position.getSecurityLink())) {
       links.add(position.getSecurityLink());
     } else {
-      s_logger.warn("Invalid link on position {}", position.getUniqueId());
+      LOGGER.warn("Invalid link on position {}", position.getUniqueId());
     }
-    for (Trade trade : position.getTrades()) {
+    for (final Trade trade : position.getTrades()) {
       if (LinkUtils.isValid(trade.getSecurityLink())) {
         links.add(trade.getSecurityLink());
       } else {
-        s_logger.warn("Invalid link on trade {} within position {}", trade.getUniqueId(), position.getUniqueId());
+        LOGGER.warn("Invalid link on trade {} within position {}", trade.getUniqueId(), position.getUniqueId());
       }
     }
     resolveSecurities(links);
@@ -216,25 +217,25 @@ public final class SecurityLinkResolver {
    * Resolves security links on the positions and trades of a portfolio node.
    * <p>
    * Underlying securities are not resolved. Some caching of securities occurs within this instance.
-   * 
+   *
    * @param node the node to resolve, not null
    * @throws RuntimeException if unable to resolve all the securities
    */
   public void resolveSecurities(final PortfolioNode node) {
-    final Collection<SecurityLink> links = new ArrayList<SecurityLink>(256);
+    final Collection<SecurityLink> links = new ArrayList<>(256);
     PortfolioNodeTraverser.depthFirst(new AbstractPortfolioNodeTraversalCallback() {
       @Override
       public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
         if (LinkUtils.isValid(position.getSecurityLink())) {
           links.add(position.getSecurityLink());
         } else {
-          s_logger.warn("Invalid link on position {}", position.getUniqueId());
+          LOGGER.warn("Invalid link on position {}", position.getUniqueId());
         }
-        for (Trade trade : position.getTrades()) {
+        for (final Trade trade : position.getTrades()) {
           if (LinkUtils.isValid(trade.getSecurityLink())) {
             links.add(trade.getSecurityLink());
           } else {
-            s_logger.warn("Invalid link in trade {} associated with position {}", trade.getUniqueId(), position.getUniqueId());
+            LOGGER.warn("Invalid link in trade {} associated with position {}", trade.getUniqueId(), position.getUniqueId());
           }
         }
       }
@@ -252,7 +253,8 @@ public final class SecurityLinkResolver {
     private final SecuritySource _securitySource;
     private final VersionCorrection _versionCorrection;
 
-    private SingleSecurityResolutionJob(Pair<ObjectId, ExternalIdBundle> key, SecurityLink link, SecuritySource securitySource, VersionCorrection versionCorrection) {
+    private SingleSecurityResolutionJob(final Pair<ObjectId, ExternalIdBundle> key, final SecurityLink link, final SecuritySource securitySource,
+        final VersionCorrection versionCorrection) {
       _key = key;
       _securitySource = securitySource;
       _link = link;
@@ -285,7 +287,7 @@ public final class SecurityLinkResolver {
 
     @Override
     public Pair<ObjectId, ExternalIdBundle> call() {
-      for (SecurityLink link : _links) {
+      for (final SecurityLink link : _links) {
         link.resolve(_securitySource, _versionCorrection);
       }
       return _key;
@@ -299,23 +301,23 @@ public final class SecurityLinkResolver {
    * <p>
    * This is designed to be used by a single resolution pass, for the efficiency of resolving the same security multiple times.
    */
-  static class CachedSecuritySource extends AbstractSecuritySource implements SecuritySource {
+  static class CachedSecuritySource extends AbstractSecuritySource {
     private final SecuritySource _underlying;
-    private final ConcurrentMap<ObjectId, Security> _objectIdCache = new ConcurrentHashMap<ObjectId, Security>();
-    private final ConcurrentMap<ExternalIdBundle, Security> _weakIdCache = new ConcurrentHashMap<ExternalIdBundle, Security>();
+    private final ConcurrentMap<ObjectId, Security> _objectIdCache = new ConcurrentHashMap<>();
+    private final ConcurrentMap<ExternalIdBundle, Security> _weakIdCache = new ConcurrentHashMap<>();
 
-    CachedSecuritySource(SecuritySource underlying) {
+    CachedSecuritySource(final SecuritySource underlying) {
       _underlying = underlying;
     }
 
-    void addToCache(Security security) {
+    void addToCache(final Security security) {
       if (security.getUniqueId() != null) {
         _objectIdCache.put(security.getUniqueId().getObjectId(), security);
       }
     }
 
     @Override
-    public Security get(UniqueId uniqueId) {
+    public Security get(final UniqueId uniqueId) {
       Security security = _objectIdCache.get(uniqueId.getObjectId());
       if (security == null) {
         security = _underlying.get(uniqueId);
@@ -325,7 +327,7 @@ public final class SecurityLinkResolver {
     }
 
     @Override
-    public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+    public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
       Security security = _objectIdCache.get(objectId);
       if (security == null) {
         security = _underlying.get(objectId, versionCorrection);
@@ -335,17 +337,17 @@ public final class SecurityLinkResolver {
     }
 
     @Override
-    public Collection<Security> get(ExternalIdBundle bundle) {
+    public Collection<Security> get(final ExternalIdBundle bundle) {
       return _underlying.get(bundle);
     }
 
     @Override
-    public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+    public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
       return _underlying.get(bundle, versionCorrection);
     }
 
     @Override
-    public Security getSingle(ExternalIdBundle bundle) {
+    public Security getSingle(final ExternalIdBundle bundle) {
       Security security = _weakIdCache.get(bundle);
       if (security == null) {
         security = _underlying.getSingle(bundle);
@@ -357,7 +359,7 @@ public final class SecurityLinkResolver {
     }
 
     @Override
-    public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+    public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
       Security security = _weakIdCache.get(bundle);
       if (security == null) {
         security = _underlying.getSingle(bundle, versionCorrection);

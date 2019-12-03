@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 
 /**
- * A Fudge builder for {@link ZeroCouponInflationSwapSecurity}
+ * A Fudge builder for {@link ZeroCouponInflationSwapSecurity}.
  */
 @FudgeBuilderFor(ZeroCouponInflationSwapSecurity.class)
 public class ZeroCouponInflationSwapSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<ZeroCouponInflationSwapSecurity> {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -10,17 +10,17 @@ import org.fudgemsg.FudgeContext;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * 
+ *
  */
 public class BerkeleyDBViewComputationCacheSourceFactoryBean extends SingletonFactoryBean<BerkeleyDBViewComputationCacheSource> {
-  
+
   private BerkeleyDBIdentifierMapFactoryBean _identifierMapFactory = new BerkeleyDBIdentifierMapFactoryBean();
   private BerkeleyDBBinaryDataStoreFactoryFactoryBean _dataStoreFactoryFactory = new BerkeleyDBBinaryDataStoreFactoryFactoryBean();
 
   public void setIdentifierMapFactory(final BerkeleyDBIdentifierMapFactoryBean identifierMapFactory) {
     _identifierMapFactory = identifierMapFactory;
   }
-  
+
   public BerkeleyDBIdentifierMapFactoryBean getIdentifierMapFactory() {
     return _identifierMapFactory;
   }
@@ -75,7 +75,8 @@ public class BerkeleyDBViewComputationCacheSourceFactoryBean extends SingletonFa
 
   @Override
   protected BerkeleyDBViewComputationCacheSource createObject() {
-    return new BerkeleyDBViewComputationCacheSource(getIdentifierMapFactory().createObject(), getDataStoreFactoryFactory().createDataStoreEnvironment(), getFudgeContext());
+    return new BerkeleyDBViewComputationCacheSource(getIdentifierMapFactory().createObject(),
+        getDataStoreFactoryFactory().createDataStoreEnvironment(), getFudgeContext());
   }
 
 }

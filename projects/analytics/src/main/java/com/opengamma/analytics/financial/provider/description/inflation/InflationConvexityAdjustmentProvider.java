@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing a provider with inflation (which contain multicurve) and  inflation parameters needed for the convexity adjustemnts.
+ * Class describing a provider with inflation (which contain multicurve) and inflation parameters needed for the convexity adjustemnts.
  */
 public class InflationConvexityAdjustmentProvider implements InflationConvexityAdjustmentProviderInterface {
 
@@ -32,17 +32,22 @@ public class InflationConvexityAdjustmentProvider implements InflationConvexityA
   private final InflationConvexityAdjustmentParameters _inflationConvexityAdjustmentsParameters;
 
   /**
-   * The  Black volatility surface used in cap/floor ibor modeling.
+   * The Black volatility surface used in cap/floor ibor modeling.
    */
   private final BlackFlatCapFloorParameters _blackSmileIborCapParameters;
 
   /**
    * Constructor.
-   * @param inflation The inflation provider.
-   * @param inflationConvexityAdjustmentsParameters The inflation convexity adjustment parameters.
-   * @param blackSmileIborCapParameters The Black volatility cap/floor (ibor)  parameters.
+   *
+   * @param inflation
+   *          The inflation provider.
+   * @param inflationConvexityAdjustmentsParameters
+   *          The inflation convexity adjustment parameters.
+   * @param blackSmileIborCapParameters
+   *          The Black volatility cap/floor (ibor) parameters.
    */
-  public InflationConvexityAdjustmentProvider(final InflationProviderInterface inflation, final InflationConvexityAdjustmentParameters inflationConvexityAdjustmentsParameters,
+  public InflationConvexityAdjustmentProvider(final InflationProviderInterface inflation,
+      final InflationConvexityAdjustmentParameters inflationConvexityAdjustmentsParameters,
       final BlackFlatCapFloorParameters blackSmileIborCapParameters) {
     ArgumentChecker.notNull(inflation, "inflation");
     ArgumentChecker.notNull(inflationConvexityAdjustmentsParameters, "inflationConvexityAdjustmentsParameters");

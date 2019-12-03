@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation.data;
@@ -20,7 +20,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDataBundle {
 
@@ -30,7 +30,8 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
   private DecompositionResult _decompRes;
   private final Decomposition<?> _decomp = DecompositionFactory.LU_COMMONS;
 
-  public RadialBasisFunctionInterpolatorDataBundle(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean useNormalized) {
+  public RadialBasisFunctionInterpolatorDataBundle(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction,
+      final boolean useNormalized) {
     super(data);
     Validate.notNull(basisFunction, "basis function");
     _basisFunction = basisFunction;
@@ -48,6 +49,7 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
 
   /**
    * Gets the basisFunction field.
+   * 
    * @return the basisFunction
    */
   public Function1D<Double, Double> getBasisFunction() {
@@ -56,6 +58,7 @@ public class RadialBasisFunctionInterpolatorDataBundle extends InterpolatorNDDat
 
   /**
    * Gets the useNormalized field.
+   * 
    * @return the useNormalized
    */
   public boolean isNormalized() {

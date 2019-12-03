@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
 
 import java.util.List;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
@@ -23,12 +21,14 @@ import com.opengamma.engine.cache.msg.FindMessage;
 import com.opengamma.engine.cache.msg.ReleaseCacheMessage;
 import com.opengamma.transport.FudgeMessageReceiver;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Caching client for {@link ViewComputationCacheServer}.
  */
 public class RemoteViewComputationCacheSource extends DefaultViewComputationCacheSource implements FudgeMessageReceiver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteViewComputationCacheSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteViewComputationCacheSource.class);
 
   public RemoteViewComputationCacheSource(final RemoteCacheClient client,
       final FudgeMessageStoreFactory privateDataStoreFactory, final CacheManager cacheManager) {
@@ -64,8 +64,9 @@ public class RemoteViewComputationCacheSource extends DefaultViewComputationCach
 
     @Override
     protected CacheMessage visitReleaseCacheMessage(final ReleaseCacheMessage message) {
-      s_logger.debug("Releasing caches for cycle {}", message.getViewCycleId());
-      // [ENG-256] make sure we don't cause a cascade of messages if e.g. release called on a client, must cause release on server, which must send release to other clients but these must not generate
+      LOGGER.debug("Releasing caches for cycle {}", message.getViewCycleId());
+      // [ENG-256] make sure we don't cause a cascade of messages if e.g. release called on a client, must cause release on
+      // server, which must send release to other clients but these must not generate
       // further messages
       releaseCaches(message.getViewCycleId());
       return null;
@@ -76,22 +77,22 @@ public class RemoteViewComputationCacheSource extends DefaultViewComputationCach
       final DefaultViewComputationCache cache = findCache(message.getViewCycleId(), message.getCalculationConfigurationName());
       if (cache != null) {
         final List<Long> identifiers = message.getIdentifier();
-        s_logger.debug("Searching for {} identifiers to send to shared cache", identifiers.size());
+        LOGGER.debug("Searching for {} identifiers to send to shared cache", identifiers.size());
         if (identifiers.size() == 1) {
           final long identifier = identifiers.get(0);
           final FudgeMsg data = cache.getPrivateDataStore().get(identifier);
           if (data != null) {
-            s_logger.debug("Found identifier {} in private cache", identifier);
+            LOGGER.debug("Found identifier {} in private cache", identifier);
             cache.getSharedDataStore().put(identifier, data);
           }
         } else {
           final Map<Long, FudgeMsg> data = cache.getPrivateDataStore().get(identifiers);
           if (data.size() == 1) {
-            s_logger.debug("Found 1 of {} identifiers in private cache", identifiers.size());
+            LOGGER.debug("Found 1 of {} identifiers in private cache", identifiers.size());
             final Map.Entry<Long, FudgeMsg> entry = data.entrySet().iterator().next();
             cache.getSharedDataStore().put(entry.getKey(), entry.getValue());
           } else if (data.size() > 1) {
-            s_logger.debug("Found {} of {} identifiers in private cache", data.size(), identifiers.size());
+            LOGGER.debug("Found {} of {} identifiers in private cache", data.size(), identifiers.size());
             cache.getSharedDataStore().put(data);
           }
         }
@@ -101,13 +102,14 @@ public class RemoteViewComputationCacheSource extends DefaultViewComputationCach
 
     @Override
     protected <T extends CacheMessage> T visitUnexpectedMessage(final CacheMessage message) {
-      s_logger.warn("Unexpected message {}", message);
+      LOGGER.warn("Unexpected message {}", message);
       return null;
     }
 
   };
 
-  // [ENG-256] Override, or register callback handler for releaseCaches so that if it is called by user code we propogate the message to the server and other clients, noting the warning about cascade
+  // [ENG-256] Override, or register callback handler for releaseCaches so that if it is called by user code we propagate
+  // the message to the server and other clients, noting the warning about cascade
   // above
 
   @Override

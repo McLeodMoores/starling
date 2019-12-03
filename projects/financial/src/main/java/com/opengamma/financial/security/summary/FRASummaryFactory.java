@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -18,7 +18,7 @@ public class FRASummaryFactory implements SummaryFactory<FRASecurity> {
   }
 
   @Override
-  public Summary getSummary(FRASecurity security) {
+  public Summary getSummary(final FRASecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.DESCRIPTION, security.getCurrency())
         .with(SummaryField.NOTIONAL, security.getAmount())

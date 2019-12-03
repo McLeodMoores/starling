@@ -62,24 +62,24 @@ public class SecurityLoaderRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to load a single security.
-   * 
+   *
    * @param externalIdBundle  the identifier bundle, not null
    * @return the request, not null
    */
-  public static SecurityLoaderRequest create(ExternalIdBundle externalIdBundle) {
-    SecurityLoaderRequest request = new SecurityLoaderRequest();
+  public static SecurityLoaderRequest create(final ExternalIdBundle externalIdBundle) {
+    final SecurityLoaderRequest request = new SecurityLoaderRequest();
     request.addExternalIds(externalIdBundle);
     return request;
   }
 
   /**
    * Obtains an instance to load multiple securities.
-   * 
+   *
    * @param externalIdBundles  the identifier bundle, not null
    * @return the request, not null
    */
-  public static SecurityLoaderRequest create(Iterable<ExternalIdBundle> externalIdBundles) {
-    SecurityLoaderRequest request = new SecurityLoaderRequest();
+  public static SecurityLoaderRequest create(final Iterable<ExternalIdBundle> externalIdBundles) {
+    final SecurityLoaderRequest request = new SecurityLoaderRequest();
     request.addExternalIds(externalIdBundles);
     return request;
   }
@@ -94,13 +94,13 @@ public class SecurityLoaderRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of security external identifiers to the collection to load.
-   * 
+   *
    * @param externalIds  the security identifiers to load, not null
    */
-  public void addExternalIds(ExternalId... externalIds) {
+  public void addExternalIds(final ExternalId... externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
-    List<ExternalIdBundle> list = new ArrayList<ExternalIdBundle>();
-    for (ExternalId externalId : externalIds) {
+    final List<ExternalIdBundle> list = new ArrayList<>();
+    for (final ExternalId externalId : externalIds) {
       list.add(ExternalIdBundle.of(externalId));
     }
     getExternalIdBundles().addAll(list);
@@ -108,20 +108,20 @@ public class SecurityLoaderRequest extends DirectBean {
 
   /**
    * Adds an array of security external identifiers to the collection to load.
-   * 
+   *
    * @param externalIdBundles  the security identifiers to load, not null
    */
-  public void addExternalIds(ExternalIdBundle... externalIdBundles) {
+  public void addExternalIds(final ExternalIdBundle... externalIdBundles) {
     ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
     getExternalIdBundles().addAll(Arrays.asList(externalIdBundles));
   }
 
   /**
    * Adds a collection of security external identifiers to the collection to load.
-   * 
+   *
    * @param externalIdBundles  the security identifiers to load, not null
    */
-  public void addExternalIds(Iterable<ExternalIdBundle> externalIdBundles) {
+  public void addExternalIds(final Iterable<ExternalIdBundle> externalIdBundles) {
     ArgumentChecker.notNull(externalIdBundles, "externalIdBundles");
     Iterables.addAll(getExternalIdBundles(), externalIdBundles);
   }

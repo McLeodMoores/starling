@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -16,19 +16,19 @@ import com.opengamma.id.ExternalIdBundle;
 public class EquityOptionSummaryFactory implements SummaryFactory<EquityOptionSecurity> {
 
   private final SecuritySource _securitySource;
-  
-  public EquityOptionSummaryFactory(SecuritySource securitySource) {
+
+  public EquityOptionSummaryFactory(final SecuritySource securitySource) {
     _securitySource = securitySource;
   }
-  
+
   @Override
   public String getSecurityType() {
     return EquityOptionSecurity.SECURITY_TYPE;
   }
 
   @Override
-  public Summary getSummary(EquityOptionSecurity security) {
-    EquitySecurity underlyingSecurity = (EquitySecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+  public Summary getSummary(final EquityOptionSecurity security) {
+    final EquitySecurity underlyingSecurity = (EquitySecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
     return SummaryBuilder.create(security)
         .with(SummaryField.DESCRIPTION, underlyingSecurity.getShortName())
         .with(SummaryField.STRIKE, security.getStrike())

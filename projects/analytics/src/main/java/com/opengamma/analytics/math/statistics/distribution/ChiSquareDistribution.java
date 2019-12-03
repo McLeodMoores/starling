@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -9,33 +9,19 @@ import java.util.Date;
 
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.analytics.math.function.Function2D;
+import com.opengamma.analytics.math.function.special.InverseIncompleteGammaFunction;
+
 import cern.jet.random.ChiSquare;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
-import com.opengamma.analytics.math.function.Function2D;
-import com.opengamma.analytics.math.function.special.InverseIncompleteGammaFunction;
-
 /**
- * A $\chi^2$ distribution with $k$ degrees of freedom is the distribution of
- * the sum of squares of $k$ independent standard normal random variables with
- * cdf and inverse cdf
- * $$
- * \begin{align*}
- * F(x) &=\frac{\gamma\left(\frac{k}{2}, \frac{x}{2}\right)}{\Gamma\left(\frac{k}{2}\right)}\\
- * F^{-1}(p) &= 2\gamma^{-1}\left(\frac{k}{2}, p\right)
- * \end{align*}
- * $$
- * where $\gamma(y, z)$ is the lower incomplete Gamma function and $\Gamma(y)$
- * is the Gamma function.  The pdf is given by:
- * $$
- * \begin{align*}
- * f(x)=\frac{x^{\frac{k}{2}-1}e^{-\frac{x}{2}}}{2^{\frac{k}{2}}\Gamma\left(\frac{k}{2}\right)}
- * \end{align*}
- * $$
- * This implementation uses the CERN <a href="http://acs.lbl.gov/~hoschek/colt/api/index.html">colt</a> package for the
- * cdf, pdf and $\chi^2$-distributed random numbers.
- * 
+ * A $\chi^2$ distribution with $k$ degrees of freedom is the distribution of the sum of squares of $k$ independent standard normal random variables.
+ * <p>
+ * This implementation uses the CERN <a href="http://acs.lbl.gov/~hoschek/colt/api/index.html">colt</a> package for the cdf, pdf and $\chi^2$-distributed random
+ * numbers.
+ *
  */
 public class ChiSquareDistribution implements ProbabilityDistribution<Double> {
   private final Function2D<Double, Double> _inverseFunction = new InverseIncompleteGammaFunction();
@@ -109,7 +95,7 @@ public class ChiSquareDistribution implements ProbabilityDistribution<Double> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_degrees);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

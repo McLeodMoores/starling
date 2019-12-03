@@ -41,20 +41,20 @@ public class WebExchangeVersionResource extends AbstractWebExchangeResource {
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "exchangeversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "exchange.ftl", out);
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "exchange.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -63,10 +63,11 @@ public class WebExchangeVersionResource extends AbstractWebExchangeResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ExchangeDocument latestDoc = data().getExchange();
-    ExchangeDocument versionedExchange = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final ExchangeDocument latestDoc = data().getExchange();
+    final ExchangeDocument versionedExchange = data().getVersioned();
     out.put("latestExchangeDoc", latestDoc);
     out.put("latestExchange", latestDoc.getExchange());
     out.put("exchangeDoc", versionedExchange);
@@ -92,8 +93,8 @@ public class WebExchangeVersionResource extends AbstractWebExchangeResource {
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data, final UniqueId overrideVersionId) {
-    String exchangeId = data.getBestExchangeUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String exchangeId = data.getBestExchangeUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebExchangeVersionResource.class).build(exchangeId, versionId);
   }
 

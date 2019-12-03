@@ -43,6 +43,7 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.curve.exposure.ConfigDBInstrumentExposuresProvider;
 import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvider;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
+import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -54,8 +55,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 /**
  * Base class for bond and bond future analytic calculations from yield curves.
  *
- * @param <S> The type of the curves required by the calculator
- * @param <T> The type of the result
+ * @param <S>
+ *          The type of the curves required by the calculator
+ * @param <T>
+ *          The type of the result
  */
 public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIssuerProviderInterface, T> extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
@@ -68,8 +71,10 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * @param valueRequirementName The value requirement name, not null
-   * @param calculator The calculator
+   * @param valueRequirementName
+   *          The value requirement name, not null
+   * @param calculator
+   *          The calculator
    */
   public BondAndBondFutureFromCurvesFunction(final String valueRequirementName, final InstrumentDerivativeVisitor<S, T> calculator) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement");
@@ -82,6 +87,7 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     _instrumentExposuresProvider = ConfigDBInstrumentExposuresProvider.init(context, this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
@@ -125,12 +131,13 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       return null;
     }
     final Set<String> curveTypes = constraints.getValues(PROPERTY_CURVE_TYPE);
+    final Set<String> underlyingCurveTypes = constraints.getValues(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY);
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames =
-            _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+            target.getTrade());
         if (curveConstructionConfigurationNames == null) {
           LOGGER.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
           return null;
@@ -140,6 +147,11 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
               .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName);
           if (curveTypes != null && !curveTypes.isEmpty()) {
             builder = builder.with(PROPERTY_CURVE_TYPE, curveTypes);
+          }
+          if (underlyingCurveTypes != null && !underlyingCurveTypes.isEmpty()) {
+            builder = builder.with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, underlyingCurveTypes);
+          } else {
+            builder = builder.with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, curveTypes);
           }
           final ValueProperties properties = builder.get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
@@ -158,14 +170,16 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
   /**
    * Gets the value properties of the result.
    *
-   * @param target The computation target
+   * @param target
+   *          The computation target
    * @return The properties
    */
   protected Collection<ValueProperties.Builder> getResultProperties(final ComputationTarget target) {
     return Collections.singleton(createValueProperties()
         .with(CALCULATION_METHOD, CURVES_METHOD)
         .withAny(CURVE_EXPOSURES)
-        .withAny(PROPERTY_CURVE_TYPE));
+        .withAny(PROPERTY_CURVE_TYPE)
+        .withAny(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY));
   }
 
 }

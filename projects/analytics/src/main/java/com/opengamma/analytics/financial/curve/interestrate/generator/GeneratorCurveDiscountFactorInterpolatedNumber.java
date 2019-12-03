@@ -7,17 +7,15 @@ package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the discount factor.
- * Only the lastTimeCalculator is stored. The node are computed from the instruments. The number of instruments is set exogenously.
+ * Store the details and generate the required curve. The curve is interpolated on the discount factor. Only the lastTimeCalculator is
+ * stored. The node are computed from the instruments. The number of instruments is set exogenously.
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveDiscountFactorInterpolatedNumber extends GeneratorYDCurve {
 
   /**
@@ -35,11 +33,16 @@ public class GeneratorCurveDiscountFactorInterpolatedNumber extends GeneratorYDC
 
   /**
    * Constructor.
-   * @param nodeTimeCalculator Calculator of the node associated to instruments.
-   * @param numberNode The number of node in the interpolated curve.
-   * @param interpolator The interpolator used for the curve.
+   *
+   * @param nodeTimeCalculator
+   *          Calculator of the node associated to instruments.
+   * @param numberNode
+   *          The number of node in the interpolated curve.
+   * @param interpolator
+   *          The interpolator used for the curve.
    */
-  public GeneratorCurveDiscountFactorInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final int numberNode, final Interpolator1D interpolator) {
+  public GeneratorCurveDiscountFactorInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator,
+      final int numberNode, final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
     _numberNode = numberNode;
@@ -52,16 +55,6 @@ public class GeneratorCurveDiscountFactorInterpolatedNumber extends GeneratorYDC
 
   @Override
   public YieldAndDiscountCurve generateCurve(final String name, final double[] parameters) {
-    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
-  }
-
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
   }
 

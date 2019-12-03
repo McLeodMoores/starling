@@ -36,7 +36,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 final class LabelledMatrix1DBuilder {
 
@@ -142,7 +142,8 @@ final class LabelledMatrix1DBuilder {
       return new DoubleLabelledMatrix1D(keysArray, labelsArray, labelsTitle, valuesArray, valuesTitle);
     }
 
-    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); //TODO: This should be expired at some point, but it's an insignificant leak at the moment
+    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); // TODO: This should be expired at some point, but it's an insignificant
+                                                                                    // leak at the moment
   }
 
   @FudgeBuilderFor(LocalDateLabelledMatrix1D.class)
@@ -230,7 +231,8 @@ final class LabelledMatrix1DBuilder {
       return labelClass;
     }
 
-    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); //TODO: This should be expired at some point, but it's an insignificant leak at the moment
+    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); // TODO: This should be expired at some point, but it's an insignificant
+                                                                                    // leak at the moment
   }
 
   @FudgeBuilderFor(TenorLabelledMatrix1D.class)
@@ -318,10 +320,11 @@ final class LabelledMatrix1DBuilder {
       return labelClass;
     }
 
-    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); //TODO: This should be expired at some point, but it's an insignificant leak at the moment
+    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); // TODO: This should be expired at some point, but it's an insignificant
+                                                                                    // leak at the moment
   }
 
-  //TODO add ZonedDateTime version
+  // TODO add ZonedDateTime version
 
   @FudgeBuilderFor(CurrencyLabelledMatrix1D.class)
   public static final class CurrencyLabelledMatrix1DBuilder extends AbstractFudgeBuilder<CurrencyLabelledMatrix1D> {
@@ -387,7 +390,7 @@ final class LabelledMatrix1DBuilder {
           }
           final FudgeField labelValue = labelValues.remove();
           final Object label = deserializer.fieldValueToObject(labelClass, labelValue);
-          //          labels.add(Currency.of((String) label));
+          // labels.add(Currency.of((String) label));
           labels.add(label);
         }
       }
@@ -404,7 +407,8 @@ final class LabelledMatrix1DBuilder {
       return new CurrencyLabelledMatrix1D(keysArray, labelsArray, labelsTitle, valuesArray, valuesTitle);
     }
 
-    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); //TODO: This should be expired at some point, but it's an insignificant leak at the moment
+    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); // TODO: This should be expired at some point, but it's an insignificant
+                                                                                    // leak at the moment
   }
 
   @FudgeBuilderFor(StringLabelledMatrix1D.class)
@@ -452,7 +456,8 @@ final class LabelledMatrix1DBuilder {
   }
 
   @FudgeBuilderFor(TenorLabelledLocalDateDoubleTimeSeriesMatrix1D.class)
-  public static final class TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFudgeBuilder extends AbstractFudgeBuilder<TenorLabelledLocalDateDoubleTimeSeriesMatrix1D> {
+  public static final class TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFudgeBuilder
+      extends AbstractFudgeBuilder<TenorLabelledLocalDateDoubleTimeSeriesMatrix1D> {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D object) {
@@ -537,7 +542,8 @@ final class LabelledMatrix1DBuilder {
       return labelClass;
     }
 
-    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); //TODO: This should be expired at some point, but it's an insignificant leak at the moment
+    private final Map<String, Class<?>> _loadedClasses = new ConcurrentHashMap<>(); // TODO: This should be expired at some point, but it's an insignificant
+                                                                                    // leak at the moment
   }
-  
+
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -30,90 +30,97 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalTimeSeriesResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FieldMappingHistoricalTimeSeriesResolver.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(FieldMappingHistoricalTimeSeriesResolver.class);
+
   private final Map<String, HistoricalTimeSeriesFieldAdjustmentMap> _fieldMaps;
-  
-  public FieldMappingHistoricalTimeSeriesResolver(Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps, HistoricalTimeSeriesSelector selector, HistoricalTimeSeriesMaster master) {
+
+  public FieldMappingHistoricalTimeSeriesResolver(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps,
+      final HistoricalTimeSeriesSelector selector, final HistoricalTimeSeriesMaster master) {
     super(selector, master);
     _fieldMaps = getFieldMaps(fieldMaps);
   }
 
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField,
-      String resolutionKey) {
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider, final String dataField, final String resolutionKey) {
     ArgumentChecker.notNull(dataField, "dataField");
     // Apply any field mappings
-    Map<String, HistoricalTimeSeriesFieldAdjustment> fieldMappings = getFieldAdjustments(dataSource, dataField);
+    final Map<String, HistoricalTimeSeriesFieldAdjustment> fieldMappings = getFieldAdjustments(dataSource, dataField);
+    final String multiDataSource, multiDataProvider, multiDataField;
     if (fieldMappings.size() == 1) {
       // Optimisation - might as well restrict the search results
-      Map.Entry<String, HistoricalTimeSeriesFieldAdjustment> fieldMappingEntry = Iterables.getOnlyElement(fieldMappings.entrySet());
-      dataSource = fieldMappingEntry.getKey();
-      dataProvider = fieldMappingEntry.getValue().getUnderlyingDataProvider();
-      dataField = fieldMappingEntry.getValue().getUnderlyingDataField();
+      final Map.Entry<String, HistoricalTimeSeriesFieldAdjustment> fieldMappingEntry = Iterables.getOnlyElement(fieldMappings.entrySet());
+      multiDataSource = fieldMappingEntry.getKey();
+      multiDataProvider = fieldMappingEntry.getValue().getUnderlyingDataProvider();
+      multiDataField = fieldMappingEntry.getValue().getUnderlyingDataField();
     } else if (fieldMappings.size() > 1) {
       // Could have been mapped to multiple underlying providers/fields
-      dataField = null;
-      dataProvider = null;
+      multiDataField = null;
+      multiDataProvider = null;
+      multiDataSource = dataSource;
+    } else {
+      multiDataField = dataField;
+      multiDataProvider = dataProvider;
+      multiDataSource = dataSource;
     }
     if (identifierBundle != null) {
-      Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
+      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates =
+          search(identifierBundle, identifierValidityDate, multiDataSource, multiDataProvider, multiDataField);
       if (!fieldMappings.isEmpty()) {
-        Iterator<ManageableHistoricalTimeSeriesInfo> it = timeSeriesCandidates.iterator();
+        final Iterator<ManageableHistoricalTimeSeriesInfo> it = timeSeriesCandidates.iterator();
         while (it.hasNext()) {
-          ManageableHistoricalTimeSeriesInfo candidate = it.next();
-          HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(candidate.getDataSource());
-          if (fieldAdjustment == null ||
-              ((fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider()))
-              || !fieldAdjustment.getUnderlyingDataField().equals(candidate.getDataField()))) {
+          final ManageableHistoricalTimeSeriesInfo candidate = it.next();
+          final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(candidate.getDataSource());
+          if (fieldAdjustment == null
+              || fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider())
+              || !fieldAdjustment.getUnderlyingDataField().equals(candidate.getDataField())) {
             // Incompatible
             it.remove();
           }
         }
       }
-      ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
+      final ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
-        s_logger.debug("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
+        LOGGER.debug("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, multiDataField, resolutionKey });
         return null;
       }
-      HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(selectedResult.getDataSource());
-      HistoricalTimeSeriesAdjuster adjuster = fieldAdjustment != null ? fieldAdjustment.getAdjuster() : null;
+      final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(selectedResult.getDataSource());
+      final HistoricalTimeSeriesAdjuster adjuster = fieldAdjustment != null ? fieldAdjustment.getAdjuster() : null;
       return new HistoricalTimeSeriesResolutionResult(selectedResult, adjuster);
-    } else {
-      return search(dataSource, dataProvider, dataField);
     }
+    return search(multiDataSource, multiDataProvider, multiDataField);
   }
-  
+
   public Collection<HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps() {
     return _fieldMaps.values();
   }
-  
+
   //-------------------------------------------------------------------------
-  private Map<String, HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps(Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps) {
-    Map<String, HistoricalTimeSeriesFieldAdjustmentMap> result = new HashMap<String, HistoricalTimeSeriesFieldAdjustmentMap>();
-    for (HistoricalTimeSeriesFieldAdjustmentMap fieldMap : fieldMaps) {
+  private static Map<String, HistoricalTimeSeriesFieldAdjustmentMap> getFieldMaps(final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldMaps) {
+    final Map<String, HistoricalTimeSeriesFieldAdjustmentMap> result = new HashMap<>();
+    for (final HistoricalTimeSeriesFieldAdjustmentMap fieldMap : fieldMaps) {
       if (result.put(fieldMap.getDataSource(), fieldMap) != null) {
         throw new IllegalArgumentException("Only one field map per data source is permitted. Found multiple for data source " + fieldMap.getDataSource());
       }
     }
     return result;
   }
-  
-  private Map<String, HistoricalTimeSeriesFieldAdjustment> getFieldAdjustments(String dataSource, String dataField) {
+
+  private Map<String, HistoricalTimeSeriesFieldAdjustment> getFieldAdjustments(final String dataSource, final String dataField) {
     if (dataSource != null) {
-      HistoricalTimeSeriesFieldAdjustmentMap fieldMap = _fieldMaps.get(dataSource);
-      HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMap != null ? fieldMap.getFieldAdjustment(dataField) : null;
+      final HistoricalTimeSeriesFieldAdjustmentMap fieldMap = _fieldMaps.get(dataSource);
+      final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMap != null ? fieldMap.getFieldAdjustment(dataField) : null;
       return fieldAdjustment != null ? ImmutableMap.of(dataSource, fieldAdjustment) : ImmutableMap.<String, HistoricalTimeSeriesFieldAdjustment>of();
     }
-    
-    Map<String, HistoricalTimeSeriesFieldAdjustment> results = new HashMap<String, HistoricalTimeSeriesFieldAdjustment>();
-    for (Map.Entry<String, HistoricalTimeSeriesFieldAdjustmentMap> fieldMapEntry : _fieldMaps.entrySet()) {
-      HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMapEntry.getValue().getFieldAdjustment(dataField);
+
+    final Map<String, HistoricalTimeSeriesFieldAdjustment> results = new HashMap<>();
+    for (final Map.Entry<String, HistoricalTimeSeriesFieldAdjustmentMap> fieldMapEntry : _fieldMaps.entrySet()) {
+      final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMapEntry.getValue().getFieldAdjustment(dataField);
       if (fieldAdjustment != null) {
         results.put(fieldMapEntry.getKey(), fieldAdjustment);
       }
     }
     return results;
   }
-  
+
 }

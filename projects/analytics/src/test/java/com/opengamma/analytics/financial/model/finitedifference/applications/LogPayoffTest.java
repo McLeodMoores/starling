@@ -35,8 +35,8 @@ import com.opengamma.analytics.financial.model.volatility.surface.MixedLogNormal
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.util.test.TestGroup;
 
@@ -50,7 +50,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class LogPayoffTest {
 
-  private static final Interpolator1D INTERPOLATOR = Interpolator1DFactory.DOUBLE_QUADRATIC_INSTANCE;
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of("DoubleQuadratic");
   private static final PDE1DCoefficientsProvider PDE_DATA_PROVIDER = new PDE1DCoefficientsProvider();
   private static final InitialConditionsProvider INT_COND_PROVIDER = new InitialConditionsProvider();
   private static final double EXPIRY = 1.5;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.historical.normalization;
@@ -18,17 +18,16 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Implementation of {@link HistoricalTimeSeriesAdjuster} for normalizing time-series consisting of Bloomberg market
- * data.
+ * Implementation of {@link HistoricalTimeSeriesAdjuster} for normalizing time-series consisting of Bloomberg market data.
  */
 public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTimeSeriesAdjuster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRateHistoricalTimeSeriesNormalizer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRateHistoricalTimeSeriesNormalizer.class);
 
   private final BloombergRateClassifier _classifier;
-  
-  public BloombergRateHistoricalTimeSeriesNormalizer(BloombergRateClassifier classifier) {
+
+  public BloombergRateHistoricalTimeSeriesNormalizer(final BloombergRateClassifier classifier) {
     _classifier = classifier;
   }
 
@@ -37,14 +36,15 @@ public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTi
   }
 
   protected Integer getNormalizationFactor(final ExternalIdBundle securityIdBundle) {
-    String buid = securityIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID);
+    final String buid = securityIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID);
     if (buid == null) {
-      s_logger.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.", securityIdBundle);
+      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.",
+          securityIdBundle);
       return null;
     }
-    Integer normalizationFactor = getClassifier().getNormalizationFactor(buid);
+    final Integer normalizationFactor = getClassifier().getNormalizationFactor(buid);
     if (normalizationFactor == null) {
-      s_logger.warn("Unable to classify security for Bloomberg time-series normalization: {}. The time-series will be unnormalized.", securityIdBundle);
+      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization: {}. The time-series will be unnormalized.", securityIdBundle);
       return null;
     }
     if (normalizationFactor == 1) {
@@ -54,18 +54,18 @@ public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTi
   }
 
   @Override
-  public HistoricalTimeSeries adjust(ExternalIdBundle securityIdBundle, HistoricalTimeSeries timeSeries) {
+  public HistoricalTimeSeries adjust(final ExternalIdBundle securityIdBundle, final HistoricalTimeSeries timeSeries) {
     final Integer normalizationFactor = getNormalizationFactor(securityIdBundle);
     if (normalizationFactor == null) {
       return timeSeries;
     }
-    LocalDateDoubleTimeSeries normalizedTimeSeries = (LocalDateDoubleTimeSeries) timeSeries.getTimeSeries().divide(normalizationFactor);
+    final LocalDateDoubleTimeSeries normalizedTimeSeries = timeSeries.getTimeSeries().divide(normalizationFactor);
     return new SimpleHistoricalTimeSeries(timeSeries.getUniqueId(), normalizedTimeSeries);
   }
-  
+
   @Override
   public HistoricalTimeSeriesAdjustment getAdjustment(final ExternalIdBundle securityIdBundle) {
-    Integer normalizationFactor = getNormalizationFactor(securityIdBundle);
+    final Integer normalizationFactor = getNormalizationFactor(securityIdBundle);
     if (normalizationFactor == null) {
       return HistoricalTimeSeriesAdjustment.NoOp.INSTANCE;
     }

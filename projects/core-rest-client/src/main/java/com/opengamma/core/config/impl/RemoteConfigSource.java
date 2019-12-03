@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.config.impl;
@@ -58,8 +58,7 @@ public class RemoteConfigSource extends AbstractRemoteSource<ConfigItem<?>> impl
     _changeManager = changeManager;
   }
 
-  @SuppressWarnings("unchecked")
-  private <R> Collection<ConfigItem<R>> configItemCollectionResult(final FudgeMsg msg) {
+  private static <R> Collection<ConfigItem<R>> configItemCollectionResult(final FudgeMsg msg) {
     final Collection<ConfigItem<R>> result = Lists.newArrayListWithCapacity(msg.getNumFields());
     final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
     for (final FudgeField field : msg) {
@@ -95,9 +94,8 @@ public class RemoteConfigSource extends AbstractRemoteSource<ConfigItem<?>> impl
     final Object value = get(uniqueId).getValue();
     if (clazz.isAssignableFrom(value.getClass())) {
       return (R) value;
-    } else {
-      throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
     }
+    throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
   }
 
   @Override
@@ -106,9 +104,8 @@ public class RemoteConfigSource extends AbstractRemoteSource<ConfigItem<?>> impl
     final Object value = get(objectId, versionCorrection).getValue();
     if (clazz.isAssignableFrom(value.getClass())) {
       return (R) value;
-    } else {
-      throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
     }
+    throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
   }
 
   //-------------------------------------------------------------------------
@@ -120,9 +117,9 @@ public class RemoteConfigSource extends AbstractRemoteSource<ConfigItem<?>> impl
     try {
       final URI uri = DataConfigSourceUris.uriSearchSingle(getBaseUri(), configName, versionCorrection, clazz);
       return accessRemote(uri).get(clazz);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }

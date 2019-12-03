@@ -43,7 +43,7 @@ import com.opengamma.scripts.Scriptable;
 public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotTool.class);
 
   /** Snapshot name command line option. */
   private static final String SNAPSHOT_NAME_OPTION = "s";
@@ -66,29 +66,30 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
   private static MarketDataSourceCli s_mktDataSourceCli = new MarketDataSourceCli();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new MarketDataSnapshotTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     s_context = getToolContext();
 
     final RemoteViewProcessor viewProcessor = (RemoteViewProcessor) s_context.getViewProcessor();
     if (viewProcessor == null) {
-      s_logger.warn("No view processors found at {}", s_context);
+      LOGGER.warn("No view processors found at {}", s_context);
       return;
     }
     final MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
       return;
     }
     final MarketDataSnapshotter marketDataSnapshotter;
@@ -99,11 +100,12 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     }
     final Long marketDataTimeoutSeconds = getCommandLine().hasOption(TIMEOUT_OPTION) ? Long.parseLong(getCommandLine().getOptionValue(TIMEOUT_OPTION)) : null;
     final Long marketDataTimeoutMillis = marketDataTimeoutSeconds != null ? TimeUnit.SECONDS.toMillis(marketDataTimeoutSeconds) : null;
-    final MarketDataSnapshotSaver snapshotSaver = MarketDataSnapshotSaver.of(marketDataSnapshotter, viewProcessor, s_context.getConfigMaster(), marketDataSnapshotMaster, marketDataTimeoutMillis);
+    final MarketDataSnapshotSaver snapshotSaver = MarketDataSnapshotSaver.of(marketDataSnapshotter, viewProcessor, s_context.getConfigMaster(),
+        marketDataSnapshotMaster, marketDataTimeoutMillis);
 
     if (getCommandLine().hasOption(VIEW_PROCESS_ID_OPTION)) {
       final UniqueId viewProcessId = UniqueId.parse(getCommandLine().getOptionValue(VIEW_PROCESS_ID_OPTION));
-      s_logger.info("Creating snapshot from existing view process " + viewProcessId);
+      LOGGER.info("Creating snapshot from existing view process " + viewProcessId);
       try {
         snapshotSaver.createSnapshot(null, viewProcessId);
       } catch (final Exception e) {
@@ -112,7 +114,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     } else {
       final String viewDefinitionName = StringUtils.trimToNull(getCommandLine().getOptionValue(VIEW_NAME_OPTION));
       if (viewDefinitionName == null) {
-        s_logger.warn("Given view definition name is blank");
+        LOGGER.warn("Given view definition name is blank");
         return;
       }
       final String valuationTimeArg = StringUtils.trimToNull(getCommandLine().getOptionValue(VALUATION_TIME_OPTION));
@@ -131,11 +133,11 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
         marketDataSpecs.addAll(getMarketDataSpecs());
       }
 
-      s_logger.info("Creating snapshot for view definition " + viewDefinitionName);
+      LOGGER.info("Creating snapshot for view definition " + viewDefinitionName);
       try {
         String snapshotName = StringUtils.trimToNull(getCommandLine().getOptionValue(SNAPSHOT_NAME_OPTION));
         if (snapshotName == null) {
-          s_logger.warn("Given snapshot name is blank, using {}/{}", viewDefinitionName, valuationInstant);
+          LOGGER.warn("Given snapshot name is blank, using {}/{}", viewDefinitionName, valuationInstant);
           snapshotName = viewDefinitionName + "/" + valuationInstant;
         }
         snapshotSaver.createSnapshot(snapshotName, viewDefinitionName, valuationInstant, marketDataSpecs);
@@ -152,11 +154,11 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   private void endWithError(final String message, final Object... messageArgs) {
     final String formattedMessage = format(message, messageArgs);
     System.err.println(formattedMessage);
-    s_logger.error(formattedMessage);
+    LOGGER.error(formattedMessage);
     System.exit(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
@@ -192,7 +194,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   }
 
   private static Option createSnapshotNameOption() {
-    final Option option = new Option(SNAPSHOT_NAME_OPTION, "snapshotName", true, "the name to use when persisting the snapshot. (defaults to '<view name>/<valuation time>' )");
+    final Option option = new Option(SNAPSHOT_NAME_OPTION, "snapshotName", true,
+        "the name to use when persisting the snapshot. (defaults to '<view name>/<valuation time>' )");
     option.setArgName("snapshot name");
     return option;
   }
@@ -210,7 +213,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   }
 
   private static Option createTimeoutOption() {
-    final Option option = new Option(TIMEOUT_OPTION, "timeout", true, "the timeout, in seconds, for market data to populate the snapshot (defaults to the engine default)");
+    final Option option = new Option(TIMEOUT_OPTION, "timeout", true,
+        "the timeout, in seconds, for market data to populate the snapshot (defaults to the engine default)");
     option.setArgName("seconds");
     return option;
   }

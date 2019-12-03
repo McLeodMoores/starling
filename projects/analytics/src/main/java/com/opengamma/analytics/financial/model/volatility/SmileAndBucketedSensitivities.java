@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -20,8 +20,10 @@ public class SmileAndBucketedSensitivities {
   private final double[][] _sensitivities;
 
   /**
-   * @param smile The volatility smile, not null
-   * @param sensitivities The bucketed sensitivities, not null
+   * @param smile
+   *          The volatility smile, not null
+   * @param sensitivities
+   *          The bucketed sensitivities, not null
    */
   public SmileAndBucketedSensitivities(final SmileDeltaParameters smile, final double[][] sensitivities) {
     ArgumentChecker.notNull(smile, "smile");
@@ -31,7 +33,8 @@ public class SmileAndBucketedSensitivities {
   }
 
   /**
-   * Gets the smile
+   * Gets the smile.
+   * 
    * @return The smile
    */
   public SmileDeltaParameters getSmile() {
@@ -39,7 +42,8 @@ public class SmileAndBucketedSensitivities {
   }
 
   /**
-   * Gets the bucketed sensitivities
+   * Gets the bucketed sensitivities.
+   * 
    * @return The bucketed sensitivities
    */
   public double[][] getBucketedSensitivities() {

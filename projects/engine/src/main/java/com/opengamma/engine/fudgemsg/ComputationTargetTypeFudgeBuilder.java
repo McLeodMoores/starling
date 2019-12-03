@@ -29,7 +29,7 @@ import com.opengamma.util.ClassUtils;
 
 /**
  * Fudge message builder for {@link ComputationTargetType}.
- * 
+ *
  * <pre>
  * message ComputationTargetType {
  *   optional repeated string computationTargetType;     // name of the type
@@ -45,16 +45,16 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
 
   private static class CommonByName {
 
-    private static final Map<String, ComputationTargetType> s_data = new HashMap<String, ComputationTargetType>();
+    private static final Map<String, ComputationTargetType> DATA = new HashMap<>();
 
     static {
       try {
         final Class<?> c = ComputationTargetType.class;
         for (final Field field : c.getDeclaredFields()) {
-          if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) &&
-              field.isSynthetic() == false && c.isAssignableFrom(field.getType())) {
+          if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())
+              && !field.isSynthetic() && c.isAssignableFrom(field.getType())) {
             final ComputationTargetType type = (ComputationTargetType) field.get(null);
-            s_data.put(type.toString(), type);
+            DATA.put(type.toString(), type);
           }
         }
       } catch (final IllegalAccessException e) {
@@ -63,7 +63,7 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
     }
 
     public static ComputationTargetType get(final String name) {
-      return s_data.get(name);
+      return DATA.get(name);
     }
 
   }
@@ -78,19 +78,18 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
     final ComputationTargetType common = CommonByName.get(str);
     if (common != null) {
       return common;
-    } else {
-      return ComputationTargetType.of((Class) ClassUtils.loadClassRuntime(str));
     }
+    return ComputationTargetType.of((Class) ClassUtils.loadClassRuntime(str));
   }
 
-  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> s_baseEncoder = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> BASE_ENCODER = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MutableFudgeMsg data) {
       // Add a sub-message containing the choices
       final MutableFudgeMsg msg = data.addSubMessage(TYPE_FIELD_NAME, null);
       for (final ComputationTargetType type : types) {
-        if (type.accept(s_choiceEncoder, msg)) {
+        if (type.accept(CHOICE_ENCODER, msg)) {
           msg.add(null, null, FudgeWireType.STRING, type.toString());
         }
       }
@@ -101,7 +100,7 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
     public Boolean visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final MutableFudgeMsg data) {
       // Add fields in order
       for (final ComputationTargetType type : types) {
-        if (type.accept(s_baseEncoder, data)) {
+        if (type.accept(BASE_ENCODER, data)) {
           data.add(TYPE_FIELD_NAME, null, FudgeWireType.STRING, type.toString());
         }
       }
@@ -120,7 +119,7 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
 
   };
 
-  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> s_choiceEncoder = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> CHOICE_ENCODER = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MutableFudgeMsg data) {
@@ -132,7 +131,7 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
       // Add a sub-message which encodes the types in the correct order
       final MutableFudgeMsg msg = data.addSubMessage(null, null);
       for (final ComputationTargetType type : types) {
-        if (type.accept(s_nestedEncoder, msg)) {
+        if (type.accept(NESTED_ENCODER, msg)) {
           msg.add(null, null, FudgeWireType.STRING, type.toString());
         }
       }
@@ -151,14 +150,14 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
 
   };
 
-  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> s_nestedEncoder = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean> NESTED_ENCODER = new ComputationTargetTypeVisitor<MutableFudgeMsg, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MutableFudgeMsg data) {
       // Add a sub-message containing the choices
       final MutableFudgeMsg msg = data.addSubMessage(null, null);
       for (final ComputationTargetType type : types) {
-        if (type.accept(s_choiceEncoder, msg)) {
+        if (type.accept(CHOICE_ENCODER, msg)) {
           msg.add(null, null, FudgeWireType.STRING, type.toString());
         }
       }
@@ -183,7 +182,7 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
   };
 
   public static void buildMessageImpl(final MutableFudgeMsg msg, final ComputationTargetType object) {
-    if (object.accept(s_baseEncoder, msg)) {
+    if (object.accept(BASE_ENCODER, msg)) {
       msg.add(TYPE_FIELD_NAME, null, FudgeWireType.STRING, object.toString());
     }
   }
@@ -203,17 +202,14 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
       if (common != null) {
         if (current == null) {
           return common;
-        } else {
-          return current.or(common);
         }
-      } else {
-        final Class clazz = ClassUtils.loadClass(name);
-        if (current == null) {
-          return ComputationTargetType.of(clazz);
-        } else {
-          return current.or(clazz);
-        }
+        return current.or(common);
       }
+      final Class clazz = ClassUtils.loadClass(name);
+      if (current == null) {
+        return ComputationTargetType.of(clazz);
+      }
+      return current.or(clazz);
     } else if (field.getValue() instanceof FudgeMsg) {
       ComputationTargetType type = null;
       for (final FudgeField field2 : (FudgeMsg) field.getValue()) {
@@ -222,15 +218,12 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
       if (type != null) {
         if (current == null) {
           return type;
-        } else {
-          return current.or(type);
         }
-      } else {
-        return current;
+        return current.or(type);
       }
-    } else {
       return current;
     }
+    return current;
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
@@ -241,17 +234,14 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
       if (common != null) {
         if (outer == null) {
           return common;
-        } else {
-          return outer.containing(common);
         }
-      } else {
-        final Class clazz = ClassUtils.loadClass(name);
-        if (outer == null) {
-          return ComputationTargetType.of(clazz);
-        } else {
-          return outer.containing(clazz);
-        }
+        return outer.containing(common);
       }
+      final Class clazz = ClassUtils.loadClass(name);
+      if (outer == null) {
+        return ComputationTargetType.of(clazz);
+      }
+      return outer.containing(clazz);
     } else if (field.getValue() instanceof FudgeMsg) {
       ComputationTargetType type = null;
       for (final FudgeField field2 : (FudgeMsg) field.getValue()) {
@@ -260,15 +250,12 @@ public class ComputationTargetTypeFudgeBuilder implements FudgeBuilder<Computati
       if (type != null) {
         if (outer == null) {
           return type;
-        } else {
-          return outer.containing(type);
         }
-      } else {
-        return outer;
+        return outer.containing(type);
       }
-    } else {
       return outer;
     }
+    return outer;
   }
 
   public static ComputationTargetType buildObjectImpl(final FudgeMsg msg) {

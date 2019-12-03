@@ -26,24 +26,24 @@ public final class RandomTimeSeriesGenerator {
 
   /**
    * Generates a random time-series for the specified number of days.
-   * 
+   *
    * @param numDays  the number of days
    * @return the time-series, not null
    */
-  public static LocalDateDoubleTimeSeries makeRandomTimeSeries(int numDays) {
-    LocalDate previousWeekDay = DateUtils.previousWeekDay();
+  public static LocalDateDoubleTimeSeries makeRandomTimeSeries(final int numDays) {
+    final LocalDate previousWeekDay = DateUtils.previousWeekDay();
     return makeRandomTimeSeries(previousWeekDay, numDays);
   }
 
   /**
    * Generates a random time-series for the specified number of days from a start date.
-   * 
+   *
    * @param startDate  the start date, not null
    * @param numDays  the number of days
    * @return the time-series, not null
    */
-  public static LocalDateDoubleTimeSeries makeRandomTimeSeries(LocalDate startDate, int numDays) {
-    LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
+  public static LocalDateDoubleTimeSeries makeRandomTimeSeries(final LocalDate startDate, final int numDays) {
+    final LocalDateDoubleTimeSeriesBuilder bld = ImmutableLocalDateDoubleTimeSeries.builder();
     LocalDate current = startDate;
     bld.put(current, Math.random());
     while (bld.size() < numDays) {
@@ -57,12 +57,12 @@ public final class RandomTimeSeriesGenerator {
 
   /**
    * Determine if the date is a weekday (not Saturday or Sunday).
-   * 
+   *
    * @param day  the day-of-week, not null
    * @return true if Monday to Friday
    */
-  private static boolean isWeekday(LocalDate day) {
-    return (day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY);
+  private static boolean isWeekday(final LocalDate day) {
+    return day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY;
   }
 
 }

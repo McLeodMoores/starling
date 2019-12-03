@@ -25,9 +25,9 @@ public class SecurityTypeExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
+  public List<ExternalId> getIds(final Trade trade) {
     return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, trade.getSecurity().getSecurityType()));
   }
 }

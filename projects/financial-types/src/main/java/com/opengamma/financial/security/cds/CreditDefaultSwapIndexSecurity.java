@@ -29,8 +29,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- * A credit security based on a underlying CDS Index rather than a reference
- * entity for a standard CDS trade.
+ * A credit security based on a underlying CDS Index rather than a reference entity for a standard CDS trade.
  */
 @BeanDefinition
 @SecurityDescription(type = CreditDefaultSwapIndexSecurity.SECURITY_TYPE, description = "Cds index")
@@ -40,7 +39,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "CDS_INDEX";
 
@@ -51,8 +50,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   private ZonedDateTime _settlementDate;
 
   /**
-   * Flag to determine if we business day adjust the user input settlement
-   * date (not a standard feature of index CDS positions).
+   * Flag to determine if we business day adjust the user input settlement date (not a standard feature of index CDS positions).
    */
   @PropertyDefinition(validate = "notNull")
   private boolean _adjustSettlementDate;
@@ -76,46 +74,45 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
     super(SECURITY_TYPE);
   }
 
-
-  public CreditDefaultSwapIndexSecurity(boolean buy,  // CSIGNORE: number of parameters is appropriate here
-                                        ExternalId protectionBuyer,
-                                        ExternalId protectionSeller,
-                                        ExternalId underlyingIndex,
-                                        ZonedDateTime startDate,
-                                        ZonedDateTime effectiveDate,
-                                        ZonedDateTime maturityDate,
-                                        StubType stubType,
-                                        Frequency couponFrequency,
-                                        DayCount dayCount,
-                                        BusinessDayConvention businessDayConvention,
-                                        boolean immAdjustMaturityDate,
-                                        boolean adjustEffectiveDate,
-                                        boolean adjustMaturityDate,
-                                        InterestRateNotional notional,
-                                        boolean includeAccruedPremium,
-                                        boolean protectionStart,
-                                        ZonedDateTime settlementDate,
-                                        boolean adjustSettlementDate,
-                                        InterestRateNotional upfrontPayment,
-                                        double indexCoupon) {
+  public CreditDefaultSwapIndexSecurity(final boolean buy, // CSIGNORE: number of parameters is appropriate here
+      final ExternalId protectionBuyer,
+      final ExternalId protectionSeller,
+      final ExternalId underlyingIndex,
+      final ZonedDateTime startDate,
+      final ZonedDateTime effectiveDate,
+      final ZonedDateTime maturityDate,
+      final StubType stubType,
+      final Frequency couponFrequency,
+      final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention,
+      final boolean immAdjustMaturityDate,
+      final boolean adjustEffectiveDate,
+      final boolean adjustMaturityDate,
+      final InterestRateNotional notional,
+      final boolean includeAccruedPremium,
+      final boolean protectionStart,
+      final ZonedDateTime settlementDate,
+      final boolean adjustSettlementDate,
+      final InterestRateNotional upfrontPayment,
+      final double indexCoupon) {
     super(SECURITY_TYPE,
-          buy,
-          protectionBuyer,
-          protectionSeller,
-          underlyingIndex,
-          startDate,
-          effectiveDate,
-          maturityDate,
-          stubType,
-          couponFrequency,
-          dayCount,
-          businessDayConvention,
-          immAdjustMaturityDate,
-          adjustEffectiveDate,
-          adjustMaturityDate,
-          notional,
-          includeAccruedPremium,
-          protectionStart);
+        buy,
+        protectionBuyer,
+        protectionSeller,
+        underlyingIndex,
+        startDate,
+        effectiveDate,
+        maturityDate,
+        stubType,
+        couponFrequency,
+        dayCount,
+        businessDayConvention,
+        immAdjustMaturityDate,
+        adjustEffectiveDate,
+        adjustMaturityDate,
+        notional,
+        includeAccruedPremium,
+        protectionStart);
     setSettlementDate(settlementDate);
     setAdjustSettlementDate(adjustSettlementDate);
     setUpfrontPayment(upfrontPayment);
@@ -123,7 +120,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   }
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCreditDefaultSwapIndexSecurity(this);
   }
 
@@ -174,8 +171,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
 
   //-----------------------------------------------------------------------
   /**
-   * Gets flag to determine if we business day adjust the user input settlement
-   * date (not a standard feature of index CDS positions).
+   * Gets flag to determine if we business day adjust the user input settlement date (not a standard feature of index CDS positions).
    * @return the value of the property, not null
    */
   public boolean isAdjustSettlementDate() {
@@ -183,8 +179,7 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
   }
 
   /**
-   * Sets flag to determine if we business day adjust the user input settlement
-   * date (not a standard feature of index CDS positions).
+   * Sets flag to determine if we business day adjust the user input settlement date (not a standard feature of index CDS positions).
    * @param adjustSettlementDate  the new value of the property, not null
    */
   public void setAdjustSettlementDate(boolean adjustSettlementDate) {
@@ -194,7 +189,6 @@ public class CreditDefaultSwapIndexSecurity extends AbstractCreditDefaultSwapSec
 
   /**
    * Gets the the {@code adjustSettlementDate} property.
-   * date (not a standard feature of index CDS positions).
    * @return the property, not null
    */
   public final Property<Boolean> adjustSettlementDate() {

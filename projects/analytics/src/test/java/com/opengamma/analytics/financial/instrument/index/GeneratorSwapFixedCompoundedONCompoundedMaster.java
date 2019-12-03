@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.index;
@@ -8,6 +8,7 @@ package com.opengamma.analytics.financial.instrument.index;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -19,7 +20,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 /**
  * A list of generators for swaps Fixed/ON available for tests.
  */
-public class GeneratorSwapFixedCompoundedONCompoundedMaster {
+public final class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   /**
    * The method unique instance.
@@ -28,6 +29,7 @@ public class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static GeneratorSwapFixedCompoundedONCompoundedMaster getInstance() {
@@ -53,14 +55,16 @@ public class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   }
 
-  public GeneratorSwapFixedCompoundedONCompounded getGenerator(final String name, final Calendar cal) {
+  public GeneratorSwapFixedCompoundedONCompounded getGenerator(final String name, final WorkingDayCalendar cal) {
     final GeneratorSwapFixedCompoundedONCompounded generatorNoCalendar = _generatorSwap.get(name);
     if (generatorNoCalendar == null) {
       throw new OpenGammaRuntimeException("Could not get Swap Fixed/ON Compounded generator for " + name);
     }
     final IndexON indexNoCalendar = generatorNoCalendar.getIndex();
-    final IndexON index = new IndexON(indexNoCalendar.getName(), indexNoCalendar.getCurrency(), indexNoCalendar.getDayCount(), indexNoCalendar.getPublicationLag());
-    return new GeneratorSwapFixedCompoundedONCompounded(generatorNoCalendar.getName(), index, generatorNoCalendar.getFixedLegDayCount(), generatorNoCalendar.getBusinessDayConvention(),
+    final IndexON index = new IndexON(indexNoCalendar.getName(), indexNoCalendar.getCurrency(), indexNoCalendar.getDayCount(),
+        indexNoCalendar.getPublicationLag());
+    return new GeneratorSwapFixedCompoundedONCompounded(generatorNoCalendar.getName(), index, generatorNoCalendar.getFixedLegDayCount(),
+        generatorNoCalendar.getBusinessDayConvention(),
         generatorNoCalendar.isEndOfMonth(), generatorNoCalendar.getSpotLag(), generatorNoCalendar.getPaymentLag(), cal);
   }
 

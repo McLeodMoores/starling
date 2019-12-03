@@ -31,7 +31,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.swap.EquityTotalReturnSwapSecurity;
 
@@ -44,7 +43,8 @@ public class EquityTotalReturnSwapGammaPV01Function extends EquityTotalReturnSwa
       EqyTrsGammaPV01Calculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#GAMMA_PV01}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#GAMMA_PV01}.
    */
   public EquityTotalReturnSwapGammaPV01Function() {
     super(GAMMA_PV01);

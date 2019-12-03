@@ -31,35 +31,37 @@ public class SABRVegaCalculationUtils {
   private static final MatrixAlgebra ALGEBRA = MatrixAlgebraFactory.OG_ALGEBRA;
   private static final DoublesPairComparator COMPARATOR = new DoublesPairComparator();
 
-  public static DoubleMatrix2D getVegaSurface(final double alpha, final double rho, final double nu, final Map<Double, Interpolator1DDataBundle> alphaDataBundle,
-      final Map<Double, Interpolator1DDataBundle> rhoDataBundle, final Map<Double, Interpolator1DDataBundle> nuDataBundle,
-      final Map<DoublesPair, DoubleMatrix2D> inverseJacobians, final DoublesPair expiryMaturity, final Interpolator2D nodeSensitivityCalculator,
+  public static DoubleMatrix2D getVegaSurface(final double alpha, final double rho, final double nu,
+      final Map<Double, Interpolator1DDataBundle> alphaDataBundle, final Map<Double, Interpolator1DDataBundle> rhoDataBundle,
+      final Map<Double, Interpolator1DDataBundle> nuDataBundle, final Map<DoublesPair, DoubleMatrix2D> inverseJacobians,
+      final DoublesPair expiryMaturity, final Interpolator2D nodeSensitivityCalculator,
       final Map<Double, List<Double>> fittedDataPoints, final VolatilitySurfaceDefinition<Object, Object> definition) {
-    final Map<Double, List<Pair<Double, Double>>> alphaGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(alphaDataBundle, expiryMaturity));
-    final Map<Double, List<Pair<Double, Double>>> nuGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(nuDataBundle, expiryMaturity));
-    final Map<Double, List<Pair<Double, Double>>> rhoGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(rhoDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> alphaGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(alphaDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> nuGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(nuDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> rhoGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(rhoDataBundle, expiryMaturity));
     final Map<Double, List<Pair<Double, DoubleMatrix2D>>> orderedInverseJacobian = getMaturityExpiryValueMap(inverseJacobians);
-    //TODO having to know the order of the parameters is not good - change the result that is returned from the fit
+    // TODO having to know the order of the parameters is not good - change the result that is returned from the fit
     final DoubleMatrix2D alphaResult = getVegaSurfaceForParameter(alpha, alphaGridNodeSensitivities, orderedInverseJacobian, 0, fittedDataPoints, definition);
     final DoubleMatrix2D rhoResult = getVegaSurfaceForParameter(rho, rhoGridNodeSensitivities, orderedInverseJacobian, 1, fittedDataPoints, definition);
     final DoubleMatrix2D nuResult = getVegaSurfaceForParameter(nu, nuGridNodeSensitivities, orderedInverseJacobian, 2, fittedDataPoints, definition);
     return (DoubleMatrix2D) ALGEBRA.add(alphaResult, ALGEBRA.add(nuResult, rhoResult));
   }
 
-  public static Map<Double, DoubleMatrix2D> getVegaCube(final double alpha, final double rho, final double nu, final Map<Double, Interpolator1DDataBundle> alphaDataBundle,
+  public static Map<Double, DoubleMatrix2D> getVegaCube(final double alpha, final double rho, final double nu,
+      final Map<Double, Interpolator1DDataBundle> alphaDataBundle,
       final Map<Double, Interpolator1DDataBundle> rhoDataBundle, final Map<Double, Interpolator1DDataBundle> nuDataBundle,
       final Map<DoublesPair, DoubleMatrix2D> inverseJacobians, final DoublesPair expiryMaturity, final Interpolator2D nodeSensitivityCalculator) {
-    final Map<Double, List<Pair<Double, Double>>> alphaGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(alphaDataBundle, expiryMaturity));
-    final Map<Double, List<Pair<Double, Double>>> nuGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(nuDataBundle, expiryMaturity));
-    final Map<Double, List<Pair<Double, Double>>> rhoGridNodeSensitivities =
-      SABRVegaCalculationUtils.getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(rhoDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> alphaGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(alphaDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> nuGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(nuDataBundle, expiryMaturity));
+    final Map<Double, List<Pair<Double, Double>>> rhoGridNodeSensitivities = SABRVegaCalculationUtils
+        .getMaturityExpiryValueMap(nodeSensitivityCalculator.getNodeSensitivitiesForValue(rhoDataBundle, expiryMaturity));
     final Map<Double, List<Pair<Double, DoubleMatrix2D>>> orderedInverseJacobian = getMaturityExpiryValueMap(inverseJacobians);
-    //TODO having to know the order of the parameters is not good - change the result that is returned from the fit
+    // TODO having to know the order of the parameters is not good - change the result that is returned from the fit
     final Map<Double, DoubleMatrix2D> alphaResult = getVegaCubeForParameter(alpha, alphaGridNodeSensitivities, orderedInverseJacobian, 0);
     final Map<Double, DoubleMatrix2D> rhoResult = getVegaCubeForParameter(rho, rhoGridNodeSensitivities, orderedInverseJacobian, 1);
     final Map<Double, DoubleMatrix2D> nuResult = getVegaCubeForParameter(nu, nuGridNodeSensitivities, orderedInverseJacobian, 2);
@@ -71,7 +73,8 @@ public class SABRVegaCalculationUtils {
     }
     final Map<Double, DoubleMatrix2D> result = new HashMap<>();
     for (final Map.Entry<Double, DoubleMatrix2D> alphaEntry : alphaResult.entrySet()) {
-      result.put(alphaEntry.getKey(), (DoubleMatrix2D) ALGEBRA.add(alphaEntry.getValue(), ALGEBRA.add(nuResult.get(alphaEntry.getKey()), rhoResult.get(alphaEntry.getKey()))));
+      result.put(alphaEntry.getKey(),
+          (DoubleMatrix2D) ALGEBRA.add(alphaEntry.getValue(), ALGEBRA.add(nuResult.get(alphaEntry.getKey()), rhoResult.get(alphaEntry.getKey()))));
     }
     return result;
   }
@@ -126,7 +129,8 @@ public class SABRVegaCalculationUtils {
     return new DoubleMatrix2D(result);
   }
 
-  private static Map<Double, DoubleMatrix2D> getVegaCubeForParameter(final double parameter, final Map<Double, List<Pair<Double, Double>>> gridNodeSensitivities,
+  private static Map<Double, DoubleMatrix2D> getVegaCubeForParameter(final double parameter,
+      final Map<Double, List<Pair<Double, Double>>> gridNodeSensitivities,
       final Map<Double, List<Pair<Double, DoubleMatrix2D>>> inverseJacobians, final int parameterNumber) {
     final Map<Double, DoubleMatrix2D> vega = new TreeMap<>();
     for (final Map.Entry<Double, List<Pair<Double, Double>>> entry : gridNodeSensitivities.entrySet()) {
@@ -155,7 +159,7 @@ public class SABRVegaCalculationUtils {
 
   private static final class DoublesPairComparator implements Comparator<DoublesPair> {
 
-    public DoublesPairComparator() {
+    DoublesPairComparator() {
     }
 
     @Override

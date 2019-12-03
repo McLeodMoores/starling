@@ -22,7 +22,7 @@ import com.opengamma.id.ExternalIdBundle;
 
 /**
  * Encodes/decodes a {@link SnapshotDataBundle} to/from its Fudge representation.
- * 
+ *
  * <pre>
  * message SnapshotDataBundle {
  *   message {
@@ -63,7 +63,7 @@ public class SnapshotDataBundleFudgeBuilder implements FudgeBuilder<SnapshotData
         if (identifierFields.size() == 1) {
           object.setDataPoint(deserializer.fieldValueToObject(ExternalId.class, identifierFields.get(0)), dataMsg.getDouble(VALUE_FIELD));
         } else {
-          final List<ExternalId> identifiers = new ArrayList<ExternalId>(identifierFields.size());
+          final List<ExternalId> identifiers = new ArrayList<>(identifierFields.size());
           for (final FudgeField identifier : identifierFields) {
             identifiers.add(deserializer.fieldValueToObject(ExternalId.class, identifier));
           }

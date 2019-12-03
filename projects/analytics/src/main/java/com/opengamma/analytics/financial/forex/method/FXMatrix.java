@@ -112,9 +112,11 @@ public class FXMatrix {
   /**
    * Add a new currency to the FX matrix.
    * @param ccyToAdd The currency to add. Should not be in the FX matrix already.
-   * @param ccyReference The reference currency used to compute the cross rates with the new currency. Should already be in the matrix, except if the matrix is empty.
+   * @param ccyReference The reference currency used to compute the cross rates with the new currency.
+   * Should already be in the matrix, except if the matrix is empty.
    * IF the FX matrix is empty, the reference currency will be used as currency 0.
-   * @param fxRate TheFX rate between the new currency and the reference currency. It is 1 ccyToAdd = fxrate ccyReference. The FX matrix will be completed using cross rate
+   * @param fxRate TheFX rate between the new currency and the reference currency.
+   * It is 1 ccyToAdd = fxrate ccyReference. The FX matrix will be completed using cross rate
    * coherent with the data provided.
    */
   public void addCurrency(final Currency ccyToAdd, final Currency ccyReference, final double fxRate) {
@@ -196,7 +198,8 @@ public class FXMatrix {
    * Reset the exchange rate of a given currency.
    * @param ccyToUpdate The currency for which the exchange rates should be updated. Should be in the FX matrix already.
    * @param ccyReference The reference currency used to compute the cross rates with the new currency. Should already be in the matrix.
-   * @param fxRate TheFX rate between the new currency and the reference currency. It is 1.0 * ccyToAdd = fxrate * ccyReference. The FX matrix will be changed for currency1
+   * @param fxRate TheFX rate between the new currency and the reference currency.
+   * It is 1.0 * ccyToAdd = fxrate * ccyReference. The FX matrix will be changed for currency1
    * using cross rate coherent with the data provided.
    */
   public void updateRates(final Currency ccyToUpdate, final Currency ccyReference, final double fxRate) {

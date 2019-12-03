@@ -38,25 +38,25 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    */
-  public DelegatingFinancialSecuritySource(FinancialSecuritySource defaultSource) {
-    _delegator = new UniqueIdSchemeDelegator<FinancialSecuritySource>(defaultSource);
+  public DelegatingFinancialSecuritySource(final FinancialSecuritySource defaultSource) {
+    _delegator = new UniqueIdSchemeDelegator<>(defaultSource);
     _changeManager = defaultSource.changeManager();
   }
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    * @param schemePrefixToSourceMap the map of sources by scheme to switch on, not null
    */
-  public DelegatingFinancialSecuritySource(FinancialSecuritySource defaultSource, Map<String, FinancialSecuritySource> schemePrefixToSourceMap) {
-    _delegator = new UniqueIdSchemeDelegator<FinancialSecuritySource>(defaultSource, schemePrefixToSourceMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
+  public DelegatingFinancialSecuritySource(final FinancialSecuritySource defaultSource, final Map<String, FinancialSecuritySource> schemePrefixToSourceMap) {
+    _delegator = new UniqueIdSchemeDelegator<>(defaultSource, schemePrefixToSourceMap);
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
     changeManager.addChangeManager(defaultSource.changeManager());
-    for (FinancialSecuritySource source : schemePrefixToSourceMap.values()) {
+    for (final FinancialSecuritySource source : schemePrefixToSourceMap.values()) {
       changeManager.addChangeManager(source.changeManager());
     }
     _changeManager = changeManager;
@@ -64,24 +64,24 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
 
   //-------------------------------------------------------------------------
   @Override
-  public Security get(UniqueId uid) {
+  public Security get(final UniqueId uid) {
     ArgumentChecker.notNull(uid, "uid");
     return _delegator.chooseDelegate(uid.getScheme()).get(uid);
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return _delegator.chooseDelegate(objectId.getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     // best implementation is to return first matching result
-    for (SecuritySource delegateSource : _delegator.getDelegates().values()) {
-      Collection<Security> result = delegateSource.get(bundle);
+    for (final SecuritySource delegateSource : _delegator.getDelegates().values()) {
+      final Collection<Security> result = delegateSource.get(bundle);
       if (!result.isEmpty()) {
         return result;
       }
@@ -90,12 +90,12 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // best implementation is to return first matching result
-    for (SecuritySource delegateSource : _delegator.getDelegates().values()) {
-      Collection<Security> result = delegateSource.get(bundle, versionCorrection);
+    for (final SecuritySource delegateSource : _delegator.getDelegates().values()) {
+      final Collection<Security> result = delegateSource.get(bundle, versionCorrection);
       if (!result.isEmpty()) {
         return result;
       }
@@ -104,11 +104,11 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     // best implementation is to return first matching result
-    for (SecuritySource delegateSource : _delegator.getDelegates().values()) {
-      Security result = delegateSource.getSingle(bundle);
+    for (final SecuritySource delegateSource : _delegator.getDelegates().values()) {
+      final Security result = delegateSource.getSingle(bundle);
       if (result != null) {
         return result;
       }
@@ -117,13 +117,13 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(bundle, "bundle");
     // best implementation is to return first matching result
-    for (SecuritySource delegateSource : _delegator.getDelegates().values()) {
-      Security result = delegateSource.getSingle(bundle, versionCorrection);
+    for (final SecuritySource delegateSource : _delegator.getDelegates().values()) {
+      final Security result = delegateSource.getSingle(bundle, versionCorrection);
       if (result != null) {
         return result;
       }
@@ -132,10 +132,10 @@ public class DelegatingFinancialSecuritySource extends AbstractSecuritySource im
   }
 
   @Override
-  public Collection<Security> getBondsWithIssuerName(String issuerName) {
+  public Collection<Security> getBondsWithIssuerName(final String issuerName) {
     // best implementation is to return first matching result
-    for (FinancialSecuritySource delegateSource : _delegator.getDelegates().values()) {
-      Collection<Security> result = delegateSource.getBondsWithIssuerName(issuerName);
+    for (final FinancialSecuritySource delegateSource : _delegator.getDelegates().values()) {
+      final Collection<Security> result = delegateSource.getBondsWithIssuerName(issuerName);
       if (!result.isEmpty()) {
         return result;
       }

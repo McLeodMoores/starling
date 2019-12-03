@@ -5,7 +5,6 @@
  */
 package com.opengamma.livedata.client;
 
-import java.io.IOException;
 import java.util.Timer;
 
 import org.mockito.Mockito;
@@ -42,20 +41,21 @@ public class HeartbeaterTest {
 
   //-------------------------------------------------------------------------
   @Test(invocationCount = 5, successPercentage = 19)
-  public void basicOperation() throws InterruptedException, IOException {
-    LiveDataHeartbeat heartbeatService = Mockito.mock(LiveDataHeartbeat.class);
-    ValueDistributor valueDistributor = new ValueDistributor();
-    CollectingLiveDataListener listener1 = new CollectingLiveDataListener();
-    LiveDataSpecification spec1 = new LiveDataSpecification(
+  public void basicOperation() throws InterruptedException {
+    final LiveDataHeartbeat heartbeatService = Mockito.mock(LiveDataHeartbeat.class);
+    final ValueDistributor valueDistributor = new ValueDistributor();
+    final CollectingLiveDataListener listener1 = new CollectingLiveDataListener();
+    final LiveDataSpecification spec1 = new LiveDataSpecification(
         "Test",
         ExternalId.of("foo", "bar"));
-    LiveDataSpecification spec2 = new LiveDataSpecification(
+    final LiveDataSpecification spec2 = new LiveDataSpecification(
         "Test",
         ExternalId.of("foo", "baz"));
     valueDistributor.addListener(spec1, listener1);
     valueDistributor.addListener(spec2, listener1);
 
     @SuppressWarnings("unused")
+    final
     Heartbeater heartbeatSender = new Heartbeater(valueDistributor, heartbeatService, _timer, 100L);
     // Wait 250ms to make sure we get two ticks.
     Thread.sleep(250L);

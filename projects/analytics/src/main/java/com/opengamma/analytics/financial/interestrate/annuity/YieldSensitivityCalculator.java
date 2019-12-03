@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.annuity;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 
 /**
- * 
+ *
  */
 public final class YieldSensitivityCalculator {
   private static final BracketRoot BRACKETER = new BracketRoot();
@@ -32,11 +32,14 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the 
-   * same present value
-   * @param annuity Set of known cash flows 
-   * @param pv The present value of the future cash flows. Also know as dirty or full price
-   * @return continuously compounded yield (as a fraction) 
+   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the
+   * same present value.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param pv
+   *          The present value of the future cash flows. Also know as dirty or full price
+   * @return continuously compounded yield (as a fraction)
    */
   public double calculateYield(final Annuity<? extends PaymentFixed> annuity, final double pv) {
     Validate.notNull(annuity, "annuity");
@@ -54,11 +57,14 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the 
-   * same present value
-   * @param annuity Set of known cash flows 
-   * @param pv The present value of the future cash flows. Also know as dirty or full price
-   * @return continuously compounded yield (as a fraction) 
+   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the
+   * same present value.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param pv
+   *          The present value of the future cash flows. Also know as dirty or full price
+   * @return continuously compounded yield (as a fraction)
    */
   public double calculateYield(final AnnuityCouponFixed annuity, final double pv) {
     Validate.notNull(annuity, "annuity");
@@ -76,9 +82,12 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * Calculate the present value of a set of cash flows given a yield 
-   * @param annuity  Set of known cash flows 
-   * @param yield Continuously compounded constant interest rate 
+   * Calculate the present value of a set of cash flows given a yield.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param yield
+   *          Continuously compounded constant interest rate
    * @return Present value (dirty price)
    */
   public double calculatePriceForYield(final Annuity<? extends PaymentFixed> annuity, final double yield) {
@@ -95,9 +104,12 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * Calculate the present value of a set of cash flows given a yield 
-   * @param annuity  Set of known cash flows 
-   * @param yield Continuously compounded constant interest rate 
+   * Calculate the present value of a set of cash flows given a yield.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param yield
+   *          Continuously compounded constant interest rate
    * @return Present value (dirty price)
    */
   public double calculatePriceForYield(final AnnuityCouponFixed annuity, final double yield) {
@@ -114,11 +126,15 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the 
-   * factor (-1)^n which just keeps the sign positive when cash flows are positive 
-   * @param annuity Set of known cash flows  
-   * @param pv The present value of the future cash flows. Also know as dirty or full price
-   *@param order The order of the derivative 
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
+   * just keeps the sign positive when cash flows are positive.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param pv
+   *          The present value of the future cash flows. Also know as dirty or full price
+   * @param order
+   *          The order of the derivative
    * @return nth order yield sensitivity (times (-1)^n
    */
   public double calculateNthOrderSensitivity(final Annuity<? extends PaymentFixed> annuity, final double pv, final int order) {
@@ -128,11 +144,15 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the 
-   * factor (-1)^n which just keeps the sign positive when cash flows are positive 
-   * @param annuity Set of known cash flows  
-   * @param pv The present value of the future cash flows. Also know as dirty or full price
-   *@param order The order of the derivative 
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
+   * just keeps the sign positive when cash flows are positive.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param pv
+   *          The present value of the future cash flows. Also know as dirty or full price
+   * @param order
+   *          The order of the derivative
    * @return nth order yield sensitivity (times (-1)^n
    */
   public double calculateNthOrderSensitivity(final AnnuityCouponFixed annuity, final double pv, final int order) {
@@ -142,11 +162,15 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   *  For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the 
-   *  factor (-1)^n which just keeps the sign positive when cash flows are positive 
-   * @param annuity Set of known cash flows 
-   * @param yield Continuously compounded constant interest rate 
-   * @param order The order of the derivative 
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
+   * just keeps the sign positive when cash flows are positive.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param yield
+   *          Continuously compounded constant interest rate
+   * @param order
+   *          The order of the derivative
    * @return nth order yield sensitivity (times (-1)^n)
    */
   public double calculateNthOrderSensitivityFromYield(final Annuity<? extends PaymentFixed> annuity, final double yield, final int order) {
@@ -168,11 +192,15 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   *  For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the 
-   *  factor (-1)^n which just keeps the sign positive when cash flows are positive 
-   * @param annuity Set of known cash flows 
-   * @param yield Continuously compounded constant interest rate 
-   * @param order The order of the derivative 
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
+   * just keeps the sign positive when cash flows are positive.
+   *
+   * @param annuity
+   *          Set of known cash flows
+   * @param yield
+   *          Continuously compounded constant interest rate
+   * @param order
+   *          The order of the derivative
    * @return nth order yield sensitivity (times (-1)^n)
    */
   public double calculateNthOrderSensitivityFromYield(final AnnuityCouponFixed annuity, final double yield, final int order) {

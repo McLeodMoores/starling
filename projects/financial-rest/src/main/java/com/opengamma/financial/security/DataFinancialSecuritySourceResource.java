@@ -5,14 +5,12 @@
  */
 package com.opengamma.financial.security;
 
-import java.net.URI;
 import java.util.Collection;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
@@ -28,7 +26,7 @@ public class DataFinancialSecuritySourceResource extends DataSecuritySourceResou
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param securitySource  the underlying security source, not null
    */
   public DataFinancialSecuritySourceResource(final SecuritySource securitySource) {
@@ -38,9 +36,10 @@ public class DataFinancialSecuritySourceResource extends DataSecuritySourceResou
   //-------------------------------------------------------------------------
   /**
    * Gets the security source.
-   * 
+   *
    * @return the security source, not null
    */
+  @Override
   public FinancialSecuritySource getSecuritySource() {
     return (FinancialSecuritySource) super.getSecuritySource();
   }
@@ -48,9 +47,9 @@ public class DataFinancialSecuritySourceResource extends DataSecuritySourceResou
   //-------------------------------------------------------------------------
   @GET
   @Path("securities/bonds")
-  public Response searchBonds(@QueryParam("issuerName") String issuerName) {
-    FinancialSecuritySource source = (FinancialSecuritySource) getSecuritySource();
-    Collection<? extends Security> result = source.getBondsWithIssuerName(issuerName);
+  public Response searchBonds(@QueryParam("issuerName") final String issuerName) {
+    final FinancialSecuritySource source = getSecuritySource();
+    final Collection<? extends Security> result = source.getBondsWithIssuerName(issuerName);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 

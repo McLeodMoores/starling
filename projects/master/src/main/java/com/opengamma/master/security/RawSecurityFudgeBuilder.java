@@ -24,27 +24,31 @@ public class RawSecurityFudgeBuilder extends AbstractFudgeBuilder implements Fud
   public static final String RAW_DATA_FIELD_NAME = "rawData";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, RawSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final RawSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     RawSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, RawSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final RawSecurity object, final MutableFudgeMsg msg) {
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
-    addToMessage(msg, RAW_DATA_FIELD_NAME, object.getRawData());
+    if (object.getRawData().length != 0) {
+      addToMessage(msg, RAW_DATA_FIELD_NAME, object.getRawData());
+    }
   }
 
   @Override
-  public RawSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    RawSecurity object = new RawSecurity(msg.getString(ManageableSecurityFudgeBuilder.SECURITY_TYPE_FIELD_NAME));
+  public RawSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final RawSecurity object = new RawSecurity(msg.getString(ManageableSecurityFudgeBuilder.SECURITY_TYPE_FIELD_NAME));
     RawSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, RawSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final RawSecurity object) {
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
-    object.setRawData(msg.getValue(byte[].class, RAW_DATA_FIELD_NAME));
+    if (msg.hasField(RAW_DATA_FIELD_NAME)) {
+      object.setRawData(msg.getValue(byte[].class, RAW_DATA_FIELD_NAME));
+    }
   }
 
 }

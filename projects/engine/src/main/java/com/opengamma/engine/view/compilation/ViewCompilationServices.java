@@ -27,20 +27,25 @@ public class ViewCompilationServices {
   private final DependencyGraphBuilderFactory _dependencyGraphBuilder;
 
   /**
-   * Constructs an instance
-   * 
-   * @param marketDataAvailabilityProvider the market data availability provider
-   * @param functionResolver the function resolver
-   * @param compilationContext the function compilation context
-   * @param executorService the executor service
-   * @param dependencyGraphBuilder the graph building implementation
+   * Constructs an instance.
+   *
+   * @param marketDataAvailabilityProvider
+   *          the market data availability provider
+   * @param functionResolver
+   *          the function resolver
+   * @param compilationContext
+   *          the function compilation context
+   * @param executorService
+   *          the executor service
+   * @param dependencyGraphBuilder
+   *          the graph building implementation
    */
   public ViewCompilationServices(
-      MarketDataAvailabilityProvider marketDataAvailabilityProvider,
-      FunctionResolver functionResolver,
-      FunctionCompilationContext compilationContext,
-      PoolExecutor executorService,
-      DependencyGraphBuilderFactory dependencyGraphBuilder) {
+      final MarketDataAvailabilityProvider marketDataAvailabilityProvider,
+      final FunctionResolver functionResolver,
+      final FunctionCompilationContext compilationContext,
+      final PoolExecutor executorService,
+      final DependencyGraphBuilderFactory dependencyGraphBuilder) {
     ArgumentChecker.notNull(marketDataAvailabilityProvider, "marketDataAvailabilityProvider");
     ArgumentChecker.notNull(functionResolver, "functionResolver");
     ArgumentChecker.notNull(compilationContext, "compilationContext");
@@ -53,10 +58,10 @@ public class ViewCompilationServices {
     _dependencyGraphBuilder = dependencyGraphBuilder;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the market data availability provider.
-   * 
+   *
    * @return the market data availability provider, not null
    */
   public MarketDataAvailabilityProvider getMarketDataAvailabilityProvider() {
@@ -65,7 +70,7 @@ public class ViewCompilationServices {
 
   /**
    * Gets the function resolver.
-   * 
+   *
    * @return the function resolver, not null
    */
   public FunctionResolver getFunctionResolver() {
@@ -74,7 +79,7 @@ public class ViewCompilationServices {
 
   /**
    * Gets the executor service.
-   * 
+   *
    * @return the executor service, not null
    */
   public PoolExecutor getExecutorService() {
@@ -83,7 +88,7 @@ public class ViewCompilationServices {
 
   /**
    * Gets the compilation context.
-   * 
+   *
    * @return the compilation context, not null
    */
   public FunctionCompilationContext getFunctionCompilationContext() {
@@ -92,7 +97,7 @@ public class ViewCompilationServices {
 
   /**
    * Gets the dependency graph builder factory.
-   * 
+   *
    * @return the dependency graph builder factory, not null
    */
   public DependencyGraphBuilderFactory getDependencyGraphBuilder() {

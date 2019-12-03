@@ -21,12 +21,12 @@ import com.opengamma.util.tuple.Pairs;
  * <p>
  * Date constraint strings are crude expressions that are evaluated at execution time. This allows the valuation time to be referred to symbolically.
  * <dl>
- * <dt><em>YYYY</em>-</em>MM</em>-<em>DD</em></dt>
+ * <dt><em>YYYY</em>-<em>MM</em>-<em>DD</em></dt>
  * <dd>The date literal</dd>
  * <dt>Now</dt>
  * <dd>The valuation date</dd>
  * <dt>Null</dt>
- * <dd>Will return <code>null</code> from the {@link #getLocalDate} function</dd>
+ * <dd>Will return <code>null</code> from the function</dd>
  * <dt>PreviousWeekDay(<em>expr</em>)</dt>
  * <dd>The previous weekday to the evaluated date constraint expression</dd>
  * <dt>PreviousWeekDay</dt>
@@ -36,7 +36,8 @@ import com.opengamma.util.tuple.Pairs;
  * <dt><em>expr</em>[+|-]<em>period</em></dt>
  * <dd>The evaluated date constraint expression plus or minus the given period, for example <code>PreviousWeekDay-P7D</code></dd>
  * <dt>-<em>period</em></dt>
- * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day. This is equivalent to <code>NOW-<em>period</em></code></dd>
+ * <dd>The valuation date minus the given period, for example <code>-P1D</code> for the previous day. This is equivalent to
+ * <code>NOW-<em>period</em></code></dd>
  * </dl>
  */
 public abstract class DateConstraint {
@@ -58,7 +59,7 @@ public abstract class DateConstraint {
    */
   public static final DateConstraint VALUATION_TIME = new ValuationTime();
 
-  /* package */DateConstraint() {
+  /* package */ DateConstraint() {
   }
 
   public static DateConstraint of(final LocalDate date) {
@@ -87,7 +88,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one plus the given period.
    *
-   * @param period the period to add, not null
+   * @param period
+   *          the period to add, not null
    * @return the new date constraint
    */
   public DateConstraint plus(final Period period) {
@@ -97,7 +99,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one minus the given period.
    *
-   * @param period the period to subtract, not null
+   * @param period
+   *          the period to subtract, not null
    * @return the new date constraint
    */
   public DateConstraint minus(final Period period) {
@@ -107,7 +110,8 @@ public abstract class DateConstraint {
   /**
    * Returns a date constraint that corresponds to this one minus the given period.
    *
-   * @param period the period to subtract, not null
+   * @param period
+   *          the period to subtract, not null
    * @return the new date constraint
    */
   public DateConstraint minus(final String period) {
@@ -115,11 +119,14 @@ public abstract class DateConstraint {
   }
 
   /**
-   * Approximates the period difference between two constraints, that is the period that must be added to this contraint to get the same value as the other one.
+   * Approximates the period difference between two constraints, that is the period that must be added to this constraint to get the same value as the other
+   * one.
    *
-   * @param other the other constraint, not null
+   * @param other
+   *          the other constraint, not null
    * @return the difference as a period, not null
-   * @throws IllegalArgumentException if the constraints are not sufficiently compatible
+   * @throws IllegalArgumentException
+   *           if the constraints are not sufficiently compatible
    */
   public Period periodUntil(final DateConstraint other) {
     if (equals(other)) {
@@ -177,7 +184,7 @@ public abstract class DateConstraint {
 
     private final LocalDate _value;
 
-    public LiteralDateConstraint(final LocalDate value) {
+    LiteralDateConstraint(final LocalDate value) {
       _value = value;
     }
 
@@ -205,9 +212,8 @@ public abstract class DateConstraint {
     public Period periodUntil(final DateConstraint other) {
       if (other instanceof LiteralDateConstraint) {
         return _value.until(((LiteralDateConstraint) other)._value);
-      } else {
-        return super.periodUntil(other);
       }
+      return super.periodUntil(other);
     }
 
     @Override
@@ -237,7 +243,7 @@ public abstract class DateConstraint {
     private final boolean _plus;
     private final Period _period;
 
-    public PlusMinusPeriodDateConstraint(final DateConstraint underlying, final boolean plus, final Period period) {
+    PlusMinusPeriodDateConstraint(final DateConstraint underlying, final boolean plus, final Period period) {
       _underlying = underlying;
       _plus = plus;
       _period = period;
@@ -254,12 +260,10 @@ public abstract class DateConstraint {
       if (newPeriod.isZero()) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
+        return VALUATION_TIME;
       }
+      return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
     }
 
     @Override
@@ -273,12 +277,10 @@ public abstract class DateConstraint {
       if (newPeriod.isZero()) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
+        return VALUATION_TIME;
       }
+      return new PlusMinusPeriodDateConstraint(_underlying, _plus, newPeriod);
     }
 
     @Override
@@ -293,9 +295,8 @@ public abstract class DateConstraint {
       } else if (o.equals(_underlying == null ? DateConstraint.VALUATION_TIME : _underlying)) {
         if (_plus) {
           return _period.negated();
-        } else {
-          return _period;
         }
+        return _period;
       }
       throw new IllegalArgumentException();
     }
@@ -334,7 +335,7 @@ public abstract class DateConstraint {
     private final DateConstraint _underlying;
     private final int _adjust;
 
-    public WeekDayDateConstraint(final DateConstraint underlying, final int adjust) {
+    WeekDayDateConstraint(final DateConstraint underlying, final int adjust) {
       _underlying = underlying;
       _adjust = adjust;
     }
@@ -344,12 +345,10 @@ public abstract class DateConstraint {
       if (_adjust == 1) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new WeekDayDateConstraint(_underlying, _adjust - 1);
+        return VALUATION_TIME;
       }
+      return new WeekDayDateConstraint(_underlying, _adjust - 1);
     }
 
     @Override
@@ -357,33 +356,28 @@ public abstract class DateConstraint {
       if (_adjust == -1) {
         if (_underlying != null) {
           return _underlying;
-        } else {
-          return VALUATION_TIME;
         }
-      } else {
-        return new WeekDayDateConstraint(_underlying, _adjust + 1);
+        return VALUATION_TIME;
       }
+      return new WeekDayDateConstraint(_underlying, _adjust + 1);
     }
 
     private String expr(final int adjust, final String str) {
       if (adjust == 1) {
         if (_underlying != null) {
           return str + "(" + _underlying + ")";
-        } else {
-          return str;
         }
-      } else {
-        return str + "(" + expr(adjust - 1, str) + ")";
+        return str;
       }
+      return str + "(" + expr(adjust - 1, str) + ")";
     }
 
     @Override
     public String toString() {
       if (_adjust < 0) {
         return expr(-_adjust, PREVIOUS_WEEK_DAY_STRING);
-      } else {
-        return expr(_adjust, NEXT_WEEK_DAY_STRING);
       }
+      return expr(_adjust, NEXT_WEEK_DAY_STRING);
     }
 
     @Override
@@ -461,9 +455,8 @@ public abstract class DateConstraint {
       final String bracketExpr = str.substring(1, index - 1);
       if (index == str.length()) {
         return Pairs.of(bracketExpr, (String) null);
-      } else {
-        return Pairs.of(bracketExpr, str.substring(index));
       }
+      return Pairs.of(bracketExpr, str.substring(index));
     } else {
       return Pairs.of((String) null, str);
     }
@@ -492,10 +485,11 @@ public abstract class DateConstraint {
   /**
    * Basic parsing of a date constraint string to a {@link DateConstraint} object.
    * <p>
-   * This is not a full parser for the syntax described above. For example, expressions such as <code>-P7D-P7D</code> will not be recognized. Such expressions will not however be constructed using the
-   * classes above (it would produce <code>-P14D</code>).
+   * This is not a full parser for the syntax described above. For example, expressions such as <code>-P7D-P7D</code> will not be recognized. Such expressions
+   * will not however be constructed using the classes above (it would produce <code>-P14D</code>).
    *
-   * @param str the string to parse, not null
+   * @param str
+   *          the string to parse, not null
    * @return the parsed constraint or null if the empty string is given
    */
   public static DateConstraint parse(final String str) {
@@ -506,9 +500,8 @@ public abstract class DateConstraint {
       if (str.startsWith(NOW_STRING)) {
         if (str.length() == NOW_STRING.length()) {
           return VALUATION_TIME;
-        } else {
-          return parseRight(VALUATION_TIME, str.substring(NOW_STRING.length()));
         }
+        return parseRight(VALUATION_TIME, str.substring(NOW_STRING.length()));
       } else if (str.startsWith(NULL_STRING)) {
         return NULL;
       } else if (str.charAt(0) == '-') {
@@ -525,9 +518,8 @@ public abstract class DateConstraint {
         }
         if (brackets.getSecond() != null) {
           return parseRight(left, brackets.getSecond());
-        } else {
-          return left;
         }
+        return left;
       } else if (str.startsWith(NEXT_WEEK_DAY_STRING)) {
         final Pair<String, String> brackets = parseBrackets(str.substring(NEXT_WEEK_DAY_STRING.length()));
         final DateConstraint left;
@@ -538,9 +530,8 @@ public abstract class DateConstraint {
         }
         if (brackets.getSecond() != null) {
           return parseRight(left, brackets.getSecond());
-        } else {
-          return left;
         }
+        return left;
       } else {
         return new LiteralDateConstraint(LocalDate.parse(str));
       }
@@ -554,8 +545,10 @@ public abstract class DateConstraint {
    * <p>
    * This is more efficient than parsing and evaluating the {@link DateConstraint} object structures as two separate steps.
    *
-   * @param context the execution context, not null
-   * @param str the string to parse and evaluate
+   * @param context
+   *          the execution context, not null
+   * @param str
+   *          the string to parse and evaluate
    * @return the evaluated local date, possibly null
    */
   public static LocalDate evaluate(final FunctionExecutionContext context, final String str) {
@@ -569,9 +562,8 @@ public abstract class DateConstraint {
     if (str.startsWith(NOW_STRING)) {
       if (str.length() == NOW_STRING.length()) {
         return valuationTime;
-      } else {
-        return evaluateRight(valuationTime, str.substring(NOW_STRING.length()));
       }
+      return evaluateRight(valuationTime, str.substring(NOW_STRING.length()));
     } else if (str.startsWith(NULL_STRING)) {
       return null;
     } else if (str.charAt(0) == '-') {
@@ -588,9 +580,8 @@ public abstract class DateConstraint {
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());
-      } else {
-        return left;
       }
+      return left;
     } else if (str.startsWith(NEXT_WEEK_DAY_STRING)) {
       final Pair<String, String> brackets = parseBrackets(str.substring(NEXT_WEEK_DAY_STRING.length()));
       final LocalDate left;
@@ -601,9 +592,8 @@ public abstract class DateConstraint {
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());
-      } else {
-        return left;
       }
+      return left;
     } else {
       return LocalDate.parse(str);
     }

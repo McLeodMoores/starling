@@ -23,14 +23,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbPositionMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbPositionMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbPositionMasterTest.class);
 
   private DbPositionMaster _posMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbPositionMasterTest(String databaseType, String databaseVersion) {
+  public DbPositionMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

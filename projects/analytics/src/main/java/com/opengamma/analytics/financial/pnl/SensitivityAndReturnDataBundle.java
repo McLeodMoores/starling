@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.sensitivity.Sensitivity;
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class SensitivityAndReturnDataBundle {
   private final Sensitivity<?> _sensitivity;
@@ -24,7 +24,8 @@ public class SensitivityAndReturnDataBundle {
   private final Map<UnderlyingType, DoubleTimeSeries<?>> _underlyingReturnTS;
   private final List<UnderlyingType> _underlyings;
 
-  public SensitivityAndReturnDataBundle(final Sensitivity<?> sensitivity, final double value, final Map<UnderlyingType, DoubleTimeSeries<?>> underlyingReturnTS) {
+  public SensitivityAndReturnDataBundle(final Sensitivity<?> sensitivity, final double value,
+      final Map<UnderlyingType, DoubleTimeSeries<?>> underlyingReturnTS) {
     Validate.notNull(sensitivity, "sensitivity");
     Validate.notNull(underlyingReturnTS, "underlying returns");
     Validate.notEmpty(underlyingReturnTS, "underlying returns");
@@ -69,11 +70,11 @@ public class SensitivityAndReturnDataBundle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_sensitivity == null) ? 0 : _sensitivity.hashCode());
-    result = prime * result + ((_underlyingReturnTS == null) ? 0 : _underlyingReturnTS.hashCode());
+    result = prime * result + (_sensitivity == null ? 0 : _sensitivity.hashCode());
+    result = prime * result + (_underlyingReturnTS == null ? 0 : _underlyingReturnTS.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_value);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -89,7 +90,8 @@ public class SensitivityAndReturnDataBundle {
       return false;
     }
     final SensitivityAndReturnDataBundle other = (SensitivityAndReturnDataBundle) obj;
-    return ObjectUtils.equals(_sensitivity, other._sensitivity) && ObjectUtils.equals(_underlyingReturnTS, other._underlyingReturnTS) && ObjectUtils.equals(_value, other._value);
+    return ObjectUtils.equals(_sensitivity, other._sensitivity) && ObjectUtils.equals(_underlyingReturnTS, other._underlyingReturnTS)
+        && ObjectUtils.equals(_value, other._value);
   }
 
 }

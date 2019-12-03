@@ -49,11 +49,11 @@ public class FXForwardPointsBCSFunction extends FXForwardPointsFunction {
   private static final InstrumentDerivativeVisitor<MulticurveForwardPointsProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivityForexForwardPointsCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<MulticurveForwardPointsProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<MulticurveForwardPointsProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(
+      PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<MulticurveForwardPointsProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<MulticurveForwardPointsProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(
+      PSC);
 
   public FXForwardPointsBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -77,7 +77,8 @@ public class FXForwardPointsBCSFunction extends FXForwardPointsFunction {
         } else {
           ccyPair = Pairs.of(currency2, currency1);
         }
-        final MulticurveForwardPointsProviderInterface curves = new MulticurveForwardPointsProvider(getMergedProviders(inputs, fxMatrix), forwardPoints, ccyPair);
+        final MulticurveForwardPointsProviderInterface curves = new MulticurveForwardPointsProvider(getMergedProviders(inputs, fxMatrix), forwardPoints,
+            ccyPair);
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(forex, curves, blocks);
         final Set<Pair<String, Currency>> entries = sensitivities.getAllNamesCurrency();

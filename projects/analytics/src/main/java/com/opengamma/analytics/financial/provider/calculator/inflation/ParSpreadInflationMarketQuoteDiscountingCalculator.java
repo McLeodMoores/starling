@@ -28,8 +28,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute the spread to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "market quote" will depend of each instrument.
+ * Compute the spread to be added to the market standard quote of the instrument for which the present value of the instrument is zero. The notion of "market
+ * quote" will depend of each instrument.
  */
 public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<InflationProviderInterface, Double> {
 
@@ -40,6 +40,7 @@ public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends In
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadInflationMarketQuoteDiscountingCalculator getInstance() {
@@ -64,7 +65,7 @@ public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends In
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUT = InterestRateFutureSecurityDiscountingMethod.getInstance();
   private static final ForexSwapDiscountingMethod METHOD_FOREX_SWAP = ForexSwapDiscountingMethod.getInstance();
 
-  //-----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public Double visitCash(final Cash deposit, final InflationProviderInterface inflation) {
@@ -76,23 +77,26 @@ public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends In
     return METHOD_DEPOSIT_IBOR.parSpread(deposit, inflation.getMulticurveProvider());
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitForwardRateAgreement(final ForwardRateAgreement fra, final InflationProviderInterface inflation) {
     return METHOD_FRA.parSpread(fra, inflation.getMulticurveProvider());
   }
 
-  //-----      Swaps     -----
+  // ----- Swaps -----
 
   /**
-  * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-  * It is computed as the opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point
-  * of the first leg (as computed by the PresentValueBasisPointCalculator).
-  * @param swap The swap.
-  * @param inflation The inflation curves and multi-curves provider.
-  * @return The par spread.
-  */
+   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
+   * present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
+   * PresentValueBasisPointCalculator).
+   *
+   * @param swap
+   *          The swap.
+   * @param inflation
+   *          The inflation curves and multi-curves provider.
+   * @return The par spread.
+   */
   @Override
   public Double visitSwap(final Swap<?, ?> swap, final InflationProviderInterface inflation) {
     ArgumentChecker.notNull(inflation, "Market");
@@ -106,7 +110,8 @@ public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends In
       return Math.pow(pvInflationLeg / discountFactor / notional + 1, 1 / tenor) - 1 - cpn.getFixedRate();
     }
     final MulticurveProviderInterface multicurves = inflation.getMulticurveProvider();
-    return -multicurves.getFxRates().convert(swap.accept(PVMC, multicurves), swap.getFirstLeg().getCurrency()).getAmount() / swap.getFirstLeg().accept(PVMQSC, multicurves);
+    return -multicurves.getFxRates().convert(swap.accept(PVMC, multicurves), swap.getFirstLeg().getCurrency()).getAmount()
+        / swap.getFirstLeg().accept(PVMQSC, multicurves);
   }
 
   @Override
@@ -114,21 +119,24 @@ public final class ParSpreadInflationMarketQuoteDiscountingCalculator extends In
     return visitSwap(swap, inflation);
   }
 
-  //-----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final InflationProviderInterface inflation) {
     return METHOD_IR_FUT.price(futures.getUnderlyingSecurity(), inflation.getMulticurveProvider()) - futures.getReferencePrice();
   }
 
-  //     -----     Forex     -----
+  // ----- Forex -----
 
   /**
-  * The par spread is the spread that should be added to the forex forward points to have a zero value.
-  * @param fx The forex swap.
-  * @param inflation The inflation provider.
-  * @return The spread.
-  */
+   * The par spread is the spread that should be added to the forex forward points to have a zero value.
+   *
+   * @param fx
+   *          The forex swap.
+   * @param inflation
+   *          The inflation provider.
+   * @return The spread.
+   */
   @Override
   public Double visitForexSwap(final ForexSwap fx, final InflationProviderInterface inflation) {
     return METHOD_FOREX_SWAP.parSpread(fx, inflation.getMulticurveProvider());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -19,10 +19,10 @@ public class DirichletBoundaryCondition implements BoundaryCondition {
 
   /**
    * Dirichlet boundary condition, i.e. u(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time
-   * @param timeValue The value of u at the boundary, i.e. u(A,t) = f(t) 
+   * @param timeValue The value of u at the boundary, i.e. u(A,t) = f(t)
    * @param level The boundary level (A)
    */
-  public DirichletBoundaryCondition(final Function1D<Double, Double> timeValue, double level) {
+  public DirichletBoundaryCondition(final Function1D<Double, Double> timeValue, final double level) {
     Validate.notNull(timeValue, "null timeValue");
     _timeValue = timeValue;
     _level = level;
@@ -37,7 +37,7 @@ public class DirichletBoundaryCondition implements BoundaryCondition {
     _timeValue = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(Double x) {
+      public Double evaluate(final Double x) {
         return fixedValue;
       }
     };
@@ -55,12 +55,12 @@ public class DirichletBoundaryCondition implements BoundaryCondition {
   }
 
   @Override
-  public double[] getLeftMatrixCondition(ConvectionDiffusionPDE1DStandardCoefficients data, PDEGrid1D grid, double t) {
+  public double[] getLeftMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, final PDEGrid1D grid, final double t) {
     return new double[] {1.0 };
   }
 
   @Override
-  public double[] getRightMatrixCondition(ConvectionDiffusionPDE1DStandardCoefficients data, PDEGrid1D grid, double t) {
+  public double[] getRightMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, final PDEGrid1D grid, final double t) {
     return new double[0];
   }
 

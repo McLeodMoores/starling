@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.portfoliolosssimulationmodel;
@@ -12,8 +12,11 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors
+ * Class to generate a set of simulated default/recovery rate scenarios for a specified universe of obligors.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ScenarioGenerator {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -71,10 +74,12 @@ public class ScenarioGenerator {
     ArgumentChecker.notNull(obligorUniverse, "Obligor universe");
     ArgumentChecker.notNull(recoveryRateModels, "Recovery rate models");
 
-    ArgumentChecker.isTrue(recoveryRateModels.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input recovery rate models");
+    ArgumentChecker.isTrue(recoveryRateModels.length == obligorUniverse.getNumberOfObligors(),
+        "The number of obligors must equal the number of input recovery rate models");
     ArgumentChecker.isTrue(rho.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input correlations");
     ArgumentChecker.isTrue(beta.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input correlations");
-    ArgumentChecker.isTrue(defaultProbability.length == obligorUniverse.getNumberOfObligors(), "The number of obligors must equal the number of input default probabilities");
+    ArgumentChecker.isTrue(defaultProbability.length == obligorUniverse.getNumberOfObligors(),
+        "The number of obligors must equal the number of input default probabilities");
 
     ArgumentChecker.notNegative(numberOfSimulations, "Number of simulations");
     ArgumentChecker.notNegative(simulationTimeHorizon, "Simulation time horizon");
@@ -108,17 +113,17 @@ public class ScenarioGenerator {
   public double[][] generateRecoveryRateScenarios(final ScenarioGenerator scenarioGenerator, final SimulatedObligorDefaultState[][] simulatedDefaultScenarios) {
 
     // Determine the number of simulations and number of obligors in the universe
-    int numberOfSimulations = scenarioGenerator.getNumberofSimulations();
-    int numberOfObligors = scenarioGenerator.getObligorUniverse().getNumberOfObligors();
+    final int numberOfSimulations = scenarioGenerator.getNumberofSimulations();
+    final int numberOfObligors = scenarioGenerator.getObligorUniverse().getNumberOfObligors();
 
     // The matrix of simulated recovery rates per simulation to output
-    double[][] simulatedRecoveryRateScenarios = new double[numberOfSimulations][numberOfObligors];
+    final double[][] simulatedRecoveryRateScenarios = new double[numberOfSimulations][numberOfObligors];
 
     // Construct a N(0, 1) random number generator
-    NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
+    final NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
 
     // Construct a N(0, 1) distribution object (for calculating the default barrier level)
-    NormalDistribution normDist = new NormalDistribution(0.0, 1.0);
+    final NormalDistribution normDist = new NormalDistribution(0.0, 1.0);
 
     // Compute the vector of systemic factors
     final double[] systemicFactor = normRand.getVector(numberOfSimulations);
@@ -145,7 +150,7 @@ public class ScenarioGenerator {
 
           // Calculate the recovery rate
 
-          // FIXME : 
+          // FIXME :
           simulatedRecoveryRateScenarios[alpha][i] = 0.0;
 
         } else {
@@ -167,7 +172,7 @@ public class ScenarioGenerator {
   private double[] generateSystemicFactors(final int numberOfSimulations, final int defaultSimulationSeed) {
 
     // Construct a N(0, 1) random number generator
-    NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
+    final NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
 
     // Compute the vector of systemic factors
     final double[] systemicFactor = normRand.getVector(numberOfSimulations);
@@ -178,15 +183,15 @@ public class ScenarioGenerator {
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // Method to compute the default barrier levels for the obligors
-  private double[] generateDefaultBarrierLevels(ScenarioGenerator scenarioGenerator) {
+  private double[] generateDefaultBarrierLevels(final ScenarioGenerator scenarioGenerator) {
 
     final int numberOfObligors = scenarioGenerator.getObligorUniverse().getNumberOfObligors();
 
     // Vector to hold the default barrier level for each obligor
-    double[] defaultBarrierLevel = new double[numberOfObligors];
+    final double[] defaultBarrierLevel = new double[numberOfObligors];
 
     // Construct a N(0, 1) distribution object (for calculating the default barrier level)
-    NormalDistribution normDist = new NormalDistribution(0.0, 1.0);
+    final NormalDistribution normDist = new NormalDistribution(0.0, 1.0);
 
     // Compute the default barrier level for each obligor
     for (int i = 0; i < numberOfObligors; i++) {
@@ -204,14 +209,14 @@ public class ScenarioGenerator {
   public SimulatedObligorDefaultState[][] generateDefaultScenarios(final ScenarioGenerator scenarioGenerator) {
 
     // Determine the number of simulations and number of obligors in the universe
-    int numberOfSimulations = scenarioGenerator.getNumberofSimulations();
-    int numberOfObligors = scenarioGenerator.getObligorUniverse().getNumberOfObligors();
+    final int numberOfSimulations = scenarioGenerator.getNumberofSimulations();
+    final int numberOfObligors = scenarioGenerator.getObligorUniverse().getNumberOfObligors();
 
     // Construct a N(0, 1) random number generator
-    NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
+    final NormalRandomNumberGenerator normRand = new NormalRandomNumberGenerator(0.0, 1.0);
 
     // The matrix of simulated defaults per simulation to output
-    SimulatedObligorDefaultState[][] simulatedDefaultScenarios = new SimulatedObligorDefaultState[numberOfSimulations][numberOfObligors];
+    final SimulatedObligorDefaultState[][] simulatedDefaultScenarios = new SimulatedObligorDefaultState[numberOfSimulations][numberOfObligors];
 
     // Compute the default barrier level for each obligor
     final double[] defaultBarrierLevel = generateDefaultBarrierLevels(scenarioGenerator);
@@ -234,7 +239,7 @@ public class ScenarioGenerator {
         // Compute the default latent variable for this obligor for this simulation
         final double defaultLatentVariable = rho * systemicFactor[0] + Math.sqrt(1 - rho * rho) * epsilon[i];
 
-        // Did the obligor i default in simulation alpha ... 
+        // Did the obligor i default in simulation alpha ...
         if (defaultLatentVariable < defaultBarrierLevel[i]) {
           // ... yes
           simulatedDefaultScenarios[alpha][i] = SimulatedObligorDefaultState.DEFAULTED;

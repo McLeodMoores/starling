@@ -9,10 +9,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
 
 
@@ -23,7 +22,7 @@ import com.opengamma.util.PublicAPI;
  */
 @PublicAPI
 public class RegionUtils {
-  
+
   /**
    * Restricted constructor.
    */
@@ -34,23 +33,23 @@ public class RegionUtils {
   /**
    * Creates a set of regions from a region id.
    * This is useful in the case where the region is compound (e.g. NY+LON).
-   * 
+   *
    * @param regionSource The region source, not null
    * @param regionId The region id, not null
    * @return a set of the region(s)
    */
-  public static Set<Region> getRegions(RegionSource regionSource, final ExternalId regionId) {
-    Validate.notNull(regionSource, "region source");
-    Validate.notNull(regionId, "region id");
+  public static Set<Region> getRegions(final RegionSource regionSource, final ExternalId regionId) {
+    ArgumentChecker.notNull(regionSource, "regionSource");
+    ArgumentChecker.notNull(regionId, "regionId");
     if (regionId.isScheme(ExternalSchemes.FINANCIAL) && regionId.getValue().contains("+")) {
       final String[] regions = regionId.getValue().split("\\+");
-      final Set<Region> resultRegions = new HashSet<Region>();
+      final Set<Region> resultRegions = new HashSet<>();
       for (final String region : regions) {
         resultRegions.add(regionSource.getHighestLevelRegion(ExternalSchemes.financialRegionId(region)));
       }
       return resultRegions;
-    } 
-    return Collections.singleton(regionSource.getHighestLevelRegion(regionId)); 
+    }
+    return Collections.singleton(regionSource.getHighestLevelRegion(regionId));
   }
 
 }

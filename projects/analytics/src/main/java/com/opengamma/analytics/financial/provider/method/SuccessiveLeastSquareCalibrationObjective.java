@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -40,7 +40,7 @@ public abstract class SuccessiveLeastSquareCalibrationObjective extends Function
    * @param fxMatrix The exchange rate to convert the present values in a unique currency.
    * @param ccy The unique currency in which all present values are converted.
    */
-  public SuccessiveLeastSquareCalibrationObjective(FXMatrix fxMatrix, Currency ccy) {
+  public SuccessiveLeastSquareCalibrationObjective(final FXMatrix fxMatrix, final Currency ccy) {
     _fxMatrix = fxMatrix;
     _ccy = ccy;
   }
@@ -65,7 +65,7 @@ public abstract class SuccessiveLeastSquareCalibrationObjective extends Function
    * Sets the instruments to calibrate.
    * @param instruments The instruments.
    */
-  public void setInstruments(InstrumentDerivative[] instruments) {
+  public void setInstruments(final InstrumentDerivative[] instruments) {
     _instruments = instruments;
   }
 
@@ -73,7 +73,7 @@ public abstract class SuccessiveLeastSquareCalibrationObjective extends Function
    * Sets the prices of the instruments to calibrate. The instruments should be set first.
    * @param prices The prices.
    */
-  public void setPrice(double[] prices) {
+  public void setPrice(final double[] prices) {
     ArgumentChecker.isTrue(prices.length == _instruments.length, "Incorrect number of prices.");
     _prices = prices;
   }

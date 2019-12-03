@@ -45,14 +45,31 @@ public class InterestRateFutureSecurity extends FutureSecurity {
     super();
   }
 
-  public InterestRateFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, ExternalId underlyingIdentifier, String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying
+   * @param category
+   *          the future category, not null
+   */
+  public InterestRateFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final ExternalId underlyingIdentifier, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setUnderlyingId(underlyingIdentifier);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitInterestRateFutureSecurity(this);
   }
 

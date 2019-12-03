@@ -24,15 +24,12 @@ import com.google.common.collect.Lists;
  */
 public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCloseable {
 
-  
-  
-  public ZipFileRegressionIO(File zipFile, Format format) throws IOException {
+  public ZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
     super(zipFile, format);
   }
 
-  
-  protected String createObjectPath(final String type, String identifier) {
-    
+  protected String createObjectPath(final String type, final String identifier) {
+
     String objectPath = createFilename(identifier);
     if (type != null) {
       objectPath = type + "/" + objectPath;
@@ -40,36 +37,33 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
     return objectPath;
   }
 
-  
-  public static ZipFileRegressionIO createWriter(File zipFile, Format format) throws IOException {
+  public static ZipFileRegressionIO createWriter(final File zipFile, final Format format) throws IOException {
     return new WritingZipFileRegressionIO(zipFile, format);
   }
-  
-  public static ZipFileRegressionIO createReader(File zipFile, Format format) throws IOException {
+
+  public static ZipFileRegressionIO createReader(final File zipFile, final Format format) throws IOException {
     return new ReadingZipFileRegressionIO(zipFile, format);
   }
-  
-  
+
   /**
-   * An implementation which only writes to zip files. Read operations throw
-   * {@link UnsupportedOperationException}s.
+   * An implementation which only writes to zip files. Read operations throw {@link UnsupportedOperationException}s.
    */
   private static final class WritingZipFileRegressionIO extends ZipFileRegressionIO {
-    
+
     /**
      * The zip output stream - not null
      */
-    private ZipArchiveOutputStream _zipArchiveOS;
+    private final ZipArchiveOutputStream _zipArchiveOS;
 
-    private WritingZipFileRegressionIO(File zipFile, Format format) throws IOException {
+    private WritingZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
       super(zipFile, format);
       _zipArchiveOS = new ZipArchiveOutputStream(zipFile);
     }
-    
+
     @Override
-    public void write(String type, Object o, String identifier) throws IOException {
-      ZipArchiveEntry entry = new ZipArchiveEntry(createObjectPath(type, identifier));
-      
+    public void write(final String type, final Object o, final String identifier) throws IOException {
+      final ZipArchiveEntry entry = new ZipArchiveEntry(createObjectPath(type, identifier));
+
       _zipArchiveOS.putArchiveEntry(entry);
       getFormat().write(getFormatContext(), o, _zipArchiveOS);
       _zipArchiveOS.flush();
@@ -97,39 +91,34 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
     }
 
     @Override
-    public Object read(String type, String identifier) throws IOException {
+    public Object read(final String type, final String identifier) throws IOException {
       throw unimplemented();
     }
 
     @Override
-    public List<String> enumObjects(String type) throws IOException {
+    public List<String> enumObjects(final String type) throws IOException {
       throw unimplemented();
     }
 
-    
-    
   }
 
-  
   /**
-   * An implementation which only reads from zip files. Write operations throw
-   * {@link UnsupportedOperationException}s.
+   * An implementation which only reads from zip files. Write operations throw {@link UnsupportedOperationException}s.
    */
   private static final class ReadingZipFileRegressionIO extends ZipFileRegressionIO {
-    
+
     /**
      * The zip file. Not null.
      */
     private ZipFile _zipFile;
-    
 
-    public ReadingZipFileRegressionIO(File zipFile, Format format) throws IOException {
+    ReadingZipFileRegressionIO(final File zipFile, final Format format) throws IOException {
       super(zipFile, format);
       initZipFile(zipFile);
 
     }
 
-    private void initZipFile(File zipFile) throws IOException {
+    private void initZipFile(final File zipFile) throws IOException {
       if (!zipFile.exists()) {
         throw new IllegalStateException("Unable to locate specified zip file on the file system: " + zipFile.getPath());
       }
@@ -142,58 +131,55 @@ public abstract class ZipFileRegressionIO extends RegressionIO implements AutoCl
     }
 
     @Override
-    public void write(String type, Object o, String identifier) throws IOException {
+    public void write(final String type, final Object o, final String identifier) throws IOException {
       unimplemented();
     }
-    
+
     private void unimplemented() {
       throw new UnsupportedOperationException("Cannot perform writes when in read mode.");
     }
 
     @Override
-    public Object read(String type, String identifier) throws IOException {
-      String objectPath = createObjectPath(type, identifier);
-      ZipArchiveEntry entry = _zipFile.getEntry(objectPath);
-      
+    public Object read(final String type, final String identifier) throws IOException {
+      final String objectPath = createObjectPath(type, identifier);
+      final ZipArchiveEntry entry = _zipFile.getEntry(objectPath);
+
       if (entry == null) {
         throw new IllegalArgumentException(objectPath + " does not exist in this archive.");
       }
-      
-      InputStream inputStream = _zipFile.getInputStream(entry);
+
+      final InputStream inputStream = _zipFile.getInputStream(entry);
       return getFormat().read(getFormatContext(), inputStream);
-      
+
     }
 
     @Override
-    public List<String> enumObjects(String type) throws IOException {
-      
-      List<String> objectIdentifiers = Lists.newLinkedList();
-      Pattern typeNameFormat = Pattern.compile("(.*)/(.*)");
-      
-      @SuppressWarnings("unchecked")
-      Enumeration<ZipArchiveEntry> entries = _zipFile.getEntries();
-      
+    public List<String> enumObjects(final String type) throws IOException {
+
+      final List<String> objectIdentifiers = Lists.newLinkedList();
+      final Pattern typeNameFormat = Pattern.compile("(.*)/(.*)");
+
+      final Enumeration<ZipArchiveEntry> entries = _zipFile.getEntries();
+
       while (entries.hasMoreElements()) {
-        ZipArchiveEntry nextEntry = entries.nextElement();
-        String entryName = nextEntry.getName();
-        Matcher matcher = typeNameFormat.matcher(entryName);
+        final ZipArchiveEntry nextEntry = entries.nextElement();
+        final String entryName = nextEntry.getName();
+        final Matcher matcher = typeNameFormat.matcher(entryName);
         if (matcher.matches()) {
-          String objectType = matcher.group(1);
+          final String objectType = matcher.group(1);
           if (objectType.equals(type)) {
-            String objectIdentifierFileName = matcher.group(2);
+            final String objectIdentifierFileName = matcher.group(2);
             if (isIdentifierIncluded(objectIdentifierFileName)) {
-              String objectIdentifier = stripIdentifierExtension(objectIdentifierFileName);
+              final String objectIdentifier = stripIdentifierExtension(objectIdentifierFileName);
               objectIdentifiers.add(objectIdentifier);
             }
           }
         }
       }
-      
+
       return objectIdentifiers;
     }
-    
 
   }
 
-  
 }

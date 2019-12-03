@@ -52,12 +52,12 @@ public final class UnderlyingExternalIdVisitor extends FinancialSecurityVisitorA
   private final Set<ExternalIdBundle> _underlyings = Sets.newHashSet();
 
   /**
-   * Creates an instance
+   * Creates an instance.
    */
   public UnderlyingExternalIdVisitor() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the set of underlying identifiers that were found.
    *
@@ -67,7 +67,7 @@ public final class UnderlyingExternalIdVisitor extends FinancialSecurityVisitorA
     return _underlyings;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Void visitEquitySecurity(final EquitySecurity security) {
     return null;
@@ -92,7 +92,7 @@ public final class UnderlyingExternalIdVisitor extends FinancialSecurityVisitorA
   public Void visitInflationBondSecurity(final InflationBondSecurity security) {
     return null;
   }
-  
+
   @Override
   public Void visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
     return null;
@@ -279,7 +279,7 @@ public final class UnderlyingExternalIdVisitor extends FinancialSecurityVisitorA
 
   @Override
   public Void visitFloatingRateNoteSecurity(final FloatingRateNoteSecurity security) {
-    return null; //TODO the index?
+    return null; // TODO the index?
   }
 
   @Override

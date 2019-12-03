@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.depgraph.rest;
@@ -31,23 +31,25 @@ import com.opengamma.livedata.UserPrincipal;
 
 /**
  * Helper class for {@link LocalDependencyGraphTraceProvider}.
- * 
+ *
  * Implements builder pattern with defaults.
  */
 public class DependencyGraphTraceBuilder {
 
   private final DependencyGraphBuilderResourceContextBean _builderContext;
 
-  public DependencyGraphTraceBuilder(DependencyGraphBuilderResourceContextBean builderContext) {
+  public DependencyGraphTraceBuilder(final DependencyGraphBuilderResourceContextBean builderContext) {
     _builderContext = builderContext;
   }
 
   /**
    * Builds the dependency graph trace with the configured params.
-   * @param properties the properties to use
+   *
+   * @param properties
+   *          the properties to use
    * @return the built trace object
    */
-  public DependencyGraphBuildTrace build(DependencyGraphTraceBuilderProperties properties) {
+  public DependencyGraphBuildTrace build(final DependencyGraphTraceBuilderProperties properties) {
     final DependencyGraphBuilder builder = _builderContext.getDependencyGraphBuilderFactory().newInstance();
     builder.setCalculationConfigurationName(properties.getCalculationConfigurationName());
     final FunctionCompilationContext context = _builderContext.getFunctionCompilationContext().clone();
@@ -57,7 +59,8 @@ public class DependencyGraphTraceBuilder {
     context.setViewCalculationConfiguration(calcConfig);
     context.setComputationTargetResolver(context.getRawComputationTargetResolver().atVersionCorrection(properties.getResolutionTime()));
     builder.setCompilationContext(context);
-    final Collection<ResolutionRule> rules = _builderContext.getFunctionResolver().compile((properties.getValuationTime() != null) ? properties.getValuationTime() : Instant.now())
+    final Collection<ResolutionRule> rules = _builderContext.getFunctionResolver()
+        .compile(properties.getValuationTime() != null ? properties.getValuationTime() : Instant.now())
         .getAllResolutionRules();
     // TODO: allow transformation rules
     final DefaultCompiledFunctionResolver functions = new DefaultCompiledFunctionResolver(context, rules);
@@ -69,10 +72,11 @@ public class DependencyGraphTraceBuilder {
     final MarketDataProviderResolver resolver = _builderContext.getMarketDataProviderResolver();
     List<MarketDataSpecification> marketData = properties.getMarketData();
     if (marketData == null || marketData.isEmpty()) {
-      marketData = Collections.<MarketDataSpecification>singletonList(MarketData.live());
+      marketData = Collections.<MarketDataSpecification> singletonList(MarketData.live());
     }
-    
-    MarketDataAvailabilityProvider availabilityProvider = new SnapshottingViewExecutionDataProvider(marketDataUser, marketData, resolver).getAvailabilityProvider();
+
+    final MarketDataAvailabilityProvider availabilityProvider = new SnapshottingViewExecutionDataProvider(marketDataUser, marketData, resolver)
+        .getAvailabilityProvider();
     builder.setMarketDataAvailabilityProvider(availabilityProvider);
     final ResolutionFailureAccumulator resolutionFailureAccumulator = new ResolutionFailureAccumulator();
     builder.setResolutionFailureListener(resolutionFailureAccumulator);
@@ -80,10 +84,10 @@ public class DependencyGraphTraceBuilder {
     for (final ValueRequirement requirement : properties.getRequirements()) {
       builder.addTarget(requirement);
     }
-    DependencyGraph dependencyGraph = builder.getDependencyGraph();
-    List<ResolutionFailure> resolutionFailures = resolutionFailureAccumulator.getResolutionFailures();
+    final DependencyGraph dependencyGraph = builder.getDependencyGraph();
+    final List<ResolutionFailure> resolutionFailures = resolutionFailureAccumulator.getResolutionFailures();
 
-    DependencyGraphBuildTrace graphBuildTrace = DependencyGraphBuildTrace.of(
+    final DependencyGraphBuildTrace graphBuildTrace = DependencyGraphBuildTrace.of(
         dependencyGraph,
         builder.getExceptions(),
         resolutionFailures,

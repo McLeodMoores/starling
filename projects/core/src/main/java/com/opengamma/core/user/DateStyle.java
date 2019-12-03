@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user;
@@ -19,7 +19,7 @@ import com.opengamma.util.PublicAPI;
 public enum DateStyle {
 
   /**
-   * The standard ISO-8601 format
+   * The standard ISO-8601 format.
    */
   ISO(DateTimeFormatter.ISO_LOCAL_DATE),
   /**
@@ -53,18 +53,21 @@ public enum DateStyle {
 
   private final DateTimeFormatter _formatter;
 
-  private DateStyle(DateTimeFormatter formatter) {
+  /**
+   * @param formatter  the formatter, not null
+   */
+  DateStyle(final DateTimeFormatter formatter) {
     _formatter = formatter;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the formatter object, ready to use.
-   * 
+   *
    * @param locale  the locale to use, not null
    * @return the formatter, not null
    */
-  public DateTimeFormatter formatter(Locale locale) {
+  public DateTimeFormatter formatter(final Locale locale) {
     return _formatter.withLocale(locale);
   }
 

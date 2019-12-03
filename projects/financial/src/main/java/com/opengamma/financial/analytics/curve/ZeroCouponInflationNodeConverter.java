@@ -60,16 +60,25 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
   private final HistoricalTimeSeriesBundle _timeSeries;
 
   /**
-   * @param securitySource The security source. Not null.
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The data id, not null
-   * @param valuationTime The valuation time, not null
-   * @param timeSeries The time series, not null
+   * @param securitySource
+   *          The security source. Not null.
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The data id, not null
+   * @param valuationTime
+   *          The valuation time, not null
+   * @param timeSeries
+   *          The time series, not null
    */
-  public ZeroCouponInflationNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public ZeroCouponInflationNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final HistoricalTimeSeriesBundle timeSeries) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -99,31 +108,36 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
     final InflationLegConvention inflationLegConvention = _conventionSource.getSingle(inflationNode.getInflationLegConvention(), InflationLegConvention.class);
     final Security sec = _securitySource.getSingle(inflationLegConvention.getPriceIndexConvention().toBundle());
     if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationLegConvention.getPriceIndexConvention()
-          + " was null");
+      throw new OpenGammaRuntimeException(
+          "CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationLegConvention.getPriceIndexConvention()
+              + " was null");
     }
     if (!(sec instanceof PriceIndex)) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationLegConvention.getPriceIndexConvention()
-          + " not of type PriceIndex");
+      throw new OpenGammaRuntimeException(
+          "CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + inflationLegConvention.getPriceIndexConvention()
+              + " not of type PriceIndex");
     }
     final PriceIndex indexSecurity = (PriceIndex) sec;
     final PriceIndexConvention priceIndexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), PriceIndexConvention.class);
     if (priceIndexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: Convention with id " + indexSecurity.getConventionId() + " was null");
+      throw new OpenGammaRuntimeException(
+          "CurveNodeCurrencyVisitor.visitInflationLegConvention: Convention with id " + indexSecurity.getConventionId() + " was null");
     }
     final int settlementDays = fixedLegConvention.getSettlementDays();
     final Period tenor = inflationNode.getTenor().getPeriod();
     final double notional = 1;
-    //TODO business day convention and currency are in both conventions - should we enforce that they're the same or use
+    // TODO business day convention and currency are in both conventions - should we enforce that they're the same or use
     // different ones for each leg?
     final BusinessDayConvention businessDayConvention = fixedLegConvention.getBusinessDayConvention();
     final boolean endOfMonth = fixedLegConvention.isIsEOM();
     final Currency currency = priceIndexConvention.getCurrency();
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, priceIndexConvention.getRegion());
-    final ZoneId zone = _valuationTime.getZone(); //TODO time zone set to midnight UTC
+    final ZoneId zone = _valuationTime.getZone(); // TODO time zone set to midnight UTC
     final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, calendar).toLocalDate().atStartOfDay(zone);
-    final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, endOfMonth).toLocalDate().atStartOfDay(zone);
-    final CouponFixedCompoundingDefinition fixedCoupon = CouponFixedCompoundingDefinition.from(currency, settlementDate, paymentDate, notional, tenor.getYears(),
+    final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, endOfMonth).toLocalDate()
+        .atStartOfDay(zone);
+    final CouponFixedCompoundingDefinition fixedCoupon = CouponFixedCompoundingDefinition.from(currency, settlementDate, paymentDate, notional,
+        tenor.getYears(),
         rate);
     final HistoricalTimeSeries ts = _timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, priceIndexConvention.getExternalIdBundle());
     if (ts == null) {
@@ -135,12 +149,13 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
     final IndexPrice indexPrice = new IndexPrice(indexSecurity.getName(), currency);
     switch (inflationNode.getInflationNodeType()) {
       case INTERPOLATED: {
-        final CouponInflationZeroCouponInterpolationDefinition inflationCoupon = CouponInflationZeroCouponInterpolationDefinition.from(settlementDate, paymentDate,
-            -notional, indexPrice, conventionalMonthLag, monthLag, false);
+        final CouponInflationZeroCouponInterpolationDefinition inflationCoupon = CouponInflationZeroCouponInterpolationDefinition.from(settlementDate,
+            paymentDate, -notional, indexPrice, conventionalMonthLag, monthLag, false);
         return new SwapFixedInflationZeroCouponDefinition(fixedCoupon, inflationCoupon, calendar);
       }
       case MONTHLY: {
-        final CouponInflationZeroCouponMonthlyDefinition inflationCoupon = CouponInflationZeroCouponMonthlyDefinition.from(settlementDate, paymentDate, -notional,
+        final CouponInflationZeroCouponMonthlyDefinition inflationCoupon = CouponInflationZeroCouponMonthlyDefinition.from(settlementDate, paymentDate,
+            -notional,
             indexPrice, conventionalMonthLag, monthLag, false);
         return new SwapFixedInflationZeroCouponDefinition(fixedCoupon, inflationCoupon, calendar);
       }

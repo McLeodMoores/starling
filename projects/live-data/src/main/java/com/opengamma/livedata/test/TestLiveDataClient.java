@@ -26,18 +26,18 @@ import com.opengamma.livedata.msg.LiveDataSubscriptionResponse;
  * and actually does not contact any server.
  */
 public class TestLiveDataClient extends AbstractLiveDataClient {
-  
-  private final List<LiveDataSpecification> _cancelRequests = new ArrayList<LiveDataSpecification>();
-  private final List<Collection<SubscriptionHandle>> _subscriptionRequests = new ArrayList<Collection<SubscriptionHandle>>();
+
+  private final List<LiveDataSpecification> _cancelRequests = new ArrayList<>();
+  private final List<Collection<SubscriptionHandle>> _subscriptionRequests = new ArrayList<>();
   private final AtomicLong _sequenceGenerator = new AtomicLong(0);
-  
+
   @Override
-  protected void cancelPublication(LiveDataSpecification fullyQualifiedSpecification) {
+  protected void cancelPublication(final LiveDataSpecification fullyQualifiedSpecification) {
     _cancelRequests.add(fullyQualifiedSpecification);
   }
 
   @Override
-  protected void handleSubscriptionRequest(Collection<SubscriptionHandle> subHandles) {
+  protected void handleSubscriptionRequest(final Collection<SubscriptionHandle> subHandles) {
     _subscriptionRequests.add(subHandles);
   }
 
@@ -49,29 +49,29 @@ public class TestLiveDataClient extends AbstractLiveDataClient {
     return _subscriptionRequests;
   }
 
-  public void marketDataReceived(LiveDataSpecification fullyQualifiedSpecification, FudgeMsg fields) {
-    LiveDataValueUpdateBean bean = new LiveDataValueUpdateBean(_sequenceGenerator.incrementAndGet(), fullyQualifiedSpecification, fields);
+  public void marketDataReceived(final LiveDataSpecification fullyQualifiedSpecification, final FudgeMsg fields) {
+    final LiveDataValueUpdateBean bean = new LiveDataValueUpdateBean(_sequenceGenerator.incrementAndGet(), fullyQualifiedSpecification, fields);
     getValueDistributor().notifyListeners(bean);
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user,
-      Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataSpecification, Boolean> returnValue = new HashMap<LiveDataSpecification, Boolean>();
-    for (LiveDataSpecification spec : requestedSpecifications) {
-      returnValue.put(spec, isEntitled(user, spec));            
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user,
+      final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
+    for (final LiveDataSpecification spec : requestedSpecifications) {
+      returnValue.put(spec, isEntitled(user, spec));
     }
     return returnValue;
   }
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
     return true;
   }
-  
+
   @Override
-  public void subscriptionRequestSatisfied(SubscriptionHandle subHandle, LiveDataSubscriptionResponse response) {
+  public void subscriptionRequestSatisfied(final SubscriptionHandle subHandle, final LiveDataSubscriptionResponse response) {
     super.subscriptionRequestSatisfied(subHandle, response);
   }
-  
+
 }

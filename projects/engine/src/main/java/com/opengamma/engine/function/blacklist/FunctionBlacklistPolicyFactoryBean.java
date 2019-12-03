@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -20,10 +20,10 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<FunctionBlacklistPolicy> {
 
-  private static final AtomicInteger s_nextName = new AtomicInteger(1);
+  private static final AtomicInteger NEXT_NAME = new AtomicInteger(1);
 
   private UniqueId _uniqueId;
-  private String _name = Integer.toString(s_nextName.getAndIncrement());
+  private String _name = Integer.toString(NEXT_NAME.getAndIncrement());
   private int _defaultEntryActivationPeriod = 3600;
   private int _wildcard;
   private int _function;
@@ -67,12 +67,10 @@ public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<Fun
     if (flag) {
       if (entry == 0) {
         return -1;
-      } else {
-        return entry;
       }
-    } else {
-      return 0;
+      return entry;
     }
+    return 0;
   }
 
   public boolean isWildcard() {
@@ -176,21 +174,22 @@ public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<Fun
   }
 
   public void setEntries(final Collection<Entry> entries) {
-    _entries = new ArrayList<Entry>(entries);
+    _entries = new ArrayList<>(entries);
   }
 
-  private void create(final Collection<Entry> target, Entry entry, final int flag) {
+  private void create(final Collection<Entry> target, final Entry entry, final int flag) {
+    Entry e = entry;
     if (flag == 0) {
       return;
     }
     if (flag > 0) {
-      entry = entry.activationPeriod(flag);
+      e = e.activationPeriod(flag);
     }
-    target.add(entry);
+    target.add(e);
   }
 
   private Collection<Entry> createEntries() {
-    final Collection<Entry> entries = new LinkedList<Entry>();
+    final Collection<Entry> entries = new LinkedList<>();
     if (getEntries() != null) {
       entries.addAll(getEntries());
     }

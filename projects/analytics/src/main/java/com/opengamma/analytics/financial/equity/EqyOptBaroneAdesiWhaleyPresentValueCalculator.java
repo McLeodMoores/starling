@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -22,7 +22,7 @@ public final class EqyOptBaroneAdesiWhaleyPresentValueCalculator extends Instrum
   private static final BaroneAdesiWhaleyModel MODEL = new BaroneAdesiWhaleyModel();
 
   /**
-   * Gets the static instance
+   * Gets the static instance.
    * @return The static instance
    */
   public static EqyOptBaroneAdesiWhaleyPresentValueCalculator getInstance() {
@@ -76,7 +76,7 @@ public final class EqyOptBaroneAdesiWhaleyPresentValueCalculator extends Instrum
   public Double visitEquityIndexFutureOption(final EquityIndexFutureOption option, final StaticReplicationDataBundle data) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(data, "data");
-    
+
     final double strike = option.getStrike();
     final double time = option.getExpiry();
     final double sigma = data.getVolatilitySurface().getVolatility(time, strike);

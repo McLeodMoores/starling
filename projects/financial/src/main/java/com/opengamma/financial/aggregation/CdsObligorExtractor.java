@@ -26,7 +26,7 @@ public class CdsObligorExtractor implements RedCodeHandler<LegalEntity> {
    *
    * @param legalEntitySource the organization source, must not be null
    */
-  public CdsObligorExtractor(LegalEntitySource legalEntitySource) {
+  public CdsObligorExtractor(final LegalEntitySource legalEntitySource) {
     ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
     _legalEntitySource = legalEntitySource;
   }
@@ -39,8 +39,8 @@ public class CdsObligorExtractor implements RedCodeHandler<LegalEntity> {
    * @return the Obligor if found, null otherwise
    */
   @Override
-  public LegalEntity extract(String redCode) {
-    LegalEntity legalEntity = _legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
+  public LegalEntity extract(final String redCode) {
+    final LegalEntity legalEntity = _legalEntitySource.getSingle(ExternalId.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
     return legalEntity == null ? null : legalEntity;
   }
 

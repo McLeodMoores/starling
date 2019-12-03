@@ -35,7 +35,7 @@ import com.opengamma.util.jms.JmsConnector;
 public abstract class AbstractJmsResultPublisher {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractJmsResultPublisher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJmsResultPublisher.class);
   private static final String SEQUENCE_NUMBER_FIELD_NAME = "#";
 
   private final FudgeContext _fudgeContext;
@@ -45,7 +45,7 @@ public abstract class AbstractJmsResultPublisher {
   private final AtomicLong _sequenceNumber = new AtomicLong();
 
   private final AtomicBoolean _isShutdown = new AtomicBoolean(false);
-  private BlockingQueue<byte[]> _messageQueue = new LinkedBlockingQueue<byte[]>();
+  private final BlockingQueue<byte[]> _messageQueue = new LinkedBlockingQueue<>();
 
   private volatile Connection _connection;
   private volatile Session _session;
@@ -53,11 +53,11 @@ public abstract class AbstractJmsResultPublisher {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param fudgeContext the Fudge context, not null
    * @param jmsConnector the JMS connector, may be null
    */
-  public AbstractJmsResultPublisher(FudgeContext fudgeContext, JmsConnector jmsConnector) {
+  public AbstractJmsResultPublisher(final FudgeContext fudgeContext, final JmsConnector jmsConnector) {
     _fudgeContext = fudgeContext;
     _fudgeSerializationContext = new FudgeSerializer(fudgeContext);
     _jmsConnector = jmsConnector;
@@ -78,25 +78,25 @@ public abstract class AbstractJmsResultPublisher {
    * Publishes a result over JMS.
    * <p>
    * This should only be called once results are required, as indicated by a call to {@link #startListener()}.
-   * 
+   *
    * @param result the result, not null
    */
-  protected void send(Object result) {
-    s_logger.debug("Result received to forward over JMS: {}", result);
+  protected void send(final Object result) {
+    LOGGER.debug("Result received to forward over JMS: {}", result);
     MutableFudgeMsg resultMsg;
     synchronized (_fudgeSerializationContext) {
       resultMsg = _fudgeSerializationContext.objectToFudgeMsg(result);
     }
     FudgeSerializer.addClassHeader(resultMsg, result.getClass());
-    long sequenceNumber = _sequenceNumber.getAndIncrement();
+    final long sequenceNumber = _sequenceNumber.getAndIncrement();
     resultMsg.add(SEQUENCE_NUMBER_FIELD_NAME, sequenceNumber);
-    s_logger.debug("Sending result as fudge message with sequence number {}: {}", sequenceNumber, resultMsg);
-    byte[] resultMsgByteArray = _fudgeContext.toByteArray(resultMsg);
+    LOGGER.debug("Sending result as fudge message with sequence number {}: {}", sequenceNumber, resultMsg);
+    final byte[] resultMsgByteArray = _fudgeContext.toByteArray(resultMsg);
     _messageQueue.add(resultMsgByteArray);
   }
 
   //-------------------------------------------------------------------------
-  public void startPublishingResults(String destination) throws Exception {
+  public void startPublishingResults(final String destination) throws Exception {
     _lock.lock();
     try {
       startJmsIfRequired(destination);
@@ -107,7 +107,7 @@ public abstract class AbstractJmsResultPublisher {
     }
   }
 
-  private void startJmsIfRequired(String destination) throws Exception {
+  private void startJmsIfRequired(final String destination) throws Exception {
     if (_jmsConnector == null) {
       throw new OpenGammaRuntimeException("JMS not configured on server");
     }
@@ -119,7 +119,7 @@ public abstract class AbstractJmsResultPublisher {
         _messageQueue.clear();
         startSenderThread();
         _connection.start();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         closeJms();
         throw e;
       }
@@ -127,7 +127,7 @@ public abstract class AbstractJmsResultPublisher {
   }
 
   private void sendStartedSignal() {
-    s_logger.debug("Sending started signal");
+    LOGGER.debug("Sending started signal");
 
     // REVIEW jonathan 2012-02-03 -- until we have more than one control signal, it's sufficient to push through an
     // empty message.
@@ -149,7 +149,7 @@ public abstract class AbstractJmsResultPublisher {
   }
 
   private void startSenderThread() throws JMSException {
-    Thread senderThread = new Thread(new Runnable() {
+    final Thread senderThread = new Thread(new Runnable() {
       @Override
       public void run() {
         while (true) {
@@ -160,8 +160,8 @@ public abstract class AbstractJmsResultPublisher {
               break;
             }
             sendSync(nextMessage);
-          } catch (Exception e) {
-            s_logger.error("Failed to send message asynchronously", e);
+          } catch (final Exception e) {
+            LOGGER.error("Failed to send message asynchronously", e);
           }
         }
       }
@@ -170,25 +170,25 @@ public abstract class AbstractJmsResultPublisher {
     senderThread.start();
   }
 
-  private void sendSync(byte[] buffer) {
-    MessageProducer producer = _producer;
+  private void sendSync(final byte[] buffer) {
+    final MessageProducer producer = _producer;
     if (producer == null) {
-      s_logger.debug("Result received after publishing stopped");
+      LOGGER.debug("Result received after publishing stopped");
       return;
     }
     try {
-      BytesMessage msg = _session.createBytesMessage();
+      final BytesMessage msg = _session.createBytesMessage();
       msg.writeBytes(buffer);
       producer.send(msg);
-    } catch (Exception e) {
-      s_logger.error("Error while sending result over JMS. This result may never reach the client.", e);
+    } catch (final Exception e) {
+      LOGGER.error("Error while sending result over JMS. This result may never reach the client.", e);
     }
   }
 
   public void stopPublishingResults() throws JMSException {
     _lock.lock();
     try {
-      s_logger.debug("Removing listener {}", this);
+      LOGGER.debug("Removing listener {}", this);
       stopListener();
       _isShutdown.set(true);
       _messageQueue.add(new byte[0]);

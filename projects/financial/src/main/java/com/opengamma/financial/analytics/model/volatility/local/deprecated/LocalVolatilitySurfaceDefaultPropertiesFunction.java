@@ -33,7 +33,8 @@ public class LocalVolatilitySurfaceDefaultPropertiesFunction extends DefaultProp
   private final String _surfaceName;
   private final String _hName;
 
-  public LocalVolatilitySurfaceDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType, final String xAxis, final String yAxis,
+  public LocalVolatilitySurfaceDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType,
+      final String xAxis, final String yAxis,
       final String yAxisType, final String surfaceName, final String hName) {
     super(ComputationTargetType.LEGACY_PRIMITIVE, true); // // [PLAT-2286]: change to correct type
     ArgumentChecker.notNull(forwardCurveCalculationMethod, "forward curve calculation method");
@@ -67,7 +68,8 @@ public class LocalVolatilitySurfaceDefaultPropertiesFunction extends DefaultProp
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethod);
     }

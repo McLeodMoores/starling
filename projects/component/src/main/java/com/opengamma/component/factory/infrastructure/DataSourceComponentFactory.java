@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.infrastructure;
@@ -40,7 +40,7 @@ import com.opengamma.util.db.management.jmx.DatabaseMBean;
 public class DataSourceComponentFactory extends AbstractAliasedComponentFactory {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DataSourceComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceComponentFactory.class);
 
   /**
    * The fully-qualified class name of the database driver.
@@ -90,7 +90,7 @@ public class DataSourceComponentFactory extends AbstractAliasedComponentFactory 
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (getPoolName() == null) {
       setPoolName(getClassifier());
     }
@@ -99,12 +99,12 @@ public class DataSourceComponentFactory extends AbstractAliasedComponentFactory 
 
   /**
    * Creates and registers the data source.
-   * 
+   *
    * @param repo  the component repository, not null
    * @return the cache manager, not null
    */
-  protected DataSource initDataSource(ComponentRepository repo) {
-    DataSource dataSource = createDataSource(repo);
+  protected DataSource initDataSource(final ComponentRepository repo) {
+    final DataSource dataSource = createDataSource(repo);
     registerComponentAndAliases(repo, DataSource.class, dataSource);
     registerMBean(repo, dataSource);
     return dataSource;
@@ -112,12 +112,12 @@ public class DataSourceComponentFactory extends AbstractAliasedComponentFactory 
 
   /**
    * Creates the data source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the data source, not null
    */
-  protected DataSource createDataSource(ComponentRepository repo) {
-    BoneCPDataSource dataSource = new BoneCPDataSource();
+  protected DataSource createDataSource(final ComponentRepository repo) {
+    final BoneCPDataSource dataSource = new BoneCPDataSource();
     dataSource.setDriverClass(getDriverClass());
     dataSource.setJdbcUrl(getJdbcUrl());
     dataSource.setUsername(getUsername());
@@ -132,22 +132,22 @@ public class DataSourceComponentFactory extends AbstractAliasedComponentFactory 
 
   /**
    * Registers the JMX MBean for the data source.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param dataSource  the data source, not null
    */
-  protected void registerMBean(ComponentRepository repo, DataSource dataSource) {
-    DatabaseMBean.Local mbeanLocal = new DatabaseMBean.Local(getDriverClass(), dataSource);
+  protected void registerMBean(final ComponentRepository repo, final DataSource dataSource) {
+    final DatabaseMBean.Local mbeanLocal = new DatabaseMBean.Local(getDriverClass(), dataSource);
     mbeanLocal.setLocalJdbc(getJdbcUrl());
     mbeanLocal.setUsername(getUsername());
-    Hashtable<String, String> mbeanName = new Hashtable<String, String>();
+    final Hashtable<String, String> mbeanName = new Hashtable<>();
     mbeanName.put("type", "DataSourceComponent");
     mbeanName.put("name", getClassifier());
     try {
       repo.registerMBean(mbeanLocal.mbean(), new ObjectName("com.opengamma", mbeanName));
-    } catch (MalformedObjectNameException ex) {
-      s_logger.error("Couldn't register MBEAN for {}: {}", this, ex.getMessage());
-      s_logger.warn("Caught exception", ex);
+    } catch (final MalformedObjectNameException ex) {
+      LOGGER.error("Couldn't register MBEAN for {}: {}", this, ex.getMessage());
+      LOGGER.warn("Caught exception", ex);
     }
   }
 

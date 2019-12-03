@@ -55,20 +55,21 @@ public class HistoricalTimeSeriesProviderGetResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    */
-  public HistoricalTimeSeriesProviderGetResult(Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result) {
+  public HistoricalTimeSeriesProviderGetResult(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result) {
     setResultMap(result);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    * @param permissions the permissions
    */
-  public HistoricalTimeSeriesProviderGetResult(Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result, Map<ExternalIdBundle, Set<String>> permissions) {
+  public HistoricalTimeSeriesProviderGetResult(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result,
+      final Map<ExternalIdBundle, Set<String>> permissions) {
     setResultMap(result);
     setPermissionsMap(permissions);
   }

@@ -33,14 +33,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbConventionBeanMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConventionBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConventionBeanMasterTest.class);
 
   private DbConventionBeanMaster _cnvMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbConventionBeanMasterTest(String databaseType, String databaseVersion) {
+  public DbConventionBeanMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -66,47 +66,47 @@ public class DbConventionBeanMasterTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_addAndGet() throws Exception {
-    MockConvention cnv = new MockConvention("London", ExternalIdBundle.of("Test", "OG"), Currency.GBP);
-    ConventionDocument addDoc = new ConventionDocument(cnv);
-    ConventionDocument added = _cnvMaster.add(addDoc);
-    
-    ConventionDocument loaded = _cnvMaster.get(added.getUniqueId());
+    final MockConvention cnv = new MockConvention("London", ExternalIdBundle.of("Test", "OG"), Currency.GBP);
+    final ConventionDocument addDoc = new ConventionDocument(cnv);
+    final ConventionDocument added = _cnvMaster.add(addDoc);
+
+    final ConventionDocument loaded = _cnvMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
   }
 
   //-------------------------------------------------------------------------
   @Test(enabled = false)
-  public void test_concurrentModification() {    
-    final AtomicReference<Throwable> exceptionOccurred = new AtomicReference<Throwable>();
-    Runnable task = new Runnable() {
+  public void test_concurrentModification() {
+    final AtomicReference<Throwable> exceptionOccurred = new AtomicReference<>();
+    final Runnable task = new Runnable() {
       @Override
       public void run() {
         try {
           test_addAndGet();
-        } catch (Throwable th) {
+        } catch (final Throwable th) {
           exceptionOccurred.compareAndSet(null, th);
         }
       }
     };
-    
+
     // 5 threads for plenty of concurrent activity
-    ExecutorService executor = Executors.newFixedThreadPool(5);
-    
+    final ExecutorService executor = Executors.newFixedThreadPool(5);
+
     // 10 security inserts is always enough to produce a duplicate key exception
-    LinkedList<Future<?>> futures = new LinkedList<Future<?>>();
+    final LinkedList<Future<?>> futures = new LinkedList<>();
     for (int i = 0; i < 10; i++) {
       futures.add(executor.submit(task));
     }
-    
+
     while (!futures.isEmpty()) {
-      Future<?> future = futures.poll();
+      final Future<?> future = futures.poll();
       try {
         future.get();
-      } catch (Throwable t) {
-        s_logger.error("Exception waiting for task to complete", t);
+      } catch (final Throwable t) {
+        LOGGER.error("Exception waiting for task to complete", t);
       }
     }
-    
+
     assertEquals(null, exceptionOccurred.get());
   }
 

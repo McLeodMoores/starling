@@ -16,7 +16,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A wrapper class for a AnnuityDefinition containing CapFloorInflationYearOnYearMonthlyDefinition
+ * A wrapper class for a AnnuityDefinition containing CapFloorInflationYearOnYearMonthlyDefinition.
  */
 public class AnnuityCapFloorInflationYearOnYearMonthlyDefinition extends AnnuityCouponDefinition<CapFloorInflationYearOnYearMonthlyDefinition> {
 
@@ -48,16 +48,20 @@ public class AnnuityCapFloorInflationYearOnYearMonthlyDefinition extends Annuity
    */
   public static AnnuityCapFloorInflationYearOnYearMonthlyDefinition from(final IndexPrice priceIndex, final ZonedDateTime settlementDate,
       final double notional, final Period totalTenor, final Period paymentPeriod, final BusinessDayConvention businessDayConvention, final Calendar calendar,
-      final boolean endOfMonth, final int conventionalMonthLag, final int monthLag, final ZonedDateTime lastKnownFixingDate, final double strike, final boolean isCap) {
+      final boolean endOfMonth, final int conventionalMonthLag, final int monthLag, final ZonedDateTime lastKnownFixingDate,
+      final double strike, final boolean isCap) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(paymentPeriod, "Payment period");
     ArgumentChecker.notNull(lastKnownFixingDate, "Last known fixing date");
-    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, totalTenor, paymentPeriod,  true, false, businessDayConvention, calendar, endOfMonth);
+    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, totalTenor, paymentPeriod,
+        true, false, businessDayConvention, calendar, endOfMonth);
 
     final CapFloorInflationYearOnYearMonthlyDefinition[] coupons = new CapFloorInflationYearOnYearMonthlyDefinition[paymentDates.length];
-    coupons[0] = CapFloorInflationYearOnYearMonthlyDefinition.from(settlementDate, paymentDates[0], notional, priceIndex, conventionalMonthLag, monthLag, lastKnownFixingDate, strike, isCap);
+    coupons[0] = CapFloorInflationYearOnYearMonthlyDefinition.from(settlementDate, paymentDates[0], notional, priceIndex,
+        conventionalMonthLag, monthLag, lastKnownFixingDate, strike, isCap);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
-      coupons[loopcpn] = CapFloorInflationYearOnYearMonthlyDefinition.from(paymentDates[loopcpn - 1], paymentDates[loopcpn], notional, priceIndex, conventionalMonthLag, monthLag, lastKnownFixingDate,
+      coupons[loopcpn] = CapFloorInflationYearOnYearMonthlyDefinition.from(paymentDates[loopcpn - 1], paymentDates[loopcpn],
+          notional, priceIndex, conventionalMonthLag, monthLag, lastKnownFixingDate,
           strike, isCap);
     }
     return new AnnuityCapFloorInflationYearOnYearMonthlyDefinition(coupons, calendar);

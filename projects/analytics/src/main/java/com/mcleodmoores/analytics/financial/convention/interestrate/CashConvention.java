@@ -237,7 +237,7 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
       startDate = ScheduleCalculator.getAdjustedDate(spot, startTenor, _businessDayConvention, _calendar, 0, _endOfMonth);
       endDate = ScheduleCalculator.getAdjustedDate(startDate, endTenor, _businessDayConvention, _calendar, 0, _endOfMonth);
     }
-    final double accrualFactor = _dayCount.getDayCountFraction(startDate, endDate, new CalendarAdapter(_calendar));
+    final double accrualFactor = _dayCount.getDayCountFraction(startDate, endDate, CalendarAdapter.of(_calendar));
     return new CashDefinition(_currency, startDate, endDate, notional, fixedRate, accrualFactor);
   }
 

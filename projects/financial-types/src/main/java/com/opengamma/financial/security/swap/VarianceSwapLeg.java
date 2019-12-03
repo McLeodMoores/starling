@@ -19,7 +19,7 @@ import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.id.ExternalId;
 
 /**
- * Base class for the legs of a variance swap
+ * Base class for the legs of a variance swap.
  */
 @BeanDefinition
 public abstract class VarianceSwapLeg extends SwapLeg {
@@ -28,23 +28,25 @@ public abstract class VarianceSwapLeg extends SwapLeg {
   private static final long serialVersionUID = 1L;
 
   /**
-   * @param dayCount The day count convention, not null
-   * @param frequency The frequency, not null
-   * @param regionId The region ID, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param notional The notional, not null
-   * @param eom The end-of-month flag
+   * @param dayCount
+   *          The day count convention, not null
+   * @param frequency
+   *          The frequency, not null
+   * @param regionId
+   *          The region ID, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param notional
+   *          The notional, not null
+   * @param eom
+   *          The end-of-month flag
    */
-  protected VarianceSwapLeg(DayCount dayCount,
-                            Frequency frequency,
-                            ExternalId regionId,
-                            BusinessDayConvention businessDayConvention,
-                            Notional notional,
-                            boolean eom) {
+  protected VarianceSwapLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionId, final BusinessDayConvention businessDayConvention,
+      final Notional notional, final boolean eom) {
     super(dayCount, frequency, regionId, businessDayConvention, notional, eom);
   }
 
-  /** For the builder */
+  /** For the builder. */
   VarianceSwapLeg() {
   }
 

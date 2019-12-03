@@ -1,12 +1,14 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,7 @@ public final class Assert {
    * @param actual  the actual collection
    * @param expected  the expected collection
    */
-  public static void assertEqualsNoOrder(final Collection<?> actual, final Collection<?> expected) {
+  public static void assertEqualsNoOrder(final Iterable<?> actual, final Iterable<?> expected) {
     assertEqualsNoOrder(actual, expected, null);
   }
 
@@ -45,7 +47,7 @@ public final class Assert {
    * @param expected  the expected collection
    * @param message  the message if the test is false
    */
-  public static void assertEqualsNoOrder(final Collection<?> actual, final Collection<?> expected, final String message) {
+  public static void assertEqualsNoOrder(final Iterable<?> actual, final Iterable<?> expected, final String message) {
     if (actual == null) {
       if (expected == null) {
         return;
@@ -61,8 +63,20 @@ public final class Assert {
       }
       throw new AssertionError("Collections not equal: expected: null and actual: " + actual.toString());
     }
-    assertEquals(actual.size(), expected.size(), message);
-    assertTrue(actual.containsAll(expected), message);
+    Iterator<?> actualI = actual.iterator();
+    Iterator<?> expectedI = expected.iterator();
+    List<Object> actualL = new ArrayList<>();
+    List<Object> expectedL = new ArrayList<>();
+    while (actualI.hasNext()) {
+      actualL.add(actualI.next());
+    }
+    while (expectedI.hasNext()) {
+      expectedL.add(expectedI.next());
+    }
+    assertEquals(actualL.size(), expectedL.size(), message);
+    if (!actualL.containsAll(expectedL)) {
+      throw new AssertionError("Collections not equal: expected: " + expected.toString() + " and actual: " + actual.toString());
+    }
   }
 
   /**
@@ -107,6 +121,19 @@ public final class Assert {
       throw new AssertionError("Maps not equal: expected: null and actual: " + actual.toString());
     }
     assertEquals(actual.size(), expected.size(), message);
-    assertTrue(actual.entrySet().containsAll(expected.entrySet()), message);
+    for (final Map.Entry<?, ?> entries : actual.entrySet()) {
+      if (entries.getValue() instanceof Collection) {
+        final Collection<?> value = (Collection<?>) expected.get(entries.getKey());
+        if (value == null) {
+          throw new AssertionError("No value found in expected map for key " + entries.getKey());
+        }
+        if (entries.getValue() instanceof Collection) {
+          assertEqualsNoOrder((Collection<?>) entries.getValue(), value, message);
+        }
+      } else {
+        assertEquals(entries.getValue(), expected.get(entries.getKey()));
+      }
+    }
   }
+
 }

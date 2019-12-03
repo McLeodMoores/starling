@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -28,6 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for inflation swap legs.
  */
+@ConventionMetaData(description = "Inflation leg", group = ConventionGroups.INFLATION)
 @BeanDefinition
 public class InflationLegConvention extends FinancialConvention {
 
@@ -50,7 +53,7 @@ public class InflationLegConvention extends FinancialConvention {
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
   /**
-   * Whether dates follow the end-of-month convention
+   * Whether dates follow the end-of-month convention.
    */
   @PropertyDefinition
   private boolean _isEOM;
@@ -79,20 +82,26 @@ public class InflationLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param businessDayConvention  the business day convention, not null
-   * @param dayCount  the day-count, not null
-   * @param isEOM  true if dates follow the end-of-month convention
-   * @param monthLag  the price index fixing lag in months
-   * @param spotLag  the spot lag in days
-   * @param priceIndexConvention  the id of the price index convention, not null
+   *
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
+   * @param dayCount
+   *          the day-count, not null
+   * @param isEOM
+   *          true if dates follow the end-of-month convention
+   * @param monthLag
+   *          the price index fixing lag in months
+   * @param spotLag
+   *          the spot lag in days
+   * @param priceIndexConvention
+   *          the id of the price index convention, not null
    */
-  public InflationLegConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final BusinessDayConvention businessDayConvention,
-      final DayCount dayCount, final boolean isEOM, final int monthLag, final int spotLag,
-      final ExternalId priceIndexConvention) {
+  public InflationLegConvention(final String name, final ExternalIdBundle externalIdBundle, final BusinessDayConvention businessDayConvention,
+      final DayCount dayCount, final boolean isEOM, final int monthLag, final int spotLag, final ExternalId priceIndexConvention) {
     super(name, externalIdBundle);
     setBusinessDayConvention(businessDayConvention);
     setDayCount(dayCount);
@@ -102,10 +111,10 @@ public class InflationLegConvention extends FinancialConvention {
     setPriceIndexConvention(priceIndexConvention);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -116,8 +125,10 @@ public class InflationLegConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override
@@ -199,7 +210,7 @@ public class InflationLegConvention extends FinancialConvention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether dates follow the end-of-month convention
+   * Gets whether dates follow the end-of-month convention.
    * @return the value of the property
    */
   public boolean isIsEOM() {
@@ -207,7 +218,7 @@ public class InflationLegConvention extends FinancialConvention {
   }
 
   /**
-   * Sets whether dates follow the end-of-month convention
+   * Sets whether dates follow the end-of-month convention.
    * @param isEOM  the new value of the property
    */
   public void setIsEOM(boolean isEOM) {

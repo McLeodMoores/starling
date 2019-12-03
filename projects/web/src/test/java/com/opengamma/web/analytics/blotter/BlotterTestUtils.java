@@ -48,9 +48,9 @@ import com.opengamma.util.time.Expiry;
   /* package */ static final MapBeanDataSource EQUITY_VARIANCE_SWAP_DATA_SOURCE;
 
   static {
-    Map<String, String> attributes = ImmutableMap.of("attr1", "attrVal1", "attr2", "attrVal2");
-    List<String> permissions = Lists.newArrayList("perm1", "perm2");
-    String forwardDateStr = "2012-12-21";
+    final Map<String, String> attributes = ImmutableMap.of("attr1", "attrVal1", "attr2", "attrVal2");
+    final List<String> permissions = Lists.newArrayList("perm1", "perm2");
+    final String forwardDateStr = "2012-12-21";
     FX_FORWARD_DATA_SOURCE = beanData(
         "name", "TODO",
         "externalIdBundle", "",
@@ -63,8 +63,8 @@ import com.opengamma.util.time.Expiry;
         "attributes", attributes,
         "requiredPermissions", permissions);
 
-    ZonedDateTime forwardDate = parseDate(forwardDateStr);
-    ExternalId regionId = ExternalId.of(ExternalSchemes.FINANCIAL, "GB");
+    final ZonedDateTime forwardDate = parseDate(forwardDateStr);
+    final ExternalId regionId = ExternalId.of(ExternalSchemes.FINANCIAL, "GB");
     FX_FORWARD = new FXForwardSecurity(Currency.USD, 150, Currency.GBP, 100, forwardDate, regionId);
     FX_FORWARD.setName("TODO");
     FX_FORWARD.setAttributes(attributes);
@@ -72,9 +72,9 @@ import com.opengamma.util.time.Expiry;
 
     //-------------------------------------
 
-    String tradeDateStr = "2012-12-21";
-    String effectiveDateStr = "2012-12-23";
-    String maturityDateStr = "2013-12-21";
+    final String tradeDateStr = "2012-12-21";
+    final String effectiveDateStr = "2012-12-23";
+    final String maturityDateStr = "2013-12-21";
     SWAP_DATA_SOURCE = beanData(
         "externalIdBundle", "",
         "name", "TODO",
@@ -115,11 +115,11 @@ import com.opengamma.util.time.Expiry;
             "currency", "GBP",
             "amount", "123.45")));
 
-    ZonedDateTime tradeDate = parseDate(tradeDateStr);
-    ZonedDateTime effectiveDate = parseDate(effectiveDateStr);
-    ZonedDateTime maturityDate = parseDate(maturityDateStr);
+    final ZonedDateTime tradeDate = parseDate(tradeDateStr);
+    final ZonedDateTime effectiveDate = parseDate(effectiveDateStr);
+    final ZonedDateTime maturityDate = parseDate(maturityDateStr);
 
-    SwapLeg payLeg = new FixedInterestRateLeg(
+    final SwapLeg payLeg = new FixedInterestRateLeg(
         DayCounts.ACT_360,
         SimpleFrequencyFactory.of("3m"),
         ExternalId.of(ExternalSchemes.FINANCIAL, "123"),
@@ -127,7 +127,7 @@ import com.opengamma.util.time.Expiry;
         new InterestRateNotional(Currency.USD, 222.33),
         true,
         1.234);
-    FloatingInterestRateLeg receiveLeg = new FloatingInterestRateLeg(
+    final FloatingInterestRateLeg receiveLeg = new FloatingInterestRateLeg(
         DayCounts.ACT_ACT_ISDA,
         SimpleFrequencyFactory.of("6m"),
         ExternalId.of(ExternalSchemes.FINANCIAL, "234"),
@@ -145,9 +145,9 @@ import com.opengamma.util.time.Expiry;
 
     //-------------------------------------
 
-    String firstObservationDateStr = "2012-12-21";
-    String lastObservationDateStr = "2013-12-21";
-    String settlementDateStr = "2013-12-25";
+    final String firstObservationDateStr = "2012-12-21";
+    final String lastObservationDateStr = "2013-12-21";
+    final String settlementDateStr = "2013-12-25";
     EQUITY_VARIANCE_SWAP_DATA_SOURCE = beanData(
         "externalIdBundle", "",
         "name", "TODO",
@@ -195,66 +195,66 @@ import com.opengamma.util.time.Expiry;
         "exerciseType", "European",
         "settlementDate", "2013-03-10");
     // need to provide a value for the underlying ID but it isn't used
-    Expiry expiry = new Expiry(ZonedDateTime.of(LocalDateTime.of(2013, 3, 8, 0, 0), ZoneOffset.UTC));
-    ZonedDateTime settlementDate = ZonedDateTime.of(LocalDateTime.of(2013, 3, 10, 11, 0), ZoneOffset.UTC);
+    final Expiry expiry = new Expiry(ZonedDateTime.of(LocalDateTime.of(2013, 3, 8, 0, 0), ZoneOffset.UTC));
+    final ZonedDateTime settlementDate = ZonedDateTime.of(LocalDateTime.of(2013, 3, 10, 11, 0), ZoneOffset.UTC);
     SWAPTION = new SwaptionSecurity(true, ExternalId.of("ABC", "123"), false, expiry, false, Currency.GBP, 100000d,
                                     new EuropeanExerciseType(), settlementDate);
     SWAPTION.setName("TODO");
     SWAPTION.setAttributes(attributes);
   }
 
-  private static ZonedDateTime parseDate(String dateStr) {
+  private static ZonedDateTime parseDate(final String dateStr) {
     return LocalDate.parse(dateStr).atTime(11, 0).atZone(ZoneOffset.UTC);
   }
 
-  /* package */ static MapBeanDataSource overrideBeanData(MapBeanDataSource delegate, Object... pairs) {
+  /* package */ static MapBeanDataSource overrideBeanData(final MapBeanDataSource delegate, final Object... pairs) {
     final Map<Object, Object> map = Maps.newHashMap();
     for (int i = 0; i < pairs.length / 2; i++) {
-      map.put(pairs[i * 2], pairs[(i * 2) + 1]);
+      map.put(pairs[i * 2], pairs[i * 2 + 1]);
     }
     return new MapBeanDataSource(delegate, map);
   }
 
-  /* package */ static MapBeanDataSource beanData(Object... pairs) {
+  /* package */ static MapBeanDataSource beanData(final Object... pairs) {
     final Map<Object, Object> map = Maps.newHashMap();
     for (int i = 0; i < pairs.length / 2; i++) {
-      map.put(pairs[i * 2], pairs[(i * 2) + 1]);
+      map.put(pairs[i * 2], pairs[i * 2 + 1]);
     }
     return new MapBeanDataSource(map);
   }
 
   @SuppressWarnings("unchecked")
-  private static class MapBeanDataSource implements BeanDataSource {
+  private static final class MapBeanDataSource implements BeanDataSource {
 
     private final Map<Object, Object> _map;
 
-    private MapBeanDataSource(MapBeanDataSource delegate, Map<Object, Object> map) {
+    private MapBeanDataSource(final MapBeanDataSource delegate, final Map<Object, Object> map) {
       _map = Maps.newHashMap(delegate._map);
       _map.putAll(map);
     }
 
-    private MapBeanDataSource(Map<Object, Object> map) {
+    private MapBeanDataSource(final Map<Object, Object> map) {
       _map = map;
     }
 
     @Override
-    public Object getValue(String propertyName) {
+    public Object getValue(final String propertyName) {
       return _map.get(propertyName);
     }
 
     @Override
-    public List<Object> getCollectionValues(String propertyName) {
+    public List<Object> getCollectionValues(final String propertyName) {
       return (List<Object>) _map.get(propertyName);
     }
 
     @Override
-    public Map<?, ?> getMapValues(String propertyName) {
+    public Map<?, ?> getMapValues(final String propertyName) {
       return (Map<?, ?>) _map.get(propertyName);
     }
 
     @Override
     public String getBeanTypeName() {
-      String type = (String) getValue("type");
+      final String type = (String) getValue("type");
       if (type == null) {
         throw new OpenGammaRuntimeException("No type found in " + _map);
       }

@@ -22,17 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.opengamma.util.auth.AuthUtils;
 
 /**
- * Manages long-polling http requests using Jetty continuations.  Requests to this servlet block until there
- * is new data available for the client or until the connection times out.  The URL is assumed to be
- * {@code <servlet path>/{clientId}}.
+ * Manages long-polling http requests using Jetty continuations. Requests to this servlet block until there is new data available for the client or until the
+ * connection times out. The URL is assumed to be {@code <servlet path>/{clientId}}.
  */
 public class LongPollingServlet extends HttpServlet {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LongPollingServlet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LongPollingServlet.class);
 
   /** Key for storing the results as an attribute of the continuation. */
   /* package */ static final String RESULTS = "RESULTS";
-  /** Name of the HTTP query parameter for the client ID */
+  /** Name of the HTTP query parameter for the client ID. */
   public static final String CLIENT_ID = "clientId";
 
   /** Serialization version. */
@@ -49,16 +48,16 @@ public class LongPollingServlet extends HttpServlet {
   private LongPollingConnectionManager _connectionManager;
 
   @Override
-  public void init(ServletConfig config) throws ServletException {
+  public void init(final ServletConfig config) throws ServletException {
     super.init(config);
     _connectionManager = WebPushServletContextUtils.getLongPollingConnectionManager(config.getServletContext());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // this is a hack to get round a problem with browsers caching GET requests even when they're told not to
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String method = req.getParameter(METHOD);
+  protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+    final String method = req.getParameter(METHOD);
     if (GET.equals(method)) {
       doGet(req, resp);
     } else {
@@ -67,36 +66,36 @@ public class LongPollingServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Continuation continuation = ContinuationSupport.getContinuation(request);
+  protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    final Continuation continuation = ContinuationSupport.getContinuation(request);
     if (continuation.isExpired()) {
       // timeout - just send a blank response and tell the connection that its continuation has timed out
-      String clientId = (String) continuation.getAttribute(CLIENT_ID);
+      final String clientId = (String) continuation.getAttribute(CLIENT_ID);
       if (clientId != null) {
         // TODO will this always get the correct continuation?
         _connectionManager.longPollHttpTimeout(clientId, continuation);
       }
       return;
     }
-    String results = (String) request.getAttribute(RESULTS);
+    final String results = (String) request.getAttribute(RESULTS);
     // if this is the first time the request has been dispatched the results will be null. if the request has been
     // dispatched before and is being dispatched again after its continuation was resumed the results will be populated
     if (results == null) {
       setUpConnection(continuation, request, response);
     } else {
       // Send the results
-      s_logger.debug("Writing results to HTTP response {}", results);
+      LOGGER.debug("Writing results to HTTP response {}", results);
       response.getWriter().write(results);
     }
   }
 
-  private void setUpConnection(Continuation continuation, HttpServletRequest request, HttpServletResponse response) throws IOException {
+  private void setUpConnection(final Continuation continuation, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
     // suspend the request
     continuation.suspend(); // always suspend before registration
-    String userName = (AuthUtils.isPermissive() ? null : AuthUtils.getUserName());
+    final String userName = AuthUtils.isPermissive() ? null : AuthUtils.getUserName();
     // get the client ID from the URL and pass the continuation to the connection manager for the next updates
-    String clientId = getClientId(request);
-    boolean connected = (clientId != null) && _connectionManager.longPollHttpConnect(userName, clientId, continuation);
+    final String clientId = getClientId(request);
+    final boolean connected = clientId != null && _connectionManager.longPollHttpConnect(userName, clientId, continuation);
     if (!connected) {
       // couldn't get the client ID from the URL or the client ID didn't correspond to a known client
       // TODO how do I send something other than jetty's standard HTML error page?
@@ -107,14 +106,16 @@ public class LongPollingServlet extends HttpServlet {
   }
 
   /**
-   * Extracts the client ID from the URL.  If the URL is {@code http://<host>/<servlet path>/12345} the client ID is 12345.
-   * @param request The request
+   * Extracts the client ID from the URL. If the URL is {@code http://<host>/<servlet path>/12345} the client ID is 12345.
+   * 
+   * @param request
+   *          The request
    * @return The client ID from {@code request}'s URL or null if it's missing
    */
-  /* package */ static String getClientId(HttpServletRequest request) {
+  /* package */ static String getClientId(final HttpServletRequest request) {
     // this is the portion of the URL after the part used to direct it to this servlet
     // i.e. if the full URL is http://host/subscription/abcd then suffix=/abcd
-    String suffix = request.getRequestURI().substring(request.getServletPath().length());
+    final String suffix = request.getRequestURI().substring(request.getServletPath().length());
     String clientId;
     if (suffix.length() > 1) {
       clientId = suffix.substring(1);

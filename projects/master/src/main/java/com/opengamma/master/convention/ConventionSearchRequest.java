@@ -39,18 +39,15 @@ import com.opengamma.util.RegexUtils;
 /**
  * Request for searching for conventions.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link ConventionHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link ConventionHistoryRequest} for more details on how history works.
  */
 @PublicSPI
 @BeanDefinition
 public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of convention object identifiers, null to not limit by convention object identifiers.
-   * Note that an empty set will return no conventions.
+   * The set of convention object identifiers, null to not limit by convention object identifiers. Note that an empty set will return no conventions.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -60,25 +57,23 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
   /**
-   * The external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    */
   @PropertyDefinition
   private String _externalIdValue;
   /**
-   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _externalIdScheme;
   /**
-   * Map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
+   * allowed.
    */
   @PropertyDefinition
   private final Map<String, String> _attributes = Maps.newHashMap();
@@ -106,74 +101,77 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Creates an instance using a single search identifier.
-   * 
-   * @param conventionId  the convention external identifier to search for, not null
+   *
+   * @param conventionId
+   *          the convention external identifier to search for, not null
    */
-  public ConventionSearchRequest(ExternalId conventionId) {
+  public ConventionSearchRequest(final ExternalId conventionId) {
     addExternalId(conventionId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
-   * @param conventionBundle  the convention external identifiers to search for, not null
+   *
+   * @param conventionBundle
+   *          the convention external identifiers to search for, not null
    */
-  public ConventionSearchRequest(ExternalIdBundle conventionBundle) {
+  public ConventionSearchRequest(final ExternalIdBundle conventionBundle) {
     addExternalIds(conventionBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single convention object identifier to the set.
-   * 
-   * @param conventionId  the convention object identifier to add, not null
+   *
+   * @param conventionId
+   *          the convention object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable conventionId) {
+  public void addObjectId(final ObjectIdentifiable conventionId) {
     ArgumentChecker.notNull(conventionId, "conventionId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(conventionId.getObjectId());
   }
 
   /**
-   * Sets the set of convention object identifiers, null to not limit by convention object identifiers.
-   * Note that an empty set will return no conventions.
-   * 
-   * @param conventionIds  the new convention identifiers, null clears the convention id search
+   * Sets the set of convention object identifiers, null to not limit by convention object identifiers. Note that an empty set will return no conventions.
+   *
+   * @param conventionIds
+   *          the new convention identifiers, null clears the convention id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> conventionIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> conventionIds) {
     if (conventionIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable conventionId : conventionIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable conventionId : conventionIds) {
         _objectIds.add(conventionId.getObjectId());
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Adds a single convention external identifier to the collection to search for.
-   * Unless customized, the search will match 
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param conventionId  the convention key identifier to add, not null
+   * Adds a single convention external identifier to the collection to search for. Unless customized, the search will match {@link ExternalIdSearchType#ANY any}
+   * of the identifiers.
+   *
+   * @param conventionId
+   *          the convention key identifier to add, not null
    */
-  public void addExternalId(ExternalId conventionId) {
+  public void addExternalId(final ExternalId conventionId) {
     ArgumentChecker.notNull(conventionId, "conventionId");
     addExternalIds(Arrays.asList(conventionId));
   }
 
   /**
-   * Adds a collection of convention external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Adds a collection of convention external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param conventionIds  the convention key identifiers to add, not null
+   *
+   * @param conventionIds
+   *          the convention key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... conventionIds) {
+  public void addExternalIds(final ExternalId... conventionIds) {
     ArgumentChecker.notNull(conventionIds, "conventionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(conventionIds));
@@ -183,13 +181,13 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of convention external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Adds a collection of convention external identifiers to the collection to search for. Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param conventionIds  the convention key identifiers to add, not null
+   *
+   * @param conventionIds
+   *          the convention key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> conventionIds) {
+  public void addExternalIds(final Iterable<ExternalId> conventionIds) {
     ArgumentChecker.notNull(conventionIds, "conventionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(conventionIds));
@@ -200,10 +198,11 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
-   * @param type  the type to set, not null
+   *
+   * @param type
+   *          the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -215,54 +214,58 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
    * Adds a key-value pair to the set of attributes to search for.
    * <p>
    * Attributes are used to tag the object with additional information.
-   * 
-   * @param key  the key to add, not null
-   * @param value  the value to add, not null
+   *
+   * @param key
+   *          the key to add, not null
+   * @param value
+   *          the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof ConventionDocument == false) {
+    if (!(obj instanceof ConventionDocument)) {
       return false;
     }
     final ConventionDocument document = (ConventionDocument) obj;
     final ManageableConvention convention = document.getConvention();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(convention.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(convention.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), convention.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), convention.getName())) {
       return false;
     }
     if (getExternalIdValue() != null) {
-      for (ExternalId identifier : convention.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
-          return false;
+      for (final ExternalId identifier : convention.getExternalIdBundle()) {
+        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
+          return true;
         }
       }
+      return false;
     }
     if (getExternalIdScheme() != null) {
-      for (ExternalId identifier : convention.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
-          return false;
+      for (final ExternalId identifier : convention.getExternalIdBundle()) {
+        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
+          return true;
         }
       }
+      return false;
     }
     if (getAttributes().size() > 0) {
-      for (Entry<String, String> entry : getAttributes().entrySet()) {
-        if (convention.getAttributes().containsKey(entry.getKey()) == false) {
+      for (final Entry<String, String> entry : getAttributes().entrySet()) {
+        if (!convention.getAttributes().containsKey(entry.getKey())) {
           return false;
         }
-        String otherValue = convention.getAttributes().get(entry.getKey());
-        if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
+        final String otherValue = convention.getAttributes().get(entry.getKey());
+        if (!RegexUtils.wildcardMatch(entry.getValue(), otherValue)) {
           return false;
         }
       }
@@ -291,8 +294,7 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of convention object identifiers, null to not limit by convention object identifiers.
-   * Note that an empty set will return no conventions.
+   * Gets the set of convention object identifiers, null to not limit by convention object identifiers. Note that an empty set will return no conventions.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -301,7 +303,6 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty set will return no conventions.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -335,12 +336,10 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the value of the property
    */
   public String getExternalIdValue() {
@@ -348,12 +347,10 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @param externalIdValue  the new value of the property
    */
   public void setExternalIdValue(String externalIdValue) {
@@ -362,11 +359,9 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdValue} property.
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * by identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and
+   * does not match against the key. Wildcards are allowed. This method is suitable for human
+   * searching, whereas the {@code externalIdSearch} search is useful for exact machine searching.
    * @return the property, not null
    */
   public final Property<String> externalIdValue() {
@@ -375,8 +370,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    * @return the value of the property
    */
   public String getExternalIdScheme() {
@@ -384,8 +379,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match
+   * by identifier scheme. Wildcards are allowed.
    * @param externalIdScheme  the new value of the property
    */
   public void setExternalIdScheme(String externalIdScheme) {
@@ -394,7 +389,7 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdScheme} property.
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * by identifier scheme. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> externalIdScheme() {
@@ -403,9 +398,9 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Gets map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
+   * allowed.
    * @return the value of the property, not null
    */
   public Map<String, String> getAttributes() {
@@ -413,9 +408,9 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Sets map of attributes to search for. The returned documents must match all of the specified attributes.
+   * Wildcards are allowed for the values. Nulls are not
+   * allowed.
    * @param attributes  the new value of the property, not null
    */
   public void setAttributes(Map<String, String> attributes) {
@@ -426,8 +421,8 @@ public class ConventionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code attributes} property.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Wildcards are allowed for the values. Nulls are not
+   * allowed.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {

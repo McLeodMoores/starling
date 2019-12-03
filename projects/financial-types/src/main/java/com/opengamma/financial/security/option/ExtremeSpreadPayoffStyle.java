@@ -47,18 +47,18 @@ public class ExtremeSpreadPayoffStyle extends PayoffStyle {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param periodEnd  the period end, not null
    * @param reverse  whether the style is reversed
    */
-  public ExtremeSpreadPayoffStyle(ZonedDateTime periodEnd, boolean reverse) {
+  public ExtremeSpreadPayoffStyle(final ZonedDateTime periodEnd, final boolean reverse) {
     setPeriodEnd(periodEnd);
     setReverse(reverse);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitExtremeSpreadPayoffStyle(this);
   }
 

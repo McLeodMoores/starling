@@ -52,9 +52,11 @@ public class AlwaysAvailableHistoricalTimeSeriesResolver extends HistoricalTimeS
   }
 
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider,
       final String dataField, final String resolutionKey) {
-    final HistoricalTimeSeriesResolutionResult resultFromUnderlying = _underlyingResolver.resolve(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, resolutionKey);
+    final HistoricalTimeSeriesResolutionResult resultFromUnderlying = _underlyingResolver.resolve(identifierBundle, identifierValidityDate,
+        dataSource, dataProvider, dataField, resolutionKey);
     if (resultFromUnderlying != null) {
       return resultFromUnderlying;
     }

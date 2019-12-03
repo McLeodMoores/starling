@@ -12,10 +12,6 @@ import java.util.Map;
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
 
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.management.ManagementService;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -32,6 +28,10 @@ import org.springframework.context.Lifecycle;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractAliasedComponentFactory;
 import com.opengamma.util.ResourceUtils;
+
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.management.ManagementService;
 
 /**
  * Component Factory for an Ehcache CacheManager using the standard OG Ehcache config found on the classpath.
@@ -68,8 +68,8 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    CacheManager cacheManager = createCacheManager(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final CacheManager cacheManager = createCacheManager(repo);
     registerComponentAndAliases(repo, CacheManager.class, cacheManager);
     repo.registerLifecycleStop(cacheManager, "shutdown");
     registerMBean(repo, cacheManager);
@@ -77,12 +77,15 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
 
   /**
    * Creates the cache manager without registering it.
-   * 
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
+   *
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
    * @return the cache manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
-  protected CacheManager createCacheManager(ComponentRepository repo) throws IOException {
-    EhCacheManagerFactoryBean factoryBean = new EhCacheManagerFactoryBean();
+  protected CacheManager createCacheManager(final ComponentRepository repo) throws IOException {
+    final EhCacheManagerFactoryBean factoryBean = new EhCacheManagerFactoryBean();
     factoryBean.setShared(isShared());
     factoryBean.setConfigLocation(ResourceUtils.createResource(getConfigLocation()));
     factoryBean.afterPropertiesSet();
@@ -93,11 +96,11 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
    * Registers a JMX MBean for the cache manager.
    * <p>
    * Cannot assume MBean server exists at this point, so a lifecycle is used.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param cacheManager  the cache manager, not null
    */
-  protected void registerMBean(ComponentRepository repo, CacheManager cacheManager) {
+  protected void registerMBean(final ComponentRepository repo, final CacheManager cacheManager) {
     repo.registerLifecycle(new CacheManagerLifecycle(repo, cacheManager));
   }
 
@@ -110,19 +113,19 @@ public class CacheManagerComponentFactory extends AbstractAliasedComponentFactor
     private volatile ComponentRepository _repo;
     private volatile CacheManager _cacheManager;
     private volatile ManagementService _jmxService;
-    CacheManagerLifecycle(ComponentRepository repo, CacheManager cacheManager) {
+    CacheManagerLifecycle(final ComponentRepository repo, final CacheManager cacheManager) {
       _repo = repo;
       _cacheManager = cacheManager;
     }
     @Override
     public void start() {
-      MBeanServer mbeanServer = _repo.findInstance(MBeanServer.class);
+      final MBeanServer mbeanServer = _repo.findInstance(MBeanServer.class);
       if (mbeanServer != null) {
         _jmxService = new ManagementService(_cacheManager, mbeanServer, true, true, true, true);
         try {
           _jmxService.init();
-        } catch (CacheException ex) {
-          if (ex.getCause() instanceof InstanceAlreadyExistsException == false) {
+        } catch (final CacheException ex) {
+          if (!(ex.getCause() instanceof InstanceAlreadyExistsException)) {
             throw ex;
           }
         }

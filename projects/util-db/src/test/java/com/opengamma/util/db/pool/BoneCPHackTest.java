@@ -19,7 +19,6 @@ import org.testng.annotations.Test;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import com.opengamma.util.async.BlockingOperation;
-import com.opengamma.util.db.pool.BoneCPHack;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
@@ -29,7 +28,12 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.INTEGRATION)
 public class BoneCPHackTest {
 
-  private BoneCPConfig createConfig() {
+  /**
+   * Creates a configuration.
+   *
+   * @return  the configuration
+   */
+  private static BoneCPConfig createConfig() {
     final BoneCPConfig config = new BoneCPConfig();
     config.setPartitionCount(1);
     config.setLazyInit(false);
@@ -43,10 +47,11 @@ public class BoneCPHackTest {
       }
 
       @Override
-      public Connection getConnection(String username, String password) throws SQLException {
+      public Connection getConnection(final String username, final String password) throws SQLException {
         return getConnection();
       }
-      
+
+      @Override
       public Logger getParentLogger() {
         return null;
       }
@@ -56,39 +61,57 @@ public class BoneCPHackTest {
     return config;
   }
 
+  /**
+   * Tests a blocking operation.
+   *
+   * @throws SQLException  if there is a problem
+   */
   public void testNonBlocking() throws SQLException {
-    final BoneCP bcp = new BoneCP(createConfig());
+    try (BoneCP bcp = new BoneCP(createConfig())) {
     BlockingOperation.off();
-    try {
-      final Connection h1 = bcp.getConnection();
-      assertNotNull(h1);
-      final Connection h2 = bcp.getConnection();
-      assertNotNull(h2);
-      final Connection h3 = bcp.getConnection();
-      assertNotNull(h3);
-      h1.close();
-      h2.close();
-      h3.close();
-    } finally {
-      BlockingOperation.on();
+      try {
+        try (Connection h1 = bcp.getConnection()) {
+          assertNotNull(h1);
+          h1.close();
+        }
+        try (Connection h2 = bcp.getConnection()) {
+          assertNotNull(h2);
+          h2.close();
+        }
+        try (Connection h3 = bcp.getConnection()) {
+          assertNotNull(h3);
+          h3.close();
+        }
+      } finally {
+        BlockingOperation.on();
+      }
     }
   }
 
+  /**
+   * Tests a non-blocking operation.
+   *
+   * @throws SQLException  if there is a problem
+   */
   @Test(expectedExceptions = {BlockingOperation.class })
   public void testBlocking() throws SQLException {
-    final BoneCP bcp = new BoneCP(createConfig());
-    BlockingOperation.off();
-    try {
-      final Connection h1 = bcp.getConnection();
-      assertNotNull(h1);
-      final Connection h2 = bcp.getConnection();
-      assertNotNull(h2);
-      final Connection h3 = bcp.getConnection();
-      assertNotNull(h3);
-      bcp.getConnection();
-      fail();
-    } finally {
-      BlockingOperation.on();
+    try (BoneCP bcp = new BoneCP(createConfig())) {
+      BlockingOperation.off();
+      try {
+        try (Connection h1 = bcp.getConnection()) {
+          assertNotNull(h1);
+        }
+        try (Connection h2 = bcp.getConnection()) {
+          assertNotNull(h2);
+        }
+        try (Connection h3 = bcp.getConnection()) {
+          assertNotNull(h3);
+        }
+        bcp.getConnection();
+        fail();
+      } finally {
+        BlockingOperation.on();
+      }
     }
   }
 

@@ -17,7 +17,7 @@ import com.opengamma.id.UniqueId;
   /** ID of the row's target. */
   private final UniqueId _nodeId;
 
-  /* package */  RowTarget(String name, UniqueId nodeId) {
+  /* package */  RowTarget(final String name, final UniqueId nodeId) {
     _name = name;
     _nodeId = nodeId;
   }

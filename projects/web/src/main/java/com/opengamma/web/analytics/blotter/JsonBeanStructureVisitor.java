@@ -31,37 +31,37 @@ import com.opengamma.util.ArgumentChecker;
 // TODO do this as HTML, easier to consume
 /* package */ class JsonBeanStructureVisitor implements BeanVisitor<JSONObject> {
 
-  private static final Map<Class<?>, String> s_types = Maps.newHashMap();
+  private static final Map<Class<?>, String> TYPES = Maps.newHashMap();
   private static final String NUMBER = "number";
   private static final String BOOLEAN = "boolean";
   private static final String STRING = "string";
 
   static {
-    s_types.put(Double.TYPE, NUMBER);
-    s_types.put(Double.class, NUMBER);
-    s_types.put(Float.TYPE, NUMBER);
-    s_types.put(Float.class, NUMBER);
-    s_types.put(Long.TYPE, NUMBER);
-    s_types.put(Long.class, NUMBER);
-    s_types.put(Short.TYPE, NUMBER);
-    s_types.put(Short.class, NUMBER);
-    s_types.put(Integer.TYPE, NUMBER);
-    s_types.put(Integer.class, NUMBER);
-    s_types.put(Byte.TYPE, NUMBER);
-    s_types.put(Byte.class, NUMBER);
-    s_types.put(BigDecimal.class, NUMBER);
-    s_types.put(Boolean.TYPE, BOOLEAN);
-    s_types.put(Boolean.class, BOOLEAN);
-    s_types.put(Character.TYPE, STRING);
-    s_types.put(Character.class, STRING);
-    s_types.put(String.class, STRING);
+    TYPES.put(Double.TYPE, NUMBER);
+    TYPES.put(Double.class, NUMBER);
+    TYPES.put(Float.TYPE, NUMBER);
+    TYPES.put(Float.class, NUMBER);
+    TYPES.put(Long.TYPE, NUMBER);
+    TYPES.put(Long.class, NUMBER);
+    TYPES.put(Short.TYPE, NUMBER);
+    TYPES.put(Short.class, NUMBER);
+    TYPES.put(Integer.TYPE, NUMBER);
+    TYPES.put(Integer.class, NUMBER);
+    TYPES.put(Byte.TYPE, NUMBER);
+    TYPES.put(Byte.class, NUMBER);
+    TYPES.put(BigDecimal.class, NUMBER);
+    TYPES.put(Boolean.TYPE, BOOLEAN);
+    TYPES.put(Boolean.class, BOOLEAN);
+    TYPES.put(Character.TYPE, STRING);
+    TYPES.put(Character.class, STRING);
+    TYPES.put(String.class, STRING);
   }
 
   private final Map<String, Object> _json = Maps.newHashMap();
   private final BeanHierarchy _beanHierarchy;
   private final StringConvert _stringConvert;
 
-  /* package */ JsonBeanStructureVisitor(Set<MetaBean> metaBeans) {
+  /* package */ JsonBeanStructureVisitor(final Set<MetaBean> metaBeans) {
     ArgumentChecker.notNull(metaBeans, "metaBeans");
     _beanHierarchy = new BeanHierarchy(metaBeans);
     // TODO parameter for this
@@ -69,59 +69,58 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public void visitMetaBean(MetaBean metaBean) {
+  public void visitMetaBean(final MetaBean metaBean) {
     // TODO configurable field name
     _json.clear();
     _json.put("type", metaBean.beanType().getSimpleName());
   }
 
   @Override
-  public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Set<Class<? extends Bean>> argumentTypes = _beanHierarchy.subtypes(property.propertyType());
+  public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Set<Class<? extends Bean>> argumentTypes = _beanHierarchy.subtypes(property.propertyType());
     if (argumentTypes.isEmpty()) {
       throw new OpenGammaRuntimeException("No bean types are available to satisfy property " + property);
     }
-    List<String> beanTypeNames = Lists.newArrayListWithCapacity(argumentTypes.size());
-    for (Class<? extends Bean> argumentType : argumentTypes) {
+    final List<String> beanTypeNames = Lists.newArrayListWithCapacity(argumentTypes.size());
+    for (final Class<? extends Bean> argumentType : argumentTypes) {
       beanTypeNames.add(argumentType.getSimpleName());
     }
     _json.put(property.name(), optional(property, StringUtils.join(beanTypeNames, "|")));
   }
 
   @Override
-  public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), arrayType(property));
   }
 
   @Override
-  public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Class<? extends Bean> beanType = property.metaBean().beanType();
-    Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
-    Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
+  public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Class<? extends Bean> beanType = property.metaBean().beanType();
+    final Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
+    final Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
     _json.put(property.name(), optional(property,  "{" + typeFor(keyType) + ":" + typeFor(valueType) + "}"));
   }
 
   @Override
-  public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _json.put(property.name(), optional(property, typeFor(property)));
   }
 
-  private static String optional(MetaProperty<?> property, String type) {
+  private static String optional(final MetaProperty<?> property, final String type) {
     if (nullable(property)) {
       return type + "?";
-    } else {
-      return type;
     }
+    return type;
   }
 
   @Override
@@ -129,34 +128,32 @@ import com.opengamma.util.ArgumentChecker;
     return new JSONObject(_json);
   }
 
-  private String arrayType(MetaProperty<?> property) {
+  private String arrayType(final MetaProperty<?> property) {
     return optional(property, "[" + typeFor(property.propertyType()) + "]");
   }
 
-  private String typeFor(MetaProperty<?> property) {
+  private String typeFor(final MetaProperty<?> property) {
     return typeFor(property.propertyType());
   }
 
-  private String typeFor(Class<?> type) {
-    String typeName = s_types.get(type);
+  private String typeFor(final Class<?> type) {
+    final String typeName = TYPES.get(type);
     if (typeName != null) {
       return typeName;
-    } else {
-      try {
-        _stringConvert.findConverter(type);
-        return STRING;
-      } catch (Exception e) {
-        throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName(), e);
-      }
+    }
+    try {
+      _stringConvert.findConverter(type);
+      return STRING;
+    } catch (final Exception e) {
+      throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName(), e);
     }
   }
 
-  private static boolean nullable(MetaProperty<?> property) {
+  private static boolean nullable(final MetaProperty<?> property) {
     if (property.propertyType().isPrimitive()) {
       return false;
-    } else {
-      PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
-      return !definitionAnnotation.validate().equals("notNull");
     }
+    final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
+    return !definitionAnnotation.validate().equals("notNull");
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -24,27 +24,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * The Heston stochastic volatility model is defined as:
- * $$
- * \begin{align*}
- * dS_t &= \mu S_t dt + \sqrt{V_t}S_t dW_S(t)\\
- * dV_t &= \kappa(\theta - V_0)dt + \omega\sqrt{V_t} dW_V(t)\\
- * \text{with}\\
- * dW_S(t) dW_V(t) = \rho dt
- * \end{align*}
- * $$
- * This class represents the characteristic function of the Heston model:
- * $$
- * \begin{align*}
- * \phi(u) &= e^{C(t, u) + D(t, u)V_0 + iu\ln F}\\
- * \text{where}\\
- * C(t, u) &= \frac{\kappa\theta}{\omega^2} \left((\kappa - \rho \omega ui + d(u))t - 2\ln\left(\frac{c(u)e^{d(u)t} - 1}{c(u) - 1}\right) \right)\\
- * D(t, u) &= \frac{\kappa - \rho \omega ui + d(u)}{\omega^2}\left(\frac{e^{d(u)t} - 1}{c(u)e^{d(u)t} - 1}\right)\\
- * c(u) &= \frac{\kappa - \rho \omega ui + d(u)}{\kappa - \rho \omega ui - d(u)}\\
- * \text{and}\\
- * d(u) &= \sqrt{(\rho \omega ui - \kappa)^2 + iu\omega^2 + \omega^2 u^2}
- * \end{align*}
- * $$
+ * The characteristic exponent of the Heston stochastic volatility model.
  */
 public class HestonCharacteristicExponent implements MartingaleCharacteristicExponent {
   private final double _kappa;
@@ -56,12 +36,17 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   private final double _alphaMax;
 
   /**
-   * 
-   * @param kappa mean-reverting speed
-   * @param theta mean-reverting level
-   * @param vol0 starting value of volatility
-   * @param omega volatility-of-volatility
-   * @param rho correlation between the spot process and the volatility process
+   *
+   * @param kappa
+   *          mean-reverting speed
+   * @param theta
+   *          mean-reverting level
+   * @param vol0
+   *          starting value of volatility
+   * @param omega
+   *          volatility-of-volatility
+   * @param rho
+   *          correlation between the spot process and the volatility process
    */
   public HestonCharacteristicExponent(final double kappa, final double theta, final double vol0, final double omega, final double rho) {
     _kappa = kappa;
@@ -101,13 +86,13 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     // that u = 0 gives zero is true for any characteristic function, that u = -i gives zero is because this is already mean corrected
     if (u.getReal() == 0.0 && (u.getImaginary() == 0.0 || u.getImaginary() == -1.0)) {
       return ZERO;
     }
 
-    //non-stochastic vol limit
+    // non-stochastic vol limit
     if (_omega == 0.0 || mod(multiply(multiply(_omega / _kappa, u), add(I, u))) < 1e-6) {
       final ComplexNumber z = multiply(u, add(I, u));
       if (_kappa * t < 1e-6) {
@@ -133,7 +118,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   private ComplexNumber[] forwardSweep(final ComplexNumber u, final double t) {
-    ComplexNumber[] w = new ComplexNumber[19];
+    final ComplexNumber[] w = new ComplexNumber[19];
     w[0] = new ComplexNumber(_kappa * _theta / _omega / _omega);
     w[1] = multiply(u, new ComplexNumber(0, _rho * _omega));
     w[2] = subtract(w[1], _kappa);
@@ -159,21 +144,21 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   private ComplexNumber[] backwardsSweep(final ComplexNumber[] w, final double t) {
     final double oneOverOmega2 = 1 / _omega / _omega;
     final ComplexNumber[] wBar = new ComplexNumber[19];
-    wBar[18] = new ComplexNumber(1.0); //formal start
-    wBar[17] = new ComplexNumber(_vol0); //Suppressing the multiple by wBar18
+    wBar[18] = new ComplexNumber(1.0); // formal start
+    wBar[17] = new ComplexNumber(_vol0); // Suppressing the multiple by wBar18
     wBar[16] = wBar[18];
     wBar[15] = multiply(oneOverOmega2, w[8], wBar[17]);
     wBar[14] = multiply(-2, w[0], wBar[16]);
     wBar[13] = divide(wBar[14], w[13]);
-    ComplexNumber temp1 = subtract(1.0, w[10]);
-    ComplexNumber temp2 = subtract(w[10], w[12]);
-    ComplexNumber temp3 = square(temp2);
+    final ComplexNumber temp1 = subtract(1.0, w[10]);
+    final ComplexNumber temp2 = subtract(w[10], w[12]);
+    final ComplexNumber temp3 = square(temp2);
     wBar[12] = add(multiply(wBar[15], divide(temp1, temp3)), divide(wBar[13], temp1));
     wBar[11] = multiply(w[0], wBar[16]);
     wBar[10] = add(multiply(divide(subtract(w[12], 1), temp3), wBar[15]), multiply(divide(subtract(w[12], 1), square(temp1)), wBar[13]));
     wBar[9] = subtract(multiply(t, wBar[11]), multiply(divide(w[8], square(w[9])), wBar[10]));
     wBar[8] = add(multiply(oneOverOmega2, w[15], wBar[17]), divide(wBar[10], w[9]));
-    //subtract(add(multiply(wBar12, multiply(-t, w12)), wBar8), wBar9);
+    // subtract(add(multiply(wBar12, multiply(-t, w12)), wBar8), wBar9);
     wBar[7] = subtract(wBar[8], add(multiply(t, w[12], wBar[12]), wBar[9]));
     wBar[6] = divide(wBar[7], multiply(2, w[7]));
     wBar[5] = wBar[6];
@@ -187,9 +172,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   public ComplexNumber[] getCharacteristicExponentAdjointDebug(final ComplexNumber u, final double t) {
-    ComplexNumber[] res = new ComplexNumber[6];
-    ComplexNumber[] w = forwardSweep(u, t);
-    ComplexNumber[] wBar = backwardsSweep(w, t);
+    final ComplexNumber[] res = new ComplexNumber[6];
+    final ComplexNumber[] w = forwardSweep(u, t);
+    final ComplexNumber[] wBar = backwardsSweep(w, t);
 
     res[0] = w[18];
     res[1] = subtract(multiply(_theta / _omega / _omega, wBar[0]), wBar[2]);
@@ -204,7 +189,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   @Override
   public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
-    ComplexNumber[] res = new ComplexNumber[6];
+    final ComplexNumber[] res = new ComplexNumber[6];
 
     if (u.getReal() == 0.0 && (u.getImaginary() == 0.0 || u.getImaginary() == -1.0)) {
       for (int i = 0; i < 6; i++) {
@@ -213,13 +198,13 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
       return res;
     }
 
-    //non-stochastic vol limit
+    // non-stochastic vol limit
     if (_omega == 0.0 || mod(multiply(_omega / _kappa, u, add(I, u))) < 1e-6) {
       final ComplexNumber z = multiply(u, add(I, u));
 
-      //      //TODO calculate the omega -> 0 sensitivity without resorting to this hack
-      //      HestonCharacteristicExponent ceTemp = this.withOmega(1.1e-6 * _kappa / mod(z));
-      //      ComplexNumber[] temp = ceTemp.getCharacteristicExponentAdjoint(u, t);
+      // //TODO calculate the omega -> 0 sensitivity without resorting to this hack
+      // HestonCharacteristicExponent ceTemp = this.withOmega(1.1e-6 * _kappa / mod(z));
+      // ComplexNumber[] temp = ceTemp.getCharacteristicExponentAdjoint(u, t);
 
       final double var;
       if (_kappa * t < 1e-6) {
@@ -227,7 +212,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
         res[1] = multiply(-0.5 * (_vol0 - _theta) * t * t / 2, z);
         res[2] = multiply(_kappa * t * t / 4, z);
         res[3] = multiply(-0.5 * (t + _kappa * t * t / 2), z);
-        res[4] = ZERO; //TODO this is wrong
+        res[4] = ZERO; // TODO this is wrong
         res[5] = ZERO;
       } else {
         final double expKappaT = Math.exp(-_kappa * t);
@@ -235,7 +220,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
         res[1] = multiply(-0.5 * (_vol0 - _theta) * (expKappaT * (1 + t * _kappa) - 1) / _kappa / _kappa, z);
         res[2] = multiply(-0.5 * (t - (1 - expKappaT) / _kappa), z);
         res[3] = multiply(-0.5 * (1 - expKappaT) / _kappa, z);
-        res[4] = ZERO; //TODO this is wrong
+        res[4] = ZERO; // TODO this is wrong
         res[5] = ZERO;
       }
       res[0] = multiply(-var / 2, z);
@@ -245,9 +230,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     final double oneOverOmega2 = 1 / _omega / _omega;
     final double w0 = _kappa * _theta * oneOverOmega2;
 
-    final ComplexNumber w1 = multiply(u, new ComplexNumber(0, _rho * _omega)); //w1
-    final ComplexNumber w2 = subtract(w1, _kappa); //w2
-    final ComplexNumber w3 = square(w2); //w3
+    final ComplexNumber w1 = multiply(u, new ComplexNumber(0, _rho * _omega)); // w1
+    final ComplexNumber w2 = subtract(w1, _kappa); // w2
+    final ComplexNumber w3 = square(w2); // w3
     final ComplexNumber w4 = multiply(u, new ComplexNumber(0, _omega * _omega));
     final ComplexNumber w5 = square(multiply(u, _omega));
     final ComplexNumber w6 = add(w3, w4, w5);
@@ -268,9 +253,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     final ComplexNumber w17 = multiply(oneOverOmega2, w8, w15);
     final ComplexNumber w18 = add(w16, multiply(_vol0, w17));
 
-    res[0] = w18; //value of CE
+    res[0] = w18; // value of CE
 
-    //backwards sweep
+    // backwards sweep
     final ComplexNumber wBar16 = new ComplexNumber(1.0);
     final ComplexNumber wBar17 = new ComplexNumber(_vol0);
     final ComplexNumber wBar15 = multiply(oneOverOmega2, wBar17, w8);
@@ -298,9 +283,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     final ComplexNumber wBar1 = wBar2;
     final ComplexNumber wBar0 = multiply(wBar16, subtract(w11, multiply(2, w14)));
 
-    res[1] = subtract(multiply(wBar0, _theta / _omega / _omega), wBar2); //kappaBar
-    res[2] = multiply(wBar0, _kappa / _omega / _omega); //thetaBar
-    res[3] = w17; //vol0
+    res[1] = subtract(multiply(wBar0, _theta / _omega / _omega), wBar2); // kappaBar
+    res[2] = multiply(wBar0, _kappa / _omega / _omega); // thetaBar
+    res[3] = w17; // vol0
 
     final ComplexNumber omegaBar1 = multiply(-2 / _omega, w17, wBar17);
     final ComplexNumber omegaBar2 = multiply(-2.0 * w0 / _omega, wBar0);
@@ -354,16 +339,8 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   /**
-   * The maximum allowable value of $alpha$ which is given by
-   * $$
-   * \begin{align*}
-   * t &= \omega - 2 \kappa \rho \\
-   * \rho^* &= 1 - \rho^2\\
-   * r &= \sqrt{t^2 + 4\kappa^2\rho^*}\\
-   * \alpha_{max} &= \frac{t + r}{\omega(\rho^* - 1)}
-   * \end{align*}
-   * $$
-   * 
+   * The maximum allowable value of $alpha$.
+   *
    * @return $alpha_{max}$
    */
   @Override
@@ -371,15 +348,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     return _alphaMax;
   }
 
-  /** The maximum allowable value of $alpha$ which is given by
-   * $$
-   * \begin{align*}
-   * t &= \omega - 2 \kappa \rho \\
-   * \rho^* &= 1 - \rho^2\\
-   * r &= \sqrt{t^2 + 4\kappa^2\rho^*}\\
-   * \alpha_{min} &= \frac{t - r}{\omega(\rho^* - 1)}
-   * \end{align*}
-   * $$
+  /**
+   * The minimum allowable value of $alpha$.
+   *
    * @return $alpha_{min}$
    */
   @Override
@@ -389,6 +360,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the mean-reverting speed.
+   * 
    * @return kappa
    */
   public double getKappa() {
@@ -397,6 +369,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the mean-reverting level.
+   * 
    * @return theta
    */
   public double getTheta() {
@@ -404,7 +377,8 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   }
 
   /**
-   * Gets the initial volatility
+   * Gets the initial volatility.
+   * 
    * @return initial volatility
    */
   public double getVol0() {
@@ -413,7 +387,8 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the volatility-of-volatility.
-   * @return omega
+   * 
+   * @return omega volatility of volatility
    */
   public double getOmega() {
     return _omega;
@@ -421,6 +396,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
 
   /**
    * Gets the correlation.
+   * 
    * @return rho
    */
   public double getRho() {
@@ -453,15 +429,15 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_kappa);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_omega);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rho);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_theta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol0);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

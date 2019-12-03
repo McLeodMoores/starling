@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.carrlee;
@@ -27,11 +27,10 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class CarrLeeValueDeltaFXVolatilitySwapFunction extends CarrLeeFXVolatilitySwapFunction {
 
@@ -39,7 +38,8 @@ public class CarrLeeValueDeltaFXVolatilitySwapFunction extends CarrLeeFXVolatili
   private static final InstrumentDerivativeVisitor<CarrLeeFXData, Double> CALCULATOR = new CarrLeeFXVolatilitySwapDeltaCalculator();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_DELTA}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_DELTA}.
    */
   public CarrLeeValueDeltaFXVolatilitySwapFunction() {
     super(VALUE_DELTA);
@@ -54,7 +54,7 @@ public class CarrLeeValueDeltaFXVolatilitySwapFunction extends CarrLeeFXVolatili
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         final CarrLeeFXData data = getCarrLeeData(executionContext, inputs, target, fxMatrix);
-        
+
         if (derivative instanceof FXVolatilitySwap) {
           final FXVolatilitySwap swap = (FXVolatilitySwap) derivative;
           final Double delta = derivative.accept(CALCULATOR, data);
@@ -66,7 +66,7 @@ public class CarrLeeValueDeltaFXVolatilitySwapFunction extends CarrLeeFXVolatili
           final ValueSpecification spec = new ValueSpecification(VALUE_DELTA, target.toSpecification(), properties);
           return Collections.singleton(new ComputedValue(spec, valueDelta));
         }
-        
+
         throw new IllegalArgumentException("Derivative instrument should be FX volatility swap");
       }
 

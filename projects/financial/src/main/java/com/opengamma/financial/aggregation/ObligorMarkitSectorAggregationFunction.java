@@ -7,7 +7,6 @@ package com.opengamma.financial.aggregation;
 
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.legalentity.LegalEntitySource;
-import com.opengamma.core.obligor.definition.Obligor;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.security.SecuritySource;
 
@@ -26,18 +25,18 @@ public class ObligorMarkitSectorAggregationFunction extends AbstractRedCodeHandl
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    * @param legalEntitySource  the organization source, not null
    */
   public ObligorMarkitSectorAggregationFunction(
-      SecuritySource securitySource, LegalEntitySource legalEntitySource) {
+      final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
     super(NAME, securitySource, new CdsObligorExtractor(legalEntitySource));
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(LegalEntity obligor) {
+  protected String handleExtractedData(final LegalEntity obligor) {
     return obligor.getAttributes().get("sector");
   }
 

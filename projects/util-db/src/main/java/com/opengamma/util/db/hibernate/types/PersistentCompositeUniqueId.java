@@ -10,9 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.CompositeUserType;
 
@@ -30,17 +30,16 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
 
   @Override
   public String[] getPropertyNames() {
-    return new String[] {"scheme", "value", "version" };
+    return new String[] { "scheme", "value", "version" };
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public Type[] getPropertyTypes() {
-    return new Type[] {Hibernate.STRING, Hibernate.STRING, Hibernate.STRING };
+    return new Type[] { StandardBasicTypes.STRING, StandardBasicTypes.STRING, StandardBasicTypes.STRING };
   }
 
   @Override
-  public Object getPropertyValue(Object component, int property) throws HibernateException {
+  public Object getPropertyValue(final Object component, final int property) throws HibernateException {
     final UniqueId uid = (UniqueId) component;
     if (property == 0) {
       return uid.getScheme();
@@ -52,7 +51,7 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public void setPropertyValue(Object component, int property, Object value) throws HibernateException {
+  public void setPropertyValue(final Object component, final int property, final Object value) throws HibernateException {
     throw new UnsupportedOperationException("UniqueId is immutable");
   }
 
@@ -62,17 +61,18 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public boolean equals(Object x, Object y) throws HibernateException {
+  public boolean equals(final Object x, final Object y) throws HibernateException {
     return x.equals(y);
   }
 
   @Override
-  public int hashCode(Object x) throws HibernateException {
+  public int hashCode(final Object x) throws HibernateException {
     return x.hashCode();
   }
 
   @Override
-  public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SharedSessionContractImplementor session, final Object owner)
+      throws HibernateException, SQLException {
     final String scheme = resultSet.getString(names[0]);
     if (resultSet.wasNull()) {
       return null;
@@ -82,13 +82,13 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
     return UniqueId.of(scheme, value, version);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  public void nullSafeSet(PreparedStatement statement, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+  public void nullSafeSet(final PreparedStatement statement, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      statement.setNull(index, Hibernate.STRING.sqlType());
-      statement.setNull(index + 1, Hibernate.STRING.sqlType());
-      statement.setNull(index + 2, Hibernate.STRING.sqlType());
+      statement.setNull(index, StandardBasicTypes.STRING.sqlType());
+      statement.setNull(index + 1, StandardBasicTypes.STRING.sqlType());
+      statement.setNull(index + 2, StandardBasicTypes.STRING.sqlType());
     } else {
       final UniqueId uid = (UniqueId) value;
       statement.setString(index, uid.getScheme());
@@ -96,13 +96,13 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
       if (uid.getVersion() != null) {
         statement.setString(index + 2, uid.getVersion());
       } else {
-        statement.setNull(index + 2, Hibernate.STRING.sqlType());
+        statement.setNull(index + 2, StandardBasicTypes.STRING.sqlType());
       }
     }
   }
 
   @Override
-  public Object deepCopy(Object value) throws HibernateException {
+  public Object deepCopy(final Object value) throws HibernateException {
     return value;
   }
 
@@ -112,17 +112,18 @@ public class PersistentCompositeUniqueId implements CompositeUserType {
   }
 
   @Override
-  public Serializable disassemble(Object value, SessionImplementor session) throws HibernateException {
+  public Serializable disassemble(final Object value, final SharedSessionContractImplementor session) throws HibernateException {
     return (Serializable) value;
   }
 
   @Override
-  public Object assemble(Serializable cached, SessionImplementor session, Object owner) throws HibernateException {
+  public Object assemble(final Serializable cached, final SharedSessionContractImplementor session, final Object owner) {
     return cached;
   }
 
   @Override
-  public Object replace(Object original, Object target, SessionImplementor session, Object owner) throws HibernateException {
+  public Object replace(final Object original, final Object target, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException {
     return original;
   }
 

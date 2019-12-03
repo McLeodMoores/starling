@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -26,7 +26,9 @@ public class QuandlTimeSeriesRatingLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * @param args  the standard tool arguments, not null
+   * 
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) {
     new QuandlTimeSeriesRatingLoader().invokeAndTerminate(args);

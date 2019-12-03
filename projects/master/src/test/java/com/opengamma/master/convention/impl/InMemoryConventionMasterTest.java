@@ -29,123 +29,165 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryConventionMasterTest {
 
-  private static String NAME = "FooBar";
-  private static ExternalId ID_ISIN_12345 = ExternalId.of(ExternalSchemes.ISIN, "12345");
-  private static ExternalId ID_FOO = ExternalId.of("FOO", "979");
-  private static ExternalId ID_BAR = ExternalId.of("BAR", "987654");
-  private static ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "VAL1");
-  private static ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "VAL2");
-  private static ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_ISIN_12345, ID_BAR, ID_FOO);
-  private static ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_ISIN_12345, ID_FOO);
-  private static ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_ISIN_12345, ID_BAR, ID_OTHER1);
+  private static final String NAME = "FooBar";
+  private static final ExternalId ID_ISIN_12345 = ExternalId.of(ExternalSchemes.ISIN, "12345");
+  private static final ExternalId ID_FOO = ExternalId.of("FOO", "979");
+  private static final ExternalId ID_BAR = ExternalId.of("BAR", "987654");
+  private static final ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "VAL1");
+  private static final ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "VAL2");
+  private static final ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_ISIN_12345, ID_BAR, ID_FOO);
+  private static final ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_ISIN_12345, ID_FOO);
+  private static final ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_ISIN_12345, ID_BAR, ID_OTHER1);
 
-  private InMemoryConventionMaster master;
-  private ConventionDocument addedDoc;
+  private InMemoryConventionMaster _master;
+  private ConventionDocument _addedDoc;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    master = new InMemoryConventionMaster();
+    _master = new InMemoryConventionMaster();
     final ManageableConvention inputConvention = new MockConvention(NAME, BUNDLE_FULL, Currency.GBP);
-    ConventionDocument inputDoc = new ConventionDocument(inputConvention);
-    addedDoc = master.add(inputDoc);
+    final ConventionDocument inputDoc = new ConventionDocument(inputConvention);
+    _addedDoc = _master.add(inputDoc);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_noMatch() {
-    master.get(UniqueId.of("A", "B"));
+  public void testGetNoMatch() {
+    _master.get(UniqueId.of("A", "B"));
   }
 
-  public void test_get_match() {
-    ConventionDocument result = master.get(addedDoc.getUniqueId());
+  /**
+   *
+   */
+  public void testGetMatch() {
+    final ConventionDocument result = _master.get(_addedDoc.getUniqueId());
     assertEquals(UniqueId.of("MemCnv", "1"), result.getUniqueId());
-    assertEquals(addedDoc, result);
+    assertEquals(_addedDoc, result);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneId_noMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest(ID_OTHER1);
-    ConventionSearchResult result = master.search(request);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneIdNoMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(ID_OTHER1);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneId_mic() {
-    ConventionSearchRequest request = new ConventionSearchRequest(ID_ISIN_12345);
-    ConventionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdIsin() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(ID_ISIN_12345);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneId_ccid() {
-    ConventionSearchRequest request = new ConventionSearchRequest(ID_ISIN_12345);
-    ConventionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdCcid() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(ID_ISIN_12345);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneBundle_noMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_OTHER);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneBundleNoMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_OTHER);
     request.setExternalIdSearch(request.getExternalIdSearch().withSearchType(ExternalIdSearchType.ALL));
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneBundle_full() {
-    ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_FULL);
-    ConventionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundleFull() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_FULL);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneBundle_part() {
-    ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_PART);
-    ConventionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundlePart() {
+    final ConventionSearchRequest request = new ConventionSearchRequest(BUNDLE_PART);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_twoBundles_noMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchTwoBundlesNoMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID_OTHER1);
     request.addExternalId(ID_OTHER2);
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_twoBundles_oneMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesOneMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID_ISIN_12345);
     request.addExternalId(ID_OTHER1);
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_twoBundles_bothMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesBothMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID_ISIN_12345);
     request.addExternalId(ID_FOO);
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_name_noMatch() {
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchNameNoMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.setName("No match");
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_name_match() {
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchNameMatch() {
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.setName(NAME);
-    ConventionSearchResult result = master.search(request);
+    final ConventionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
 }

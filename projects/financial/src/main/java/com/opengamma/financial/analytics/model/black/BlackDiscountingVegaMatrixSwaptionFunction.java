@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.black;
 import static com.opengamma.engine.value.ValueRequirementNames.VEGA_MATRIX;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Set;
 
 import org.threeten.bp.Instant;
@@ -19,11 +18,9 @@ import com.opengamma.analytics.financial.interestrate.BlackSwaptionSensitivityNo
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBlackSwaptionSensitivity;
-import com.opengamma.analytics.financial.model.option.parameters.BlackFlatSwaptionParameters;
 import com.opengamma.analytics.financial.provider.calculator.blackswaption.PresentValueBlackSensitivityBlackSwaptionCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProvider;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderInterface;
-import com.opengamma.analytics.util.amount.SurfaceValue;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.function.FunctionCompilationContext;
@@ -37,12 +34,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix2D;
 import com.opengamma.financial.analytics.model.VegaMatrixUtils;
 import com.opengamma.financial.security.option.SwaptionSecurity;
-import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculates the At-The-Money {@link ValueRequirementNames#VEGA_MATRIX} of a {@link SwaptionSecurity} 
- * using a Black (lognormal) surface and curves constructed using the Discounting method.
- * 
+ * Calculates the At-The-Money {@link com.opengamma.engine.value.ValueRequirementNames#VEGA_MATRIX} of a {@link SwaptionSecurity} using a Black (lognormal)
+ * surface and curves constructed using the Discounting method.
+ *
  */
 public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscountingSwaptionFunction {
   /** The value vega calculator */
@@ -50,7 +46,7 @@ public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscounting
       PresentValueBlackSensitivityBlackSwaptionCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VEGA_MATRIX}
+   * Sets the value requirement to {@link ValueRequirementNames#VEGA_MATRIX}.
    */
   public BlackDiscountingVegaMatrixSwaptionFunction() {
     super(VEGA_MATRIX);
@@ -68,9 +64,10 @@ public class BlackDiscountingVegaMatrixSwaptionFunction extends BlackDiscounting
         // Compute scalar value of the Black Vega
         final PresentValueBlackSwaptionSensitivity vegaSens = derivative.accept(VEGA_CALCULATOR, blackData);
         // Distribute the vega back onto the nodes of the Vol Surface according to the interpolator
-        final PresentValueBlackSwaptionSensitivity vegaMap = (new BlackSwaptionSensitivityNodeCalculator()).calculateNodeSensitivities(vegaSens, blackData.getBlackParameters());
+        final PresentValueBlackSwaptionSensitivity vegaMap = new BlackSwaptionSensitivityNodeCalculator().calculateNodeSensitivities(vegaSens,
+            blackData.getBlackParameters());
         // Repackage the sensitivities into a format easy that's fit for display
-        DoubleLabelledMatrix2D vegaMatrix = VegaMatrixUtils.getVegaSwaptionMatrix(vegaMap);
+        final DoubleLabelledMatrix2D vegaMatrix = VegaMatrixUtils.getVegaSwaptionMatrix(vegaMap);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final ValueSpecification spec = new ValueSpecification(VEGA_MATRIX, target.toSpecification(), properties);

@@ -15,19 +15,19 @@ import com.opengamma.core.position.Position;
 public class AbstractPortfolioNodeTraversalCallback implements PortfolioNodeTraversalCallback {
 
   @Override
-  public void postOrderOperation(PortfolioNode portfolioNode) {
+  public void postOrderOperation(final PortfolioNode portfolioNode) {
   }
 
   @Override
-  public void postOrderOperation(PortfolioNode parentNode, Position position) {
+  public void postOrderOperation(final PortfolioNode parentNode, final Position position) {
   }
 
   @Override
-  public void preOrderOperation(PortfolioNode portfolioNode) {
+  public void preOrderOperation(final PortfolioNode portfolioNode) {
   }
 
   @Override
-  public void preOrderOperation(PortfolioNode parentNode, Position position) {
+  public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
   }
 
 }

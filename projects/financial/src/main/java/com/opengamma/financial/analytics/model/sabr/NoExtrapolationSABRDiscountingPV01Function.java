@@ -36,7 +36,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -48,13 +47,13 @@ import com.opengamma.util.tuple.Pair;
  */
 public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(NoExtrapolationSABRDiscountingPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NoExtrapolationSABRDiscountingPV01Function.class);
   /** The PV01 calculator */
-  private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
-      PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance());
+  private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
+      new PV01CurveParametersCalculator<>(PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance());
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public NoExtrapolationSABRDiscountingPV01Function() {
     super(PV01);
@@ -67,7 +66,7 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
-        final DayCount dayCount = DayCounts.ACT_360; //TODO
+        final DayCount dayCount = DayCounts.ACT_360; // TODO
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final String desiredCurveName = desiredValue.getConstraint(CURVE);
@@ -85,7 +84,7 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
           results.add(new ComputedValue(spec, entry.getValue()));
         }
         if (!curveNameFound) {
-          s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+          LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
           return Collections.emptySet();
         }
         return results;
@@ -94,7 +93,7 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;

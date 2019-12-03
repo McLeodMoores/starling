@@ -21,9 +21,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing the pricing of Fed Fund swap-like floating coupon (arithmetic average on overnight rates) by estimation and discounting (no convexity adjustment is computed).
- * The estimation is done through an approximation.
- * <p>Reference: Overnight Indexes Related Products. OpenGamma Documentation n. 20, Version 1.0, February 2013.
+ * Class describing the pricing of Fed Fund swap-like floating coupon (arithmetic average on overnight rates) by estimation and discounting (no convexity
+ * adjustment is computed). The estimation is done through an approximation.
+ * <p>
+ * Reference: Overnight Indexes Related Products. OpenGamma Documentation n. 20, Version 1.0, February 2013.
  */
 public final class CouponONArithmeticAverageDiscountingApproxMethod {
 
@@ -34,6 +35,7 @@ public final class CouponONArithmeticAverageDiscountingApproxMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponONArithmeticAverageDiscountingApproxMethod getInstance() {
@@ -48,8 +50,11 @@ public final class CouponONArithmeticAverageDiscountingApproxMethod {
 
   /**
    * Computes the present value.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponONArithmeticAverage coupon, final MulticurveProviderInterface multicurve) {
@@ -68,11 +73,15 @@ public final class CouponONArithmeticAverageDiscountingApproxMethod {
 
   /**
    * Computes the present value curve sensitivity.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value curve sensitivities.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverage coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverage coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Multi-curve provider");
     // Forward sweep
@@ -98,7 +107,8 @@ public final class CouponONArithmeticAverageDiscountingApproxMethod {
     final List<ForwardSensitivity> listForward = new ArrayList<>();
     listForward.add(new SimplyCompoundedForwardSensitivity(startTimes[0], endTimes[nbFwd], delta, forwardBar));
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
-    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
+    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(),
+        MulticurveSensitivity.of(mapDsc, mapFwd));
     return result;
   }
 

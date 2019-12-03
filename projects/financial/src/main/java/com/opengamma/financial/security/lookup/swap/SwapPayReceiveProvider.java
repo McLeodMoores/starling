@@ -14,10 +14,10 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 public class SwapPayReceiveProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public String getValue(SwapSecurity security) {
-    FixedFloatVisitor visitor = new FixedFloatVisitor();
-    Boolean payFixed = security.getPayLeg().accept(visitor);
-    Boolean receiveFixed = security.getReceiveLeg().accept(visitor);
+  public String getValue(final SwapSecurity security) {
+    final FixedFloatVisitor visitor = new FixedFloatVisitor();
+    final Boolean payFixed = security.getPayLeg().accept(visitor);
+    final Boolean receiveFixed = security.getReceiveLeg().accept(visitor);
     // for fixed/float swaps it's taken from the fixed leg, for float/float it doesn't make any sense
     if (payFixed) {
       return "Pay";

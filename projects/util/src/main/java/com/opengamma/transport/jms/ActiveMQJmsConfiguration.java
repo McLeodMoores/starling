@@ -24,7 +24,7 @@ import com.google.common.base.Supplier;
  */
 public class ActiveMQJmsConfiguration implements Supplier<String> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ActiveMQJmsConfiguration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQJmsConfiguration.class);
 
   private static final int DEFAULT_PORT = 61616;
 
@@ -50,34 +50,74 @@ public class ActiveMQJmsConfiguration implements Supplier<String> {
 
   private volatile String _generatedURL;
 
+  /**
+   * Gets the broker URL.
+   *
+   * @return  the broker URL
+   */
   public String getBrokerURL() {
     return _brokerURL;
   }
 
+  /**
+   * Sets the broker URL.
+   *
+   * @param brokerURL  the broker URL
+   */
   public void setBrokerURL(final String brokerURL) {
     _brokerURL = brokerURL;
   }
 
+  /**
+   * Gets the broker host.
+   *
+   * @return  the broker host
+   */
   public String getBrokerHost() {
     return _brokerHost;
   }
 
+  /**
+   * Sets the broker host.
+   *
+   * @param brokerHost  the broker host
+   */
   public void setBrokerHost(final String brokerHost) {
     _brokerHost = brokerHost;
   }
 
+  /**
+   * Gets the broker port.
+   *
+   * @return  the broker port
+   */
   public Integer getBrokerPort() {
     return _brokerPort;
   }
 
+  /**
+   * Sets the broker port.
+   *
+   * @param brokerPort  the broker port
+   */
   public void setBrokerPort(final Integer brokerPort) {
     _brokerPort = brokerPort;
   }
 
+  /**
+   * Gets the timeout.
+   *
+   * @return  the timeout
+   */
   public Integer getTimeout() {
     return _timeout;
   }
 
+  /**
+   * Sets the timeout.
+   *
+   * @param timeout  the timeout
+   */
   public void setTimeout(final Integer timeout) {
     _timeout = timeout;
   }
@@ -104,7 +144,7 @@ public class ActiveMQJmsConfiguration implements Supplier<String> {
         getLocalHosts(ni.nextElement(), hosts);
       }
     } catch (final IOException e) {
-      s_logger.warn("Error resolving local addresses", e);
+      LOGGER.warn("Error resolving local addresses", e);
     }
   }
 
@@ -113,10 +153,10 @@ public class ActiveMQJmsConfiguration implements Supplier<String> {
     if (getBrokerHost() != null) {
       hosts = Collections.singleton(getBrokerHost());
     } else {
-      hosts = new ArrayList<String>();
+      hosts = new ArrayList<>();
       getLocalHosts(hosts);
     }
-    final String port = Integer.toString((getBrokerPort() != null) ? getBrokerPort() : DEFAULT_PORT);
+    final String port = Integer.toString(getBrokerPort() != null ? getBrokerPort() : DEFAULT_PORT);
     final StringBuilder sb = new StringBuilder();
     sb.append("failover:(");
     boolean comma = false;

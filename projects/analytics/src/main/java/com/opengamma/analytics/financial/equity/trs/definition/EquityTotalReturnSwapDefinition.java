@@ -34,13 +34,20 @@ public class EquityTotalReturnSwapDefinition extends TotalReturnSwapDefinition {
   private final double _dividendPercentage;
 
   /**
-   * @param effectiveDate The effective date.
-   * @param terminationDate The termination date.
-   * @param fundingLeg The funding leg, not null
-   * @param equity The equity, not null
-   * @param notionalAmount The notional amount
-   * @param notionalCurrency The notional currency, not null
-   * @param dividendPercentage The dividend percentage received, >= 0 and <= 1
+   * @param effectiveDate
+   *          The effective date.
+   * @param terminationDate
+   *          The termination date.
+   * @param fundingLeg
+   *          The funding leg, not null
+   * @param equity
+   *          The equity, not null
+   * @param notionalAmount
+   *          The notional amount
+   * @param notionalCurrency
+   *          The notional currency, not null
+   * @param dividendPercentage
+   *          The dividend percentage received, &ge; 0 and &le; 1
    */
   public EquityTotalReturnSwapDefinition(final ZonedDateTime effectiveDate, final ZonedDateTime terminationDate,
       final AnnuityDefinition<? extends PaymentDefinition> fundingLeg, final EquityDefinition equity,
@@ -124,11 +131,11 @@ public class EquityTotalReturnSwapDefinition extends TotalReturnSwapDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_dividendPercentage);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notionalAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _notionalCurrency.hashCode();
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

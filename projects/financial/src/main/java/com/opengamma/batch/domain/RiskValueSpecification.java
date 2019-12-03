@@ -15,7 +15,7 @@ public class RiskValueSpecification extends RiskValueProperties {
   public RiskValueSpecification() {
   }
 
-  public RiskValueSpecification(ValueProperties properties) {
+  public RiskValueSpecification(final ValueProperties properties) {
     super(properties);
   }
 

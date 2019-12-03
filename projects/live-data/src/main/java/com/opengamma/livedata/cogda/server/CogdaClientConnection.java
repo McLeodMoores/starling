@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -59,35 +59,35 @@ import com.opengamma.util.ArgumentChecker;
 public class CogdaClientConnection implements FudgeConnectionStateListener, FudgeMessageReceiver {
 
   /**
-   * Subscribe to a stream
+   * Subscribe to a stream.
    */
   public static final String SUBSCRIBE = "subscribe";
   /**
-   * Snapshot the state of the world
+   * Snapshot the state of the world.
    */
   public static final String SNAPSHOT = "snapshot";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaClientConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaClientConnection.class);
   private final FudgeContext _fudgeContext;
   private final CogdaLiveDataServer _server;
   private final FudgeMessageSender _messageSender;
-  
+
   // REVIEW kirk 2013-03-27 -- The only reason why _subscriptions exists is to act as
   // a quick pass on whether the client is subscribed to a specification.
-  // This is to avoid going into a locking state waiting for _valuesToSend. 
-  private final ConcurrentMap<LiveDataSpecification, Boolean> _subscriptions = new ConcurrentHashMap<LiveDataSpecification, Boolean>();
-  private final Map<LiveDataSpecification, FudgeMsg> _valuesToSend = new HashMap<LiveDataSpecification, FudgeMsg>();
+  // This is to avoid going into a locking state waiting for _valuesToSend.
+  private final ConcurrentMap<LiveDataSpecification, Boolean> _subscriptions = new ConcurrentHashMap<>();
+  private final Map<LiveDataSpecification, FudgeMsg> _valuesToSend = new HashMap<>();
   private final Lock _writerLock = new ReentrantLock();
   private final Lock _valuesToSendLock = new ReentrantLock();
-  
+
   private UserPrincipal _userPrincipal;
   private UserAccount _user;
-  
-  public CogdaClientConnection(FudgeContext fudgeContext, CogdaLiveDataServer server, FudgeConnection connection) {
+
+  public CogdaClientConnection(final FudgeContext fudgeContext, final CogdaLiveDataServer server, final FudgeConnection connection) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(server, "server");
     ArgumentChecker.notNull(connection, "fudgeConnection");
-    
+
     _fudgeContext = fudgeContext;
     _server = server;
     connection.setConnectionStateListener(this);
@@ -139,35 +139,35 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
    * Sets the user.
    * @param user  the user
    */
-  public void setUser(UserAccount user) {
+  public void setUser(final UserAccount user) {
     _user = user;
   }
 
   @Override
-  public void connectionReset(FudgeConnection connection) {
-    s_logger.warn("Connection Reset");
+  public void connectionReset(final FudgeConnection connection) {
+    LOGGER.warn("Connection Reset");
   }
 
   @Override
-  public void connectionFailed(FudgeConnection connection, Exception cause) {
+  public void connectionFailed(final FudgeConnection connection, final Exception cause) {
     // TODO kirk 2012-08-15 -- Fix this so that failed connections result in
     // torn down client connections.
     // Cause may be null.
-    s_logger.warn("Connection failed \"{}\"", (cause != null) ? cause.getMessage() : "no cause");
-    s_logger.info("Connection failed", cause);
+    LOGGER.warn("Connection failed \"{}\"", cause != null ? cause.getMessage() : "no cause");
+    LOGGER.info("Connection failed", cause);
     getServer().removeClient(this);
   }
-  
-  public void handshakeMessage(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+
+  public void handshakeMessage(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     // REVIEW kirk 2012-07-23 -- If there are multiple versions of the protocol have to check
     // the schema on the envelope.
-    FudgeMsg msg = msgEnvelope.getMessage();
+    final FudgeMsg msg = msgEnvelope.getMessage();
     if (CogdaMessageType.getFromMessage(msg) != CogdaMessageType.CONNECTION_REQUEST) {
       // On failure tear down the connection when http://jira.opengamma.com/browse/PLAT-2458 is done.
       throw new OpenGammaRuntimeException("Cannot handle any other message than connection request as first message in COGDA protocol.");
     }
-    ConnectionRequestMessage request = ConnectionRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
-    
+    final ConnectionRequestMessage request = ConnectionRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
+
     // Wrap this in synchronized to force the cache flush.
     synchronized (this) {
       _userPrincipal = getServer().authenticate(request.getUserName(), request.getPassword());
@@ -175,15 +175,15 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
         _user = getServer().getUserAccount(request.getUserName());
       }
     }
-    
+
     if (getUserPrincipal() == null) {
-      ConnectionResponseMessage response = new ConnectionResponseMessage();
+      final ConnectionResponseMessage response = new ConnectionResponseMessage();
       response.setResult(ConnectionResult.NOT_AUTHORIZED);
       sendMessage(ConnectionResponseBuilder.buildMessageStatic(new FudgeSerializer(fudgeContext), response));
       // On failure tear down the connection when http://jira.opengamma.com/browse/PLAT-2458 is done.
       getServer().removeClient(this);
     } else {
-      ConnectionResponseMessage response = new ConnectionResponseMessage();
+      final ConnectionResponseMessage response = new ConnectionResponseMessage();
       response.setResult(ConnectionResult.NEW_CONNECTION_SUCCESS);
       response.setAvailableServers(getServer().getAvailableServers());
       response.applyCapabilities(getServer().getCapabilities());
@@ -192,12 +192,12 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
   }
 
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     if (getUserPrincipal() == null) {
       throw new OpenGammaRuntimeException("Cannot operate, failed user authentication.");
     }
-    FudgeMsg msg = msgEnvelope.getMessage();
-    
+    final FudgeMsg msg = msgEnvelope.getMessage();
+
     CogdaLiveDataCommandResponseMessage response = null;
     switch (CogdaMessageType.getFromMessage(msg)) {
       case SNAPSHOT_REQUEST:
@@ -214,13 +214,13 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
         // Need an "ILLEGAL_COMMAND" message.
         break;
     }
-    
+
     if (response != null) {
       sendMessage(CogdaLiveDataBuilderUtil.buildCommandResponseMessage(fudgeContext, response));
     }
   }
-  
-  protected boolean isEntitled(String operation, ExternalId subscriptionId, String normalizationScheme) {
+
+  protected boolean isEntitled(final String operation, final ExternalId subscriptionId, final String normalizationScheme) {
     return true;  // TODO: check permissions against user
 //    String entitlementDetail = MessageFormat.format("/{0}/{1}[{2}]", subscriptionId.getScheme(), subscriptionId.getValue(), normalizationScheme);
 //    String entitlementString = EntitlementUtils.generateEntitlementString(true, operation, "cogda", entitlementDetail);
@@ -231,31 +231,31 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
    * @param fudgeContext
    * @param msg
    */
-  private CogdaLiveDataCommandResponseMessage handleSnapshotRequest(FudgeContext fudgeContext, FudgeMsg msg) {
-    CogdaLiveDataSnapshotRequestMessage request = CogdaLiveDataSnapshotRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
-    CogdaLiveDataSnapshotResponseMessage response = new CogdaLiveDataSnapshotResponseMessage();
+  private CogdaLiveDataCommandResponseMessage handleSnapshotRequest(final FudgeContext fudgeContext, final FudgeMsg msg) {
+    final CogdaLiveDataSnapshotRequestMessage request = CogdaLiveDataSnapshotRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
+    final CogdaLiveDataSnapshotResponseMessage response = new CogdaLiveDataSnapshotResponseMessage();
     response.setCorrelationId(request.getCorrelationId());
     response.setSubscriptionId(request.getSubscriptionId());
     response.setNormalizationScheme(request.getNormalizationScheme());
-    
+
     if (!getServer().isValidLiveData(request.getSubscriptionId(), request.getNormalizationScheme())) {
       response.setGenericResult(CogdaCommandResponseResult.NOT_AVAILABLE);
     } else if (!isEntitled(SNAPSHOT, request.getSubscriptionId(), request.getNormalizationScheme())) {
       response.setGenericResult(CogdaCommandResponseResult.NOT_AUTHORIZED);
     } else {
-      LastKnownValueStore lkvStore = getServer().getLastKnownValueStore(request.getSubscriptionId(), request.getNormalizationScheme());
+      final LastKnownValueStore lkvStore = getServer().getLastKnownValueStore(request.getSubscriptionId(), request.getNormalizationScheme());
       FudgeMsg fields = null;
       if (lkvStore != null) {
         fields = lkvStore.getFields();
       } else {
-        s_logger.warn("Valid live data {} lacks fields in LKV store", request);
+        LOGGER.warn("Valid live data {} lacks fields in LKV store", request);
         fields = fudgeContext.newMessage();
       }
-      
+
       response.setGenericResult(CogdaCommandResponseResult.SUCCESSFUL);
       response.setValues(fields);
     }
-    
+
     return response;
   }
 
@@ -263,43 +263,43 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
    * @param fudgeContext
    * @param msg
    */
-  private CogdaLiveDataCommandResponseMessage handleSubscriptionRequest(FudgeContext fudgeContext, FudgeMsg msg) {
-    CogdaLiveDataSubscriptionRequestMessage request = CogdaLiveDataSubscriptionRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
-    CogdaLiveDataSubscriptionResponseMessage response = new CogdaLiveDataSubscriptionResponseMessage();
+  private CogdaLiveDataCommandResponseMessage handleSubscriptionRequest(final FudgeContext fudgeContext, final FudgeMsg msg) {
+    final CogdaLiveDataSubscriptionRequestMessage request = CogdaLiveDataSubscriptionRequestBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
+    final CogdaLiveDataSubscriptionResponseMessage response = new CogdaLiveDataSubscriptionResponseMessage();
     response.setCorrelationId(request.getCorrelationId());
     response.setSubscriptionId(request.getSubscriptionId());
     response.setNormalizationScheme(request.getNormalizationScheme());
-    
+
     // TODO kirk 2012-07-23 -- Check entitlements.
     if (!getServer().isValidLiveData(request.getSubscriptionId(), request.getNormalizationScheme())) {
       response.setGenericResult(CogdaCommandResponseResult.NOT_AVAILABLE);
     } else if (!isEntitled(SUBSCRIBE, request.getSubscriptionId(), request.getNormalizationScheme())) {
       response.setGenericResult(CogdaCommandResponseResult.NOT_AUTHORIZED);
     } else {
-      LastKnownValueStore lkvStore = getServer().getLastKnownValueStore(request.getSubscriptionId(), request.getNormalizationScheme());
+      final LastKnownValueStore lkvStore = getServer().getLastKnownValueStore(request.getSubscriptionId(), request.getNormalizationScheme());
       FudgeMsg fields = null;
       if (lkvStore != null) {
         fields = lkvStore.getFields();
       } else {
-        s_logger.warn("Valid live data {} lacks fields in LKV store", request);
+        LOGGER.warn("Valid live data {} lacks fields in LKV store", request);
         fields = fudgeContext.newMessage();
       }
-      
+
       response.setGenericResult(CogdaCommandResponseResult.SUCCESSFUL);
       response.setSnapshot(fields);
-      
+
       _subscriptions.putIfAbsent(new LiveDataSpecification(request.getNormalizationScheme(), request.getSubscriptionId()), Boolean.TRUE);
     }
     return response;
   }
-  
-  private void handleUnsubscription(FudgeContext fudgeContext, FudgeMsg msg) {
-    CogdaLiveDataUnsubscribeMessage request = CogdaLiveDataUnsubscribeBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
-    
+
+  private void handleUnsubscription(final FudgeContext fudgeContext, final FudgeMsg msg) {
+    final CogdaLiveDataUnsubscribeMessage request = CogdaLiveDataUnsubscribeBuilder.buildObjectStatic(new FudgeDeserializer(fudgeContext), msg);
+
     _subscriptions.remove(new LiveDataSpecification(request.getNormalizationScheme(), request.getSubscriptionId()));
   }
-  
-  private void sendMessage(FudgeMsg msg) {
+
+  private void sendMessage(final FudgeMsg msg) {
     _writerLock.lock();
     try {
       getMessageSender().send(msg);
@@ -307,8 +307,8 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
       _writerLock.unlock();
     }
   }
-  
-  public boolean liveDataReceived(LiveDataValueUpdate valueUpdate) {
+
+  public boolean liveDataReceived(final LiveDataValueUpdate valueUpdate) {
     if (!_subscriptions.containsKey(valueUpdate.getSpecification())) {
       return false;
     }
@@ -320,13 +320,13 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
     }
     return true;
   }
-  
+
   public void sendAllUpdates() {
     _writerLock.lock();
     try {
       _valuesToSendLock.lock();
       try {
-        for (Map.Entry<LiveDataSpecification, FudgeMsg> entry : _valuesToSend.entrySet()) {
+        for (final Map.Entry<LiveDataSpecification, FudgeMsg> entry : _valuesToSend.entrySet()) {
           sendValueUpdate(entry.getKey(), entry.getValue());
         }
         _valuesToSend.clear();
@@ -342,17 +342,17 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
    * @param key
    * @param values
    */
-  private void sendValueUpdate(LiveDataSpecification key, FudgeMsg values) {
-    CogdaLiveDataUpdateMessage message = new CogdaLiveDataUpdateMessage();
+  private void sendValueUpdate(final LiveDataSpecification key, final FudgeMsg values) {
+    final CogdaLiveDataUpdateMessage message = new CogdaLiveDataUpdateMessage();
     // REVIEW kirk 2012-07-23 -- This is a terrible terrible idea performance wise, this next line.
     message.setSubscriptionId(key.getIdentifiers().getExternalIds().iterator().next());
     message.setNormalizationScheme(key.getNormalizationRuleSetId());
     message.setValues(values);
-    FudgeMsg msg = CogdaLiveDataUpdateBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), message);
+    final FudgeMsg msg = CogdaLiveDataUpdateBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), message);
     try {
       getMessageSender().send(msg);
-    } catch (Exception e) {
-      s_logger.info("Exception thrown; assuming socket closed and tearing down client.");
+    } catch (final Exception e) {
+      LOGGER.info("Exception thrown; assuming socket closed and tearing down client.");
       // Note that the actual connection state will be handled by the FudgeConnectionStateListener callback.
     }
   }

@@ -36,7 +36,7 @@ public class DataMarketDataSnapshotterResource extends AbstractDataResource {
   private final ViewProcessor _viewProcessor;
   private final MarketDataSnapshotter _snapshotter;
 
-  public DataMarketDataSnapshotterResource(ViewProcessor viewProcessor, MarketDataSnapshotter snapshotter) {
+  public DataMarketDataSnapshotterResource(final ViewProcessor viewProcessor, final MarketDataSnapshotter snapshotter) {
     _viewProcessor = viewProcessor;
     _snapshotter = snapshotter;
   }
@@ -44,16 +44,16 @@ public class DataMarketDataSnapshotterResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   @GET
   @Path(PATH_CREATE_SNAPSHOT + "/{viewClientId}" + "/{viewCycleId}")
-  public Response createSnapshot(@PathParam("viewClientId") String viewClientIdString, @PathParam("viewCycleId") String viewCycleIdString) {
-    UniqueId viewClientId = UniqueId.parse(viewClientIdString);
-    UniqueId viewCycleId = UniqueId.parse(viewCycleIdString);
-    ViewClient client = _viewProcessor.getViewClient(viewClientId);
-    EngineResourceReference<? extends ViewCycle> cycleReference = client.createCycleReference(viewCycleId);
+  public Response createSnapshot(@PathParam("viewClientId") final String viewClientIdString, @PathParam("viewCycleId") final String viewCycleIdString) {
+    final UniqueId viewClientId = UniqueId.parse(viewClientIdString);
+    final UniqueId viewCycleId = UniqueId.parse(viewCycleIdString);
+    final ViewClient client = _viewProcessor.getViewClient(viewClientId);
+    final EngineResourceReference<? extends ViewCycle> cycleReference = client.createCycleReference(viewCycleId);
     if (cycleReference == null) {
       throw new IllegalArgumentException("Cycle is not available");
     }
     try {
-      StructuredMarketDataSnapshot result = _snapshotter.createSnapshot(client, cycleReference.get());
+      final StructuredMarketDataSnapshot result = _snapshotter.createSnapshot(client, cycleReference.get());
       return responseOkObject(result);
     } finally {
       cycleReference.release();
@@ -62,17 +62,17 @@ public class DataMarketDataSnapshotterResource extends AbstractDataResource {
 
   @GET
   @Path(PATH_YIELD_CURVE_SPECS + "/{viewClientId}" + "/{viewCycleId}")
-  public Response getYieldCurveSpecs(@PathParam("viewClientId") String viewClientIdString, @PathParam("viewCycleId") String viewCycleIdString) {
-    UniqueId viewClientId = UniqueId.parse(viewClientIdString);
-    UniqueId viewCycleId = UniqueId.parse(viewCycleIdString);
-    ViewClient client = _viewProcessor.getViewClient(viewClientId);
-    EngineResourceReference<? extends ViewCycle> cycleReference = client.createCycleReference(viewCycleId);
+  public Response getYieldCurveSpecs(@PathParam("viewClientId") final String viewClientIdString, @PathParam("viewCycleId") final String viewCycleIdString) {
+    final UniqueId viewClientId = UniqueId.parse(viewClientIdString);
+    final UniqueId viewCycleId = UniqueId.parse(viewCycleIdString);
+    final ViewClient client = _viewProcessor.getViewClient(viewClientId);
+    final EngineResourceReference<? extends ViewCycle> cycleReference = client.createCycleReference(viewCycleId);
 
     if (cycleReference == null) {
       throw new IllegalArgumentException("Cycle is not available");
     }
     try {
-      Map<YieldCurveKey, Map<String, ValueRequirement>> result = _snapshotter.getYieldCurveSpecifications(client, cycleReference.get());
+      final Map<YieldCurveKey, Map<String, ValueRequirement>> result = _snapshotter.getYieldCurveSpecifications(client, cycleReference.get());
       return responseOkObject(result);
     } finally {
       cycleReference.release();

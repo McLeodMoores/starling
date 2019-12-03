@@ -18,8 +18,8 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For a CDS with set set of payments on the fixed leg, this holds the payments dates and the accrual start and end dates. It does not
- * hold the payment amounts with depends on the day-count (normally ACT/360) and the spread.
+ * For a CDS with set set of payments on the fixed leg, this holds the payments dates and the accrual start and end dates. It does not hold the payment amounts
+ * with depends on the day-count (normally ACT/360) and the spread.
  */
 public class ISDAPremiumLegSchedule {
 
@@ -30,20 +30,26 @@ public class ISDAPremiumLegSchedule {
   private final LocalDate[] _nominalPaymentDates;
 
   /**
-   * This mimics JpmcdsDateListMakeRegular. Produces a set of ascending dates by following the rules:<p>
-   * If the stub is at the front end, we role backwards from the endDate at an integer multiple of the specified step size (e.g. 3M),
-   * adding these date until we pass the startDate(this date is not added). If the stub type is short, the startDate is added (as the first date), hence the first period
-   * will be less than (or equal to) the remaining periods. If the stub type is long, the startDate is also added, but the date immediately
-   * after that is removed, so the first period is longer than the remaining.<p>
-   * If the stub is at the back end, we role forward from the startDate at an integer multiple of the specified step size (e.g. 3M),
-   * adding these date until we pass the endDate(this date is not added). If the stub type is short, the endDate is added (as the last date), hence the last period
-   * will be less than (or equal to) the other periods. If the stub type is long, the endDate is also added, but the date immediately
-   * before that is removed, so the last period is longer than the others.
+   * This mimics JpmcdsDateListMakeRegular. Produces a set of ascending dates by following the rules:
+   * <p>
+   * If the stub is at the front end, we role backwards from the endDate at an integer multiple of the specified step size (e.g. 3M), adding these date until we
+   * pass the startDate(this date is not added). If the stub type is short, the startDate is added (as the first date), hence the first period will be less than
+   * (or equal to) the remaining periods. If the stub type is long, the startDate is also added, but the date immediately after that is removed, so the first
+   * period is longer than the remaining.
+   * <p>
+   * If the stub is at the back end, we role forward from the startDate at an integer multiple of the specified step size (e.g. 3M), adding these date until we
+   * pass the endDate(this date is not added). If the stub type is short, the endDate is added (as the last date), hence the last period will be less than (or
+   * equal to) the other periods. If the stub type is long, the endDate is also added, but the date immediately before that is removed, so the last period is
+   * longer than the others.
    *
-   * @param startDate The start date - this will be the first entry in the list
-   * @param endDate The end date - this will be the last entry in the list
-   * @param step the step period (e.g. 3M - will produce dates every 3 months, with adjustments at the beginning or end based on stub type)
-   * @param stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param startDate
+   *          The start date - this will be the first entry in the list
+   * @param endDate
+   *          The end date - this will be the last entry in the list
+   * @param step
+   *          the step period (e.g. 3M - will produce dates every 3 months, with adjustments at the beginning or end based on stub type)
+   * @param stubType
+   *          Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
    * @return an array of LocalDate
    */
   public static LocalDate[] getUnadjustedDates(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType) {
@@ -99,27 +105,25 @@ public class ISDAPremiumLegSchedule {
       return res;
 
       // stub at back end, so start at startDate and work forward
-    } else {
-      int intervals = 0;
-      LocalDate tDate = startDate;
-      while (tDate.isBefore(endDate)) {
-        dates.add(tDate);
-        final Period tStep = step.multipliedBy(++intervals); // this mimics ISDA c code, rather than true market convention
-        tDate = startDate.plus(tStep);
-      }
-
-      final int n = dates.size();
-      if (tDate.isEqual(endDate) || n == 1 || stubType == StubType.BACKSHORT) {
-        dates.add(endDate);
-      } else {
-        // long back stub - remove the last date entry in the list and replace it with endDate
-        dates.remove(n - 1);
-        dates.add(endDate);
-      }
-      final LocalDate[] res = new LocalDate[dates.size()];
-      return dates.toArray(res);
+    }
+    int intervals = 0;
+    LocalDate tDate = startDate;
+    while (tDate.isBefore(endDate)) {
+      dates.add(tDate);
+      final Period tStep = step.multipliedBy(++intervals); // this mimics ISDA c code, rather than true market convention
+      tDate = startDate.plus(tStep);
     }
 
+    final int n = dates.size();
+    if (tDate.isEqual(endDate) || n == 1 || stubType == StubType.BACKSHORT) {
+      dates.add(endDate);
+    } else {
+      // long back stub - remove the last date entry in the list and replace it with endDate
+      dates.remove(n - 1);
+      dates.add(endDate);
+    }
+    final LocalDate[] res = new LocalDate[dates.size()];
+    return dates.toArray(res);
   }
 
   public static ISDAPremiumLegSchedule truncateSchedule(final LocalDate stepin, final ISDAPremiumLegSchedule schedule) {
@@ -127,8 +131,10 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * Remove all payment intervals before the given date
-   * @param stepin a date
+   * Remove all payment intervals before the given date.
+   *
+   * @param stepin
+   *          a date
    * @return truncate schedule
    */
   public ISDAPremiumLegSchedule truncateSchedule(final LocalDate stepin) {
@@ -145,8 +151,10 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * makes a new ISDAPremiumLegSchedule with payment before index removed
-   * @param index the index of the old schedule that will be the zero index of the new
+   * makes a new ISDAPremiumLegSchedule with payment before index removed.
+   *
+   * @param index
+   *          the index of the old schedule that will be the zero index of the new
    * @return truncate schedule
    */
   public ISDAPremiumLegSchedule truncateSchedule(final int index) {
@@ -155,12 +163,15 @@ public class ISDAPremiumLegSchedule {
 
   /**
    * Truncation constructor
+   *
    * @param paymentDates
    * @param accStartDates
    * @param accEndDates
-   * @param index copy the date starting from this index
+   * @param index
+   *          copy the date starting from this index
    */
-  private ISDAPremiumLegSchedule(final LocalDate[] nominalPaymentDates, final LocalDate[] paymentDates, final LocalDate[] accStartDates, final LocalDate[] accEndDates, final int index) {
+  private ISDAPremiumLegSchedule(final LocalDate[] nominalPaymentDates, final LocalDate[] paymentDates, final LocalDate[] accStartDates,
+      final LocalDate[] accEndDates, final int index) {
     ArgumentChecker.noNulls(nominalPaymentDates, "unadjustedDates");
     ArgumentChecker.noNulls(paymentDates, "paymentDates");
     ArgumentChecker.noNulls(accStartDates, "accStartDates");
@@ -168,7 +179,8 @@ public class ISDAPremiumLegSchedule {
 
     final int n = paymentDates.length;
     _nPayments = n - index;
-    ArgumentChecker.isTrue(n == nominalPaymentDates.length, "nominalPaymentDates length of {} does not match paymentDates length of {}", nominalPaymentDates.length, _nPayments);
+    ArgumentChecker.isTrue(n == nominalPaymentDates.length, "nominalPaymentDates length of {} does not match paymentDates length of {}",
+        nominalPaymentDates.length, _nPayments);
     ArgumentChecker.isTrue(n == accStartDates.length, "accStartDates length of {} does not match paymentDates length of {}", accStartDates.length, _nPayments);
     ArgumentChecker.isTrue(n == accEndDates.length, "accEndDates length of {} does not match paymentDates length of {}", accEndDates.length, _nPayments);
 
@@ -183,21 +195,30 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * Mimics JpmcdsCdsFeeLegMake
-   * @param startDate The protection start date
-   * @param endDate The protection end date
-   * @param step The period or frequency at which payments are made (e.g. every three months)
-   * @param stubType Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
-   * @param businessdayAdjustmentConvention options are 'following' or 'proceeding'
-   * @param calandar A holiday calendar
-   * @param protectionStart If true, protection starts are the beginning rather than end of day (protection still ends at end of day).
+   * Mimics <code>JpmcdsCdsFeeLegMake</code>.
+   *
+   * @param startDate
+   *          The protection start date
+   * @param endDate
+   *          The protection end date
+   * @param step
+   *          The period or frequency at which payments are made (e.g. every three months)
+   * @param stubType
+   *          Options are FRONTSHORT, FRONTLONG, BACKSHORT, BACKLONG or NONE - <b>Note</b> in this code NONE is not allowed
+   * @param businessdayAdjustmentConvention
+   *          options are 'following' or 'proceeding'
+   * @param calendar
+   *          A holiday calendar
+   * @param protectionStart
+   *          If true, protection starts are the beginning rather than end of day (protection still ends at end of day).
    */
-  public ISDAPremiumLegSchedule(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType, final BusinessDayConvention businessdayAdjustmentConvention,
-      final Calendar calandar, final boolean protectionStart) {
-    this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calandar, protectionStart);
+  public ISDAPremiumLegSchedule(final LocalDate startDate, final LocalDate endDate, final Period step, final StubType stubType,
+      final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final boolean protectionStart) {
+    this(getUnadjustedDates(startDate, endDate, step, stubType), businessdayAdjustmentConvention, calendar, protectionStart);
   }
 
-  public ISDAPremiumLegSchedule(final LocalDate[] unadjustedDates, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar, final boolean protectionStart) {
+  public ISDAPremiumLegSchedule(final LocalDate[] unadjustedDates, final BusinessDayConvention businessdayAdjustmentConvention, final Calendar calendar,
+      final boolean protectionStart) {
     _nPayments = unadjustedDates.length - 1;
     _nominalPaymentDates = new LocalDate[_nPayments];
     _paymentDates = new LocalDate[_nPayments];
@@ -225,9 +246,8 @@ public class ISDAPremiumLegSchedule {
     ArgumentChecker.notNull(unadjustedDate, "unadjustedDate");
     if (protectionStart) {
       return unadjustedDate.plusDays(1); // extra day of accrued interest
-    } else {
-      return unadjustedDate;
     }
+    return unadjustedDate;
   }
 
   public int getNumPayments() {
@@ -251,9 +271,11 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * finds the index in accStartDate that matches the given date, or if date is not a member of accStartDate returns (-insertionPoint -1)
+   * Finds the index in accStartDate that matches the given date, or if date is not a member of accStartDate returns (-insertionPoint -1).
+   *
    * @see Arrays#binarySearch
-   * @param date The date to find
+   * @param date
+   *          The date to find
    * @return index or code giving insertion point
    */
   public int getAccStartDateIndex(final LocalDate date) {
@@ -261,9 +283,11 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * finds the index in paymentDate that matches the given date, or if date is not a member of paymentDate returns (-insertionPoint -1)
+   * Finds the index in paymentDate that matches the given date, or if date is not a member of paymentDate returns (-insertionPoint -1).
+   *
    * @see Arrays#binarySearch
-   * @param date The date to find
+   * @param date
+   *          The date to find
    * @return index or code giving insertion point
    */
   public int getPaymentDateIndex(final LocalDate date) {
@@ -275,15 +299,17 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * The accrual start date, end date and payment date at the given index
-   * @param index the index (from zero)
+   * The accrual start date, end date and payment date at the given index.
+   *
+   * @param index
+   *          the index (from zero)
    * @return array of LocalDate
    */
   public LocalDate[] getAccPaymentDateTriplet(final int index) {
-    return new LocalDate[] {_accStartDates[index], _accEndDates[index], _paymentDates[index] };
+    return new LocalDate[] { _accStartDates[index], _accEndDates[index], _paymentDates[index] };
   }
 
-  private LocalDate businessDayAdjustDate(final LocalDate date, final Calendar calendar, final BusinessDayConvention convention) {
+  private static LocalDate businessDayAdjustDate(final LocalDate date, final Calendar calendar, final BusinessDayConvention convention) {
 
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(calendar, "Calendar");

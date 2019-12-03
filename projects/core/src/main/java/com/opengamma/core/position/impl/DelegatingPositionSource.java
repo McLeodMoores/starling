@@ -37,28 +37,28 @@ public class DelegatingPositionSource extends UniqueIdSchemeDelegator<PositionSo
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource  the source to use when no scheme matches, not null
    */
-  public DelegatingPositionSource(PositionSource defaultSource) {
+  public DelegatingPositionSource(final PositionSource defaultSource) {
     super(defaultSource);
     _changeManager = defaultSource.changeManager();
   }
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource  the source to use when no scheme matches, not null
    * @param schemePrefixToSourceMap  the map of sources by scheme to switch on, not null
    */
-  public DelegatingPositionSource(PositionSource defaultSource, Map<String, PositionSource> schemePrefixToSourceMap) {
+  public DelegatingPositionSource(final PositionSource defaultSource, final Map<String, PositionSource> schemePrefixToSourceMap) {
     super(defaultSource, schemePrefixToSourceMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
     // REVIEW jonathan 2011-08-03 -- this assumes that the delegating source lasts for the lifetime of the engine as we
     // never detach from the underlying change managers.
     changeManager.addChangeManager(defaultSource.changeManager());
-    for (PositionSource source : schemePrefixToSourceMap.values()) {
+    for (final PositionSource source : schemePrefixToSourceMap.values()) {
       changeManager.addChangeManager(source.changeManager());
     }
     _changeManager = changeManager;
@@ -73,7 +73,7 @@ public class DelegatingPositionSource extends UniqueIdSchemeDelegator<PositionSo
   }
 
   @Override
-  public Portfolio getPortfolio(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getScheme()).getPortfolio(objectId, versionCorrection);
@@ -87,7 +87,7 @@ public class DelegatingPositionSource extends UniqueIdSchemeDelegator<PositionSo
   }
 
   @Override
-  public Position getPosition(UniqueId uniqueId) {
+  public Position getPosition(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).getPosition(uniqueId);
   }
@@ -100,7 +100,7 @@ public class DelegatingPositionSource extends UniqueIdSchemeDelegator<PositionSo
   }
 
   @Override
-  public Trade getTrade(UniqueId uniqueId) {
+  public Trade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).getTrade(uniqueId);
   }

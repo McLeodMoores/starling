@@ -18,7 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
 
 /**
- * An immutable reference to a particular computation target that will be resolved later on in the view compilation process to a {@link ComputationTargetSpecification} that satisfies the requirement.
+ * An immutable reference to a particular computation target that will be resolved later on in the view compilation process to a
+ * {@link ComputationTargetSpecification} that satisfies the requirement.
  */
 @PublicAPI
 public final class ComputationTargetRequirement extends ComputationTargetReference {
@@ -78,7 +79,8 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
   }
 
   /**
-   * Creates a requirement that describes an arbitrary target. The identifier is not resolved to a target but will be presented as an arbitrary parameter to a function.
+   * Creates a requirement that describes an arbitrary target. The identifier is not resolved to a target but will be presented as an arbitrary
+   * parameter to a function.
    *
    * @param identifier the identifier to hold, not null
    * @return the target requirement, not null
@@ -88,8 +90,8 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
   }
 
   /**
-   * Creates a requirement that describes an arbitrary target. The identifiers are not resolved to a target but the preferred one from the bundle will be presented as an arbitrary parameter to a
-   * function.
+   * Creates a requirement that describes an arbitrary target. The identifiers are not resolved to a target but the preferred one from the bundle
+   * will be presented as an arbitrary parameter to a function.
    *
    * @param bundle the identifiers to hold, not null
    * @return the target specification, not null

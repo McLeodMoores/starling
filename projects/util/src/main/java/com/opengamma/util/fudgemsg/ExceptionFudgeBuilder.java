@@ -27,7 +27,7 @@ public final class ExceptionFudgeBuilder extends AbstractFudgeBuilder implements
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Exception object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Exception object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
@@ -58,13 +58,13 @@ public final class ExceptionFudgeBuilder extends AbstractFudgeBuilder implements
     if (msg == null) {
       return null;
     }
-    String type = msg.getString(TYPE_FIELD_NAME);
-    String message = msg.getString(MESSAGE_FIELD_NAME);
+    final String type = msg.getString(TYPE_FIELD_NAME);
+    final String message = msg.getString(MESSAGE_FIELD_NAME);
     try {
-      Class<? extends Exception> exceptionType = (Class<? extends Exception>) Class.forName(type);
-      Constructor<? extends Exception> messageConstructor = exceptionType.getConstructor(String.class);
+      final Class<? extends Exception> exceptionType = (Class<? extends Exception>) Class.forName(type);
+      final Constructor<? extends Exception> messageConstructor = exceptionType.getConstructor(String.class);
       return messageConstructor.newInstance(message);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return new Exception(message);
     }
   }

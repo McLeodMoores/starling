@@ -22,7 +22,7 @@ import com.opengamma.util.PublicSPI;
  * The returned documents may be a mixture of versions and corrections.
  * The document instant fields are used to identify which are which.
  * See {@link AbstractHistoryRequest} for more details.
- * 
+ *
  * @param <D>  the type of the document
  */
 @PublicSPI
@@ -39,7 +39,7 @@ public abstract class AbstractHistoryResult<D extends AbstractDocument> extends 
    * Creates an instance.
    * @param coll  the collection of documents to add, not null
    */
-  public AbstractHistoryResult(Collection<D> coll) {
+  public AbstractHistoryResult(final Collection<D> coll) {
     super(coll);
   }
 
@@ -48,6 +48,7 @@ public abstract class AbstractHistoryResult<D extends AbstractDocument> extends 
    * Gets the first document, or null if no documents.
    * @return the first document, null if none
    */
+  @Override
   public D getFirstDocument() {
     return getDocuments().size() > 0 ? getDocuments().get(0) : null;
   }

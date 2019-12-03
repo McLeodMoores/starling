@@ -40,7 +40,7 @@ public class DoubleTimeSeriesOperators {
    */
   public static final BinaryOperator MAXIMUM_OPERATOR = new MaximumOperator();
   /**
-   * Binary operator to return the average of the two input parameters.
+   * Binary operator to return the arithmetic mean of the two input parameters.
    */
   public static final BinaryOperator AVERAGE_OPERATOR = new AverageOperator();
   /**
@@ -85,7 +85,7 @@ public class DoubleTimeSeriesOperators {
   public interface BinaryOperator {
     /**
      * Performs an operation on the input to produce an output.
-     * 
+     *
      * @param a  the first parameter
      * @param b  the second parameter
      * @return the result
@@ -94,68 +94,112 @@ public class DoubleTimeSeriesOperators {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Adds two numbers together.
+   */
   private static class AddOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return a + b;
     }
   }
 
+  /**
+   * Subtracts the second from the first number.
+   */
   private static class SubtractOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return a - b;
     }
   }
 
+  /**
+   * Multiplies two numbers together.
+   */
   private static class MultiplyOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return a * b;
     }
   }
 
+  /**
+   * Divides the first number by the second.
+   */
   private static class DivideOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return a / b;
     }
   }
 
+  /**
+   * Raises the first number to the power of the second.
+   */
   private static class PowerOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return Math.pow(a, b);
     }
   }
 
+  /**
+   * Returns the minimum of two numbers.
+   */
   private static class MinimumOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return Math.min(a, b);
     }
   }
 
+  /**
+   * Returns the maximum of two numbers.
+   */
   private static class MaximumOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return Math.max(a, b);
     }
   }
 
+  /**
+   * Returns the arithmetic mean of two numbers.
+   */
   private static class AverageOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return (a + b) / 2;
     }
   }
 
+  /**
+   * Returns the first number.
+   */
   private static class FirstOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return a;
     }
   }
 
+  /**
+   * Returns the second number.
+   */
   private static class SecondOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       return b;
     }
   }
-  
+
+  /**
+   * Throws an exception.
+   */
   private static class NoIntersectionOperator implements BinaryOperator {
-    public double operate(double a, double b) {
+    @Override
+    public double operate(final double a, final double b) {
       throw new IllegalStateException("No binary operation permitted");
     }
   }
@@ -168,7 +212,7 @@ public class DoubleTimeSeriesOperators {
   public interface UnaryOperator {
     /**
      * Performs an operation on the input to produce an output.
-     * 
+     *
      * @param a  the input parameter
      * @return the result
      */
@@ -176,32 +220,52 @@ public class DoubleTimeSeriesOperators {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Calculates the reciprocal of a number.
+   */
   private static class ReciprocalOperator implements UnaryOperator {
-    public double operate(double a) {
+    @Override
+    public double operate(final double a) {
       return 1 / a;
     }
   }
 
+  /**
+   * Negates a number.
+   */
   private static class NegateOperator implements UnaryOperator {
-    public double operate(double a) {
+    @Override
+    public double operate(final double a) {
       return -a;
     }
   }
 
+  /**
+   * Calculates the natural logarithm of a number.
+   */
   private static class LogOperator implements UnaryOperator {
-    public double operate(double a) {
+    @Override
+    public double operate(final double a) {
       return Math.log(a);
     }
   }
 
+  /**
+   * Calculates the base 10 log of a number.
+   */
   private static class Log10Operator implements UnaryOperator {
-    public double operate(double a) {
+    @Override
+    public double operate(final double a) {
       return Math.log10(a);
     }
   }
 
+  /**
+   * Returns the absolute value of a number.
+   */
   private static class AbsOperator implements UnaryOperator {
-    public double operate(double a) {
+    @Override
+    public double operate(final double a) {
       return Math.abs(a);
     }
   }

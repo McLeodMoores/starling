@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.derivative;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.forex.derivative;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForexPriceQuoteConverter {
 
@@ -24,7 +24,8 @@ public class ForexPriceQuoteConverter {
   private final double _absDom;
   private final double _absForeign;
 
-  public ForexPriceQuoteConverter(final double domesticPipsPrice, final double spotRate, final double strike, final double domesticNotional, final double foreignNotional) {
+  public ForexPriceQuoteConverter(final double domesticPipsPrice, final double spotRate, final double strike, final double domesticNotional,
+      final double foreignNotional) {
 
     ArgumentChecker.isTrue(domesticPipsPrice >= 0.0, "Negative price given");
     ArgumentChecker.isTrue(spotRate > 0.0, "Spot rate must be greater than zero. value gvien is {}", spotRate);
@@ -98,20 +99,20 @@ public class ForexPriceQuoteConverter {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_domPips);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_k);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_nd);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_nf);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_s0);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -121,7 +122,7 @@ public class ForexPriceQuoteConverter {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    ForexPriceQuoteConverter other = (ForexPriceQuoteConverter) obj;
+    final ForexPriceQuoteConverter other = (ForexPriceQuoteConverter) obj;
     if (Double.doubleToLongBits(_domPips) != Double.doubleToLongBits(other._domPips)) {
       return false;
     }

@@ -38,12 +38,12 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
   /**
    * The valuation instant.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Instant _valuationTime;
   /**
    * The values.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ManageableUnstructuredMarketDataSnapshot _values;
 
   /**
@@ -72,7 +72,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
     FudgeField field = msg.getByName("values");
     if (field != null) {
       values = deserializer.fieldValueToObject(ManageableUnstructuredMarketDataSnapshot.class, field);
-      
+
     }
     Instant valuationTime = null;
     field = msg.getByName("valuationTime");
@@ -137,6 +137,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
    * Gets the valuation instant.
    * @return the value of the property, not null
    */
+  @Override
   public Instant getValuationTime() {
     return _valuationTime;
   }
@@ -146,6 +147,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
    * Gets the values.
    * @return the value of the property, not null
    */
+  @Override
   public ManageableUnstructuredMarketDataSnapshot getValues() {
     return _values;
   }
@@ -166,8 +168,8 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ManageableYieldCurveSnapshot other = (ManageableYieldCurveSnapshot) obj;
-      return JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          JodaBeanUtils.equal(getValues(), other.getValues());
+      return JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          JodaBeanUtils.equal(_values, other._values);
     }
     return false;
   }
@@ -175,8 +177,8 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_values);
     return hash;
   }
 
@@ -184,8 +186,8 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("ManageableYieldCurveSnapshot{");
-    buf.append("valuationTime").append('=').append(getValuationTime()).append(',').append(' ');
-    buf.append("values").append('=').append(JodaBeanUtils.toString(getValues()));
+    buf.append("valuationTime").append('=').append(_valuationTime).append(',').append(' ');
+    buf.append("values").append('=').append(JodaBeanUtils.toString(_values));
     buf.append('}');
     return buf.toString();
   }
@@ -348,19 +350,31 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

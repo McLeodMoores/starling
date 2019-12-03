@@ -37,18 +37,24 @@ public class BlackSmileCapInflationYearOnYearWithConvexityProvider implements Bl
   private final InflationConvexityAdjustmentParameters _inflationConvexityAdjustmentsParameters;
 
   /**
-   * The  Black volatility surface used in cap/floor ibor modeling.
+   * The Black volatility surface used in cap/floor ibor modeling.
    */
   private final BlackFlatCapFloorParameters _blackSmileIborCapParameters;
 
   /**
    * Constructor.
-   * @param inflation The inflation provider, not null
-   * @param parameters The Black parameters, not null
-   * @param inflationConvexityAdjustmentsParameters The inflation convexity adjustment parameters, not null
-   * @param blackSmileIborCapParameters The Black volatility cap/floor (ibor) parameters, not null
+   * 
+   * @param inflation
+   *          The inflation provider, not null
+   * @param parameters
+   *          The Black parameters, not null
+   * @param inflationConvexityAdjustmentsParameters
+   *          The inflation convexity adjustment parameters, not null
+   * @param blackSmileIborCapParameters
+   *          The Black volatility cap/floor (ibor) parameters, not null
    */
-  public BlackSmileCapInflationYearOnYearWithConvexityProvider(final InflationProviderInterface inflation, final BlackSmileCapInflationYearOnYearParameters parameters,
+  public BlackSmileCapInflationYearOnYearWithConvexityProvider(final InflationProviderInterface inflation,
+      final BlackSmileCapInflationYearOnYearParameters parameters,
       final InflationConvexityAdjustmentParameters inflationConvexityAdjustmentsParameters, final BlackFlatCapFloorParameters blackSmileIborCapParameters) {
     ArgumentChecker.notNull(inflation, "inflation");
     ArgumentChecker.notNull(parameters, "parameters");
@@ -73,7 +79,8 @@ public class BlackSmileCapInflationYearOnYearWithConvexityProvider implements Bl
   @Override
   public BlackSmileCapInflationYearOnYearWithConvexityProvider copy() {
     final InflationProviderInterface inflation = _inflation.copy();
-    return new BlackSmileCapInflationYearOnYearWithConvexityProvider(inflation, _parameters, _inflationConvexityAdjustmentsParameters, _blackSmileIborCapParameters);
+    return new BlackSmileCapInflationYearOnYearWithConvexityProvider(inflation, _parameters, _inflationConvexityAdjustmentsParameters,
+        _blackSmileIborCapParameters);
   }
 
   @Override

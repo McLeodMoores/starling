@@ -28,13 +28,11 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.VegaMatrixUtils;
 
 /**
- * Calculates the bucketed vega of FX options using a Black surface and
- * curves constructed using the discounting method. The matrix axes are delta and expiry.
+ * Calculates the bucketed vega of FX options using a Black surface and curves constructed using the discounting method. The matrix axes are delta and expiry.
  */
 public class BlackDiscountingVegaMatrixFXOptionFunction extends BlackDiscountingFXOptionFunction {
   /** The present value calculator */
@@ -42,7 +40,7 @@ public class BlackDiscountingVegaMatrixFXOptionFunction extends BlackDiscounting
       BucketedVegaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VEGA_MATRIX}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VEGA_MATRIX}.
    */
   public BlackDiscountingVegaMatrixFXOptionFunction() {
     super(VEGA_MATRIX);

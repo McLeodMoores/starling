@@ -30,7 +30,7 @@ import com.opengamma.util.PublicSPI;
  * History can be stored in two dimensions and this request provides searching.
  * <p>
  * The first historic dimension is the classic series of versions.
- * Each new version is stored in such a manor that previous versions can be accessed.
+ * Each new version is stored in such a manner that previous versions can be accessed.
  * <p>
  * The second historic dimension is corrections.
  * A correction occurs when it is realized that the original data stored was incorrect.
@@ -69,7 +69,7 @@ public class SecurityHistoryRequest extends AbstractHistoryRequest {
   /**
    * Creates an instance with object identifier.
    * This will retrieve all versions and corrections unless the relevant fields are set.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public SecurityHistoryRequest(final ObjectIdentifiable objectId) {
@@ -78,12 +78,12 @@ public class SecurityHistoryRequest extends AbstractHistoryRequest {
 
   /**
    * Creates an instance with object identifier and optional version and correction.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param versionInstant  the version instant to retrieve, null for all versions
    * @param correctedToInstant  the instant that the data should be corrected to, null for all corrections
    */
-  public SecurityHistoryRequest(final ObjectIdentifiable objectId, Instant versionInstant, Instant correctedToInstant) {
+  public SecurityHistoryRequest(final ObjectIdentifiable objectId, final Instant versionInstant, final Instant correctedToInstant) {
     super(objectId, versionInstant, correctedToInstant);
   }
 

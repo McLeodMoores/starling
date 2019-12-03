@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -11,29 +11,34 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.E
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Data container for mixed bivariate log-normal model, where data for X,Y are reordered such that sigmasZ are appropriately ordered
- * Derive volatility smile of a mixed log-normal model with mixed normal variable Z = X-Y under the assumption that X, Y are mixed bivariate normal variables. 
- * Here all of the parameters of X,Y and their correlations are input parameters.
+ * Data container for mixed bivariate log-normal model, where data for X,Y are reordered such that sigmasZ are appropriately ordered Derive volatility smile of
+ * a mixed log-normal model with mixed normal variable Z = X-Y under the assumption that X, Y are mixed bivariate normal variables. Here all of the parameters
+ * of X,Y and their correlations are input parameters.
  */
 public class MixedBivariateLogNormalModelVolatility {
 
-  private MixedLogNormalModelData _data;
+  private final MixedLogNormalModelData _data;
 
-  private double[] _weights;
-  private double[] _sigmasX;
-  private double[] _sigmasY;
-  private double[] _relativePartialForwardsX;
-  private double[] _relativePartialForwardsY;
-  private double[] _rhos;
+  private final double[] _weights;
+  private final double[] _sigmasX;
+  private final double[] _sigmasY;
+  private final double[] _relativePartialForwardsX;
+  private final double[] _relativePartialForwardsY;
+  private final double[] _rhos;
 
   private final double _driftCorrection;
 
   /**
-   * Set up mixed log-normal models with mixed normal variables X, Y and another mixed log-normal model with Z = X-Y
-   * @param weights The weights  <b>These weights must sum to 1</b> 
-   * @param sigmasX The standard deviation of the individual normal distributions in X 
-   * @param sigmasY The standard deviation of the individual normal distributions in Y 
-   * @param rhos The correlation between distributions of X and Y
+   * Set up mixed log-normal models with mixed normal variables X, Y and another mixed log-normal model with Z = X-Y.
+   *
+   * @param weights
+   *          The weights <b>These weights must sum to 1</b>
+   * @param sigmasX
+   *          The standard deviation of the individual normal distributions in X
+   * @param sigmasY
+   *          The standard deviation of the individual normal distributions in Y
+   * @param rhos
+   *          The correlation between distributions of X and Y
    */
   public MixedBivariateLogNormalModelVolatility(final double[] weights, final double[] sigmasX, final double[] sigmasY, final double[] rhos) {
     ArgumentChecker.notNull(weights, "weights is Null");
@@ -75,8 +80,8 @@ public class MixedBivariateLogNormalModelVolatility {
       _rhos[i] = rhos[i];
     }
 
-    double[] sigmas = getVolatilityZ(_sigmasX, _sigmasY, _rhos);
-    double[] relativePartialForwards = getrelativePartialForwardZ(_relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
+    final double[] sigmas = getVolatilityZ(_sigmasX, _sigmasY, _rhos);
+    final double[] relativePartialForwards = getrelativePartialForwardZ(_relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
     _driftCorrection = getDriftCorrectionZ(_weights, _relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
 
     for (int i = 0; i < nNormals; ++i) {
@@ -123,15 +128,20 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Set up mixed log-normal models with mixed bivariate normal variables X, Y and another mixed log-normal model with Z = X-Y
-   * @param weights The weights  <b>These weights must sum to 1</b> 
-   * @param sigmasX The standard deviation of the normal distributions in X 
-   * @param sigmasY The standard deviation of the normal distributions in Y 
-   * @param relativePartialForwardsX The expectation of each distribution in X is rpf_i*forward
-   * @param relativePartialForwardsY The expectation of each distribution in Y is rpf_i*forward
-   * (rpf_i is the ith relativePartialForwards)
-   * <b>Must have sum w_i*rpf_i = 1.0</b>
-   * @param rhos The correlation between the distributions
+   * Set up mixed log-normal models with mixed bivariate normal variables X, Y and another mixed log-normal model with Z = X-Y.
+   *
+   * @param weights
+   *          The weights <b>These weights must sum to 1</b>
+   * @param sigmasX
+   *          The standard deviation of the normal distributions in X
+   * @param sigmasY
+   *          The standard deviation of the normal distributions in Y
+   * @param relativePartialForwardsX
+   *          The expectation of each distribution in X is rpf_i*forward
+   * @param relativePartialForwardsY
+   *          The expectation of each distribution in Y is rpf_i*forward (rpf_i is the ith relativePartialForwards) <b>Must have sum w_i*rpf_i = 1.0</b>
+   * @param rhos
+   *          The correlation between the distributions
    */
   public MixedBivariateLogNormalModelVolatility(final double[] weights, final double[] sigmasX, final double[] sigmasY, final double[] relativePartialForwardsX,
       final double[] relativePartialForwardsY,
@@ -185,15 +195,15 @@ public class MixedBivariateLogNormalModelVolatility {
 
     _driftCorrection = getDriftCorrectionZ(_weights, _relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
 
-    double[] sigmas = getVolatilityZ(_sigmasX, _sigmasY, _rhos);
-    double[] relativePartialForwards = getrelativePartialForwardZ(_relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
+    final double[] sigmas = getVolatilityZ(_sigmasX, _sigmasY, _rhos);
+    final double[] relativePartialForwards = getrelativePartialForwardZ(_relativePartialForwardsX, _relativePartialForwardsY, _sigmasX, _sigmasY, _rhos);
 
     for (int i = 0; i < nNormals; ++i) {
       relativePartialForwards[i] *= _driftCorrection;
     }
 
     // sigmas should be descending order.
-    // Labels for input variables of X,Y are also changed. These will be useful for rho-fitting of Z (see MixedLogNormal2DCorrelationFinder). 
+    // Labels for input variables of X,Y are also changed. These will be useful for rho-fitting of Z (see MixedLogNormal2DCorrelationFinder).
     int j = 0;
     double tmpSigmas = 0;
     double tmpWeights = 0;
@@ -237,8 +247,7 @@ public class MixedBivariateLogNormalModelVolatility {
   /**
    * Sigmas calculator for the normal distributions in Z
    */
-  private double[] getVolatilityZ(final double[] sigX, final double[] sigY, final double[] rh)
-  {
+  private double[] getVolatilityZ(final double[] sigX, final double[] sigY, final double[] rh) {
     final int nNormals = sigX.length;
     final double[] res = new double[nNormals];
 
@@ -250,10 +259,9 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Calculate "relative partial forward" of the normal distributions in Z 
+   * Calculate "relative partial forward" of the normal distributions in Z
    */
-  private double[] getrelativePartialForwardZ(final double[] rpfX, final double[] rpfY, final double[] sigX, final double[] sigY, final double[] rh)
-  {
+  private double[] getrelativePartialForwardZ(final double[] rpfX, final double[] rpfY, final double[] sigX, final double[] sigY, final double[] rh) {
     final int nNormals = rpfY.length;
     final double[] res = new double[nNormals];
     for (int i = 0; i < nNormals; i++) {
@@ -264,8 +272,7 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Fix the extra degree of freedom in Z such that sum w_i*rpf_i = 1.0 is satisfied
-   * (rpf_i for Z is then relativePartialForwardsZ[i] * driftCorrectionZ)
+   * Fix the extra degree of freedom in Z such that sum w_i*rpf_i = 1.0 is satisfied (rpf_i for Z is then relativePartialForwardsZ[i] * driftCorrectionZ)
    */
   private double getDriftCorrectionZ(final double[] wght, final double[] rpfX, final double[] rpfY, final double[] sigX, final double[] sigY,
       final double[] rhos) {
@@ -273,15 +280,16 @@ public class MixedBivariateLogNormalModelVolatility {
     final int nNormals = wght.length;
     double tmp = 0.;
     for (int i = 0; i < nNormals; i++) {
-      tmp += wght[i] *
-          Math.exp(Math.log(rpfX[i]) - Math.log(rpfY[i]) + sigY[i] * sigY[i] - rhos[i] * sigX[i] * sigY[i]);
+      tmp += wght[i]
+          * Math.exp(Math.log(rpfX[i]) - Math.log(rpfY[i]) + sigY[i] * sigY[i] - rhos[i] * sigX[i] * sigY[i]);
     }
 
     return 1. / tmp;
   }
 
   /**
-   * Access drift correction
+   * Access drift correction.
+   *
    * @return _driftCorrection
    */
   public double getInvExpDriftCorrection() {
@@ -289,7 +297,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access weights ordered in terms of sigmasZ
+   * Access weights ordered in terms of sigmasZ.
+   *
    * @return weights
    */
   public double[] getOrderedWeights() {
@@ -304,7 +313,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access relativeForwardsZ
+   * Access relativeForwardsZ.
+   *
    * @return relativeForwardsZ
    */
   public double[] getRelativeForwardsZ() {
@@ -312,8 +322,10 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * @param option TimeToExpiry Strike and OptionType are contained
-   * @param forward 
+   * @param option
+   *          TimeToExpiry Strike and OptionType are contained
+   * @param forward
+   *          the forward
    * @return implied volatility
    */
   public double getImpliedVolatilityZ(final EuropeanVanillaOption option, final double forward) {
@@ -322,10 +334,13 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Call price for Z, used for checking call-put parity
-   * @param option 
-   * @param forward 
-   * @return call price  
+   * Call price for Z, used for checking call-put parity.
+   *
+   * @param option
+   *          the option
+   * @param forward
+   *          the forward
+   * @return call price
    */
   public double getPriceZ(final EuropeanVanillaOption option, final double forward) {
     final MixedLogNormalVolatilityFunction volfunc = MixedLogNormalVolatilityFunction.getInstance();
@@ -333,7 +348,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access sigmasX reordered in terms of sigmasZ
+   * Access sigmasX reordered in terms of sigmasZ.
+   *
    * @return sigmasX
    */
   public double[] getOrderedSigmasX() {
@@ -341,7 +357,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access sigmasY reordered in terms of sigmasZ
+   * Access sigmasY reordered in terms of sigmasZ.
+   *
    * @return sigmasY
    */
   public double[] getOrderedSigmasY() {
@@ -349,7 +366,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access relativePartialForwardsX reordered in terms of sigmasZ
+   * Access relativePartialForwardsX reordered in terms of sigmasZ.
+   *
    * @return relativePartialForwardsX
    */
   public double[] getOrderedRelativePartialForwardsX() {
@@ -357,7 +375,8 @@ public class MixedBivariateLogNormalModelVolatility {
   }
 
   /**
-   * Access relativePartialForwardsY reordered in terms of sigmasZ
+   * Access relativePartialForwardsY reordered in terms of sigmasZ.
+   *
    * @return relativePartialForwardsY
    */
   public double[] getOrderedRelativePartialForwardsY() {

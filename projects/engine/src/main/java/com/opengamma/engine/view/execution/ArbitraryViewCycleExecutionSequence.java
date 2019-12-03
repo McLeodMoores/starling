@@ -30,7 +30,7 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
 
     private Cycle _next;
 
-    public Cycle(final ViewCycleExecutionOptions options) {
+    Cycle(final ViewCycleExecutionOptions options) {
       _options = options;
     }
 
@@ -51,7 +51,7 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
   private Cycle _executionSequenceHead;
   private int _size;
 
-  public ArbitraryViewCycleExecutionSequence(Collection<ViewCycleExecutionOptions> executionSequence) {
+  public ArbitraryViewCycleExecutionSequence(final Collection<ViewCycleExecutionOptions> executionSequence) {
     ArgumentChecker.notNull(executionSequence, "executionSequence");
     final Iterator<ViewCycleExecutionOptions> itr = executionSequence.iterator();
     if (itr.hasNext()) {
@@ -67,14 +67,14 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
     }
   }
 
-  protected ArbitraryViewCycleExecutionSequence(ArbitraryViewCycleExecutionSequence copyFrom) {
+  protected ArbitraryViewCycleExecutionSequence(final ArbitraryViewCycleExecutionSequence copyFrom) {
     _executionSequenceHead = copyFrom._executionSequenceHead;
     _size = copyFrom._size;
   }
 
   /**
    * Gets a sequence for a single cycle which relies on default cycle execution options.
-   * 
+   *
    * @return the sequence, not null
    */
   public static ArbitraryViewCycleExecutionSequence single() {
@@ -83,36 +83,36 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
 
   /**
    * Gets a sequence for a single cycle.
-   * 
+   *
    * @param executionOptions the execution options for the single cycle, not null
    * @return the sequence, not null
    */
-  public static ArbitraryViewCycleExecutionSequence single(ViewCycleExecutionOptions executionOptions) {
+  public static ArbitraryViewCycleExecutionSequence single(final ViewCycleExecutionOptions executionOptions) {
     return new ArbitraryViewCycleExecutionSequence(Collections.singletonList(executionOptions));
   }
 
   /**
    * Gets a sequence for a collection of valuation times.
-   * 
+   *
    * @param valuationTimeProviders the valuation times, not null
    * @return the sequence, not null
    */
-  public static ArbitraryViewCycleExecutionSequence of(Instant... valuationTimeProviders) {
+  public static ArbitraryViewCycleExecutionSequence of(final Instant... valuationTimeProviders) {
     return of(Arrays.asList(valuationTimeProviders));
   }
 
   /**
    * Gets a sequence for a collection of valuation times.
-   * 
+   *
    * @param valuationTimeProviders the valuation times, not null
    * @return the sequence, not null
    */
-  public static ArbitraryViewCycleExecutionSequence of(Collection<Instant> valuationTimeProviders) {
+  public static ArbitraryViewCycleExecutionSequence of(final Collection<Instant> valuationTimeProviders) {
     ArgumentChecker.notNull(valuationTimeProviders, "valuationTimeProviders");
-    List<ViewCycleExecutionOptions> executionSequence = new ArrayList<ViewCycleExecutionOptions>(valuationTimeProviders.size());
+    final List<ViewCycleExecutionOptions> executionSequence = new ArrayList<>(valuationTimeProviders.size());
     final ViewCycleExecutionOptions.Builder builder = ViewCycleExecutionOptions.builder();
-    for (Instant valuationTimeProvider : valuationTimeProviders) {
-      ViewCycleExecutionOptions options = builder.setValuationTime(valuationTimeProvider).create();
+    for (final Instant valuationTimeProvider : valuationTimeProviders) {
+      final ViewCycleExecutionOptions options = builder.setValuationTime(valuationTimeProvider).create();
       executionSequence.add(options);
     }
     return new ArbitraryViewCycleExecutionSequence(executionSequence);
@@ -120,16 +120,16 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
 
   /**
    * Gets a sequence for a collection of cycles.
-   * 
+   *
    * @param executionSequence the sequence, not null
    * @return the sequence, not null
    */
-  public static ArbitraryViewCycleExecutionSequence of(ViewCycleExecutionOptions... executionSequence) {
+  public static ArbitraryViewCycleExecutionSequence of(final ViewCycleExecutionOptions... executionSequence) {
     return new ArbitraryViewCycleExecutionSequence(Arrays.asList(executionSequence));
   }
 
   public List<ViewCycleExecutionOptions> getRemainingSequence() {
-    final List<ViewCycleExecutionOptions> result = new ArrayList<ViewCycleExecutionOptions>(_size);
+    final List<ViewCycleExecutionOptions> result = new ArrayList<>(_size);
     Cycle itr = _executionSequenceHead;
     while (itr != null) {
       result.add(itr.getOptions());
@@ -139,15 +139,14 @@ public class ArbitraryViewCycleExecutionSequence extends MergingViewCycleExecuti
   }
 
   @Override
-  public ViewCycleExecutionOptions poll(ViewCycleExecutionOptions defaultExecutionOptions) {
-    Cycle head = _executionSequenceHead;
+  public ViewCycleExecutionOptions poll(final ViewCycleExecutionOptions defaultExecutionOptions) {
+    final Cycle head = _executionSequenceHead;
     if (head != null) {
       _executionSequenceHead = head.getNext();
       _size--;
       return merge(head.getOptions(), defaultExecutionOptions);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

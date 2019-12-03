@@ -29,12 +29,19 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExternalIdBundle object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExternalIdBundle object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
+  /**
+   * Converts an {@link ExternalIdBundle} to a mutable Fudge message. Returns null if the id bundle is null.
+   *
+   * @param serializer  the Fudge serializer
+   * @param object  the id bundle
+   * @return  the message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundle object) {
     if (object == null) {
       return null;
@@ -44,8 +51,15 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
     return msg;
   }
 
+  /**
+   * Adds an {@link ExternalIdBundle} to a message.
+   *
+   * @param serializer  the Fudge serializer, not null
+   * @param object  the id bundle
+   * @param msg  the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ExternalIdBundle object, final MutableFudgeMsg msg) {
-    for (ExternalId externalId : object) {
+    for (final ExternalId externalId : object) {
       addToMessage(msg, ID_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, externalId));
     }
   }
@@ -56,12 +70,19 @@ public final class ExternalIdBundleFudgeBuilder extends AbstractFudgeBuilder imp
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a Fudge message to an {@link ExternalIdBundle}. Returns null if the message is null.
+   *
+   * @param deserializer  the Fudge deserializer
+   * @param msg  the message
+   * @return  the id bundle
+   */
   public static ExternalIdBundle fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }
-    Set<ExternalId> ids = new HashSet<ExternalId>();
-    for (FudgeField field : msg.getAllByName(ID_FIELD_NAME)) {
+    final Set<ExternalId> ids = new HashSet<>();
+    for (final FudgeField field : msg.getAllByName(ID_FIELD_NAME)) {
       ids.add(ExternalIdFudgeBuilder.fromFudgeMsg((FudgeMsg) field.getValue()));
     }
     return ExternalIdBundle.of(ids);

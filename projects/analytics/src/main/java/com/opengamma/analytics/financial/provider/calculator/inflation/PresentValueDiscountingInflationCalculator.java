@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueDiscountingInflationCalculator extends InstrumentDerivativeVisitorDelegate<InflationProviderInterface, MultipleCurrencyAmount> {
 
@@ -44,6 +44,7 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueDiscountingInflationCalculator getInstance() {
@@ -64,15 +65,18 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
   /**
    * Pricing method for zero-coupon with interpolated reference index.
    */
-  private static final CouponInflationZeroCouponInterpolationDiscountingMethod METHOD_ZC_INTERPOLATION = new CouponInflationZeroCouponInterpolationDiscountingMethod();
+  private static final CouponInflationZeroCouponInterpolationDiscountingMethod METHOD_ZC_INTERPOLATION =
+      new CouponInflationZeroCouponInterpolationDiscountingMethod();
   /**
    * Pricing method for zero-coupon with monthly reference index.
    */
-  private static final CouponInflationZeroCouponMonthlyGearingDiscountingMethod METHOD_ZC_MONTHLY_GEARING = new CouponInflationZeroCouponMonthlyGearingDiscountingMethod();
+  private static final CouponInflationZeroCouponMonthlyGearingDiscountingMethod METHOD_ZC_MONTHLY_GEARING =
+      new CouponInflationZeroCouponMonthlyGearingDiscountingMethod();
   /**
    * Pricing method for zero-coupon with interpolated reference index.
    */
-  private static final CouponInflationZeroCouponInterpolationGearingDiscountingMethod METHOD_ZC_INTERPOLATION_GEARING = new CouponInflationZeroCouponInterpolationGearingDiscountingMethod();
+  private static final CouponInflationZeroCouponInterpolationGearingDiscountingMethod METHOD_ZC_INTERPOLATION_GEARING =
+      new CouponInflationZeroCouponInterpolationGearingDiscountingMethod();
   /**
    * Pricing method for year on year coupon with monthly reference index.
    */
@@ -80,12 +84,14 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
   /**
    * Pricing method for year on year coupon with interpolated reference index.
    */
-  private static final CouponInflationYearOnYearInterpolationDiscountingMethod METHOD_YEAR_ON_YEAR_INTERPOLATION = new CouponInflationYearOnYearInterpolationDiscountingMethod();
+  private static final CouponInflationYearOnYearInterpolationDiscountingMethod METHOD_YEAR_ON_YEAR_INTERPOLATION =
+      new CouponInflationYearOnYearInterpolationDiscountingMethod();
 
   /**
    * Pricing method for year on year coupon with monthly and with margin reference index.
    */
-  private static final CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod METHOD_YEAR_ON_YEAR_MONTHLY_WITH_MARGIN = new CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod();
+  private static final CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod METHOD_YEAR_ON_YEAR_MONTHLY_WITH_MARGIN =
+      new CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod();
   /**
    * Pricing method for year on year coupon with interpolated and with margin reference index.
    */
@@ -98,17 +104,20 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponInflationZeroCouponInterpolation(final CouponInflationZeroCouponInterpolation coupon, final InflationProviderInterface market) {
+  public MultipleCurrencyAmount visitCouponInflationZeroCouponInterpolation(final CouponInflationZeroCouponInterpolation coupon,
+      final InflationProviderInterface market) {
     return METHOD_ZC_INTERPOLATION.presentValue(coupon, market);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponInflationZeroCouponMonthlyGearing(final CouponInflationZeroCouponMonthlyGearing coupon, final InflationProviderInterface market) {
+  public MultipleCurrencyAmount visitCouponInflationZeroCouponMonthlyGearing(final CouponInflationZeroCouponMonthlyGearing coupon,
+      final InflationProviderInterface market) {
     return METHOD_ZC_MONTHLY_GEARING.presentValue(coupon, market);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponInflationZeroCouponInterpolationGearing(final CouponInflationZeroCouponInterpolationGearing coupon, final InflationProviderInterface market) {
+  public MultipleCurrencyAmount visitCouponInflationZeroCouponInterpolationGearing(final CouponInflationZeroCouponInterpolationGearing coupon,
+      final InflationProviderInterface market) {
     return METHOD_ZC_INTERPOLATION_GEARING.presentValue(coupon, market);
   }
 
@@ -118,12 +127,14 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponInflationYearOnYearInterpolation(final CouponInflationYearOnYearInterpolation coupon, final InflationProviderInterface market) {
+  public MultipleCurrencyAmount visitCouponInflationYearOnYearInterpolation(final CouponInflationYearOnYearInterpolation coupon,
+      final InflationProviderInterface market) {
     return METHOD_YEAR_ON_YEAR_INTERPOLATION.presentValue(coupon, market);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCouponInflationYearOnYearMonthlyWithMargin(final CouponInflationYearOnYearMonthlyWithMargin coupon, final InflationProviderInterface inflation) {
+  public MultipleCurrencyAmount visitCouponInflationYearOnYearMonthlyWithMargin(final CouponInflationYearOnYearMonthlyWithMargin coupon,
+      final InflationProviderInterface inflation) {
     return METHOD_YEAR_ON_YEAR_MONTHLY_WITH_MARGIN.presentValue(coupon, inflation);
   }
 
@@ -133,7 +144,7 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
     return METHOD_YEAR_ON_YEAR_INTERPOLATION_WITH_MARGIN.presentValue(coupon, inflation);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final InflationProviderInterface market) {
@@ -151,7 +162,7 @@ public final class PresentValueDiscountingInflationCalculator extends Instrument
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public MultipleCurrencyAmount visitSwap(final Swap<?, ?> swap, final InflationProviderInterface market) {

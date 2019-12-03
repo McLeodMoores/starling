@@ -36,7 +36,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -48,9 +47,10 @@ public class EquityTotalReturnSwapPV01Function extends EquityTotalReturnSwapFunc
   /** The calculator */
   private static final PV01CurveParametersCalculator<EquityTrsDataBundle> CALCULATOR =
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityEquityDiscountingCalculator.getInstance());
-      
+
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PV01}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public EquityTotalReturnSwapPV01Function() {
     super(PV01);
@@ -90,7 +90,8 @@ public class EquityTotalReturnSwapPV01Function extends EquityTotalReturnSwapFunc
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final Set<String> curveNames = desiredValue.getConstraints().getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
           return null;

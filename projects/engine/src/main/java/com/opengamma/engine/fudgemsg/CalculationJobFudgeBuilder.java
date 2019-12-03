@@ -28,7 +28,7 @@ import com.opengamma.id.VersionCorrection;
 
 /**
  * Fudge message builder for {@code CalculationJob}.
- * 
+ *
  * <pre>
  * message CalculationJob extends CalculationJobSpecification, CacheSelect {
  *   optional long[] required;                              // pre-requisite job identifiers
@@ -48,10 +48,10 @@ public class CalculationJobFudgeBuilder implements FudgeBuilder<CalculationJob> 
 
   protected FudgeMsg buildItemsMessage(final FudgeSerializer serializer, final List<CalculationJobItem> items) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    final Map<ComputationTargetSpecification, Integer> targets = new HashMap<ComputationTargetSpecification, Integer>();
-    final Map<String, Integer> functions = new HashMap<String, Integer>();
-    final Map<FunctionParameters, Integer> parameters = new HashMap<FunctionParameters, Integer>();
-    for (CalculationJobItem item : items) {
+    final Map<ComputationTargetSpecification, Integer> targets = new HashMap<>();
+    final Map<String, Integer> functions = new HashMap<>();
+    final Map<FunctionParameters, Integer> parameters = new HashMap<>();
+    for (final CalculationJobItem item : items) {
       msg.add(null, null, CalculationJobItemFudgeBuilder.buildMessageImpl(serializer, item, targets, functions, parameters));
     }
     return msg;
@@ -72,11 +72,11 @@ public class CalculationJobFudgeBuilder implements FudgeBuilder<CalculationJob> 
   }
 
   protected List<CalculationJobItem> buildItemsObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    final List<CalculationJobItem> result = new ArrayList<CalculationJobItem>(msg.getNumFields());
-    final Map<Integer, ComputationTargetSpecification> targets = new HashMap<Integer, ComputationTargetSpecification>();
-    final Map<Integer, String> functions = new HashMap<Integer, String>();
-    final Map<Integer, FunctionParameters> parameters = new HashMap<Integer, FunctionParameters>();
-    for (FudgeField field : msg) {
+    final List<CalculationJobItem> result = new ArrayList<>(msg.getNumFields());
+    final Map<Integer, ComputationTargetSpecification> targets = new HashMap<>();
+    final Map<Integer, String> functions = new HashMap<>();
+    final Map<Integer, FunctionParameters> parameters = new HashMap<>();
+    for (final FudgeField field : msg) {
       result.add(CalculationJobItemFudgeBuilder.buildObjectImpl(deserializer, (FudgeMsg) field.getValue(), targets, functions, parameters));
     }
     return result;
@@ -88,7 +88,8 @@ public class CalculationJobFudgeBuilder implements FudgeBuilder<CalculationJob> 
     final CacheSelectHint cacheSelectHint = CacheSelectHintFudgeBuilder.buildObjectImpl(message);
     final long[] requiredJobIds = message.getValue(long[].class, REQUIRED_FIELD_NAME);
     final long functionInitializationIdentifier = message.getLong(FUNCTION_INITIALIZATION_IDENTIFIER_FIELD_NAME);
-    final VersionCorrection resolverVersionCorrection = deserializer.fieldValueToObject(VersionCorrection.class, message.getByName(RESOLVER_VERSION_CORRECTION_FIELD_NAME));
+    final VersionCorrection resolverVersionCorrection = deserializer.fieldValueToObject(VersionCorrection.class,
+        message.getByName(RESOLVER_VERSION_CORRECTION_FIELD_NAME));
     final List<CalculationJobItem> jobItems = buildItemsObject(deserializer, message.getMessage(ITEMS_FIELD_NAME));
     return new CalculationJob(jobSpec, functionInitializationIdentifier, resolverVersionCorrection, requiredJobIds, jobItems, cacheSelectHint);
   }

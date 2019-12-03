@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve.calcconfig;
@@ -32,10 +32,10 @@ public class CurveInstrumentConfigTest extends FinancialTestBase {
     final String[] fundingOnly = new String[] {FUNDING_CURVE_NAME};
     final String[] forward3MOnly = new String[] {FORWARD_3M_CURVE_NAME};
     final String[] fundingForward3M = new String[] {FUNDING_CURVE_NAME, FORWARD_3M_CURVE_NAME};
-    final Map<StripInstrumentType, String[]> fundingConfig = new HashMap<StripInstrumentType, String[]>();
+    final Map<StripInstrumentType, String[]> fundingConfig = new HashMap<>();
     fundingConfig.put(StripInstrumentType.CASH, fundingOnly);
     fundingConfig.put(StripInstrumentType.OIS_SWAP, new String[] {FUNDING_CURVE_NAME, FUNDING_CURVE_NAME});
-    final Map<StripInstrumentType, String[]> forward3MConfig = new HashMap<StripInstrumentType, String[]>();
+    final Map<StripInstrumentType, String[]> forward3MConfig = new HashMap<>();
     forward3MConfig.put(StripInstrumentType.LIBOR, forward3MOnly);
     forward3MConfig.put(StripInstrumentType.FUTURE, fundingForward3M);
     forward3MConfig.put(StripInstrumentType.FRA_3M, fundingForward3M);
@@ -51,7 +51,7 @@ public class CurveInstrumentConfigTest extends FinancialTestBase {
 
   @Test
   public void test() {
-    final Map<StripInstrumentType, String[]> fundingConfig = new HashMap<StripInstrumentType, String[]>();
+    final Map<StripInstrumentType, String[]> fundingConfig = new HashMap<>();
     fundingConfig.put(StripInstrumentType.CASH, new String[] {FUNDING_CURVE_NAME} );
     fundingConfig.put(StripInstrumentType.OIS_SWAP, new String[] {FUNDING_CURVE_NAME, FUNDING_CURVE_NAME});
     final CurveInstrumentConfig config = new CurveInstrumentConfig(fundingConfig);

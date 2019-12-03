@@ -15,9 +15,9 @@ import com.opengamma.livedata.server.FieldHistoryStore;
 public class FieldHistoryUpdater implements NormalizationRule {
 
   @Override
-  public MutableFudgeMsg apply(MutableFudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
+  public MutableFudgeMsg apply(final MutableFudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
     fieldHistory.liveDataReceived(msg);
     return msg;
   }
-  
+
 }

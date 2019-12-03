@@ -27,44 +27,43 @@ public class SecurityAttributeMapper {
   /* package */ SecurityAttributeMapper() {
   }
 
-  /* package */ void mapColumn(SecurityAttribute column, MetaProperty<?> metaProp) {
+  /* package */ void mapColumn(final SecurityAttribute column, final MetaProperty<?> metaProp) {
     ArgumentChecker.notNull(column, "column");
     ArgumentChecker.notNull(metaProp, "metaProp");
-    Class<? extends ManageableSecurity> securityType = (Class<? extends ManageableSecurity>) metaProp.metaBean().beanType();
-    Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(securityType);
+    final Class<? extends ManageableSecurity> securityType = (Class<? extends ManageableSecurity>) metaProp.metaBean().beanType();
+    final Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(securityType);
     mappings.put(column, propertyProvider(metaProp));
   }
 
-  /* package */  <T extends ManageableSecurity> void mapColumn(SecurityAttribute column,
-                                                               Class<T> type,
-                                                               SecurityValueProvider<T> provider) {
+  /* package */  <T extends ManageableSecurity> void mapColumn(final SecurityAttribute column,
+      final Class<T> type,
+      final SecurityValueProvider<T> provider) {
     ArgumentChecker.notNull(column, "column");
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(provider, "provider");
-    Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(type);
+    final Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(type);
     mappings.put(column, provider);
   }
 
-  /* package */ <T extends ManageableSecurity> void mapColumn(SecurityAttribute column, Class<T> type, String value) {
+  /* package */ <T extends ManageableSecurity> void mapColumn(final SecurityAttribute column, final Class<T> type, final String value) {
     ArgumentChecker.notNull(column, "column");
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(value, "value");
-    Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(type);
+    final Map<SecurityAttribute, SecurityValueProvider> mappings = mappingsFor(type);
     mappings.put(column, new StaticValueProvider(value));
   }
 
-  private <T extends ManageableSecurity> Map<SecurityAttribute, SecurityValueProvider> mappingsFor(Class<T> type) {
-    Map<SecurityAttribute, SecurityValueProvider> securityMappings = _mappings.get(type);
+  private <T extends ManageableSecurity> Map<SecurityAttribute, SecurityValueProvider> mappingsFor(final Class<T> type) {
+    final Map<SecurityAttribute, SecurityValueProvider> securityMappings = _mappings.get(type);
     if (securityMappings != null) {
       return securityMappings;
-    } else {
-      Map<SecurityAttribute, SecurityValueProvider> newMappings = Maps.newHashMap();
-      _mappings.put(type, newMappings);
-      return newMappings;
     }
+    final Map<SecurityAttribute, SecurityValueProvider> newMappings = Maps.newHashMap();
+    _mappings.put(type, newMappings);
+    return newMappings;
   }
 
-  private SecurityValueProvider propertyProvider(MetaProperty<?> property) {
+  private static SecurityValueProvider propertyProvider(final MetaProperty<?> property) {
     ArgumentChecker.notNull(property, "property");
     return new PropertyValueProvider(property);
   }
@@ -75,7 +74,7 @@ public class SecurityAttributeMapper {
    * @param security The security, possibly null (for rows that represent a portfolio node)
    * @return The value to display in the column, not null
    */
-  public Object valueFor(SecurityAttribute column, Object security) {
+  public Object valueFor(final SecurityAttribute column, final Object security) {
     // position rows have no security
     if (security == null) {
       return "";
@@ -83,37 +82,32 @@ public class SecurityAttributeMapper {
     return getValue(column, security, security.getClass());
   }
 
-  private Object getValue(SecurityAttribute column, Object security, Class<?> type) {
-    Map<SecurityAttribute, SecurityValueProvider> providerMap = getMappingsForType(type);
+  private Object getValue(final SecurityAttribute column, final Object security, final Class<?> type) {
+    final Map<SecurityAttribute, SecurityValueProvider> providerMap = getMappingsForType(type);
     if (providerMap == null) {
       return "";
-    } else {
-      SecurityValueProvider valueProvider = providerMap.get(column);
-      if (valueProvider != null) {
-        return valueProvider.getValue(security);
-      } else {
-        Class<?> superclass = type.getSuperclass();
-        if (superclass == null) {
-          return "";
-        } else {
-          return getValue(column, security, superclass);
-        }
-      }
     }
+    final SecurityValueProvider valueProvider = providerMap.get(column);
+    if (valueProvider != null) {
+      return valueProvider.getValue(security);
+    }
+    final Class<?> superclass = type.getSuperclass();
+    if (superclass == null) {
+      return "";
+    }
+    return getValue(column, security, superclass);
   }
 
-  private Map<SecurityAttribute, SecurityValueProvider> getMappingsForType(Class<?> type) {
-    Map<SecurityAttribute, SecurityValueProvider> providerMap = _mappings.get(type);
+  private Map<SecurityAttribute, SecurityValueProvider> getMappingsForType(final Class<?> type) {
+    final Map<SecurityAttribute, SecurityValueProvider> providerMap = _mappings.get(type);
     if (providerMap != null) {
       return providerMap;
-    } else {
-      Class<?> superclass = type.getSuperclass();
-      if (superclass == null) {
-        return null;
-      } else {
-        return getMappingsForType(superclass);
-      }
     }
+    final Class<?> superclass = type.getSuperclass();
+    if (superclass == null) {
+      return null;
+    }
+    return getMappingsForType(superclass);
   }
 
   /**
@@ -125,13 +119,13 @@ public class SecurityAttributeMapper {
     /** The property used to get the value from the security. */
     private final MetaProperty<?> _property;
 
-    private PropertyValueProvider(MetaProperty<?> property) {
+    private PropertyValueProvider(final MetaProperty<?> property) {
       ArgumentChecker.notNull(property, "property");
       _property = property;
     }
 
     @Override
-    public Object getValue(T security) {
+    public Object getValue(final T security) {
       return _property.get((Bean) security);
     }
   }
@@ -144,13 +138,13 @@ public class SecurityAttributeMapper {
     /** The value that is always returned from {@link #getValue} */
     private final Object _value;
 
-    private StaticValueProvider(Object value) {
+    private StaticValueProvider(final Object value) {
       ArgumentChecker.notNull(value, "value");
       _value = value;
     }
 
     @Override
-    public Object getValue(Object security) {
+    public Object getValue(final Object security) {
       return _value;
     }
   }

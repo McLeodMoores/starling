@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class StandardSmileSurfaceDataBundle extends SmileSurfaceDataBundle {
   private final double[] _forwards;
@@ -26,7 +26,8 @@ public class StandardSmileSurfaceDataBundle extends SmileSurfaceDataBundle {
   private final ForwardCurve _forwardCurve;
   private final int _nExpiries;
 
-  public StandardSmileSurfaceDataBundle(final double spot, final double[] forwards, final double[] expiries, final double[][] strikes, final double[][] impliedVols,
+  public StandardSmileSurfaceDataBundle(final double spot, final double[] forwards, final double[] expiries, final double[][] strikes,
+      final double[][] impliedVols,
       final Interpolator1D forwardCurveInterpolator) {
     ArgumentChecker.notNull(forwards, "forwards");
     ArgumentChecker.notNull(expiries, "expiries");

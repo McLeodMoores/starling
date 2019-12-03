@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.math.interpolation;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Solves cubic spline problem with natural endpoint conditions, where the second derivative at the endpoints is 0
+ * Solves cubic spline problem with natural endpoint conditions, where the second derivative at the endpoints is 0.
  */
 public class CubicSplineNaturalSolver extends CubicSplineSolver {
 
@@ -31,7 +31,7 @@ public class CubicSplineNaturalSolver extends CubicSplineSolver {
   @Override
   public DoubleMatrix2D[] solveMultiDim(final double[] xValues, final DoubleMatrix2D yValuesMatrix) {
     final int dim = yValuesMatrix.getNumberOfRows();
-    DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
 
     for (int i = 0; i < dim; ++i) {
       coefMatrix[i] = solve(xValues, yValuesMatrix.getRowVector(i).getData());
@@ -42,7 +42,9 @@ public class CubicSplineNaturalSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Matrix A
    */
   private double[][] getMatrix(final double[] intervals) {

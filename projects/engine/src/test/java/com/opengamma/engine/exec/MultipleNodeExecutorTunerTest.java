@@ -35,7 +35,7 @@ public class MultipleNodeExecutorTunerTest {
     final MultipleNodeExecutorFactory factory = Mockito.mock(MultipleNodeExecutorFactory.class);
     final MultipleNodeExecutorTuner tuner = new MultipleNodeExecutorTuner(factory);
     final JobDispatcher dispatcher = Mockito.mock(JobDispatcher.class);
-    final Map<String, Collection<Capability>> capabilities = new HashMap<String, Collection<Capability>>();
+    final Map<String, Collection<Capability>> capabilities = new HashMap<>();
     Mockito.when(dispatcher.getAllCapabilities()).thenReturn(capabilities);
     tuner.setJobDispatcher(dispatcher);
     tuner.run();

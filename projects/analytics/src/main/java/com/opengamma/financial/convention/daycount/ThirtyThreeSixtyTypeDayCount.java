@@ -16,18 +16,26 @@ public abstract class ThirtyThreeSixtyTypeDayCount extends StatelessDayCount {
   private static final long serialVersionUID = 1L;
 
   @Override
-  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear) {
+  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon,
+      final double paymentsPerYear) {
     return coupon * getDayCountFraction(previousCouponDate, date);
   }
 
   /**
    * Calculates the year fraction assuming 30 days per month and 360 days per year.
-   * @param d1 The first day of the month
-   * @param d2 The second day of the month
-   * @param m1 The first month of the year (where January is 1)
-   * @param m2 The second month of the year (where January is 1)
-   * @param y1 The first year
-   * @param y2 The second year
+   *
+   * @param d1
+   *          The first day of the month
+   * @param d2
+   *          The second day of the month
+   * @param m1
+   *          The first month of the year (where January is 1)
+   * @param m2
+   *          The second month of the year (where January is 1)
+   * @param y1
+   *          The first year
+   * @param y2
+   *          The second year
    * @return The year fraction
    */
   protected double getYears(final double d1, final double d2, final double m1, final double m2, final double y1, final double y2) {

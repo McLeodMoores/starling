@@ -20,7 +20,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A wrapper class for an annuity containing AnnuityCouponCommodityCashSettleDefinition. 
+ * A wrapper class for an annuity containing AnnuityCouponCommodityCashSettleDefinition.
  */
 public class AnnuityCouponCommodityCashSettleDefinition extends AnnuityCouponCommodityDefinition<CouponCommodityCashSettleDefinition> {
 
@@ -39,7 +39,8 @@ public class AnnuityCouponCommodityCashSettleDefinition extends AnnuityCouponCom
    */
   @Deprecated
   @Override
-  public Annuity<? extends Payment> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
+  public Annuity<? extends Payment> toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
     return toDerivative(valZdt, indexFixingTS);
   }
 

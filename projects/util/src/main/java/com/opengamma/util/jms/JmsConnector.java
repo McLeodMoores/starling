@@ -56,7 +56,7 @@ public class JmsConnector implements Connector {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the configuration name, not null
    * @param jmsTemplateTopic  the JMS Spring template for topic-based messaging, not null
    * @param jmsTemplateQueue  the JMS Spring template for queue-based messaging, not null
@@ -65,9 +65,9 @@ public class JmsConnector implements Connector {
    * @param clientBrokerUri  the client configuration to connect to the broker, such as a URI, null if no config provided for clients
    * @param topicName  the topic name, null if left up to the application
    */
-  public JmsConnector(String name, JmsTemplate jmsTemplateTopic, JmsTemplate jmsTemplateQueue, 
-      JmsTopicContainerFactory containerFactoryTopic, JmsQueueContainerFactory containerFactoryQueue,
-      URI clientBrokerUri, String topicName) {
+  public JmsConnector(final String name, final JmsTemplate jmsTemplateTopic, final JmsTemplate jmsTemplateQueue,
+      final JmsTopicContainerFactory containerFactoryTopic, final JmsQueueContainerFactory containerFactoryQueue,
+      final URI clientBrokerUri, final String topicName) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(jmsTemplateTopic, "jmsTemplateTopic");
     ArgumentChecker.notNull(jmsTemplateQueue, "jmsTemplateQueue");
@@ -97,7 +97,7 @@ public class JmsConnector implements Connector {
    * <p>
    * This extracts the factory of the topic template, which should be the same as that of the queue template.
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the JMS connection factory, may be null
    */
   public ConnectionFactory getConnectionFactory() {
@@ -108,7 +108,7 @@ public class JmsConnector implements Connector {
    * Gets the shared JMS template for topic-based messaging.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the JMS template for topic-based messaging, null if not setup by configuration
    */
   public JmsTemplate getJmsTemplateTopic() {
@@ -119,7 +119,7 @@ public class JmsConnector implements Connector {
    * Gets the shared JMS template for queue-based messaging.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the JMS template for queue-based messaging, null if not setup by configuration
    */
   public JmsTemplate getJmsTemplateQueue() {
@@ -128,7 +128,7 @@ public class JmsConnector implements Connector {
 
   /**
    * Gets the topic container factory.
-   * 
+   *
    * @return the factory for topic containers, null if not available
    */
   public JmsTopicContainerFactory getTopicContainerFactory() {
@@ -149,7 +149,7 @@ public class JmsConnector implements Connector {
    * <p>
    * The client needs some form of configuration, frequently a URI, to connect to the JMS broker.
    * This field provides that configuration.
-   * 
+   *
    * @return the client broker configuration, null if no config provided for clients
    */
   public URI getClientBrokerUri() {
@@ -159,7 +159,7 @@ public class JmsConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Gets the topic name.
-   * 
+   *
    * @return the topic name, null if topic left up to the application
    */
   public String getTopicName() {
@@ -168,19 +168,19 @@ public class JmsConnector implements Connector {
 
   /**
    * Returns a copy of this connector with a new topic name.
-   * 
+   *
    * @param topicName  the new topic name, not empty
    * @return a connector with the specified topic name, not null
    */
-  public JmsConnector withTopicName(String topicName) {
+  public JmsConnector withTopicName(final String topicName) {
     ArgumentChecker.notEmpty(topicName, "topicName");
     return new JmsConnector(_name, _jmsTemplateTopic, _jmsTemplateQueue, _topicContainerFactory, _queueContainerFactory, _clientBrokerUri, topicName);
   }
 
   //-------------------------------------------------------------------------
   /**
-   * Ensures that the topic name is set, using the current name or the specified default
-   * 
+   * Ensures that the topic name is set, using the current name or the specified default.
+   *
    * @return a connector which definitely has a topic name, not null
    */
   public JmsConnector ensureTopicName() {
@@ -191,12 +191,12 @@ public class JmsConnector implements Connector {
   }
 
   /**
-   * Ensures that the topic name is set, using the current name or the specified default
-   * 
+   * Ensures that the topic name is set, using the current name or the specified default.
+   *
    * @param defaultTopicName  the default topic name, not empty
    * @return a connector which definitely has a topic name, not null
    */
-  public JmsConnector ensureTopicName(String defaultTopicName) {
+  public JmsConnector ensureTopicName(final String defaultTopicName) {
     if (StringUtils.isNotEmpty(_topicName)) {
       return this;
     }
@@ -212,7 +212,7 @@ public class JmsConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override

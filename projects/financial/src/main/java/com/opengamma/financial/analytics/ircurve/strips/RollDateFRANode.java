@@ -69,16 +69,23 @@ public class RollDateFRANode extends CurveNode {
   }
 
   /**
-   * Sets the useFixings field to true and the node name to null
-   * @param startTenor The start tenor, not null
-   * @param indexTenor The index tenor, not null
-   * @param rollDateStartNumber The IMM date start number, not negative or zero
-   * @param rollDateEndNumber The IMM date end number, not negative or zero
-   * @param convention The swap convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
+   * Sets the useFixings field to true and the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param indexTenor
+   *          The index tenor, not null
+   * @param rollDateStartNumber
+   *          The IMM date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The IMM date end number, not negative or zero
+   * @param convention
+   *          The swap convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
    */
-  public RollDateFRANode(final Tenor startTenor, final Tenor indexTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId convention,
-      final String curveNodeIdMapperName) {
+  public RollDateFRANode(final Tenor startTenor, final Tenor indexTenor, final int rollDateStartNumber, final int rollDateEndNumber,
+      final ExternalId convention, final String curveNodeIdMapperName) {
     super(curveNodeIdMapperName);
     setStartTenor(startTenor);
     setIndexTenor(indexTenor);
@@ -88,17 +95,25 @@ public class RollDateFRANode extends CurveNode {
   }
 
   /**
-   * Sets the useFixings field to true and the node name to null
-   * @param startTenor The start tenor, not null
-   * @param indexTenor The index tenor, not null
-   * @param rollDateStartNumber The IMM date start number, not negative or zero
-   * @param rollDateEndNumber The IMM date end number, not negative or zero
-   * @param convention The IMM FRA convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
-   * @param name The curve node name
+   * Sets the useFixings field to true and the node name to null.
+   *
+   * @param startTenor
+   *          The start tenor, not null
+   * @param indexTenor
+   *          The index tenor, not null
+   * @param rollDateStartNumber
+   *          The IMM date start number, not negative or zero
+   * @param rollDateEndNumber
+   *          The IMM date end number, not negative or zero
+   * @param convention
+   *          The IMM FRA convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
+   * @param name
+   *          The curve node name
    */
-  public RollDateFRANode(final Tenor startTenor, final Tenor indexTenor, final int rollDateStartNumber, final int rollDateEndNumber, final ExternalId convention,
-      final String curveNodeIdMapperName, final String name) {
+  public RollDateFRANode(final Tenor startTenor, final Tenor indexTenor, final int rollDateStartNumber, final int rollDateEndNumber,
+      final ExternalId convention, final String curveNodeIdMapperName, final String name) {
     super(curveNodeIdMapperName, name);
     setStartTenor(startTenor);
     setIndexTenor(indexTenor);
@@ -108,7 +123,7 @@ public class RollDateFRANode extends CurveNode {
   }
 
   @Override
-  public Tenor getResolvedMaturity() { 
+  public Tenor getResolvedMaturity() {
     final int m = getIndexTenor().getPeriod().getMonths(); // TODO: Review: should it be index tenor or Roll date adjuster period?
     return Tenor.of(getStartTenor().getPeriod().plusMonths(m * getRollDateEndNumber()));
   }

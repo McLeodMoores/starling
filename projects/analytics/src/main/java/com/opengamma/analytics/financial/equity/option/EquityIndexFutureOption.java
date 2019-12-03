@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.option;
@@ -32,7 +32,7 @@ public class EquityIndexFutureOption implements InstrumentDerivative {
   private final double _pointValue;
   /** The reference price is the transaction price on the transaction date and the last close price afterward */
   private final double _referencePrice;
-  
+
   /**
    * @param expiry The time to expiry in years, greater than zero.
    * @param underlying The underlying equity index future, not null
@@ -42,9 +42,11 @@ public class EquityIndexFutureOption implements InstrumentDerivative {
    * @param pointValue The point value of the option
    * @param referencePrice last close price (margin price) except on trade date on which it is the trade price
    */
-  public EquityIndexFutureOption(final double expiry, final EquityIndexFuture underlying, final double strike, final ExerciseDecisionType exerciseType, final boolean isCall,
-      final double pointValue, double referencePrice) {
-    if (expiry < 0.0) { throw new OpenGammaRuntimeException("Expired"); }
+  public EquityIndexFutureOption(final double expiry, final EquityIndexFuture underlying, final double strike, final ExerciseDecisionType exerciseType,
+      final boolean isCall, final double pointValue, final double referencePrice) {
+    if (expiry < 0.0) {
+      throw new OpenGammaRuntimeException("Expired");
+    }
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNegativeOrZero(strike, "strike");
     ArgumentChecker.notNull(exerciseType, "exercise type");
@@ -104,7 +106,7 @@ public class EquityIndexFutureOption implements InstrumentDerivative {
   public double getPointValue() {
     return _pointValue;
   }
-  
+
   /**
    * Gets the reference price, the trade price on trade date. or the last close price thereafter.
    * @return The reference price
@@ -132,15 +134,15 @@ public class EquityIndexFutureOption implements InstrumentDerivative {
     result = prime * result + _exerciseType.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCall ? 1231 : 1237);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlying.hashCode();
     temp = Double.doubleToLongBits(_pointValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));   
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

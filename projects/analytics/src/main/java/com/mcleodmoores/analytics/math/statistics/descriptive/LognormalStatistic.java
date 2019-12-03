@@ -20,6 +20,7 @@ public @interface LognormalStatistic {
 
   /**
    * Any aliases of the calculator.
+   * @return  the aliases
    */
   String[] aliases() default { };
 }

@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantC
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
 
 /**
- * Fudge builder for objects used in ISDA pricing of CDS, CDX and CDS options
+ * Fudge builder for objects used in ISDA pricing of CDS, CDX and CDS options.
  *
  */
 final class ISDAResultsBuilder {
@@ -25,7 +25,7 @@ final class ISDAResultsBuilder {
   }
 
   /**
-   * Fudge builder for {@link ISDACompliantCurve}
+   * Fudge builder for {@link ISDACompliantCurve}.
    */
   @FudgeBuilderFor(ISDACompliantCurve.class)
   public static final class ISDACompliantCurveBuilder extends AbstractFudgeBuilder<ISDACompliantCurve> {
@@ -48,14 +48,12 @@ final class ISDAResultsBuilder {
   }
 
   /**
-   * Fudge builder for {@link ISDACompliantYieldCurve}
+   * Fudge builder for {@link ISDACompliantYieldCurve}.
    */
   @FudgeBuilderFor(ISDACompliantYieldCurve.class)
   public static final class ISDACompliantYieldCurveBuilder extends AbstractFudgeBuilder<ISDACompliantYieldCurve> {
     private static final String T_FIELD_NAME = "t";
-    private static final String R_FIELD_NAME = "r";
     private static final String RT_FIELD_NAME = "rt";
-    private static final String DF_FIELD_NAME = "df";
 
     @Override
     public ISDACompliantYieldCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
@@ -72,7 +70,7 @@ final class ISDAResultsBuilder {
   }
 
   /**
-   * Fudge builder for {@link ISDACompliantCreditCurve}
+   * Fudge builder for {@link ISDACompliantCreditCurve}.
    */
   @FudgeBuilderFor(ISDACompliantCreditCurve.class)
   public static final class ISDACompliantCreditCurveBuilder extends AbstractFudgeBuilder<ISDACompliantCreditCurve> {
@@ -89,7 +87,7 @@ final class ISDAResultsBuilder {
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final ISDACompliantCreditCurve object) {
       serializer.addToMessage(message, T_FIELD_NAME, null, object.getT());
-      serializer.addToMessage(message, RT_FIELD_NAME, null, object.getRt());;
+      serializer.addToMessage(message, RT_FIELD_NAME, null, object.getRt());
     }
   }
 

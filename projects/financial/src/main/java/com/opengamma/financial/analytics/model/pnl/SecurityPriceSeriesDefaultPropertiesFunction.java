@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -19,13 +19,13 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class SecurityPriceSeriesDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingCalculator;
-  
+
   public SecurityPriceSeriesDefaultPropertiesFunction(final String samplingPeriod, final String scheduleCalculator, final String samplingCalculator) {
     super(FinancialSecurityTypes.FINANCIAL_SECURITY.or(FinancialSecurityTypes.RAW_SECURITY), true);
     ArgumentChecker.notNull(samplingPeriod, "sampling period name");
@@ -40,11 +40,11 @@ public class SecurityPriceSeriesDefaultPropertiesFunction extends DefaultPropert
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     try {
       return FinancialSecurityUtils.getCurrency(target.getSecurity()) != null;
-    } catch (UnsupportedOperationException e) {
+    } catch (final UnsupportedOperationException e) {
       return false;
     }
   }
-  
+
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     defaults.addValuePropertyName(ValueRequirementNames.PRICE_SERIES, ValuePropertyNames.SAMPLING_PERIOD);
@@ -53,10 +53,11 @@ public class SecurityPriceSeriesDefaultPropertiesFunction extends DefaultPropert
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriod);
-    } 
+    }
     if (ValuePropertyNames.SCHEDULE_CALCULATOR.equals(propertyName)) {
       return Collections.singleton(_scheduleCalculator);
     }
@@ -65,5 +66,5 @@ public class SecurityPriceSeriesDefaultPropertiesFunction extends DefaultPropert
     }
     return null;
   }
-  
+
 }

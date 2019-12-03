@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.trs;
@@ -36,67 +36,64 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Block Curve Sensitivity for Equity Total Return Swap
+ * Block Curve Sensitivity for Equity Total Return Swap.
  */
 public class EquityTotalReturnSwapBCSFunction extends EquityTotalReturnSwapFunction {
 
-   /** The curve sensitivity calculator */
+  /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<EquityTrsDataBundle, MultipleCurrencyMulticurveSensitivity> PVCSEDC =
       PresentValueCurveSensitivityEquityDiscountingCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<EquityTrsDataBundle> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSEDC);
+  private static final ParameterSensitivityParameterCalculator<EquityTrsDataBundle> PSC = new ParameterSensitivityParameterCalculator<>(PVCSEDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<EquityTrsDataBundle> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<EquityTrsDataBundle> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public EquityTotalReturnSwapBCSFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
   }
-  
+
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new EquityTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
-                                                     getDefinitionToDerivativeConverter(context),
-                                                     true) {
+        getDefinitionToDerivativeConverter(context),
+        true) {
 
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext,
-                                             FunctionInputs inputs,
-                                             ComputationTarget target,
-                                             Set<ValueRequirement> desiredValues,
-                                             InstrumentDerivative derivative,
-                                             FXMatrix fxMatrix) {
-        EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
-        CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
-        for (ComputedValue cv : inputs.getAllValues()) {
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
+          final FunctionInputs inputs,
+          final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative,
+          final FXMatrix fxMatrix) {
+        final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
+        final CurveBuildingBlockBundle blocks = new CurveBuildingBlockBundle();
+        for (final ComputedValue cv : inputs.getAllValues()) {
           if (JACOBIAN_BUNDLE.equals(cv.getSpecification().getValueName())) {
-            blocks.addAll((CurveBuildingBlockBundle) cv.getValue()); 
+            blocks.addAll((CurveBuildingBlockBundle) cv.getValue());
           }
         }
-        
-        Set<ComputedValue> result = new HashSet<>();
-        MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, data, blocks);
-        for (ValueRequirement desiredValue : desiredValues) {
+
+        final Set<ComputedValue> result = new HashSet<>();
+        final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, data, blocks);
+        for (final ValueRequirement desiredValue : desiredValues) {
           final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES,
-                                                                 target.toSpecification(),
-                                                                 desiredValue.getConstraints().copy().get());
+              target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;
       }
 
       @Override
-      protected Collection<ValueProperties.Builder> getResultProperties(FunctionCompilationContext compilationContext,
-                                                                        ComputationTarget target) {
-        ValueProperties.Builder properties = createValueProperties()
+      protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext,
+          final ComputationTarget target) {
+        final ValueProperties.Builder properties = createValueProperties()
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .withAny(CURVE_EXPOSURES)
             .withAny(PROPERTY_CURVE_TYPE);

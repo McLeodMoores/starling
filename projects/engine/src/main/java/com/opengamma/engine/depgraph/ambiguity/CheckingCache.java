@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -27,11 +27,11 @@ import com.opengamma.engine.value.ValueRequirement;
     private final Object _key;
     private ValueRequirement _requirement;
 
-    public VisitedKey() {
+    VisitedKey() {
       _key = new Object();
     }
 
-    public VisitedKey(final ValueRequirement requirement) {
+    VisitedKey(final ValueRequirement requirement) {
       _key = new Object();
       _requirement = requirement;
     }
@@ -48,6 +48,9 @@ import com.opengamma.engine.value.ValueRequirement;
     @Override
     public boolean equals(final Object o) {
       if (o == this) {
+        return false;
+      }
+      if (!(o instanceof VisitedKey)) {
         return false;
       }
       final VisitedKey other = (VisitedKey) o;
@@ -69,15 +72,15 @@ import com.opengamma.engine.value.ValueRequirement;
 
   }
 
-  private final Set<ValueRequirement> _visited = new HashSet<ValueRequirement>();
+  private final Set<ValueRequirement> _visited = new HashSet<>();
   private final Map<Set<ValueRequirement>, VisitedKey> _visitedKey;
   private final ConcurrentMap<VisitedKey, FullRequirementResolution> _cache;
   private final VisitedKey _greedyCacheKey;
 
   @SuppressWarnings("unchecked")
-  public CheckingCache(final boolean greedyCaching, final ConcurrentMap<?, FullRequirementResolution> cache) {
+  CheckingCache(final boolean greedyCaching, final ConcurrentMap<?, FullRequirementResolution> cache) {
     _visitedKey = greedyCaching ? null : new HashMap<Set<ValueRequirement>, VisitedKey>();
-    _cache = (cache != null) ? (ConcurrentMap<VisitedKey, FullRequirementResolution>) cache : new ConcurrentHashMap<VisitedKey, FullRequirementResolution>();
+    _cache = cache != null ? (ConcurrentMap<VisitedKey, FullRequirementResolution>) cache : new ConcurrentHashMap<VisitedKey, FullRequirementResolution>();
     _greedyCacheKey = greedyCaching ? new VisitedKey() : null;
   }
 
@@ -110,7 +113,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
   public FullRequirementResolution put(final FullRequirementResolution resolved) {
     final FullRequirementResolution existing = _cache.putIfAbsent(getVisitedKey(resolved.getRequirement()).clone(), resolved);
-    return (existing != null) ? existing : resolved;
+    return existing != null ? existing : resolved;
   }
 
 }

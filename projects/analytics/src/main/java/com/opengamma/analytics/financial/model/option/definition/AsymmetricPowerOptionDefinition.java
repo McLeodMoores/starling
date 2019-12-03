@@ -10,17 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
  * Definition for an asymmetric power options (a.k.a. standard power options).
- * <p>
- * The exercise style is European. The payoff of these options is:
- * $$
- * \begin{align*}
- * c &= \max(S^i - K, 0)\\\\
- * p &= \max(K - S^i, 0)
- * \end{align*}
- * $$
- * where $K$ is the strike, $i$ is the power, with $i > 0$, and $S$ is the spot.
  */
 public class AsymmetricPowerOptionDefinition extends OptionDefinition {
   private final OptionPayoffFunction<StandardOptionDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionDataBundle>() {

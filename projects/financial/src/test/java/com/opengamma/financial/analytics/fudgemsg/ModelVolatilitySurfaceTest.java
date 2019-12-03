@@ -71,10 +71,11 @@ public class ModelVolatilitySurfaceTest extends AnalyticsTestBase {
   public void testMoneynessSurfaceBackedByGrid() {
     final ConstantDoublesSurface surface = ConstantDoublesSurface.from(0.5);
     final ForwardCurve curve = new ForwardCurve(1);
-    final StandardSmileSurfaceDataBundle gridData = new StandardSmileSurfaceDataBundle(100.0, new double[] {101,102,103}, new double[] {1,2,3},
-        new double[][] {{80,80},{100,100},{120,120}}, new double[][] {{.3,.25},{.2,.2},{.3,.25}}, new LinearInterpolator1D() );
+    final StandardSmileSurfaceDataBundle gridData = new StandardSmileSurfaceDataBundle(100.0, new double[] {101, 102, 103}, new double[] {1, 2, 3},
+        new double[][] {{80, 80}, {100, 100}, {120, 120}}, new double[][] {{.3, .25}, {.2, .2}, {.3, .25}}, new LinearInterpolator1D());
     final VolatilitySurfaceInterpolator interpolator = new VolatilitySurfaceInterpolator();
-    final BlackVolatilitySurfaceMoneynessFcnBackedByGrid moneyness1 = new BlackVolatilitySurfaceMoneynessFcnBackedByGrid(surface, curve, gridData, interpolator);
+    final BlackVolatilitySurfaceMoneynessFcnBackedByGrid moneyness1 =
+        new BlackVolatilitySurfaceMoneynessFcnBackedByGrid(surface, curve, gridData, interpolator);
     BlackVolatilitySurfaceMoneynessFcnBackedByGrid moneyness2 = cycleObject(BlackVolatilitySurfaceMoneynessFcnBackedByGrid.class, moneyness1);
     assertArrayEquals(moneyness1.getGridData().getExpiries(), moneyness2.getGridData().getExpiries(), 0);
     assertArrayEquals(moneyness1.getGridData().getForwards(), moneyness2.getGridData().getForwards(), 0);

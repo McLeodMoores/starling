@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -77,8 +77,8 @@ public class ExampleUsBondPortfolioGeneratorTool extends AbstractPortfolioGenera
       final double coupon = (1 + rng.nextInt(39)) / 8.;
       final double issuePrice = 100 - 3 * rng.nextDouble();
       final GovernmentBondSecurity bond = new GovernmentBondSecurity(issuer.get(2), issuer.get(3), issuer.get(0), issuer.get(4), Currency.of(issuer.get(1)),
-          YieldConventionFactory.of(issuer.get(5)), new Expiry(maturity), issuer.get(6), coupon, couponFrequency, dayCountConvention,
-          startDate, startDate, startDate.plusMonths(6), issuePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+          YieldConventionFactory.of(issuer.get(5)), new Expiry(maturity), issuer.get(6), coupon, couponFrequency, dayCountConvention, startDate, startDate,
+          startDate.plusMonths(6), issuePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
       final String name = generateName(issuer.get(7), maturity.toLocalDate(), coupon);
       bond.setName(name);
       bond.setExternalIdBundle(ExternalIdBundle.of(ExternalSchemes.syntheticSecurityId(name)));
@@ -89,9 +89,13 @@ public class ExampleUsBondPortfolioGeneratorTool extends AbstractPortfolioGenera
 
   /**
    * Generates a ticker / coupon / maturity name for a bond.
-   * @param issuerPrefix The bond prefix for an issuer
-   * @param maturity The bond maturity date
-   * @param coupon The (fixed) coupon
+   *
+   * @param issuerPrefix
+   *          The bond prefix for an issuer
+   * @param maturity
+   *          The bond maturity date
+   * @param coupon
+   *          The (fixed) coupon
    * @return The T/C/M
    */
   private static String generateName(final String issuerPrefix, final LocalDate maturity, final double coupon) {
@@ -151,10 +155,12 @@ public class ExampleUsBondPortfolioGeneratorTool extends AbstractPortfolioGenera
     private int _positionCount;
 
     /**
-     * @param securities The government bond securities
-     * @param amounts The amount in each position
+     * @param securities
+     *          The government bond securities
+     * @param amounts
+     *          The amount in each position
      */
-    public BondSecurityAndPositionGenerator(final List<BondSecurity> securities, final List<Double> amounts) {
+    BondSecurityAndPositionGenerator(final List<BondSecurity> securities, final List<Double> amounts) {
       _securities = securities;
       _amounts = amounts;
     }

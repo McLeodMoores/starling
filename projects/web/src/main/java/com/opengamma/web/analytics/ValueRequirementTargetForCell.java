@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Joda bean containing the ValueRequirement and Column Set/Calc Config for a specific cell
+ * Joda bean containing the ValueRequirement and Column Set/Calc Config for a specific cell.
  */
 @BeanDefinition
 public final class ValueRequirementTargetForCell implements ImmutableBean {
@@ -46,13 +46,15 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
   /**
    * Constructor for the definition.
    *
-   * @param columnSet the name of the Column Set/Calc Config
-   * @param valueRequirement ValueRequirement for cell
+   * @param columnSet
+   *          the name of the Column Set/Calc Config
+   * @param valueRequirement
+   *          ValueRequirement for cell
    */
   @ImmutableConstructor
   public ValueRequirementTargetForCell(
-      String columnSet,
-      ValueRequirement valueRequirement) {
+      final String columnSet,
+      final ValueRequirement valueRequirement) {
 
     ArgumentChecker.notNull(columnSet, "columnSet");
     ArgumentChecker.notNull(valueRequirement, "valuleSpecification");
@@ -131,8 +133,8 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ValueRequirementTargetForCell other = (ValueRequirementTargetForCell) obj;
-      return JodaBeanUtils.equal(getColumnSet(), other.getColumnSet()) &&
-          JodaBeanUtils.equal(getValueRequirement(), other.getValueRequirement());
+      return JodaBeanUtils.equal(_columnSet, other._columnSet) &&
+          JodaBeanUtils.equal(_valueRequirement, other._valueRequirement);
     }
     return false;
   }
@@ -140,8 +142,8 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getColumnSet());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValueRequirement());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_columnSet);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valueRequirement);
     return hash;
   }
 
@@ -149,8 +151,8 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("ValueRequirementTargetForCell{");
-    buf.append("columnSet").append('=').append(getColumnSet()).append(',').append(' ');
-    buf.append("valueRequirement").append('=').append(JodaBeanUtils.toString(getValueRequirement()));
+    buf.append("columnSet").append('=').append(_columnSet).append(',').append(' ');
+    buf.append("valueRequirement").append('=').append(JodaBeanUtils.toString(_valueRequirement));
     buf.append('}');
     return buf.toString();
   }
@@ -313,19 +315,31 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

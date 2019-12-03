@@ -1,14 +1,16 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-
 package com.opengamma.integration.copier.sheet.reader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,67 +28,96 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A class for importing portfolio data from XLS worksheets
+ * A class for importing portfolio data from XLS worksheets.
  */
 public class XlsSheetReader extends SheetReader {
-
-  private static final Logger s_logger = LoggerFactory.getLogger(XlsSheetReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XlsSheetReader.class);
 
   private Sheet _sheet;
-  private Workbook _workbook;
+  private final Workbook _workbook;
   private int _currentRowIndex;
   private InputStream _inputStream;
-  
-  public XlsSheetReader(String filename, int sheetIndex) {
-    
+
+  /**
+   * Creates an Excel sheet reader.
+   *
+   * @param filename
+   *          the .xls file name, not null or empty
+   * @param sheetIndex
+   *          the index of the sheet to read
+   */
+  public XlsSheetReader(final String filename, final int sheetIndex) {
     ArgumentChecker.notEmpty(filename, "filename");
 
     _inputStream = openFile(filename);
     _workbook = getWorkbook(_inputStream);
     _sheet = _workbook.getSheetAt(sheetIndex);
     _currentRowIndex = _sheet.getFirstRowNum();
-    
+
     // Read in the header row
-    Row rawRow = _sheet.getRow(_currentRowIndex++);
-    
+    final Row rawRow = _sheet.getRow(_currentRowIndex++);
+
     // Normalise read-in headers (to lower case) and set as columns
     setColumns(getColumnNames(rawRow));
   }
-  
-  public XlsSheetReader(String filename, String sheetName) {
-    
+
+  /**
+   * Creates an Excel sheet reader.
+   *
+   * @param filename
+   *          the .xls file name, not null or empty
+   * @param sheetName
+   *          the name of the sheet to read, not null or empty
+   */
+  public XlsSheetReader(final String filename, final String sheetName) {
+
     ArgumentChecker.notEmpty(filename, "filename");
     ArgumentChecker.notEmpty(sheetName, "sheetName");
 
-    InputStream fileInputStream = openFile(filename);
+    final InputStream fileInputStream = openFile(filename);
     _workbook = getWorkbook(fileInputStream);
     _sheet = getSheetSafely(sheetName);
     _currentRowIndex = _sheet.getFirstRowNum();
 
     // Read in the header row
-    Row rawRow = _sheet.getRow(_currentRowIndex++);
+    final Row rawRow = _sheet.getRow(_currentRowIndex++);
 
     // Normalise read-in headers (to lower case) and set as columns
-    setColumns(getColumnNames(rawRow)); 
+    setColumns(getColumnNames(rawRow));
   }
 
-  public XlsSheetReader(InputStream inputStream, int sheetIndex) {
-    
+  /**
+   * Creates an Excel sheet reader.
+   *
+   * @param inputStream
+   *          a file stream, not null
+   * @param sheetIndex
+   *          the index of the sheet to read
+   */
+  public XlsSheetReader(final InputStream inputStream, final int sheetIndex) {
     ArgumentChecker.notNull(inputStream, "inputStream");
 
     _workbook = getWorkbook(inputStream);
     _sheet = _workbook.getSheetAt(sheetIndex);
     _currentRowIndex = _sheet.getFirstRowNum();
-    
+
     // Read in the header row
-    Row rawRow = _sheet.getRow(_currentRowIndex++);
-    
+    final Row rawRow = _sheet.getRow(_currentRowIndex++);
+
     // Normalise read-in headers (to lower case) and set as columns
     setColumns(getColumnNames(rawRow));
   }
-  
-  public XlsSheetReader(InputStream inputStream, String sheetName) {
-    
+
+  /**
+   * Creates an Excel sheet reader.
+   *
+   * @param inputStream
+   *          a file stream, not null
+   * @param sheetName
+   *          the name of the sheet to read
+   */
+  public XlsSheetReader(final InputStream inputStream, final String sheetName) {
+
     ArgumentChecker.notNull(inputStream, "inputStream");
     ArgumentChecker.notEmpty(sheetName, "sheetName");
 
@@ -95,56 +126,64 @@ public class XlsSheetReader extends SheetReader {
     _currentRowIndex = _sheet.getFirstRowNum();
 
     // Read in the header row
-    Row rawRow = _sheet.getRow(_currentRowIndex++);
+    final Row rawRow = _sheet.getRow(_currentRowIndex++);
 
-    String[] columns = getColumnNames(rawRow);
-    setColumns(columns); 
+    final String[] columns = getColumnNames(rawRow);
+    setColumns(columns);
   }
 
-  public XlsSheetReader(Workbook workbook, String sheetName) {
+  /**
+   * Creates an Excel sheet reader.
+   *
+   * @param workbook
+   *          a .xls workbook, not null
+   * @param sheetName
+   *          the name of the sheet to read, not null or empty
+   */
+  public XlsSheetReader(final Workbook workbook, final String sheetName) {
     ArgumentChecker.notNull(workbook, "workbook");
     ArgumentChecker.notEmpty(sheetName, "sheetName");
     _workbook = workbook;
     _sheet = getSheetSafely(sheetName);
     if (_sheet == null) {
       _sheet = _workbook.createSheet(sheetName);
-      s_logger.warn("Workbook does not contain a sheet for {}", sheetName);
+      LOGGER.warn("Workbook does not contain a sheet for {}", sheetName);
     }
     _currentRowIndex = _sheet.getFirstRowNum();
   }
 
-  private Sheet getSheetSafely(String sheetName) {
+  private Sheet getSheetSafely(final String sheetName) {
     Sheet sheet = _workbook.getSheet(sheetName);
     if (sheet == null) {
       sheet = _workbook.createSheet(sheetName);
-      s_logger.warn("Workbook does not contain a sheet for {}, temporary sheet created", sheetName);
+      LOGGER.warn("Workbook does not contain a sheet for {}, temporary sheet created", sheetName);
     }
     return sheet;
   }
 
-  private Workbook getWorkbook(InputStream inputStream) {
+  private static Workbook getWorkbook(final InputStream inputStream) {
     try {
       return new HSSFWorkbook(inputStream);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error opening Excel workbook: " + ex.getMessage());
-    }    
+    }
   }
-  
+
   @Override
   public Map<String, String> loadNextRow() {
-    
+
     // Get a reference to the next Excel row
-    Row rawRow = _sheet.getRow(_currentRowIndex++);
+    final Row rawRow = _sheet.getRow(_currentRowIndex++);
 
     // If the row is empty return null (assume end of table)
     if (rawRow == null || rawRow.getFirstCellNum() == -1) {
       return null; // new HashMap<String, String>();
-    } 
+    }
 
     // Map read-in row onto expected columns
-    Map<String, String> result = new HashMap<String, String>();
+    final Map<String, String> result = new HashMap<>();
     for (int i = 0; i < getColumns().length; i++) {
-      String cell = getCell(rawRow, rawRow.getFirstCellNum() + i).trim();
+      final String cell = getCell(rawRow, rawRow.getFirstCellNum() + i).trim();
       if (cell != null && cell.length() > 0) {
         result.put(getColumns()[i], cell);
       }
@@ -152,37 +191,36 @@ public class XlsSheetReader extends SheetReader {
 
     return result;
   }
-  
-  private String[] getColumnNames(Row rawRow) {
-    String[] columns = new String[rawRow.getPhysicalNumberOfCells()];
+
+  private static String[] getColumnNames(final Row rawRow) {
+    final String[] columns = new String[rawRow.getPhysicalNumberOfCells()];
     for (int i = 0; i < rawRow.getPhysicalNumberOfCells(); i++) {
       columns[i] = getCell(rawRow, i).trim().toLowerCase();
     }
     return columns;
   }
-  
-  private static Cell getCellSafe(Row rawRow, int column) {
-    return rawRow.getCell(column, Row.CREATE_NULL_AS_BLANK);
+
+  private static Cell getCellSafe(final Row rawRow, final int column) {
+    return rawRow.getCell(column, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
   }
-  
-  private static String getCell(Row rawRow, int column) {
+
+  private static String getCell(final Row rawRow, final int column) {
     return getCellAsString(getCellSafe(rawRow, column));
   }
-  
-  private static String getCellAsString(Cell cell) {
+
+  private static String getCellAsString(final Cell cell) {
 
     if (cell == null) {
       return "";
     }
-    switch (cell.getCellType()) {
-      case Cell.CELL_TYPE_NUMERIC:
+    switch (cell.getCellTypeEnum()) {
+      case NUMERIC:
         return Double.toString(cell.getNumericCellValue());
-        //return (new DecimalFormat("#.##")).format(cell.getNumericCellValue());
-      case Cell.CELL_TYPE_STRING:
+      case STRING:
         return cell.getStringCellValue();
-      case Cell.CELL_TYPE_BOOLEAN:
+      case BOOLEAN:
         return Boolean.toString(cell.getBooleanCellValue());
-      case Cell.CELL_TYPE_BLANK:
+      case BLANK:
         return "";
       default:
         return null;
@@ -192,116 +230,133 @@ public class XlsSheetReader extends SheetReader {
   @Override
   public void close() {
     try {
-      if (_inputStream != null) { //if sheet is multi sheeted, the first call with close input stream
+      if (_inputStream != null) { // if sheet is multi sheeted, the first call with close input stream
         _inputStream.close();
       }
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error closing Excel workbook: " + ex.getMessage());
     }
   }
 
+  /**
+   * Gets and increments the current row index.
+   *
+   * @return the current row index
+   */
   public int getCurrentRowIndex() {
     return _currentRowIndex++;
   }
 
   /**
-   * @param startRow, int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol, int to specify starting point
-   * @return Map<String, String> of all key/values until and empty row is reached.
+   * Reads a sheet from the start row and column and returns a map of key / values.
+   *
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;String, String&gt; of all key/values until an empty row is reached.
    */
-  public Map<String, String> readKeyValueBlock(int startRow, int startCol) {
-    Map<String, String> keyValueMap = new HashMap<>();
+  public Map<String, String> readKeyValueBlock(final int startRow, final int startCol) {
+    final Map<String, String> keyValueMap = new HashMap<>();
     _currentRowIndex = startRow;
     Row row = _sheet.getRow(_currentRowIndex);
     while (row != null) {
-      Cell keyCell = row.getCell(startCol);
-      Cell valueCell = row.getCell(startCol + 1);
+      final Cell keyCell = row.getCell(startCol);
+      final Cell valueCell = row.getCell(startCol + 1);
       keyValueMap.put(getCellAsString(keyCell), getCellAsString(valueCell));
       _currentRowIndex++;
       row = _sheet.getRow(_currentRowIndex);
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
     return keyValueMap;
   }
 
   /**
-   * @param startRow, int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol, int to specify starting point
-   * @return Map<String, ObjectsPair<String, String>> of all key/value-pair until and empty row is reached.
+   * Reads a sheet from the start row and column and returns a map of key / pair values.
+   *
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;String, ObjectsPair&lt;String, String&gt;&gt; of all key/value-pair until an empty row is reached.
    */
-  public Map<String, ObjectsPair<String, String>> readKeyPairBlock(int startRow, int startCol) {
-    Map<String, ObjectsPair<String, String>> keyPairMap = new HashMap<>();
+  public Map<String, ObjectsPair<String, String>> readKeyPairBlock(final int startRow, final int startCol) {
+    final Map<String, ObjectsPair<String, String>> keyPairMap = new HashMap<>();
     _currentRowIndex = startRow;
     Row row = _sheet.getRow(_currentRowIndex);
     while (row != null) {
-      Cell keyCell = row.getCell(startCol);
-      Cell firstValueCell = row.getCell(startCol + 1);
-      Cell secondValueCell = row.getCell(startCol + 2);
+      final Cell keyCell = row.getCell(startCol);
+      final Cell firstValueCell = row.getCell(startCol + 1);
+      final Cell secondValueCell = row.getCell(startCol + 2);
       try {
-        String stringCellValue = getCellAsString(keyCell);
-        String stringFirstCellValue = getCellAsString(firstValueCell);
-        String stringSecondCellValue = getCellAsString(secondValueCell);
+        final String stringCellValue = getCellAsString(keyCell);
+        final String stringFirstCellValue = getCellAsString(firstValueCell);
+        final String stringSecondCellValue = getCellAsString(secondValueCell);
         keyPairMap.put(stringCellValue,
-                       ObjectsPair.of(stringFirstCellValue, stringSecondCellValue));
-      } catch (IllegalStateException ise) {
-        s_logger.error("Could not extract String value from cell col={} row={} sheet={}", startCol, _currentRowIndex, _sheet.getSheetName(), ise);
+            ObjectsPair.of(stringFirstCellValue, stringSecondCellValue));
+      } catch (final IllegalStateException ise) {
+        LOGGER.error("Could not extract String value from cell col={} row={} sheet={}", startCol, _currentRowIndex, _sheet.getSheetName(), ise);
       }
       _currentRowIndex++;
       row = _sheet.getRow(_currentRowIndex);
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
     return keyPairMap;
   }
 
   /**
-   * @param startRow, int to specify starting point, _currentRowIndex is set to startRow
-   * @param startCol, int to specify starting point
-   * @return Map<Pair<String, String>, String> of all ordinal-pair/value until and empty row is reached.
+   * Reads a sheet from the start row and column and returns a map of ordinal-key / values.
+   *
+   * @param startRow
+   *          int to specify starting point, _currentRowIndex is set to startRow
+   * @param startCol
+   *          int to specify starting point
+   * @return Map&lt;Pair&lt;String, String&gt;, String&gt; of all ordinal-pair/value until an empty row is reached.
    */
-  public Map<Pair<String, String>, String> readMatrix(int startRow, int startCol) {
-    Map<Pair<String, String>, String> valueMap = new HashMap<>();
+  public Map<Pair<String, String>, String> readMatrix(final int startRow, final int startCol) {
+    final Map<Pair<String, String>, String> valueMap = new HashMap<>();
     _currentRowIndex = startRow;
     int tempRowIndex = _currentRowIndex + 1; // Ignore top left cell
-    //Maps used to store the index of each x and y axis
-    Map<Integer, String> colIndexToXAxis = new HashMap<>();
-    Map<Integer, String> rowIndexToYAxis = new HashMap<>();
+    // Maps used to store the index of each x and y axis
+    final Map<Integer, String> colIndexToXAxis = new HashMap<>();
+    final Map<Integer, String> rowIndexToYAxis = new HashMap<>();
 
-    Row xAxisRow = _sheet.getRow(_currentRowIndex);
-    for (Cell cell : xAxisRow) {
-      int columnIndex = cell.getColumnIndex();
+    final Row xAxisRow = _sheet.getRow(_currentRowIndex);
+    for (final Cell cell : xAxisRow) {
+      final int columnIndex = cell.getColumnIndex();
       if (columnIndex != startCol) { // Ignore top left cell
         colIndexToXAxis.put(columnIndex, getCellAsString(cell));
       }
     }
 
     while (true) {
-      Row yAxisRow = _sheet.getRow(tempRowIndex);
+      final Row yAxisRow = _sheet.getRow(tempRowIndex);
       if (yAxisRow == null) {
         break;
       }
-      Cell yAxisCell = yAxisRow.getCell(startCol);
+      final Cell yAxisCell = yAxisRow.getCell(startCol);
       rowIndexToYAxis.put(yAxisCell.getRowIndex(), getCellAsString(yAxisCell));
       tempRowIndex++;
     }
 
-    _currentRowIndex++; //move to first row after x-axis
+    _currentRowIndex++; // move to first row after x-axis
 
     while (true) {
-      Row valueRow = _sheet.getRow(_currentRowIndex);
+      final Row valueRow = _sheet.getRow(_currentRowIndex);
       if (valueRow == null) {
         break;
       }
-      for (Cell valueCell : valueRow) {
-        int columnIndex = valueCell.getColumnIndex();
+      for (final Cell valueCell : valueRow) {
+        final int columnIndex = valueCell.getColumnIndex();
         if (columnIndex != startCol) { // Ignore left y axis cells
-          String xAxis = colIndexToXAxis.get(columnIndex);
-          String yAxis = rowIndexToYAxis.get(_currentRowIndex);
+          final String xAxis = colIndexToXAxis.get(columnIndex);
+          final String yAxis = rowIndexToYAxis.get(_currentRowIndex);
           valueMap.put(ObjectsPair.of(xAxis, yAxis), valueCell.getStringCellValue());
         }
       }
       _currentRowIndex++;
     }
-    _currentRowIndex++; //increment to prepare for next read method
+    _currentRowIndex++; // increment to prepare for next read method
 
     return valueMap;
   }

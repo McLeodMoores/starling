@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -23,12 +23,12 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 import com.opengamma.util.money.Currency;
 
 /**
- * Bean operation for {@link CreditDefaultSwapOptionSecurity}
+ * Bean operation for {@link CreditDefaultSwapOptionSecurity}.
  */
 public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<CreditDefaultSwapOptionSecurity, CreditDefaultSwapOptionSecurityBean> {
-  
+
   /**
-   * Singleton
+   * Singleton.
    */
   public static final CDSOptionSecurityBeanOperation INSTANCE = new CDSOptionSecurityBeanOperation();
 
@@ -37,9 +37,10 @@ public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOp
   }
 
   @Override
-  public CreditDefaultSwapOptionSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, CreditDefaultSwapOptionSecurity security) {
-    CreditDefaultSwapOptionSecurityBean bean = new CreditDefaultSwapOptionSecurityBean();
-    
+  public CreditDefaultSwapOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CreditDefaultSwapOptionSecurity security) {
+    final CreditDefaultSwapOptionSecurityBean bean = new CreditDefaultSwapOptionSecurityBean();
+
     bean.setBuy(security.isBuy());
     bean.setProtectionBuyer(externalIdToExternalIdBean(security.getProtectionBuyer()));
     bean.setProtectionSeller(externalIdToExternalIdBean(security.getProtectionSeller()));
@@ -56,8 +57,8 @@ public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOp
   }
 
   @Override
-  public CreditDefaultSwapOptionSecurity createSecurity(OperationContext context, CreditDefaultSwapOptionSecurityBean bean) {
-    
+  public CreditDefaultSwapOptionSecurity createSecurity(final OperationContext context, final CreditDefaultSwapOptionSecurityBean bean) {
+
     final boolean buy = bean.getBuy();
     final ExternalId protectionBuyer = externalIdBeanToExternalId(bean.getProtectionBuyer());
     final ExternalId protectionSeller = externalIdBeanToExternalId(bean.getProtectionSeller());
@@ -66,9 +67,8 @@ public final class CDSOptionSecurityBeanOperation extends AbstractSecurityBeanOp
     final Currency currency = currencyBeanToCurrency(bean.getCurrency());
     final ExerciseType exerciseType = bean.getExerciseType().accept(new ExerciseTypeVisitorImpl());
     final ExternalId underlying = externalIdBeanToExternalId(bean.getUnderlying());
-    
-    
-    final CreditDefaultSwapOptionSecurity security = new CreditDefaultSwapOptionSecurity(buy, protectionBuyer, protectionSeller, 
+
+    final CreditDefaultSwapOptionSecurity security = new CreditDefaultSwapOptionSecurity(buy, protectionBuyer, protectionSeller,
         startDate, maturityDate, currency, bean.getNotional(), bean.getStrike(), bean.getKnockOut(), bean.getPayer(), exerciseType, underlying);
     return security;
   }

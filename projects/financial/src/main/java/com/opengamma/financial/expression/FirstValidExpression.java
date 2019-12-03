@@ -15,8 +15,8 @@ import java.util.List;
 
   private final List<UserExpression> _exprs;
 
-  public FirstValidExpression(final List<UserExpression> exprs) {
-    _exprs = new ArrayList<UserExpression>(exprs);
+  FirstValidExpression(final List<UserExpression> exprs) {
+    _exprs = new ArrayList<>(exprs);
   }
 
   protected List<UserExpression> getExprs() {
@@ -25,7 +25,7 @@ import java.util.List;
 
   @Override
   protected Object evaluate(final Evaluator evaluator) {
-    for (UserExpression expr : getExprs()) {
+    for (final UserExpression expr : getExprs()) {
       final Object exprResult = expr.evaluate(evaluator);
       if (exprResult != NA) {
         return exprResult;
@@ -37,7 +37,7 @@ import java.util.List;
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder();
-    for (UserExpression expr : _exprs) {
+    for (final UserExpression expr : _exprs) {
       if (sb.length() != 0) {
         sb.append(";\n");
       }

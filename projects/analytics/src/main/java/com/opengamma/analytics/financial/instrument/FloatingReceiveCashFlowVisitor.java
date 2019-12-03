@@ -187,7 +187,8 @@ public final class FloatingReceiveCashFlowVisitor extends InstrumentDefinitionVi
    * @return A map containing the (single) payment date and amount, or an empty map, as appropriate
    */
   @Override
-  public Map<LocalDate, MultipleCurrencyAmount> visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition forwardRateAgreement, final Object data) {
+  public Map<LocalDate, MultipleCurrencyAmount> visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition forwardRateAgreement,
+      final Object data) {
     return visitForwardRateAgreementDefinition(forwardRateAgreement);
   }
 
@@ -266,7 +267,7 @@ public final class FloatingReceiveCashFlowVisitor extends InstrumentDefinitionVi
   }
 
   /**
-   * Returns a map containing all of the floating payments in the receive leg
+   * Returns a map containing all of the floating payments in the receive leg.
    * @param swap The swap, not null
    * @return A map containing floating payments
    */
@@ -280,7 +281,7 @@ public final class FloatingReceiveCashFlowVisitor extends InstrumentDefinitionVi
   }
 
   /**
-   * Returns a map containing all of the floating payments in the receive leg
+   * Returns a map containing all of the floating payments in the receive leg.
    * @param swap The swap, not null
    * @param data Not used
    * @return A map containing floating payments

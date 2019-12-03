@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -24,7 +24,7 @@ public final class CurrencyAmountFudgeBuilder implements FudgeBuilder<CurrencyAm
   public static final String AMOUNT_FIELD_NAME = "amount";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CurrencyAmount object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CurrencyAmount object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, CURRENCY_FIELD_NAME, null, object.getCurrency());
     serializer.addToMessage(msg, AMOUNT_FIELD_NAME, null, object.getAmount());
@@ -32,7 +32,7 @@ public final class CurrencyAmountFudgeBuilder implements FudgeBuilder<CurrencyAm
   }
 
   @Override
-  public CurrencyAmount buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public CurrencyAmount buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final Currency currency = msg.getValue(Currency.class, CURRENCY_FIELD_NAME);
     if (currency == null) {
       throw new IllegalArgumentException("Fudge message is not a CurrencyAmount - field 'currency' is not present");

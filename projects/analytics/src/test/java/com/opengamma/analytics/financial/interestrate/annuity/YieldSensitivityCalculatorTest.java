@@ -22,37 +22,54 @@ public class YieldSensitivityCalculatorTest {
   private static YieldSensitivityCalculator YSC = YieldSensitivityCalculator.getInstance();
   private static final Currency CUR = Currency.EUR;
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity1() {
     YSC.calculateYield((AnnuityCouponFixed) null, 1.0);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity2() {
     YSC.calculatePriceForYield((AnnuityCouponFixed) null, 0.05);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity3() {
     YSC.calculateNthOrderSensitivity((AnnuityCouponFixed) null, 1.0, 3);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity4() {
     YSC.calculateNthOrderSensitivityFromYield((AnnuityCouponFixed) null, 0.04, 1);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeOrder() {
-    YSC.calculateNthOrderSensitivity(new AnnuityCouponFixed(new CouponFixed[] {new CouponFixed(CUR, 2, 2, 0.4)}), 1, -1);
+    YSC.calculateNthOrderSensitivity(new AnnuityCouponFixed(new CouponFixed[] { new CouponFixed(CUR, 2, 2, 0.4) }), 1, -1);
   }
 
+  /**
+   *
+   */
   @Test
   public void testSinglePaymentYield() {
     final int n = 10;
     final double pv = 0.875;
     final CouponFixed[] payments = new CouponFixed[n];
-    //    final PaymentFixed[] payments = new PaymentFixed[n];
     final double tau = 0.5;
     for (int i = 0; i < n - 1; i++) {
       payments[i] = new CouponFixed(CUR, (i + 1) * tau, tau, 0.0);
@@ -64,6 +81,9 @@ public class YieldSensitivityCalculatorTest {
     assertEquals(Math.log(2.0 * tau / pv) / 10.0 / tau, yield, 1e-8);
   }
 
+  /**
+   *
+   */
   @Test
   public void testSinglePaymentSensitivity() {
     final int n = 10;
@@ -83,6 +103,9 @@ public class YieldSensitivityCalculatorTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testSinglePaymentSensitivityFromYield() {
     final int n = 10;

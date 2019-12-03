@@ -53,9 +53,11 @@ import com.opengamma.util.async.ResultCallback;
 
 /**
  * Runs an arbitrary execution sequence on a view definition to produce values for one or more targets. The job is encoded into a {@link ViewEvaluationTarget}.
- * 
- * @param <TTarget> the computation target type
- * @param <TResultBuilder> the type of the result builder used throughout execution
+ *
+ * @param <TTarget>
+ *          the computation target type
+ * @param <TResultBuilder>
+ *          the type of the result builder used throughout execution
  */
 public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarget, TResultBuilder> extends AbstractFunction.NonCompiledInvoker {
 
@@ -64,12 +66,12 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
    */
   public static final String PROPERTY_CALC_CONFIG = "config";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewEvaluationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewEvaluationFunction.class);
 
   private final String _valueRequirementName;
   private final ComputationTargetType _targetType;
 
-  public ViewEvaluationFunction(String valueRequirementName, Class<TTarget> targetType) {
+  public ViewEvaluationFunction(final String valueRequirementName, final Class<TTarget> targetType) {
     _valueRequirementName = valueRequirementName;
     _targetType = ComputationTargetType.of(targetType);
   }
@@ -105,27 +107,26 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     if (master == null) {
       throw new IllegalStateException("Execution context does not contain a " + OpenGammaExecutionContext.CONFIG_MASTER_NAME);
     }
-    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<ViewDefinition>(ViewDefinition.class);
+    final ConfigSearchRequest<ViewDefinition> request = new ConfigSearchRequest<>(ViewDefinition.class);
     request.setName(name);
     final ConfigSearchResult<ViewDefinition> result = master.search(request);
     if (result.getDocuments() != null) {
       for (final ConfigDocument document : result.getDocuments()) {
         if (viewDefinition.equals(document.getValue().getValue())) {
           // Found a matching one
-          s_logger.debug("Using previous view definition {}", document.getUniqueId());
+          LOGGER.debug("Using previous view definition {}", document.getUniqueId());
           return document.getUniqueId();
-        } else {
-          // Found a dead one; either our temp target unique identifiers are not unique (different repositories MUST have different schemes) or the identifier
-          // sequence has been restarted/repeated and is colliding with old or dead configuration documents.
-          s_logger.info("Deleting expired view definition {}", document.getUniqueId());
-          master.removeVersion(document.getUniqueId());
         }
+        // Found a dead one; either our temp target unique identifiers are not unique (different repositories MUST have different schemes) or the identifier
+        // sequence has been restarted/repeated and is colliding with old or dead configuration documents.
+        LOGGER.info("Deleting expired view definition {}", document.getUniqueId());
+        master.removeVersion(document.getUniqueId());
       }
     }
     final ConfigItem<ViewDefinition> item = ConfigItem.of(viewDefinition);
     item.setName(name);
     final UniqueId uid = master.add(new ConfigDocument(item)).getUniqueId();
-    s_logger.info("Created new view definition {} for {}", uid, name);
+    LOGGER.info("Created new view definition {} for {}", uid, name);
     return uid;
   }
 
@@ -142,12 +143,14 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     }
     final ViewClient viewClient = viewProcessor.createViewClient(viewEvaluation.getViewDefinition().getMarketDataUser());
     final UniqueId viewClientId = viewClient.getUniqueId();
-    s_logger.info("Created view client {}, connecting to {}", viewClientId, viewId);
+    LOGGER.info("Created view client {}, connecting to {}", viewClientId, viewId);
     viewClient.attachToViewProcess(viewId,
-        ExecutionOptions.of(viewEvaluation.getExecutionSequence().createSequence(executionContext), getDefaultCycleOptions(executionContext), getViewExecutionFlags(desiredValues)), true);
+        ExecutionOptions.of(viewEvaluation.getExecutionSequence().createSequence(executionContext), getDefaultCycleOptions(executionContext),
+            getViewExecutionFlags(desiredValues)),
+        true);
     final TResultBuilder resultBuilder = createResultBuilder(viewEvaluation, desiredValues);
     final AsynchronousOperation<Set<ComputedValue>> async = AsynchronousOperation.createSet();
-    final AtomicReference<ResultCallback<Set<ComputedValue>>> asyncResult = new AtomicReference<ResultCallback<Set<ComputedValue>>>(async.getCallback());
+    final AtomicReference<ResultCallback<Set<ComputedValue>>> asyncResult = new AtomicReference<>(async.getCallback());
     viewClient.setResultListener(new ViewResultListener() {
 
       private void reportException(final RuntimeException e) {
@@ -156,11 +159,11 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
           try {
             callback.setException(e);
           } finally {
-            s_logger.info("Shutting down view client {}", viewClientId);
+            LOGGER.info("Shutting down view client {}", viewClientId);
             viewClient.shutdown();
           }
         } else {
-          s_logger.warn("Callback already made before exception for {}", viewClientId);
+          LOGGER.warn("Callback already made before exception for {}", viewClientId);
         }
       }
 
@@ -170,11 +173,11 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
           try {
             callback.setResult(values);
           } finally {
-            s_logger.info("Shutting down view client {}", viewClientId);
+            LOGGER.info("Shutting down view client {}", viewClientId);
             viewClient.shutdown();
           }
         } else {
-          s_logger.warn("Callback already made before results for {}", viewClientId);
+          LOGGER.warn("Callback already made before results for {}", viewClientId);
         }
       }
 
@@ -185,60 +188,60 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
 
       @Override
       public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
-        s_logger.debug("View definition compiled for {}", viewClientId);
+        LOGGER.debug("View definition compiled for {}", viewClientId);
         try {
           store(compiledViewDefinition, resultBuilder);
         } catch (final RuntimeException e) {
-          s_logger.error("Caught exception during compilation completed callback", e);
+          LOGGER.error("Caught exception during compilation completed callback", e);
           reportException(e);
         }
       }
 
       @Override
       public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
-        s_logger.error("View compilation failure for {} - {}", viewClientId, exception);
+        LOGGER.error("View compilation failure for {} - {}", viewClientId, exception);
         reportException(new OpenGammaRuntimeException("View definition compilation failed for " + valuationTime, exception));
       }
 
       @Override
       public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
         // This is good. Don't need to do anything.
-        s_logger.debug("Cycle started for {}", viewClientId);
+        LOGGER.debug("Cycle started for {}", viewClientId);
       }
 
       @Override
       public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
         // This shouldn't happen. We've asked for full results only
-        s_logger.error("Cycle fragment completed for {}", viewClientId);
+        LOGGER.error("Cycle fragment completed for {}", viewClientId);
         reportException(new OpenGammaRuntimeException("Assertion error"));
         assert false;
       }
 
       @Override
       public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
-        s_logger.debug("Cycle completed for {}", viewClientId);
+        LOGGER.debug("Cycle completed for {}", viewClientId);
         try {
           store(fullResult, resultBuilder);
         } catch (final RuntimeException e) {
-          s_logger.error("Caught exception during cycle completed callback", e);
+          LOGGER.error("Caught exception during cycle completed callback", e);
           reportException(e);
         }
       }
 
       @Override
       public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
-        s_logger.error("Cycle execution failed for {}", viewClientId);
+        LOGGER.error("Cycle execution failed for {}", viewClientId);
         reportException(new OpenGammaRuntimeException("View cycle execution failed for " + executionOptions, exception));
       }
 
       @Override
       public void processCompleted() {
-        s_logger.info("View process completed for {}", viewClientId);
+        LOGGER.info("View process completed for {}", viewClientId);
         try {
-          Set<ComputedValue> results = buildResults(target, resultBuilder);
+          final Set<ComputedValue> results = buildResults(target, resultBuilder);
           reportResult(results);
         } catch (final RuntimeException e) {
-          s_logger.error("Caught exception during process completed callback", e);
+          LOGGER.error("Caught exception during process completed callback", e);
           reportException(e);
         }
       }
@@ -248,22 +251,23 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
         // Normally we would have expected one of the other notifications, so if the callback exists we report an error
         final ResultCallback<?> callback = asyncResult.getAndSet(null);
         if (callback != null) {
-          s_logger.error("View process terminated for {}", viewClientId);
+          LOGGER.error("View process terminated for {}", viewClientId);
           reportException(new OpenGammaRuntimeException(executionInterrupted ? "Execution interrupted" : "View process terminated"));
         } else {
-          s_logger.debug("View process terminated for {}", viewClientId);
+          LOGGER.debug("View process terminated for {}", viewClientId);
         }
       }
 
       @Override
       public void clientShutdown(final Exception e) {
-        // Normally we would have expected one of the other notifications or this in response to us calling "shutdown", so if the callback exists we report an error
+        // Normally we would have expected one of the other notifications or this in response to us calling "shutdown", so if the callback exists we report an
+        // error
         final ResultCallback<?> callback = asyncResult.getAndSet(null);
         if (callback != null) {
-          s_logger.error("View client shutdown for {}", viewClientId);
+          LOGGER.error("View client shutdown for {}", viewClientId);
           reportException(new OpenGammaRuntimeException("View client shutdown", e));
         } else {
-          s_logger.debug("View client shutdown for {}", viewClientId);
+          LOGGER.debug("View client shutdown for {}", viewClientId);
         }
       }
 
@@ -272,13 +276,13 @@ public abstract class ViewEvaluationFunction<TTarget extends ViewEvaluationTarge
     return async.getResult();
   }
 
-  //-------------------------------------------------------------------------
-  protected ValueSpecification getResultSpec(String calcConfigName, ComputationTargetSpecification targetSpec) {
-    ValueProperties.Builder properties = createValueProperties().withoutAny(PROPERTY_CALC_CONFIG).with(PROPERTY_CALC_CONFIG, calcConfigName);
+  // -------------------------------------------------------------------------
+  protected ValueSpecification getResultSpec(final String calcConfigName, final ComputationTargetSpecification targetSpec) {
+    final ValueProperties.Builder properties = createValueProperties().withoutAny(PROPERTY_CALC_CONFIG).with(PROPERTY_CALC_CONFIG, calcConfigName);
     return new ValueSpecification(_valueRequirementName, targetSpec, properties.get());
   }
 
-  protected EnumSet<ViewExecutionFlags> getViewExecutionFlags(Set<ValueRequirement> desiredValues) {
+  protected EnumSet<ViewExecutionFlags> getViewExecutionFlags(final Set<ValueRequirement> desiredValues) {
     return EnumSet.of(ViewExecutionFlags.WAIT_FOR_INITIAL_TRIGGER, ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE, ViewExecutionFlags.SKIP_CYCLE_ON_NO_MARKET_DATA);
   }
 

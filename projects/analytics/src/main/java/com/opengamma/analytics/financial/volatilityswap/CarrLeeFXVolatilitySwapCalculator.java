@@ -36,17 +36,21 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
   private final double[] _strikeRange;
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CarrLeeFXVolatilitySwapCalculator() {
     this(DEFAULT_LOWEST_PUT_DELTA, DEFAULT_HIGHEST_CALL_DELTA, DEFAULT_NUM_POINTS);
   }
 
   /**
-   * Constructor specifying strike range and number of strikes
-   * @param lowestPutDelta The delta for put with lowest strike
-   * @param highestCallDelta The delta for call with highest strike
-   * @param numPoints The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
+   * Constructor specifying strike range and number of strikes.
+   *
+   * @param lowestPutDelta
+   *          The delta for put with lowest strike
+   * @param highestCallDelta
+   *          The delta for call with highest strike
+   * @param numPoints
+   *          The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
    */
   public CarrLeeFXVolatilitySwapCalculator(final double lowestPutDelta, final double highestCallDelta, final int numPoints) {
     ArgumentChecker.isTrue(lowestPutDelta < 0. && lowestPutDelta > -1., "-1 < lowestPutDelta < 0 should be true");
@@ -59,9 +63,12 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
   }
 
   /**
-   * Constructor specifying number of strikes and strike range by strike values
-   * @param numPoints The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
-   * @param strikeRange {minimum strike, maximum strike}
+   * Constructor specifying number of strikes and strike range by strike values.
+   *
+   * @param numPoints
+   *          The number of strikes between the lowest strike and the highest strike is (numPoints + 1)
+   * @param strikeRange
+   *          {minimum strike, maximum strike}
    */
   public CarrLeeFXVolatilitySwapCalculator(final int numPoints, final double[] strikeRange) {
     ArgumentChecker.isTrue(numPoints > 2, "numPoints should be greater than 2");
@@ -107,7 +114,7 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
       }
     } else {
       strikeRange = Arrays.copyOf(_strikeRange, 2);
-      ArgumentChecker.isTrue((forward > strikeRange[0] && forward < strikeRange[1]), "forward is outside of strike range");
+      ArgumentChecker.isTrue(forward > strikeRange[0] && forward < strikeRange[1], "forward is outside of strike range");
     }
 
     final double deltaK = (strikeRange[1] - strikeRange[0]) / _numPoints;
@@ -132,11 +139,12 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
       callVols[i] = data.getVolatilityData().getVolatility(Triple.of(timeToExpiry, callStrikes[i], forward));
     }
     if (swap.getTimeToObservationStart() < 0) {
-      return (SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception, domesticRate,
-          foreignRate, putVols, callVols, data.getRealizedVariance()).withStrikes(putStrikes, callStrikes));
+      return SEASONED_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeFromInception, domesticRate,
+          foreignRate, putVols, callVols, data.getRealizedVariance()).withStrikes(putStrikes, callStrikes);
     }
     final double strdVol = data.getVolatilityData().getVolatility(Triple.of(timeToExpiry, forward, forward));
-    return (NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, putVols, strdVol, callVols)).withStrikes(putStrikes, callStrikes);
+    return NEW_CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, domesticRate, foreignRate, putVols, strdVol, callVols).withStrikes(putStrikes,
+        callStrikes);
   }
 
   private double[] getStrikeRange(final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward, final double reference) {
@@ -151,7 +159,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     return res;
   }
 
-  private double findStrike(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward, final boolean isCall) {
+  private double findStrike(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward,
+      final boolean isCall) {
     final Function1D<Double, Double> func = getDeltaDifference(delta, timeToExpiry, smile, forward, isCall);
     final Function1D<Double, Double> funcDiff = getDeltaDifferenceDiff(timeToExpiry, smile, forward);
     final NewtonRaphsonSingleRootFinder rtFinder = new NewtonRaphsonSingleRootFinder(1.e-12);
@@ -160,7 +169,8 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     return strike;
   }
 
-  private Function1D<Double, Double> getDeltaDifference(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile, final double forward,
+  private Function1D<Double, Double> getDeltaDifference(final double delta, final double timeToExpiry, final SmileDeltaTermStructureParameters smile,
+      final double forward,
       final boolean isCall) {
     final double rootT = Math.sqrt(timeToExpiry);
     return new Function1D<Double, Double>() {
@@ -194,16 +204,16 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_highestCallDelta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lowestPutDelta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _numPoints;
     result = prime * result + Arrays.hashCode(_strikeRange);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -213,7 +223,7 @@ public class CarrLeeFXVolatilitySwapCalculator extends InstrumentDerivativeVisit
     if (!(obj instanceof CarrLeeFXVolatilitySwapCalculator)) {
       return false;
     }
-    CarrLeeFXVolatilitySwapCalculator other = (CarrLeeFXVolatilitySwapCalculator) obj;
+    final CarrLeeFXVolatilitySwapCalculator other = (CarrLeeFXVolatilitySwapCalculator) obj;
     if (Double.doubleToLongBits(_highestCallDelta) != Double.doubleToLongBits(other._highestCallDelta)) {
       return false;
     }

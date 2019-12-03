@@ -15,7 +15,7 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 public class SwapFrequencyProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public Frequency getValue(SwapSecurity security) {
+  public Frequency getValue(final SwapSecurity security) {
     // fixed leg frequency for fixed/float, pay leg frequency for float/float
     return new FrequencyVisitor().visit(security).getFirst();
   }

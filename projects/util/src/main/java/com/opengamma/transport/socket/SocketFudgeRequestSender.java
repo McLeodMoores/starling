@@ -24,9 +24,9 @@ import com.opengamma.util.ArgumentChecker;
  * Opens a raw socket with a remote site for RPC-style communications.
  */
 public class SocketFudgeRequestSender extends AbstractSocketProcess implements FudgeRequestSender {
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketFudgeRequestSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketFudgeRequestSender.class);
   private final FudgeContext _fudgeContext;
-  
+
   /**
    * Batch outgoing requests, not to get the benefits of offloading to another thread as we're going
    * to block anyway on a response but to allow concurrent use of the sender to be batched so only
@@ -34,12 +34,12 @@ public class SocketFudgeRequestSender extends AbstractSocketProcess implements F
    */
   private final MessageBatchingWriter _writer = new MessageBatchingWriter();
   private FudgeMsgReader _msgReader;
-  
+
   public SocketFudgeRequestSender() {
     this(FudgeContext.GLOBAL_DEFAULT);
   }
-  
-  public SocketFudgeRequestSender(FudgeContext fudgeContext) {
+
+  public SocketFudgeRequestSender(final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _fudgeContext = fudgeContext;
   }
@@ -50,22 +50,22 @@ public class SocketFudgeRequestSender extends AbstractSocketProcess implements F
   }
 
   @Override
-  public void sendRequest(FudgeMsg request, FudgeMessageReceiver responseReceiver) {
+  public void sendRequest(final FudgeMsg request, final FudgeMessageReceiver responseReceiver) {
     startIfNecessary();
-    s_logger.debug("Dispatching request with {} fields", request.getNumFields());
+    LOGGER.debug("Dispatching request with {} fields", request.getNumFields());
     _writer.write(request);
     final FudgeMsgEnvelope response;
     synchronized (_msgReader) {
       response = _msgReader.nextMessageEnvelope();
     }
     if (response != null) {
-      s_logger.debug("Got response with {} fields", response.getMessage().getNumFields());
+      LOGGER.debug("Got response with {} fields", response.getMessage().getNumFields());
       responseReceiver.messageReceived(getFudgeContext(), response);
     }
   }
 
   @Override
-  protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+  protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
     _writer.setFudgeMsgWriter(getFudgeContext(), os);
     _msgReader = getFudgeContext().createMessageReader(is);
   }
@@ -76,7 +76,7 @@ public class SocketFudgeRequestSender extends AbstractSocketProcess implements F
     _writer.setFudgeMsgWriter(null);
     _msgReader = null;
   }
-  
-  
+
+
 
 }

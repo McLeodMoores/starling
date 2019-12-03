@@ -23,7 +23,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Fudge builder for {@link FunctionBlacklistRule}.
- * 
+ *
  * <pre>
  * message FunctionBlacklistRule {
  *   optional string functionId;                       // function identifier to match on
@@ -51,13 +51,13 @@ public class FunctionBlacklistRuleFudgeBuilder implements FudgeBuilder<FunctionB
     serializer.addToMessage(msg, TARGET_FIELD, null, object.getTarget());
     if (object.getInputs() != null) {
       final MutableFudgeMsg inputs = msg.addSubMessage(INPUTS_FIELD, null);
-      for (ValueSpecification input : object.getInputs()) {
+      for (final ValueSpecification input : object.getInputs()) {
         serializer.addToMessage(inputs, null, null, input);
       }
     }
     if (object.getOutputs() != null) {
       final MutableFudgeMsg outputs = msg.addSubMessage(OUTPUTS_FIELD, null);
-      for (ValueSpecification output : object.getOutputs()) {
+      for (final ValueSpecification output : object.getOutputs()) {
         serializer.addToMessage(outputs, null, null, output);
       }
     }
@@ -82,8 +82,8 @@ public class FunctionBlacklistRuleFudgeBuilder implements FudgeBuilder<FunctionB
     field = message.getByName(INPUTS_FIELD);
     if (field != null) {
       final FudgeMsg fieldValue = message.getFieldValue(FudgeMsg.class, field);
-      final Collection<ValueSpecification> inputs = new ArrayList<ValueSpecification>(fieldValue.getNumFields());
-      for (FudgeField input : fieldValue) {
+      final Collection<ValueSpecification> inputs = new ArrayList<>(fieldValue.getNumFields());
+      for (final FudgeField input : fieldValue) {
         inputs.add(deserializer.fieldValueToObject(ValueSpecification.class, input));
       }
       rule.setInputs(inputs);
@@ -91,8 +91,8 @@ public class FunctionBlacklistRuleFudgeBuilder implements FudgeBuilder<FunctionB
     field = message.getByName(OUTPUTS_FIELD);
     if (field != null) {
       final FudgeMsg fieldValue = message.getFieldValue(FudgeMsg.class, field);
-      final Collection<ValueSpecification> outputs = new ArrayList<ValueSpecification>(fieldValue.getNumFields());
-      for (FudgeField output : fieldValue) {
+      final Collection<ValueSpecification> outputs = new ArrayList<>(fieldValue.getNumFields());
+      for (final FudgeField output : fieldValue) {
         outputs.add(deserializer.fieldValueToObject(ValueSpecification.class, output));
       }
       rule.setOutputs(outputs);

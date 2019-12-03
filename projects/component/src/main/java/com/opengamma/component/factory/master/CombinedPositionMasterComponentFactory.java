@@ -47,7 +47,7 @@ public class CombinedPositionMasterComponentFactory extends AbstractComponentFac
    * The flag determining whether the component should be published by REST (default true).
    */
   @PropertyDefinition
-  private boolean _publishRest = true; 
+  private boolean _publishRest = true;
   /**
    * The default position master.
    */
@@ -56,27 +56,27 @@ public class CombinedPositionMasterComponentFactory extends AbstractComponentFac
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {   
-    Map<String, PositionMaster> map = new HashMap<>();    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final Map<String, PositionMaster> map = new HashMap<>();
     final String defaultPositionScheme = repo.getInfo(getDefaultPositionMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
     map.put(defaultPositionScheme, getDefaultPositionMaster());
-    
+
     // all additional PositionMaster instances
-    Map<String, ComponentInfo> infos = repo.findInfos(configuration);
-    for (Entry<String, ComponentInfo> entry : infos.entrySet()) {
-      String key = entry.getKey();
-      ComponentInfo info = entry.getValue();
+    final Map<String, ComponentInfo> infos = repo.findInfos(configuration);
+    for (final Entry<String, ComponentInfo> entry : infos.entrySet()) {
+      final String key = entry.getKey();
+      final ComponentInfo info = entry.getValue();
       if (key.matches("positionMaster[0-9]+") && info.getType() == PositionMaster.class) {
-        PositionMaster positionMaster = (PositionMaster) repo.getInstance(info);
-        String uniqueIdScheme = repo.getInfo(positionMaster).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
+        final PositionMaster positionMaster = (PositionMaster) repo.getInstance(info);
+        final String uniqueIdScheme = repo.getInfo(positionMaster).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
         map.put(uniqueIdScheme, positionMaster);
         configuration.remove(key);
       }
     }
-    PositionMaster master = new DelegatingPositionMaster(getDefaultPositionMaster(), map);
-    
+    final PositionMaster master = new DelegatingPositionMaster(getDefaultPositionMaster(), map);
+
     // register
-    ComponentInfo info = new ComponentInfo(PositionMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(PositionMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePositionMaster.class);

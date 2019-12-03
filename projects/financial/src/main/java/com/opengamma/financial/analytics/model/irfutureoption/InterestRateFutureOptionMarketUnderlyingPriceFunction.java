@@ -26,9 +26,8 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
 
-
 /**
- * Provides the market price for the security of a position as a value on the position
+ * Provides the market price for the security of a position as a value on the position.
  */
 public class InterestRateFutureOptionMarketUnderlyingPriceFunction extends AbstractFunction.NonCompiledInvoker {
 

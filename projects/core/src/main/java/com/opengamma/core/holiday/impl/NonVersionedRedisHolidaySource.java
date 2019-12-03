@@ -15,10 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.exceptions.JedisConnectionException;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.collect.ImmutableList;
@@ -38,6 +34,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.GUIDGenerator;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
 import com.opengamma.util.money.Currency;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /*
  * REDIS DATA STRUCTURES:
@@ -65,28 +65,27 @@ import com.opengamma.util.money.Currency;
  */
 
 /**
- * A lightweight {@link HolidaySource} that cannot handle any versioning, and
- * which stores all Holiday documents as individual Redis elements using direct
- * Redis types rather than Fudge encoding.
+ * A lightweight {@link HolidaySource} that cannot handle any versioning, and which stores all Holiday documents as individual Redis elements using direct Redis
+ * types rather than Fudge encoding.
  *
- * Treats Saturday & Sunday as non working days.
+ * Treats Saturday and Sunday as non working days.
  */
 public class NonVersionedRedisHolidaySource implements HolidaySource {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonVersionedRedisHolidaySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisHolidaySource.class);
   private static final String EXCHANGE = "EXCHANGE";
   private static final String EXCHANGE_SCHEME = "EXCHANGE_SCHEME";
   private static final String CUSTOM_SCHEME = "CUSTOM_SCHEME";
-  /** Currency key */
+  /** Currency key. */
   public static final String CURRENCY = "CURRENCY";
-  /** Type key */
+  /** Type key. */
   public static final String TYPE = "TYPE";
-  /** UniqueId key */
+  /** UniqueId key. */
   public static final String UNIQUE_ID = "UNIQUE_ID";
-  /** Region value key */
+  /** Region value key. */
   public static final String REGION = "REGION";
-  /** Custom value key */
+  /** Custom value key. */
   public static final String CUSTOM = "CUSTOM";
-  /** Region scheme key */
+  /** Region scheme key. */
   public static final String REGION_SCHEME = "REGION_SCHEME";
   /** The default scheme for unique identifiers. */
   public static final String IDENTIFIER_SCHEME_DEFAULT = "RedisHol";
@@ -97,20 +96,34 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
   private Timer _putTimer = new Timer();
   private Timer _isHolidayTimer = new Timer();
 
-
+  /**
+   * Constructs a source without a prefix.
+   *
+   * @param jedisPool  the pool, not null
+   */
   public NonVersionedRedisHolidaySource(final JedisPool jedisPool) {
     this(jedisPool, "");
   }
 
+  /**
+   * Constructs a source.
+   *
+   * @param jedisPool  the pool, not null
+   * @param redisPrefix  the prefix, not null
+   */
   public NonVersionedRedisHolidaySource(final JedisPool jedisPool, final String redisPrefix) {
-    ArgumentChecker.notNull(jedisPool, "jedisPool");
-    ArgumentChecker.notNull(redisPrefix, "redisPrefix");
-
-    _jedisPool = jedisPool;
-    _redisPrefix = redisPrefix;
+    _jedisPool = ArgumentChecker.notNull(jedisPool, "jedisPool");
+    _redisPrefix = ArgumentChecker.notNull(redisPrefix, "redisPrefix");
     registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "NonVersionedRedisHolidaySource");
   }
 
+  /**
+   * Registers timers for get, put and isHoliday methods.
+   *
+   * @param summaryRegistry  a summary registry for gets
+   * @param detailRegistry  a detail registry for puts
+   * @param namePrefix  a registry for isHoliday methods
+   */
   public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailRegistry, final String namePrefix) {
     _getTimer = summaryRegistry.timer(namePrefix + ".get");
     _putTimer = summaryRegistry.timer(namePrefix + ".put");
@@ -137,6 +150,13 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
   // REDIS KEY MANAGEMENT
   // ---------------------------------------------------------------------
 
+  /**
+   * Converts a unique id to a redis key of the form <code>[REDIS_PREFIX]-UNQ-[UniqueId]</code> or
+   * <code>UNQ-[UniqueId]</code> if there is no prefix.
+   *
+   * @param uniqueId  the id to convert
+   * @return  a string used as a key
+   */
   public String toRedisKey(final UniqueId uniqueId) {
     final StringBuilder sb = new StringBuilder();
     if (!getRedisPrefix().isEmpty()) {
@@ -149,10 +169,25 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
     return keyText;
   }
 
+  /**
+   * Converts an object id to a unique id ({@link UniqueId#of(ObjectId, String)} with a null version string) to a redis key of the
+   * form <code>[REDIS_PREFIX]-UNQ-[UniqueId]</code> or <code>UNQ-[UniqueId]</code> if there is no prefix.
+   *
+   * @param objectId  the id to convert
+   * @return  a string used as a key
+   */
   protected String toRedisKey(final ObjectId objectId) {
     return toRedisKey(UniqueId.of(objectId, null));
   }
 
+  /**
+   * Converts an external id to a redis key of the form <code>[REDIS_PREFIX]-EXT-[ExternalId]-[HOLIDAY_TYPE]</code> or
+   * <code>EXT-[ExternalId]-[HOLIDAY_TYPE]</code> if there is no prefix.
+   *
+   * @param externalId  the id to convert
+   * @param holidayType  the holiday type
+   * @return  a string used as a key
+   */
   public String toRedisKey(final ExternalId externalId, final HolidayType holidayType) {
     final StringBuilder sb = new StringBuilder();
     if (!getRedisPrefix().isEmpty()) {
@@ -226,16 +261,16 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         for (final LocalDate holidayDate : holiday.getHolidayDates()) {
           jedis.zadd(daysKey, LocalDateToIntConverter.convertToInt(holidayDate), holidayDate.toString());
         }
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       } catch (final Exception e) {
-        s_logger.error("Unable to add holiday " + holiday, e);
-        getJedisPool().returnBrokenResource(jedis);
+        LOGGER.error("Unable to add holiday " + holiday, e);
+        jedis.close();
         throw new OpenGammaRuntimeException("Unable to add holiday " + holiday, e);
       }
     }
   }
 
-  private UniqueId generateUniqueId() {
+  private static UniqueId generateUniqueId() {
     return UniqueId.of(IDENTIFIER_SCHEME_DEFAULT, GUIDGenerator.generate().toString());
   }
 
@@ -243,11 +278,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
   // IMPLEMENTATION OF HOLIDAY SOURCE
   // ---------------------------------------------------------------------
 
-  /**
-   * @param days
-   * @param simpleHoliday
-   */
-  private void convertDaysToLocalDates(final Set<String> days, final SimpleHoliday simpleHoliday) {
+  private static void convertDaysToLocalDates(final Set<String> days, final SimpleHoliday simpleHoliday) {
     for (final String dayText : days) {
       final LocalDate localDate = LocalDate.parse(dayText);
       simpleHoliday.addHolidayDate(localDate);
@@ -263,16 +294,23 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
       final Jedis jedis = getJedisPool().getResource();
       try {
         result = loadFromRedis(jedis, uniqueId);
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       } catch (final Exception e) {
-        s_logger.error("Unable to load holiday " + uniqueId, e);
-        getJedisPool().returnBrokenResource(jedis);
+        LOGGER.error("Unable to load holiday " + uniqueId, e);
+        jedis.close();
         throw new OpenGammaRuntimeException("Unable to load holiday " + uniqueId, e);
       }
     }
     return result;
   }
 
+  /**
+   * Loads a holiday from redis.
+   *
+   * @param jedis  the underlying database
+   * @param uniqueId  the id
+   * @return  a holiday
+   */
   protected Holiday loadFromRedis(final Jedis jedis, final UniqueId uniqueId) {
     final String uniqueRedisKey = toRedisKey(uniqueId);
     final String daysKey = uniqueRedisKey + "-DAYS";
@@ -308,7 +346,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Map<UniqueId, Holiday> get(final Collection<UniqueId> uniqueIds) {
-    final Map<UniqueId, Holiday> result = new HashMap<UniqueId, Holiday>();
+    final Map<UniqueId, Holiday> result = new HashMap<>();
 
     for (final UniqueId uniqueId : uniqueIds) {
       result.put(uniqueId, get(uniqueId));
@@ -319,7 +357,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Map<ObjectId, Holiday> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-    final Map<ObjectId, Holiday> result = new HashMap<ObjectId, Holiday>();
+    final Map<ObjectId, Holiday> result = new HashMap<>();
 
     for (final ObjectId objectId : objectIds) {
       result.put(objectId, get(objectId, null));
@@ -328,6 +366,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
     return result;
   }
 
+  @Deprecated
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
@@ -352,10 +391,10 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
           }
         }
 
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       } catch (final Exception e) {
-        s_logger.error("Unable to check if holiday " + dateToCheck + " - " + currency, e);
-        getJedisPool().returnBrokenResource(jedis);
+        LOGGER.error("Unable to check if holiday " + dateToCheck + " - " + currency, e);
+        jedis.close();
         throw new OpenGammaRuntimeException("Unable to check if holiday " + dateToCheck + " - " + currency, e);
       }
     }
@@ -363,6 +402,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
     return result;
   }
 
+  @Deprecated
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
     // Any is the only supported type underneath, so we use the same logic.
@@ -398,10 +438,10 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
           }
         }
 
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       } catch (final Exception e) {
-        s_logger.error("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
-        getJedisPool().returnBrokenResource(jedis);
+        LOGGER.error("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
+        jedis.close();
         throw new OpenGammaRuntimeException("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
       }
     }
@@ -419,7 +459,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
   @Override
   public Collection<Holiday> get(final HolidayType holidayType,
-                                 final ExternalIdBundle regionOrExchangeIds) {
+      final ExternalIdBundle regionOrExchangeIds) {
     ArgumentChecker.notNull(holidayType, "holidayType");
     ArgumentChecker.notNull(regionOrExchangeIds, "regionOrExchangeIds");
 
@@ -449,14 +489,14 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
       return ImmutableList.of();
     } catch (final JedisConnectionException e) {
-      s_logger.error("Unable to get holiday - " + holidayType + " - " + regionOrExchangeIds, e);
-      getJedisPool().returnBrokenResource(jedis);
+      LOGGER.error("Unable to get holiday - " + holidayType + " - " + regionOrExchangeIds, e);
+      jedis.close();
       // Prevent returning the resource twice when the finally block runs
       jedis = null;
       throw new OpenGammaRuntimeException("Unable to get holiday - " + holidayType + " - " + regionOrExchangeIds, e);
     } finally {
       if (jedis != null) {
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       }
     }
   }
@@ -480,24 +520,25 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         holiday.setType(HolidayType.CURRENCY);
         holiday.setCurrency(currency);
         holiday.setHolidayDates(parseHolidayDates(dates));
+        jedis.close();
         return ImmutableList.<Holiday>of(holiday);
-      } else {
-        return ImmutableList.of();
       }
+      jedis.close();
+      return ImmutableList.of();
     } catch (final JedisConnectionException e) {
-      s_logger.error("Unable to get holiday - " + currency, e);
-      getJedisPool().returnBrokenResource(jedis);
+      LOGGER.error("Unable to get holiday - " + currency, e);
+      jedis.close();
       // Prevent returning the resource twice when the finally block runs
       jedis = null;
       throw new OpenGammaRuntimeException("Unable to get holiday - " + currency, e);
     } finally {
       if (jedis != null) {
-        getJedisPool().returnResource(jedis);
+        jedis.close();
       }
     }
   }
 
-  private ImmutableList<LocalDate> parseHolidayDates(final Set<String> dates) {
+  private static ImmutableList<LocalDate> parseHolidayDates(final Set<String> dates) {
     final ImmutableList.Builder<LocalDate> builder = ImmutableList.builder();
     for (final String date : dates) {
       builder.add(LocalDate.parse(date));
@@ -505,6 +546,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
     return builder.build();
   }
 
+  @Deprecated
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
     return isHoliday(dateToCheck, holidayType, ExternalIdBundle.of(regionOrExchangeId));

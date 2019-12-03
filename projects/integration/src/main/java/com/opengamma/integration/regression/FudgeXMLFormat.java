@@ -29,8 +29,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.xml.FormattingXmlStreamWriter;
 
 /**
- * Implementation of I/O using an XML representation of the Fudge binary encoding. Note that this is simply a human readable form of the Fudge binary data - as a result it is not as efficient or
- * appear as natural as other XML representations which may be available.
+ * Implementation of I/O using an XML representation of the Fudge binary encoding. Note that this is simply a human readable form of the Fudge binary data - as
+ * a result it is not as efficient or appear as natural as other XML representations which may be available.
  */
 public class FudgeXMLFormat implements RegressionIO.Format {
 
@@ -39,7 +39,7 @@ public class FudgeXMLFormat implements RegressionIO.Format {
    */
   /* package */static final String FILE_EXTENSION = ".xml";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FudgeXMLFormat.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FudgeXMLFormat.class);
 
   private static final class Context {
 
@@ -56,11 +56,10 @@ public class FudgeXMLFormat implements RegressionIO.Format {
     }
 
     public static Context of(final FudgeContext ctx, final FudgeSerializer write, final FudgeDeserializer read) {
-      if ((write != null) || (read != null)) {
+      if (write != null || read != null) {
         return new Context(ctx, write, read);
-      } else {
-        return null;
       }
+      return null;
     }
 
   }
@@ -70,11 +69,10 @@ public class FudgeXMLFormat implements RegressionIO.Format {
     if (context == null) {
       final FudgeContext ctx = OpenGammaFudgeContext.getInstance();
       return new Context(ctx, null, new FudgeDeserializer(ctx));
-    } else {
-      final Context ctx = (Context) context;
-      assert ctx._deserializer == null;
-      return new Context(ctx._ctx, ctx._serializer, new FudgeDeserializer(ctx._ctx));
     }
+    final Context ctx = (Context) context;
+    assert ctx._deserializer == null;
+    return new Context(ctx._ctx, ctx._serializer, new FudgeDeserializer(ctx._ctx));
   }
 
   @Override
@@ -82,11 +80,10 @@ public class FudgeXMLFormat implements RegressionIO.Format {
     if (context == null) {
       final FudgeContext ctx = OpenGammaFudgeContext.getInstance();
       return new Context(ctx, new FudgeSerializer(ctx), null);
-    } else {
-      final Context ctx = (Context) context;
-      assert ctx._serializer == null;
-      return new Context(ctx._ctx, new FudgeSerializer(ctx._ctx), ctx._deserializer);
     }
+    final Context ctx = (Context) context;
+    assert ctx._serializer == null;
+    return new Context(ctx._ctx, new FudgeSerializer(ctx._ctx), ctx._deserializer);
   }
 
   @Override
@@ -98,32 +95,34 @@ public class FudgeXMLFormat implements RegressionIO.Format {
   public void write(final Object context, final Object o, final OutputStream dest) throws IOException {
     final Context ctx = (Context) context;
     final Writer writer = new OutputStreamWriter(dest);
-    FormattingXmlStreamWriter xmlStreamWriter = FormattingXmlStreamWriter.builder(writer)
-                                               .indent(true)
-                                               .build();
+    final FormattingXmlStreamWriter xmlStreamWriter = FormattingXmlStreamWriter.builder(writer)
+        .indent(true)
+        .build();
     final FudgeXMLStreamWriter streamWriter = new FudgeXMLStreamWriter(ctx._ctx, xmlStreamWriter);
     // Don't close fudgeMsgWriter; the caller will close the stream later
     @SuppressWarnings("resource")
+    final
     FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(streamWriter);
-    MutableFudgeMsg msg = ctx._serializer.objectToFudgeMsg(o);
+    final MutableFudgeMsg msg = ctx._serializer.objectToFudgeMsg(o);
     FudgeSerializer.addClassHeader(msg, o.getClass());
     fudgeMsgWriter.writeMessage(msg);
     fudgeMsgWriter.flush();
     writer.append("\n");
-    s_logger.debug("Wrote object {}", o);
+    LOGGER.debug("Wrote object {}", o);
   }
 
   @Override
   public Object read(final Object context, final InputStream in) throws IOException {
     final Context ctx = (Context) context;
     final Reader reader = new InputStreamReader(in);
-    FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(ctx._ctx, reader);
+    final FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(ctx._ctx, reader);
     // Don't close fudgeMsgReader; the caller will close the stream later
     @SuppressWarnings("resource")
+    final
     FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
-    FudgeMsg msg = fudgeMsgReader.nextMessage();
+    final FudgeMsg msg = fudgeMsgReader.nextMessage();
     final Object object = ctx._deserializer.fudgeMsgToObject(msg);
-    s_logger.debug("Read object {}", object);
+    LOGGER.debug("Read object {}", object);
     return object;
   }
 

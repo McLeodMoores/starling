@@ -42,7 +42,7 @@ public class RiskRunProperty extends DirectBean {
   public RiskRunProperty() {
   }
 
-  public RiskRunProperty(String propertyKey, String propertyValue) {
+  public RiskRunProperty(final String propertyKey, final String propertyValue) {
     this._propertyKey = propertyKey;
     this._propertyValue = propertyValue;
   }

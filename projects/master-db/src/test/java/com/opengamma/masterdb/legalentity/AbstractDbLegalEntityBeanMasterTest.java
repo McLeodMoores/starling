@@ -38,7 +38,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbLegalEntityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbLegalEntityBeanMasterTest.class);
 
   private static final ExternalIdBundle BUNDLE_201 = ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F"));
   private static final ExternalIdBundle BUNDLE_102 = ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("GH", "HI"));
@@ -49,9 +49,9 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
   protected Instant _version2Instant;
   protected int _totalSecurities;
 
-  public AbstractDbLegalEntityBeanMasterTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbLegalEntityBeanMasterTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -85,12 +85,12 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
 //    sub_type varchar(255) NOT NULL,
 //    java_type varchar(255) NOT NULL,
 //    packed_data blob NOT NULL,
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _lenMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _lenMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO len_document VALUES (?,?,?,?,?, ?,?,?,?,?, ?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP,
@@ -140,24 +140,24 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
         202, 3);
   }
 
-  private Object blob(String name, ExternalIdBundle bundle) {
-    MockLegalEntity value = new MockLegalEntity(name, bundle, Currency.GBP);
-    String xml = JodaBeanSer.COMPACT.xmlWriter().write(value);
-    byte[] bytes = ZipUtils.deflateString(xml);
-    SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
+  private Object blob(final String name, final ExternalIdBundle bundle) {
+    final MockLegalEntity value = new MockLegalEntity(name, bundle, Currency.GBP);
+    final String xml = JodaBeanSer.COMPACT.xmlWriter().write(value);
+    final byte[] bytes = ZipUtils.deflateString(xml);
+    final SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
     return new SqlParameterValue(Types.BLOB, lob);
   }
 
   //-------------------------------------------------------------------------
   protected void assert101(final LegalEntityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
+    final MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
     assertNotNull(legalEntity);
     assertEquals(uniqueId, legalEntity.getUniqueId());
     assertEquals("TestLegalEntity101", legalEntity.getName());
@@ -165,14 +165,14 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
   }
 
   protected void assert102(final LegalEntityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbLen", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
+    final MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
     assertNotNull(legalEntity);
     assertEquals(uniqueId, legalEntity.getUniqueId());
     assertEquals("TestLegalEntity102", legalEntity.getName());
@@ -180,14 +180,14 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
   }
 
   protected void assert201(final LegalEntityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbLen", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
+    final MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
     assertNotNull(legalEntity);
     assertEquals(uniqueId, legalEntity.getUniqueId());
     assertEquals("TestLegalEntity201", legalEntity.getName());
@@ -195,14 +195,14 @@ public abstract class AbstractDbLegalEntityBeanMasterTest extends AbstractDbTest
   }
 
   protected void assert202(final LegalEntityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbLen", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
+    final MockLegalEntity legalEntity = (MockLegalEntity) test.getLegalEntity();
     assertNotNull(legalEntity);
     assertEquals(uniqueId, legalEntity.getUniqueId());
     assertEquals("TestLegalEntity202", legalEntity.getName());

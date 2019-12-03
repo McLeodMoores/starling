@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.calendar;
 
@@ -24,8 +24,8 @@ import com.opengamma.util.money.Currency;
  * <p>
  * This class currently only supports {@link Holiday}s of the types:
  * <ul>
- *  <li> {@link HolidayType#BANK} for a {@link Region}
- *  <li> {@link HolidayType#CURRENCY} for a {@link Currency}
+ * <li>{@link HolidayType#BANK} for a {@link Region}
+ * <li>{@link HolidayType#CURRENCY} for a {@link Currency}
  * </ul>
  * If a holiday is requested that is not available from the source, then an exception is thrown.
  * <p>
@@ -43,8 +43,11 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
 
   /**
    * Creates an adapter for bank holidays referenced by a region.
-   * @param holidaySource  the holiday source, not null
-   * @param region  the region, not null
+   * 
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param region
+   *          the region, not null
    */
   public HolidaySourceWorkingDayCalendarAdapter(final HolidaySource holidaySource, final Region region) {
     _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -55,8 +58,11 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
 
   /**
    * Creates an adapter for currency holidays referenced by a currency.
-   * @param holidaySource  the holiday source, not null
-   * @param currency  the currency, not null
+   * 
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param currency
+   *          the currency, not null
    */
   public HolidaySourceWorkingDayCalendarAdapter(final HolidaySource holidaySource, final Currency currency) {
     _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
@@ -203,32 +209,32 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
   public boolean isWeekend(final LocalDate date) {
     switch (_type) {
       case BANK: {
-          Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        if (holidays.isEmpty()) {
+          // see if there is a holiday for the currency
+          final Currency currency = _region.getCurrency();
+          if (currency != null) {
+            holidays = _holidaySource.get(currency);
+          }
           if (holidays.isEmpty()) {
-            // see if there is a holiday for the currency
-            final Currency currency = _region.getCurrency();
-            if (currency != null) {
-              holidays = _holidaySource.get(currency);
-            }
-            if (holidays.isEmpty()) {
-              throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
-            }
+            throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
           }
-          for (final Holiday holiday : holidays) {
-            if (holiday instanceof WeekendTypeProvider) {
-              if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
-                return true;
-              }
-            } else {
-              // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
-              // object
-              if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
-                return true;
-              }
-            }
-          }
-          return false;
         }
+        for (final Holiday holiday : holidays) {
+          if (holiday instanceof WeekendTypeProvider) {
+            if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
+              return true;
+            }
+          } else {
+            // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
+            // object
+            if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
       case CURRENCY: {
         final Collection<Holiday> holidays = _holidaySource.get(_currency);
         if (holidays.isEmpty()) {
@@ -280,6 +286,5 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
     sb.append("]");
     return sb.toString();
   }
-
 
 }

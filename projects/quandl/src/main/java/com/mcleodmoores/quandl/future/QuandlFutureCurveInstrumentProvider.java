@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.future;
 
@@ -17,8 +17,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * An instrument provider for curves that generates Quandl codes for futures. The codes take the form
- * <code>[Prefix][Month code][YYYY]</code> e.g. CME/EDZ2015.
+ * An instrument provider for curves that generates Quandl codes for futures. The codes take the form <code>[Prefix][Month code][YYYY]</code> e.g. CME/EDZ2015.
  */
 public class QuandlFutureCurveInstrumentProvider implements CurveInstrumentProvider {
   /** The future prefix */
@@ -30,9 +29,13 @@ public class QuandlFutureCurveInstrumentProvider implements CurveInstrumentProvi
 
   /**
    * Creates an instance.
-   * @param futurePrefix  the future prefix, not null
-   * @param dataField  the data field, not null
-   * @param fieldType  the field type, not null
+   * 
+   * @param futurePrefix
+   *          the future prefix, not null
+   * @param dataField
+   *          the data field, not null
+   * @param fieldType
+   *          the field type, not null
    */
   public QuandlFutureCurveInstrumentProvider(final String futurePrefix, final String dataField, final DataFieldType fieldType) {
     ArgumentChecker.notNull(futurePrefix, "futurePrefix");
@@ -85,7 +88,8 @@ public class QuandlFutureCurveInstrumentProvider implements CurveInstrumentProvi
 
   /**
    * Gets the future prefix.
-   * @return  the prefix
+   * 
+   * @return the prefix
    */
   public String getFuturePrefix() {
     return _futurePrefix;
@@ -134,6 +138,5 @@ public class QuandlFutureCurveInstrumentProvider implements CurveInstrumentProvi
     }
     return true;
   }
-
 
 }

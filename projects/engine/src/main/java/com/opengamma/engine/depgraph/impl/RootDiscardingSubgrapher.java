@@ -18,18 +18,18 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Sub-graphing operation that only keeps nodes which:
+ * Represents a sub-graphing operation. The operation only keeps nodes which:
  * <ul>
  * <li>Pass a filtering test themselves; and
  * <li>Consume only values from nodes that also pass the filtering test
- * <ul>
+ * </ul>
  */
 public abstract class RootDiscardingSubgrapher {
 
   /**
    * The inclusion state of any given node.
    */
-  public static enum NodeState {
+  public enum NodeState {
     /**
      * The node is excluded from the graph. This means no nodes from the original graph that depended on this node can remain.
      */
@@ -48,14 +48,14 @@ public abstract class RootDiscardingSubgrapher {
    * Tests whether the given node passes the filter.
    * <p>
    * This test is performed before any of the input nodes are considered for inclusion.
-   * 
+   *
    * @param node the node to test, never null
    * @return true if the node passes the filter (and should have its input nodes tested), false otherwise
    */
   protected abstract boolean acceptNode(DependencyNode node);
 
   private NodeState acceptNode(final DependencyNode node, final Map<DependencyNode, NodeState> accepted) {
-    NodeState state = accepted.get(node);
+    final NodeState state = accepted.get(node);
     if (state != null) {
       return state;
     }
@@ -84,19 +84,19 @@ public abstract class RootDiscardingSubgrapher {
 
   /**
    * Forms a subgraph of the given graph.
-   * 
+   *
    * @param roots the root nodes to process, not null
    * @param terminals the terminal outputs to update, not null
    * @param missingRequirements the structure that should receive any requirements that are ejected from the sub-graph, not null
    * @param accepted the acceptance state buffer, not null
    * @return the new graph roots, or null for an empty graph
    */
-  public Set<DependencyNode> subGraph(Collection<DependencyNode> roots, final Map<ValueSpecification, Set<ValueRequirement>> terminals, final Set<ValueRequirement> missingRequirements,
-      final Map<DependencyNode, NodeState> accepted) {
-    Set<DependencyNode> newRoots = new HashSet<DependencyNode>();
+  public Set<DependencyNode> subGraph(Collection<DependencyNode> roots, final Map<ValueSpecification, Set<ValueRequirement>> terminals,
+      final Set<ValueRequirement> missingRequirements, final Map<DependencyNode, NodeState> accepted) {
+    final Set<DependencyNode> newRoots = new HashSet<>();
     do {
       Set<DependencyNode> possibleRoots = null;
-      for (DependencyNode root : roots) {
+      for (final DependencyNode root : roots) {
         final NodeState state = acceptNode(root, accepted);
         if (state == NodeState.INCLUDED) {
           // This root is in the new graph
@@ -104,7 +104,7 @@ public abstract class RootDiscardingSubgrapher {
         } else if (state == NodeState.EXCLUDED) {
           // This root isn't in the new graph, but one or more of its inputs might become roots
           if (possibleRoots == null) {
-            possibleRoots = new HashSet<DependencyNode>();
+            possibleRoots = new HashSet<>();
           }
           final int inputs = root.getInputCount();
           for (int j = 0; j < inputs; j++) {
@@ -120,26 +120,25 @@ public abstract class RootDiscardingSubgrapher {
     } while (true);
     if (newRoots.isEmpty()) {
       return null;
-    } else {
-      for (Map.Entry<DependencyNode, NodeState> accept : accepted.entrySet()) {
-        final DependencyNode node = accept.getKey();
-        final int count = node.getOutputCount();
-        if (accept.getValue() == NodeState.EXCLUDED) {
-          for (int i = 0; i < count; i++) {
-            final Set<ValueRequirement> requirements = terminals.remove(node.getOutputValue(i));
-            if (requirements != null) {
-              missingRequirements.addAll(requirements);
-            }
+    }
+    for (final Map.Entry<DependencyNode, NodeState> accept : accepted.entrySet()) {
+      final DependencyNode node = accept.getKey();
+      final int count = node.getOutputCount();
+      if (accept.getValue() == NodeState.EXCLUDED) {
+        for (int i = 0; i < count; i++) {
+          final Set<ValueRequirement> requirements = terminals.remove(node.getOutputValue(i));
+          if (requirements != null) {
+            missingRequirements.addAll(requirements);
           }
         }
       }
-      return newRoots;
     }
+    return newRoots;
   }
 
   /**
    * Forms a subgraph of the given graph.
-   * 
+   *
    * @param graph the graph to process, not null
    * @param missingRequirements the structure that should receive any requirements that are ejected from the sub-graph, not null
    * @param accepted the acceptance state buffer, not null
@@ -147,7 +146,7 @@ public abstract class RootDiscardingSubgrapher {
    */
   public DependencyGraph subGraph(final DependencyGraph graph, final Set<ValueRequirement> missingRequirements, final Map<DependencyNode, NodeState> accepted) {
     final int rootCount = graph.getRootCount();
-    Set<DependencyNode> newRoots = new HashSet<DependencyNode>();
+    final Set<DependencyNode> newRoots = new HashSet<>();
     Set<DependencyNode> possibleRoots = null;
     for (int i = 0; i < rootCount; i++) {
       final DependencyNode root = graph.getRootNode(i);
@@ -159,7 +158,7 @@ public abstract class RootDiscardingSubgrapher {
         assert state == NodeState.EXCLUDED;
         // This root isn't in the new graph, but one or more of its inputs might become roots
         if (possibleRoots == null) {
-          possibleRoots = new HashSet<DependencyNode>();
+          possibleRoots = new HashSet<>();
         }
         final int inputs = root.getInputCount();
         for (int j = 0; j < inputs; j++) {
@@ -174,7 +173,7 @@ public abstract class RootDiscardingSubgrapher {
     while (possibleRoots != null) {
       final Set<DependencyNode> roots = possibleRoots;
       possibleRoots = null;
-      for (DependencyNode root : roots) {
+      for (final DependencyNode root : roots) {
         final NodeState state = acceptNode(root, accepted);
         if (state == NodeState.INCLUDED) {
           // This root is in the new graph
@@ -182,7 +181,7 @@ public abstract class RootDiscardingSubgrapher {
         } else if (state == NodeState.EXCLUDED) {
           // This root isn't in the new graph, but one or more of its inputs might become roots
           if (possibleRoots == null) {
-            possibleRoots = new HashSet<DependencyNode>();
+            possibleRoots = new HashSet<>();
           }
           final int inputs = root.getInputCount();
           for (int j = 0; j < inputs; j++) {
@@ -193,51 +192,51 @@ public abstract class RootDiscardingSubgrapher {
     }
     if (newRoots.isEmpty()) {
       return null;
-    } else {
-      final Map<ValueSpecification, Set<ValueRequirement>> oldTerminals = graph.getTerminalOutputs();
-      final Map<ValueSpecification, Set<ValueRequirement>> terminals = Maps.newHashMapWithExpectedSize(oldTerminals.size());
-      int size = 0;
-      for (Map.Entry<DependencyNode, NodeState> accept : accepted.entrySet()) {
-        final DependencyNode node = accept.getKey();
-        final int count = node.getOutputCount();
-        if (accept.getValue() == NodeState.EXCLUDED) {
-          for (int i = 0; i < count; i++) {
-            final ValueSpecification value = node.getOutputValue(i);
-            final Set<ValueRequirement> terminal = oldTerminals.get(value);
-            if (terminal != null) {
-              missingRequirements.addAll(terminal);
-            }
-          }
-        } else {
-          for (int i = 0; i < count; i++) {
-            final ValueSpecification value = node.getOutputValue(i);
-            final Set<ValueRequirement> terminal = oldTerminals.get(value);
-            if (terminal != null) {
-              terminals.put(value, terminal);
-            }
-          }
-          size++;
-        }
-      }
-      return new DependencyGraphImpl(graph.getCalculationConfigurationName(), newRoots, size, terminals);
     }
+    final Map<ValueSpecification, Set<ValueRequirement>> oldTerminals = graph.getTerminalOutputs();
+    final Map<ValueSpecification, Set<ValueRequirement>> terminals = Maps.newHashMapWithExpectedSize(oldTerminals.size());
+    int size = 0;
+    for (final Map.Entry<DependencyNode, NodeState> accept : accepted.entrySet()) {
+      final DependencyNode node = accept.getKey();
+      final int count = node.getOutputCount();
+      if (accept.getValue() == NodeState.EXCLUDED) {
+        for (int i = 0; i < count; i++) {
+          final ValueSpecification value = node.getOutputValue(i);
+          final Set<ValueRequirement> terminal = oldTerminals.get(value);
+          if (terminal != null) {
+            missingRequirements.addAll(terminal);
+          }
+        }
+      } else {
+        for (int i = 0; i < count; i++) {
+          final ValueSpecification value = node.getOutputValue(i);
+          final Set<ValueRequirement> terminal = oldTerminals.get(value);
+          if (terminal != null) {
+            terminals.put(value, terminal);
+          }
+        }
+        size++;
+      }
+    }
+    return new DependencyGraphImpl(graph.getCalculationConfigurationName(), newRoots, size, terminals);
   }
 
   /**
    * Forms a subgraph of the given graph.
-   * 
+   *
    * @param roots the root nodes to process, not null
    * @param terminals the terminal outputs to update, not null
    * @param missingRequirements the structure that should receive any requirements that are ejected from the sub-graph, not null
    * @return the new graph roots, or null for an empty graph
    */
-  public Set<DependencyNode> subGraph(final Collection<DependencyNode> roots, final Map<ValueSpecification, Set<ValueRequirement>> terminals, final Set<ValueRequirement> missingRequirements) {
+  public Set<DependencyNode> subGraph(final Collection<DependencyNode> roots, final Map<ValueSpecification, Set<ValueRequirement>> terminals,
+      final Set<ValueRequirement> missingRequirements) {
     return subGraph(roots, terminals, missingRequirements, new HashMap<DependencyNode, NodeState>());
   }
 
   /**
    * Forms a subgraph of the given graph.
-   * 
+   *
    * @param graph the graph to process, not null
    * @param missingRequirements the structure that should receive any requirements that are ejected from the sub-graph, not null
    * @return the subgraph, or null if it would be empty

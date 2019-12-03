@@ -15,11 +15,14 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link LifecycleUtils} class
+ * Tests the {@link LifecycleUtils} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class LifecycleUtilsTest {
 
+  /**
+   *
+   */
   public void testStart() {
     // No-op; not a Lifecycle
     LifecycleUtils.start("Foo");
@@ -30,6 +33,9 @@ public class LifecycleUtilsTest {
     Mockito.verifyNoMoreInteractions(mock);
   }
 
+  /**
+   *
+   */
   public void testIsRunning() {
     // Default return value; not a Lifecycle
     assertFalse(LifecycleUtils.isRunning("Foo", false));
@@ -40,6 +46,9 @@ public class LifecycleUtilsTest {
     assertTrue(LifecycleUtils.isRunning(mock, false));
   }
 
+  /**
+   *
+   */
   public void testStop() {
     // No-op; not a Lifecycle
     LifecycleUtils.stop("Foo");

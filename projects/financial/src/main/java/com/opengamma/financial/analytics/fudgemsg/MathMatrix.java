@@ -15,15 +15,15 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * 
+ *
  */
 /* package */final class MathMatrix {
-  
+
   private MathMatrix() {
   }
-  
+
   /**
-   * Fudge builder for {@code DoubleMatrix1D}
+   * Fudge builder for {@code DoubleMatrix1D}.
    */
   @FudgeBuilderFor(DoubleMatrix1D.class)
   public static final class DoubleMatrix1DBuilder extends AbstractFudgeBuilder<DoubleMatrix1D> {
@@ -31,7 +31,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
     @Override
     public DoubleMatrix1D buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      double[] data = message.getFieldValue(double[].class, message.getByName(DATA_FIELD_NAME));
+      final double[] data = message.getFieldValue(double[].class, message.getByName(DATA_FIELD_NAME));
       return new DoubleMatrix1D(data);
     }
 
@@ -43,7 +43,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
   }
 
   /**
-   * Fudge builder for {@code DoubleMatrix2D}
+   * Fudge builder for {@code DoubleMatrix2D}.
    */
   @FudgeBuilderFor(DoubleMatrix2D.class)
   public static final class DoubleMatrix2DBuilder extends AbstractFudgeBuilder<DoubleMatrix2D> {

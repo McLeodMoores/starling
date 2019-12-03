@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.deposit;
@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ * A security representing a cash deposit with a periodically-compounded zero rate.
  */
 @BeanDefinition
 @SecurityDescription(type = PeriodicZeroDepositSecurity.SECURITY_TYPE, description = "Periodic zero deposit")
@@ -34,7 +34,7 @@ public class PeriodicZeroDepositSecurity extends FinancialSecurity {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** The security type */
+  /** The security type. */
   public static final String SECURITY_TYPE = "PERIODIC_ZERO_DEPOSIT";
 
   /** The currency. */
@@ -61,10 +61,27 @@ public class PeriodicZeroDepositSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _region;
 
+  /**
+   * For the builder.
+   */
   PeriodicZeroDepositSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param rate
+   *          the zero rate
+   * @param compoundingPeriodsPerYear
+   *          the number of compounding periods per year, greater than zero
+   * @param region
+   *          the region, not null
+   */
   public PeriodicZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate,
       final double compoundingPeriodsPerYear, final ExternalId region) {
     super(SECURITY_TYPE);

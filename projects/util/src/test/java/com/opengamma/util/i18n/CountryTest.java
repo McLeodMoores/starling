@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.i18n;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 import static org.testng.AssertJUnit.assertTrue;
@@ -26,10 +27,13 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CountryTest {
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // constants
-  //-----------------------------------------------------------------------
-  public void test_constants() {
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testConstants() {
     assertEquals(Country.EU, Country.of("EU"));
     assertEquals(Country.BE, Country.of("BE"));
     assertEquals(Country.CH, Country.of("CH"));
@@ -67,135 +71,191 @@ public class CountryTest {
     assertEquals(Country.TH, Country.of("TH"));
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // of(String)
-  //-----------------------------------------------------------------------
-  public void test_of_String() {
-    Country test = Country.of("SE");
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testOfString() {
+    final Country test = Country.of("SE");
     assertSame(Country.SE, test);
     assertEquals("SE", test.getCode());
     assertSame(Country.of("SE"), test);
   }
 
-  public void test_of_String_unknownCountryCreated() {
-    Country test = Country.of("ZY");
+  /**
+   *
+   */
+  public void testOfStringUnknownCountryCreated() {
+    final Country test = Country.of("ZY");
     assertEquals("ZY", test.getCode());
     assertSame(Country.of("ZY"), test);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_lowerCase() {
+  public void testOfStringLowerCase() {
     try {
       Country.of("gb");
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       assertEquals("Invalid country code: gb", ex.getMessage());
       throw ex;
     }
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_empty() {
+  public void testOfStringEmpty() {
     Country.of("");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_tooShort() {
+  public void testOfStringTooShort() {
     Country.of("A");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_tooLong() {
+  public void testOfStringTooLong() {
     Country.of("ABC");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_nullString() {
+  public void testOfStringNullString() {
     Country.of((String) null);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // parse(String)
-  //-----------------------------------------------------------------------
-  public void test_parse_String() {
-    Country test = Country.parse("GB");
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testParseString() {
+    final Country test = Country.parse("GB");
     assertEquals("GB", test.getCode());
     assertSame(Country.GB, test);
   }
 
-  public void test_parse_String_unknownCountryCreated() {
-    Country test = Country.parse("ZX");
+  /**
+   *
+   */
+  public void testParseStringUnknownCountryCreated() {
+    final Country test = Country.parse("ZX");
     assertEquals("ZX", test.getCode());
     assertSame(Country.of("ZX"), test);
   }
 
-  public void test_parse_String_lowerCase() {
-    Country test = Country.parse("gb");
+  /**
+   *
+   */
+  public void testParseStringLowerCase() {
+    final Country test = Country.parse("gb");
     assertEquals("GB", test.getCode());
     assertSame(Country.GB, test);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_empty() {
+  public void testParseStringEmpty() {
     Country.parse("");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_tooShort() {
+  public void testParseStringTooShort() {
     Country.parse("A");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_tooLong() {
+  public void testParseStringTooLong() {
     Country.parse("ABC");
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_nullString() {
+  public void testParseStringNullString() {
     Country.parse((String) null);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // Serialisation
-  //-----------------------------------------------------------------------
-  public void test_serialization_GB() throws Exception {
-    Country cu = Country.of("GB");
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(baos);
+  // -----------------------------------------------------------------------
+  /**
+   * @throws Exception
+   *           if there is a problem with writing the stream
+   */
+  public void testSerializationGB() throws Exception {
+    final Country cu = Country.of("GB");
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final ObjectOutputStream oos = new ObjectOutputStream(baos);
     oos.writeObject(cu);
     oos.close();
-    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-    Country input = (Country) ois.readObject();
+    final ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+    final Country input = (Country) ois.readObject();
     assertSame(input, cu);
   }
 
-  public void test_serialization_AA() throws Exception {
-    Country cu = Country.of("AA");
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(baos);
+  /**
+   * @throws Exception
+   *           if there is a problem with writing to the stream
+   */
+  public void testSerializationAA() throws Exception {
+    final Country cu = Country.of("AA");
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final ObjectOutputStream oos = new ObjectOutputStream(baos);
     oos.writeObject(cu);
     oos.close();
-    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-    Country input = (Country) ois.readObject();
+    final ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+    final Country input = (Country) ois.readObject();
     assertSame(input, cu);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // gets
-  //-----------------------------------------------------------------------
-  public void test_gets() {
-    Country test = Country.of("GB");
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGets() {
+    final Country test = Country.of("GB");
     assertEquals("GB", test.getCode());
     assertEquals(ObjectId.of("CountryISO", "GB"), test.getObjectId());
     assertEquals(UniqueId.of("CountryISO", "GB"), test.getUniqueId());
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // compareTo()
-  //-----------------------------------------------------------------------
-  public void test_compareTo() {
-    Country a = Country.FR;
-    Country b = Country.GB;
-    Country c = Country.JP;
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testCompareTo() {
+    final Country a = Country.FR;
+    final Country b = Country.GB;
+    final Country c = Country.JP;
     assertEquals(a.compareTo(a), 0);
     assertEquals(b.compareTo(b), 0);
     assertEquals(c.compareTo(c), 0);
@@ -210,18 +270,24 @@ public class CountryTest {
     assertTrue(c.compareTo(b) > 0);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = NullPointerException.class)
-  public void test_compareTo_null() {
+  public void testCompareToNull() {
     Country.AU.compareTo(null);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // equals() hashCode()
-  //-----------------------------------------------------------------------
-  public void test_equals_hashCode() {
-    Country a = Country.GB;
-    Country b = Country.of("GB");
-    Country c = Country.FR;
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testEqualsHashCode() {
+    final Country a = Country.GB;
+    final Country b = Country.of("GB");
+    final Country c = Country.FR;
     assertEquals(a.equals(a), true);
     assertEquals(b.equals(b), true);
     assertEquals(c.equals(c), true);
@@ -234,18 +300,24 @@ public class CountryTest {
     assertEquals(b.equals(c), false);
   }
 
-  public void test_equals_false() {
-    Country a = Country.GB;
+  /**
+   *
+   */
+  public void testEqualsFalse() {
+    final Country a = Country.GB;
     assertEquals(a.equals(null), false);
-    assertEquals(a.equals("String"), false);
+    assertNotEquals("Country", a);
     assertEquals(a.equals(new Object()), false);
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // toString()
-  //-----------------------------------------------------------------------
-  public void test_toString() {
-    Country test = Country.GB;
+  // -----------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testToString() {
+    final Country test = Country.GB;
     assertEquals(test.toString(), "GB");
   }
 

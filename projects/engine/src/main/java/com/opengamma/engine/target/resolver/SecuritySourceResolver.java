@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.resolver;
@@ -42,8 +42,8 @@ public class SecuritySourceResolver extends AbstractIdentifierResolver implement
   protected ExternalIdBundle replaceWeakTickers(final ExternalIdBundle identifiers) {
     final String bbgWeakTicker = identifiers.getValue(ExternalSchemes.BLOOMBERG_TICKER_WEAK);
     final String bbgWeakBUID = identifiers.getValue(ExternalSchemes.BLOOMBERG_BUID_WEAK);
-    if ((bbgWeakTicker != null) || (bbgWeakBUID != null)) {
-      final List<ExternalId> ids = new ArrayList<ExternalId>();
+    if (bbgWeakTicker != null || bbgWeakBUID != null) {
+      final List<ExternalId> ids = new ArrayList<>();
       for (final ExternalId identifier : identifiers) {
         if (ExternalSchemes.BLOOMBERG_TICKER_WEAK.equals(identifier.getScheme())) {
           ids.add(ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, identifier.getValue()));
@@ -54,9 +54,8 @@ public class SecuritySourceResolver extends AbstractIdentifierResolver implement
         }
       }
       return ExternalIdBundle.of(ids);
-    } else {
-      return identifiers;
     }
+    return identifiers;
   }
 
   // ObjectResolver
@@ -87,16 +86,15 @@ public class SecuritySourceResolver extends AbstractIdentifierResolver implement
     final Security security = getUnderlying().getSingle(replaceWeakTickers(identifiers), versionCorrection);
     if (security == null) {
       return null;
-    } else {
-      return security.getUniqueId();
     }
+    return security.getUniqueId();
   }
 
   @Override
   public Map<ExternalIdBundle, UniqueId> resolveExternalIds(final Collection<ExternalIdBundle> identifiers, final VersionCorrection versionCorrection) {
     final Map<ExternalIdBundle, ? extends Security> securities = getUnderlying().getSingle(identifiers, versionCorrection);
     final Map<ExternalIdBundle, UniqueId> result = Maps.newHashMapWithExpectedSize(securities.size());
-    for (Map.Entry<ExternalIdBundle, ? extends Security> security : securities.entrySet()) {
+    for (final Map.Entry<ExternalIdBundle, ? extends Security> security : securities.entrySet()) {
       result.put(security.getKey(), security.getValue().getUniqueId());
     }
     return result;
@@ -115,7 +113,7 @@ public class SecuritySourceResolver extends AbstractIdentifierResolver implement
   public Map<ObjectId, UniqueId> resolveObjectIds(final Collection<ObjectId> identifiers, final VersionCorrection versionCorrection) {
     final Map<ObjectId, Security> securities = getUnderlying().get(identifiers, versionCorrection);
     final Map<ObjectId, UniqueId> result = Maps.newHashMapWithExpectedSize(securities.size());
-    for (Map.Entry<ObjectId, Security> security : securities.entrySet()) {
+    for (final Map.Entry<ObjectId, Security> security : securities.entrySet()) {
       result.put(security.getKey(), security.getValue().getUniqueId());
     }
     return result;

@@ -31,27 +31,27 @@ public class PersistentSubscription implements Serializable {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param fullyQualifiedSpec  the specification, not null
    */
-  protected PersistentSubscription(LiveDataSpecification fullyQualifiedSpec) {
+  protected PersistentSubscription(final LiveDataSpecification fullyQualifiedSpec) {
     ArgumentChecker.notNull(fullyQualifiedSpec, "Fully qualified spec");
     _fullyQualifiedSpec = fullyQualifiedSpec;
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param distributor  the distributor, not null
    */
-  protected PersistentSubscription(MarketDataDistributor distributor) {
+  protected PersistentSubscription(final MarketDataDistributor distributor) {
     _fullyQualifiedSpec = distributor.getDistributionSpec().getFullyQualifiedLiveDataSpecification();
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the specification.
-   * 
+   *
    * @return the specification, not null
    */
   public LiveDataSpecification getFullyQualifiedSpec() {
@@ -60,7 +60,7 @@ public class PersistentSubscription implements Serializable {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 

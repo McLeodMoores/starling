@@ -56,7 +56,8 @@ public class PresentValueForexBlackVolatilityNodeSensitivityDataBundle {
    * @param delta The deltas for the vega matrix, not null
    * @param vega The initial sensitivity, not null
    */
-  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle(final Currency ccy1, final Currency ccy2, final DoubleMatrix1D expiries, final DoubleMatrix1D delta, final DoubleMatrix2D vega) {
+  public PresentValueForexBlackVolatilityNodeSensitivityDataBundle(final Currency ccy1, final Currency ccy2, final DoubleMatrix1D expiries,
+      final DoubleMatrix1D delta, final DoubleMatrix2D vega) {
     ArgumentChecker.notNull(ccy1, "currency 1");
     ArgumentChecker.notNull(ccy2, "currency 2");
     ArgumentChecker.notNull(expiries, "expiries");
@@ -101,12 +102,14 @@ public class PresentValueForexBlackVolatilityNodeSensitivityDataBundle {
    * @param tolerance The tolerance.
    * @return The comparison flag.
    */
-  public static boolean compare(final PresentValueForexBlackVolatilityNodeSensitivityDataBundle value1, final PresentValueForexBlackVolatilityNodeSensitivityDataBundle value2,
+  public static boolean compare(final PresentValueForexBlackVolatilityNodeSensitivityDataBundle value1,
+      final PresentValueForexBlackVolatilityNodeSensitivityDataBundle value2,
       final double tolerance) {
     if (!value1._currencyPair.equals(value2._currencyPair)) {
       return false;
     }
-    if ((value1._expiries.getNumberOfElements() != value2._expiries.getNumberOfElements()) || (value1._delta.getNumberOfElements() != value2._delta.getNumberOfElements())) {
+    if (value1._expiries.getNumberOfElements() != value2._expiries.getNumberOfElements()
+        || value1._delta.getNumberOfElements() != value2._delta.getNumberOfElements()) {
       return false;
     }
     for (int loopexp = 0; loopexp < value1._expiries.getNumberOfElements(); loopexp++) {
@@ -137,7 +140,8 @@ public class PresentValueForexBlackVolatilityNodeSensitivityDataBundle {
         result[loopexp][0] += vegaStrike[loopexp][loopstrike] + vegaStrike[loopexp][nbStrike - 1 - loopstrike];
       }
     }
-    return new PresentValueForexBlackVolatilityQuoteSensitivityDataBundle(_currencyPair.getFirst(), _currencyPair.getSecond(), _expiries.getData(), _delta.getData(), result);
+    return new PresentValueForexBlackVolatilityQuoteSensitivityDataBundle(_currencyPair.getFirst(),
+        _currencyPair.getSecond(), _expiries.getData(), _delta.getData(), result);
   }
 
   //TODO Add possibility to add a sensitivity?

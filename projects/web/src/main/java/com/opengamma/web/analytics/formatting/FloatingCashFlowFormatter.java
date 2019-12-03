@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -38,7 +38,7 @@ public class FloatingCashFlowFormatter extends AbstractFormatter<FloatingLegCash
   private static final String[] COLUMN_LABELS = { NOTIONAL, SPREAD, GEARING, INDEX_TERM,
       PAYMENT_DATE, PAYMENT_TIME, START_ACCRUAL_DATES, END_ACCRUAL_DATES, ACCRUAL_YEAR_FRACTION, START_FIXING_DATES, END_FIXING_DATES, FIXING_FRACTIONS,
       FIXED_RATE, PAYMENT_DISCOUNT_FACTOR, PAYMENT_AMOUNT, DISCOUNTED_PAYMENT_AMOUNT,
-      FORWARD_RATE, PROJECTED_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT};
+      FORWARD_RATE, PROJECTED_AMOUNT, DISCOUNTED_PROJECTED_PAYMENT };
   private static final String X_LABELS = "xLabels";
   private static final String Y_LABELS = "yLabels";
   private static final String MATRIX = "matrix";
@@ -48,9 +48,12 @@ public class FloatingCashFlowFormatter extends AbstractFormatter<FloatingLegCash
   private final CurrencyAmountFormatter _currencyAmountFormatter;
 
   /**
-   * @param doubleFormatter  formats the discount factors
-   * @param rateFormatter  formats the zero rates
-   * @param currencyAmountFormatter  formats the currency amounts
+   * @param doubleFormatter
+   *          formats the discount factors
+   * @param rateFormatter
+   *          formats the zero rates
+   * @param currencyAmountFormatter
+   *          formats the currency amounts
    */
   /* package */ FloatingCashFlowFormatter(final DoubleFormatter doubleFormatter, final RateFormatter rateFormatter,
       final CurrencyAmountFormatter currencyAmountFormatter) {
@@ -73,9 +76,12 @@ public class FloatingCashFlowFormatter extends AbstractFormatter<FloatingLegCash
 
   /**
    * Transforms the details object to an amount that can be displayed.
-   * @param value  the FX forward details
-   * @param valueSpec  the value specification
-   * @return  the data
+   * 
+   * @param value
+   *          the FX forward details
+   * @param valueSpec
+   *          the value specification
+   * @return the data
    */
   /* package */ Map<String, Object> formatExpanded(final FloatingLegCashFlows value, final ValueSpecification valueSpec) {
     final int columnCount = COLUMN_LABELS.length;

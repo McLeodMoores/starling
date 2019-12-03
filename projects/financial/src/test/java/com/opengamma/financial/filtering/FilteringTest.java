@@ -77,17 +77,17 @@ public class FilteringTest {
 
   private static void print(final Position position, final String indent) {
     System.out.println(indent + "POSITION: " + position.getUniqueId());
-    for (Trade trade : position.getTrades()) {
+    for (final Trade trade : position.getTrades()) {
       print(trade, indent + "  ");
     }
   }
 
   private static void print(final PortfolioNode portfolioNode, final String indent) {
     System.out.println(indent + "NODE: " + portfolioNode.getName() + "/" + portfolioNode.getUniqueId());
-    for (PortfolioNode childNode : portfolioNode.getChildNodes()) {
+    for (final PortfolioNode childNode : portfolioNode.getChildNodes()) {
       print(childNode, indent + "  ");
     }
-    for (Position position : portfolioNode.getPositions()) {
+    for (final Position position : portfolioNode.getPositions()) {
       print(position, indent + "  ");
     }
   }
@@ -97,12 +97,12 @@ public class FilteringTest {
     final PortfolioFilter filter = new PortfolioFilter(new FilteringFunction() {
 
       @Override
-      public boolean acceptPortfolioNode(PortfolioNode portfolioNode) {
+      public boolean acceptPortfolioNode(final PortfolioNode portfolioNode) {
         return true;
       }
 
       @Override
-      public boolean acceptPosition(Position position) {
+      public boolean acceptPosition(final Position position) {
         return true;
       }
 
@@ -146,9 +146,9 @@ public class FilteringTest {
       // The default portfolio node filter will remove empty nodes
       @Override
       public boolean acceptPosition(final Position position) {
-        for (Trade trade : position.getTrades ()) {
+        for (final Trade trade : position.getTrades ()) {
           final int attrib = Integer.parseInt(trade.getAttributes ().get ("Foo"));
-          if ((attrib <= 6) || (attrib >= 33)) {
+          if (attrib <= 6 || attrib >= 33) {
             return false;
           }
         }

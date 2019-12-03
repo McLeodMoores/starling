@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -10,52 +10,15 @@ import java.util.Date;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.util.CompareUtils;
+
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
-import com.opengamma.util.CompareUtils;
-
 /**
- * 
- * The generalized Pareto distribution is a family of power law probability
- * distributions with location parameter $\mu$, shape parameter $\xi$ and scale
- * parameter $\sigma$, where
- * $$
- * \begin{eqnarray*}
- * \mu&\in&\Re,\\
- * \xi&\in&\Re,\\
- * \sigma&>&0
- * \end{eqnarray*}
- * $$
- * and with support
- * $$
- * \begin{eqnarray*}
- * x\geq\mu\quad\quad\quad(\xi\geq 0)\\
- * \mu\leq x\leq\mu-\frac{\sigma}{\xi}\quad(\xi<0)
- * \end{eqnarray*}
- * $$
- * The cdf is given by:
- * $$
- * \begin{align*}
- * F(z)&=1-\left(1 + \xi z\right)^{-\frac{1}{\xi}}\\
- * z&=\frac{x-\mu}{\sigma}
- * \end{align*}
- * $$
- * and the pdf is given by:
- * $$
- * \begin{align*}
- * f(z)&=\frac{\left(1+\xi z\right)^{-\left(\frac{1}{\xi} + 1\right)}}{\sigma}\\
- * z&=\frac{x-\mu}{\sigma}
- * \end{align*}
- * $$
- * Given a uniform random number variable $U$ drawn from the interval $(0,1]$, a
- * Pareto-distributed random variable with parameters $\mu$, $\sigma$ and
- * $\xi$ is given by
- * $$
- * \begin{align*}
- * X=\mu + \frac{\sigma\left(U^{-\xi}-1\right)}{\xi}\sim GPD(\mu,\sigma,\xi)
- * \end{align*}
- * $$
+ *
+ * The generalized Pareto distribution is a family of power law probability distributions with location parameter $\mu$, shape parameter $\xi$ and scale
+ * parameter $\sigma$.
  */
 public class GeneralizedParetoDistribution implements ProbabilityDistribution<Double> {
   // TODO check cdf, pdf for support
@@ -66,7 +29,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   private final RandomEngine _engine;
 
   /**
-   * 
+   *
    * @param mu The location parameter
    * @param sigma The scale parameter, not negative or zero
    * @param ksi The shape parameter, not zero
@@ -76,7 +39,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-   * 
+   *
    * @param mu The location parameter
    * @param sigma The scale parameter
    * @param ksi The shape parameter
@@ -125,8 +88,10 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -134,9 +99,9 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-  * {@inheritDoc} 
-  * @throws IllegalArgumentException If $x \not\in$ support
-  */
+   * {@inheritDoc}
+   * @throws IllegalArgumentException If $x \not\in$ support
+   */
   @Override
   public double getPDF(final Double x) {
     Validate.notNull(x);
@@ -144,7 +109,7 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
   }
 
   /**
-   * {@inheritDoc} 
+   * {@inheritDoc}
    */
   @Override
   public double nextRandom() {
@@ -167,11 +132,11 @@ public class GeneralizedParetoDistribution implements ProbabilityDistribution<Do
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_ksi);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_mu);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sigma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

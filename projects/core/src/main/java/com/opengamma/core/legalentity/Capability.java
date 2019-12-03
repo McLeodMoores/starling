@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.legalentity;
@@ -29,10 +29,18 @@ public class Capability implements Bean {
   @PropertyDefinition
   private String _name;
 
+  /**
+   * Constructor used by the bean.
+   */
   public Capability() {
   }
 
-  public Capability(String name) {
+  /**
+   * Constructs a capability.
+   *
+   * @param name  the name
+   */
+  public Capability(final String name) {
     _name = name;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex;
@@ -24,7 +24,7 @@ import com.opengamma.financial.security.option.NonDeliverableFXOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class FXOptionsCalculationMethodDefaults extends StaticDefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
@@ -62,7 +62,7 @@ public class FXOptionsCalculationMethodDefaults extends StaticDefaultPropertyFun
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, ValueRequirement desiredValue) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Security security = target.getSecurity();
     if (security instanceof FXOptionSecurity || security instanceof NonDeliverableFXOptionSecurity) {
       return _fxOptionCalculationMethod;

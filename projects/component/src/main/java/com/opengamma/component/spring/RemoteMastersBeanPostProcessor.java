@@ -63,7 +63,7 @@ public class RemoteMastersBeanPostProcessor extends DirectBean implements BeanFa
   /**
    * The remote wrappers.
    */
-  private final Map<Class<?>, Class<?>> _remoteWrappers = new HashMap<Class<?>, Class<?>>();
+  private final Map<Class<?>, Class<?>> _remoteWrappers = new HashMap<>();
   {
     _remoteWrappers.put(ConfigMaster.class, RemoteConfigMaster.class);
     _remoteWrappers.put(ExchangeMaster.class, RemoteExchangeMaster.class);
@@ -86,21 +86,21 @@ public class RemoteMastersBeanPostProcessor extends DirectBean implements BeanFa
 
   //-------------------------------------------------------------------------
   @Override
-  public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-    RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
-    ComponentServer server = remote.getComponentServer();
-    for (ComponentInfo info : server.getComponentInfos()) {
+  public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    final RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
+    final ComponentServer server = remote.getComponentServer();
+    for (final ComponentInfo info : server.getComponentInfos()) {
       initComponent(beanFactory, info);
     }
   }
 
-  protected void initComponent(ConfigurableListableBeanFactory beanFactory, ComponentInfo info) {
-    URI componentUri = DataComponentServerUris.uri(_baseUri, info);
-    Class<?> remoteType = _remoteWrappers.get(info.getType());
+  protected void initComponent(final ConfigurableListableBeanFactory beanFactory, final ComponentInfo info) {
+    final URI componentUri = DataComponentServerUris.uri(_baseUri, info);
+    final Class<?> remoteType = _remoteWrappers.get(info.getType());
     if (remoteType != null) {
-      Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
-      Object target = ReflectionUtils.newInstance(con, componentUri);
-      String beanName = info.getClassifier() + info.getType().getSimpleName();
+      final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
+      final Object target = ReflectionUtils.newInstance(con, componentUri);
+      final String beanName = info.getClassifier() + info.getType().getSimpleName();
       beanFactory.registerSingleton(beanName, target);
     }
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -28,14 +28,14 @@ import com.sleepycat.je.OperationStatus;
  */
 public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent implements BinaryDataStore {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBBinaryDataStore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBBinaryDataStore.class);
 
   private final class Worker extends AbstractBerkeleyDBWorker implements BinaryDataStore {
 
     private final DatabaseEntry _key = new DatabaseEntry();
     private final DatabaseEntry _value = new DatabaseEntry();
 
-    public Worker(final BlockingQueue<Request> requests) {
+    Worker(final BlockingQueue<Request> requests) {
       super(null, requests);
     }
 
@@ -50,12 +50,12 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     @Override
     public byte[] get(final long identifier) {
       LongBinding.longToEntry(identifier, _key);
-      OperationStatus opStatus = getDatabase().get(getTransaction(), _key, _value, LockMode.READ_UNCOMMITTED);
+      final OperationStatus opStatus = getDatabase().get(getTransaction(), _key, _value, LockMode.READ_UNCOMMITTED);
       switch (opStatus) {
         case SUCCESS:
           return _value.getData();
         default:
-          s_logger.debug("{} - No record available for identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
+          LOGGER.debug("{} - No record available for identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
           return null;
       }
     }
@@ -64,12 +64,12 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     public void put(final long identifier, final byte[] data) {
       LongBinding.longToEntry(identifier, _key);
       _value.setData(data);
-      OperationStatus opStatus = getDatabase().put(getTransaction(), _key, _value);
+      final OperationStatus opStatus = getDatabase().put(getTransaction(), _key, _value);
       switch (opStatus) {
         case SUCCESS:
           return;
         default:
-          s_logger.warn("{} - Unable to write to identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
+          LOGGER.warn("{} - Unable to write to identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
       }
     }
 
@@ -87,7 +87,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
   private BlockingQueue<Worker.Request> _requests;
 
-  public BerkeleyDBBinaryDataStore(Environment dbEnvironment, String databaseName) {
+  public BerkeleyDBBinaryDataStore(final Environment dbEnvironment, final String databaseName) {
     super(dbEnvironment, databaseName);
   }
 
@@ -95,7 +95,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   public void start() {
     synchronized (this) {
       if (_requests == null) {
-        _requests = new LinkedBlockingQueue<Worker.Request>();
+        _requests = new LinkedBlockingQueue<>();
         // TODO: We can have multiple worker threads -- will that be good or bad?
         final Thread worker = new Thread(new Worker(_requests));
         worker.setName("BerkeleyDBBinaryDataStore-Worker");
@@ -118,7 +118,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
   @Override
   protected DatabaseConfig getDatabaseConfig() {
-    DatabaseConfig dbConfig = new DatabaseConfig();
+    final DatabaseConfig dbConfig = new DatabaseConfig();
     dbConfig.setAllowCreate(true);
     dbConfig.setTransactional(false);
     // TODO kirk 2010-08-07 -- For Batch operation, this should be set to false probably.
@@ -152,7 +152,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final long _identifier;
     private byte[] _result;
 
-    public GetRequest(final long identifier) {
+    GetRequest(final long identifier) {
       _identifier = identifier;
     }
 
@@ -170,9 +170,9 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   }
 
   @Override
-  public byte[] get(long identifier) {
+  public byte[] get(final long identifier) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetRequest(identifier).run(_requests);
@@ -183,7 +183,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final long _identifier;
     private final byte[] _data;
 
-    public PutRequest(final long identifier, final byte[] data) {
+    PutRequest(final long identifier, final byte[] data) {
       _identifier = identifier;
       _data = data;
     }
@@ -201,9 +201,9 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   }
 
   @Override
-  public void put(long identifier, byte[] data) {
+  public void put(final long identifier, final byte[] data) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     ArgumentChecker.notNull(data, "data to store");
@@ -215,7 +215,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
     private final Collection<Long> _identifiers;
     private Map<Long, byte[]> _result;
 
-    public BulkGetRequest(final Collection<Long> identifiers) {
+    BulkGetRequest(final Collection<Long> identifiers) {
       _identifiers = identifiers;
     }
 
@@ -235,7 +235,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public Map<Long, byte[]> get(final Collection<Long> identifiers) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new BulkGetRequest(identifiers).run(_requests);
@@ -245,7 +245,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
 
     private final Map<Long, byte[]> _data;
 
-    public BulkPutRequest(final Map<Long, byte[]> data) {
+    BulkPutRequest(final Map<Long, byte[]> data) {
       _data = data;
     }
 
@@ -264,7 +264,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public void put(final Map<Long, byte[]> data) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     new BulkPutRequest(data).run(_requests);

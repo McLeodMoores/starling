@@ -35,49 +35,51 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebMarketDataSnapshotResource(final AbstractWebMarketDataSnapshotResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
     final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "snapshot.ftl", out);
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response putHTML(
-      @FormParam("name") String name,
-      @FormParam("snapshotxml") String xml) {
-    if (data().getSnapshot().isLatest() == false) {
+      @FormParam("name") final String name,
+      @FormParam("snapshotxml") final String xml) {
+    if (!data().getSnapshot().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
-    name = StringUtils.trimToNull(name);
-    xml = StringUtils.trimToNull(xml);
-    if (name == null || xml == null) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    if (trimmedName == null || trimmedXml == null) {
       final FlexiBean out = createRootData();
-      if (name == null) {
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (xml == null) {
+      if (trimmedXml == null) {
         out.put("err_xmlMissing", true);
       }
       final String html = getFreemarker().build(HTML_DIR + "snapshot-update.ftl", out);
       return Response.ok(html).build();
     }
 
-    final URI uri = updateSnapshot(name, parseXML(xml, ManageableMarketDataSnapshot.class));
+    final URI uri = updateSnapshot(trimmedName, parseXML(trimmedXml, ManageableMarketDataSnapshot.class));
     return Response.seeOther(uri).build();
   }
-  
+
   private URI updateSnapshot(final String name, final ManageableMarketDataSnapshot snapshot) {
     final MarketDataSnapshotDocument oldDoc = data().getSnapshot();
     MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument(snapshot);
@@ -88,13 +90,13 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     final URI uri = WebMarketDataSnapshotResource.uri(data());
     return uri;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
     final MarketDataSnapshotDocument doc = data().getSnapshot();
-    if (doc.isLatest() == false) {
+    if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     data().getMarketDataSnapshotMaster().remove(doc.getUniqueId());
@@ -102,9 +104,10 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     return Response.seeOther(uri).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
   @Override
@@ -112,22 +115,24 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
     final FlexiBean out = super.createRootData();
     final MarketDataSnapshotDocument doc = data().getSnapshot();
     out.put("snapshotDoc", doc);
-    out.put("snapshot", doc.getSnapshot());
+    out.put("snapshot", doc.getNamedSnapshot());
     out.put("deleted", !doc.isLatest());
-    out.put("snapshotXml", StringEscapeUtils.escapeJavaScript(createBeanXML(doc.getSnapshot())));
+    out.put("snapshotXml", StringEscapeUtils.escapeJavaScript(createBeanXML(doc.getNamedSnapshot())));
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("versions")
   public WebMarketDataSnapshotVersionsResource findVersions() {
     return new WebMarketDataSnapshotVersionsResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data) {
@@ -136,8 +141,11 @@ public class WebMarketDataSnapshotResource extends AbstractWebMarketDataSnapshot
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideSnapshotId  the override snapshot id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideSnapshotId
+   *          the override snapshot id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data, final UniqueId overrideSnapshotId) {

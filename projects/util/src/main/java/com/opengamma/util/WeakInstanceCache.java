@@ -12,7 +12,7 @@ import com.opengamma.util.async.AbstractHousekeeper;
 
 /**
  * Reduction of common object values to single instances.
- * 
+ *
  * @param <T> object type to reduce
  */
 public class WeakInstanceCache<T> {
@@ -41,9 +41,9 @@ public class WeakInstanceCache<T> {
 
   public WeakInstanceCache() {
     for (int i = 0; i < BUCKETS; i++) {
-      _data[i] = new WeakHashMap<T, WeakReference<T>>();
+      _data[i] = new WeakHashMap<>();
     }
-    (new Housekeeper(this)).start();
+    new Housekeeper(this).start();
   }
 
   protected T getImpl(final WeakHashMap<T, WeakReference<T>> data, final T value) {
@@ -55,13 +55,13 @@ public class WeakInstanceCache<T> {
           return canonValue;
         }
       }
-      data.put(value, new WeakReference<T>(value));
+      data.put(value, new WeakReference<>(value));
       return value;
     }
   }
 
   public T get(final T value) {
-    final WeakHashMap<T, WeakReference<T>> data = _data[value.hashCode() & (BUCKETS - 1)];
+    final WeakHashMap<T, WeakReference<T>> data = _data[value.hashCode() & BUCKETS - 1];
     return getImpl(data, value);
   }
 

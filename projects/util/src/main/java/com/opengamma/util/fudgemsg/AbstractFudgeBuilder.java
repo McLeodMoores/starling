@@ -18,7 +18,7 @@ public abstract class AbstractFudgeBuilder {
 
   /**
    * Adds an object to the specified message if non-null.
-   * 
+   *
    * @param msg  the msg to populate, not null
    * @param fieldName  the field name, may be null
    * @param value  the value, null ignored
@@ -38,7 +38,7 @@ public abstract class AbstractFudgeBuilder {
   /**
    * Adds an object to the specified message if non-null.
    * This handles object hierarchies.
-   * 
+   *
    * @param <T> the declared type
    * @param serializer  the serializer, not null
    * @param msg  the msg to populate, not null
@@ -46,12 +46,13 @@ public abstract class AbstractFudgeBuilder {
    * @param value  the value, null ignored
    * @param declaredType  the declared Java type of the field, not null
    */
-  protected static <T> void addToMessage(final FudgeSerializer serializer, final MutableFudgeMsg msg, final String fieldName, final T value, final Class<T> declaredType) {
+  protected static <T> void addToMessage(final FudgeSerializer serializer, final MutableFudgeMsg msg, final String fieldName,
+      final T value, final Class<T> declaredType) {
     if (value != null) {
-      MutableFudgeMsg subMsg = serializer.newMessage();
+      final MutableFudgeMsg subMsg = serializer.newMessage();
       FudgeSerializer.addClassHeader(subMsg, value.getClass(), declaredType);
-      FudgeMsg builtMsg = serializer.objectToFudgeMsg(value);
-      for (FudgeField field : builtMsg) {
+      final FudgeMsg builtMsg = serializer.objectToFudgeMsg(value);
+      for (final FudgeField field : builtMsg) {
         subMsg.add(field);
       }
       msg.add(fieldName, null, subMsg);
@@ -60,7 +61,7 @@ public abstract class AbstractFudgeBuilder {
 
   /**
    * Adds an object to the specified message if non-null.
-   * 
+   *
    * @param <T> the declared type
    * @param msg  the msg to populate, not null
    * @param fieldName  the field name, may be null
@@ -68,7 +69,8 @@ public abstract class AbstractFudgeBuilder {
    * @param value  the value, null ignored
    * @param declaredType  the declared Java type of the field, not null
    */
-  protected static <T> void addToMessage(final MutableFudgeMsg msg, final String fieldName, final FudgeMsg objectMsg, final T value, final Class<T> declaredType) {
+  protected static <T> void addToMessage(final MutableFudgeMsg msg, final String fieldName, final FudgeMsg objectMsg, final T value,
+      final Class<T> declaredType) {
     if (objectMsg != null) {
       FudgeSerializer.addClassHeader((MutableFudgeMsg) objectMsg, value.getClass(), declaredType);
       msg.add(fieldName, null, objectMsg);
@@ -77,7 +79,7 @@ public abstract class AbstractFudgeBuilder {
 
 //  /**
 //   * Adds an object to the specified message if non-null
-//   * 
+//   *
 //   * @param msg  the msg to populate, not null
 //   * @param fieldName  the field name, may be null
 //   * @param wireType  the wire type to use, not null

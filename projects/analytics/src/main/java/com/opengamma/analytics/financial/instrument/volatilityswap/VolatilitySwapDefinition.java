@@ -11,7 +11,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionUtils;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.volatilityswap.VolatilitySwap;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -47,16 +46,26 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
   private final Calendar _calendar;
 
   /**
-   * @param currency The currency, not null
-   * @param volStrike The volatility strike, not negative
-   * @param volNotional The volatility notional
-   * @param observationStartDate The observation start date, not null
-   * @param observationEndDate The observation end date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param observationFrequency The observation frequency, not null
-   * @param annualizationFactor The annualization factor, greater than zero
-   * @param calendar The holiday calendar, not null
+   * @param currency
+   *          The currency, not null
+   * @param volStrike
+   *          The volatility strike, not negative
+   * @param volNotional
+   *          The volatility notional
+   * @param observationStartDate
+   *          The observation start date, not null
+   * @param observationEndDate
+   *          The observation end date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param annualizationFactor
+   *          The annualization factor, greater than zero
+   * @param calendar
+   *          The holiday calendar, not null
    */
   public VolatilitySwapDefinition(final Currency currency, final double volStrike, final double volNotional, final ZonedDateTime observationStartDate,
       final ZonedDateTime observationEndDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
@@ -82,11 +91,13 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
     _observationFrequency = observationFrequency;
     _annualizationFactor = annualizationFactor;
     _calendar = calendar;
-    _nObservations = InstrumentDefinitionUtils.countExpectedGoodDays(observationStartDate.toLocalDate(), observationEndDate.toLocalDate(), calendar, observationFrequency);
+    _nObservations = InstrumentDefinitionUtils.countExpectedGoodDays(observationStartDate.toLocalDate(), observationEndDate.toLocalDate(), calendar,
+        observationFrequency);
   }
 
   /**
    * Gets the currency.
+   *
    * @return the currency
    */
   public Currency getCurrency() {
@@ -95,6 +106,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the volatility strike.
+   *
    * @return The volatility strike
    */
   public double getVolatilityStrike() {
@@ -103,6 +115,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the volatility notional.
+   *
    * @return The volatility notional
    */
   public double getVolatilityNotional() {
@@ -111,6 +124,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the observation start date.
+   *
    * @return The observation start date
    */
   public ZonedDateTime getObservationStartDate() {
@@ -119,6 +133,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the observation end date.
+   *
    * @return the observation end date
    */
   public ZonedDateTime getObservationEndDate() {
@@ -127,6 +142,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the effective date.
+   *
    * @return the effective date
    */
   public ZonedDateTime getEffectiveDate() {
@@ -135,6 +151,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the maturity date.
+   *
    * @return the maturity date
    */
   public ZonedDateTime getMaturityDate() {
@@ -143,6 +160,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the observation frequency.
+   *
    * @return the observation frequency
    */
   public PeriodFrequency getObservationFrequency() {
@@ -151,6 +169,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the number of expected observations of the underlying.
+   *
    * @return The number of expected observations of the underlying
    */
   public int getNumberOfObservationsExpected() {
@@ -159,6 +178,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the annualization factor.
+   *
    * @return the annualization factor
    */
   public double getAnnualizationFactor() {
@@ -167,6 +187,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * Gets the calendar.
+   *
    * @return the calendar
    */
   public Calendar getCalendar() {
@@ -187,7 +208,8 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
 
   /**
    * {@inheritDoc}
-   * @deprecated Yield curve names are no longer stored in {@link InstrumentDerivative}
+   *
+   * @deprecated Yield curve names are no longer stored in {@link InstrumentDefinition}
    */
   @Deprecated
   @Override
@@ -211,7 +233,7 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_annualizationFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _calendar.hashCode();
     result = prime * result + _currency.hashCode();
     result = prime * result + _nObservations;
@@ -221,9 +243,9 @@ public class VolatilitySwapDefinition implements InstrumentDefinition<Volatility
     result = prime * result + _effectiveDate.hashCode();
     result = prime * result + _maturityDate.hashCode();
     temp = Double.doubleToLongBits(_volNotional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

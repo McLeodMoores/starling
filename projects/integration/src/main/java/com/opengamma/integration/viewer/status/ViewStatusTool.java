@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status;
@@ -26,30 +26,31 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The view status tool
+ * The view status tool.
  */
 @Scriptable
 public class ViewStatusTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewStatusTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusTool.class);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ViewStatusTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    ViewStatusOption option = ViewStatusOption.getViewStatusReporterOption(getCommandLine(), getToolContext());
-    
-    String portfolioName = option.getPortfolioName();
+    final ViewStatusOption option = ViewStatusOption.getViewStatusReporterOption(getCommandLine(), getToolContext());
+
+    final String portfolioName = option.getPortfolioName();
     UniqueId portfolioId = null;
     if (portfolioName == null) {
       portfolioId = createReferencePortfolio();
@@ -61,22 +62,22 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
     }
     generateViewStatusReport(portfolioId, option);
   }
-  
+
   private void generateViewStatusReport(final UniqueId portfolioId, final ViewStatusOption option) {
-    
-    ViewStatusCalculationWorker calculationWorker = new ViewStatusCalculationWorker(getToolContext(), portfolioId, option);
-    ViewStatusResultAggregator resultAggregator = calculationWorker.run();
-    
-    ViewStatusResultProducer resultProducer = new ViewStatusResultProducer();
-    String statusResult = resultProducer.statusResult(resultAggregator, option.getFormat(), option.getAggregateType());
+
+    final ViewStatusCalculationWorker calculationWorker = new ViewStatusCalculationWorker(getToolContext(), portfolioId, option);
+    final ViewStatusResultAggregator resultAggregator = calculationWorker.run();
+
+    final ViewStatusResultProducer resultProducer = new ViewStatusResultProducer();
+    final String statusResult = resultProducer.statusResult(resultAggregator, option.getFormat(), option.getAggregateType());
     try {
-      File outputFile = option.getOutputFile();
-      s_logger.debug("Writing status report into : {}", outputFile.getPath());
+      final File outputFile = option.getOutputFile();
+      LOGGER.debug("Writing status report into : {}", outputFile.getPath());
       FileUtils.writeStringToFile(outputFile, statusResult);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error writing view-status report to " + option.getOutputFile().toString(), ex);
     }
-   
+
   }
 
   private UniqueId findPortfolioId(final String portfolioName) {
@@ -91,23 +92,24 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
   }
 
   private UniqueId createReferencePortfolio() {
-    ToolContext toolContext = getToolContext();
-    BloombergReferencePortfolioMaker portfolioMaker = new BloombergReferencePortfolioMaker(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(), toolContext.getSecurityMaster());
+    final ToolContext toolContext = getToolContext();
+    final BloombergReferencePortfolioMaker portfolioMaker = new BloombergReferencePortfolioMaker(toolContext.getPortfolioMaster(),
+        toolContext.getPositionMaster(), toolContext.getSecurityMaster());
     portfolioMaker.run();
     return findPortfolioId(BloombergReferencePortfolioMaker.PORTFOLIO_NAME);
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  protected Options createOptions(boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
     final Options toolOptions = super.createOptions(contextProvided);
-    
-    Options viewStatusOptions = ViewStatusOption.createOptions();
-    for (Option option : (Collection<Option>) viewStatusOptions.getOptions()) {
-      s_logger.debug("adding {} to tool options", option);
+
+    final Options viewStatusOptions = ViewStatusOption.createOptions();
+    for (final Option option : (Collection<Option>) viewStatusOptions.getOptions()) {
+      LOGGER.debug("adding {} to tool options", option);
       toolOptions.addOption(option);
     }
     return toolOptions;
   }
-  
+
 }

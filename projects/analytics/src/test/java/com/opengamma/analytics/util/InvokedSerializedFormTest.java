@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.util;
@@ -26,19 +26,19 @@ public class InvokedSerializedFormTest {
     return "static-prefixed-no-arg";
   }
 
-  protected static Object staticExamplePrimitive(double foo) {
+  protected static Object staticExamplePrimitive(final double foo) {
     return "static-primitive-arg-" + foo;
   }
 
-  protected static Object getStaticExamplePrimitive(double foo) {
+  protected static Object getStaticExamplePrimitive(final double foo) {
     return "static-prefixed-primitive-arg-" + foo;
   }
 
-  protected static Object staticExample(Double foo) {
+  protected static Object staticExample(final Double foo) {
     return "static-object-arg-" + foo;
   }
 
-  protected static Object getStaticExample(Double foo) {
+  protected static Object getStaticExample(final Double foo) {
     return "static-prefixed-object-arg-" + foo;
   }
 
@@ -50,19 +50,19 @@ public class InvokedSerializedFormTest {
     return "dynamic-prefixed-no-arg";
   }
 
-  protected Object dynamicExamplePrimitive(double foo) {
+  protected Object dynamicExamplePrimitive(final double foo) {
     return "dynamic-primitive-arg-" + foo;
   }
 
-  protected Object getDynamicExamplePrimitive(double foo) {
+  protected Object getDynamicExamplePrimitive(final double foo) {
     return "dynamic-prefixed-primitive-arg-" + foo;
   }
 
-  protected Object dynamicExample(Double foo) {
+  protected Object dynamicExample(final Double foo) {
     return "dynamic-object-arg-" + foo;
   }
 
-  protected Object getDynamicExample(Double foo) {
+  protected Object getDynamicExample(final Double foo) {
     return "dynamic-prefixed-object-arg-" + foo;
   }
 

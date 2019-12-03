@@ -41,10 +41,10 @@ public class MockConfigSource extends AbstractSource<ConfigItem<?>> implements C
   @SuppressWarnings("unchecked")
   @Override
   public <T> Collection<ConfigItem<T>> get(final Class<T> clazz, final String configName, final VersionCorrection versionCorrection) {
-    final Collection<ConfigItem<T>> result = new ArrayList<ConfigItem<T>>();
-    for (final ConfigItem configItem : _store.values()) {
+    final Collection<ConfigItem<T>> result = new ArrayList<>();
+    for (final ConfigItem<?> configItem : _store.values()) {
       if (clazz.isAssignableFrom(configItem.getType()) && configItem.getName().equals(configName)) {
-        result.add(configItem);
+        result.add((ConfigItem<T>) configItem);
       }
     }
     return result;
@@ -55,9 +55,8 @@ public class MockConfigSource extends AbstractSource<ConfigItem<?>> implements C
     final ConfigItem<?> item = _store.get(uniqueId.getObjectId());
     if (item != null) {
       return item;
-    } else {
-      throw new DataNotFoundException(uniqueId.toString());
     }
+    throw new DataNotFoundException(uniqueId.toString());
   }
 
   @Override

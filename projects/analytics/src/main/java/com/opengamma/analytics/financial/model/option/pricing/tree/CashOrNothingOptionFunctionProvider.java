@@ -1,13 +1,13 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * Cash-or-nothing call option pays 0 if S <= K and 1 if S > K, whereas cash-or-nothing put option pays 1 if S < K and 0 if S >= K, 
- * where S is asset price at expiry.
+ * Cash-or-nothing call option pays 0 if S &lt;= K and 1 if S &gt; K, whereas cash-or-nothing put option pays 1 if S &lt; K and 0 if S &gt;= K, where S is asset
+ * price at expiry.
  */
 public class CashOrNothingOptionFunctionProvider extends OptionFunctionProvider1D {
 
@@ -59,7 +59,7 @@ public class CashOrNothingOptionFunctionProvider extends OptionFunctionProvider1
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

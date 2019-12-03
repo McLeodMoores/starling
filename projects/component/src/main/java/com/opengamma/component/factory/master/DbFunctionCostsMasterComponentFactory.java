@@ -32,7 +32,7 @@ import com.opengamma.util.db.DbConnector;
 
 /**
  * Component factory for the database function costs master.
- * 
+ *
  * Note, does not extend from {@link AbstractDbMasterComponentFactory} since it doesn't produce
  * true master instances of type {@link AbstractMaster}.
  */
@@ -55,7 +55,7 @@ public class DbFunctionCostsMasterComponentFactory extends AbstractComponentFact
    */
   @PropertyDefinition
   private DbConnector _dbConnector;
-  
+
   /**
    * The flag determining whether to enforce the schema version, preventing the server from starting if the version
    * does not match the expected version.
@@ -69,34 +69,34 @@ public class DbFunctionCostsMasterComponentFactory extends AbstractComponentFact
    * server expects. Database objects will never be deleted and the server will fail to start if the database is found
    * in an unexpected state.
    * <p>
-   * This flag is intended for use with temporary user databases. 
+   * This flag is intended for use with temporary user databases.
    */
   @PropertyDefinition
   private boolean _autoSchemaManagement;
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ComponentInfo info = new ComponentInfo(FunctionCostsMaster.class, getClassifier());
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ComponentInfo info = new ComponentInfo(FunctionCostsMaster.class, getClassifier());
+
     // create
-    DbFunctionCostsMaster master = new DbFunctionCostsMaster(getDbConnector());
-    
-    OGSchema ogSchema = OGSchema.on(getDbConnector())
+    final DbFunctionCostsMaster master = new DbFunctionCostsMaster(getDbConnector());
+
+    final OGSchema ogSchema = OGSchema.on(getDbConnector())
                         .enforcingSchemaVersion(isEnforceSchemaVersion())
                         .withAutoSchemaManagement(isAutoSchemaManagement())
                         .build();
-    
+
     ogSchema.checkSchema(master.getSchemaVersion(), "eng");
-    
+
     // register
-    
+
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFunctionCostsMaster.class);
     }
     repo.registerComponent(info, master);
-    
+
     // publish
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataFunctionCostsMasterResource(master));

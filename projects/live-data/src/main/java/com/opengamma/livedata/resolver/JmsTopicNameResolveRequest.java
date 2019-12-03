@@ -13,26 +13,32 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.livedata.normalization.NormalizationRuleSet;
 
 /**
- * 
+ * A market data resolve request for a JMS topic.
  */
 public class JmsTopicNameResolveRequest {
-  
+
   /**
    * what market data the server is going to publish
    */
   private final ExternalId _marketDataUniqueId;
-  
+
   /**
    * what normalization rule will be applied to the raw market data
    */
   private final NormalizationRuleSet _normalizationRule;
-  
+
+  /**
+   * @param marketDataUniqueId
+   *          the id of the market data
+   * @param normalizationRule
+   *          the normalization rule
+   */
   public JmsTopicNameResolveRequest(
-      ExternalId marketDataUniqueId,
-      NormalizationRuleSet normalizationRule) {
+      final ExternalId marketDataUniqueId,
+      final NormalizationRuleSet normalizationRule) {
     _marketDataUniqueId = marketDataUniqueId;
     _normalizationRule = normalizationRule;
-    
+
   }
 
   /**
@@ -48,20 +54,20 @@ public class JmsTopicNameResolveRequest {
   public NormalizationRuleSet getNormalizationRule() {
     return _normalizationRule;
   }
-  
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
-  
+
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this); 
+    return ToStringBuilder.reflectionToString(this);
   }
-  
+
 }

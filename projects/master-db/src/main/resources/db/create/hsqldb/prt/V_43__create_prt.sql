@@ -12,7 +12,7 @@ CREATE TABLE prt_schema_version (
 );
 INSERT INTO prt_schema_version (version_key, version_value) VALUES ('schema_patch', '43');
 
-CREATE SEQUENCE prt_master_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS prt_master_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby, not accepted by Postgresql
 
@@ -75,7 +75,7 @@ CREATE TABLE prt_position (
 -- prt_position is fully dependent of prt_portfolio
 CREATE INDEX ix_prt_position_node_id ON prt_position(node_id);
 
-CREATE SEQUENCE prt_portfolio_attr_seq as bigint
+CREATE SEQUENCE IF NOT EXISTS prt_portfolio_attr_seq as bigint
     start with 1000 increment by 1 no cycle;
 
 CREATE TABLE prt_portfolio_attribute (

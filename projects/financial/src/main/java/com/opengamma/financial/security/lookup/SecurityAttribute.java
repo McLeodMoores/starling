@@ -8,9 +8,8 @@ package com.opengamma.financial.security.lookup;
 import com.opengamma.util.ArgumentChecker;
 
 /**
-* Defines an attribute on a security. The {@link SecurityAttributeMapper} can then be used to
-* map the attribute to a field on a security.
-*/
+ * Defines an attribute on a security. The {@link SecurityAttributeMapper} can then be used to map the attribute to a field on a security.
+ */
 public enum SecurityAttribute {
 
   /**
@@ -65,7 +64,7 @@ public enum SecurityAttribute {
 
   private final String _name;
 
-  private SecurityAttribute(String name) {
+  SecurityAttribute(final String name) {
     ArgumentChecker.notNull(name, "name");
     _name = name;
   }

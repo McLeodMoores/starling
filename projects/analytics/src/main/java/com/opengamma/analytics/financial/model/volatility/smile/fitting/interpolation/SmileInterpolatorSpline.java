@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
@@ -16,20 +16,20 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Fits a set of implied volatilities at given strikes by interpolating log-moneyness (ln(strike/forward)) against implied volatility using the supplied interpolator (the default
- * is double quadratic). While this will fit any input data, there is no guarantee that the smile is arbitrage free, or indeed always positive, and should therefore be used with
- * care, and only when other smile interpolators fail. The smile is extrapolated in both directions using shifted log-normals set to match the level and slope of the smile at
- * the end point.
+ * Fits a set of implied volatilities at given strikes by interpolating log-moneyness (ln(strike/forward)) against implied volatility using the supplied
+ * interpolator (the default is double quadratic). While this will fit any input data, there is no guarantee that the smile is arbitrage free, or indeed always
+ * positive, and should therefore be used with care, and only when other smile interpolators fail. The smile is extrapolated in both directions using shifted
+ * log-normals set to match the level and slope of the smile at the end point.
  */
 public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
-  //  private static final Logger LOG = LoggerFactory.getLogger(ShiftedLogNormalTailExtrapolationFitter.class);
+  // private static final Logger LOG = LoggerFactory.getLogger(ShiftedLogNormalTailExtrapolationFitter.class);
   private static final Interpolator1D DEFAULT_INTERPOLATOR = new DoubleQuadraticInterpolator1D();
   private static final ScalarFirstOrderDifferentiator DIFFERENTIATOR = new ScalarFirstOrderDifferentiator();
   private static final ShiftedLogNormalTailExtrapolationFitter TAIL_FITTER = new ShiftedLogNormalTailExtrapolationFitter();
 
-  private static final String s_exception = "Exception"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE;
-  private static final String s_flat = "Flat"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.FLAT_SPLINE_EXTRAPOLATOR_FAILURE;
-  private static final String s_quiet = "Quiet"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.QUIET_SPLINE_EXTRAPOLATOR_FAILURE;
+  private static final String EXCEPTION = "Exception"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE;
+  private static final String FLAT = "Flat"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.FLAT_SPLINE_EXTRAPOLATOR_FAILURE;
+  private static final String QUIET = "Quiet"; // OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.QUIET_SPLINE_EXTRAPOLATOR_FAILURE;
 
   private final Interpolator1D _interpolator;
   private final String _extrapolatorFailureBehaviour;
@@ -41,20 +41,27 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
   public SmileInterpolatorSpline(final Interpolator1D interpolator) {
     ArgumentChecker.notNull(interpolator, "null interpolator");
     _interpolator = interpolator;
-    _extrapolatorFailureBehaviour = s_exception; // This follows pattern of OG-Financial's BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE
+    _extrapolatorFailureBehaviour = EXCEPTION; // This follows pattern of OG-Financial's
+                                               // BlackVolatilitySurfacePropertyNamesAndValues.EXCEPTION_SPLINE_EXTRAPOLATOR_FAILURE
   }
 
-  public SmileInterpolatorSpline(final Interpolator1D interpolator, String extrapolatorFailureBehaviour) {
+  public SmileInterpolatorSpline(final Interpolator1D interpolator, final String extrapolatorFailureBehaviour) {
     ArgumentChecker.notNull(interpolator, "null interpolator");
     _interpolator = interpolator;
     _extrapolatorFailureBehaviour = extrapolatorFailureBehaviour;
   }
 
   /**
-   * Gets the extrapolatorFailureBehaviour. If a shiftedLognormal model (Black with additional free parameter, F' = F*exp(mu)) fails to fit the boundary vol and the vol smile at that point...<p>
-   * "Exception": an exception will be thrown <p>
-   * "Quiet":  the target gradient is reduced until a solution is found.<p>
-   * "Flat": the target gradient is zero. A trivial solution exists in which extrapolated volatilities equal target volatility.<p>
+   * Gets the extrapolatorFailureBehaviour. If a shiftedLognormal model (Black with additional free parameter, F' = F*exp(mu)) fails to fit the boundary vol and
+   * the vol smile at that point...
+   * <p>
+   * "Exception": an exception will be thrown
+   * <p>
+   * "Quiet": the target gradient is reduced until a solution is found.
+   * <p>
+   * "Flat": the target gradient is zero. A trivial solution exists in which extrapolated volatilities equal target volatility.
+   * <p>
+   * 
    * @return the extrapolatorFailureBehaviour
    */
   public final String getExtrapolatorFailureBehaviour() {
@@ -69,7 +76,6 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     ArgumentChecker.isTrue(impliedVols.length == n, "#strikes {} does not match #vols {}", n, impliedVols.length);
     final double kL = strikes[0];
     final double kH = strikes[n - 1];
-
 
     final double[] x = new double[n];
     for (int i = 0; i < n; i++) {
@@ -105,19 +111,20 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     final Function1D<Double, Double> dSigmaDx = DIFFERENTIATOR.differentiate(interpFunc, domain);
 
     // The 'quiet' method reduces smile if the volatility gradient is either out of bounds of ShiftedLognormal model, or if root-finder fails to find solution
-    if (_extrapolatorFailureBehaviour.equalsIgnoreCase(s_quiet)) {
+    if (_extrapolatorFailureBehaviour.equalsIgnoreCase(QUIET)) {
       ArgumentChecker.isTrue(kL <= forward, "Cannot do left tail extrapolation when the lowest strike ({}) is greater than the forward ({})", kL, forward);
       ArgumentChecker.isTrue(kH >= forward, "Cannot do right tail extrapolation when the highest strike ({}) is less than the forward ({})", kH, forward);
-      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, strikes[n - 1], impliedVols[n - 1], dSigmaDx.evaluate(kH), expiry);
+      shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, strikes[n - 1], impliedVols[n - 1], dSigmaDx.evaluate(kH),
+          expiry);
       shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGradRecursivelyByReducingSmile(forward, kL, impliedVols[0], dSigmaDx.evaluate(kL), expiry);
       // 'Exception' will throw an exception if it fails to fit to target vol and gradient provided by interpolating function at the boundary
-    } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(s_exception)) {
+    } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(EXCEPTION)) {
       ArgumentChecker.isTrue(kL <= forward, "Cannot do left tail extrapolation when the lowest strike ({}) is greater than the forward ({})", kL, forward);
       ArgumentChecker.isTrue(kH >= forward, "Cannot do right tail extrapolation when the highest strike ({}) is less than the forward ({})", kH, forward);
       shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kH, impliedVols[n - 1], dSigmaDx.evaluate(kH), expiry);
       shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kL, impliedVols[0], dSigmaDx.evaluate(kL), expiry);
       // 'Flat' will simply return the target volatility at the boundary. Thus the target gradient is zero.
-    } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(s_flat)) {
+    } else if (_extrapolatorFailureBehaviour.equalsIgnoreCase(FLAT)) {
       shiftLnVolHighTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kH, impliedVols[n - 1], 0.0, expiry);
       shiftLnVolLowTail = TAIL_FITTER.fitVolatilityAndGrad(forward, kL, impliedVols[0], 0.0, expiry);
     } else {
@@ -125,7 +132,7 @@ public class SmileInterpolatorSpline implements GeneralSmileInterpolator {
     }
 
     // Resulting Functional Vol Surface
-    Function1D<Double, Double> volSmileFunction = new Function1D<Double, Double>() {
+    final Function1D<Double, Double> volSmileFunction = new Function1D<Double, Double>() {
       @Override
       public Double evaluate(final Double k) {
         if (k < kL) {

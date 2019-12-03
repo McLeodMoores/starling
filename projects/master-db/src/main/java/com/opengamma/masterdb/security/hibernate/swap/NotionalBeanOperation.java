@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -30,19 +30,19 @@ public final class NotionalBeanOperation {
   public static NotionalBean createBean(final HibernateSecurityMasterDao secMasterSession, final Notional notional) {
     return notional.accept(new NotionalVisitor<NotionalBean>() {
 
-      private NotionalBean createNotionalBean(Notional notional) {
+      private NotionalBean createNotionalBean(final Notional notional) {
         final NotionalBean bean = new NotionalBean();
         bean.setNotionalType(NotionalType.identify(notional));
         return bean;
       }
 
       @Override
-      public NotionalBean visitCommodityNotional(CommodityNotional notional) {
+      public NotionalBean visitCommodityNotional(final CommodityNotional notional) {
         return createNotionalBean(notional);
       }
 
       @Override
-      public NotionalBean visitInterestRateNotional(InterestRateNotional notional) {
+      public NotionalBean visitInterestRateNotional(final InterestRateNotional notional) {
         final NotionalBean bean = createNotionalBean(notional);
         bean.setCurrency(secMasterSession.getOrCreateCurrencyBean(notional.getCurrency().getCode()));
         bean.setAmount(notional.getAmount());
@@ -50,15 +50,15 @@ public final class NotionalBeanOperation {
       }
 
       @Override
-      public NotionalBean visitSecurityNotional(SecurityNotional notional) {
+      public NotionalBean visitSecurityNotional(final SecurityNotional notional) {
         final NotionalBean bean = createNotionalBean(notional);
         bean.setIdentifier(uniqueIdToUniqueIdBean(notional.getNotionalId()));
         return bean;
       }
 
       @Override
-      public NotionalBean visitVarianceSwapNotional(VarianceSwapNotional notional) {
-        NotionalBean bean = createNotionalBean(notional);
+      public NotionalBean visitVarianceSwapNotional(final VarianceSwapNotional notional) {
+        final NotionalBean bean = createNotionalBean(notional);
         bean.setCurrency(secMasterSession.getOrCreateCurrencyBean(notional.getCurrency().getCode()));
         bean.setAmount(notional.getAmount());
         return bean;
@@ -76,18 +76,18 @@ public final class NotionalBeanOperation {
       }
 
       @Override
-      public Notional visitInterestRateNotional(InterestRateNotional ignore) {
+      public Notional visitInterestRateNotional(final InterestRateNotional ignore) {
         return new InterestRateNotional(currencyBeanToCurrency(bean.getCurrency()), bean.getAmount());
       }
 
       @Override
-      public Notional visitSecurityNotional(SecurityNotional ignore) {
-        UniqueId uniqueId = uniqueIdBeanToUniqueId(bean.getIdentifier());
+      public Notional visitSecurityNotional(final SecurityNotional ignore) {
+        final UniqueId uniqueId = uniqueIdBeanToUniqueId(bean.getIdentifier());
         return new SecurityNotional(uniqueId);
       }
 
       @Override
-      public Notional visitVarianceSwapNotional(VarianceSwapNotional notional) {
+      public Notional visitVarianceSwapNotional(final VarianceSwapNotional notional) {
         return new VarianceSwapNotional(currencyBeanToCurrency(bean.getCurrency()), bean.getAmount());
       }
 

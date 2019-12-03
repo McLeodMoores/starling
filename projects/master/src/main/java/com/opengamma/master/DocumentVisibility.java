@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master;
@@ -34,10 +34,10 @@ public enum DocumentVisibility {
   /**
    * Map for looking up values.
    */
-  private static final Int2ObjectMap<DocumentVisibility> s_reverseMap = new Int2ObjectArrayMap<DocumentVisibility>();
+  private static final Int2ObjectMap<DocumentVisibility> REVERSE_MAP = new Int2ObjectArrayMap<>();
   static {
-    for (DocumentVisibility value : DocumentVisibility.values()) {
-      s_reverseMap.put(value.getVisibilityLevel(), value);
+    for (final DocumentVisibility value : DocumentVisibility.values()) {
+      REVERSE_MAP.put(value.getVisibilityLevel(), value);
     }
   }
 
@@ -49,17 +49,17 @@ public enum DocumentVisibility {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param visibilityLevel  the level, typically from 0 (highest) to 100 (lowest)
    */
-  private DocumentVisibility(short visibilityLevel) {
+  DocumentVisibility(final short visibilityLevel) {
     _visibilityLevel = visibilityLevel;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the visibility level.
-   * 
+   *
    * @return the level, typically from 0 (highest) to 100 (lowest)
    */
   public short getVisibilityLevel() {
@@ -69,13 +69,13 @@ public enum DocumentVisibility {
   //-------------------------------------------------------------------------
   /**
    * Obtains a {@code DocumentVisibility} by level.
-   * 
+   *
    * @param level  the visibility level, typically from 0 (highest) to 100 (lowest)
    * @return the visibility object, not null
    * @throws IllegalArgumentException if the visibility is not found
    */
-  public static DocumentVisibility ofLevel(short level) {
-    DocumentVisibility visibility = s_reverseMap.get(level);
+  public static DocumentVisibility ofLevel(final short level) {
+    final DocumentVisibility visibility = REVERSE_MAP.get(level);
     if (visibility == null) {
       throw new IllegalArgumentException("No visibility exists with ordinal " + level);
     }

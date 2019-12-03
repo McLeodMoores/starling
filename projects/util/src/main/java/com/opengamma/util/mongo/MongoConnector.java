@@ -37,13 +37,13 @@ public class MongoConnector implements Connector {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the configuration name, not null
    * @param mongo  the main Mongo instance, not null
    * @param database  the Mongo database, not null
    * @param collectionSuffix  the collection suffix, not null
    */
-  public MongoConnector(String name, MongoClient mongo, DB database, String collectionSuffix) {
+  public MongoConnector(final String name, final MongoClient mongo, final DB database, final String collectionSuffix) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(mongo, "mongo");
     ArgumentChecker.notNull(database, "database");
@@ -70,7 +70,7 @@ public class MongoConnector implements Connector {
    * Gets the Mongo instance.
    * <p>
    * Access to the Mongo instance is needed for advanced Mongo use cases.
-   * 
+   *
    * @return the main Mongo instance, not null
    */
   public MongoClient getMongo() {
@@ -82,7 +82,7 @@ public class MongoConnector implements Connector {
    * <p>
    * Access to the database is needed for advanced Mongo use cases.
    * A Mongo instance can hold multiple databases each with multiple collections.
-   * 
+   *
    * @return the database, not null
    */
   public DB getDB() {
@@ -91,7 +91,7 @@ public class MongoConnector implements Connector {
 
   /**
    * Gets the suffix to add to the collection.
-   * 
+   *
    * @return the collection suffix, not null
    */
   public String getCollectionSuffix() {
@@ -103,12 +103,12 @@ public class MongoConnector implements Connector {
    * <p>
    * Most applications should use this method to obtain a properly configured collection.
    * A Mongo instance can hold multiple databases each with multiple collections.
-   * 
+   *
    * @param collectionName  the collection name, not null
    * @return the database, not null
    * @throws IllegalStateException if no collection name is present
    */
-  public DBCollection getDBCollection(String collectionName) {
+  public DBCollection getDBCollection(final String collectionName) {
     return _database.getCollection(collectionName + getCollectionSuffix());
   }
 
@@ -122,7 +122,7 @@ public class MongoConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override

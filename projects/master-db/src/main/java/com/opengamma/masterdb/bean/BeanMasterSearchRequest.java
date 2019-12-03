@@ -107,15 +107,15 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of security object identifiers, null to not limit by security object identifiers.
    * Note that an empty set will return no securities.
-   * 
+   *
    * @param securityIds  the new security identifiers, null clears the security id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> securityIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> securityIds) {
     if (securityIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable securityId : securityIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable securityId : securityIds) {
         _objectIds.add(securityId.getObjectId());
       }
     }
@@ -126,10 +126,10 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
    * Adds a single security external identifier to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityId  the security key identifier to add, not null
    */
-  public void addExternalId(ExternalId securityId) {
+  public void addExternalId(final ExternalId securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     addExternalIds(Arrays.asList(securityId));
   }
@@ -138,10 +138,10 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
    * Adds a collection of security external identifiers to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... securityIds) {
+  public void addExternalIds(final ExternalId... securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -154,10 +154,10 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
    * Adds a collection of security external identifiers to the collection to search for.
    * Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> securityIds) {
+  public void addExternalIds(final Iterable<ExternalId> securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -168,10 +168,10 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -183,11 +183,11 @@ public class BeanMasterSearchRequest extends AbstractSearchRequest {
    * Adds a key-value pair to the set of attributes to search for.
    * <p>
    * Attributes are used to tag the object with additional information.
-   * 
+   *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);

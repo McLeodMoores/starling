@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -19,13 +19,13 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class VolatilitySurface implements VolatilityModel<DoublesPair> {
   private final Surface<Double, Double, Double> _surface;
-  /** x-axis */
+  /** x-axis. */
   public static final Axis EXPIRY_AXIS = Axis.X; // TODO Review
-  /** y-axis */
+  /** y-axis. */
   public static final Axis STRIKE_AXIS = Axis.Y;
 
   public VolatilitySurface(final Surface<Double, Double, Double> surface) {
@@ -40,17 +40,18 @@ public class VolatilitySurface implements VolatilityModel<DoublesPair> {
   }
 
   /**
-   * Return a volatility for the expiry, strike pair provided.
-   * Interpolation/extrapolation behaviour depends on underlying surface
-   * @param t time to maturity
-   * @param k strike
+   * Return a volatility for the expiry, strike pair provided. Interpolation/extrapolation behaviour depends on underlying surface
+   * 
+   * @param t
+   *          time to maturity
+   * @param k
+   *          strike
    * @return The Black (implied) volatility
    */
   public double getVolatility(final double t, final double k) {
     final DoublesPair temp = DoublesPair.of(t, k);
     return getVolatility(temp);
   }
-
 
   public VolatilityCurve getSlice(final Axis axis, final double here, final Interpolator1D interpolator) {
     final Curve<Double, Double> curve = SurfaceSliceFunction.cut(_surface, axis, here, interpolator);
@@ -108,7 +109,7 @@ public class VolatilitySurface implements VolatilityModel<DoublesPair> {
   protected Surface<Double, Double, Double> getMultipleMultiplicativeShiftsSurface(final double[] x, final double[] y, final double[] shifts) {
     return SurfaceShiftFunctionFactory.getShiftedSurface(_surface, x, y, shifts, false);
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;

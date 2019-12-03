@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public final class AgricultureFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AgricultureFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AgricultureFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -65,69 +65,71 @@ public final class AgricultureFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT);
-  
+
   /**
-   * The valid Bloomberg future categories for Agriculture Futures
+   * The valid Bloomberg future categories for Agriculture Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BBG_CORN, BBG_WHEAT, BBG_SOY, BBG_LIVESTOCK, BBG_FOODSTUFF);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public  AgricultureFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
+  public AgricultureFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String futureCategory = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");    
-    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String futureCategory = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     // validate params
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct agriculture future security");
+      LOGGER.warn("bbgUnique is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(name)) {
-      s_logger.warn("name is null, cannot construct agriculture future security");
+      LOGGER.warn("name is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct agriculture future security");
+      LOGGER.warn("expiry date is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct bond future security");
+      LOGGER.warn("futures trading hours is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct agriculture future security");
+      LOGGER.warn("settlement exchange is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct agriculture future security");
+      LOGGER.info("currency is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(futureCategory)) {
-      s_logger.info("futureCategory is null, cannot construct agriculture future security");
+      LOGGER.info("futureCategory is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(unitName)) {
-      s_logger.info("unitName is null, cannot construct agriculture future security");
+      LOGGER.info("unitName is null, cannot construct agriculture future security");
       return null;
     }
     if (unitNumber == null) {
-      s_logger.info("unitNumber is null, cannot construct agriculture future security");
+      LOGGER.info("unitNumber is null, cannot construct agriculture future security");
       return null;
     }
     // decode string params
@@ -140,7 +142,7 @@ public final class AgricultureFutureLoader extends SecurityLoader {
     final AgricultureFutureSecurity security = new AgricultureFutureSecurity(expiry, micExchangeCode, micExchangeCode,
         currency, unitAmount, futureCategory);
     security.setUnitNumber(unitNumber);
-    security.setUnitName(unitName);    
+    security.setUnitName(unitName);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

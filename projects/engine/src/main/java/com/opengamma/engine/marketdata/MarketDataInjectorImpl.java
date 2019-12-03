@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class MarketDataInjectorImpl implements MarketDataInjector {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataInjectorImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataInjectorImpl.class);
 
   /**
    * A snapshot of the state of the injection.
@@ -37,7 +37,8 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
     private final Map<ValueRequirement, Object> _valuesByRequirement;
     private final Map<ValueSpecification, Object> _valuesBySpecification;
 
-    private Snapshot(final MarketDataAvailabilityProvider availability, final Map<ValueRequirement, Object> valuesByRequirement, final Map<ValueSpecification, Object> valuesBySpecification) {
+    private Snapshot(final MarketDataAvailabilityProvider availability, final Map<ValueRequirement, Object> valuesByRequirement,
+        final Map<ValueSpecification, Object> valuesBySpecification) {
       _availability = availability;
       _valuesByRequirement = valuesByRequirement;
       _valuesBySpecification = valuesBySpecification;
@@ -45,27 +46,27 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
 
     public void init() {
       if (!_valuesByRequirement.isEmpty()) {
-        ComputationTargetResolver.AtVersionCorrection targetResolver = getComputationTargetResolver();
+        final ComputationTargetResolver.AtVersionCorrection targetResolver = getComputationTargetResolver();
         if (targetResolver != null) {
           final ComputationTargetSpecificationResolver.AtVersionCorrection specificationResolver = targetResolver.getSpecificationResolver();
-          for (Map.Entry<ValueRequirement, Object> valueByRequirement : _valuesByRequirement.entrySet()) {
+          for (final Map.Entry<ValueRequirement, Object> valueByRequirement : _valuesByRequirement.entrySet()) {
             final ComputationTargetSpecification targetSpec = specificationResolver.getTargetSpecification(valueByRequirement.getKey().getTargetReference());
             if (targetSpec != null) {
               final ComputationTarget target = targetResolver.resolve(targetSpec);
-              final Object targetValue = (target != null) ? target.getValue() : null;
+              final Object targetValue = target != null ? target.getValue() : null;
               final ValueSpecification resolved = _availability.getAvailability(targetSpec, targetValue, valueByRequirement.getKey());
               if (resolved != null) {
-                s_logger.info("Injecting {} as {}", valueByRequirement, resolved);
+                LOGGER.info("Injecting {} as {}", valueByRequirement, resolved);
                 _valuesBySpecification.put(resolved, valueByRequirement.getValue());
               } else {
-                s_logger.debug("Not injecting {} - no availability from {}", valueByRequirement, _availability);
+                LOGGER.debug("Not injecting {} - no availability from {}", valueByRequirement, _availability);
               }
             } else {
-              s_logger.warn("Couldn't resolve {} for injected value requirement", valueByRequirement.getKey());
+              LOGGER.warn("Couldn't resolve {} for injected value requirement", valueByRequirement.getKey());
             }
           }
         } else {
-          s_logger.warn("Values injected by requirement, but no target resolver");
+          LOGGER.warn("Values injected by requirement, but no target resolver");
         }
       }
     }
@@ -76,16 +77,16 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
 
   }
 
-  private final ConcurrentMap<ValueRequirement, Object> _valuesByRequirement = new ConcurrentHashMap<ValueRequirement, Object>();
-  private final ConcurrentMap<ValueSpecification, Object> _valuesBySpecification = new ConcurrentHashMap<ValueSpecification, Object>();
+  private final ConcurrentMap<ValueRequirement, Object> _valuesByRequirement = new ConcurrentHashMap<>();
+  private final ConcurrentMap<ValueSpecification, Object> _valuesBySpecification = new ConcurrentHashMap<>();
   private ComputationTargetResolver.AtVersionCorrection _targetResolver;
 
   public Snapshot snapshot(final MarketDataAvailabilityProvider availability) {
     if (_valuesByRequirement.isEmpty() && _valuesBySpecification.isEmpty()) {
       return null;
     }
-    final Map<ValueRequirement, Object> valuesByRequirement = new HashMap<ValueRequirement, Object>(_valuesByRequirement);
-    final Map<ValueSpecification, Object> valuesBySpecification = new HashMap<ValueSpecification, Object>(_valuesBySpecification);
+    final Map<ValueRequirement, Object> valuesByRequirement = new HashMap<>(_valuesByRequirement);
+    final Map<ValueSpecification, Object> valuesBySpecification = new HashMap<>(_valuesBySpecification);
     if (valuesByRequirement.isEmpty() && valuesBySpecification.isEmpty()) {
       return null;
     }
@@ -103,22 +104,22 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
   // MarketDataInjector
 
   @Override
-  public void addValue(ValueRequirement valueRequirement, Object value) {
+  public void addValue(final ValueRequirement valueRequirement, final Object value) {
     _valuesByRequirement.put(valueRequirement, value);
   }
 
   @Override
-  public void addValue(ValueSpecification valueSpecification, Object value) {
+  public void addValue(final ValueSpecification valueSpecification, final Object value) {
     _valuesBySpecification.put(valueSpecification, value);
   }
 
   @Override
-  public void removeValue(ValueRequirement valueRequirement) {
+  public void removeValue(final ValueRequirement valueRequirement) {
     _valuesByRequirement.remove(valueRequirement);
   }
 
   @Override
-  public void removeValue(ValueSpecification valueSpecification) {
+  public void removeValue(final ValueSpecification valueSpecification) {
     _valuesBySpecification.remove(valueSpecification);
   }
 

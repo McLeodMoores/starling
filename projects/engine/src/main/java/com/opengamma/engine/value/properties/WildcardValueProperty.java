@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -14,10 +14,9 @@ import org.fudgemsg.types.IndicatorType;
 import org.fudgemsg.wire.types.FudgeWireType;
 
 import com.opengamma.engine.fudgemsg.ValuePropertiesFudgeBuilder;
-import com.opengamma.engine.value.ValueProperties;
 
 /**
- * Internal state used to implement a {@link ValueProperties} entry that is a wild-card.
+ * Internal state used to implement a {@link com.opengamma.engine.value.ValueProperties} entry that is a wild-card.
  */
 public final class WildcardValueProperty extends AbstractValueProperty {
 
@@ -27,7 +26,7 @@ public final class WildcardValueProperty extends AbstractValueProperty {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param key the value key, never null
    * @param optional the optional flag
    * @param next the next property in the bucket, or null if this is the end of the chain
@@ -45,9 +44,8 @@ public final class WildcardValueProperty extends AbstractValueProperty {
   protected AbstractValueProperty withOptional(final boolean optional) {
     if (isOptional() == optional) {
       return this;
-    } else {
-      return new WildcardValueProperty(getKey(), optional, getNext());
     }
+    return new WildcardValueProperty(getKey(), optional, getNext());
   }
 
   // query

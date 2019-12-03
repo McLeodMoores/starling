@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -58,7 +58,7 @@ public class ISDACompliantDateCurve
   //  }
 
   protected static ISDACompliantCurve makeISDACompliantCurve(final LocalDate baseDate, final LocalDate[] dates, final double[] rates, final DayCount dayCount) {
-    double[] t = checkAndGetTimes(baseDate, dates, rates, dayCount);
+    final double[] t = checkAndGetTimes(baseDate, dates, rates, dayCount);
     return new ISDACompliantCurve(t, rates);
   }
 
@@ -72,7 +72,7 @@ public class ISDACompliantDateCurve
   /**
    * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates
    * The times (year-fractions) between the baseDate and the knot dates is calculated using ACT/365.
-   * 
+   *
    * @param baseDate  the base date for the curve (i.e. this is time zero), not null
    * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
    * @param rates  the continually compounded zero rates at given knot dates, not null
@@ -84,7 +84,7 @@ public class ISDACompliantDateCurve
   /**
    * Builds a curve from a baseDate with a set of <b>continually compounded</b> zero rates at given knot dates.
    * The times (year-fractions) between the baseDate and the knot dates is calculated using the specified day-count-convention.
-   * 
+   *
    * @param baseDate  the base date for the curve (i.e. this is time zero), not null
    * @param dates  the knot dates on the curve. These must be ascending with the first date after the baseDate, not null
    * @param rates  the continually compounded zero rates at given knot dates, not null
@@ -102,17 +102,19 @@ public class ISDACompliantDateCurve
   }
 
   //-------------------------------------------------------------------------
+  @Override
   public final LocalDate getCurveDate(final int index) {
     return _dates[index];
   }
 
+  @Override
   public final LocalDate[] getCurveDates() {
     return _dates.clone();
   }
 
   @Override
   public ISDACompliantDateCurve withRate(final double rate, final int index) {
-    ISDACompliantCurve temp = super.withRate(rate, index);
+    final ISDACompliantCurve temp = super.withRate(rate, index);
     return new ISDACompliantDateCurve(_baseDate, _dates, _dayCount, temp);
   }
 
@@ -139,8 +141,8 @@ public class ISDACompliantDateCurve
   }
 
   @Override
-  public double getZeroRate(LocalDate date) {
-    double t = _dayCount.getDayCountFraction(_baseDate, date);
+  public double getZeroRate(final LocalDate date) {
+    final double t = _dayCount.getDayCountFraction(_baseDate, date);
     return getZeroRate(t);
   }
 

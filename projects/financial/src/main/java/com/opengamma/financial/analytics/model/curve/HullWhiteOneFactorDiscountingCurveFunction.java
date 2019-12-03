@@ -47,8 +47,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
@@ -100,16 +100,18 @@ import com.opengamma.util.tuple.Pairs;
  * Produces yield curves using the Hull-White one-factor discounting method.
  */
 public class HullWhiteOneFactorDiscountingCurveFunction extends
-  MultiCurveFunction<HullWhiteOneFactorProviderInterface, HullWhiteProviderDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+    MultiCurveFunction<HullWhiteOneFactorProviderInterface, HullWhiteProviderDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HullWhiteOneFactorDiscountingCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteOneFactorDiscountingCurveFunction.class);
   /** The calculator */
   private static final ParSpreadMarketQuoteHullWhiteCalculator PSMQHWC = ParSpreadMarketQuoteHullWhiteCalculator.getInstance();
   /** The sensitivity calculator */
-  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator PSMQCSHWC = ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator PSMQCSHWC = ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator
+      .getInstance();
 
   /**
-   * @param configurationName The configuration name, not null
+   * @param configurationName
+   *          The configuration name, not null
    */
   public HullWhiteOneFactorDiscountingCurveFunction(final String configurationName) {
     super(configurationName);
@@ -123,9 +125,9 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
 
   @Override
   public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
-                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        final String[] currencies) {
-    return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
+      final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration, final String[] currencies) {
+    return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements,
+        curveConstructionConfiguration, currencies);
   }
 
   @Override
@@ -151,11 +153,16 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
     private final CurveConstructionConfiguration _curveConstructionConfiguration;
 
     /**
-     * @param earliestInvokation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvokation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
+     * @param earliestInvokation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvokation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration) {
@@ -165,19 +172,25 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
     }
 
     /**
-     * @param earliestInvokation The earliest time for which this function is valid, null if there is no bound
-     * @param latestInvokation The latest time for which this function is valid, null if there is no bound
-     * @param curveNames The names of the curves produced by this function, not null
-     * @param exogenousRequirements The exogenous requirements, not null
-     * @param curveConstructionConfiguration The curve construction configuration, not null
-     * @param currencies The set of currencies to which the curves produce sensitivities
+     * @param earliestInvokation
+     *          The earliest time for which this function is valid, null if there is no bound
+     * @param latestInvokation
+     *          The latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          The names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          The exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          The curve construction configuration, not null
+     * @param currencies
+     *          The set of currencies to which the curves produce sensitivities
      */
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
-                                        final ZonedDateTime latestInvokation,
-                                        final String[] curveNames,
-                                        final Set<ValueRequirement> exogenousRequirements,
-                                        final CurveConstructionConfiguration curveConstructionConfiguration,
-                                        final String[] currencies) {
+        final ZonedDateTime latestInvokation,
+        final String[] curveNames,
+        final Set<ValueRequirement> exogenousRequirements,
+        final CurveConstructionConfiguration curveConstructionConfiguration,
+        final String[] currencies) {
 
       super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
@@ -193,8 +206,8 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
       final ValueProperties curveConstructionProperties = ValueProperties.builder()
           .with(CURVE_CONSTRUCTION_CONFIG, _curveConstructionConfiguration.getName())
           .get();
-      final HistoricalTimeSeriesBundle timeSeries =
-          (HistoricalTimeSeriesBundle) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
+      final HistoricalTimeSeriesBundle timeSeries = (HistoricalTimeSeriesBundle) inputs
+          .getValue(new ValueRequirement(ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
               ComputationTargetSpecification.NULL, curveConstructionProperties));
       final int nGroups = _curveConstructionConfiguration.getCurveGroups().size();
       @SuppressWarnings("unchecked")
@@ -202,7 +215,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
       final LinkedHashMap<String, Currency> discountingMap = new LinkedHashMap<>();
       final LinkedHashMap<String, IborIndex[]> forwardIborMap = new LinkedHashMap<>();
       final LinkedHashMap<String, IndexON[]> forwardONMap = new LinkedHashMap<>();
-      //TODO comparator to sort groups by order
+      // TODO comparator to sort groups by order
       int i = 0; // Implementation Note: loop on the groups
       for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) { // Group - start
         int j = 0;
@@ -214,12 +227,12 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
           final List<IndexON> overnightIndexList = new ArrayList<>();
           final String curveName = entry.getKey();
           final ValueProperties properties = ValueProperties.builder().with(CURVE, curveName).get();
-          final CurveSpecification specification =
-              (CurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
-          final CurveDefinition definition =
-              (CurveDefinition) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
-          final SnapshotDataBundle snapshot =
-              (SnapshotDataBundle) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
+          final CurveSpecification specification = (CurveSpecification) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
+          final CurveDefinition definition = (CurveDefinition) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
+          final SnapshotDataBundle snapshot = (SnapshotDataBundle) inputs
+              .getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
           final int nNodes = specification.getNodes().size();
           final InstrumentDerivative[] derivativesForCurve = new InstrumentDerivative[nNodes];
           final double[] parameterGuessForCurves = new double[nNodes];
@@ -233,7 +246,8 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
               parameterGuessForCurves[k] = 1 - marketData;
             } else {
               if (node.getCurveNode() instanceof DeliverableSwapFutureNode) {
-                parameterGuessForCurves[k] = 0.01d; // Implementation note: The relation between price, coupon and rate is complex. There is no good initial guess.
+                parameterGuessForCurves[k] = 0.01d; // Implementation note: The relation between price, coupon and rate is complex. There is no good initial
+                                                    // guess.
               } else {
                 parameterGuessForCurves[k] = marketData;
               }
@@ -265,15 +279,17 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
         final MultiCurveBundle<GeneratorYDCurve> groupBundle = new MultiCurveBundle<>(singleCurves);
         curveBundles[i++] = groupBundle;
       } // Group - end
-      //TODO this is only in here because the code in analytics doesn't use generics properly
+      // TODO this is only in here because the code in analytics doesn't use generics properly
       final Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> temp = builder.makeCurvesFromDerivatives(curveBundles,
           (HullWhiteOneFactorProviderDiscount) knownData, discountingMap, forwardIborMap, forwardONMap, getCalculator(), getSensitivityCalculator());
-      final Pair<HullWhiteOneFactorProviderInterface, CurveBuildingBlockBundle> result = Pairs.of((HullWhiteOneFactorProviderInterface) temp.getFirst(), temp.getSecond());
+      final Pair<HullWhiteOneFactorProviderInterface, CurveBuildingBlockBundle> result = Pairs.of((HullWhiteOneFactorProviderInterface) temp.getFirst(),
+          temp.getSecond());
       return result;
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(compilationContext, target, desiredValue);
       if (requirements == null) {
         return null;
@@ -292,7 +308,8 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
           .with(PROPERTY_HULL_WHITE_PARAMETERS, hwPropertyNames)
           .with(PROPERTY_HULL_WHITE_CURRENCY, hwCurrencies)
           .get();
-      requirements.add(new ValueRequirement(ValueRequirementNames.HULL_WHITE_ONE_FACTOR_PARAMETERS, ComputationTargetSpecification.of(hwCurrency), hwProperties));
+      requirements
+          .add(new ValueRequirement(ValueRequirementNames.HULL_WHITE_ONE_FACTOR_PARAMETERS, ComputationTargetSpecification.of(hwCurrency), hwProperties));
       return requirements;
     }
 
@@ -314,7 +331,8 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
 
     @Override
     protected HullWhiteOneFactorProviderInterface getKnownData(final FunctionInputs inputs) {
-      final HullWhiteOneFactorPiecewiseConstantParameters modelParameters = (HullWhiteOneFactorPiecewiseConstantParameters) inputs.getValue(ValueRequirementNames.HULL_WHITE_ONE_FACTOR_PARAMETERS);
+      final HullWhiteOneFactorPiecewiseConstantParameters modelParameters = (HullWhiteOneFactorPiecewiseConstantParameters) inputs
+          .getValue(ValueRequirementNames.HULL_WHITE_ONE_FACTOR_PARAMETERS);
       if (modelParameters == null) {
         throw new OpenGammaRuntimeException("Could not get the Hull-White model parameters");
       }
@@ -354,7 +372,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
         final String interpolatorName = interpolatedDefinition.getInterpolatorName();
         final String leftExtrapolatorName = interpolatedDefinition.getLeftExtrapolatorName();
         final String rightExtrapolatorName = interpolatedDefinition.getRightExtrapolatorName();
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         return new GeneratorCurveYieldInterpolated(getMaturityCalculator(), interpolator);
       }
       throw new OpenGammaRuntimeException("Cannot handle curves of type " + definition.getClass());
@@ -368,7 +386,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);
       final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
-      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>>builder()
+      return CurveNodeVisitorAdapter.<InstrumentDefinition<?>> builder()
           .cashNodeVisitor(new CashNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .deliverableSwapFutureNode(new DeliverableSwapFutureNodeConverter(conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .fraNode(new FRANodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
@@ -395,7 +413,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
             .get();
         final YieldAndDiscountCurve curve = provider.getMulticurveProvider().getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));

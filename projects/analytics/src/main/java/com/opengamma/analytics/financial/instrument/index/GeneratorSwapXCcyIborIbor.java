@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.swap.SwapXCcyIborIborDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -53,13 +55,20 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Constructor from the details. The business day conventions, end-of-month and spot lag are from the first Ibor index.
-   * @param name The generator name. Not null.
-   * @param iborIndex1 The Ibor index of the first leg.
-   * @param iborIndex2 The Ibor index of the second leg.
-   * @param calendar1 The holiday calendar for the first leg.
-   * @param calendar2 The holiday calendar for the second leg.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex1
+   *          The Ibor index of the first leg.
+   * @param iborIndex2
+   *          The Ibor index of the second leg.
+   * @param calendar1
+   *          The holiday calendar for the first leg.
+   * @param calendar2
+   *          The holiday calendar for the second leg.
    */
-  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2, final Calendar calendar1, final Calendar calendar2) {
+  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2, final Calendar calendar1,
+      final Calendar calendar2) {
     super(name);
     ArgumentChecker.notNull(iborIndex1, "ibor index");
     ArgumentChecker.notNull(iborIndex2, "ibor index");
@@ -76,16 +85,26 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Constructor from the details. The business day conventions, end-of-month and spot lag are from the Ibor index.
-   * @param name The generator name. Not null.
-   * @param iborIndex1 The Ibor index of the first leg.
-   * @param iborIndex2 The Ibor index of the second leg.
-   * @param businessDayConvention The business day convention associated to the index.
-   * @param endOfMonth The end-of-month flag.
-   * @param spotLag The swap spot lag (usually 2 or 0).
-   * @param calendar1 The holiday calendar for the first leg.
-   * @param calendar2 The holiday calendar for the second leg.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex1
+   *          The Ibor index of the first leg.
+   * @param iborIndex2
+   *          The Ibor index of the second leg.
+   * @param businessDayConvention
+   *          The business day convention associated to the index.
+   * @param endOfMonth
+   *          The end-of-month flag.
+   * @param spotLag
+   *          The swap spot lag (usually 2 or 0).
+   * @param calendar1
+   *          The holiday calendar for the first leg.
+   * @param calendar2
+   *          The holiday calendar for the second leg.
    */
-  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2, final BusinessDayConvention businessDayConvention,
+  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2,
+      final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final int spotLag, final Calendar calendar1, final Calendar calendar2) {
     super(name);
     ArgumentChecker.notNull(iborIndex1, "ibor index");
@@ -102,7 +121,76 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
   }
 
   /**
+   * Constructor from the details. The business day conventions, end-of-month and spot lag are from the first Ibor index.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex1
+   *          The Ibor index of the first leg.
+   * @param iborIndex2
+   *          The Ibor index of the second leg.
+   * @param calendar1
+   *          The holiday calendar for the first leg.
+   * @param calendar2
+   *          The holiday calendar for the second leg.
+   */
+  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2,
+      final WorkingDayCalendar calendar1,
+      final WorkingDayCalendar calendar2) {
+    super(name);
+    ArgumentChecker.notNull(iborIndex1, "ibor index");
+    ArgumentChecker.notNull(iborIndex2, "ibor index");
+    ArgumentChecker.notNull(calendar1, "calendar1");
+    ArgumentChecker.notNull(calendar2, "calendar2");
+    _iborIndex1 = iborIndex1;
+    _iborIndex2 = iborIndex2;
+    _businessDayConvention = iborIndex1.getBusinessDayConvention();
+    _endOfMonth = iborIndex1.isEndOfMonth();
+    _spotLag = iborIndex1.getSpotLag();
+    _calendar1 = CalendarAdapter.of(calendar1);
+    _calendar2 = CalendarAdapter.of(calendar2);
+  }
+
+  /**
+   * Constructor from the details. The business day conventions, end-of-month and spot lag are from the Ibor index.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param iborIndex1
+   *          The Ibor index of the first leg.
+   * @param iborIndex2
+   *          The Ibor index of the second leg.
+   * @param businessDayConvention
+   *          The business day convention associated to the index.
+   * @param endOfMonth
+   *          The end-of-month flag.
+   * @param spotLag
+   *          The swap spot lag (usually 2 or 0).
+   * @param calendar1
+   *          The holiday calendar for the first leg.
+   * @param calendar2
+   *          The holiday calendar for the second leg.
+   */
+  public GeneratorSwapXCcyIborIbor(final String name, final IborIndex iborIndex1, final IborIndex iborIndex2,
+      final BusinessDayConvention businessDayConvention,
+      final boolean endOfMonth, final int spotLag, final WorkingDayCalendar calendar1, final WorkingDayCalendar calendar2) {
+    super(name);
+    ArgumentChecker.notNull(iborIndex1, "ibor index");
+    ArgumentChecker.notNull(iborIndex2, "ibor index");
+    ArgumentChecker.notNull(calendar1, "calendar1");
+    ArgumentChecker.notNull(calendar2, "calendar2");
+    _iborIndex1 = iborIndex1;
+    _iborIndex2 = iborIndex2;
+    _businessDayConvention = businessDayConvention;
+    _endOfMonth = endOfMonth;
+    _spotLag = spotLag;
+    _calendar1 = CalendarAdapter.of(calendar1);
+    _calendar2 = CalendarAdapter.of(calendar2);
+  }
+
+  /**
    * Gets the Ibor index of the first leg.
+   *
    * @return The index.
    */
   public IborIndex getIborIndex1() {
@@ -111,6 +199,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the Ibor index of the second leg.
+   *
    * @return The index.
    */
   public IborIndex getIborIndex2() {
@@ -119,6 +208,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the swap generator business day convention.
+   *
    * @return The convention.
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -127,6 +217,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the swap generator spot lag.
+   *
    * @return The lag (in days).
    */
   public int getSpotLag() {
@@ -135,6 +226,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the swap generator end-of-month rule.
+   *
    * @return The EOM.
    */
   public Boolean isEndOfMonth() {
@@ -143,6 +235,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the holiday calendar for the first leg.
+   *
    * @return The holiday calendar
    */
   public Calendar getCalendar1() {
@@ -151,6 +244,7 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Gets the holiday calendar for the second leg.
+   *
    * @return The holiday calendar
    */
   public Calendar getCalendar2() {
@@ -159,21 +253,28 @@ public class GeneratorSwapXCcyIborIbor extends GeneratorInstrument<GeneratorAttr
 
   /**
    * Generate the cross-currency swap from the spread and the FX exchange rate.
-   * @param date The reference date (the effective date of the swap will be the spot lag of the generator after the reference date).
-   * @param spread The spread above the index (is applied to the first leg).
-   * @param notional The notional of the first leg. The second leg notional is that number multiplied by the FX rate (1 Ccy1 = x Ccy2).
-   * @param attribute The FX instrument attributes. The start period is the date between the spot date and the effective period.
-   *   The end period is the period between the effective date and the maturity.
+   *
+   * @param date
+   *          The reference date (the effective date of the swap will be the spot lag of the generator after the reference date).
+   * @param spread
+   *          The spread above the index (is applied to the first leg).
+   * @param notional
+   *          The notional of the first leg. The second leg notional is that number multiplied by the FX rate (1 Ccy1 = x Ccy2).
+   * @param attribute
+   *          The FX instrument attributes. The start period is the date between the spot date and the effective period. The end period is
+   *          the period between the effective date and the maturity.
    * @return The cross-currency swap.
    */
   @Override
-  public SwapXCcyIborIborDefinition generateInstrument(final ZonedDateTime date, final double spread, final double notional, final GeneratorAttributeFX attribute) {
+  public SwapXCcyIborIborDefinition generateInstrument(final ZonedDateTime date, final double spread, final double notional,
+      final GeneratorAttributeFX attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     ArgumentChecker.notNull(attribute, "Attributes");
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar1);
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), _iborIndex1, _calendar1);
     final double fx = attribute.getFXMatrix().getFxRate(_iborIndex1.getCurrency(), _iborIndex2.getCurrency());
-    return SwapXCcyIborIborDefinition.from(startDate, attribute.getEndPeriod(), this, notional, fx * notional, spread, true, _calendar1, _calendar2);
+    return SwapXCcyIborIborDefinition.from(startDate, attribute.getEndPeriod(), this, notional, fx * notional, spread, true, _calendar1,
+        _calendar2);
   }
 
   @Override

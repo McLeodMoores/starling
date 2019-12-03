@@ -46,18 +46,18 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
   /**
    * Returns the position's value for this function's attribute if it has one.  If not its trades are searched and
    * the value is returned from the first one with a matching attribute.  If neither the position nor any of its
-   * trades have a matching attribute then {@link #UNKNOWN} is returned.
+   * trades have a matching attribute then "Unknown" is returned.
    * @param position The position to classify
-   * @return The attribute value from the position or one of its trades or {@link #UNKNOWN} if there are no
+   * @return The attribute value from the position or one of its trades or "Unknown" if there are no
    * matching attributes
    */
   @Override
   public String classifyPosition(final Position position) {
-    String positionAttribute = position.getAttributes().get(getAttribute());
+    final String positionAttribute = position.getAttributes().get(getAttribute());
     if (positionAttribute != null) {
       return positionAttribute;
     }
-    for (Trade trade : position.getTrades()) {
+    for (final Trade trade : position.getTrades()) {
       final String value = trade.getAttributes().get(getAttribute());
       if (value != null) {
         return value;
@@ -66,6 +66,7 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
     return getUnknownClassification();
   }
 
+  @Override
   public String getName() {
     return _attribute;
   }
@@ -76,7 +77,7 @@ public class PositionAttributeAggregationFunction implements AggregationFunction
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     return o1.compareTo(o2);
   }
 

@@ -21,23 +21,24 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default barrier distance output format
+ * Default barrier distance output format.
  */
 public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BarrierOptionDistanceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BarrierOptionDistanceDefaults.class);
   /** Default value for barrier output */
   private final String _barrierOutput;
 
   /**
    * Value requirement names for which these properties apply
    */
-  private static final String[] s_valueNames = new String[] {
-    ValueRequirementNames.BARRIER_DISTANCE
+  private static final String[] VALUE_NAMES = new String[] {
+                ValueRequirementNames.BARRIER_DISTANCE
   };
 
   /**
-   * @param barrierOutput the barrier output format, not null
+   * @param barrierOutput
+   *          the barrier output format, not null
    */
   public BarrierOptionDistanceDefaults(final String barrierOutput) {
     super(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY
@@ -48,20 +49,20 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
     _barrierOutput = barrierOutput;
   }
 
-
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT.equals(propertyName)) {
       return Collections.singleton(_barrierOutput);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

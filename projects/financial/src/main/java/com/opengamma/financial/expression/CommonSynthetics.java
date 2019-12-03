@@ -18,17 +18,17 @@ import com.opengamma.util.money.Currency;
  */
 public final class CommonSynthetics {
 
-  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> s_resolver = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
+  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<>();
 
   private CommonSynthetics() {
   }
 
   protected static ComputationTargetResolver.AtVersionCorrection getResolver() {
-    return s_resolver.get();
+    return RESOLVER.get();
   }
 
   protected static void setResolver(final ComputationTargetResolver.AtVersionCorrection resolver) {
-    s_resolver.set(resolver);
+    RESOLVER.set(resolver);
   }
 
   public static Function<Security, Currency> securityCurrency() {

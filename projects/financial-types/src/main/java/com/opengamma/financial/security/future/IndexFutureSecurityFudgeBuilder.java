@@ -25,25 +25,25 @@ public class IndexFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implem
   public static final String UNDERLYING_IDENTIFIER_FIELD_NAME = "underlyingIdentifier";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, IndexFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final IndexFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     IndexFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, IndexFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final IndexFutureSecurity object, final MutableFudgeMsg msg) {
     FutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, UNDERLYING_IDENTIFIER_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getUnderlyingId()));
   }
 
   @Override
-  public IndexFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    IndexFutureSecurity object = new IndexFutureSecurity();
+  public IndexFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final IndexFutureSecurity object = new IndexFutureSecurity();
     IndexFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, IndexFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final IndexFutureSecurity object) {
     FutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setUnderlyingId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNDERLYING_IDENTIFIER_FIELD_NAME)));
   }

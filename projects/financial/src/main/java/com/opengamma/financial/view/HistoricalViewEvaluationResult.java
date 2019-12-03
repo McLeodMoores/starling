@@ -31,7 +31,7 @@ public final class HistoricalViewEvaluationResult implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private final Map<ValueRequirement, TimeSeries> _data = new HashMap<ValueRequirement, TimeSeries>();
+  private final Map<ValueRequirement, TimeSeries> _data = new HashMap<>();
 
   public void addTimeSeries(final ValueRequirement requirement, final TimeSeries timeSeries) {
     _data.put(requirement, timeSeries);
@@ -49,18 +49,16 @@ public final class HistoricalViewEvaluationResult implements Serializable {
     final TimeSeries ts = getTimeSeries(requirement);
     if (ts instanceof LocalDateDoubleTimeSeries) {
       return (LocalDateDoubleTimeSeries) ts;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public LocalDateObjectTimeSeries getObjectTimeSeries(final ValueRequirement requirement) {
     final TimeSeries ts = getTimeSeries(requirement);
     if (ts instanceof LocalDateObjectTimeSeries) {
       return (LocalDateObjectTimeSeries) ts;
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -85,7 +83,7 @@ public final class HistoricalViewEvaluationResult implements Serializable {
 
   public static HistoricalViewEvaluationResult fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final HistoricalViewEvaluationResult result = new HistoricalViewEvaluationResult();
-    final Queue<Object> queue = new LinkedList<Object>();
+    final Queue<Object> queue = new LinkedList<>();
     boolean requirements = false;
     for (final FudgeField field : msg) {
       final Integer ord = field.getOrdinal();

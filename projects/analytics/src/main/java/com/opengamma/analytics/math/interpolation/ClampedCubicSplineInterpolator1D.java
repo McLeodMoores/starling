@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,8 +10,8 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialDataBundle;
 
 /**
- * Cubic spline interpolation with Clamped endpoint condition
- * Note that the first derivative values at endpoints are set to be 0.0 if the endpoints values are unspecified
+ * Cubic spline interpolation with Clamped endpoint condition. Note that the first derivative values at endpoints are set to be 0.0 if the endpoints values are
+ * unspecified
  */
 public class ClampedCubicSplineInterpolator1D extends PiecewisePolynomialInterpolator1D {
 
@@ -19,7 +19,7 @@ public class ClampedCubicSplineInterpolator1D extends PiecewisePolynomialInterpo
   private static final long serialVersionUID = 1L;
 
   /**
-   * Default constructor where interpolation method is specified
+   * Default constructor where interpolation method is specified.
    */
   public ClampedCubicSplineInterpolator1D() {
     super(new CubicSplineInterpolator());

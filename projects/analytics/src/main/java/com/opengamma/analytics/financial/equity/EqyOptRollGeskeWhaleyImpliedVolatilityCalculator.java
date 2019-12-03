@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -23,25 +23,25 @@ import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates implied volatility for American options using Roll-Geske-Whaley model
+ * Calculates implied volatility for American options using Roll-Geske-Whaley model.
  */
 public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
 
   /** Static instance */
-  private static final EqyOptRollGeskeWhaleyImpliedVolatilityCalculator s_instance = new EqyOptRollGeskeWhaleyImpliedVolatilityCalculator();
+  private static final EqyOptRollGeskeWhaleyImpliedVolatilityCalculator INSTANCE = new EqyOptRollGeskeWhaleyImpliedVolatilityCalculator();
 
   /**
    * The Black present value calculator
    * The model is chosen to be consistent with {@link EquityBlackVolatilitySurfaceFromSinglePriceFunction}
    */
-  private static final EquityOptionBlackPresentValueCalculator s_pvCalculator = EquityOptionBlackPresentValueCalculator.getInstance();
+  private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Gets the (singleton) instance of this calculator
+   * Gets the (singleton) instance of this calculator.
    * @return The instance of this calculator
    */
   public static EqyOptRollGeskeWhaleyImpliedVolatilityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private EqyOptRollGeskeWhaleyImpliedVolatilityCalculator() {
@@ -69,7 +69,7 @@ public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends Inst
   }
 
   /**
-   * Calculates implied volatility for American options using Roll-Geske-Whaley model
+   * Calculates implied volatility for American options using Roll-Geske-Whaley model.
    * @param derivative  The derivative
    * @param data The market data bundle
    * @param marketPrice The market price of security
@@ -93,13 +93,13 @@ public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends Inst
     throw new OpenGammaRuntimeException("Unexpected InstrumentDerivative type");
   }
 
-  private Double impliedVolEquityIndexOption(final EquityIndexOption option, final StaticReplicationDataBundle data, final Double marketPrice) {
+  private static Double impliedVolEquityIndexOption(final EquityIndexOption option, final StaticReplicationDataBundle data, final Double marketPrice) {
     final double optionPrice;
     final double strike = option.getStrike();
     final double timeToExpiry = option.getTimeToExpiry();
     final boolean isCall = option.isCall();
     if (marketPrice == null) {
-      optionPrice = option.accept(s_pvCalculator, data) / option.getUnitAmount();
+      optionPrice = option.accept(PV_CALCULATOR, data) / option.getUnitAmount();
     } else {
       optionPrice = marketPrice;
     }
@@ -107,13 +107,13 @@ public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends Inst
     return getImpliedVol(optionPrice, strike, timeToExpiry, isCall, false, data);
   }
 
-  private Double impliedVolEquityOption(final EquityOption option, final StaticReplicationDataBundle data, final Double marketPrice) {
+  private static Double impliedVolEquityOption(final EquityOption option, final StaticReplicationDataBundle data, final Double marketPrice) {
     final double optionPrice;
     final double strike = option.getStrike();
     final double timeToExpiry = option.getTimeToExpiry();
     final boolean isCall = option.isCall();
     if (marketPrice == null) {
-      optionPrice = option.accept(s_pvCalculator, data) / option.getUnitAmount();
+      optionPrice = option.accept(PV_CALCULATOR, data) / option.getUnitAmount();
     } else {
       optionPrice = marketPrice;
     }
@@ -121,13 +121,14 @@ public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends Inst
     return getImpliedVol(optionPrice, strike, timeToExpiry, isCall, true, data);
   }
 
-  private Double impliedVolEquityIndexFutureOption(final EquityIndexFutureOption option, final StaticReplicationDataBundle data, final Double marketPrice) {
+  private static Double impliedVolEquityIndexFutureOption(final EquityIndexFutureOption option, final StaticReplicationDataBundle data,
+      final Double marketPrice) {
     final double optionPrice;
     final double strike = option.getStrike();
     final double timeToExpiry = option.getExpiry();
     final boolean isCall = option.isCall();
     if (marketPrice == null) {
-      optionPrice = option.accept(s_pvCalculator, data) / option.getPointValue();
+      optionPrice = option.accept(PV_CALCULATOR, data) / option.getPointValue();
     } else {
       optionPrice = marketPrice;
     }
@@ -135,7 +136,8 @@ public final class EqyOptRollGeskeWhaleyImpliedVolatilityCalculator extends Inst
     return getImpliedVol(optionPrice, strike, timeToExpiry, isCall, false, data);
   }
 
-  private Double getImpliedVol(final double optionPrice, final double strike, final double timeToExpiry, final boolean isCall, final boolean eqyOpt, final StaticReplicationDataBundle data) {
+  private static Double getImpliedVol(final double optionPrice, final double strike, final double timeToExpiry, final boolean isCall,
+      final boolean eqyOpt, final StaticReplicationDataBundle data) {
     final double spot = data.getForwardCurve().getSpot();
     final double discountRate = data.getDiscountCurve().getInterestRate(timeToExpiry);
 

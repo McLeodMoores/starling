@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -25,11 +25,11 @@ import com.opengamma.financial.security.swap.VarianceSwapNotional;
 import com.opengamma.id.ExternalId;
 
 /**
- * 
+ *
  */
 public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
 
-  private static final NotionalVisitor<Double> s_notionalVisitor = new NotionalVisitor<Double>() {
+  private static final NotionalVisitor<Double> NOTIONAL_VISITOR = new NotionalVisitor<Double>() {
 
     @Override
     public Double visitCommodityNotional(final CommodityNotional notional) {
@@ -53,7 +53,7 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
 
   };
 
-  private static final SwapLegVisitor<String> s_legNameVisitor = new SwapLegVisitor<String>() {
+  private static final SwapLegVisitor<String> LEG_NAME_VISITOR = new SwapLegVisitor<String>() {
 
     @Override
     public String visitFixedInterestRateLeg(final FixedInterestRateLeg swapLeg) {
@@ -109,7 +109,7 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
   //-------------------------------------------------------------------------
   public static SummaryBuilder append(final SummaryBuilder builder, final SwapSecurity security) {
     final Double notional = getNotional(security);
-    final String direction = notional != null ? (notional >= 0 ? "Pay" : "Receive") : null;
+    final String direction = notional != null ? notional >= 0 ? "Pay" : "Receive" : null;
     final Double rate = getRate(security);
     return builder
         .with(SummaryField.START, security.getEffectiveDate())
@@ -123,17 +123,17 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
   }
 
   private static String getLegName(final SwapLeg leg) {
-    return leg.accept(s_legNameVisitor);
+    return leg.accept(LEG_NAME_VISITOR);
   }
 
   private static Double getNotional(final SwapSecurity security) {
     if (SwapSecurityUtils.isFloatFloat(security)) {
-      return security.getPayLeg().getNotional().accept(s_notionalVisitor);
+      return security.getPayLeg().getNotional().accept(NOTIONAL_VISITOR);
     }
 
     final boolean isPayFixed = isFixedLeg(security.getPayLeg());
     final SwapLeg fixedLeg = isPayFixed ? security.getPayLeg() : security.getReceiveLeg();
-    Double notional = fixedLeg.getNotional().accept(s_notionalVisitor);
+    Double notional = fixedLeg.getNotional().accept(NOTIONAL_VISITOR);
     if (notional != null && !isPayFixed) {
       notional *= -1;
     }
@@ -154,10 +154,9 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
       final ExternalId payRefRate = getReferenceRate(security.getPayLeg());
       final ExternalId receiveRefRate = getReferenceRate(security.getReceiveLeg());
       return payRefRate.getValue() + "/" + receiveRefRate.getValue();
-    } else {
-      final SwapLeg floatingLeg = isFixedLeg(security.getPayLeg()) ? security.getReceiveLeg() : security.getPayLeg();
-      return getReferenceRate(floatingLeg).getValue();
     }
+    final SwapLeg floatingLeg = isFixedLeg(security.getPayLeg()) ? security.getReceiveLeg() : security.getPayLeg();
+    return getReferenceRate(floatingLeg).getValue();
   }
 
   private static Double getFixedRate(final SwapLeg leg) {

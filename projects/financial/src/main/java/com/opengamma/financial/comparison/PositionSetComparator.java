@@ -30,7 +30,7 @@ public class PositionSetComparator extends AbstractComparator {
 
   private static Set<PositionInfo> createPositionInfoSet(final ComparisonContext context, final Iterable<Position> positions, final int sizeHint) {
     final Map<PositionInfo, PositionInfo> map = Maps.newHashMapWithExpectedSize(sizeHint);
-    for (Position position : positions) {
+    for (final Position position : positions) {
       final PositionInfo info = new PositionInfo(context, position);
       final PositionInfo previous = map.get(info);
       if (previous != null) {
@@ -39,12 +39,12 @@ public class PositionSetComparator extends AbstractComparator {
         map.put(info, info);
       }
     }
-    return new HashSet<PositionInfo>(map.keySet());
+    return new HashSet<>(map.keySet());
   }
 
   /**
    * Produces a comparison of two sets of positions.
-   * 
+   *
    * @param first first set of positions, not null
    * @param second second set of positions, not null
    * @return the comparison result
@@ -58,7 +58,7 @@ public class PositionSetComparator extends AbstractComparator {
 
   /**
    * Produces a comparison of two sets of positions.
-   * 
+   *
    * @param first first set of positions, not null
    * @param second second set of positions, not null
    * @return the comparison result
@@ -71,8 +71,8 @@ public class PositionSetComparator extends AbstractComparator {
   }
 
   private static Collection<Position> getUnderlyingPositions(final Collection<PositionInfo> positions) {
-    final Collection<Position> result = new ArrayList<Position>(positions.size());
-    for (PositionInfo position : positions) {
+    final Collection<Position> result = new ArrayList<>(positions.size());
+    for (final PositionInfo position : positions) {
       position.addUnderlyingToCollection(result);
     }
     return result;
@@ -80,7 +80,7 @@ public class PositionSetComparator extends AbstractComparator {
 
   private PositionSetComparison compare(final Set<PositionInfo> first, final Set<PositionInfo> second) {
     final Iterator<PositionInfo> itrFirst = first.iterator();
-    final Collection<Position> intersection = new ArrayList<Position>();
+    final Collection<Position> intersection = new ArrayList<>();
     // Remove the identical positions first to lower the size of the sets
     while (itrFirst.hasNext()) {
       final PositionInfo position = itrFirst.next();
@@ -90,7 +90,7 @@ public class PositionSetComparator extends AbstractComparator {
         itrFirst.remove();
       }
     }
-    final Collection<Pair<Position, Position>> diff = new ArrayList<Pair<Position, Position>>();
+    final Collection<Pair<Position, Position>> diff = new ArrayList<>();
     // TODO: identify changes
     // Anything left in either set is unique to that set
     return new PositionSetComparison(diff, getUnderlyingPositions(first), getUnderlyingPositions(second), intersection);

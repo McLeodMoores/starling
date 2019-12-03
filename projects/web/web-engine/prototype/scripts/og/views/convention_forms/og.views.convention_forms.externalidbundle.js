@@ -13,7 +13,8 @@ $.register_module({
 		var ExternalIdBundle = function (config) {
 			var block = this,
 				id = og.common.id('externalIdBundle'),
-				form = config.form;
+				form = config.form,
+				header_name = config.name ? config.name : 'External Identifiers';
 			if (config.data.ID) {
 				if (config.data.ID.length) { 
 					eid_data = Object.keys(config.data.ID).reduce(function (acc, val) {
@@ -27,7 +28,7 @@ $.register_module({
 			}
 			form.Block.call(block, {
 				module: 'og.views.forms.convention-external-id-bundle_tash',
-				extras: { id: id, data: eid_data },
+				extras: { id: id, data: eid_data, name: header_name },
 				processor: function (data) {
 					var eids = [],
 						path = config.index.split('.'),

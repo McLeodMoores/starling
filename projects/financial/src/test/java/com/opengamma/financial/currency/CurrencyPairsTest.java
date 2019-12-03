@@ -27,14 +27,14 @@ public class CurrencyPairsTest {
   protected void setUp() throws Exception {
     _pairs = CurrencyPairs.of(ImmutableSet.of(CurrencyPair.of(Currency.EUR, Currency.USD), CurrencyPair.of(Currency.GBP, Currency.USD)));
     _currencyPairsSource = new CurrencyPairsSource() {
-      
+
       @Override
-      public CurrencyPairs getCurrencyPairs(String name) {
+      public CurrencyPairs getCurrencyPairs(final String name) {
         return _pairs;
       }
 
       @Override
-      public CurrencyPair getCurrencyPair(String name, Currency currency1, Currency currency2) {
+      public CurrencyPair getCurrencyPair(final String name, final Currency currency1, final Currency currency2) {
         return _pairs.getCurrencyPair(currency1, currency2);
       }
     };
@@ -42,8 +42,8 @@ public class CurrencyPairsTest {
 
   @Test
   public void getCurrencyPair() {
-    CurrencyPair eurUsd = CurrencyPair.of(Currency.EUR, Currency.USD);
-    CurrencyPair gbpUsd = CurrencyPair.of(Currency.GBP, Currency.USD);
+    final CurrencyPair eurUsd = CurrencyPair.of(Currency.EUR, Currency.USD);
+    final CurrencyPair gbpUsd = CurrencyPair.of(Currency.GBP, Currency.USD);
     assertEquals(eurUsd, _pairs.getCurrencyPair(Currency.USD, Currency.EUR));
     assertEquals(eurUsd, _pairs.getCurrencyPair(Currency.EUR, Currency.USD));
     assertEquals(gbpUsd, _pairs.getCurrencyPair(Currency.GBP, Currency.USD));

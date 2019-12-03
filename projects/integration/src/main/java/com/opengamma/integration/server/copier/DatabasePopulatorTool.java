@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.server.copier;
@@ -61,11 +61,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.monitor.OperationTimer;
 
 /**
- * 
+ *
  */
 public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(DatabasePopulatorTool.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DatabasePopulatorTool.class);
   /**
    * Demo function configuration object name.
    */
@@ -75,9 +75,9 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
    */
   private final String _serverUrl;
   private final ExecutorService _executorService = Executors.newFixedThreadPool(10);
-  private final ExecutorCompletionService<UniqueId> _completionService = new ExecutorCompletionService<UniqueId>(_executorService);
+  private final ExecutorCompletionService<UniqueId> _completionService = new ExecutorCompletionService<>(_executorService);
   private final List<HistoricalTimeSeriesInfoDocument> _tsList = Lists.newArrayList();
-  
+
   public DatabasePopulatorTool(final String serverUrl) {
     ArgumentChecker.notNull(serverUrl, "serverUrl");
     _serverUrl = serverUrl;
@@ -85,7 +85,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
 
   @Override
   protected void doRun() throws Exception {
-    ToolContext toolContext = getToolContext();
+    final ToolContext toolContext = getToolContext();
     loadSecurity(toolContext.getSecurityMaster());
     loadPortfolio(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(), toolContext.getSecurityMaster(), toolContext.getSecuritySource());
     loadConfig(toolContext.getConfigMaster(), toolContext.getPortfolioMaster());
@@ -94,110 +94,112 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
     loadFunctionConfiguration(toolContext.getConfigMaster());
     _executorService.shutdown();
   }
-  
+
   protected void loadFunctionConfiguration(final ConfigMaster configMaster) {
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
       protected void doRun() throws Exception {
-        FunctionConfigurationSource functionConfigSource = getToolContext().getFunctionConfigSource();
-        FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(DEMO_FUNCTION, functionConfigSource);
+        final FunctionConfigurationSource functionConfigSource = getToolContext().getFunctionConfigSource();
+        final FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(DEMO_FUNCTION, functionConfigSource);
         final ConfigItem<FunctionConfigurationDefinition> config = ConfigItem.of(definition, DEMO_FUNCTION, FunctionConfigurationDefinition.class);
         ConfigMasterUtils.storeByName(getToolContext().getConfigMaster(), config);
       }
     };
-    String[] args = {"-c", _serverUrl};
+    final String[] args = { "-c", _serverUrl };
     remoteServerTool.initAndRun(args, ToolContext.class);
   }
 
   protected void loadSecurity(final SecurityMaster demoSecurityMaster) {
-    s_logger.info("loading securities");
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+    LOGGER.info("loading securities");
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
       protected void doRun() throws Exception {
-        SecurityMaster remotesecurityMaster = getToolContext().getSecurityMaster();
-        for (SecurityDocument securityDocument : SecuritySearchIterator.iterable(remotesecurityMaster, new SecuritySearchRequest())) {
+        final SecurityMaster remotesecurityMaster = getToolContext().getSecurityMaster();
+        for (final SecurityDocument securityDocument : SecuritySearchIterator.iterable(remotesecurityMaster, new SecuritySearchRequest())) {
           securityDocument.setUniqueId(null);
           demoSecurityMaster.add(securityDocument);
         }
       }
     };
-    String[] args = {"-c", _serverUrl};
+    final String[] args = { "-c", _serverUrl };
     remoteServerTool.initAndRun(args, ToolContext.class);
   }
-  
+
   protected void loadPortfolio(final PortfolioMaster demoPortfolioMaster, final PositionMaster demoPositionMaster,
       final SecurityMaster demoSecurityMaster, final SecuritySource demoSecuritySource) {
-    s_logger.info("loading portfolios");
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+    LOGGER.info("loading portfolios");
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
       protected void doRun() throws Exception {
-        PortfolioMaster remotePortfolioMaster = getToolContext().getPortfolioMaster();
-        PositionSource remotePositionSource = getToolContext().getPositionSource();
-        
-        PortfolioSearchRequest request = new PortfolioSearchRequest();
+        final PortfolioMaster remotePortfolioMaster = getToolContext().getPortfolioMaster();
+        final PositionSource remotePositionSource = getToolContext().getPositionSource();
+
+        final PortfolioSearchRequest request = new PortfolioSearchRequest();
         request.setDepth(0);
-        for (PortfolioDocument portfolioDocument : PortfolioSearchIterator.iterable(remotePortfolioMaster, request)) {
-          Portfolio portfolio = remotePositionSource.getPortfolio(portfolioDocument.getUniqueId(), VersionCorrection.LATEST);
+        for (final PortfolioDocument portfolioDocument : PortfolioSearchIterator.iterable(remotePortfolioMaster, request)) {
+          final Portfolio portfolio = remotePositionSource.getPortfolio(portfolioDocument.getUniqueId(), VersionCorrection.LATEST);
           Portfolio resolvePortfolio = null;
           try {
             resolvePortfolio = PortfolioCompiler.resolvePortfolio(portfolio, _executorService, getToolContext().getSecuritySource());
-          } catch (Exception ex) {
-            s_logger.warn(String.format("Error resolving porfolio %s", portfolio.getName()), ex);
+          } catch (final Exception ex) {
+            LOGGER.warn(String.format("Error resolving porfolio %s", portfolio.getName()), ex);
             continue;
           }
-          SavePortfolio savePortfolio = new SavePortfolio(_executorService, demoPortfolioMaster, demoPositionMaster);
+          final SavePortfolio savePortfolio = new SavePortfolio(_executorService, demoPortfolioMaster, demoPositionMaster);
           savePortfolio.savePortfolio(resolvePortfolio, true);
         }
       }
     };
-    String[] args = {"-c", _serverUrl };
+    final String[] args = { "-c", _serverUrl };
     remoteServerTool.initAndRun(args, ToolContext.class);
   }
-  
+
   protected void loadConfig(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster) {
-    s_logger.info("loading configs");
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+    LOGGER.info("loading configs");
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
       protected void doRun() throws Exception {
         final ConfigMaster remoteConfigMaster = getToolContext().getConfigMaster();
         final PortfolioMaster remotePortfolioMaster = getToolContext().getPortfolioMaster();
-        ConfigSaver configSaver = new ConfigSaver(remoteConfigMaster, remotePortfolioMaster, new ArrayList<String>(), new ArrayList<String>(), true, true, ConfigSearchSortOrder.VERSION_FROM_INSTANT_DESC);
-        ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(byteArrayOutput);
+        final ConfigSaver configSaver = new ConfigSaver(remoteConfigMaster, remotePortfolioMaster, new ArrayList<String>(), new ArrayList<String>(), true, true,
+            ConfigSearchSortOrder.VERSION_FROM_INSTANT_DESC);
+        final ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
+        final PrintStream outputStream = new PrintStream(byteArrayOutput);
         configSaver.saveConfigs(outputStream);
-        ConfigLoader configLoader = new ConfigLoader(configMaster, portfolioMaster, true, true, true);
-        configLoader.loadConfig(new ByteArrayInputStream(byteArrayOutput.toByteArray()));            
+        final ConfigLoader configLoader = new ConfigLoader(configMaster, portfolioMaster, true, true, true);
+        configLoader.loadConfig(new ByteArrayInputStream(byteArrayOutput.toByteArray()));
       }
     };
-    String[] args = {"-c", _serverUrl };
+    final String[] args = { "-c", _serverUrl };
     remoteServerTool.initAndRun(args, ToolContext.class);
   }
-  
+
   protected void loadHistoricalTimeSeries(final HistoricalTimeSeriesMaster htsMaster) {
-    s_logger.info("loading timeseries");
-    final OperationTimer timer = new OperationTimer(s_logger, "Loading time series");
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
-      
+    LOGGER.info("loading timeseries");
+    final OperationTimer timer = new OperationTimer(LOGGER, "Loading time series");
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+
       @Override
       protected void doRun() throws Exception {
         final HistoricalTimeSeriesMaster remoteHtsMaster = getToolContext().getHistoricalTimeSeriesMaster();
-        for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(remoteHtsMaster, new HistoricalTimeSeriesInfoSearchRequest())) {
-          ObjectId timeSeriesObjectId = infoDoc.getInfo().getTimeSeriesObjectId();
+        for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(remoteHtsMaster,
+            new HistoricalTimeSeriesInfoSearchRequest())) {
+          final ObjectId timeSeriesObjectId = infoDoc.getInfo().getTimeSeriesObjectId();
           final ManageableHistoricalTimeSeries timeSeries = remoteHtsMaster.getTimeSeries(timeSeriesObjectId, VersionCorrection.LATEST);
           _tsList.add(infoDoc);
           _completionService.submit(new Callable<UniqueId>() {
-            
+
             @Override
             public UniqueId call() throws Exception {
               try {
-                ManageableHistoricalTimeSeriesInfo added = htsMaster.add(infoDoc).getInfo();
+                final ManageableHistoricalTimeSeriesInfo added = htsMaster.add(infoDoc).getInfo();
                 htsMaster.updateTimeSeriesDataPoints(added.getTimeSeriesObjectId(), timeSeries.getTimeSeries());
                 return added.getUniqueId();
-              } catch (Exception ex) {
+              } catch (final Exception ex) {
                 ex.printStackTrace();
                 return null;
               }
@@ -206,12 +208,12 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
         }
       }
     };
-    String[] args = {"-c", getServerUrl()};
+    final String[] args = { "-c", getServerUrl() };
     remoteServerTool.initAndRun(args, ToolContext.class);
     for (int i = 0; i < _tsList.size(); i++) {
       try {
         _completionService.take();
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new OpenGammaRuntimeException("Error writing TS to remote master", ex);
       }
     }
@@ -219,28 +221,29 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   }
 
   protected void loadSnapshot(final MarketDataSnapshotMaster marketDataSnapshotMaster) {
-    s_logger.info("loading market data snapshots");
-    AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
+    LOGGER.info("loading market data snapshots");
+    final AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
       protected void doRun() throws Exception {
-        MarketDataSnapshotMaster remoteSnapshotMaster = getToolContext().getMarketDataSnapshotMaster();
-        MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
-        for (MarketDataSnapshotDocument snapshotDocument : MarketDataSnapshotSearchIterator.iterable(remoteSnapshotMaster, request)) {
+        final MarketDataSnapshotMaster remoteSnapshotMaster = getToolContext().getMarketDataSnapshotMaster();
+        final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+        for (final MarketDataSnapshotDocument snapshotDocument : MarketDataSnapshotSearchIterator.iterable(remoteSnapshotMaster, request)) {
           marketDataSnapshotMaster.add(snapshotDocument);
         }
       }
     };
-    String[] args = {"-c", _serverUrl };
+    final String[] args = { "-c", _serverUrl };
     remoteServerTool.initAndRun(args, ToolContext.class);
   }
 
   /**
    * Gets the serverUrl.
+   * 
    * @return the serverUrl
    */
   public String getServerUrl() {
     return _serverUrl;
   }
- 
+
 }

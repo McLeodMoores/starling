@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestGroup;
 public class ComputationTargetTypeMapTest {
 
   public void testEmpty() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     assertNull(map.getDirect(ComputationTargetType.NULL));
     assertNull(map.get(ComputationTargetType.NULL));
     assertNull(map.getDirect(ComputationTargetType.POSITION));
@@ -36,7 +36,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testSimple() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
     assertNull(map.getDirect(ComputationTargetType.NULL));
@@ -55,7 +55,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testNull() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "NULL");
     map.put(ComputationTargetType.SECURITY, "Sec");
     assertEquals(map.getDirect(ComputationTargetType.NULL), "NULL");
@@ -63,7 +63,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testNested() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY), "Sec");
     assertNull(map.getDirect(ComputationTargetType.NULL));
     assertNull(map.get(ComputationTargetType.NULL));
@@ -83,7 +83,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testMultiple() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "Pos|Trade");
     assertNull(map.getDirect(ComputationTargetType.NULL));
     assertNull(map.get(ComputationTargetType.NULL));
@@ -102,7 +102,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testHierarchy() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "SEC");
     map.put(ComputationTargetType.of(MockSecurity.class), "MOCK");
     final Class<? extends MockSecurity> c = new MockSecurity(0) {
@@ -114,21 +114,21 @@ public class ComputationTargetTypeMapTest {
 
   @Test(expectedExceptions = {IllegalStateException.class })
   public void testCollision_direct() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE), "Pos|Trade");
     map.put(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION), "Pos");
   }
 
   @Test(expectedExceptions = {IllegalStateException.class })
   public void testCollision_cache() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "Sec");
     assertNotNull(map.get(ComputationTargetType.of(MockSecurity.class)));
     map.put(ComputationTargetType.of(MockSecurity.class), "MSec");
   }
 
   public void testCollision_folding() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>(new Function2<String, String, String>() {
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>(new Function2<String, String, String>() {
       @Override
       public String execute(final String a, final String b) {
         return a + b;
@@ -141,9 +141,10 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testChained() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.SECURITY, "A");
-    map.put(ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", new Function2<String, String, String>() {
+    map.put(ComputationTargetType.POSITION.containing(
+        ComputationTargetType.TRADE.or(ComputationTargetType.of(MockSecurity.class))), "B", new Function2<String, String, String>() {
       @Override
       public String execute(final String a, final String b) {
         return a + b;
@@ -155,16 +156,16 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testValues_noNull() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
     map.get(ComputationTargetType.SECURITY);
     map.get(ComputationTargetType.PORTFOLIO_NODE);
     int flags = 0;
-    for (String str : map.values()) {
-      if ("Pos".equals(str) && ((flags & 1) == 0)) {
+    for (final String str : map.values()) {
+      if ("Pos".equals(str) && (flags & 1) == 0) {
         flags |= 1;
-      } else if ("Sec".equals(str) && ((flags & 2) == 0)) {
+      } else if ("Sec".equals(str) && (flags & 2) == 0) {
         flags |= 2;
       } else {
         fail("str = " + str + ", flags = " + flags);
@@ -174,16 +175,16 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testValues_withNull() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.POSITION, "Pos");
     map.get(ComputationTargetType.SECURITY);
     map.get(ComputationTargetType.PORTFOLIO_NODE);
     int flags = 0;
-    for (String str : map.values()) {
-      if ("Pos".equals(str) && ((flags & 1) == 0)) {
+    for (final String str : map.values()) {
+      if ("Pos".equals(str) && (flags & 1) == 0) {
         flags |= 1;
-      } else if ("Null".equals(str) && ((flags & 2) == 0)) {
+      } else if ("Null".equals(str) && (flags & 2) == 0) {
         flags |= 2;
       } else {
         fail("str = " + str + ", flags = " + flags);
@@ -193,7 +194,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testValues_withRemove() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.SECURITY, "Sec");
     map.get(ComputationTargetType.POSITION);
@@ -212,17 +213,17 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testEntries_noNull() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.POSITION, "Pos");
     map.put(ComputationTargetType.SECURITY, "Sec");
     map.get(ComputationTargetType.PORTFOLIO_NODE);
     int flags = 0;
-    for (Map.Entry<ComputationTargetType, String> e : map.entries()) {
-      if ("Pos".equals(e.getValue()) && ((flags & 1) == 0)) {
+    for (final Map.Entry<ComputationTargetType, String> e : map.entries()) {
+      if ("Pos".equals(e.getValue()) && (flags & 1) == 0) {
         assertEquals(e.getKey(), ComputationTargetType.POSITION);
         flags |= 1;
         e.setValue("Foo");
-      } else if ("Sec".equals(e.getValue()) && ((flags & 2) == 0)) {
+      } else if ("Sec".equals(e.getValue()) && (flags & 2) == 0) {
         assertEquals(e.getKey(), ComputationTargetType.SECURITY);
         flags |= 2;
         e.setValue("Bar");
@@ -236,18 +237,18 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testEntries_withNull() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.POSITION, "Pos");
     map.get(ComputationTargetType.SECURITY);
     map.get(ComputationTargetType.PORTFOLIO_NODE);
     int flags = 0;
-    for (Map.Entry<ComputationTargetType, String> e : map.entries()) {
-      if ("Pos".equals(e.getValue()) && ((flags & 1) == 0)) {
+    for (final Map.Entry<ComputationTargetType, String> e : map.entries()) {
+      if ("Pos".equals(e.getValue()) && (flags & 1) == 0) {
         assertEquals(e.getKey(), ComputationTargetType.POSITION);
         flags |= 1;
         e.setValue("Foo");
-      } else if ("Null".equals(e.getValue()) && ((flags & 2) == 0)) {
+      } else if ("Null".equals(e.getValue()) && (flags & 2) == 0) {
         assertEquals(e.getKey(), ComputationTargetType.NULL);
         flags |= 2;
         e.setValue("Bar");
@@ -261,7 +262,7 @@ public class ComputationTargetTypeMapTest {
   }
 
   public void testEntries_withRemove() {
-    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<String>();
+    final ComputationTargetTypeMap<String> map = new ComputationTargetTypeMap<>();
     map.put(ComputationTargetType.NULL, "Null");
     map.put(ComputationTargetType.SECURITY, "Sec");
     map.get(ComputationTargetType.POSITION);

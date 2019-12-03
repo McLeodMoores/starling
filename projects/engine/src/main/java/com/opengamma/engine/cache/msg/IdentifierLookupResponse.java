@@ -2,18 +2,24 @@
 ///CLOVER:OFF
 package com.opengamma.engine.cache.msg;
 public class IdentifierLookupResponse extends com.opengamma.engine.cache.msg.CacheMessage implements java.io.Serializable {
-  public CacheMessage accept (CacheMessageVisitor visitor) { return visitor.visitIdentifierLookupResponse (this); }
+  @Override
+  public CacheMessage accept (final CacheMessageVisitor visitor) { return visitor.visitIdentifierLookupResponse (this); }
   private static final long serialVersionUID = -51269628524l;
   private java.util.List<Long> _identifier;
   public static final String IDENTIFIER_KEY = "identifier";
-  public IdentifierLookupResponse (java.util.Collection<? extends Long> identifier) {
-    if (identifier == null) throw new NullPointerException ("'identifier' cannot be null");
-    else {
-      final java.util.List<Long> fudge0 = new java.util.ArrayList<Long> (identifier);
-      if (identifier.size () == 0) throw new IllegalArgumentException ("'identifier' cannot be an empty list");
-      for (java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext (); ) {
-        Long fudge2 = fudge1.next ();
-        if (fudge2 == null) throw new NullPointerException ("List element of 'identifier' cannot be null");
+  public IdentifierLookupResponse (final java.util.Collection<? extends Long> identifier) {
+    if (identifier == null) {
+      throw new NullPointerException ("'identifier' cannot be null");
+    } else {
+      final java.util.List<Long> fudge0 = new java.util.ArrayList<> (identifier);
+      if (identifier.size () == 0) {
+        throw new IllegalArgumentException ("'identifier' cannot be an empty list");
+      }
+      for (final java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext ();) {
+        final Long fudge2 = fudge1.next ();
+        if (fudge2 == null) {
+          throw new NullPointerException ("List element of 'identifier' cannot be null");
+        }
       }
       _identifier = fudge0;
     }
@@ -22,64 +28,81 @@ public class IdentifierLookupResponse extends com.opengamma.engine.cache.msg.Cac
     super (deserializer, fudgeMsg);
     java.util.List<org.fudgemsg.FudgeField> fudgeFields;
     fudgeFields = fudgeMsg.getAllByName (IDENTIFIER_KEY);
-    if (fudgeFields.size () == 0) throw new IllegalArgumentException ("Fudge message is not a IdentifierLookupResponse - field 'identifier' is not present");
-    _identifier = new java.util.ArrayList<Long> (fudgeFields.size ());
-    for (org.fudgemsg.FudgeField fudge1 : fudgeFields) {
+    if (fudgeFields.size () == 0) {
+      throw new IllegalArgumentException ("Fudge message is not a IdentifierLookupResponse - field 'identifier' is not present");
+    }
+    _identifier = new java.util.ArrayList<> (fudgeFields.size ());
+    for (final org.fudgemsg.FudgeField fudge1 : fudgeFields) {
       try {
         _identifier.add (fudgeMsg.getFieldValue (Long.class, fudge1));
       }
-      catch (IllegalArgumentException e) {
+      catch (final IllegalArgumentException e) {
         throw new IllegalArgumentException ("Fudge message is not a IdentifierLookupResponse - field 'identifier' is not long", e);
       }
     }
   }
-  public IdentifierLookupResponse (Long correlationId, java.util.Collection<? extends Long> identifier) {
+  public IdentifierLookupResponse (final Long correlationId, final java.util.Collection<? extends Long> identifier) {
     super (correlationId);
-    if (identifier == null) throw new NullPointerException ("'identifier' cannot be null");
-    else {
-      final java.util.List<Long> fudge0 = new java.util.ArrayList<Long> (identifier);
-      if (identifier.size () == 0) throw new IllegalArgumentException ("'identifier' cannot be an empty list");
-      for (java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext (); ) {
-        Long fudge2 = fudge1.next ();
-        if (fudge2 == null) throw new NullPointerException ("List element of 'identifier' cannot be null");
+    if (identifier == null) {
+      throw new NullPointerException ("'identifier' cannot be null");
+    } else {
+      final java.util.List<Long> fudge0 = new java.util.ArrayList<> (identifier);
+      if (identifier.size () == 0) {
+        throw new IllegalArgumentException ("'identifier' cannot be an empty list");
+      }
+      for (final java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext ();) {
+        final Long fudge2 = fudge1.next ();
+        if (fudge2 == null) {
+          throw new NullPointerException ("List element of 'identifier' cannot be null");
+        }
       }
       _identifier = fudge0;
     }
   }
   protected IdentifierLookupResponse (final IdentifierLookupResponse source) {
     super (source);
-    if (source == null) throw new NullPointerException ("'source' must not be null");
-    if (source._identifier == null) _identifier = null;
-    else {
-      _identifier = new java.util.ArrayList<Long> (source._identifier);
+    if (source == null) {
+      throw new NullPointerException ("'source' must not be null");
+    }
+    if (source._identifier == null) {
+      _identifier = null;
+    } else {
+      _identifier = new java.util.ArrayList<> (source._identifier);
     }
   }
+  @Override
   public IdentifierLookupResponse clone () {
     return new IdentifierLookupResponse (this);
   }
+  @Override
   public org.fudgemsg.FudgeMsg toFudgeMsg (final org.fudgemsg.mapping.FudgeSerializer serializer) {
-    if (serializer == null) throw new NullPointerException ("serializer must not be null");
+    if (serializer == null) {
+      throw new NullPointerException ("serializer must not be null");
+    }
     final org.fudgemsg.MutableFudgeMsg msg = serializer.newMessage ();
     toFudgeMsg (serializer, msg);
     return msg;
   }
+  @Override
   public void toFudgeMsg (final org.fudgemsg.mapping.FudgeSerializer serializer, final org.fudgemsg.MutableFudgeMsg msg) {
     super.toFudgeMsg (serializer, msg);
     if (_identifier != null)  {
-      for (Long fudge1 : _identifier) {
+      for (final Long fudge1 : _identifier) {
         msg.add (IDENTIFIER_KEY, null, fudge1);
       }
     }
   }
   public static IdentifierLookupResponse fromFudgeMsg (final org.fudgemsg.mapping.FudgeDeserializer deserializer, final org.fudgemsg.FudgeMsg fudgeMsg) {
     final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal (0);
-    for (org.fudgemsg.FudgeField field : types) {
+    for (final org.fudgemsg.FudgeField field : types) {
       final String className = (String)field.getValue ();
-      if ("com.opengamma.engine.cache.msg.IdentifierLookupResponse".equals (className)) break;
+      if ("com.opengamma.engine.cache.msg.IdentifierLookupResponse".equals (className)) {
+        break;
+      }
       try {
         return (com.opengamma.engine.cache.msg.IdentifierLookupResponse)Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
       }
-      catch (Throwable t) {
+      catch (final Throwable t) {
         // no-action
       }
     }
@@ -88,30 +111,41 @@ public class IdentifierLookupResponse extends com.opengamma.engine.cache.msg.Cac
   public java.util.List<Long> getIdentifier () {
     return java.util.Collections.unmodifiableList (_identifier);
   }
-  public void setIdentifier (Long identifier) {
-    if (identifier == null) throw new NullPointerException ("'identifier' cannot be null");
-    else {
-      _identifier = new java.util.ArrayList<Long> (1);
+  public void setIdentifier (final Long identifier) {
+    if (identifier == null) {
+      throw new NullPointerException ("'identifier' cannot be null");
+    } else {
+      _identifier = new java.util.ArrayList<> (1);
       addIdentifier (identifier);
     }
   }
-  public void setIdentifier (java.util.Collection<? extends Long> identifier) {
-    if (identifier == null) throw new NullPointerException ("'identifier' cannot be null");
-    else {
-      final java.util.List<Long> fudge0 = new java.util.ArrayList<Long> (identifier);
-      if (identifier.size () == 0) throw new IllegalArgumentException ("'identifier' cannot be an empty list");
-      for (java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext (); ) {
-        Long fudge2 = fudge1.next ();
-        if (fudge2 == null) throw new NullPointerException ("List element of 'identifier' cannot be null");
+  public void setIdentifier (final java.util.Collection<? extends Long> identifier) {
+    if (identifier == null) {
+      throw new NullPointerException ("'identifier' cannot be null");
+    } else {
+      final java.util.List<Long> fudge0 = new java.util.ArrayList<> (identifier);
+      if (identifier.size () == 0) {
+        throw new IllegalArgumentException ("'identifier' cannot be an empty list");
+      }
+      for (final java.util.ListIterator<Long> fudge1 = fudge0.listIterator (); fudge1.hasNext ();) {
+        final Long fudge2 = fudge1.next ();
+        if (fudge2 == null) {
+          throw new NullPointerException ("List element of 'identifier' cannot be null");
+        }
       }
       _identifier = fudge0;
     }
   }
-  public void addIdentifier (Long identifier) {
-    if (identifier == null) throw new NullPointerException ("'identifier' cannot be null");
-    if (_identifier == null) _identifier = new java.util.ArrayList<Long> ();
+  public void addIdentifier (final Long identifier) {
+    if (identifier == null) {
+      throw new NullPointerException ("'identifier' cannot be null");
+    }
+    if (_identifier == null) {
+      _identifier = new java.util.ArrayList<> ();
+    }
     _identifier.add (identifier);
   }
+  @Override
   public String toString () {
     return org.apache.commons.lang.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang.builder.ToStringStyle.SHORT_PREFIX_STYLE);
   }

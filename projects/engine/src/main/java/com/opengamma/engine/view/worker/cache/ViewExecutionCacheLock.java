@@ -28,12 +28,12 @@ import com.opengamma.util.tuple.Pairs;
 public final class ViewExecutionCacheLock {
 
   // No harm in sharing the canonicalized forms with other instances.
-  private static final WeakInstanceCache<ViewExecutionCacheKey> s_keys = new WeakInstanceCache<ViewExecutionCacheKey>();
+  private static final WeakInstanceCache<ViewExecutionCacheKey> KEYS = new WeakInstanceCache<>();
 
   private static final class Locks {
 
     private final Lock _broad = new ReentrantLock();
-    private final Map2<VersionCorrection, Instant, Lock> _fine = new WeakValueHashMap2<VersionCorrection, Instant, Lock>(HashMap2.STRONG_KEYS);
+    private final Map2<VersionCorrection, Instant, Lock> _fine = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
 
   }
 
@@ -41,7 +41,7 @@ public final class ViewExecutionCacheLock {
   private final ConcurrentMap<ViewExecutionCacheKey, Locks> _locks = new MapMaker().weakKeys().makeMap();
 
   private Locks getOrCreateLocks(final ViewExecutionCacheKey cacheKey) {
-    final ViewExecutionCacheKey normalized = s_keys.get(cacheKey);
+    final ViewExecutionCacheKey normalized = KEYS.get(cacheKey);
     Locks locks = _locks.get(normalized);
     if (locks == null) {
       locks = new Locks();
@@ -55,8 +55,9 @@ public final class ViewExecutionCacheLock {
 
   /**
    * Acquires the broad lock for the view compilation.
-   * 
-   * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
+   *
+   * @param cacheKey
+   *          the broad key that summarizes the view definition and market data providers, not null
    * @return the lock instance, not null
    */
   public Lock get(final ViewExecutionCacheKey cacheKey) {
@@ -64,11 +65,14 @@ public final class ViewExecutionCacheLock {
   }
 
   /**
-   * Acquires the broad and finer grained locks for a specific compilation of a view
-   * 
-   * @param cacheKey the broad key that summarizes the view definition and market data providers, not null
-   * @param valuationTime an indicative valuation time for any compilation, not null
-   * @param resolverVersionCorrection the target resolver version/correction timestamp, not null
+   * Acquires the broad and finer grained locks for a specific compilation of a view.
+   *
+   * @param cacheKey
+   *          the broad key that summarizes the view definition and market data providers, not null
+   * @param valuationTime
+   *          an indicative valuation time for any compilation, not null
+   * @param resolverVersionCorrection
+   *          the target resolver version/correction timestamp, not null
    * @return the lock instances, not null. The first element in the pair is the broad lock, the second is the finer lock
    */
   public Pair<Lock, Lock> get(final ViewExecutionCacheKey cacheKey, final Instant valuationTime, final VersionCorrection resolverVersionCorrection) {

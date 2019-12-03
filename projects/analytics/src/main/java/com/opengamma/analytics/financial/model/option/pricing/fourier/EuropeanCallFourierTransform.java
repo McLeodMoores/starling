@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -17,9 +17,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * Gives the Fourier transform of a European call $\hat{C}(z) =
- * -\frac{\phi(z)}{z(z+i)}$ where $\phi(z)$ is the characteristic function of
- *  the (normalised) terminal distribution of the underlying 
+ * Gives the Fourier transform of a European call $\hat{C}(z) = -\frac{\phi(z)}{z(z+i)}$ where $\phi(z)$ is the characteristic function of the (normalised)
+ * terminal distribution of the underlying .
  */
 public class EuropeanCallFourierTransform {
   private final CharacteristicExponent _ce;
@@ -45,6 +44,7 @@ public class EuropeanCallFourierTransform {
 
   /**
    * Gets the _ce field.
+   * 
    * @return the _ce
    */
   public CharacteristicExponent getCharacteristicExponent() {

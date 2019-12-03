@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -33,6 +31,8 @@ import com.opengamma.core.config.impl.RemoteConfigSource;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.EHCachingMasterConfigSource;
 import com.opengamma.master.config.impl.MasterConfigSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the config source.
@@ -82,20 +82,20 @@ public class UserFinancialConfigSourceComponentFactory extends AbstractComponent
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     ConfigSource source = initUnderlying(repo, configuration);
 
     // add user level if requested
-    ConfigSource userSource = initUser(repo, configuration);
-    Map<String, ConfigSource> map = new HashMap<String, ConfigSource>();
+    final ConfigSource userSource = initUser(repo, configuration);
+    final Map<String, ConfigSource> map = new HashMap<>();
     if (userSource != null) {
-      String scheme = repo.getInfo(getUserConfigMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
+      final String scheme = repo.getInfo(getUserConfigMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
       map.put(scheme, userSource);
       source = new DelegatingConfigSource(source, map);
     }
 
     // register
-    ComponentInfo info = new ComponentInfo(ConfigSource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(ConfigSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConfigSource.class);
@@ -106,13 +106,13 @@ public class UserFinancialConfigSourceComponentFactory extends AbstractComponent
     }
   }
 
-  protected ConfigSource initUnderlying(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected ConfigSource initUnderlying(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     ConfigSource source = new MasterConfigSource(getUnderlyingConfigMaster());
     if (getCacheManager() != null) {
       source = new EHCachingMasterConfigSource(getUnderlyingConfigMaster(), getCacheManager());
     }
     if (getUnderlyingClassifier() != null) {
-      ComponentInfo info = new ComponentInfo(ConfigSource.class, getUnderlyingClassifier());
+      final ComponentInfo info = new ComponentInfo(ConfigSource.class, getUnderlyingClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConfigSource.class);
@@ -125,13 +125,13 @@ public class UserFinancialConfigSourceComponentFactory extends AbstractComponent
     return source;
   }
 
-  protected ConfigSource initUser(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected ConfigSource initUser(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     if (getUserConfigMaster() == null) {
       return null;
     }
-    ConfigSource source = new MasterConfigSource(getUserConfigMaster());
+    final ConfigSource source = new MasterConfigSource(getUserConfigMaster());
     if (getUserClassifier() != null) {
-      ComponentInfo info = new ComponentInfo(ConfigSource.class, getUserClassifier());
+      final ComponentInfo info = new ComponentInfo(ConfigSource.class, getUserClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConfigSource.class);

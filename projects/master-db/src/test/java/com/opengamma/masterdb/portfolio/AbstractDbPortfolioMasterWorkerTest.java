@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbPortfolioMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbPortfolioMasterWorkerTest.class);
 
   protected DbPortfolioMaster _prtMaster;
   protected Instant _version1Instant;
@@ -45,9 +45,9 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
   protected OffsetDateTime _now;
   private boolean _includePositions = true;
 
-  public AbstractDbPortfolioMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbPortfolioMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -70,13 +70,13 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
   //-------------------------------------------------------------------------
   private void init() {
     _prtMaster = new DbPortfolioMaster(getDbConnector());
-    
+
     _now = OffsetDateTime.now();
     _prtMaster.setClock(Clock.fixed(_now.toInstant(), ZoneOffset.UTC));
     _version1Instant = _now.toInstant().minusSeconds(100);
     _version2Instant = _now.toInstant().minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _prtMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio101", 25);
@@ -90,7 +90,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
         301, 301, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio301", 75);
     _visiblePortfolios = 3;
     _totalPortfolios = 4;
-    
+
     template.update("INSERT INTO prt_node VALUES (?,?,?,?,?, ?,?,?,?,?)",
         111, 111, 101, 101, null, null, 0, 1, 6, "TestNode111");
     template.update("INSERT INTO prt_node VALUES (?,?,?,?,?, ?,?,?,?,?)",
@@ -105,7 +105,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
         212, 211, 202, 201, null, null, 0, 1, 2, "TestNode212");
     template.update("INSERT INTO prt_node VALUES (?,?,?,?,?, ?,?,?,?,?)",
         311, 311, 301, 301, null, null, 0, 1, 2, "TestNode311");
-    
+
     template.update("INSERT INTO prt_position VALUES (?,?,?)",
         112, "DbPos", "500");
     template.update("INSERT INTO prt_position VALUES (?,?,?)",
@@ -118,7 +118,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
         212, "DbPos", "500");
     template.update("INSERT INTO prt_position VALUES (?,?,?)",
         311, "DbPos", "500");
-    
+
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
         10, 101, 101, "K101a", "V101a");
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
@@ -127,25 +127,25 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
         12, 102, 102,  "K102a", "V102a");
     template.update("INSERT INTO prt_portfolio_attribute VALUES (?,?,?,?,?)",
         13, 102, 102, "K102b", "V102b");
-    
+
     _totalPositions = 6;
   }
 
   //-------------------------------------------------------------------------
   protected void assert101(final PortfolioDocument test, final int depth) {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestPortfolio101", portfolio.getName());
-    ManageablePortfolioNode rootNode = portfolio.getRootNode();
+    final ManageablePortfolioNode rootNode = portfolio.getRootNode();
     assertNode111(rootNode, depth, uniqueId);
-    
+
     assertNotNull(portfolio.getAttributes());
     assertEquals(2, portfolio.getAttributes().size());
     assertEquals("V101a", portfolio.getAttributes().get("K101a"));
@@ -163,7 +163,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
       return;
     }
     assertEquals(1, node.getChildNodes().size());
-    ManageablePortfolioNode child112 = node.getChildNodes().get(0);
+    final ManageablePortfolioNode child112 = node.getChildNodes().get(0);
     assertNode112(child112, depth, portfolioId);
   }
 
@@ -183,7 +183,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
       return;
     }
     assertEquals(1, node.getChildNodes().size());
-    ManageablePortfolioNode child113 = node.getChildNodes().get(0);
+    final ManageablePortfolioNode child113 = node.getChildNodes().get(0);
     assertNode113(child113, portfolioId);
   }
 
@@ -203,17 +203,17 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
   }
 
   protected void assert102(final PortfolioDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestPortfolio102", portfolio.getName());
-    
+
     assertNotNull(portfolio.getAttributes());
     assertEquals(2, portfolio.getAttributes().size());
     assertEquals("V102a", portfolio.getAttributes().get("K102a"));
@@ -221,19 +221,19 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
   }
 
   protected void assert201(final PortfolioDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestPortfolio201", portfolio.getName());
-    ManageablePortfolioNode rootNode = portfolio.getRootNode();
+    final ManageablePortfolioNode rootNode = portfolio.getRootNode();
     assertNode211(rootNode, uniqueId);
-    
+
     assertNotNull(portfolio.getAttributes());
     assertTrue(portfolio.getAttributes().isEmpty());
   }
@@ -253,19 +253,19 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
   }
 
   protected void assert202(final PortfolioDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestPortfolio202", portfolio.getName());
-    ManageablePortfolioNode rootNode = portfolio.getRootNode();
+    final ManageablePortfolioNode rootNode = portfolio.getRootNode();
     assertNode212(rootNode, uniqueId);
-    
+
     assertNotNull(portfolio.getAttributes());
     assertTrue(portfolio.getAttributes().isEmpty());
   }
@@ -283,25 +283,25 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
       assertEquals(0, node.getPositionIds().size());
     }
   }
-  
+
   protected void assert301(final PortfolioDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "301", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "301", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePortfolio portfolio = test.getPortfolio();
+    final ManageablePortfolio portfolio = test.getPortfolio();
     assertEquals(uniqueId, portfolio.getUniqueId());
     assertEquals("TestPortfolio301", portfolio.getName());
-    ManageablePortfolioNode rootNode = portfolio.getRootNode();
+    final ManageablePortfolioNode rootNode = portfolio.getRootNode();
     assertNode311(rootNode, uniqueId);
-    
+
     assertNotNull(portfolio.getAttributes());
     assertTrue(portfolio.getAttributes().isEmpty());
   }
-  
+
   protected void assertNode311(final ManageablePortfolioNode node, final UniqueId portfolioId) {
     assertEquals(UniqueId.of("DbPrt", "311", "0"), node.getUniqueId());
     assertEquals("TestNode311", node.getName());

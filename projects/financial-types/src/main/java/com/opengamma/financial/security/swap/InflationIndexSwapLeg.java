@@ -60,24 +60,35 @@ public class InflationIndexSwapLeg extends InflationLeg {
   /**
    * For the builder.
    */
-  /* package */InflationIndexSwapLeg() {
+  /* package */ InflationIndexSwapLeg() {
     super();
   }
 
   /**
-   * @param dayCount The day count, not null
-   * @param frequency The frequency, not null
-   * @param regionId The region id, not null
-   * @param businessDayConvention The business day convention, not null
-   * @param notional The notional, not null
-   * @param isEOM True if dates follow the EOM convention
-   * @param indexId The id of the index, not null
-   * @param quotationIndexationLag The actual quotation indexation lag
-   * @param conventionalIndexationLag The conventional indexation lag
-   * @param interpolationMethod The interpolation method, not null
+   * @param dayCount
+   *          The day count, not null
+   * @param frequency
+   *          The frequency, not null
+   * @param regionId
+   *          The region id, not null
+   * @param businessDayConvention
+   *          The business day convention, not null
+   * @param notional
+   *          The notional, not null
+   * @param isEOM
+   *          True if dates follow the EOM convention
+   * @param indexId
+   *          The id of the index, not null
+   * @param quotationIndexationLag
+   *          The actual quotation indexation lag
+   * @param conventionalIndexationLag
+   *          The conventional indexation lag
+   * @param interpolationMethod
+   *          The interpolation method, not null
    */
   public InflationIndexSwapLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionId, final BusinessDayConvention businessDayConvention,
-      final Notional notional, final boolean isEOM, final ExternalId indexId, final int quotationIndexationLag, final int conventionalIndexationLag, final InterpolationMethod interpolationMethod) {
+      final Notional notional, final boolean isEOM, final ExternalId indexId, final int quotationIndexationLag, final int conventionalIndexationLag,
+      final InterpolationMethod interpolationMethod) {
     super(dayCount, frequency, regionId, businessDayConvention, notional, isEOM);
     setIndexId(indexId);
     setQuotationIndexationLag(quotationIndexationLag);

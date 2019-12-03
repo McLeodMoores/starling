@@ -34,7 +34,7 @@ public class DataMarketDataSnapshotSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param snapshotSource  the underlying snapshot source, not null
    */
   public DataMarketDataSnapshotSourceResource(final MarketDataSnapshotSource snapshotSource) {
@@ -45,7 +45,7 @@ public class DataMarketDataSnapshotSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the snapshot source.
-   * 
+   *
    * @return the snapshot source, not null
    */
   public MarketDataSnapshotSource getMarketDataSnapshotSource() {
@@ -54,15 +54,15 @@ public class DataMarketDataSnapshotSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("snapshots/{snapshotId}")
   public Response get(
-      @PathParam("snapshotId") String idStr,
-      @QueryParam("version") String version) {
+      @PathParam("snapshotId") final String idStr,
+      @QueryParam("version") final String version) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final StructuredMarketDataSnapshot result = getMarketDataSnapshotSource().get(objectId.atVersion(version));
     return responseOkObject(result);

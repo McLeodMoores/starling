@@ -48,18 +48,18 @@ public class InterestRateNotional extends Notional {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param currency  the currency, not null
    * @param amount  the amount
    */
-  public InterestRateNotional(Currency currency, double amount) {
+  public InterestRateNotional(final Currency currency, final double amount) {
     setCurrency(currency);
     setAmount(amount);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(NotionalVisitor<T> visitor) {
+  public <T> T accept(final NotionalVisitor<T> visitor) {
     return visitor.visitInterestRateNotional(this);
   }
 

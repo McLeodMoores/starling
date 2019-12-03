@@ -19,8 +19,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class SimplePortfolioTest {
 
-  public void test_construction_String() {
-    SimplePortfolio test = new SimplePortfolio("Name");
+  /**
+   * Tests construction of an empty portfolio.
+   */
+  public void testConstructionString() {
+    final SimplePortfolio test = new SimplePortfolio("Name");
     assertEquals(null, test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, SimplePortfolioNode.class.isAssignableFrom(test.getRootNode().getClass()));
@@ -28,14 +31,20 @@ public class SimplePortfolioTest {
     assertEquals("Portfolio[]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_String_null() {
+  /**
+   * Tests that the name cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionStringNull() {
     new SimplePortfolio((String) null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_PortfolioIdString() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests construction of an empty portfolio.
+   */
+  public void testConstructionPortfolioIdString() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     assertEquals(id("Scheme", "Id"), test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, SimplePortfolioNode.class.isAssignableFrom(test.getRootNode().getClass()));
@@ -43,82 +52,118 @@ public class SimplePortfolioTest {
     assertEquals("Portfolio[Scheme~Id]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_PortfolioIdString_nullId() {
+  /**
+   * Tests that the identifier cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionPortfolioIdStringNullId() {
     new SimplePortfolio(null, "Name");
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_PortfolioIdString_nullName() {
+  /**
+   * Tests that the portfolio name cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionPortfolioIdStringNullName() {
     new SimplePortfolio(id("Scheme", "Id"), null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_construction_PortfolioIdStringNode() {
-    SimplePortfolioNode root = new SimplePortfolioNode();
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name", root);
+  /**
+   * Test construction with a root node.
+   */
+  public void testConstructionPortfolioIdStringNode() {
+    final SimplePortfolioNode root = new SimplePortfolioNode();
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name", root);
     assertEquals(id("Scheme", "Id"), test.getUniqueId());
     assertEquals("Name", test.getName());
     assertEquals(true, test.getRootNode() == root);
     assertEquals("Portfolio[Scheme~Id]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_PortfolioIdStringNode_nullId() {
+  /**
+   * Tests that the id cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionPortfolioIdStringNodeNullId() {
     new SimplePortfolio(null, "Name", new SimplePortfolioNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_PortfolioIdStringNode_nullName() {
+  /**
+   * Tests that the name cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionPortfolioIdStringNodeNullName() {
     new SimplePortfolio(id("Scheme", "Id"), null, new SimplePortfolioNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_construction_PortfolioIdStringNode_nullRoot() {
+  /**
+   * Tests that the node cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructionPortfolioIdStringNodeNullRoot() {
     new SimplePortfolio(id("Scheme", "Id"), "Name", null);
   }
 
-  private UniqueId id(String scheme, String value) {
+  private static UniqueId id(final String scheme, final String value) {
     return UniqueId.of(scheme, value);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setUniqueId() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests that the unique id can be set.
+   */
+  public void testSetUniqueId() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setUniqueId(id("Scheme2", "Id2"));
     assertEquals(id("Scheme2", "Id2"), test.getUniqueId());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_setUniqueId_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests that the unique id cannot be nul.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testSetUniqueIdNull() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setUniqueId(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setName() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests that the name can be set.
+   */
+  public void testSetName() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setName("Name2");
     assertEquals("Name2", test.getName());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_setName_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests that the name cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testSetNameNull() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setName(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_setRootNode() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
-    SimplePortfolioNode root = new SimplePortfolioNode();
+  /**
+   * Tests that the root node can be set.
+   */
+  public void testSetRootNode() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+    final SimplePortfolioNode root = new SimplePortfolioNode();
     test.setRootNode(root);
     assertSame(root, test.getRootNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
-  public void test_setRootNode_null() {
-    SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
+  /**
+   * Tests that the root node cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testSetRootNodeNull() {
+    final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setRootNode(null);
   }
 

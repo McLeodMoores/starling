@@ -24,20 +24,18 @@ import com.opengamma.engine.marketdata.spec.UserMarketDataSpecification;
 import com.opengamma.id.UniqueId;
 
 /**
- * <p>Creates instances of {@link MarketDataSpecification} subclasses from JSON. The JSON format is:</p>
- * <h4>Live Data</h4>
- * <code>{"marketDataType": "live", "source": "Bloomberg"}</code>
- * <h4>Fixed Historical Data</h4>
- * <code>{"marketDataType": "fixedHistorical", "resolverKey": "TSS_CONFIG", "date": "2012-08-30"}</code>
- * <h4>Latest Historical Data</h4>
- * <code>{"marketDataType": "latestHistorical", "resolverKey": "TSS_CONFIG"}</code>
- * <h4>Snapshot Data</h4>
- * <code>{"marketDataType": "snapshot", "snapshotId": "Snap~1234"}</code>
- * <h4>Randomized Snapshot Data</h4>
- * <code>{"marketDataType": "snapshot", "snapshotId": "Snap~1234", "updateProbability": "0.2",
+ * <p>
+ * Creates instances of {@link MarketDataSpecification} subclasses from JSON. The JSON format is:<br>
+ * <b>Live Data</b> <code>{"marketDataType": "live", "source": "Bloomberg"}</code><br>
+ * <b>Fixed Historical Data</b> <code>{"marketDataType": "fixedHistorical", "resolverKey": "TSS_CONFIG", "date": "2012-08-30"}</code><br>
+ * <b>Latest Historical Data</b> <code>{"marketDataType": "latestHistorical", "resolverKey": "TSS_CONFIG"}</code><br>
+ * <b>Snapshot Data</b> <code>{"marketDataType": "snapshot", "snapshotId": "Snap~1234"}</code><br>
+ * <b>Randomized Snapshot Data</b> <code>{"marketDataType": "snapshot", "snapshotId": "Snap~1234", "updateProbability": "0.2",
  * "maxPercentageChange": "5", "averageCycleInterval": "1000"}</code>
- * <p>There are REST endpoints for looking up available values for live data source names, resolver keys and
- * snapshot IDs. See the package documentation for {@link com.opengamma.web.analytics.rest}.</p>
+ * <p>
+ * There are REST endpoints for looking up available values for live data source names, resolver keys and snapshot IDs. See the package documentation for
+ * {@link com.opengamma.web.analytics.rest}.
+ * </p>
  */
 public class MarketDataSpecificationJsonReader {
 
@@ -56,36 +54,36 @@ public class MarketDataSpecificationJsonReader {
   private static final String AVERAGE_CYCLE_INTERVAL = "averageCycleInterval";
 
   /** Builders keyed by the name of the market data type. */
-  private static final Map<String, SpecificationBuilder> s_builders = ImmutableMap.of(
+  private static final Map<String, SpecificationBuilder> BUILDERS = ImmutableMap.of(
       LIVE, new LiveSpecificationBuilder(),
       LATEST_HISTORICAL, new LatestHistoricalSpecificationBuilder(),
       FIXED_HISTORICAL, new FixedHistoricalSpecificationBuilder(),
       SNAPSHOT, new SnapshotSpecificationBuilder(),
       RANDOMIZED_SNAPSHOT, new RandomSnapshotSpecificationBuilder()
-  );
+      );
 
-  public static MarketDataSpecification buildSpecification(String json) throws JSONException {
+  public static MarketDataSpecification buildSpecification(final String json) throws JSONException {
     return buildSpecification(new JSONObject(json));
   }
 
-  private static MarketDataSpecification buildSpecification(JSONObject json) throws JSONException {
-    String marketDataType = json.getString(MARKET_DATA_TYPE);
-    SpecificationBuilder builder = s_builders.get(marketDataType);
+  private static MarketDataSpecification buildSpecification(final JSONObject json) throws JSONException {
+    final String marketDataType = json.getString(MARKET_DATA_TYPE);
+    final SpecificationBuilder builder = BUILDERS.get(marketDataType);
     if (builder == null) {
       throw new IllegalArgumentException("No builder found for market data type " + marketDataType);
     }
     return builder.build(json);
   }
 
-  public static List<MarketDataSpecification> buildSpecifications(String json) {
+  public static List<MarketDataSpecification> buildSpecifications(final String json) {
     try {
-      JSONArray array = new JSONArray(json);
-      List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(array.length());
+      final JSONArray array = new JSONArray(json);
+      final List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(array.length());
       for (int i = 0; i < array.length(); i++) {
         specs.add(buildSpecification(array.getJSONObject(i)));
       }
       return specs;
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new IllegalArgumentException("Failed to parse MarketDataSpecification JSON", e);
     }
   }
@@ -100,7 +98,7 @@ public class MarketDataSpecificationJsonReader {
   private static class LiveSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return LiveMarketDataSpecification.of(json.getString(MarketDataSpecificationJsonReader.SOURCE));
     }
   }
@@ -109,7 +107,7 @@ public class MarketDataSpecificationJsonReader {
   private static class LatestHistoricalSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return new LatestHistoricalMarketDataSpecification(
           json.getString(MarketDataSpecificationJsonReader.RESOLVER_KEY));
     }
@@ -119,7 +117,7 @@ public class MarketDataSpecificationJsonReader {
   private static class FixedHistoricalSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return new FixedHistoricalMarketDataSpecification(
           json.getString(MarketDataSpecificationJsonReader.RESOLVER_KEY),
           LocalDate.parse(json.getString(DATE)));
@@ -130,7 +128,7 @@ public class MarketDataSpecificationJsonReader {
   private static class SnapshotSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return UserMarketDataSpecification.of(UniqueId.parse(json.getString(MarketDataSpecificationJsonReader.SNAPSHOT_ID)));
     }
   }
@@ -139,13 +137,13 @@ public class MarketDataSpecificationJsonReader {
   private static class RandomSnapshotSpecificationBuilder implements SpecificationBuilder {
 
     @Override
-    public MarketDataSpecification build(JSONObject json) throws JSONException {
+    public MarketDataSpecification build(final JSONObject json) throws JSONException {
       return RandomizingMarketDataSpecification.of(
-        UserMarketDataSpecification.of(UniqueId.parse(json.getString(MarketDataSpecificationJsonReader.SNAPSHOT_ID))),
-        json.getDouble(MarketDataSpecificationJsonReader.UPDATE_PROBABILITY),
-        json.getInt(MarketDataSpecificationJsonReader.MAX_PERCENTAGE_CHANGE),
-        json.getLong(MarketDataSpecificationJsonReader.AVERAGE_CYCLE_INTERVAL)
-      );
+          UserMarketDataSpecification.of(UniqueId.parse(json.getString(MarketDataSpecificationJsonReader.SNAPSHOT_ID))),
+          json.getDouble(MarketDataSpecificationJsonReader.UPDATE_PROBABILITY),
+          json.getInt(MarketDataSpecificationJsonReader.MAX_PERCENTAGE_CHANGE),
+          json.getLong(MarketDataSpecificationJsonReader.AVERAGE_CYCLE_INTERVAL)
+          );
     }
   }
 }

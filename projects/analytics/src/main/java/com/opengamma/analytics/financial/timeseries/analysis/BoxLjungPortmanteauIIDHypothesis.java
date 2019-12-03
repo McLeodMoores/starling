@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class BoxLjungPortmanteauIIDHypothesis extends IIDHypothesis {
-  private static final Logger s_logger = LoggerFactory.getLogger(BoxLjungPortmanteauIIDHypothesis.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BoxLjungPortmanteauIIDHypothesis.class);
   private final Function1D<DoubleTimeSeries<?>, double[]> _calculator = new AutocorrelationFunctionCalculator();
   private final double _criticalValue;
   private final int _h;
@@ -31,7 +31,7 @@ public class BoxLjungPortmanteauIIDHypothesis extends IIDHypothesis {
       throw new IllegalArgumentException("Lag cannot be zero");
     }
     if (maxLag < 0) {
-      s_logger.warn("Maximum lag was less than zero; using absolute value");
+      LOGGER.warn("Maximum lag was less than zero; using absolute value");
     }
     _h = Math.abs(maxLag);
     _criticalValue = new ChiSquareDistribution(_h).getInverseCDF(1 - level);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.curve.interestrate.generator;
@@ -17,13 +17,13 @@ public abstract class GeneratorCurve {
   public abstract int getNumberOfParameter();
 
   /**
-   * Some generators require a two stage process. The generator with the general description (like interpolated) and 
-   * a specific one with all the details (like the node times for the interpolated). 
+   * Some generators require a two stage process. The generator with the general description (like interpolated) and
+   * a specific one with all the details (like the node times for the interpolated).
    * The method create the specific generator from the generic one.
    * @param data The additional data.
    * @return The final generator.
    */
-  public GeneratorCurve finalGenerator(Object data) {
+  public GeneratorCurve finalGenerator(final Object data) {
     return this;
   }
 
@@ -33,7 +33,7 @@ public abstract class GeneratorCurve {
    * @param rates The instrument estimated rates.
    * @return The initial parameters guess.
    */
-  public double[] initialGuess(double[] rates) {
+  public double[] initialGuess(final double[] rates) {
     return rates;
   }
 

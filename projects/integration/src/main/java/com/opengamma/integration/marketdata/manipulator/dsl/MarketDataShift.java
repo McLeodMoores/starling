@@ -45,7 +45,7 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ MarketDataShift(ScenarioShiftType shiftType, double shift) {
+  /* package */ MarketDataShift(final ScenarioShiftType shiftType, final double shift) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     if (Double.isInfinite(shift) || Double.isNaN(shift)) {
       throw new IllegalArgumentException("shift must not be infinite or NaN. value=" + shift);
@@ -54,7 +54,7 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   }
 
   @Override
-  public Double execute(Double value, ValueSpecification valueSpecification, FunctionExecutionContext executionContext) {
+  public Double execute(final Double value, final ValueSpecification valueSpecification, final FunctionExecutionContext executionContext) {
     switch (_shiftType) {
       case ABSOLUTE:
         return value + _shift;
@@ -141,8 +141,8 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MarketDataShift other = (MarketDataShift) obj;
-      return JodaBeanUtils.equal(getShiftType(), other.getShiftType()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return JodaBeanUtils.equal(_shiftType, other._shiftType) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -150,8 +150,8 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -159,8 +159,8 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("MarketDataShift{");
-    buf.append("shiftType").append('=').append(getShiftType()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("shiftType").append('=').append(_shiftType).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -323,19 +323,31 @@ public final class MarketDataShift implements StructureManipulator<Double>, Immu
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

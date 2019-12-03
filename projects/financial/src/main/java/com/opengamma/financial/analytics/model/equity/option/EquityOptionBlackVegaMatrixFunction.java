@@ -51,7 +51,7 @@ public class EquityOptionBlackVegaMatrixFunction extends EquityOptionBlackFuncti
   private static final double SHIFT = 0.0001; // FIXME This really should be configurable by the user!
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackVegaMatrixFunction() {
     super(ValueRequirementNames.VEGA_QUOTE_MATRIX);
@@ -112,7 +112,8 @@ public class EquityOptionBlackVegaMatrixFunction extends EquityOptionBlackFuncti
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> results = super.getResults(context, target, inputs);
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final String bbgTicker = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(security);

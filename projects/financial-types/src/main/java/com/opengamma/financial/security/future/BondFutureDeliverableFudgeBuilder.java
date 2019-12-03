@@ -29,26 +29,26 @@ public class BondFutureDeliverableFudgeBuilder extends AbstractFudgeBuilder impl
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, BondFutureDeliverable object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BondFutureDeliverable object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     BondFutureDeliverableFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, BondFutureDeliverable object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final BondFutureDeliverable object, final MutableFudgeMsg msg) {
     addToMessage(msg, IDENTIFIERS_FIELD_NAME, ExternalIdBundleFudgeBuilder.toFudgeMsg(serializer, object.getIdentifiers()));
     addToMessage(msg, CONVERSION_FACTOR_FIELD_NAME, object.getConversionFactor());
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public BondFutureDeliverable buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public BondFutureDeliverable buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return fromFudgeMsg(deserializer, msg);
   }
 
-  public static BondFutureDeliverable fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ExternalIdBundle bundle = ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(IDENTIFIERS_FIELD_NAME));
-    double conversionFactor = msg.getDouble(CONVERSION_FACTOR_FIELD_NAME);
+  public static BondFutureDeliverable fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ExternalIdBundle bundle = ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(IDENTIFIERS_FIELD_NAME));
+    final double conversionFactor = msg.getDouble(CONVERSION_FACTOR_FIELD_NAME);
     return new BondFutureDeliverable(bundle, conversionFactor);
   }
 

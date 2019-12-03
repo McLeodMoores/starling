@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.greeks;
@@ -22,7 +22,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class GreekResultCollection implements Iterable<Pair<Greek, Double>> {
   // REVIEW kirk 2010-05-20 -- Ideas for speeding up:
@@ -52,7 +52,7 @@ public class GreekResultCollection implements Iterable<Pair<Greek, Double>> {
   }
 
   /**
-   * Adds a greek to the map
+   * Adds a greek to the map.
    * @param greek The greek, not null
    * @param result The result
    */
@@ -147,7 +147,7 @@ public class GreekResultCollection implements Iterable<Pair<Greek, Double>> {
   }
 
   /**
-   * Iterates over the backing map
+   * Iterates over the backing map.
    */
   protected static class BackingMapGreekIterator implements Iterator<Pair<Greek, Double>> {
     /**  The backing map iterator */

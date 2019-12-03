@@ -27,7 +27,7 @@ public class HolidaySearchIterator extends AbstractSearchIterator<HolidayDocumen
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class HolidaySearchIterator extends AbstractSearchIterator<HolidayDocumen
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public HolidaySearchIterator(HolidayMaster master, HolidaySearchRequest request) {
+  public HolidaySearchIterator(final HolidayMaster master, final HolidaySearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected HolidaySearchResult doSearch(HolidaySearchRequest request) {
+  protected HolidaySearchResult doSearch(final HolidaySearchRequest request) {
     return getMaster().search(request);
   }
 

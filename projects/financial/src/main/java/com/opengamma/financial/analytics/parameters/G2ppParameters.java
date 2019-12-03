@@ -108,8 +108,9 @@ public class G2ppParameters extends DirectBean implements Serializable, UniqueId
    * the term structure, not null
    * @param correlationId The correlation identifier, not null
    */
-  public G2ppParameters(final Currency currency, final ExternalId firstMeanReversionId, final ExternalId secondMeanReversionId, final ExternalId firstInitialVolatilityId,
-      final ExternalId secondInitialVolatilityId, final SortedMap<Tenor, Pair<ExternalId, ExternalId>> volatilityTermStructure, final ExternalId correlationId) {
+  public G2ppParameters(final Currency currency, final ExternalId firstMeanReversionId, final ExternalId secondMeanReversionId,
+      final ExternalId firstInitialVolatilityId, final ExternalId secondInitialVolatilityId,
+      final SortedMap<Tenor, Pair<ExternalId, ExternalId>> volatilityTermStructure, final ExternalId correlationId) {
     super();
     setCurrency(currency);
     setFirstMeanReversionId(firstMeanReversionId);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ * <p>
  * Please see distribution for license.
  */
 package com.opengamma.bbg.util;
@@ -36,7 +36,7 @@ import com.bloomberglp.blpapi.Subscription;
 import com.bloomberglp.blpapi.SubscriptionList;
 import com.opengamma.scripts.Scriptable;
 
-/** Diagnostic tool for bloomberg API server */
+/** Diagnostic tool for bloomberg API server. */
 @Scriptable
 public class Diagnose {
 
@@ -54,7 +54,7 @@ public class Diagnose {
   private static final Deferred<String, Void, Void> REF_OK = new DeferredObject<>();
   private static final Deferred<String, Void, Void> MKT_OK = new DeferredObject<>();
 
-  public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
 
     final Options options = createOptions();
     final CommandLineParser parser = new PosixParser();
@@ -73,30 +73,30 @@ public class Diagnose {
 
     try {
       Integer.parseInt(s_port);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       System.err.println("port should be intiger value");
       usage(options);
     }
 
     try {
       Integer.parseInt(s_timeout);
-    } catch (NumberFormatException e) {
+    } catch (final NumberFormatException e) {
       System.err.println("timeout should be intiger value");
       usage(options);
     }
 
-    SessionOptions sessionOptions = new SessionOptions();
+    final SessionOptions sessionOptions = new SessionOptions();
     sessionOptions.setServerHost(s_host);
     sessionOptions.setServerPort(Integer.parseInt(s_port));
 
-    Session session = new Session(sessionOptions, new MyEventHandler());
+    final Session session = new Session(sessionOptions, new MyEventHandler());
     session.startAsync();
 
-    DeferredManager dm = new DefaultDeferredManager();
-    Promise completed = dm.when(MKT_OK.promise(), REF_OK.promise());
+    final DeferredManager dm = new DefaultDeferredManager();
+    final Promise completed = dm.when(MKT_OK.promise(), REF_OK.promise());
     completed.done(new DoneCallback() {
       @Override
-      public void onDone(Object o) {
+      public void onDone(final Object o) {
         // all good
         System.exit(0);
       }
@@ -133,33 +133,34 @@ public class Diagnose {
 
   static class MyEventHandler implements EventHandler {
 
-    public void handleEventVerbose(Event event) {
-      Iterator<Message> messages = event.iterator();
+    public void handleEventVerbose(final Event event) {
+      final Iterator<Message> messages = event.iterator();
       while (messages.hasNext()) {
-        Message message = messages.next();
+        final Message message = messages.next();
         System.out.println("\n");
         try {
           message.print(System.out);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           e.printStackTrace();
         }
         System.out.println("\n");
       }
     }
 
-    public void handleEvent(Event event) {
-      Iterator<Message> messages = event.iterator();
+    public void handleEvent(final Event event) {
+      final Iterator<Message> messages = event.iterator();
       while (messages.hasNext()) {
-        Message message = messages.next();
+        final Message message = messages.next();
         System.out.println(message.messageType());
       }
     }
 
-    public void processEvent(Event event, Session session) {
+    @Override
+    public void processEvent(final Event event, final Session session) {
 
-      MessageIterator iter = event.messageIterator();
+      final MessageIterator iter = event.messageIterator();
       while (iter.hasNext()) {
-        Message message = iter.next();
+        final Message message = iter.next();
 
         if (s_verbose) {
           handleEventVerbose(event);
@@ -176,7 +177,7 @@ public class Diagnose {
         if (message.messageType().equals("SessionStarted")) {
           try {
 
-            SubscriptionList subscriptions = new SubscriptionList();
+            final SubscriptionList subscriptions = new SubscriptionList();
             subscriptions.add(new Subscription(TICKER, LIVE_FIELD));
             session.subscribe(subscriptions);
 
@@ -185,40 +186,40 @@ public class Diagnose {
               System.exit(1);
             }
 
-            Service refDataSvc = session.getService("//blp/refdata");
-            Request request = refDataSvc.createRequest("ReferenceDataRequest");
+            final Service refDataSvc = session.getService("//blp/refdata");
+            final Request request = refDataSvc.createRequest("ReferenceDataRequest");
             request.append("securities", TICKER);
             request.append("fields", REF_FIELD);
             session.sendRequest(request, new CorrelationID(20));
 
-          } catch (Exception e) {
+          } catch (final Exception e) {
             System.err.println("Could not open //blp/mktdata for async. " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
           }
         } else if (message.messageType().equals("ReferenceDataResponse")) {
-          Element securityDataArray = message.getElement("securityData");
-          int numItems = securityDataArray.numValues();
+          final Element securityDataArray = message.getElement("securityData");
+          final int numItems = securityDataArray.numValues();
           if (numItems > 0) {
-            Element securityData = securityDataArray.getValueAsElement(0);
+            final Element securityData = securityDataArray.getValueAsElement(0);
             if (securityData.hasElement("securityError")) {
-              Element securityError = securityData.getElement("securityError");
+              final Element securityError = securityData.getElement("securityError");
               System.err.println("Error retrieving reference data: " + securityError);
               System.exit(1);
             } else {
               REF_OK.resolve("ok");
-              Element fieldData = securityData.getElement("fieldData");
+              final Element fieldData = securityData.getElement("fieldData");
               // Element ref = fieldData.getElement(REF_FIELD);
               System.out.printf("Successfully received reference value for  Ticker:%s, Field:%s",
-                                TICKER,
-                                fieldData.getElement(REF_FIELD));
+                  TICKER,
+                  fieldData.getElement(REF_FIELD));
 
             }
           }
         } else if (message.messageType().equals("MarketDataEvents") && message.getElement(LIVE_FIELD) != null) {
           MKT_OK.resolve("ok");
           System.out.printf("Successfully received live value for  Ticker:%s, Field:%s",
-                            TICKER, message.getElement(LIVE_FIELD));
+              TICKER, message.getElement(LIVE_FIELD));
         } else {
           handleEvent(event);
         }

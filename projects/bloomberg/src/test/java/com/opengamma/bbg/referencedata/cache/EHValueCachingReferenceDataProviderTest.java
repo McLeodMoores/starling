@@ -5,8 +5,6 @@
  */
 package com.opengamma.bbg.referencedata.cache;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -18,10 +16,12 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Test.
  */
-@Test(groups= {TestGroup.UNIT, "ehcache"}, singleThreaded = true)
+@Test(groups = {TestGroup.UNIT, "ehcache"}, singleThreaded = true)
 public class EHValueCachingReferenceDataProviderTest extends AbstractValueCachingReferenceDataProviderTestCase {
 
   private CacheManager _cacheManager;
@@ -65,27 +65,32 @@ public class EHValueCachingReferenceDataProviderTest extends AbstractValueCachin
   }
 
   //-------------------------------------------------------------------------
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void numberOfReturnedFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void singleSecurityEscalatingFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void fieldNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void securityNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void multipleSecuritiesSameEscalatingFields() {
     super.numberOfReturnedFields();
   }

@@ -9,9 +9,10 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.provider.description.inflation.InflationIssuerProviderInterface;
 
 /**
- * 
+ *
  */
-public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, Double> {
+public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator
+    extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, Double> {
 
   /**
    * The unique instance of the calculator.
@@ -20,6 +21,7 @@ public final class ParSpreadInflationMarketQuoteIssuerDiscountingCalculator exte
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadInflationMarketQuoteIssuerDiscountingCalculator getInstance() {

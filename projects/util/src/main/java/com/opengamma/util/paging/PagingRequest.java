@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -19,14 +20,13 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Simple immutable request for a page of results.
@@ -79,13 +79,13 @@ public final class PagingRequest implements ImmutableBean {
    * This factory represents the internal state directly.
    * The index is the first item in the list of results that is required (SQL OFFSET).
    * The size is the requested number of items (SQL FETCH/LIMIT).
-   * 
+   *
    * @param index  the zero-based start index, zero or greater
    * @param size  the number of items to request, zero or greater
    * @return the paging request, not null
    * @throws IllegalArgumentException if either input is invalid
    */
-  public static PagingRequest ofIndex(int index, int size) {
+  public static PagingRequest ofIndex(final int index, final int size) {
     return new PagingRequest(index, size);
   }
 
@@ -93,16 +93,16 @@ public final class PagingRequest implements ImmutableBean {
    * Obtains an instance based on a page and paging size.
    * <p>
    * This implements paging on top of the basic first-item/size data model.
-   * 
+   *
    * @param page  the page number, one or greater
    * @param pagingSize  the paging size, zero or greater
    * @return the paging request, not null
    * @throws IllegalArgumentException if either input is invalid
    */
-  public static PagingRequest ofPage(int page, int pagingSize) {
+  public static PagingRequest ofPage(final int page, final int pagingSize) {
     ArgumentChecker.notNegativeOrZero(page, "page");
     ArgumentChecker.notNegative(pagingSize, "pagingSize");
-    int index = ((page - 1) * pagingSize);
+    final int index = (page - 1) * pagingSize;
     return new PagingRequest(index, pagingSize);
   }
 
@@ -112,16 +112,18 @@ public final class PagingRequest implements ImmutableBean {
    * This implements paging on top of the basic first-item/size data model.
    * The page will default to 1 if the input is 0.
    * The paging size will default to 20 if the input is 0.
-   * 
+   *
    * @param page  the page number, page one chosen if zero, not negative
    * @param pagingSize  the paging size, size twenty chosen if zero, not negative
    * @return the paging request, not null
    * @throws IllegalArgumentException if either input is negative
    */
-  public static PagingRequest ofPageDefaulted(int page, int pagingSize) {
-    page = (page == 0 ? 1 : page);
-    pagingSize = (pagingSize == 0 ? DEFAULT_PAGING_SIZE : pagingSize);
-    return PagingRequest.ofPage(page, pagingSize);
+  public static PagingRequest ofPageDefaulted(final int page, final int pagingSize) {
+    int pageNumber = page;
+    int pageSize = pagingSize;
+    pageNumber = pageNumber == 0 ? 1 : pageNumber;
+    pageSize = pageSize == 0 ? DEFAULT_PAGING_SIZE : pageSize;
+    return PagingRequest.ofPage(pageNumber, pageSize);
   }
 
   /**
@@ -129,7 +131,7 @@ public final class PagingRequest implements ImmutableBean {
    * <p>
    * A paging size of zero will only return the count of items and will
    * always have a first item index of zero.
-   * 
+   *
    * @param index  the zero-based start index, zero or greater
    * @param size  the number of items to request, zero or greater
    * @throws IllegalArgumentException if either input is invalid
@@ -138,7 +140,7 @@ public final class PagingRequest implements ImmutableBean {
   private PagingRequest(final int index, final int size) {
     ArgumentChecker.notNegative(index, "index");
     ArgumentChecker.notNegative(size, "size");
-    _firstItem = (size != 0 ? index : 0);
+    _firstItem = size != 0 ? index : 0;
     _pagingSize = size;
   }
 
@@ -147,7 +149,7 @@ public final class PagingRequest implements ImmutableBean {
    * Gets the first item, using a zero-based index.
    * <p>
    * In SQL this corresponds to OFFSET.
-   * 
+   *
    * @return the first item index, zero-based
    */
   public int getFirstItem() {
@@ -158,7 +160,7 @@ public final class PagingRequest implements ImmutableBean {
    * Gets the requested number of items.
    * <p>
    * In SQL this corresponds to FETCH/LIMIT.
-   * 
+   *
    * @return the number of requested items, zero or greater
    */
   public int getPagingSize() {
@@ -168,7 +170,7 @@ public final class PagingRequest implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Gets the first item, using a one-based index.
-   * 
+   *
    * @return the first item number, one-based
    */
   public int getFirstItemOneBased() {
@@ -177,7 +179,7 @@ public final class PagingRequest implements ImmutableBean {
 
   /**
    * Gets the last item exclusive, using a zero-based index.
-   * 
+   *
    * @return the last item index, exclusive, zero-based
    */
   public int getLastItem() {
@@ -186,7 +188,7 @@ public final class PagingRequest implements ImmutableBean {
 
   /**
    * Gets the last item inclusive, using a one-based index.
-   * 
+   *
    * @return the last item number, inclusive, one-based
    */
   public int getLastItemOneBased() {
@@ -199,12 +201,12 @@ public final class PagingRequest implements ImmutableBean {
    * <p>
    * This will return a new list consisting of the selected elements from the supplied list.
    * The elements are selected based on {@link #getFirstItem()} and {@link #getLastItem()}.
-   * 
+   *
    * @param <T> the list type
    * @param list  the collection to select from, not null
    * @return the selected list, not linked to the original, not null
    */
-  public <T> List<T> select(List<T> list) {
+  public <T> List<T> select(final List<T> list) {
     int firstIndex = getFirstItem();
     int lastIndex = getLastItem();
     if (firstIndex > list.size()) {
@@ -213,7 +215,7 @@ public final class PagingRequest implements ImmutableBean {
     if (lastIndex > list.size()) {
       lastIndex = list.size();
     }
-    return new ArrayList<T>(list.subList(firstIndex, lastIndex));
+    return new ArrayList<>(list.subList(firstIndex, lastIndex));
   }
 
   //-------------------------------------------------------------------------
@@ -259,8 +261,8 @@ public final class PagingRequest implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       PagingRequest other = (PagingRequest) obj;
-      return (getFirstItem() == other.getFirstItem()) &&
-          (getPagingSize() == other.getPagingSize());
+      return (_firstItem == other._firstItem) &&
+          (_pagingSize == other._pagingSize);
     }
     return false;
   }
@@ -268,8 +270,8 @@ public final class PagingRequest implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstItem());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPagingSize());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstItem);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_pagingSize);
     return hash;
   }
 
@@ -377,7 +379,7 @@ public final class PagingRequest implements ImmutableBean {
   /**
    * The bean-builder for {@code PagingRequest}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<PagingRequest> {
+  private static final class Builder extends DirectPrivateBeanBuilder<PagingRequest> {
 
     private int _firstItem;
     private int _pagingSize;
@@ -386,6 +388,7 @@ public final class PagingRequest implements ImmutableBean {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -413,30 +416,6 @@ public final class PagingRequest implements ImmutableBean {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

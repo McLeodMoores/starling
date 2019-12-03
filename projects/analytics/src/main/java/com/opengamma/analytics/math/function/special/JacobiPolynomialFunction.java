@@ -13,7 +13,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class JacobiPolynomialFunction extends OrthogonalPolynomialFunctionGenerator {
 
@@ -34,10 +34,11 @@ public class JacobiPolynomialFunction extends OrthogonalPolynomialFunctionGenera
       if (i == 0) {
         polynomials[i] = getOne();
       } else if (i == 1) {
-        polynomials[i] = new RealPolynomialFunction1D(new double[] {(alpha - beta) / 2, (alpha + beta + 2) / 2});
+        polynomials[i] = new RealPolynomialFunction1D(new double[] { (alpha - beta) / 2, (alpha + beta + 2) / 2 });
       } else {
         final int j = i - 1;
-        polynomials[i] = (polynomials[j].multiply(getB(alpha, beta, j)).add(polynomials[j].multiply(getX()).multiply(getC(alpha, beta, j)).add(polynomials[j - 1].multiply(getD(alpha, beta, j)))))
+        polynomials[i] = polynomials[j].multiply(getB(alpha, beta, j))
+            .add(polynomials[j].multiply(getX()).multiply(getC(alpha, beta, j)).add(polynomials[j - 1].multiply(getD(alpha, beta, j))))
             .divide(getA(alpha, beta, j));
       }
     }
@@ -54,7 +55,8 @@ public class JacobiPolynomialFunction extends OrthogonalPolynomialFunctionGenera
         polynomials[i] = Pairs.of(getOne(), getZero());
       } else if (i == 1) {
         final double a1 = (alpha + beta + 2) / 2;
-        polynomials[i] = Pairs.of((DoubleFunction1D) new RealPolynomialFunction1D(new double[] {(alpha - beta) / 2, a1}), (DoubleFunction1D) new RealPolynomialFunction1D(new double[] {a1}));
+        polynomials[i] = Pairs.of((DoubleFunction1D) new RealPolynomialFunction1D(new double[] { (alpha - beta) / 2, a1 }),
+            (DoubleFunction1D) new RealPolynomialFunction1D(new double[] { a1 }));
       } else {
         final int j = i - 1;
         p1 = polynomials[j].getFirst();
@@ -62,7 +64,7 @@ public class JacobiPolynomialFunction extends OrthogonalPolynomialFunctionGenera
         final DoubleFunction1D temp1 = p1.multiply(getB(alpha, beta, j));
         final DoubleFunction1D temp2 = p1.multiply(getX()).multiply(getC(alpha, beta, j));
         final DoubleFunction1D temp3 = p2.multiply(getD(alpha, beta, j));
-        p = (temp1.add(temp2).add(temp3)).divide(getA(alpha, beta, j));
+        p = temp1.add(temp2).add(temp3).divide(getA(alpha, beta, j));
         dp = p.derivative();
         polynomials[i] = Pairs.of(p, dp);
       }

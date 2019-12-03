@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * Builder for big decimals
+ * Builder for big decimals.
  */
 @FudgeBuilderFor(BigDecimal.class)
 public class BigDecimalFudgeBuilder implements FudgeBuilder<BigDecimal> {
@@ -24,14 +24,14 @@ public class BigDecimalFudgeBuilder implements FudgeBuilder<BigDecimal> {
   public static final String BIG_DECIMAL_FIELD_NAME = "bigdecimal";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, BigDecimal object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BigDecimal object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, BIG_DECIMAL_FIELD_NAME, null, object);
     return msg;
   }
 
   @Override
-  public BigDecimal buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public BigDecimal buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final BigDecimal bd = msg.getValue(BigDecimal.class, BIG_DECIMAL_FIELD_NAME);
     if (bd == null) {
       throw new IllegalArgumentException("Fudge message is not a BigDecimal - field 'bigdecimal' is not present");

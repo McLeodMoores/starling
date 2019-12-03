@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -30,7 +30,7 @@ public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestC
   private int _count;
 
   private ValueRequirement valueRequirement() {
-    return new ValueRequirement("Foo" + (_count++), ComputationTargetSpecification.NULL);
+    return new ValueRequirement("Foo" + _count++, ComputationTargetSpecification.NULL);
   }
 
   private ParameterizedFunction parameterizedFunction() {
@@ -40,7 +40,8 @@ public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestC
   }
 
   private ValueSpecification valueSpecification(final ValueRequirement requirement) {
-    return new ValueSpecification(requirement.getValueName(), requirement.getTargetReference().getSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    return new ValueSpecification(requirement.getValueName(),
+        requirement.getTargetReference().getSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
   }
 
   public void testRecursiveRequirement() {
@@ -55,19 +56,29 @@ public class ResolutionFailureFudgeBuilderTest extends AbstractFudgeBuilderTestC
     final ParameterizedFunction function = parameterizedFunction();
     final ValueSpecification spec1 = valueSpecification(req1);
     final ValueSpecification spec2 = valueSpecification(req2);
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).getRequirementsFailed());
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, ResolutionFailureImpl.recursiveRequirement(req2)));
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)));
     assertEncodeDecodeCycle(ResolutionFailure.class,
-        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).requirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).getRequirementsFailed());
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirement(req2, ResolutionFailureImpl.recursiveRequirement(req2)));
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)));
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+            .requirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
         .getAdditionalRequirementsFailed());
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed());
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).suppressed());
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).lateResolutionFailure());
     assertEncodeDecodeCycle(ResolutionFailure.class,
-        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).additionalRequirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
-    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).getResultsFailed());
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).suppressed());
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2)).lateResolutionFailure());
+    assertEncodeDecodeCycle(ResolutionFailure.class,
+        ResolutionFailureImpl.functionApplication(req1, function, spec1).requirements(Collections.singletonMap(spec2, req2))
+            .additionalRequirement(req3, ResolutionFailureImpl.unsatisfied(req3)));
+    assertEncodeDecodeCycle(ResolutionFailure.class, ResolutionFailureImpl.functionApplication(req1, function, spec1)
+            .requirements(Collections.singletonMap(spec2, req2))
             .additionalRequirement(req3, ResolutionFailureImpl.recursiveRequirement(req3)));
   }
 

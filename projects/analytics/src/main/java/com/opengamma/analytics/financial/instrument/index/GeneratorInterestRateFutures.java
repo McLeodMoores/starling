@@ -24,8 +24,11 @@ public class GeneratorInterestRateFutures extends GeneratorInstrument<GeneratorA
 
   /**
    * Constructor.
-   * @param name The generator name.
-   * @param security The underlying STIR futures security.
+   *
+   * @param name
+   *          The generator name.
+   * @param security
+   *          The underlying STIR futures security.
    */
   public GeneratorInterestRateFutures(final String name, final InterestRateFutureSecurityDefinition security) {
     super(name);
@@ -35,6 +38,7 @@ public class GeneratorInterestRateFutures extends GeneratorInstrument<GeneratorA
 
   /**
    * Gets the STIR futures security.
+   *
    * @return The futures.
    */
   public InterestRateFutureSecurityDefinition getFutures() {
@@ -42,11 +46,11 @@ public class GeneratorInterestRateFutures extends GeneratorInstrument<GeneratorA
   }
 
   /**
-   * {@inheritDoc}
-   * The quantity is modified to be in line with the required notional.
+   * {@inheritDoc} The quantity is modified to be in line with the required notional.
    */
   @Override
-  public InterestRateFutureTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional, final GeneratorAttribute attribute) {
+  public InterestRateFutureTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional,
+      final GeneratorAttribute attribute) {
     final int quantity = (int) Math.ceil(notional / _security.getNotional());
     return new InterestRateFutureTransactionDefinition(_security, quantity, date, marketQuote);
   }

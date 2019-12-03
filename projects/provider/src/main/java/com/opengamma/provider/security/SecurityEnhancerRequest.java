@@ -46,24 +46,24 @@ public class SecurityEnhancerRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance to enhance one or more securities.
-   * 
+   *
    * @param securities  the securities to enhance, not null
    * @return the request, not null
    */
-  public static SecurityEnhancerRequest create(Security... securities) {
-    SecurityEnhancerRequest request = new SecurityEnhancerRequest();
+  public static SecurityEnhancerRequest create(final Security... securities) {
+    final SecurityEnhancerRequest request = new SecurityEnhancerRequest();
     request.addSecurities(securities);
     return request;
   }
 
   /**
    * Obtains an instance to enhance multiple securities.
-   * 
+   *
    * @param securities  the securities to enhance, not null
    * @return the request, not null
    */
-  public static SecurityEnhancerRequest create(Iterable<? extends Security> securities) {
-    SecurityEnhancerRequest request = new SecurityEnhancerRequest();
+  public static SecurityEnhancerRequest create(final Iterable<? extends Security> securities) {
+    final SecurityEnhancerRequest request = new SecurityEnhancerRequest();
     request.addSecurities(securities);
     return request;
   }
@@ -78,20 +78,20 @@ public class SecurityEnhancerRequest extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Adds an array of securities to those to be enhanced.
-   * 
+   *
    * @param securities  the securities to enhance, not null
    */
-  public void addSecurities(Security... securities) {
+  public void addSecurities(final Security... securities) {
     ArgumentChecker.notNull(securities, "securities");
     getSecurities().addAll(Arrays.asList(securities));
   }
 
   /**
    * Adds a collection of securities to those to be enhanced.
-   * 
+   *
    * @param securities  the securities to enhance, not null
    */
-  public void addSecurities(Iterable<? extends Security> securities) {
+  public void addSecurities(final Iterable<? extends Security> securities) {
     ArgumentChecker.notNull(securities, "securities");
     Iterables.addAll(getSecurities(), securities);
   }

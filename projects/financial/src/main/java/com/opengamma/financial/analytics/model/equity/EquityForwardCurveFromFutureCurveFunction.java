@@ -14,8 +14,8 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.curve.NodalDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -40,7 +40,7 @@ import com.opengamma.id.ExternalScheme;
  */
 public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(
       ExternalSchemes.BLOOMBERG_TICKER,
       ExternalSchemes.BLOOMBERG_TICKER_WEAK,
       ExternalSchemes.BLOOMBERG_BUID,
@@ -48,7 +48,8 @@ public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.
       ExternalSchemes.ACTIVFEED_TICKER);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final String interpolatorName = desiredValue.getConstraint(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_INTERPOLATOR);
@@ -61,7 +62,7 @@ public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.
     }
     final NodalDoublesCurve futurePriceData = (NodalDoublesCurve) objectFuturePriceData;
 
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
 
     final ForwardCurve curve = new ForwardCurve(InterpolatedDoublesCurve.from(futurePriceData.getXData(), futurePriceData.getYData(), interpolator));
 
@@ -87,7 +88,7 @@ public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }

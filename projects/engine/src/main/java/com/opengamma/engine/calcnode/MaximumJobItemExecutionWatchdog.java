@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MaximumJobItemExecutionWatchdog {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MaximumJobItemExecutionWatchdog.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MaximumJobItemExecutionWatchdog.class);
 
   /**
    * Callback for the action to take when the watchdog is triggered.
@@ -33,7 +33,7 @@ public class MaximumJobItemExecutionWatchdog {
 
     /**
      * The time limit for job item execution has been exceeded.
-     * 
+     *
      * @param jobItem the job item involved
      * @param thread the thread that is running the job item
      */
@@ -47,7 +47,7 @@ public class MaximumJobItemExecutionWatchdog {
     private CalculationJobItem _jobItem;
     private int _fault;
 
-    public ThreadInfo(final CalculationJobItem jobItem) {
+    ThreadInfo(final CalculationJobItem jobItem) {
       setJobItem(jobItem);
     }
 
@@ -75,12 +75,12 @@ public class MaximumJobItemExecutionWatchdog {
 
   }
 
-  private final ConcurrentMap<Thread, ThreadInfo> _state = new ConcurrentHashMap<Thread, ThreadInfo>();
+  private final ConcurrentMap<Thread, ThreadInfo> _state = new ConcurrentHashMap<>();
   private long _maxExecutionTime;
   private Action _action = new Action() {
     @Override
     public void jobItemExecutionLimitExceeded(final CalculationJobItem jobItem, final Thread thread) {
-      s_logger.error("Job item execution limit exceeded on {} by {}", jobItem, thread);
+      LOGGER.error("Job item execution limit exceeded on {} by {}", jobItem, thread);
       thread.interrupt();
     }
   };
@@ -123,19 +123,19 @@ public class MaximumJobItemExecutionWatchdog {
         final Map.Entry<Thread, ThreadInfo> thread = itr.next();
         if (thread.getKey().isAlive()) {
           if (thread.getValue().getJobItem() == null) {
-            s_logger.debug("Thread {} alive but not executing any job items", thread.getKey());
+            LOGGER.debug("Thread {} alive but not executing any job items", thread.getKey());
           } else {
             final long elapsed = thread.getValue().getElapsed(time);
             if (elapsed > limit) {
-              s_logger.warn("Thread {} has been executing {} for {}ms", new Object[] {thread.getKey(), thread.getValue().getJobItem(), (double) elapsed / 1e6 });
+              LOGGER.warn("Thread {} has been executing {} for {}ms", new Object[] {thread.getKey(), thread.getValue().getJobItem(), elapsed / 1e6 });
               thread.getValue().incrementFault();
               getTimeoutAction().jobItemExecutionLimitExceeded(thread.getValue().getJobItem(), thread.getKey());
             } else {
-              s_logger.debug("Thread {} within job limit", thread.getKey());
+              LOGGER.debug("Thread {} within job limit", thread.getKey());
             }
           }
         } else {
-          s_logger.info("Removed terminated thread {} from watchlist", thread.getKey());
+          LOGGER.info("Removed terminated thread {} from watchlist", thread.getKey());
           itr.remove();
         }
       }
@@ -150,9 +150,9 @@ public class MaximumJobItemExecutionWatchdog {
   }
 
   /**
-   * The calling thread is about to start executing the job item. This call must be paired with a call to {@link #jobExecutionStopped} when the thread has finished, before the time limit elapses, to
-   * avoid the watchdog triggering.
-   * 
+   * The calling thread is about to start executing the job item. This call must be paired with a call to {@link #jobExecutionStopped}
+   * when the thread has finished, before the time limit elapses, to avoid the watchdog triggering.
+   *
    * @param jobItem the item
    */
   protected void jobExecutionStarted(final CalculationJobItem jobItem) {
@@ -168,7 +168,8 @@ public class MaximumJobItemExecutionWatchdog {
               if (getScheduler() == null) {
                 setScheduler(Executors.newSingleThreadScheduledExecutor());
               }
-              _task = getScheduler().scheduleWithFixedDelay(new CheckThreads(), getMaxJobItemExecutionTime(), getMaxJobItemExecutionTime(), TimeUnit.MILLISECONDS);
+              _task = getScheduler().scheduleWithFixedDelay(new CheckThreads(), getMaxJobItemExecutionTime(),
+                  getMaxJobItemExecutionTime(), TimeUnit.MILLISECONDS);
             }
           }
         }
@@ -183,7 +184,7 @@ public class MaximumJobItemExecutionWatchdog {
    */
   protected void jobExecutionStopped() {
     if (getMaxJobItemExecutionTime() > 0) {
-      ThreadInfo info = _state.get(Thread.currentThread());
+      final ThreadInfo info = _state.get(Thread.currentThread());
       if (info != null) {
         info.setJobItem(null);
       }
@@ -191,8 +192,8 @@ public class MaximumJobItemExecutionWatchdog {
   }
 
   public boolean areThreadsAlive() {
-    for (Map.Entry<Thread, ThreadInfo> thread : _state.entrySet()) {
-      if ((thread.getValue().getFault() == 0) && thread.getKey().isAlive()) {
+    for (final Map.Entry<Thread, ThreadInfo> thread : _state.entrySet()) {
+      if (thread.getValue().getFault() == 0 && thread.getKey().isAlive()) {
         return true;
       }
     }

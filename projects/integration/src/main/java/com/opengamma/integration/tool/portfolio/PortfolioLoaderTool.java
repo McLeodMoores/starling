@@ -28,14 +28,14 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * The portfolio loader tool
+ * The portfolio loader tool.
  */
 @Scriptable
 public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
 
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
-  /** Portfolio name option flag*/
+  /** Portfolio name option flag */
   private static final String PORTFOLIO_NAME_OPT = "n";
   /** Write option flag */
   private static final String WRITE_OPT = "w";
@@ -44,10 +44,11 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioLoaderTool().invokeAndTerminate(args);
   }
 
@@ -57,8 +58,8 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
 
-    String suggestedPortfolioName = getOptionValue(PORTFOLIO_NAME_OPT);
-    boolean write = getCommandLine().hasOption(WRITE_OPT);
+    final String suggestedPortfolioName = getOptionValue(PORTFOLIO_NAME_OPT);
+    final boolean write = getCommandLine().hasOption(WRITE_OPT);
 
     if (write) {
       System.out.println("Write option specified, will persist to portfolio '" + suggestedPortfolioName + "'");
@@ -66,32 +67,31 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
       System.out.println("Write option not specified, not persisting to OpenGamma masters");
     }
 
-    PortfolioWriter persister = new PortfolioWriter(write,
-                                                          getToolContext().getPortfolioMaster(),
-                                                          getToolContext().getPositionMaster(),
-                                                          getToolContext().getSecurityMaster());
-
+    final PortfolioWriter persister = new PortfolioWriter(write,
+        getToolContext().getPortfolioMaster(),
+        getToolContext().getPositionMaster(),
+        getToolContext().getSecurityMaster());
 
     final String filename = getOptionValue(FILE_NAME_OPT);
     final String securityType = getOptionValue(SECURITY_TYPE_OPT);
 
-    for (PositionReader positionReader : constructPortfolioReaders(filename, securityType)) {
+    for (final PositionReader positionReader : constructPortfolioReaders(filename, securityType)) {
 
-      String name = positionReader.getPortfolioName();
-      String portfolioName = name != null ? name : suggestedPortfolioName;
+      final String name = positionReader.getPortfolioName();
+      final String portfolioName = name != null ? name : suggestedPortfolioName;
 
-      PortfolioReader portfolioReader = new PortfolioReader(positionReader, portfolioName);
+      final PortfolioReader portfolioReader = new PortfolioReader(positionReader, portfolioName);
 
-      Pair<Portfolio, Set<ManageableSecurity>> pair = portfolioReader.createPortfolio();
+      final Pair<Portfolio, Set<ManageableSecurity>> pair = portfolioReader.createPortfolio();
       persister.write(pair.getFirst(), pair.getSecond());
     }
   }
 
-  private String getOptionValue(String opt) {
+  private String getOptionValue(final String opt) {
     return getCommandLine().getOptionValue(opt);
   }
 
-  private Iterable<? extends PositionReader> constructPortfolioReaders(String filename, String securityType) {
+  private Iterable<? extends PositionReader> constructPortfolioReaders(final String filename, final String securityType) {
 
     switch (SheetFormat.of(filename)) {
 
@@ -101,18 +101,17 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
         // Check that the asset class was specified on the command line
         if (securityType == null) {
           throw new OpenGammaRuntimeException("Could not import as no asset class was specified for file " + filename);
-        } else {
-//          if (securityType.equalsIgnoreCase("exchangetraded")) {
-//            return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
-//          } else {
-          return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
-//          }
         }
+        // if (securityType.equalsIgnoreCase("exchangetraded")) {
+        // return new SingleSheetSimplePositionReader(filename, new ExchangeTradedRowParser(s_context.getBloombergSecuritySource()));
+        // } else {
+        return ImmutableList.of(new SingleSheetSimplePositionReader(filename, securityType));
+      // }
       case XML:
         // XMl multi-asset portfolio
         try {
           return new XmlFileReader(new FileInputStream(filename), new SchemaRegister());
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
           throw new OpenGammaRuntimeException("Cannot find file: " + filename, e);
         }
 
@@ -126,26 +125,26 @@ public class PortfolioLoaderTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
-    
-    Option filenameOption = new Option(
+  protected Options createOptions(final boolean contextProvided) {
+
+    final Options options = super.createOptions(contextProvided);
+
+    final Option filenameOption = new Option(
         FILE_NAME_OPT, "filename", true, "The path to the file containing data to import (CSV, XLS, XML or ZIP)");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
-    
-    Option portfolioNameOption = new Option(
+
+    final Option portfolioNameOption = new Option(
         PORTFOLIO_NAME_OPT, "name", true, "The name of the destination OpenGamma portfolio");
     options.addOption(portfolioNameOption);
-    
-    Option writeOption = new Option(
-        WRITE_OPT, "write", false, 
+
+    final Option writeOption = new Option(
+        WRITE_OPT, "write", false,
         "Actually persists the portfolio to the database if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
-    
-    Option assetClassOption = new Option(
-        SECURITY_TYPE_OPT, "security", true, 
+
+    final Option assetClassOption = new Option(
+        SECURITY_TYPE_OPT, "security", true,
         "The security type expected in the input CSV/XLS file (ignored if ZIP file is specified)");
     options.addOption(assetClassOption);
 

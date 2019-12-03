@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.component.ComponentManager;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ShutdownUtils;
@@ -29,18 +28,18 @@ import com.opengamma.util.StartupUtils;
 /**
  * Abstract class for command line tools.
  * <p>
- * The command line tools generally require access to key parts of the infrastructure.
- * These are provided via {@link ToolContext} which is setup and closed by this class
- * using {@link ComponentManager}. Normally the file is named {@code toolcontext.ini}.
+ * The command line tools generally require access to key parts of the infrastructure. These are provided via {@link ToolContext} which is setup and closed by
+ * this class using {@link com.opengamma.component.ComponentManager}. Normally the file is named {@code toolcontext.ini}.
  *
- * @param <T> the tool context type
+ * @param <T>
+ *          the tool context type
  */
 public abstract class AbstractTool<T extends ToolContext> {
 
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
 
   /**
    * Help command line option.
@@ -54,7 +53,7 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Logging command line option.
    */
   private static final String LOGBACK_RESOURCE_OPTION = "l";
-  
+
   static {
     StartupUtils.init();
   }
@@ -89,10 +88,10 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Main entry point to initialize and run the tool from standard command-line
    * arguments, terminating the JVM once complete.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    * <p>
    * This method is intended for use from a standalone main method.
    * It will print exceptions to system err and terminate the JVM.
@@ -110,10 +109,10 @@ public abstract class AbstractTool<T extends ToolContext> {
    * Main entry point to initialize and run the tool from standard command-line
    * arguments, terminating the JVM once complete.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    * <p>
    * This method is intended for use from a standalone main method.
    * It will print exceptions to system err and terminate the JVM.
@@ -131,26 +130,27 @@ public abstract class AbstractTool<T extends ToolContext> {
       Class<?> cls = getClass();
       ParameterizedType type = null;
       while (cls != AbstractTool.class) {
-        Type loop = cls.getGenericSuperclass();
+        final Type loop = cls.getGenericSuperclass();
         if (loop instanceof ParameterizedType) {
           type = (ParameterizedType) loop;
           break;
         }
         cls = cls.getSuperclass();
       }
-      if (type == null || type.getActualTypeArguments().length != 1 ||
-          type.getActualTypeArguments()[0] instanceof Class == false ||
-          ToolContext.class.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0]) == false) {
+      if (type == null || type.getActualTypeArguments().length != 1
+          || !(type.getActualTypeArguments()[0] instanceof Class)
+          || !ToolContext.class.isAssignableFrom((Class<?>) type.getActualTypeArguments()[0])) {
         System.err.println("Subclass must declare tool context type");
         ShutdownUtils.exit(-2);
       }
       @SuppressWarnings("unchecked")
+      final
       Class<T> toolContextClass = (Class<T>) type.getActualTypeArguments()[0];
       // invoke and terminate the tool
-      boolean success = initAndRun(args, defaultConfigResource, defaultLogbackResource, toolContextClass);
+      final boolean success = initAndRun(args, defaultConfigResource, defaultLogbackResource, toolContextClass);
       ShutdownUtils.exit(success ? 0 : -1);
-      
-    } catch (Throwable ex) {
+
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
@@ -159,10 +159,10 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args  the command-line arguments, not null
    * @param toolContextClass  the type of tool context to create, should match the generic type argument
@@ -175,10 +175,10 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Initializes and runs the tool from standard command-line arguments.
    * <p>
-   * This base class defines three options:<br />
-   * c/config - the config file, mandatory unless default specified<br />
-   * l/logback - the logback configuration, default tool-logback.xml<br />
-   * h/help - prints the help tool<br />
+   * This base class defines three options:<br>
+   * c/config - the config file, mandatory unless default specified<br>
+   * l/logback - the logback configuration, default tool-logback.xml<br>
+   * h/help - prints the help tool<br>
    *
    * @param args  the command-line arguments, not null
    * @param defaultConfigResource  the default configuration resource location, null if mandatory on command line
@@ -187,7 +187,7 @@ public abstract class AbstractTool<T extends ToolContext> {
    * @return true if successful, false otherwise
    */
   public boolean initAndRun(final String[] args, final String defaultConfigResource, final String defaultLogbackResource,
-                            final Class<? extends T> toolContextClass) {
+      final Class<? extends T> toolContextClass) {
     ArgumentChecker.notNull(args, "args");
 
     final Options options = createOptions(defaultConfigResource == null);
@@ -230,10 +230,12 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Runs the tool.
    * <p>
-   * This starts the tool contexts and calls {@link #run(ToolContexts)}. This will catch exceptions and print a stack trace.
+   * This starts the tool contexts and calls {@link #run(ToolContext)}. This will catch exceptions and print a stack trace.
    *
-   * @param configResources  the config resource locations for multiple tool contexts, not null
-   * @param toolContextClass  the type of tool context to create, should match the generic type argument
+   * @param configResources
+   *          the config resource locations for multiple tool contexts, not null
+   * @param toolContextClass
+   *          the type of tool context to create, should match the generic type argument
    * @return true if successful
    */
   @SuppressWarnings("unchecked")
@@ -241,18 +243,18 @@ public abstract class AbstractTool<T extends ToolContext> {
     ToolContext[] toolContexts = null;
     try {
       ArgumentChecker.notEmpty(configResources, "configResources");
-      s_logger.info("Starting " + getClass().getSimpleName());
+      LOGGER.info("Starting " + getClass().getSimpleName());
       toolContexts = new ToolContext[configResources.length];
       for (int i = 0; i < configResources.length; i++) {
-        s_logger.info("Populating tool context " + (i + 1) + " of " + configResources.length + "...");
+        LOGGER.info("Populating tool context " + (i + 1) + " of " + configResources.length + "...");
         toolContexts[i] = ToolContextUtils.getToolContext(configResources[i], toolContextClass);
       }
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       run((T[]) toolContexts);
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (final Exception ex) {
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
       return false;
     } finally {
@@ -262,7 +264,7 @@ public abstract class AbstractTool<T extends ToolContext> {
             try {
               toolContext.close();
             } catch (final Exception e) {
-              s_logger.error("Caught exception", e);
+              LOGGER.error("Caught exception", e);
             }
           }
         }
@@ -322,7 +324,7 @@ public abstract class AbstractTool<T extends ToolContext> {
     return getToolContext(0);
   }
 
-   //-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
   /**
    * Gets the i-th tool context.
    *
@@ -333,12 +335,11 @@ public abstract class AbstractTool<T extends ToolContext> {
     ArgumentChecker.notNegative(i, "ToolContext index");
     if (getToolContexts().length > i) {
       return getToolContexts()[i];
-    } else {
-      throw new OpenGammaRuntimeException("ToolContext " + i + " does not exist");
     }
+    throw new OpenGammaRuntimeException("ToolContext " + i + " does not exist");
   }
 
-   //-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
   /**
    * Gets all tool contexts.
    *

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo.provider;
@@ -26,7 +26,7 @@ public abstract class MonteCarloMethod {
    * @param numberGenerator The random number generator.
    * @param nbPath The number of paths.
    */
-  public MonteCarloMethod(RandomNumberGenerator numberGenerator, int nbPath) {
+  public MonteCarloMethod(final RandomNumberGenerator numberGenerator, final int nbPath) {
     _numberGenerator = numberGenerator;
     _nbPath = nbPath;
   }

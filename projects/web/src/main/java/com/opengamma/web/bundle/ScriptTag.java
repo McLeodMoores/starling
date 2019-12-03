@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 public class ScriptTag {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ScriptTag.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptTag.class);
 
   /**
    * The request data.
@@ -27,10 +27,10 @@ public class ScriptTag {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the request data, not null
    */
-  public ScriptTag(WebBundlesData data) {
+  public ScriptTag(final WebBundlesData data) {
     ArgumentChecker.notNull(data, "data");
     _data = data;
   }
@@ -38,50 +38,50 @@ public class ScriptTag {
   //-------------------------------------------------------------------------
   /**
    * Outputs the HTML for the bundle.
-   * 
+   *
    * @param bundleId  the bundle ID, not null
    * @param inline  whether to inline the script
    * @return the HTML for the bundle, may be null
    */
-  public String print(String bundleId, boolean inline) {
+  public String print(final String bundleId, final boolean inline) {
     ArgumentChecker.notNull(bundleId, "bundleId");
-    Bundle bundle = _data.getBundleManager().getBundle(bundleId);
+    final Bundle bundle = _data.getBundleManager().getBundle(bundleId);
     if (bundle == null) {
-      s_logger.warn("{} not available ", bundleId);
+      LOGGER.warn("{} not available ", bundleId);
       return "";
     }
-    DeployMode mode = _data.getMode();
+    final DeployMode mode = _data.getMode();
     switch (mode) {
       case DEV:
         return inline ? printDevInline(bundle) : printDevLinked(bundle);
       case PROD:
         return inline ? printProdInline(bundle) : printProdLinked(bundle);
       default:
-        s_logger.warn("Unknown deployment mode type: " + mode);
+        LOGGER.warn("Unknown deployment mode type: " + mode);
         return null;
     }
   }
 
-  private String printProdInline(Bundle bundle) {
-    StringBuilder buf = new StringBuilder();
+  private String printProdInline(final Bundle bundle) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<script src=\"text/javascript\"><!--//--><![CDATA[//><!--\n");
     buf.append(_data.getCompressor().compressBundle(bundle));
     buf.append("//--><!]]>\n</script>");
     return buf.toString();
   }
 
-  private String printProdLinked(Bundle bundle) {
-    StringBuilder buf = new StringBuilder();
+  private String printProdLinked(final Bundle bundle) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<script src=\"");
-    WebBundlesUris uris = new WebBundlesUris(_data);
+    final WebBundlesUris uris = new WebBundlesUris(_data);
     buf.append(uris.bundle(DeployMode.PROD, bundle.getId()));
     buf.append("?" + BuildData.getBuildStamp());
     buf.append("\"></script>");
     return buf.toString();
   }
 
-  private String printDevInline(Bundle bundle) {
-    StringBuilder buf = new StringBuilder();
+  private static String printDevInline(final Bundle bundle) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<script src=\"text/javascript\"><!--//--><![CDATA[//><!--\n");
     buf.append(BundleUtils.readBundleSource(bundle));
     buf.append("//--><!]]>\n</script>");
@@ -90,9 +90,9 @@ public class ScriptTag {
 
   private String printDevLinked(Bundle bundle) {
     bundle = _data.getDevBundleManager().getBundle(bundle.getId());  // reload from dev manager
-    StringBuilder buf = new StringBuilder();
-    List<Fragment> allFragment = bundle.getAllFragments();
-    for (Fragment fragment : allFragment) {
+    final StringBuilder buf = new StringBuilder();
+    final List<Fragment> allFragment = bundle.getAllFragments();
+    for (final Fragment fragment : allFragment) {
       buf.append("<script src=\"");
       buf.append(fragment.getPath());
       buf.append("\"></script>\n");

@@ -36,7 +36,7 @@ public class ScenarioDefinition implements ScenarioDefinitionFactory {
   private final String _name;
   private final Map<DistinctMarketDataSelector, FunctionParameters> _definitionMap;
 
-  public ScenarioDefinition(String name, Map<DistinctMarketDataSelector, FunctionParameters> definitionMap) {
+  public ScenarioDefinition(final String name, final Map<DistinctMarketDataSelector, FunctionParameters> definitionMap) {
     ArgumentChecker.notEmpty(name, "name");
     _name = name;
     _definitionMap = ImmutableMap.copyOf(definitionMap);
@@ -59,13 +59,13 @@ public class ScenarioDefinition implements ScenarioDefinitionFactory {
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, NAME, null, _name);
-    MutableFudgeMsg mapMsg = serializer.newMessage();
-    for (Map.Entry<DistinctMarketDataSelector, FunctionParameters> entry : _definitionMap.entrySet()) {
-      MutableFudgeMsg entryMsg = serializer.newMessage();
-      DistinctMarketDataSelector selector = entry.getKey();
-      FunctionParameters parameters = entry.getValue();
+    final MutableFudgeMsg mapMsg = serializer.newMessage();
+    for (final Map.Entry<DistinctMarketDataSelector, FunctionParameters> entry : _definitionMap.entrySet()) {
+      final MutableFudgeMsg entryMsg = serializer.newMessage();
+      final DistinctMarketDataSelector selector = entry.getKey();
+      final FunctionParameters parameters = entry.getValue();
       serializer.addToMessageWithClassHeaders(entryMsg, SELECTOR, null, selector);
       serializer.addToMessageWithClassHeaders(entryMsg, FUNCTION_PARAMETERS, null, parameters);
       serializer.addToMessage(mapMsg, null, null, entryMsg);
@@ -74,17 +74,17 @@ public class ScenarioDefinition implements ScenarioDefinitionFactory {
     return msg;
   }
 
-  public static ScenarioDefinition fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    String name = deserializer.fieldValueToObject(String.class, msg.getByName(NAME));
-    Map<DistinctMarketDataSelector, FunctionParameters> definitionMap = Maps.newHashMap();
+  public static ScenarioDefinition fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final String name = deserializer.fieldValueToObject(String.class, msg.getByName(NAME));
+    final Map<DistinctMarketDataSelector, FunctionParameters> definitionMap = Maps.newHashMap();
     if (msg.hasField(DEFINITION_MAP)) {
-      FudgeMsg mapMsg = msg.getMessage(DEFINITION_MAP);
-      for (FudgeField field : mapMsg) {
-        FudgeMsg entryMsg = (FudgeMsg) field.getValue();
-        FudgeField selectorField = entryMsg.getByName(SELECTOR);
-        DistinctMarketDataSelector selector = deserializer.fieldValueToObject(DistinctMarketDataSelector.class, selectorField);
-        FudgeField paramsField = entryMsg.getByName(FUNCTION_PARAMETERS);
-        FunctionParameters parameters = deserializer.fieldValueToObject(FunctionParameters.class, paramsField);
+      final FudgeMsg mapMsg = msg.getMessage(DEFINITION_MAP);
+      for (final FudgeField field : mapMsg) {
+        final FudgeMsg entryMsg = (FudgeMsg) field.getValue();
+        final FudgeField selectorField = entryMsg.getByName(SELECTOR);
+        final DistinctMarketDataSelector selector = deserializer.fieldValueToObject(DistinctMarketDataSelector.class, selectorField);
+        final FudgeField paramsField = entryMsg.getByName(FUNCTION_PARAMETERS);
+        final FunctionParameters parameters = deserializer.fieldValueToObject(FunctionParameters.class, paramsField);
         definitionMap.put(selector, parameters);
       }
     }
@@ -92,7 +92,7 @@ public class ScenarioDefinition implements ScenarioDefinitionFactory {
   }
 
   @Override
-  public ScenarioDefinition create(Map<String, Object> parameters) {
+  public ScenarioDefinition create(final Map<String, Object> parameters) {
     return this;
   }
 }

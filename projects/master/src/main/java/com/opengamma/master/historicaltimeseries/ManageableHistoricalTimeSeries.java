@@ -25,7 +25,6 @@ import org.threeten.bp.Instant;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
-import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.PublicSPI;
 
@@ -40,7 +39,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 @BeanDefinition
 public class ManageableHistoricalTimeSeries extends DirectBean
-    implements HistoricalTimeSeries, UniqueIdentifiable, MutableUniqueIdentifiable, Serializable {
+implements HistoricalTimeSeries, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -49,7 +48,7 @@ public class ManageableHistoricalTimeSeries extends DirectBean
    * The historical time-series unique identifier.
    * This field is managed by the master but must be set for updates.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The instant that this version was created.
@@ -66,7 +65,7 @@ public class ManageableHistoricalTimeSeries extends DirectBean
    * This field is only returned if requested from the master, and not all
    * points are necessarily returned.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private LocalDateDoubleTimeSeries _timeSeries;
 
   /**
@@ -100,6 +99,7 @@ public class ManageableHistoricalTimeSeries extends DirectBean
    * This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -109,6 +109,7 @@ public class ManageableHistoricalTimeSeries extends DirectBean
    * This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -179,6 +180,7 @@ public class ManageableHistoricalTimeSeries extends DirectBean
    * points are necessarily returned.
    * @return the value of the property
    */
+  @Override
   public LocalDateDoubleTimeSeries getTimeSeries() {
     return _timeSeries;
   }

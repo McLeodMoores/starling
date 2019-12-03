@@ -23,10 +23,10 @@ public class NoneFoundReferenceDataProvider extends AbstractReferenceDataProvide
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
-    ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
-    for (String identifier : request.getIdentifiers()) {
-      ReferenceData rd = new ReferenceData(identifier);
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
+    final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+    for (final String identifier : request.getIdentifiers()) {
+      final ReferenceData rd = new ReferenceData(identifier);
       rd.addError(new ReferenceDataError(null, -1, null, null, "None found"));
       result.addReferenceData(rd);
     }

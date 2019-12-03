@@ -124,13 +124,15 @@ public class SwaptionPortfolioGeneratorTool extends AbstractPortfolioGeneratorTo
         payLeg = fixedLeg;
         receiveLeg = floatLeg;
         swapName = swapYears + "Y pay " + currency + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
-        swaptionName = (isLong ? "Long " : "Short ") + swaptionYears + "Y x " + swapYears + "Y pay " + currency + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
+        swaptionName = (isLong ? "Long " : "Short ") + swaptionYears + "Y x " + swapYears + "Y pay " + currency + " " + notional.getAmount() + " @ "
+            + STRIKE_FORMATTER.format(rate);
         payer = true;
       } else {
         payLeg = floatLeg;
         receiveLeg = fixedLeg;
         swapName = swapYears + "Y receive " + currency + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
-        swaptionName = (isLong ? "Long " : "Short ") + swaptionYears + "Y x " + swapYears + "Y receive " + currency + " " + notional.getAmount() + " @ " + STRIKE_FORMATTER.format(rate);
+        swaptionName = (isLong ? "Long " : "Short ") + swaptionYears + "Y x " + swapYears + "Y receive " + currency + " " + notional.getAmount() + " @ "
+            + STRIKE_FORMATTER.format(rate);
         payer = false;
       }
       final SwapSecurity swap = new SwapSecurity(swaptionExpiry, swaptionExpiry.plusDays(2), swapMaturity, COUNTER_PARTY_OPT, payLeg, receiveLeg);
@@ -160,6 +162,6 @@ public class SwaptionPortfolioGeneratorTool extends AbstractPortfolioGeneratorTo
     };
     configure(securities);
     return securities;
-  };
+  }
 
 }

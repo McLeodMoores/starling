@@ -25,24 +25,24 @@ public class FudgeRequestDispatcher implements ByteArrayRequestReceiver {
   /**
    * The Fudge context.
    */
-  private FudgeContext _fudgeContext;
+  private final FudgeContext _fudgeContext;
 
   /**
    * Creates an instance based on an underlying receiver.
-   * 
+   *
    * @param underlying  the underlying receiver, not null
    */
-  public FudgeRequestDispatcher(FudgeRequestReceiver underlying) {
+  public FudgeRequestDispatcher(final FudgeRequestReceiver underlying) {
     this(underlying, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance based on an underlying receiver.
-   * 
+   *
    * @param underlying  the underlying receiver, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public FudgeRequestDispatcher(FudgeRequestReceiver underlying, FudgeContext fudgeContext) {
+  public FudgeRequestDispatcher(final FudgeRequestReceiver underlying, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _underlying = underlying;
@@ -52,7 +52,7 @@ public class FudgeRequestDispatcher implements ByteArrayRequestReceiver {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying receiver.
-   * 
+   *
    * @return the underlying receiver, not null
    */
   public FudgeRequestReceiver getUnderlying() {
@@ -61,7 +61,7 @@ public class FudgeRequestDispatcher implements ByteArrayRequestReceiver {
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context, not null
    */
   public FudgeContext getFudgeContext() {
@@ -70,10 +70,10 @@ public class FudgeRequestDispatcher implements ByteArrayRequestReceiver {
 
   //-------------------------------------------------------------------------
   @Override
-  public byte[] requestReceived(byte[] message) {
-    FudgeMsgEnvelope requestEnvelope = getFudgeContext().deserialize(message);
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(getFudgeContext());
-    FudgeMsg responseContainer = getUnderlying().requestReceived(deserializationContext, requestEnvelope);
+  public byte[] requestReceived(final byte[] message) {
+    final FudgeMsgEnvelope requestEnvelope = getFudgeContext().deserialize(message);
+    final FudgeDeserializer deserializationContext = new FudgeDeserializer(getFudgeContext());
+    final FudgeMsg responseContainer = getUnderlying().requestReceived(deserializationContext, requestEnvelope);
     return getFudgeContext().toByteArray(responseContainer);
   }
 

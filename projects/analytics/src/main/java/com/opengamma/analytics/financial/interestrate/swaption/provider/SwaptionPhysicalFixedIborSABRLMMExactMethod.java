@@ -11,7 +11,6 @@ import java.util.Set;
 
 import com.opengamma.analytics.financial.interestrate.PresentValueSABRSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
-import com.opengamma.analytics.financial.interestrate.swaption.method.SwaptionPhysicalFixedIborBasketMethod;
 import com.opengamma.analytics.financial.model.interestrate.definition.LiborMarketModelDisplacedDiffusionParameters;
 import com.opengamma.analytics.financial.provider.calculator.sabrswaption.PresentValueCurveSensitivitySABRSwaptionCalculator;
 import com.opengamma.analytics.financial.provider.calculator.sabrswaption.PresentValueSABRSensitivitySABRSwaptionCalculator;
@@ -34,8 +33,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to computes the present value and sensitivities of physical delivery European swaptions with a Libor Market Model calibrated exactly to SABR prices.
- * The LMM displacements and volatility weights are hard coded.
+ * Method to computes the present value and sensitivities of physical delivery European swaptions with a Libor Market Model calibrated
+ * exactly to SABR prices. The LMM displacements and volatility weights are hard coded.
  */
 public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
 
@@ -56,8 +55,10 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
    * The SABR method used for European swaptions with physical delivery.
    */
   private static final PresentValueSABRSwaptionCalculator PVSSC = PresentValueSABRSwaptionCalculator.getInstance();
-  private static final PresentValueCurveSensitivitySABRSwaptionCalculator PVCSSSC = PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance();
-  private static final PresentValueSABRSensitivitySABRSwaptionCalculator PVSSSSC = PresentValueSABRSensitivitySABRSwaptionCalculator.getInstance();
+  private static final PresentValueCurveSensitivitySABRSwaptionCalculator PVCSSSC = PresentValueCurveSensitivitySABRSwaptionCalculator
+      .getInstance();
+  private static final PresentValueSABRSensitivitySABRSwaptionCalculator PVSSSSC = PresentValueSABRSensitivitySABRSwaptionCalculator
+      .getInstance();
   /**
    * The LMM method used for European swaptions with physical delivery.
    */
@@ -68,12 +69,15 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
   private static final SwaptionPhysicalFixedIborBasketMethod METHOD_BASKET = SwaptionPhysicalFixedIborBasketMethod.getInstance();
 
   /**
-   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType.
-   * The original swaption is priced with the calibrated LMM.
-   * This should not be used for vanilla swaptions (the price is equal to the SABR price with a longer computation type and some approximation).
-   * This is useful for non-standard swaptions like amortized swaptions.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the
+   * CalibrationType. The original swaption is priced with the calibrated LMM. This should not be used for vanilla swaptions (the price is
+   * equal to the SABR price with a longer computation type and some approximation). This is useful for non-standard swaptions like
+   * amortized swaptions.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -81,39 +85,51 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final Currency ccy = swaption.getCurrency();
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
-    //TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
-    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption, DEFAULT_DISPLACEMENT, DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
-        DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
+    // TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
+    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption,
+        DEFAULT_DISPLACEMENT,
+        DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
+            DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
     final SuccessiveRootFinderLMMDDCalibrationObjective objective = new SuccessiveRootFinderLMMDDCalibrationObjective(lmmParameters, ccy);
-    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(objective);
+    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(
+        objective);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption);
     calibrationEngine.addInstrument(swaptionCalibration, PVSSC);
     calibrationEngine.calibrate(sabrData);
-    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves, lmmParameters, ccy);
+    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves,
+        lmmParameters, ccy);
     return MultipleCurrencyAmount.of(swaption.getCurrency(), METHOD_SWAPTION_LMM.presentValue(swaption, lmm).getAmount(ccy));
   }
 
   /**
-   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType.
-   * The SABR parameters sensitivities of the original swaption are calculated with LMM re-calibration.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the
+   * CalibrationType. The SABR parameters sensitivities of the original swaption are calculated with LMM re-calibration.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value SABR parameters sensitivity.
    */
-  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final Currency ccy = swaption.getCurrency();
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
-    //TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
-    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption, DEFAULT_DISPLACEMENT, DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
-        DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
+    // TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
+    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption,
+        DEFAULT_DISPLACEMENT,
+        DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
+            DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
     final SuccessiveRootFinderLMMDDCalibrationObjective objective = new SuccessiveRootFinderLMMDDCalibrationObjective(lmmParameters, ccy);
-    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(objective);
+    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(
+        objective);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption);
     calibrationEngine.addInstrument(swaptionCalibration, PVSSC);
     calibrationEngine.calibrate(sabrData);
-    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves, lmmParameters, ccy);
+    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves,
+        lmmParameters, ccy);
     // Risks
     final int nbCal = swaptionCalibration.length;
     final int nbFact = lmmParameters.getNbFactor();
@@ -138,7 +154,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
       for (int loopcal2 = 0; loopcal2 < nbCal; loopcal2++) {
         for (int loopperiod = instrumentIndex.get(loopcal2); loopperiod < instrumentIndex.get(loopcal2 + 1); loopperiod++) {
           for (int loopfact = 0; loopfact < nbFact; loopfact++) {
-            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact] * lmmParameters.getVolatility()[loopperiod][loopfact];
+            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact]
+                * lmmParameters.getVolatility()[loopperiod][loopfact];
           }
         }
       }
@@ -174,7 +191,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
     // Storage in PresentValueSABRSensitivityDataBundle
     final PresentValueSABRSensitivityDataBundle sensi = new PresentValueSABRSensitivityDataBundle();
     for (int loopcal = 0; loopcal < nbCal; loopcal++) {
-      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopcal].getTimeToExpiry(), swaptionCalibration[loopcal].getMaturityTime());
+      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopcal].getTimeToExpiry(),
+          swaptionCalibration[loopcal].getMaturityTime());
       sensi.addAlpha(expiryMaturity, dPvAmdAlpha[loopcal]);
       sensi.addRho(expiryMaturity, dPvAmdRho[loopcal]);
       sensi.addNu(expiryMaturity, dPvAmdNu[loopcal]);
@@ -183,26 +201,34 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
   }
 
   /**
-   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType.
-   * The curve sensitivities of the original swaption are calculated with LMM re-calibration.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the
+   * CalibrationType. The curve sensitivities of the original swaption are calculated with LMM re-calibration.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value curve sensitivities.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final Currency ccy = swaption.getCurrency();
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
-    //TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
-    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption, DEFAULT_DISPLACEMENT, DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
-        DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
+    // TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
+    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption,
+        DEFAULT_DISPLACEMENT,
+        DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
+            DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
     final SuccessiveRootFinderLMMDDCalibrationObjective objective = new SuccessiveRootFinderLMMDDCalibrationObjective(lmmParameters, ccy);
-    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(objective);
+    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(
+        objective);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption);
     calibrationEngine.addInstrument(swaptionCalibration, PVSSC);
     calibrationEngine.calibrate(sabrData);
-    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves, lmmParameters, ccy);
+    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves,
+        lmmParameters, ccy);
     // Risks
     final int nbCal = swaptionCalibration.length;
     final int nbFact = lmmParameters.getNbFactor();
@@ -228,7 +254,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
       for (int loopcal2 = 0; loopcal2 < nbCal; loopcal2++) {
         for (int loopperiod = instrumentIndex.get(loopcal2); loopperiod < instrumentIndex.get(loopcal2 + 1); loopperiod++) {
           for (int loopfact = 0; loopfact < nbFact; loopfact++) {
-            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact] * lmmParameters.getVolatility()[loopperiod][loopfact];
+            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact]
+                * lmmParameters.getVolatility()[loopperiod][loopfact];
           }
         }
       }
@@ -252,7 +279,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
     for (int loopcal1 = 0; loopcal1 < nbCal; loopcal1++) {
       dLambdadC[loopcal1] = new MultipleCurrencyMulticurveSensitivity();
       for (int loopcal2 = 0; loopcal2 <= loopcal1; loopcal2++) {
-        dLambdadC[loopcal1] = dLambdadC[loopcal1].plus(pvcsCalDiff[loopcal2].multipliedBy(dPvCaldLambdaMatrixInverse.getEntry(loopcal1, loopcal2)));
+        dLambdadC[loopcal1] = dLambdadC[loopcal1]
+            .plus(pvcsCalDiff[loopcal2].multipliedBy(dPvCaldLambdaMatrixInverse.getEntry(loopcal1, loopcal2)));
       }
     }
     MultipleCurrencyMulticurveSensitivity pvcsAdjust = new MultipleCurrencyMulticurveSensitivity();
@@ -267,13 +295,13 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
 
   private static final class VolatilityLMMAngle extends Function1D<Double, Double[]> {
     /**
-     * The angle between the factors: factor 1 weight is cos(angle*t/20) and factor 2 weight is sin(angle*t/20).
-     * For the angle = 0, there is only one factor. For angle = pi/2, the 0Y rate is independent of the 20Y rate.
+     * The angle between the factors: factor 1 weight is cos(angle*t/20) and factor 2 weight is sin(angle*t/20). For the angle = 0, there is
+     * only one factor. For angle = pi/2, the 0Y rate is independent of the 20Y rate.
      */
     private final double _angle;
     private final double _displacement;
 
-    public VolatilityLMMAngle(final double angle, final double displacement) {
+    VolatilityLMMAngle(final double angle, final double displacement) {
       _angle = angle;
       _displacement = displacement;
     }
@@ -289,27 +317,36 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
   }
 
   /**
-   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the CalibrationType.
-   * The curve and SABR sensitivities of the original swaption are calculated with LMM re-calibration.
-   * Used mainly for performance test purposes as the output is hybrid list.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
-   * @return The results (returned as a list of objects) [0] the present value, [1] the present curve sensitivity, [2] the present value SABR sensitivity.
+   * The method calibrates a LMM on a set of vanilla swaption priced with SABR. The set of vanilla swaptions is given by the
+   * CalibrationType. The curve and SABR sensitivities of the original swaption are calculated with LMM re-calibration. Used mainly for
+   * performance test purposes as the output is hybrid list.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
+   * @return The results (returned as a list of objects) [0] the present value, [1] the present curve sensitivity, [2] the present value
+   *         SABR sensitivity.
    */
-  public List<Object> presentValueCurveSABRSensitivity(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public List<Object> presentValueCurveSABRSensitivity(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final Currency ccy = swaption.getCurrency();
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
-    //TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
-    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption, DEFAULT_DISPLACEMENT, DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
-        DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
+    // TODO: Create a way to chose the LMM base parameters (displacement, mean reversion, volatility).
+    final LiborMarketModelDisplacedDiffusionParameters lmmParameters = LiborMarketModelDisplacedDiffusionParameters.from(swaption,
+        DEFAULT_DISPLACEMENT,
+        DEFAULT_MEAN_REVERSION, new VolatilityLMMAngle(
+            DEFAULT_ANGLE, DEFAULT_DISPLACEMENT));
     final SuccessiveRootFinderLMMDDCalibrationObjective objective = new SuccessiveRootFinderLMMDDCalibrationObjective(lmmParameters, ccy);
-    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(objective);
+    final SuccessiveRootFinderLMMDDCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderLMMDDCalibrationEngine<>(
+        objective);
     final SwaptionPhysicalFixedIbor[] swaptionCalibration = METHOD_BASKET.calibrationBasketFixedLegPeriod(swaption);
     calibrationEngine.addInstrument(swaptionCalibration, PVSSC);
     calibrationEngine.calibrate(sabrData);
-    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves, lmmParameters, ccy);
+    final LiborMarketModelDisplacedDiffusionProviderInterface lmm = new LiborMarketModelDisplacedDiffusionProvider(multicurves,
+        lmmParameters, ccy);
     // Risks
     final int nbCal = swaptionCalibration.length;
     final int nbFact = lmmParameters.getNbFactor();
@@ -336,7 +373,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
       for (int loopcal2 = 0; loopcal2 < nbCal; loopcal2++) {
         for (int loopperiod = instrumentIndex.get(loopcal2); loopperiod < instrumentIndex.get(loopcal2 + 1); loopperiod++) {
           for (int loopfact = 0; loopfact < nbFact; loopfact++) {
-            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact] * lmmParameters.getVolatility()[loopperiod][loopfact];
+            dPvCaldLambda[loopcal1][loopcal2] += dPvCaldGamma[loopcal1][loopperiod][loopfact]
+                * lmmParameters.getVolatility()[loopperiod][loopfact];
           }
         }
       }
@@ -383,7 +421,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
     // Storage in PresentValueSABRSensitivityDataBundle
     final PresentValueSABRSensitivityDataBundle pvss = new PresentValueSABRSensitivityDataBundle();
     for (int loopcal = 0; loopcal < nbCal; loopcal++) {
-      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopcal].getTimeToExpiry(), swaptionCalibration[loopcal].getMaturityTime());
+      final DoublesPair expiryMaturity = DoublesPair.of(swaptionCalibration[loopcal].getTimeToExpiry(),
+          swaptionCalibration[loopcal].getMaturityTime());
       pvss.addAlpha(expiryMaturity, dPvAmdAlpha[loopcal]);
       pvss.addRho(expiryMaturity, dPvAmdRho[loopcal]);
       pvss.addNu(expiryMaturity, dPvAmdNu[loopcal]);
@@ -393,7 +432,8 @@ public class SwaptionPhysicalFixedIborSABRLMMExactMethod {
     for (int loopcal1 = 0; loopcal1 < nbCal; loopcal1++) {
       dLambdadC[loopcal1] = new MultipleCurrencyMulticurveSensitivity();
       for (int loopcal2 = 0; loopcal2 <= loopcal1; loopcal2++) {
-        dLambdadC[loopcal1] = dLambdadC[loopcal1].plus(pvcsCalDiff[loopcal2].multipliedBy(dPvCaldLambdaMatrixInverse.getEntry(loopcal1, loopcal2)));
+        dLambdadC[loopcal1] = dLambdadC[loopcal1]
+            .plus(pvcsCalDiff[loopcal2].multipliedBy(dPvCaldLambdaMatrixInverse.getEntry(loopcal1, loopcal2)));
       }
     }
     MultipleCurrencyMulticurveSensitivity pvcs = new MultipleCurrencyMulticurveSensitivity();

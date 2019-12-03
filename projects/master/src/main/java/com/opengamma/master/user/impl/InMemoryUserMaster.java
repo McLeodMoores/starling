@@ -79,89 +79,89 @@ public class InMemoryUserMaster
 
   //-------------------------------------------------------------------------
   @Override
-  String extractName(ManageableUser user) {
+  String extractName(final ManageableUser user) {
     return user.getUserName();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean nameExists(String userName) {
+  public boolean nameExists(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
     return super.nameExists(userName);
   }
 
   @Override
-  public ManageableUser getByName(String userName) {
+  public ManageableUser getByName(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
     return super.getByName(userName);
   }
 
   @Override
-  public ManageableUser getById(ObjectId objectId) {
+  public ManageableUser getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     return super.getById(objectId);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId add(ManageableUser user) {
+  public UniqueId add(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     return super.add(user);
   }
 
   @Override
-  public UniqueId update(ManageableUser user) {
+  public UniqueId update(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     return super.update(user);
   }
 
   @Override
-  public UniqueId save(ManageableUser user) {
+  public UniqueId save(final ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
     return super.save(user);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public void removeByName(String userName) {
+  public void removeByName(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
     super.removeByName(userName);
   }
 
   @Override
-  public void removeById(ObjectId objectId) {
+  public void removeById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     super.removeById(objectId);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UserSearchResult search(UserSearchRequest request) {
+  public UserSearchResult search(final UserSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    List<ManageableUser> list = new ArrayList<>();
-    for (ManageableUser user : getStoredValues()) {
+    final List<ManageableUser> list = new ArrayList<>();
+    for (final ManageableUser user : getStoredValues()) {
       if (request.matches(user)) {
         list.add(user);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    Paging paging = Paging.of(request.getPagingRequest(), list);
+    final Paging paging = Paging.of(request.getPagingRequest(), list);
     return new UserSearchResult(paging, request.getPagingRequest().select(list));
   }
 
   @Override
-  public UserEventHistoryResult eventHistory(UserEventHistoryRequest request) {
+  public UserEventHistoryResult eventHistory(final UserEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    List<HistoryEvent> history = super.eventHistory(request.getObjectId(), request.getUserName());
+    final List<HistoryEvent> history = super.eventHistory(request.getObjectId(), request.getUserName());
     return new UserEventHistoryResult(history);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public UserAccount getAccount(String userName) {
+  public UserAccount getAccount(final String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    ManageableUser user = getByName0(userName);
-    SimpleUserAccount account = new SimpleUserAccount(user.getUserName());
+    final ManageableUser user = getByName0(userName);
+    final SimpleUserAccount account = new SimpleUserAccount(user.getUserName());
     account.setPasswordHash(user.getPasswordHash());
     account.setAlternateIds(user.getAlternateIds());
     account.setEmailAddress(user.getEmailAddress());

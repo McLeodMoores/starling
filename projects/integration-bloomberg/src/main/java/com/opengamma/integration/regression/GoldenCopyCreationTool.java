@@ -24,7 +24,7 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public class GoldenCopyCreationTool extends AbstractGoldenCopyCreationTool<IntegrationToolContext> {
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(GoldenCopyCreationTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GoldenCopyCreationTool.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -44,7 +44,7 @@ public class GoldenCopyCreationTool extends AbstractGoldenCopyCreationTool<Integ
 
     final GoldenCopyDumpCreator goldenCopyDumpCreator = new GoldenCopyDumpCreator(io, tc);
 
-    s_logger.info("Persisting db dump with tracked data");
+    LOGGER.info("Persisting db dump with tracked data");
     goldenCopyDumpCreator.execute();
   }
 

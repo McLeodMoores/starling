@@ -5,8 +5,6 @@
  */
 package com.opengamma.analytics.financial.provider.sensitivity.hullwhite;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,23 +21,28 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
- * The return format is ParameterSensitivity object.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The meaning of
+ * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
  */
 public class ParameterSensitivityHullWhiteUnderlyingMatrixCalculator extends ParameterSensitivityHullWhiteMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * @param curveSensitivityCalculator The curve sensitivity calculator.
+   * Constructor.
+   *
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityHullWhiteUnderlyingMatrixCalculator(final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityHullWhiteUnderlyingMatrixCalculator(
+      final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final HullWhiteOneFactorProviderInterface hullWhite, final Set<String> sensicurveNamesSet) {
+  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final HullWhiteOneFactorProviderInterface hullWhite,
+      final Set<String> sensicurveNamesSet) {
     // TODO: The first part depends only of the multicurves and curvesSet, not the sensitivity. Should it be refactored and done only once?
     final MulticurveProviderInterface multicurves = hullWhite.getMulticurveProvider();
     final Set<String> multicurveNamesSet = multicurves.getAllNames();
@@ -54,7 +57,8 @@ public class ParameterSensitivityHullWhiteUnderlyingMatrixCalculator extends Par
     }
     final int[] nbNewParameters = new int[nbMultiCurve];
     final int[] nbParameters = new int[nbMultiCurve];
-    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the bundle.
+    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the
+    // bundle.
     loopname = 0;
     for (final String name : multicurveNamesSet) { // loop over all curves in multicurves (by name)
       nbParameters[loopname] = multicurves.getNumberOfParameters(name);
@@ -107,7 +111,8 @@ public class ParameterSensitivityHullWhiteUnderlyingMatrixCalculator extends Par
       startOwnParameter[num] = loopstart;
       startUnderlyingParameter[num] = startUnderlyingParamList.toIntArray();
     }
-    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in the "clean" step.
+    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in
+    // the "clean" step.
     final double[][] sensiDirty = new double[nbMultiCurve][];
     final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getYieldDiscountingSensitivities();
     final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getForwardSensitivities();

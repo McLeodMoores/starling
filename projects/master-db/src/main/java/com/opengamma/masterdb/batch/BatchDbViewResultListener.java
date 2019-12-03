@@ -31,24 +31,24 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BatchDbViewResultListener extends AbstractViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BatchDbViewResultListener.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(BatchDbViewResultListener.class);
+
   private final BatchRunWriter _batchRunWriter;
   private final UserPrincipal _user;
   private final Map<UniqueId, RiskRun> _riskRuns = Maps.newConcurrentMap();
 
-  public BatchDbViewResultListener(BatchRunWriter batchRunWriter, UserPrincipal user) {
+  public BatchDbViewResultListener(final BatchRunWriter batchRunWriter, final UserPrincipal user) {
     ArgumentChecker.notNull(batchRunWriter, "batchRunWriter");
     ArgumentChecker.notNull(user, "user");
     _batchRunWriter = batchRunWriter;
     _user = user;
   }
 
-  private RiskRun getRiskRun(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
+  private RiskRun getRiskRun(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
     return _riskRuns.get(getCycleId(fullFragment, deltaFragment));
   }
 
-  private static UniqueId getCycleId(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
+  private static UniqueId getCycleId(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
     UniqueId cycleId;
     if (fullFragment != null) {
       cycleId = fullFragment.getViewCycleId();
@@ -66,61 +66,61 @@ public class BatchDbViewResultListener extends AbstractViewResultListener {
   }
 
   @Override
-  public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+  public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
     try {
-      s_logger.info("Starting new risk run for cycle ID {}", cycleMetadata.getViewCycleId());
-      RiskRun riskRun = _batchRunWriter.startRiskRun(cycleMetadata,
+      LOGGER.info("Starting new risk run for cycle ID {}", cycleMetadata.getViewCycleId());
+      final RiskRun riskRun = _batchRunWriter.startRiskRun(cycleMetadata,
                                                      Collections.<String, String>emptyMap(),
                                                      RunCreationMode.CREATE_NEW,
                                                      SnapshotMode.WRITE_THROUGH);
       _riskRuns.put(cycleMetadata.getViewCycleId(), riskRun);
-      s_logger.info("New risk run started with ID {}, cycle ID {}",
+      LOGGER.info("New risk run started with ID {}, cycle ID {}",
                     riskRun.getId(), cycleMetadata.getViewCycleId());
-    } catch (Exception e) {
-      s_logger.error("Failed to write start of batch job. No results will be recorded.", e);
+    } catch (final Exception e) {
+      LOGGER.error("Failed to write start of batch job. No results will be recorded.", e);
     }
   }
 
   @Override
-  public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
     try {
-      RiskRun riskRun = getRiskRun(fullResult, deltaResult);
+      final RiskRun riskRun = getRiskRun(fullResult, deltaResult);
       _batchRunWriter.endRiskRun(riskRun.getObjectId());
-      s_logger.info("Risk run ended, ID {}, cycle ID {}",
+      LOGGER.info("Risk run ended, ID {}, cycle ID {}",
                     riskRun.getId(), getCycleId(fullResult, deltaResult));
-    } catch (Exception e) {
-      s_logger.error("Failed to write end of batch job. Job will appear incomplete.", e);
+    } catch (final Exception e) {
+      LOGGER.error("Failed to write end of batch job. Job will appear incomplete.", e);
     }
   }
 
   @Override
-  public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
-    RiskRun riskRun = getRiskRun(fullFragment, deltaFragment);
+  public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
+    final RiskRun riskRun = getRiskRun(fullFragment, deltaFragment);
     if (riskRun == null) {
-      s_logger.warn("Skipping writing batch result fragment due to earlier failure to write start of batch job");
+      LOGGER.warn("Skipping writing batch result fragment due to earlier failure to write start of batch job");
       return;
     }
     try {
       _batchRunWriter.addJobResults(riskRun.getObjectId(), fullFragment);
-      s_logger.info("Added fragment results, ID {}, cycle ID {}",
+      LOGGER.info("Added fragment results, ID {}, cycle ID {}",
                     riskRun.getId(), getCycleId(fullFragment, deltaFragment));
-    } catch (Exception e) {
-      s_logger.error("Error writing batch result fragment", e);
+    } catch (final Exception e) {
+      LOGGER.error("Error writing batch result fragment", e);
     }
   }
 
   @Override
-  public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-    s_logger.error("Batch cycle execution failed", exception);
+  public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
+    LOGGER.error("Batch cycle execution failed", exception);
     // TODO there's no way of knowing which cycle has failed, need an extra parameter. PLAT-4173
     /*if (getRiskRun() == null) {
-      s_logger.warn("Skipping writing batch cycle failure due to earlier failure to write start of batch job");
+      LOGGER.warn("Skipping writing batch cycle failure due to earlier failure to write start of batch job");
       return;
     }
     try {
       _batchRunWriter.endRiskRun(getRiskRun().getObjectId());
     } catch (Exception e) {
-      s_logger.error("Error writing batch cycle failure", e);
+      LOGGER.error("Error writing batch cycle failure", e);
     }*/
   }
 }

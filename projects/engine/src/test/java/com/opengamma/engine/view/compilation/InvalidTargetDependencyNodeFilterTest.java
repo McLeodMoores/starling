@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.compilation;
@@ -38,13 +38,20 @@ public class InvalidTargetDependencyNodeFilterTest {
     final DependencyNodeFunction function = DependencyNodeFunctionImpl.of(MarketDataSourcingFunction.INSTANCE);
     final Set<ValueSpecification> outputs = Collections.<ValueSpecification>emptySet();
     final Map<ValueSpecification, DependencyNode> inputs = Collections.<ValueSpecification, DependencyNode>emptyMap();
-    assertTrue(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "1")), outputs, inputs)));
-    assertFalse(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "2")), outputs, inputs)));
-    assertTrue(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "2", "V")), outputs, inputs)));
-    assertTrue(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3")), outputs, inputs)));
-    assertFalse(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3", "X")), outputs, inputs)));
-    assertTrue(filter.acceptNode(new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3", "Y")), outputs, inputs)));
-    assertTrue(filter.acceptNode(new DependencyNodeImpl(function, ComputationTargetSpecification.NULL, outputs, inputs)));
+    assertTrue(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "1")), outputs, inputs)));
+    assertFalse(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "2")), outputs, inputs)));
+    assertTrue(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "2", "V")), outputs, inputs)));
+    assertTrue(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3")), outputs, inputs)));
+    assertFalse(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3", "X")), outputs, inputs)));
+    assertTrue(filter.acceptNode(
+        new DependencyNodeImpl(function, new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Pos", "3", "Y")), outputs, inputs)));
+    assertTrue(filter.acceptNode(
+        new DependencyNodeImpl(function, ComputationTargetSpecification.NULL, outputs, inputs)));
   }
 
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.inflation;
@@ -19,27 +19,35 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class ParameterSensitivityInflationMatrixCalculator extends ParameterSensitivityInflationMatrixProviderAbstractCalculator {
 
   /**
-   * Constructor
-   * @param inflationSensitivityCalculator The curve sensitivity calculator.
+   * Constructor.
+   *
+   * @param inflationSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityInflationMatrixCalculator(final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> inflationSensitivityCalculator) {
+  public ParameterSensitivityInflationMatrixCalculator(
+      final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> inflationSensitivityCalculator) {
     super(inflationSensitivityCalculator);
   }
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities.
-   * @param sensitivity The point sensitivity.
-   * @param inflation The inflation provider. Not null.
-   * @param curvesSet The set of curves for which the sensitivity will be computed. Not null.
+   *
+   * @param sensitivity
+   *          The point sensitivity.
+   * @param inflation
+   *          The inflation provider. Not null.
+   * @param curvesSet
+   *          The set of curves for which the sensitivity will be computed. Not null.
    * @return The sensitivity (as a Matrix). The order of the sensitivity is by curve as provided by the curvesSet.
    */
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final InflationSensitivity sensitivity, final InflationProviderInterface inflation, final Set<String> curvesSet) {
+  public DoubleMatrix1D pointToParameterSensitivity(final InflationSensitivity sensitivity, final InflationProviderInterface inflation,
+      final Set<String> curvesSet) {
     SimpleParameterSensitivity ps = new SimpleParameterSensitivity();
 
     // inflation curve

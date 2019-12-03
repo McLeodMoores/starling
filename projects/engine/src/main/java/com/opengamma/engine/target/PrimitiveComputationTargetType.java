@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.opengamma.core.change.ChangeManager;
-import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.target.resolver.DeepResolver;
 import com.opengamma.engine.target.resolver.IdentifierResolver;
 import com.opengamma.engine.target.resolver.ObjectResolver;
@@ -20,11 +19,12 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers without an external resolver service. Instances also serve as
- * an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that they can be added to a {@link ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle
- * the type.
- * 
- * @param <T> the target object type
+ * Specialized form of {@link ObjectComputationTargetType} for primitive objects that can be converted directly to/from unique identifiers without an external
+ * resolver service. Instances also serve as an {@link ObjectResolver} and possibly {@link IdentifierResolver} so that they can be added to a
+ * {@link com.opengamma.engine.ComputationTargetResolver} and/or {@link ComputationTargetSpecificationResolver} to handle the type.
+ *
+ * @param <T>
+ *          the target object type
  */
 public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extends ObjectComputationTargetType<T> implements ObjectResolver<T> {
 
@@ -32,13 +32,15 @@ public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extend
 
   private final ObjectResolver<T> _resolver;
 
-  private static final class IdentifierResolving<T extends UniqueIdentifiable> extends PrimitiveComputationTargetType<T> implements IdentifierResolver {
+  private static final class IdentifierResolving<T extends UniqueIdentifiable> extends PrimitiveComputationTargetType<T>
+  implements IdentifierResolver {
 
     private static final long serialVersionUID = 1L;
 
     private final IdentifierResolver _resolver;
 
-    private IdentifierResolving(final ComputationTargetType type, final Class<T> clazz, final ObjectResolver<T> objectResolver, final IdentifierResolver identifierResolver) {
+    private IdentifierResolving(final ComputationTargetType type, final Class<T> clazz, final ObjectResolver<T> objectResolver,
+        final IdentifierResolver identifierResolver) {
       super(type, clazz, objectResolver);
       _resolver = identifierResolver;
     }
@@ -72,14 +74,14 @@ public class PrimitiveComputationTargetType<T extends UniqueIdentifiable> extend
     _resolver = resolver;
   }
 
-  public static <T extends UniqueIdentifiable> PrimitiveComputationTargetType<T> of(final ComputationTargetType type, final Class<T> clazz, final ObjectResolver<T> resolver) {
+  public static <T extends UniqueIdentifiable> PrimitiveComputationTargetType<T> of(final ComputationTargetType type, final Class<T> clazz,
+      final ObjectResolver<T> resolver) {
     assert type.isTargetType(clazz);
     assert resolver != null;
     if (resolver instanceof IdentifierResolver) {
-      return new IdentifierResolving<T>(type, clazz, resolver, (IdentifierResolver) resolver);
-    } else {
-      return new PrimitiveComputationTargetType<T>(type, clazz, resolver);
+      return new IdentifierResolving<>(type, clazz, resolver, (IdentifierResolver) resolver);
     }
+    return new PrimitiveComputationTargetType<>(type, clazz, resolver);
   }
 
   public T resolve(final UniqueId identifier) {

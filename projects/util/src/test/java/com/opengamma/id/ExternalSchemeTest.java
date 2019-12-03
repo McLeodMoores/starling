@@ -5,6 +5,8 @@
  */
 package com.opengamma.id;
 
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 
@@ -18,66 +20,96 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ExternalSchemeTest {
 
-  public void test_factory() {
-    ExternalScheme test = ExternalScheme.of("IATA");
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testFactory() {
+    final ExternalScheme test = ExternalScheme.of("IATA");
     assertEquals("IATA", test.getName());
   }
 
-  public void test_factory_cached() {
+  /**
+   * Tests that schemes are cached.
+   */
+  @Test
+  public void testFactoryCached() {
     assertSame(ExternalScheme.of("ISO"), ExternalScheme.of("ISO"));
   }
 
+  /**
+   * Tests that a null scheme is not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_null() {
+  public void testFactoryNull() {
     ExternalScheme.of(null);
   }
 
+  /**
+   * Tests that the scheme name cannot be empty.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_emptyName() {
+  public void testFactoryEmptyName() {
     ExternalScheme.of("");
   }
 
-  public void test_compareTo() {
-    ExternalScheme d1 = ExternalScheme.of("d1");
-    ExternalScheme d2 = ExternalScheme.of("d2");
-    
-    assertEquals(d1.compareTo(d1) == 0, true);
-    assertEquals(d1.compareTo(d2) < 0, true);
-    
-    assertEquals(d2.compareTo(d1) > 0, true);
-    assertEquals(d2.compareTo(d2) == 0, true);
+  /**
+   * Tests the compareTo() method.
+   */
+  @Test
+  public void testCompareTo() {
+    final ExternalScheme d1 = ExternalScheme.of("d1");
+    final ExternalScheme d2 = ExternalScheme.of("d2");
+
+    assertTrue(d1.compareTo(d1) == 0);
+    assertTrue(d1.compareTo(d2) < 0);
+
+    assertTrue(d2.compareTo(d1) > 0);
+    assertTrue(d2.compareTo(d2) == 0);
   }
 
-  public void test_equals() {
-    ExternalScheme d1a = ExternalScheme.of("d1");
-    ExternalScheme d1b = ExternalScheme.of("d1");
-    ExternalScheme d2 = ExternalScheme.of("d2");
-    
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEquals() {
+    final ExternalScheme d1a = ExternalScheme.of("d1");
+    final ExternalScheme d1b = ExternalScheme.of("d1");
+    final ExternalScheme d2 = ExternalScheme.of("d2");
+
     assertEquals(d1a.equals(d1a), true);
-    assertEquals(d1a.equals(d1b), true);
-    assertEquals(d1a.equals(d2), false);
-    
-    assertEquals(d1b.equals(d1a), true);
+    assertEquals(d1a, d1b);
+    assertNotEquals(d1a, d2);
+
+    assertEquals(d1b, d1a);
     assertEquals(d1b.equals(d1b), true);
-    assertEquals(d1b.equals(d2), false);
-    
-    assertEquals(d2.equals(d1a), false);
-    assertEquals(d2.equals(d1b), false);
+    assertNotEquals(d1b, d2);
+
+    assertNotEquals(d2, d1a);
+    assertNotEquals(d2, d1b);
     assertEquals(d2.equals(d2), true);
-    
-    assertEquals(d1b.equals("d1"), false);
-    assertEquals(d1b.equals(null), false);
+
+    assertNotEquals("d1b", d1b);
+    assertNotEquals(null, d1b);
   }
 
-  public void test_hashCode() {
-    ExternalScheme d1a = ExternalScheme.of("d1");
-    ExternalScheme d1b = ExternalScheme.of("d1");
-    
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final ExternalScheme d1a = ExternalScheme.of("d1");
+    final ExternalScheme d1b = ExternalScheme.of("d1");
+
     assertEquals(d1a.hashCode(), d1b.hashCode());
   }
 
-  public void test_toString() {
-    ExternalScheme test = ExternalScheme.of("Scheme");
+  /**
+   * Tests the toString() method.
+   */
+  @Test
+  public void testToString() {
+    final ExternalScheme test = ExternalScheme.of("Scheme");
     assertEquals("Scheme", test.toString());
   }
 

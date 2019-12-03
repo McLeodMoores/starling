@@ -39,10 +39,10 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRIRFutureOptionNLSSDefaults.class);
-  private static final String[] s_valueNames = new String[] {
-    ValueRequirementNames.SABR_SURFACES,
-    ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS};
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRIRFutureOptionNLSSDefaults.class);
+  private static final String[] VALUE_NAMES = new String[] {
+                ValueRequirementNames.SABR_SURFACES,
+                ValueRequirementNames.VOLATILITY_SURFACE_FITTED_POINTS };
   private final String _xInterpolatorName;
   private final String _yInterpolatorName;
   private final String _leftXExtrapolatorName;
@@ -98,7 +98,7 @@ public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, X_INTERPOLATOR_NAME);
       defaults.addValuePropertyName(valueName, Y_INTERPOLATOR_NAME);
       defaults.addValuePropertyName(valueName, LEFT_X_EXTRAPOLATOR_NAME);
@@ -118,7 +118,8 @@ public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_xInterpolatorName);
     }
@@ -164,10 +165,10 @@ public class SABRIRFutureOptionNLSSDefaults extends DefaultPropertyFunction {
     if (PROPERTY_ERROR.equals(propertyName)) {
       return Collections.singleton(_error);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 
-  //TODO exclusion groups
+  // TODO exclusion groups
 
 }

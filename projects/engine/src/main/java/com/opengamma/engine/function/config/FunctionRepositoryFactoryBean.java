@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -15,14 +15,14 @@ import com.opengamma.util.SingletonFactoryBean;
 
 /**
  * Bean for constructing a {@link FunctionRepository} from a {@link FunctionConfigurationSource} using the {@link FunctionRepositoryFactory}.
- * 
- * @deprecated The {@code FunctionConfigurationSource} requires a version to deliver a reliable repository; configuration using this will not be able to work correctly with dynamically changing
- *             function repositories
+ *
+ * @deprecated The {@code FunctionConfigurationSource} requires a version to deliver a reliable repository; configuration using this will
+ * not be able to work correctly with dynamically changing function repositories
  */
 @Deprecated
 public class FunctionRepositoryFactoryBean extends SingletonFactoryBean<FunctionRepository> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionRepositoryFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionRepositoryFactoryBean.class);
 
   private FunctionConfigurationSource _functionConfigurationSource;
 
@@ -46,7 +46,7 @@ public class FunctionRepositoryFactoryBean extends SingletonFactoryBean<Function
 
   @Override
   protected FunctionRepository createObject() {
-    s_logger.error("Deprecated configuration: pass the FunctionConfigurationSource directly - don't use this factory bean");
+    LOGGER.error("Deprecated configuration: pass the FunctionConfigurationSource directly - don't use this factory bean");
     final FunctionConfigurationSource functionConfigurationSource = getRepositoryConfigurationSource();
     final Instant configurationVersion = getConfigurationVersion();
     ArgumentChecker.notNull(functionConfigurationSource, "functionConfigurationSource");

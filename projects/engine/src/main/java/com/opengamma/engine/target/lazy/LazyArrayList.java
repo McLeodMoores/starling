@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -17,7 +17,7 @@ import java.util.List;
   private final List<T> _raw;
   private final Object[] _resolved;
 
-  public LazyArrayList(final List<T> raw) {
+  LazyArrayList(final List<T> raw) {
     _raw = raw;
     _resolved = new Object[raw.size()];
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -96,10 +96,10 @@ public class RoleForm implements Bean {
 
   /**
    * Creates a form object.
-   * 
+   *
    * @param role  the role to copy from, not null
    */
-  public RoleForm(ManageableRole role) {
+  public RoleForm(final ManageableRole role) {
     setRoleName(role.getRoleName());
     setDescription(role.getDescription());
     setBaseRole(role);
@@ -107,11 +107,11 @@ public class RoleForm implements Bean {
 
   /**
    * Creates a form object, changing everything except the description.
-   * 
+   *
    * @param role  the role to copy from, not null
    * @param description  the description, not null
    */
-  public RoleForm(ManageableRole role, String description) {
+  public RoleForm(final ManageableRole role, final String description) {
     setRoleName(role.getRoleName());
     setDescription(description);
     setBaseRole(role);
@@ -119,11 +119,11 @@ public class RoleForm implements Bean {
 
   /**
    * Creates a form object.
-   * 
+   *
    * @param roleName  the role name, not null
    * @param description  the description, not null
    */
-  public RoleForm(String roleName, String description) {
+  public RoleForm(final String roleName, final String description) {
     setRoleName(roleName);
     setDescription(description);
   }
@@ -131,63 +131,63 @@ public class RoleForm implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Validates and adds the proposed role to the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @return the added role
    * @throws RoleFormException if the proposed role is invalid
    */
-  public ManageableRole add(UserMaster userMaster) {
+  public ManageableRole add(final UserMaster userMaster) {
     try {
-      ManageableRole role = validate(userMaster, true);
-      UniqueId uid = userMaster.roleMaster().add(role);
+      final ManageableRole role = validate(userMaster, true);
+      final UniqueId uid = userMaster.roleMaster().add(role);
       role.setUniqueId(uid);
       return role;
-    } catch (RoleFormException ex) {
+    } catch (final RoleFormException ex) {
       throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new RoleFormException(ex);
     }
   }
 
   /**
    * Validates and updates the proposed role in the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @return the added role
    * @throws RoleFormException if the proposed role is invalid
    */
-  public ManageableRole update(UserMaster userMaster) {
+  public ManageableRole update(final UserMaster userMaster) {
     try {
-      ManageableRole role = validate(userMaster, false);
-      UniqueId uid = userMaster.roleMaster().update(role);
+      final ManageableRole role = validate(userMaster, false);
+      final UniqueId uid = userMaster.roleMaster().update(role);
       role.setUniqueId(uid);
       return role;
-    } catch (RoleFormException ex) {
+    } catch (final RoleFormException ex) {
       throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new RoleFormException(ex);
     }
   }
 
   /**
    * Validates and adds the proposed role to the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param add  true if adding, false if updating
    * @return the added role
    * @throws RoleFormException if the proposed role is invalid
    */
-  protected ManageableRole validate(UserMaster userMaster, boolean add) {
-    userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
+  protected ManageableRole validate(final UserMaster userMaster, final boolean add) {
+    final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
     String roleName = StringUtils.trimToNull(getRoleName());
-    String description = StringUtils.trimToNull(getDescription());
-    String addRolesStr = StringUtils.trimToEmpty(getAddRoles());
-    String removeRolesStr = StringUtils.trimToEmpty(getRemoveRoles());
-    String addPermsStr = StringUtils.trimToEmpty(getAddPermissions());
-    String removePermsStr = StringUtils.trimToEmpty(getRemovePermissions());
-    String addUsersStr = StringUtils.trimToEmpty(getAddUsers());
-    String removeUsersStr = StringUtils.trimToEmpty(getRemoveUsers());
-    List<RoleFormError> errors = new ArrayList<>();
+    final String description = StringUtils.trimToNull(getDescription());
+    final String addRolesStr = StringUtils.trimToEmpty(getAddRoles());
+    final String removeRolesStr = StringUtils.trimToEmpty(getRemoveRoles());
+    final String addPermsStr = StringUtils.trimToEmpty(getAddPermissions());
+    final String removePermsStr = StringUtils.trimToEmpty(getRemovePermissions());
+    final String addUsersStr = StringUtils.trimToEmpty(getAddUsers());
+    final String removeUsersStr = StringUtils.trimToEmpty(getRemoveUsers());
+    final List<RoleFormError> errors = new ArrayList<>();
     // role name
     if (roleName == null) {
       if (getBaseRole() != null) {
@@ -203,7 +203,7 @@ public class RoleForm implements Bean {
     } else if (isRoleNameInvalid(roleName)) {
       errors.add(RoleFormError.ROLENAME_INVALID);
     } else {
-      if (add && userMaster.roleMaster().nameExists(roleName)) {
+      if (add && master.roleMaster().nameExists(roleName)) {
         errors.add(RoleFormError.ROLENAME_ALREADY_IN_USE);
       }
     }
@@ -230,11 +230,11 @@ public class RoleForm implements Bean {
     // roles
     for (String roleStr : StringUtils.split(addRolesStr, ',')) {
       roleStr = roleStr.trim();
-      if (VALID_NAME.matcher(roleStr).matches() && userMaster.roleMaster().nameExists(roleStr)) {
+      if (VALID_NAME.matcher(roleStr).matches() && master.roleMaster().nameExists(roleStr)) {
         role.getAssociatedRoles().add(roleStr);
       }
     }
-    for (String roleStr : StringUtils.split(removeRolesStr, ',')) {
+    for (final String roleStr : StringUtils.split(removeRolesStr, ',')) {
       role.getAssociatedRoles().remove(roleStr.trim());
     }
     // permissions
@@ -244,17 +244,17 @@ public class RoleForm implements Bean {
         role.getAssociatedPermissions().add(permStr);
       }
     }
-    for (String perm : StringUtils.split(removePermsStr, ',')) {
+    for (final String perm : StringUtils.split(removePermsStr, ',')) {
       role.getAssociatedPermissions().remove(perm.trim());
     }
     // users
     for (String userStr : StringUtils.split(addUsersStr, ',')) {
       userStr = userStr.trim();
-      if (UserForm.VALID_NAME.matcher(userStr).matches() && userMaster.nameExists(userStr)) {
+      if (UserForm.VALID_NAME.matcher(userStr).matches() && master.nameExists(userStr)) {
         role.getAssociatedUsers().add(userStr);
       }
     }
-    for (String userName : StringUtils.split(removeUsersStr, ',')) {
+    for (final String userName : StringUtils.split(removeUsersStr, ',')) {
       role.getAssociatedUsers().remove(userName.trim());
     }
     return role;
@@ -263,51 +263,51 @@ public class RoleForm implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Checks if the role name is too short.
-   * 
+   *
    * @param roleName  the role name, not null
    * @return true if short
    */
-  protected boolean isRoleNameTooShort(String roleName) {
+  protected boolean isRoleNameTooShort(final String roleName) {
     return roleName.length() < 5;
   }
 
   /**
    * Checks if the role name is too long.
-   * 
+   *
    * @param roleName  the role name, not null
    * @return true if long
    */
-  protected boolean isRoleNameTooLong(String roleName) {
+  protected boolean isRoleNameTooLong(final String roleName) {
     return roleName.length() > 20;
   }
 
   /**
    * Checks if the role name is invalid.
-   * 
+   *
    * @param roleName  the role name, not null
    * @return true if invalid
    */
-  protected boolean isRoleNameInvalid(String roleName) {
-    return VALID_NAME.matcher(roleName).matches() == false;
+  protected boolean isRoleNameInvalid(final String roleName) {
+    return !VALID_NAME.matcher(roleName).matches();
   }
 
   /**
    * Checks if the email address is too long.
-   * 
+   *
    * @param emailAddress  the email address, not null
    * @return true if long
    */
-  protected boolean isDescriptionTooLong(String emailAddress) {
+  protected boolean isDescriptionTooLong(final String emailAddress) {
     return emailAddress.length() > 200;
   }
 
   /**
    * Checks if the email address is invalid.
-   * 
+   *
    * @param email  the email address, not null
    * @return true if invalid
    */
-  protected boolean isDescriptionInvalid(String email) {
+  protected boolean isDescriptionInvalid(final String email) {
     return false;
   }
 

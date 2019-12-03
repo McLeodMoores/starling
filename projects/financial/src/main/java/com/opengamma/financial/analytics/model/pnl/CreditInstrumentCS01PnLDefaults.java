@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -24,7 +24,7 @@ import com.opengamma.financial.security.option.CreditDefaultSwapOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class CreditInstrumentCS01PnLDefaults extends DefaultPropertyFunction {
   private final String _samplingPeriod;
@@ -44,10 +44,10 @@ public class CreditInstrumentCS01PnLDefaults extends DefaultPropertyFunction {
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getPosition().getSecurity();
-    return security instanceof StandardCDSSecurity ||
-        security instanceof LegacyCDSSecurity ||
-        security instanceof CreditDefaultSwapOptionSecurity ||
-        security instanceof CreditDefaultSwapIndexSecurity;
+    return security instanceof StandardCDSSecurity
+        || security instanceof LegacyCDSSecurity
+        || security instanceof CreditDefaultSwapOptionSecurity
+        || security instanceof CreditDefaultSwapIndexSecurity;
   }
 
   @Override
@@ -58,7 +58,8 @@ public class CreditInstrumentCS01PnLDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriod);
     }

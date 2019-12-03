@@ -33,8 +33,8 @@ public class HardCodedG2ppParametersFunction extends AbstractFunction.NonCompile
   /** The name of this configuration */
   private static final String CONFIG_NAME = "Test";
   /** Hard-coded G2++ parameters */
-  private static final G2ppPiecewiseConstantParameters CONSTANT_PARAMETERS =
-      new G2ppPiecewiseConstantParameters(new double[] {0.01, 0.02} , new double[][] {new double[] {0.01, 0.02}, new double[] {0.01, 0.02}}, new double[] {1}, 0.4);
+  private static final G2ppPiecewiseConstantParameters CONSTANT_PARAMETERS = new G2ppPiecewiseConstantParameters(new double[] { 0.01, 0.02 },
+      new double[][] { new double[] { 0.01, 0.02 }, new double[] { 0.01, 0.02 } }, new double[] { 1 }, 0.4);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,

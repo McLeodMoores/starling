@@ -13,12 +13,12 @@ import javax.xml.validation.Schema;
 public interface SchemaLocator {
 
   /**
-   * Checks if a file with the expected name for the specified version can
-   * be found by this location.
+   * Checks if a file with the expected name for the specified version can be found by this location.
    *
    *
-   * @param version the version of the schema to check for
+   * @param version
+   *          the version of the schema to check for
    * @return a schema with the required version if it exists, null otherwise
    */
-  public Schema lookupSchema(SchemaVersion version);
+  Schema lookupSchema(SchemaVersion version);
 }

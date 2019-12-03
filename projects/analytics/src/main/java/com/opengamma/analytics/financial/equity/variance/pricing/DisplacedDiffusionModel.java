@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.ShiftedLogNormalTailExtrapolation;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
@@ -22,14 +21,17 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.CompareUtils;
 
 /**
- * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$, plus some displacement, $\alpha$, follow a geometric 
- * Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k \rightarrow k + \alpha$ <p>
- * <b> This should not be confused with Shifted Log-Normal</b> (see {@link ShiftedLogNormalTailExtrapolation})
+ * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$, plus some displacement, $\alpha$,
+ * follow a geometric Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k
+ * \rightarrow k + \alpha$
+ * <p>
+ * <b> This should not be confused with Shifted Log-Normal</b>
+ * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
  */
 public class DisplacedDiffusionModel {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(DisplacedDiffusionModel.class);
-  //TODO none of these next fields should be stored in this class
+  private static final Logger INSTANCE = LoggerFactory.getLogger(DisplacedDiffusionModel.class);
+  // TODO none of these next fields should be stored in this class
   /** The forward */
   private double _forward;
   /** The expiry */
@@ -53,11 +55,16 @@ public class DisplacedDiffusionModel {
   private static final ParameterLimitsTransform TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
 
   /**
-   * Build a shifted lognormal volatility model directly from model inputs
-   * @param forward absolute level of the forward
-   * @param expiry expiry in years
-   * @param lognormalVol annual lognormal (black) vol
-   * @param shift absolute level of the shift applied to the forward and strike. A positive value shifts distribution left.
+   * Build a shifted lognormal volatility model directly from model inputs.
+   *
+   * @param forward
+   *          absolute level of the forward
+   * @param expiry
+   *          expiry in years
+   * @param lognormalVol
+   *          annual lognormal (black) vol
+   * @param shift
+   *          absolute level of the shift applied to the forward and strike. A positive value shifts distribution left.
    */
   public DisplacedDiffusionModel(final double forward, final double expiry, final double lognormalVol, final double shift) {
     _forward = forward;
@@ -68,15 +75,25 @@ public class DisplacedDiffusionModel {
 
   /**
    * Fit a shifted lognormal volatility model to two target points at one expiry.
-   * @param forward absolute level of the forward
-   * @param expiry expiry in years
-   * @param targetStrike1 absolute level of the first target strike
-   * @param targetVol1 lognormal volatility at the first target strike
-   * @param targetStrike2 absolute level of the second target strike
-   * @param targetVol2 lognormal volatility at the second target strike
-   * @param volGuess initial guess for the model's annual lognormal volatility
-   * @param shiftGuess initial guess for the model's shift, as absolute level
-   * @param solver VectorRootFinder
+   *
+   * @param forward
+   *          absolute level of the forward
+   * @param expiry
+   *          expiry in years
+   * @param targetStrike1
+   *          absolute level of the first target strike
+   * @param targetVol1
+   *          lognormal volatility at the first target strike
+   * @param targetStrike2
+   *          absolute level of the second target strike
+   * @param targetVol2
+   *          lognormal volatility at the second target strike
+   * @param volGuess
+   *          initial guess for the model's annual lognormal volatility
+   * @param shiftGuess
+   *          initial guess for the model's shift, as absolute level
+   * @param solver
+   *          VectorRootFinder
    */
   public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
       final double targetVol2, final double volGuess, final double shiftGuess, final VectorRootFinder solver) {
@@ -92,13 +109,20 @@ public class DisplacedDiffusionModel {
   }
 
   /**
-   * Fit a Shifted Lognormal Volatility to two target points at one expiry
-   * @param forward absolute level of the forward
-   * @param expiry expiry in years
-   * @param targetStrike1 absolute level of the first target strike
-   * @param targetVol1 lognormal vol at the first target strike
-   * @param targetStrike2 absolute level of the second target strike
-   * @param targetVol2 lognormal vol at the second target strike
+   * Fit a Shifted Lognormal Volatility to two target points at one expiry.
+   *
+   * @param forward
+   *          absolute level of the forward
+   * @param expiry
+   *          expiry in years
+   * @param targetStrike1
+   *          absolute level of the first target strike
+   * @param targetVol1
+   *          lognormal vol at the first target strike
+   * @param targetStrike2
+   *          absolute level of the second target strike
+   * @param targetVol2
+   *          lognormal vol at the second target strike
    */
   public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
       final double targetVol2) {
@@ -106,17 +130,24 @@ public class DisplacedDiffusionModel {
   }
 
   /**
-   * Fit a Shifted Lognormal Volatility to two target points at one expiry
-   * @param forward absolute level of the forward
-   * @param expiry expiry in years
-   * @param targetStrike1 absolute level of the first target strike
-   * @param targetVol1 lognormal vol at the first target strike
-   * @param targetStrike2 absolute level of the second target strike
-   * @param targetVol2 lognormal vol at the second target strike
+   * Fit a Shifted Lognormal Volatility to two target points at one expiry.
+   *
+   * @param forward
+   *          absolute level of the forward
+   * @param expiry
+   *          expiry in years
+   * @param targetStrike1
+   *          absolute level of the first target strike
+   * @param targetVol1
+   *          lognormal vol at the first target strike
+   * @param targetStrike2
+   *          absolute level of the second target strike
+   * @param targetVol2
+   *          lognormal vol at the second target strike
    * @return a displaced diffusion model
    */
-  public DisplacedDiffusionModel from(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
-      final double targetVol2) {
+  public DisplacedDiffusionModel from(final double forward, final double expiry, final double targetStrike1, final double targetVol1,
+      final double targetStrike2, final double targetVol2) {
     return new DisplacedDiffusionModel(forward, expiry, targetStrike1, targetVol1, targetStrike2, targetVol2, DEF_GUESS_VOL, DEF_GUESS_SHIFT, DEF_SOLVER);
   }
 
@@ -126,7 +157,7 @@ public class DisplacedDiffusionModel {
     ArgumentChecker.notNull(solver, "solver");
     DoubleMatrix1D volShiftParams; // [transform(vol),shift]
 
-    final DoubleMatrix1D guess = new DoubleMatrix1D(new double[] {TRANSFORM.transform(volGuess), shiftGuess });
+    final DoubleMatrix1D guess = new DoubleMatrix1D(new double[] { TRANSFORM.transform(volGuess), shiftGuess });
 
     // Targets
     final double target1Price = BlackFormulaRepository.price(_forward, strikeTarget1, _expiry, volTarget1, strikeTarget1 > _forward);
@@ -134,15 +165,14 @@ public class DisplacedDiffusionModel {
 
     // Handle trivial case 1: Same Vol ==> 0.0 shift
     if (CompareUtils.closeEquals(volTarget1, volTarget2, DEF_TOL)) {
-      return new DoubleMatrix1D(new double[] {volTarget1, 0.0 });
+      return new DoubleMatrix1D(new double[] { volTarget1, 0.0 });
     }
 
     // Objective function - hit the two vol targets
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> priceDiffs = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-      @SuppressWarnings("synthetic-access")
       @Override
       public DoubleMatrix1D evaluate(final DoubleMatrix1D volShiftPair) {
-        final double[] diffs = new double[] {100, 100 };
+        final double[] diffs = new double[] { 100, 100 };
         final double vol = TRANSFORM.inverseTransform(volShiftPair.getEntry(0)); // Math.max(1e-9, volShiftPair.getEntry(0));
         final double shift = volShiftPair.getEntry(1);
 
@@ -156,19 +186,21 @@ public class DisplacedDiffusionModel {
       volShiftParams = solver.getRoot(priceDiffs, guess);
     } catch (final Exception e) { // Failed on first solver attempt. Doing a second
       try {
-        volShiftParams = solver.getRoot(priceDiffs, new DoubleMatrix1D(new double[] {TRANSFORM.transform(volTarget2), 0.0 }));
+        volShiftParams = solver.getRoot(priceDiffs, new DoubleMatrix1D(new double[] { TRANSFORM.transform(volTarget2), 0.0 }));
       } catch (final Exception e2) {
-        s_logger.error("Failed to find roots to fit a Shifted Lognormal Distribution to your targets. Increase maxSteps, change guess, or change secondTarget.");
-        s_logger.error("K1 = " + strikeTarget1 + ",vol1 = " + volTarget1 + ",price1 = " + target1Price);
-        s_logger.error("K2 = " + strikeTarget2 + ",vol2 = " + volTarget2 + ",price2 = " + target2Price);
+        INSTANCE.error(
+            "Failed to find roots to fit a Shifted Lognormal Distribution to your targets. " + "Increase maxSteps, change guess, or change secondTarget.");
+        INSTANCE.error("K1 = " + strikeTarget1 + ",vol1 = " + volTarget1 + ",price1 = " + target1Price);
+        INSTANCE.error("K2 = " + strikeTarget2 + ",vol2 = " + volTarget2 + ",price2 = " + target2Price);
         throw new OpenGammaRuntimeException(e.getMessage());
       }
     }
-    return new DoubleMatrix1D(new double[] {TRANSFORM.inverseTransform(volShiftParams.getEntry(0)), volShiftParams.getEntry(1) });
+    return new DoubleMatrix1D(new double[] { TRANSFORM.inverseTransform(volShiftParams.getEntry(0)), volShiftParams.getEntry(1) });
   }
 
   /**
-   * @param absoluteStrike The absolute strike
+   * @param absoluteStrike
+   *          The absolute strike
    * @return Price of the calibrated model given a fixed (absolute) strike. So if the forward, was 80, an OTM Put might have a strike of 65.
    */
   public double priceFromFixedStrike(final double absoluteStrike) {
@@ -177,6 +209,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the forward.
+   *
    * @return the forward
    */
   public final double getForward() {
@@ -185,7 +218,9 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the forward.
-   * @param forward  the forward
+   *
+   * @param forward
+   *          the forward
    */
   public final void setForward(final double forward) {
     _forward = forward;
@@ -193,6 +228,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the expiry.
+   *
    * @return the expiry
    */
   public final double getExpiry() {
@@ -201,7 +237,9 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the expiry.
-   * @param expiry  the expiry
+   *
+   * @param expiry
+   *          the expiry
    */
   public final void setExpiry(final double expiry) {
     _expiry = expiry;
@@ -209,6 +247,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the vol.
+   *
    * @return the vol
    */
   public final double getVol() {
@@ -217,7 +256,9 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the vol.
-   * @param vol  the vol
+   *
+   * @param vol
+   *          the vol
    */
   public final void setVol(final double vol) {
     _vol = vol;
@@ -225,6 +266,7 @@ public class DisplacedDiffusionModel {
 
   /**
    * Gets the shift.
+   *
    * @return the shift
    */
   public final double getShift() {
@@ -233,7 +275,9 @@ public class DisplacedDiffusionModel {
 
   /**
    * Sets the shift.
-   * @param shift  the shift
+   *
+   * @param shift
+   *          the shift
    */
   public final void setShift(final double shift) {
     _shift = shift;
@@ -245,13 +289,13 @@ public class DisplacedDiffusionModel {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_forward);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_shift);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

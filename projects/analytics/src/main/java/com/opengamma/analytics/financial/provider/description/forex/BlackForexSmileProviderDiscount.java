@@ -16,12 +16,18 @@ import com.opengamma.util.tuple.Pair;
 public class BlackForexSmileProviderDiscount extends BlackForexSmileProvider {
 
   /**
-   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param multicurves The multi-curves provider.
-   * @param smile Smile.
-   * @param currencyPair The currency pair.
+   * Constructor from exiting multicurveProvider and volatility model. The given provider and parameters are used for the new provider (the same maps are used,
+   * not copied).
+   *
+   * @param multicurves
+   *          The multi-curves provider.
+   * @param smile
+   *          Smile.
+   * @param currencyPair
+   *          The currency pair.
    */
-  public BlackForexSmileProviderDiscount(final MulticurveProviderDiscount multicurves, final SmileDeltaTermStructureParametersStrikeInterpolation smile, final Pair<Currency, Currency> currencyPair) {
+  public BlackForexSmileProviderDiscount(final MulticurveProviderDiscount multicurves, final SmileDeltaTermStructureParametersStrikeInterpolation smile,
+      final Pair<Currency, Currency> currencyPair) {
     super(multicurves, smile, currencyPair);
   }
 

@@ -127,7 +127,8 @@ public class InterestRateCurveSensitivity {
   }
 
   /**
-   * Returns a map<String, Double> with the total sensitivity with respect to each curve.
+   * Returns a map from curve name to total sensitivity with respect to that curve.
+   * 
    * @return The map.
    */
   public Map<String, Double> totalSensitivityByCurve() {

@@ -56,7 +56,7 @@ public class MockLegalEntity extends ManageableLegalEntity {
    * @param bundle   the bundle, not null
    * @param currency the currency, not null
    */
-  public MockLegalEntity(String name, ExternalIdBundle bundle, Currency currency) {
+  public MockLegalEntity(final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(name, bundle);
     setCurrency(currency);
   }
@@ -69,7 +69,7 @@ public class MockLegalEntity extends ManageableLegalEntity {
    * @param bundle   the bundle, not null
    * @param currency the currency, not null
    */
-  public MockLegalEntity(UniqueId uniqueId, String name, ExternalIdBundle bundle, Currency currency) {
+  public MockLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(uniqueId, name, bundle);
     setCurrency(currency);
   }
@@ -78,7 +78,7 @@ public class MockLegalEntity extends ManageableLegalEntity {
 
   @Override
   public List<Account> getAccounts() {
-    Account account = new Account();
+    final Account account = new Account();
     return Collections.singletonList(account);
   }
 

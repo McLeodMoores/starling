@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -11,7 +11,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionProvider<MixedLogNormalModelData> {
   private static final MixedLogNormalVolatilityFunction INSTANCE = new MixedLogNormalVolatilityFunction();
@@ -130,14 +130,14 @@ public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionPr
     for (int i = 0; i < n; i++) {
       sum += w[i] * rFwds[i] * deltas[i];
     }
-    res[1] = (sum - delta) / vega; //fBar
+    res[1] = (sum - delta) / vega; // fBar
     sum = 0.0;
     for (int i = 0; i < n; i++) {
       sum += w[i] * dualDeltas[i];
     }
-    res[2] = (sum - dualDelta) / vega; //strikeBar
+    res[2] = (sum - dualDelta) / vega; // strikeBar
 
-    //calculate the sensitivity to model parameters
+    // calculate the sensitivity to model parameters
     final double[] modelAjoint = getModelAjoint(forward, strike, expiry, data, deltas, vega);
     System.arraycopy(modelAjoint, 0, res, 3, nParms);
 
@@ -162,7 +162,8 @@ public final class MixedLogNormalVolatilityFunction extends VolatilityFunctionPr
     return getModelAjoint(forward, strike, expiry, data, deltas, vega);
   }
 
-  private double[] getModelAjoint(final double forward, final double strike, final double expiry, final MixedLogNormalModelData data, final double[] deltas, final double vega) {
+  private double[] getModelAjoint(final double forward, final double strike, final double expiry, final MixedLogNormalModelData data, final double[] deltas,
+      final double vega) {
     final boolean isCall = strike >= forward;
     final int nParms = data.getNumberOfParameters();
     final double[] sigmas = data.getVolatilities();

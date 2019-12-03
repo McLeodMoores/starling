@@ -30,9 +30,9 @@ import com.opengamma.util.async.AsynchronousExecution;
 public class LognormalVolatilityShiftFunction extends AbstractFunction.NonCompiledInvoker {
   /** Hard-coded constant shifts curve */
   private static final DoublesCurve SHIFTS = ConstantDoublesCurve.from(0.0001);
-  /** The curve name property */
+  /** The curve name property. */
   public static final String SHIFT_CURVE = "ShiftCurve";
-  /** The default value */
+  /** The default value. */
   public static final String TEST = "Test";
 
   @Override

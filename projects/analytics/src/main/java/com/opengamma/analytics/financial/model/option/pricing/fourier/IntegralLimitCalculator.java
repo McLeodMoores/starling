@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -29,15 +29,15 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
  * $$
  * where $\alpha$ is the contour (which is parallel to the real axis and
  * shifted down by $1 + \alpha$) over which to integrate.
- * 
+ *
  */
 public class IntegralLimitCalculator {
-  private static Logger s_log = LoggerFactory.getLogger(IntegralLimitCalculator.class);
-  private static BracketRoot s_bracketRoot = new BracketRoot();
-  private static final RealSingleRootFinder s_root = new BrentSingleRootFinder(1e-1);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IntegralLimitCalculator.class);
+  private static final BracketRoot BRACKET_ROOT = new BracketRoot();
+  private static final RealSingleRootFinder ROOT = new BrentSingleRootFinder(1e-1);
 
   /**
-   * 
+   *
    * @param psi The characteristic function, not null
    * @param alpha The value of $\alpha$, not 0 or -1
    * @param tol The tolerance for the root
@@ -58,12 +58,12 @@ public class IntegralLimitCalculator {
     };
     double[] range = null;
     try {
-      range = s_bracketRoot.getBracketedPoints(f, 0.0, 200.0);
-    } catch (MathException e) {
-      s_log.warn("Could not find integral limit. Using default of 500");
+      range = BRACKET_ROOT.getBracketedPoints(f, 0.0, 200.0);
+    } catch (final MathException e) {
+      LOGGER.warn("Could not find integral limit. Using default of 500");
       return 500.0;
     }
-    return s_root.getRoot(f, range[0], range[1]);
+    return ROOT.getRoot(f, range[0], range[1]);
   }
 
 }

@@ -58,7 +58,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class FXForwardPointsYCNSFunction extends FXForwardPointsFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPointsYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPointsYCNSFunction.class);
 
   public FXForwardPointsYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -88,12 +88,13 @@ public class FXForwardPointsYCNSFunction extends FXForwardPointsFunction {
             return Collections.singleton(new ComputedValue(spec, ycns));
           }
         }
-        s_logger.info("Could not get sensitivities to " + curveName + " for " + target.getName());
+        LOGGER.info("Could not get sensitivities to " + curveName + " for " + target.getName());
         return Collections.emptySet();
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {

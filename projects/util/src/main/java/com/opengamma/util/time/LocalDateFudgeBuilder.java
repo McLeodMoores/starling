@@ -25,14 +25,14 @@ public final class LocalDateFudgeBuilder implements FudgeBuilder<LocalDate> {
   public static final String DATE_FIELD_NAME = "date";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LocalDate object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LocalDate object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, DATE_FIELD_NAME, null, object);
     return msg;
   }
 
   @Override
-  public LocalDate buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public LocalDate buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final LocalDate ld = msg.getValue(LocalDate.class, DATE_FIELD_NAME);
     if (ld == null) {
       throw new IllegalArgumentException("Fudge message is not a LocalDate - field 'date' is not present");

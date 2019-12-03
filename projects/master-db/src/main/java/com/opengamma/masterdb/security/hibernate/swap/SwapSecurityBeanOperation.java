@@ -52,26 +52,26 @@ public final class SwapSecurityBeanOperation extends AbstractSecurityBeanOperati
       }
 
       @Override
-      public SwapSecurityBean visitForwardSwapSecurity(ForwardSwapSecurity security) {
+      public SwapSecurityBean visitForwardSwapSecurity(final ForwardSwapSecurity security) {
         final SwapSecurityBean bean = createSwapSecurityBean(security);
         bean.setForwardStartDate(dateTimeWithZoneToZonedDateTimeBean(security.getForwardStartDate()));
         return bean;
       }
 
       @Override
-      public SwapSecurityBean visitSwapSecurity(SwapSecurity security) {
+      public SwapSecurityBean visitSwapSecurity(final SwapSecurity security) {
         return createSwapSecurityBean(security);
       }
 
       @Override
-      public SwapSecurityBean visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+      public SwapSecurityBean visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
         final SwapSecurityBean bean = createSwapSecurityBean(security);
         bean.setMaturityTenor(secMasterSession.getOrCreateTenorBean(security.getMaturityTenor().getPeriod().toString()));
         return bean;
       }
-      
+
       @Override
-      public SwapSecurityBean visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+      public SwapSecurityBean visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
         final SwapSecurityBean bean = createSwapSecurityBean(security);
         return bean;
       }
@@ -83,8 +83,8 @@ public final class SwapSecurityBeanOperation extends AbstractSecurityBeanOperati
     return bean.getSwapType().accept(new FinancialSecurityVisitorAdapter<SwapSecurity>() {
 
       @Override
-      public SwapSecurity visitForwardSwapSecurity(ForwardSwapSecurity ignore) {
-        ForwardSwapSecurity sec = new ForwardSwapSecurity(
+      public SwapSecurity visitForwardSwapSecurity(final ForwardSwapSecurity ignore) {
+        final ForwardSwapSecurity sec = new ForwardSwapSecurity(
             zonedDateTimeBeanToDateTimeWithZone(bean.getTradeDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
@@ -98,8 +98,8 @@ public final class SwapSecurityBeanOperation extends AbstractSecurityBeanOperati
       }
 
       @Override
-      public SwapSecurity visitSwapSecurity(SwapSecurity ignore) {
-        SwapSecurity sec = new SwapSecurity(
+      public SwapSecurity visitSwapSecurity(final SwapSecurity ignore) {
+        final SwapSecurity sec = new SwapSecurity(
             zonedDateTimeBeanToDateTimeWithZone(bean.getTradeDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
@@ -112,7 +112,7 @@ public final class SwapSecurityBeanOperation extends AbstractSecurityBeanOperati
       }
 
       @Override
-      public SwapSecurity visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+      public SwapSecurity visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
         return new YearOnYearInflationSwapSecurity(zonedDateTimeBeanToDateTimeWithZone(bean.getTradeDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
@@ -123,9 +123,9 @@ public final class SwapSecurityBeanOperation extends AbstractSecurityBeanOperati
             bean.isExchangeFinalNotional(),
             tenorBeanToTenor(bean.getMaturityTenor()));
       }
-      
+
       @Override
-      public SwapSecurity visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+      public SwapSecurity visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
         return new ZeroCouponInflationSwapSecurity(zonedDateTimeBeanToDateTimeWithZone(bean.getTradeDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
             zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),

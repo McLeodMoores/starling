@@ -61,14 +61,14 @@ public class ListedSecurityTrade extends Trade {
 
   @Override
   public BigDecimal getQuantity() {
-    BigDecimal qty = new BigDecimal(getNumContracts());
+    final BigDecimal qty = new BigDecimal(getNumContracts());
     return getBuySell() == BuySell.BUY ? qty : qty.negate();
   }
 
   @Override
   public IdWrapper getCounterparty() {
-    IdWrapper counterparty = new IdWrapper();
-    ExtId extId = new ExtId();
+    final IdWrapper counterparty = new IdWrapper();
+    final ExtId extId = new ExtId();
     extId.setScheme("CPARTY");
     extId.setId(_listedSecurityDefinition.getExchange());
     counterparty.setExternalId(extId);

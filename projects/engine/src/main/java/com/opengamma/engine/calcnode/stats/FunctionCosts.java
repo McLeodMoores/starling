@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
 public final class FunctionCosts implements FunctionInvocationStatisticsGatherer {
 
   /** Logger. */
-  static final Logger s_logger = LoggerFactory.getLogger(FunctionCosts.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(FunctionCosts.class);
   /**
    * Name used for the mean.
    */
@@ -45,11 +45,11 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
   /**
    * The statistics per configuration.
    */
-  private final ConcurrentMap<String, FunctionCostsPerConfiguration> _data = new ConcurrentHashMap<String, FunctionCostsPerConfiguration>();
+  private final ConcurrentMap<String, FunctionCostsPerConfiguration> _data = new ConcurrentHashMap<>();
   /**
    * The items that persistence is dealing with.
    */
-  private final Queue<Pair<String, FunctionInvocationStatistics>> _persistedItems = new ConcurrentLinkedQueue<Pair<String, FunctionInvocationStatistics>>();
+  private final Queue<Pair<String, FunctionInvocationStatistics>> _persistedItems = new ConcurrentLinkedQueue<>();
   /**
    * The persistent storage.
    */
@@ -68,7 +68,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
 
   /**
    * Constructor.
-   * 
+   *
    * @param costsMaster  the costs master, not null
    */
   public FunctionCosts(final FunctionCostsMaster costsMaster) {
@@ -81,10 +81,10 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
    * Loads the mean statistics.
    */
   private FunctionInvocationStatistics loadMeanStatistics() {
-    s_logger.debug("Loading initial mean statistics");
+    LOGGER.debug("Loading initial mean statistics");
     FunctionCostsDocument doc = _costsMaster.load(MEAN_STATISTICS, MEAN_STATISTICS, null);
     if (doc == null) {
-      s_logger.debug("No initial mean statistics");
+      LOGGER.debug("No initial mean statistics");
       doc = new FunctionCostsDocument(MEAN_STATISTICS, MEAN_STATISTICS);
       new FunctionInvocationStatistics(MEAN_STATISTICS).populateDocument(doc);
     }
@@ -94,7 +94,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
   //-------------------------------------------------------------------------
   /**
    * Gathers statistics from the central node and records them.
-   * 
+   *
    * @param configurationName  the configuration name, not null
    * @param functionId  the function id, not null
    * @param invocationCount  the number of invocations the data is for
@@ -112,7 +112,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
   //-------------------------------------------------------------------------
   /**
    * Gets statistics for a configuration.
-   * 
+   *
    * @param configurationName  the configuration name, not null
    * @return the statistics, not null
    */
@@ -127,7 +127,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
 
   /**
    * Gets statistics for a function.
-   * 
+   *
    * @param configurationName  the configuration name, not null
    * @param functionId  the function id, not null
    * @return the statistics, not null
@@ -138,7 +138,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
 
   /**
    * Returns the defined set of configurations.
-   * 
+   *
    * @return the configurations, not null
    */
   public Set<String> getConfigurations() {
@@ -147,21 +147,21 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
 
   /**
    * Loads the statistics.
-   * 
-   * @param configurationName the configuration name, not null
+   *
+   * @param configurationCosts the configuration costs, not null
    * @param functionId the function id, not null
    * @return the statistics, not null
    */
   /* package */ FunctionInvocationStatistics loadStatistics(final FunctionCostsPerConfiguration configurationCosts, final String functionId) {
     final String configurationName = configurationCosts.getConfigurationName();
-    s_logger.debug("Loading statistics for {}/{}", configurationName, functionId);
+    LOGGER.debug("Loading statistics for {}/{}", configurationName, functionId);
     final FunctionCostsDocument doc = _costsMaster.load(configurationName, functionId, null);
     final FunctionInvocationStatistics stats;
     if (doc != null) {
-      s_logger.debug("Found previous statistics for {}/{}", configurationName, functionId);
+      LOGGER.debug("Found previous statistics for {}/{}", configurationName, functionId);
       stats = new FunctionInvocationStatistics(doc);
     } else {
-      s_logger.debug("No previous statistics for {}/{}", configurationName, functionId);
+      LOGGER.debug("No previous statistics for {}/{}", configurationName, functionId);
       stats = new FunctionInvocationStatistics(functionId);
       stats.setCosts(_meanStatistics.getInvocationCost(), _meanStatistics.getDataInputCost(), _meanStatistics.getDataOutputCost());
     }
@@ -176,7 +176,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
   //-------------------------------------------------------------------------
   /**
    * Creates a runnable to write the statistics.
-   * 
+   *
    * @return the runnable, not null
    */
   public Runnable createPersistenceWriter() {
@@ -185,11 +185,11 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
     return new Runnable() {
       @Override
       public void run() {
-        s_logger.info("Persisting function execution statistics");
+        LOGGER.info("Persisting function execution statistics");
         final FunctionInvocationStatistics meanStatistics = _meanStatistics;
         final long lastUpdate = meanStatistics.getLastUpdateNanos();
         // [PLAT-882] Temporary hack until JMX support is property implemented
-        final Map<String, FudgeMsg> report = new HashMap<String, FudgeMsg>();
+        final Map<String, FudgeMsg> report = new HashMap<>();
         // store updates and calculate mean
         int count = 1;
         double invocationCost = meanStatistics.getInvocationCost();
@@ -199,7 +199,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
           final FunctionInvocationStatistics stats = pair.getSecond();
           if (stats.getLastUpdateNanos() > lastUpdate) {
             // store
-            s_logger.debug("Storing {}/{}", pair.getFirst(), stats.getFunctionId());
+            LOGGER.debug("Storing {}/{}", pair.getFirst(), stats.getFunctionId());
             final FunctionCostsDocument doc = new FunctionCostsDocument(pair.getFirst(), stats.getFunctionId());
             stats.populateDocument(doc);
             _costsMaster.store(doc);
@@ -209,21 +209,21 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
             dataOutputCost += stats.getDataOutputCost();
             count++;
             // [PLAT-882] Temporary hack until JMX support is properly implemented
-            if (s_logger.isInfoEnabled()) {
+            if (LOGGER.isInfoEnabled()) {
               report.put(stats.getFunctionId() + "\t" + pair.getFirst(), stats.toFudgeMsg(FudgeContext.GLOBAL_DEFAULT));
             }
           }
         }
         meanStatistics.setCosts(invocationCost / count, dataInputCost / count, dataOutputCost / count);
         if (count > 1) {
-          s_logger.debug("Storing new mean statistics {}", meanStatistics);
+          LOGGER.debug("Storing new mean statistics {}", meanStatistics);
           final FunctionCostsDocument doc = new FunctionCostsDocument(MEAN_STATISTICS, MEAN_STATISTICS);
           meanStatistics.populateDocument(doc);
           _costsMaster.store(doc);
         }
         // [PLAT-882] Temporary hack until JMX support is property implemented
-        if (s_logger.isInfoEnabled()) {
-          final List<String> keys = new ArrayList<String>(report.keySet());
+        if (LOGGER.isInfoEnabled()) {
+          final List<String> keys = new ArrayList<>(report.keySet());
           Collections.sort(keys, new Comparator<String>() {
             @Override
             public int compare(final String a, final String b) {
@@ -238,7 +238,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
             }
           });
           for (final String key : keys) {
-            s_logger.info("{}\t{}", key, report.get(key));
+            LOGGER.info("{}\t{}", key, report.get(key));
           }
         }
       }

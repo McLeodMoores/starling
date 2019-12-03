@@ -25,7 +25,7 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A source of positions that uses the scheme of the unique identifier to determine which underlying source should handle the request.
+ * A source of configs that uses the scheme of the unique identifier to determine which underlying source should handle the request.
  * <p>
  * If no scheme-specific handler has been registered, a default is used.
  * <p>
@@ -37,7 +37,7 @@ public class DelegatingConfigSource
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    */
   public DelegatingConfigSource(final ConfigSource defaultSource) {
@@ -46,7 +46,7 @@ public class DelegatingConfigSource
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultSource the source to use when no scheme matches, not null
    * @param schemePrefixToSourceMap the map of sources by scheme to switch on, not null
    */
@@ -104,21 +104,19 @@ public class DelegatingConfigSource
     if (configs.isEmpty()) {
       if (results == null) {
         return Collections.emptySet();
-      } else {
-        return results;
       }
+      return results;
+    }
+    if (results == null) {
+      return configs;
+    } else if (alloc) {
+      results.addAll(configs);
+      return results;
     } else {
-      if (results == null) {
-        return configs;
-      } else if (alloc) {
-        results.addAll(configs);
-        return results;
-      } else {
-        final Collection<ConfigItem<R>> newResults = Lists.newArrayListWithCapacity(results.size() + configs.size());
-        newResults.addAll(results);
-        newResults.addAll(configs);
-        return newResults;
-      }
+      final Collection<ConfigItem<R>> newResults = Lists.newArrayListWithCapacity(results.size() + configs.size());
+      newResults.addAll(results);
+      newResults.addAll(configs);
+      return newResults;
     }
   }
 

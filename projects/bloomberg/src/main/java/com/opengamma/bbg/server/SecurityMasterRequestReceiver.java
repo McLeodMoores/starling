@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
 public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityMasterRequestReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityMasterRequestReceiver.class);
 
   /**
    * The security source.
@@ -44,20 +44,20 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
 
   /**
    * Constructor.
-   * 
+   *
    * @param secSource the source of securities, not null
    */
-  public SecurityMasterRequestReceiver(SecuritySource secSource) {
+  public SecurityMasterRequestReceiver(final SecuritySource secSource) {
     this(secSource, new FudgeContext());
   }
 
   /**
    * Constructor.
-   * 
+   *
    * @param secSource the source of securities, not null
    * @param fudgeContext the Fudge context, not null
    */
-  public SecurityMasterRequestReceiver(SecuritySource secSource, FudgeContext fudgeContext) {
+  public SecurityMasterRequestReceiver(final SecuritySource secSource, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(secSource, "secSource");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _securitySource = secSource;
@@ -67,7 +67,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying source of securities.
-   * 
+   *
    * @return the underlying source of securities, not null
    */
   public SecuritySource getSecuritySource() {
@@ -75,18 +75,18 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
   }
 
   @Override
-  public byte[] requestReceived(byte[] message) {
-    FudgeMsgEnvelope requestEnvelope = _fudgeContext.deserialize(message);
-    FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
-    SecurityMasterRequestMessage secMasterRequest = SecurityMasterRequestMessage.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), requestFudgeMsg);
-    MessageType messageType = secMasterRequest.getMessageType();
-    String secDes = secMasterRequest.getUniqueId() != null ? secMasterRequest.getUniqueId().getValue() : secMasterRequest.getSecKey().toString();
-    s_logger.debug("Received {} request for {} ", new Object[] {secMasterRequest.getMessageType(), secDes });
+  public byte[] requestReceived(final byte[] message) {
+    final FudgeMsgEnvelope requestEnvelope = _fudgeContext.deserialize(message);
+    final FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
+    final SecurityMasterRequestMessage secMasterRequest = SecurityMasterRequestMessage.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), requestFudgeMsg);
+    final MessageType messageType = secMasterRequest.getMessageType();
+    final String secDes = secMasterRequest.getUniqueId() != null ? secMasterRequest.getUniqueId().getValue() : secMasterRequest.getSecKey().toString();
+    LOGGER.debug("Received {} request for {} ", new Object[] {secMasterRequest.getMessageType(), secDes });
     Security sec = null;
-    SecurityMasterResponseMessage responseMessage = new SecurityMasterResponseMessage();
+    final SecurityMasterResponseMessage responseMessage = new SecurityMasterResponseMessage();
     switch (messageType) {
       case GET_SECURITIES_BY_KEY:
-        Collection<? extends Security> securities = _securitySource.get(secMasterRequest.getSecKey());
+        final Collection<? extends Security> securities = _securitySource.get(secMasterRequest.getSecKey());
         responseMessage.setSecurities(Collections.unmodifiableCollection(securities));
         break;
       case GET_SECURITY_BY_KEY:
@@ -98,7 +98,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
         responseMessage.setSecurity(sec);
         break;
       default:
-        s_logger.warn("Unsupported SecurityMasterRequest {}", messageType);
+        LOGGER.warn("Unsupported SecurityMasterRequest {}", messageType);
         throw new OpenGammaRuntimeException("Unsupported SecurityMasterRequest");
     }
     return toByteArray(responseMessage);
@@ -106,7 +106,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
 
   /**
    * Converts a message to a byte array.
-   * 
+   *
    * @param message the message to convert, null returns null
    * @return the converted message, null if null input
    */
@@ -114,7 +114,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
     if (message == null) {
       return null;
     }
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     _fudgeContext.writeObject(message, baos);
     return baos.toByteArray();
   }

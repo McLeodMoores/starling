@@ -31,12 +31,12 @@ public class DailyBloombergReferenceDataStatistics implements BloombergReference
   private final ReadWriteLock  _mapLock = new ReentrantReadWriteLock();
   private final Lock _mapReadLock = _mapLock.readLock();
   private final Lock _mapWriteLock = _mapLock.writeLock();
-  private final TreeMap<LocalDate, MapBloombergReferenceDataStatistics> _dailyTimeStatistics = new TreeMap<LocalDate, MapBloombergReferenceDataStatistics>();
+  private final TreeMap<LocalDate, MapBloombergReferenceDataStatistics> _dailyTimeStatistics = new TreeMap<>();
 
   @Override
-  public void recordStatistics(Set<String> securities, Set<String> fields) {
+  public void recordStatistics(final Set<String> securities, final Set<String> fields) {
     _allTimeStatistics.recordStatistics(securities, fields);
-    MapBloombergReferenceDataStatistics todaysStats = getTodaysStats();
+    final MapBloombergReferenceDataStatistics todaysStats = getTodaysStats();
     todaysStats.recordStatistics(securities, fields);
   }
 
@@ -49,15 +49,15 @@ public class DailyBloombergReferenceDataStatistics implements BloombergReference
   }
 
   public Snapshot getTodaysSnapshot() {
-    MapBloombergReferenceDataStatistics stats = getTodaysStats();
+    final MapBloombergReferenceDataStatistics stats = getTodaysStats();
     return stats.getSnapshot();
   }
 
   public TreeMap<LocalDate, Snapshot> getSnapshotsMap() {
     _mapReadLock.lock();
     try {
-      TreeMap<LocalDate, Snapshot> ret = new TreeMap<LocalDate, Snapshot>();
-      for (Entry<LocalDate, MapBloombergReferenceDataStatistics> e : _dailyTimeStatistics.entrySet()) {
+      final TreeMap<LocalDate, Snapshot> ret = new TreeMap<>();
+      for (final Entry<LocalDate, MapBloombergReferenceDataStatistics> e : _dailyTimeStatistics.entrySet()) {
         ret.put(e.getKey(), e.getValue().getSnapshot());
       }
       return ret;
@@ -67,9 +67,9 @@ public class DailyBloombergReferenceDataStatistics implements BloombergReference
   }
 
   public MapBloombergReferenceDataStatistics getTodaysStats() {
-    LocalDate today = getToday();
+    final LocalDate today = getToday();
     MapBloombergReferenceDataStatistics todaysStats;
-    
+
     _mapReadLock.lock();
     try {
       todaysStats = _dailyTimeStatistics.get(today);
@@ -91,12 +91,12 @@ public class DailyBloombergReferenceDataStatistics implements BloombergReference
     return todaysStats;
   }
 
-  private void trim(TreeMap<LocalDate, MapBloombergReferenceDataStatistics> dailyTimeStatistics) {
-    int toRemove = dailyTimeStatistics.size() - DAYS_TO_KEEP;
+  private void trim(final TreeMap<LocalDate, MapBloombergReferenceDataStatistics> dailyTimeStatistics) {
+    final int toRemove = dailyTimeStatistics.size() - DAYS_TO_KEEP;
     if (toRemove <= 0) {
       return;
     }
-    Iterator<Entry<LocalDate, MapBloombergReferenceDataStatistics>> iterator = dailyTimeStatistics.entrySet().iterator();
+    final Iterator<Entry<LocalDate, MapBloombergReferenceDataStatistics>> iterator = dailyTimeStatistics.entrySet().iterator();
     for (int i = 0; i < toRemove; i++) {
       iterator.next();
       iterator.remove();
@@ -105,7 +105,7 @@ public class DailyBloombergReferenceDataStatistics implements BloombergReference
 
   private LocalDate getToday() {
     //I think 0000 UTC is when bloomberg tips over
-    Clock clock = Clock.systemUTC();
+    final Clock clock = Clock.systemUTC();
     return LocalDate.now(clock);
   }
 

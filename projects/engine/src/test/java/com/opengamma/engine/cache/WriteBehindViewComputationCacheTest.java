@@ -45,10 +45,10 @@ import com.opengamma.util.tuple.Pairs;
 public class WriteBehindViewComputationCacheTest {
 
   @DataProvider(name = "cacheHints")
-  public static Object[][] data_cacheHints() {
+  public static Object[][] dataCacheHints() {
     return new Object[][] {
-        {CacheSelectHint.allPrivate() },
-        {CacheSelectHint.allShared() },
+      {CacheSelectHint.allPrivate() },
+      {CacheSelectHint.allShared() },
     };
   }
 
@@ -108,7 +108,7 @@ public class WriteBehindViewComputationCacheTest {
       if (_throwException) {
         throw new OpenGammaRuntimeException("woot");
       }
-      _putValues = new ArrayList<ComputedValue>(values);
+      _putValues = new ArrayList<>(values);
     }
 
     @Override
@@ -127,12 +127,13 @@ public class WriteBehindViewComputationCacheTest {
     }
   }
 
-  private static final ComputationTargetSpecification s_targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("TEST", "SECURITY"));
-  private static final ValueProperties s_properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "Function UID").get();
-  private static final ValueSpecification s_valueSpec1 = new ValueSpecification("Value 1", s_targetSpec, s_properties);
-  private static final ValueSpecification s_valueSpec2 = new ValueSpecification("Value 2", s_targetSpec, s_properties);
-  private static final ValueSpecification s_valueSpec3 = new ValueSpecification("Value 3", s_targetSpec, s_properties);
-  private static final ValueSpecification s_valueSpec4 = new ValueSpecification("Value 4", s_targetSpec, s_properties);
+  private static final ComputationTargetSpecification TARGET_SPEC =
+      new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("TEST", "SECURITY"));
+  private static final ValueProperties PROPERTIES = ValueProperties.with(ValuePropertyNames.FUNCTION, "Function UID").get();
+  private static final ValueSpecification VALUE_SPEC_1 = new ValueSpecification("Value 1", TARGET_SPEC, PROPERTIES);
+  private static final ValueSpecification VALUE_SPEC_2 = new ValueSpecification("Value 2", TARGET_SPEC, PROPERTIES);
+  private static final ValueSpecification VALUE_SPEC_3 = new ValueSpecification("Value 3", TARGET_SPEC, PROPERTIES);
+  private static final ValueSpecification VALUE_SPEC_4 = new ValueSpecification("Value 4", TARGET_SPEC, PROPERTIES);
 
   private final CacheSelectHint _filter;
   private ExecutorService _executorService;
@@ -168,41 +169,41 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test
   public void getValueHittingUnderlying() {
-    _cache.getValue(s_valueSpec1);
-    assertEquals(s_valueSpec1, _underlying._getValue);
+    _cache.getValue(VALUE_SPEC_1);
+    assertEquals(VALUE_SPEC_1, _underlying._getValue);
   }
 
   @Test
   public void getValueHittingPending() {
-    final ComputedValue value = new ComputedValue(s_valueSpec1, "foo");
+    final ComputedValue value = new ComputedValue(VALUE_SPEC_1, "foo");
     _cache.putValue(value, _filter);
-    assertEquals("foo", _cache.getValue(s_valueSpec1));
+    assertEquals("foo", _cache.getValue(VALUE_SPEC_1));
     assertNull(_underlying._putValue);
     assertNull(_underlying._getValue);
   }
 
   @Test
   public void getValuesHittingUnderlying() {
-    final Collection<ValueSpecification> valueSpec = Arrays.asList(s_valueSpec1, s_valueSpec2, s_valueSpec3, s_valueSpec4);
+    final Collection<ValueSpecification> valueSpec = Arrays.asList(VALUE_SPEC_1, VALUE_SPEC_2, VALUE_SPEC_3, VALUE_SPEC_4);
     _cache.getValues(valueSpec);
     assertEquals(valueSpec, _underlying._getValues);
   }
 
   @Test
   public void getValuesOneUnderlying() {
-    final Collection<ValueSpecification> valueSpec = Arrays.asList(s_valueSpec1, s_valueSpec2, s_valueSpec3, s_valueSpec4);
-    _cache.putValue(new ComputedValue(s_valueSpec1, "foo"), _filter);
-    _cache.putValue(new ComputedValue(s_valueSpec2, "bar"), _filter);
-    _cache.putValue(new ComputedValue(s_valueSpec3, "cow"), _filter);
+    final Collection<ValueSpecification> valueSpec = Arrays.asList(VALUE_SPEC_1, VALUE_SPEC_2, VALUE_SPEC_3, VALUE_SPEC_4);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_2, "bar"), _filter);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_3, "cow"), _filter);
     final Collection<Pair<ValueSpecification, Object>> values = _cache.getValues(valueSpec);
     assertEquals(valueSpec.size(), values.size());
-    assertTrue(values.contains(Pairs.of(s_valueSpec1, "foo")));
-    assertTrue(values.contains(Pairs.of(s_valueSpec2, "bar")));
-    assertTrue(values.contains(Pairs.of(s_valueSpec3, "cow")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_1, "foo")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_2, "bar")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_3, "cow")));
     assertNull(_underlying._putValue);
     assertNull(_underlying._putValues);
     assertNull(_underlying._getValues);
-    assertEquals(s_valueSpec4, _underlying._getValue);
+    assertEquals(VALUE_SPEC_4, _underlying._getValue);
     _underlying._allowPutValue.countDown();
     _underlying._allowPutValues.countDown();
     flush(_cache);
@@ -219,14 +220,14 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test
   public void getValuesSomeUnderlying() {
-    final Collection<ValueSpecification> valueSpec = Arrays.asList(s_valueSpec1, s_valueSpec2, s_valueSpec3);
-    _cache.putValue(new ComputedValue(s_valueSpec1, "foo"), _filter);
+    final Collection<ValueSpecification> valueSpec = Arrays.asList(VALUE_SPEC_1, VALUE_SPEC_2, VALUE_SPEC_3);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
     final Collection<Pair<ValueSpecification, Object>> values = _cache.getValues(valueSpec);
     assertEquals(1, values.size());
-    assertTrue(values.contains(Pairs.of(s_valueSpec1, "foo")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(VALUE_SPEC_1, "foo")));
     assertNull(_underlying._putValue);
     assertNull(_underlying._putValues);
-    assertEquals(Arrays.asList(s_valueSpec2, s_valueSpec3), _underlying._getValues);
+    assertEquals(Arrays.asList(VALUE_SPEC_2, VALUE_SPEC_3), _underlying._getValues);
     assertNull(_underlying._getValue);
     _underlying._allowPutValue.countDown();
     flush(_cache);
@@ -241,7 +242,7 @@ public class WriteBehindViewComputationCacheTest {
   @Test
   public void putValueDirectWrite() throws InterruptedException {
     _underlying._allowPutValue.countDown();
-    final ComputedValue value = new ComputedValue(s_valueSpec1, "foo");
+    final ComputedValue value = new ComputedValue(VALUE_SPEC_1, "foo");
     _cache.putValue(value, _filter);
     for (long i = Timeout.standardTimeoutMillis(); i > 0; i -= PAUSE) {
       if (_underlying._putValue != null) {
@@ -255,9 +256,9 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test
   public void putValueCollatedWrite() throws InterruptedException {
-    final ComputedValue value0 = new ComputedValue(s_valueSpec4, "null");
-    final ComputedValue value1 = new ComputedValue(s_valueSpec1, "foo");
-    final ComputedValue value2 = new ComputedValue(s_valueSpec2, "bar");
+    final ComputedValue value0 = new ComputedValue(VALUE_SPEC_4, "null");
+    final ComputedValue value1 = new ComputedValue(VALUE_SPEC_1, "foo");
+    final ComputedValue value2 = new ComputedValue(VALUE_SPEC_2, "bar");
     _cache.putValue(value0, _filter);
     Thread.sleep(1000);
     _cache.putValue(value1, _filter);
@@ -276,7 +277,7 @@ public class WriteBehindViewComputationCacheTest {
   @Test
   public void putValuesDirectWrite() throws InterruptedException {
     _underlying._allowPutValues.countDown();
-    final List<ComputedValue> values = Arrays.asList(new ComputedValue(s_valueSpec1, "foo"), new ComputedValue(s_valueSpec2, "bar"));
+    final List<ComputedValue> values = Arrays.asList(new ComputedValue(VALUE_SPEC_1, "foo"), new ComputedValue(VALUE_SPEC_2, "bar"));
     _cache.putValues(values, _filter);
     for (long i = Timeout.standardTimeoutMillis(); i > 0; i -= PAUSE) {
       if (_underlying._putValues != null) {
@@ -290,9 +291,9 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test
   public void putValuesCollatedWrite() throws InterruptedException {
-    final ComputedValue value0 = new ComputedValue(s_valueSpec4, "null");
-    final List<ComputedValue> values1 = Arrays.asList(new ComputedValue(s_valueSpec1, "foo"), new ComputedValue(s_valueSpec2, "bar"));
-    final List<ComputedValue> values2 = Arrays.asList(new ComputedValue(s_valueSpec3, "cow"));
+    final ComputedValue value0 = new ComputedValue(VALUE_SPEC_4, "null");
+    final List<ComputedValue> values1 = Arrays.asList(new ComputedValue(VALUE_SPEC_1, "foo"), new ComputedValue(VALUE_SPEC_2, "bar"));
+    final List<ComputedValue> values2 = Arrays.asList(new ComputedValue(VALUE_SPEC_3, "cow"));
     _cache.putValue(value0, _filter);
     Thread.sleep(1000);
     _cache.putValues(values1, _filter);
@@ -313,7 +314,7 @@ public class WriteBehindViewComputationCacheTest {
   @Test
   public void synchronizeCacheNoPending() throws InterruptedException {
     _underlying._allowPutValue.countDown();
-    _cache.putValue(new ComputedValue(s_valueSpec1, "foo"), _filter);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
     for (long i = Timeout.standardTimeoutMillis(); i > 0; i -= PAUSE) {
       if (_underlying._putValue != null) {
         break;
@@ -326,7 +327,7 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test
   public void synchronizeCacheWithPending() {
-    _cache.putValue(new ComputedValue(s_valueSpec1, "foo"), _filter);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
     new Thread() {
       @Override
       public void run() {
@@ -342,7 +343,7 @@ public class WriteBehindViewComputationCacheTest {
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void synchronizeCacheWithPendingException() {
-    _cache.putValue(new ComputedValue(s_valueSpec1, "foo"), _filter);
+    _cache.putValue(new ComputedValue(VALUE_SPEC_1, "foo"), _filter);
     new Thread() {
       @Override
       public void run() {

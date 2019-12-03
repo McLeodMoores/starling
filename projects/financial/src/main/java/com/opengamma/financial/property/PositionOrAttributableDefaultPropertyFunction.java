@@ -20,17 +20,17 @@ import com.opengamma.engine.value.ValueRequirement;
 /**
  * Dummy function to inject default properties from a position or trade's attributes into the dependency graph.
  * <p>
- * Any attributes of the form <code><em>ValueName</em>.DEFAULT_<em>PropertyName</em></code> will be
- * processed to introduce a default value for any omitted <em>PropertyName</em> on <em>ValueName</em> for the target.
+ * Any attributes of the form <code><em>ValueName</em>.DEFAULT_<em>PropertyName</em></code> will be processed to introduce a default value for any omitted
+ * <em>PropertyName</em> on <em>ValueName</em> for the target.
  */
 /* package */abstract class PositionOrAttributableDefaultPropertyFunction extends DefaultPropertyFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionOrAttributableDefaultPropertyFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionOrAttributableDefaultPropertyFunction.class);
 
   private static final String WILDCARD = "*";
   private static final String SEP = ".DEFAULT_";
 
-  public PositionOrAttributableDefaultPropertyFunction(final ComputationTargetType type) {
+  PositionOrAttributableDefaultPropertyFunction(final ComputationTargetType type) {
     super(type, false);
   }
 
@@ -48,7 +48,7 @@ import com.opengamma.engine.value.ValueRequirement;
         } else {
           defaults.addValuePropertyName(valueName, propertyName);
         }
-        s_logger.debug("Found default {}[{}]", valueName, propertyName);
+        LOGGER.debug("Found default {}[{}]", valueName, propertyName);
       }
     }
   }
@@ -56,23 +56,24 @@ import com.opengamma.engine.value.ValueRequirement;
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Map<String, String> attributes = getAttributes(target);
-    if ((attributes == null) || attributes.isEmpty()) {
-      s_logger.debug("No attributes for target {}", target);
+    if (attributes == null || attributes.isEmpty()) {
+      LOGGER.debug("No attributes for target {}", target);
       return false;
     }
     for (final Map.Entry<String, String> attribute : attributes.entrySet()) {
       final int i = attribute.getKey().indexOf(SEP);
       if (i > 0) {
-        s_logger.debug("Found attribute {} for target {}", attribute.getKey(), target);
+        LOGGER.debug("Found attribute {} for target {}", attribute.getKey(), target);
         return true;
       }
     }
-    s_logger.debug("No matching attributes for target {}", target);
+    LOGGER.debug("No matching attributes for target {}", target);
     return false;
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Map<String, String> attributes = getAttributes(target);
     String defaultValue = attributes.get(desiredValue.getValueName() + SEP + propertyName);
     if (defaultValue != null) {
@@ -84,8 +85,8 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   /**
-   * Position and trade default functions are declared a lower priority so that the normal functions that work
-   * from the calculation configuration can override their behavior.
+   * Position and trade default functions are declared a lower priority so that the normal functions that work from the calculation configuration can override
+   * their behavior.
    *
    * @return {@link com.opengamma.financial.property.DefaultPropertyFunction.PriorityClass#BELOW_NORMAL}
    */

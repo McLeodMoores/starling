@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,8 +10,8 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * This left extrapolator is designed for extrapolating a discount factor where the trivial point (0.,1.) is NOT involved in the data. 
- * The extrapolation is completed by applying a quadratic extrapolant on the discount factor (not log of the discount factor), 
+ * This left extrapolator is designed for extrapolating a discount factor where the trivial point (0.,1.) is NOT involved in the data.
+ * The extrapolation is completed by applying a quadratic extrapolant on the discount factor (not log of the discount factor),
  * where the point (0.,1.) is inserted and the first derivative value is assumed to be continuous at firstKey.
  */
 public class QuadraticPolynomialLeftExtrapolator extends Interpolator1D {
@@ -30,7 +30,7 @@ public class QuadraticPolynomialLeftExtrapolator extends Interpolator1D {
    * @param interpolator Interpolator for specifying the first derivative value at an endpoint
    * @param eps Bump parameter of finite difference approximation for the first derivative value
    */
-  public QuadraticPolynomialLeftExtrapolator(final Interpolator1D interpolator, double eps) {
+  public QuadraticPolynomialLeftExtrapolator(final Interpolator1D interpolator, final double eps) {
     Validate.notNull(interpolator, "interpolator");
     _interpolator = interpolator;
     _eps = eps;

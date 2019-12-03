@@ -24,7 +24,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class MultidimensionalMinimizerSpeedTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(MultidimensionalMinimizerSpeedTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultidimensionalMinimizerSpeedTest.class);
   private static final int HOTSPOT_WARMUP_CYCLES = 0;
   private static final int BENCHMARK_CYCLES = 1;
 
@@ -87,7 +87,7 @@ public class MultidimensionalMinimizerSpeedTest {
       doTest(minimizer, function, grad, startPosition);
     }
     if (BENCHMARK_CYCLES > 0) {
-      final OperationTimer timer = new OperationTimer(s_logger, "processing {} cycles on " + name, BENCHMARK_CYCLES);
+      final OperationTimer timer = new OperationTimer(LOGGER, "processing {} cycles on " + name, BENCHMARK_CYCLES);
       for (int i = 0; i < BENCHMARK_CYCLES; i++) {
         doTest(minimizer, function, grad, startPosition);
       }

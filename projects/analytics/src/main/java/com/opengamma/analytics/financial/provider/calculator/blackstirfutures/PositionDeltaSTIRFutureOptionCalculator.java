@@ -11,8 +11,7 @@ import com.opengamma.analytics.financial.interestrate.future.provider.InterestRa
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSTIRFuturesProviderInterface;
 
 /**
- * Calculates the position delta (first derivative of the price with respect to the underlying future price) for interest rate
- * future options.
+ * Calculates the position delta (first derivative of the price with respect to the underlying future price) for interest rate future options.
  */
 public final class PositionDeltaSTIRFutureOptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, Double> {
   /**
@@ -22,6 +21,7 @@ public final class PositionDeltaSTIRFutureOptionCalculator extends InstrumentDer
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PositionDeltaSTIRFutureOptionCalculator getInstance() {
@@ -37,10 +37,12 @@ public final class PositionDeltaSTIRFutureOptionCalculator extends InstrumentDer
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIR = InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIR = InterestRateFutureOptionMarginTransactionBlackSmileMethod
+      .getInstance();
 
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
     return METHOD_STIR.presentValueDelta(futures, black);
   }
 }

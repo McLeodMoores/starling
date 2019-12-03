@@ -5,8 +5,6 @@
  */
 package com.opengamma.util.tuple;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -20,6 +18,8 @@ import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 /**
  * An immutable pair consisting of an {@code int} and {@code Object}.
@@ -47,7 +47,7 @@ public class IntObjectPair<T>
   //-------------------------------------------------------------------------
   /**
    * Creates a pair inferring the types.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
@@ -60,13 +60,13 @@ public class IntObjectPair<T>
   //-------------------------------------------------------------------------
   /**
    * Constructs a pair.
-   * 
+   *
    * @param first  the first element
    * @param second  the second element
    * @deprecated Use public factory of(int,Object)
    */
   @Deprecated
-  public IntObjectPair(final int first, final T second) {
+  public IntObjectPair(final int first, final T second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -84,7 +84,7 @@ public class IntObjectPair<T>
 
   /**
    * Gets the first element as a primitive {@code int}.
-   * 
+   *
    * @return the primitive
    */
   public int getFirstInt() {
@@ -102,6 +102,7 @@ public class IntObjectPair<T>
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code IntObjectPair}.
@@ -123,7 +124,7 @@ public class IntObjectPair<T>
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -140,7 +141,7 @@ public class IntObjectPair<T>
   //-------------------------------------------------------------------------
   @SuppressWarnings("unchecked")
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -193,7 +194,7 @@ public class IntObjectPair<T>
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -207,7 +208,7 @@ public class IntObjectPair<T>
     public IntObjectPair.Builder builder() {
       return new IntObjectPair.Builder();
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Override
     public Class<? extends IntObjectPair> beanType() {
@@ -239,7 +240,7 @@ public class IntObjectPair<T>
     //-----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((IntObjectPair) bean).getFirst();
@@ -250,7 +251,7 @@ public class IntObjectPair<T>
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -281,7 +282,7 @@ public class IntObjectPair<T>
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = (Integer) newValue;
@@ -296,7 +297,7 @@ public class IntObjectPair<T>
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }

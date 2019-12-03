@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -22,7 +22,7 @@ import com.opengamma.engine.function.config.ParameterizedFunctionConfiguration;
 import com.opengamma.engine.function.config.StaticFunctionConfiguration;
 
 /**
- * Fudge message builder for {@link FunctionConfigurationDefinition}. 
+ * Fudge message builder for {@link FunctionConfigurationDefinition}.
  */
 @FudgeBuilderFor(FunctionConfigurationDefinition.class)
 public class FunctionConfigurationDefinitionFudgeBuilder implements FudgeBuilder<FunctionConfigurationDefinition> {
@@ -33,32 +33,32 @@ public class FunctionConfigurationDefinitionFudgeBuilder implements FudgeBuilder
   private static final String PARAMETERIZED_FUNCTION_FIELD = "parameterizedFunction";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FunctionConfigurationDefinition functionConfig) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FunctionConfigurationDefinition functionConfig) {
 
-    MutableFudgeMsg message = serializer.newMessage();
+    final MutableFudgeMsg message = serializer.newMessage();
 
     message.add(NAME_FIELD, null, functionConfig.getName());
-    
-    List<String> configurationDefinitions = functionConfig.getFunctionConfigurationDefinitions();
+
+    final List<String> configurationDefinitions = functionConfig.getFunctionConfigurationDefinitions();
     if (!configurationDefinitions.isEmpty()) {
-      for (String functionConfigName : configurationDefinitions) {
+      for (final String functionConfigName : configurationDefinitions) {
         message.add(FUNCTION_CONFIG_DEFINITION_FIELD, null, functionConfigName);
       }
     }
-    
-    List<StaticFunctionConfiguration> staticFunctions = functionConfig.getStaticFunctions();
+
+    final List<StaticFunctionConfiguration> staticFunctions = functionConfig.getStaticFunctions();
     if (!staticFunctions.isEmpty()) {
-      for (StaticFunctionConfiguration staticFunctionConfiguration : staticFunctions) {
+      for (final StaticFunctionConfiguration staticFunctionConfiguration : staticFunctions) {
         message.add(STATIC_FUNCTION_FIELD, null, staticFunctionConfiguration.getDefinitionClassName());
       }
     }
-    
-    List<ParameterizedFunctionConfiguration> parameterizedFunctions = functionConfig.getParameterizedFunctions();
+
+    final List<ParameterizedFunctionConfiguration> parameterizedFunctions = functionConfig.getParameterizedFunctions();
     if (!parameterizedFunctions.isEmpty()) {
-      for (ParameterizedFunctionConfiguration configuration : parameterizedFunctions) {
-        MutableFudgeMsg parametizedMsg = serializer.newMessage();
+      for (final ParameterizedFunctionConfiguration configuration : parameterizedFunctions) {
+        final MutableFudgeMsg parametizedMsg = serializer.newMessage();
         parametizedMsg.add("func", null, configuration.getDefinitionClassName());
-        for (String parameter : configuration.getParameter()) {
+        for (final String parameter : configuration.getParameter()) {
           parametizedMsg.add("param", null, parameter);
         }
         message.add(PARAMETERIZED_FUNCTION_FIELD, null, parametizedMsg);
@@ -68,42 +68,42 @@ public class FunctionConfigurationDefinitionFudgeBuilder implements FudgeBuilder
   }
 
   @Override
-  public FunctionConfigurationDefinition buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    
+  public FunctionConfigurationDefinition buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+
     final String name = message.getString(NAME_FIELD);
-    
-    final List<String> functionConfigurationDefinitions = new LinkedList<String>();
-    final List<StaticFunctionConfiguration> staticFunctions = new LinkedList<StaticFunctionConfiguration>();
-    final List<ParameterizedFunctionConfiguration> parameterizedFunctions = new LinkedList<ParameterizedFunctionConfiguration>();
-    
+
+    final List<String> functionConfigurationDefinitions = new LinkedList<>();
+    final List<StaticFunctionConfiguration> staticFunctions = new LinkedList<>();
+    final List<ParameterizedFunctionConfiguration> parameterizedFunctions = new LinkedList<>();
+
     if (message.hasField(FUNCTION_CONFIG_DEFINITION_FIELD)) {
-      List<FudgeField> allConfigs = message.getAllByName(FUNCTION_CONFIG_DEFINITION_FIELD);
-      for (FudgeField fudgeField : allConfigs) {
+      final List<FudgeField> allConfigs = message.getAllByName(FUNCTION_CONFIG_DEFINITION_FIELD);
+      for (final FudgeField fudgeField : allConfigs) {
         functionConfigurationDefinitions.add((String) fudgeField.getValue());
       }
     }
-    
+
     if (message.hasField(STATIC_FUNCTION_FIELD)) {
-      List<FudgeField> allStaticFunctions = message.getAllByName(STATIC_FUNCTION_FIELD);
-      for (FudgeField fudgeField : allStaticFunctions) {
+      final List<FudgeField> allStaticFunctions = message.getAllByName(STATIC_FUNCTION_FIELD);
+      for (final FudgeField fudgeField : allStaticFunctions) {
         staticFunctions.add(new StaticFunctionConfiguration((String) fudgeField.getValue()));
       }
     }
-    
+
     if (message.hasField(PARAMETERIZED_FUNCTION_FIELD)) {
-      List<FudgeField> allConfigs = message.getAllByName(PARAMETERIZED_FUNCTION_FIELD);
-      for (FudgeField configField : allConfigs) {
-        FudgeMsg parameterizedMsg = (FudgeMsg) configField.getValue();
-        String definitionClassName = parameterizedMsg.getString("func");
-        List<FudgeField> parameterFields = parameterizedMsg.getAllByName("param");
-        List<String> parameters = Lists.newArrayList();
-        for (FudgeField parameterField : parameterFields) {
+      final List<FudgeField> allConfigs = message.getAllByName(PARAMETERIZED_FUNCTION_FIELD);
+      for (final FudgeField configField : allConfigs) {
+        final FudgeMsg parameterizedMsg = (FudgeMsg) configField.getValue();
+        final String definitionClassName = parameterizedMsg.getString("func");
+        final List<FudgeField> parameterFields = parameterizedMsg.getAllByName("param");
+        final List<String> parameters = Lists.newArrayList();
+        for (final FudgeField parameterField : parameterFields) {
           parameters.add((String) parameterField.getValue());
         }
         parameterizedFunctions.add(new ParameterizedFunctionConfiguration(definitionClassName, parameters));
       }
     }
-    
+
     return new FunctionConfigurationDefinition(name, functionConfigurationDefinitions, staticFunctions, parameterizedFunctions);
   }
 

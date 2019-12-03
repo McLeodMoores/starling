@@ -35,12 +35,18 @@ public class HullWhiteOneFactorProvider implements HullWhiteOneFactorProviderInt
   private final Currency _ccyHW;
 
   /**
-   * Constructor from exiting multicurveProvider and Hull-White parameters. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param multicurves The multi-curves provider, not null
-   * @param parameters The Hull-White one factor parameters, not null
-   * @param ccyHW The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve), not null
+   * Constructor from exiting multicurveProvider and Hull-White parameters. The given provider and parameters are used for the new provider (the same maps are
+   * used, not copied).
+   * 
+   * @param multicurves
+   *          The multi-curves provider, not null
+   * @param parameters
+   *          The Hull-White one factor parameters, not null
+   * @param ccyHW
+   *          The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve), not null
    */
-  public HullWhiteOneFactorProvider(final MulticurveProviderInterface multicurves, final HullWhiteOneFactorPiecewiseConstantParameters parameters, final Currency ccyHW) {
+  public HullWhiteOneFactorProvider(final MulticurveProviderInterface multicurves, final HullWhiteOneFactorPiecewiseConstantParameters parameters,
+      final Currency ccyHW) {
     ArgumentChecker.notNull(multicurves, "multicurves");
     ArgumentChecker.notNull(parameters, "parameters");
     ArgumentChecker.notNull(ccyHW, "ccyHW");
@@ -51,6 +57,7 @@ public class HullWhiteOneFactorProvider implements HullWhiteOneFactorProviderInt
 
   /**
    * Create a new copy of the provider.
+   * 
    * @return The bundle.
    */
   @Override
@@ -61,6 +68,7 @@ public class HullWhiteOneFactorProvider implements HullWhiteOneFactorProviderInt
 
   /**
    * Returns the Hull-White one factor model parameters.
+   * 
    * @return The parameters.
    */
   @Override
@@ -70,6 +78,7 @@ public class HullWhiteOneFactorProvider implements HullWhiteOneFactorProviderInt
 
   /**
    * Returns the currency for which the Hull-White parameters are valid (Hull-White on the discounting curve).
+   * 
    * @return The currency.
    */
   @Override
@@ -79,6 +88,7 @@ public class HullWhiteOneFactorProvider implements HullWhiteOneFactorProviderInt
 
   /**
    * Returns the MulticurveProvider from which the HullWhiteOneFactorProvider is composed.
+   * 
    * @return The multi-curves provider.
    */
   @Override

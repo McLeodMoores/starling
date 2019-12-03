@@ -45,30 +45,39 @@ public class MasterConventionSourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullMaster() throws Exception {
+  public void testConstructorNullMaster() {
     new MasterConventionSource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getConvention_UniqueId_noOverride_found() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetConventionUniqueIdNoOverrideFound() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
 
-    ConventionDocument doc = new ConventionDocument(example());
+    final ConventionDocument doc = new ConventionDocument(example());
     when(mock.get(UID)).thenReturn(doc);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Convention testResult = test.get(UID);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Convention testResult = test.get(UID);
     verify(mock, times(1)).get(UID);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getConvention_UniqueId_notFound() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
+  public void testGetConventionUniqueIdNotFound() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
 
     when(mock.get(UID)).thenThrow(new DataNotFoundException(""));
-    MasterConventionSource test = new MasterConventionSource(mock);
+    final MasterConventionSource test = new MasterConventionSource(mock);
     try {
       test.get(UID);
     } finally {
@@ -76,25 +85,31 @@ public class MasterConventionSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getConvention_ObjectId_found() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetConventionObjectIdFound() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
 
-    ConventionDocument doc = new ConventionDocument(example());
+    final ConventionDocument doc = new ConventionDocument(example());
     when(mock.get(OID, VC)).thenReturn(doc);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Convention testResult = test.get(OID, VC);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Convention testResult = test.get(OID, VC);
     verify(mock, times(1)).get(OID, VC);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getConvention_ObjectId_notFound() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
+  public void testGetConventionObjectIdNotFound() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
 
     when(mock.get(OID, VC)).thenThrow(new DataNotFoundException(""));
-    MasterConventionSource test = new MasterConventionSource(mock);
+    final MasterConventionSource test = new MasterConventionSource(mock);
     try {
       test.get(OID, VC);
     } finally {
@@ -102,83 +117,98 @@ public class MasterConventionSourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_get_ExternalIdBundle() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetExternalIdBundle() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
-    ManageableConvention convention = example();
-    ConventionSearchResult result = new ConventionSearchResult();
+    final ManageableConvention convention = example();
+    final ConventionSearchResult result = new ConventionSearchResult();
     result.getDocuments().add(new ConventionDocument(convention));
 
     when(mock.search(request)).thenReturn(result);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Collection<Convention> testResult = test.get(BUNDLE);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Collection<Convention> testResult = test.get(BUNDLE);
     verify(mock, times(1)).search(request);
 
     assertEquals(UID, testResult.iterator().next().getUniqueId());
     assertEquals("Test", testResult.iterator().next().getName());
   }
 
-  public void test_get_ExternalIdBundle_VersionCorrection() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  /**
+   *
+   */
+  public void testGetExternalIdBundleVersionCorrection() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
     request.setVersionCorrection(VC);
-    ManageableConvention convention = example();
-    ConventionSearchResult result = new ConventionSearchResult();
+    final ManageableConvention convention = example();
+    final ConventionSearchResult result = new ConventionSearchResult();
     result.getDocuments().add(new ConventionDocument(convention));
 
     when(mock.search(request)).thenReturn(result);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Collection<Convention> testResult = test.get(BUNDLE, VC);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Collection<Convention> testResult = test.get(BUNDLE, VC);
     verify(mock, times(1)).search(request);
 
     assertEquals(UID, testResult.iterator().next().getUniqueId());
     assertEquals("Test", testResult.iterator().next().getName());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getSingle_ExternalIdBundle() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetSingleExternalIdBundle() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
-    ManageableConvention convention = example();
-    ConventionSearchResult result = new ConventionSearchResult();
+    final ManageableConvention convention = example();
+    final ConventionSearchResult result = new ConventionSearchResult();
     result.getDocuments().add(new ConventionDocument(convention));
 
     when(mock.search(request)).thenReturn(result);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Convention testResult = test.getSingle(BUNDLE);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Convention testResult = test.getSingle(BUNDLE);
     verify(mock, times(1)).search(request);
 
     assertEquals(UID, testResult.getUniqueId());
     assertEquals("Test", testResult.getName());
   }
 
-  public void test_getSingle_ExternalIdBundle_VersionCorrection() throws Exception {
-    ConventionMaster mock = mock(ConventionMaster.class);
-    ConventionSearchRequest request = new ConventionSearchRequest();
+  /**
+   *
+   */
+  public void testGetSingleExternalIdBundleVersionCorrection() {
+    final ConventionMaster mock = mock(ConventionMaster.class);
+    final ConventionSearchRequest request = new ConventionSearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
     request.setVersionCorrection(VC);
-    ManageableConvention convention = example();
-    ConventionSearchResult result = new ConventionSearchResult();
+    final ManageableConvention convention = example();
+    final ConventionSearchResult result = new ConventionSearchResult();
     result.getDocuments().add(new ConventionDocument(convention));
 
     when(mock.search(request)).thenReturn(result);
-    MasterConventionSource test = new MasterConventionSource(mock);
-    Convention testResult = test.getSingle(BUNDLE, VC);
+    final MasterConventionSource test = new MasterConventionSource(mock);
+    final Convention testResult = test.getSingle(BUNDLE, VC);
     verify(mock, times(1)).search(request);
 
     assertEquals(UID, testResult.getUniqueId());
     assertEquals("Test", testResult.getName());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example convention
+   */
   protected ManageableConvention example() {
     return new MockConvention(UID, "Test", ExternalIdBundle.EMPTY, Currency.GBP);
   }

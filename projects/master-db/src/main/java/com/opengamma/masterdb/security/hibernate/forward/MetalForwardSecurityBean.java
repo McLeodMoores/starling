@@ -5,15 +5,14 @@
  */
 package com.opengamma.masterdb.security.hibernate.forward;
 
-import com.opengamma.financial.security.forward.MetalForwardSecurity;
-
 /**
- * A Hibernate bean representation of {@link MetalForwardSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.forward.MetalForwardSecurity}.
  */
 public class MetalForwardSecurityBean extends CommodityForwardSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitMetalForwardType(this);
   }
 

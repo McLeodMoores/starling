@@ -44,10 +44,8 @@ import com.opengamma.util.time.DateUtils;
 /**
  * Example code to load a portfolio of four AUD swaps.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 public class ExampleAUDSwapPortfolioLoader extends AbstractTool<IntegrationToolContext> {
 
@@ -66,7 +64,7 @@ public class ExampleAUDSwapPortfolioLoader extends AbstractTool<IntegrationToolC
   /** Semi-annual frequency */
   private static final Frequency SEMI_ANNUAL = PeriodFrequency.SEMI_ANNUAL;
   /** The region */
-  private static final ExternalId REGION =  ExternalSchemes.financialRegionId("AU");
+  private static final ExternalId REGION = ExternalSchemes.financialRegionId("AU");
   /** Following business day convention */
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   /** The notional */
@@ -77,46 +75,50 @@ public class ExampleAUDSwapPortfolioLoader extends AbstractTool<IntegrationToolC
   private static final ExternalId AUD_LIBOR_6M = ExternalSchemes.bloombergTickerSecurityId("AU0006M Index");
   /** The scheme used for an identifier */
   private static final String ID_SCHEME = "AUD_SWAP_GENERATOR";
-  /** The portfolio name */
+  /** The portfolio name. */
   public static final String PORTFOLIO_NAME = "AUD Swap Portfolio";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success =
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleAUDSwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleAUDSwapPortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    final FloatingInterestRateLeg payLeg1 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg1 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg1 = new FixedInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.04);
     final SwapSecurity swap1 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg1, receiveLeg1);
     swap1.setName("Swap AUD Bank Bill 3m");
     swap1.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg payLeg2 = new FloatingInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_6M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg2 = new FloatingInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_6M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg2 = new FixedInterestRateLeg(ACT_365, SEMI_ANNUAL, REGION, FOLLOWING, NOTIONAL, true, 0.04);
     final SwapSecurity swap2 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg2, receiveLeg2);
     swap2.setName("Swap AUD Bank Bill 6m");
     swap2.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg payLeg3 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg payLeg3 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg receiveLeg3 = new FixedInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.0365);
     final SwapSecurity swap3 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg3, receiveLeg3);
     swap3.setName("Swap: receive 3.65% fixed ACT/365 vs 3m Bank Bill");
     swap3.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
-    final FloatingInterestRateLeg receiveLeg4 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
+    final FloatingInterestRateLeg receiveLeg4 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M,
+        FloatingRateType.IBOR);
     final FixedInterestRateLeg payLeg4 = new FixedInterestRateLeg(ACT_360, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.036);
     final SwapSecurity swap4 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg4, receiveLeg4);
     swap4.setName("Swap: receive 3.60% fixed ACT/360 vs 3m Bank Bill");

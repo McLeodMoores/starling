@@ -24,7 +24,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * {@link BatchFudgeMessageReceiver}.
  */
 public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
-  private static final Logger s_logger = LoggerFactory.getLogger(ByteArrayFudgeMessageReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ByteArrayFudgeMessageReceiver.class);
 
   /**
    * The underlying Fudge receiver.
@@ -43,7 +43,7 @@ public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
    * Creates a receiver based on an underlying Fudge receiver.
    * @param underlying  the underlying receiver, not null
    */
-  public ByteArrayFudgeMessageReceiver(FudgeMessageReceiver underlying) {
+  public ByteArrayFudgeMessageReceiver(final FudgeMessageReceiver underlying) {
     this(underlying, OpenGammaFudgeContext.getInstance());
   }
 
@@ -52,17 +52,17 @@ public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
    * @param underlying  the underlying receiver, not null
    * @param fudgeContext  the context to use, not null
    */
-  public ByteArrayFudgeMessageReceiver(FudgeMessageReceiver underlying, FudgeContext fudgeContext) {
+  public ByteArrayFudgeMessageReceiver(final FudgeMessageReceiver underlying, final FudgeContext fudgeContext) {
     this(underlying, fudgeContext, false);
   }
-  
+
   /**
    * Creates a receiver based on an underlying Fudge receiver.
    * @param underlying  the underlying receiver, not null
    * @param fudgeContext  the context to use, not null
    * @param compress whether input data is gzip compressed
    */
-  public ByteArrayFudgeMessageReceiver(FudgeMessageReceiver underlying, FudgeContext fudgeContext, boolean compress) {
+  public ByteArrayFudgeMessageReceiver(final FudgeMessageReceiver underlying, final FudgeContext fudgeContext, final boolean compress) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _underlying = underlying;
@@ -101,21 +101,21 @@ public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
    * @param message  the byte array message, not null
    */
   @Override
-  public void messageReceived(byte[] message) {
+  public void messageReceived(final byte[] message) {
     FudgeMsgEnvelope msgEnvelope = null;
     if (isCompress()) {
       try {
-        ByteArrayInputStream bais = new ByteArrayInputStream(message);
-        GZIPInputStream gzip = new GZIPInputStream(bais);
-        FudgeMsgReader msgReader = getFudgeContext().createMessageReader(gzip);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(message);
+        final GZIPInputStream gzip = new GZIPInputStream(bais);
+        final FudgeMsgReader msgReader = getFudgeContext().createMessageReader(gzip);
         msgEnvelope = msgReader.nextMessageEnvelope();
-      } catch (IOException ioe) {
+      } catch (final IOException ioe) {
         throw new OpenGammaRuntimeException("IOException should not be able to be thrown in this context", ioe);
       }
     } else {
       msgEnvelope = getFudgeContext().deserialize(message);
     }
-    s_logger.debug("Msg of size {} had {} fields", message.length, msgEnvelope.getMessage().getNumFields());
+    LOGGER.debug("Msg of size {} had {} fields", message.length, msgEnvelope.getMessage().getNumFields());
     getUnderlying().messageReceived(getFudgeContext(), msgEnvelope);
   }
 

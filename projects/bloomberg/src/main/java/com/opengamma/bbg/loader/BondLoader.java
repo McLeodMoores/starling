@@ -34,6 +34,7 @@ import static com.opengamma.bbg.BloombergConstants.FIELD_INDUSTRY_GROUP;
 import static com.opengamma.bbg.BloombergConstants.FIELD_INDUSTRY_SECTOR;
 import static com.opengamma.bbg.BloombergConstants.FIELD_INFLATION_LAG;
 import static com.opengamma.bbg.BloombergConstants.FIELD_INFLATION_LINKED_INDICATOR;
+import static com.opengamma.bbg.BloombergConstants.FIELD_INTERPOLATION_FOR_COUPON_CALC;
 import static com.opengamma.bbg.BloombergConstants.FIELD_INT_ACC_DT;
 import static com.opengamma.bbg.BloombergConstants.FIELD_ISSUER;
 import static com.opengamma.bbg.BloombergConstants.FIELD_ISSUE_DT;
@@ -57,7 +58,6 @@ import static com.opengamma.bbg.BloombergConstants.FIELD_SETTLE_DT;
 import static com.opengamma.bbg.BloombergConstants.FIELD_TICKER;
 import static com.opengamma.bbg.BloombergConstants.FIELD_ZERO_CPN;
 import static com.opengamma.bbg.BloombergConstants.MARKET_SECTOR_MUNI;
-import static com.opengamma.bbg.BloombergConstants.FIELD_INTERPOLATION_FOR_COUPON_CALC;
 import static com.opengamma.bbg.util.BloombergDataUtils.isValidField;
 
 import java.util.HashSet;
@@ -103,7 +103,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 public class BondLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -158,11 +158,11 @@ public class BondLoader extends SecurityLoader {
       FIELD_RESET_IDX,
       FIELD_PARSEKYABLE_DES,
       FIELD_ID_BB_SEC_NUM_DES,
-      FIELD_INFLATION_LAG, 
+      FIELD_INFLATION_LAG,
       FIELD_INTERPOLATION_FOR_COUPON_CALC);
 
   /**
-   * The valid Bloomberg security types for Bond
+   * The valid Bloomberg security types for Bond.
    */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(
       "Prvt CMO FLT",
@@ -192,15 +192,17 @@ public class BondLoader extends SecurityLoader {
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public BondLoader(final ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.BOND);
+    super(LOGGER, referenceDataProvider, SecurityType.BOND);
   }
 
   private String validateAndGetStringField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getString(fieldName);
@@ -215,7 +217,7 @@ public class BondLoader extends SecurityLoader {
 
   private Double validateAndGetDoubleField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getDouble(fieldName);
@@ -249,13 +251,13 @@ public class BondLoader extends SecurityLoader {
 
   private Integer validateAndGetIntegerField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getInt(fieldName);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     try {
@@ -264,13 +266,13 @@ public class BondLoader extends SecurityLoader {
       final String issuerSector = validateAndGetStringField(fieldData, FIELD_INDUSTRY_SECTOR);
       final String inflationIndicator = validateAndGetNullableStringField(fieldData, FIELD_INFLATION_LINKED_INDICATOR);
       final String isPerpetualStr = validateAndGetNullableStringField(fieldData, FIELD_IS_PERPETUAL);
-      final boolean isPerpetual = (isPerpetualStr != null && isPerpetualStr.trim().toUpperCase().contains("Y"));
+      final boolean isPerpetual = isPerpetualStr != null && isPerpetualStr.trim().toUpperCase().contains("Y");
       final String isBulletStr = validateAndGetNullableStringField(fieldData, FIELD_BULLET);
-      final boolean isBullet = (isBulletStr != null && isBulletStr.trim().toUpperCase().contains("Y"));
+      final boolean isBullet = isBulletStr != null && isBulletStr.trim().toUpperCase().contains("Y");
       final String isFloaterStr = validateAndGetNullableStringField(fieldData, FIELD_FLOATER);
-      final boolean isFloater = (isFloaterStr != null && isFloaterStr.trim().toUpperCase().contains("Y"));
+      final boolean isFloater = isFloaterStr != null && isFloaterStr.trim().toUpperCase().contains("Y");
       final String callable = validateAndGetNullableStringField(fieldData, FIELD_CALLABLE);
-      final boolean isCallable = (callable != null && callable.trim().toUpperCase().contains("Y"));
+      final boolean isCallable = callable != null && callable.trim().toUpperCase().contains("Y");
       final String issuerDomicile = validateAndGetStringField(fieldData, FIELD_CNTRY_ISSUE_ISO);
       final String market = validateAndGetStringField(fieldData, FIELD_SECURITY_TYP);
       final String currencyStr = validateAndGetStringField(fieldData, FIELD_CRNCY);
@@ -337,13 +339,13 @@ public class BondLoader extends SecurityLoader {
       final Double parAmount = validateAndGetDoubleField(fieldData, FIELD_PAR_AMT);
       final Double redemptionValue = validateAndGetDoubleField(fieldData, FIELD_REDEMP_VAL);
 
-      //String bbgUnique = validateAndGetStringField(fieldData, FIELD_ID_BBG_UNIQUE);
+      // String bbgUnique = validateAndGetStringField(fieldData, FIELD_ID_BBG_UNIQUE);
       final String marketSector = validateAndGetStringField(fieldData, FIELD_MARKET_SECTOR_DES);
       final String des = validateAndGetStringField(fieldData, FIELD_SECURITY_DES);
 
       ManageableSecurity bondSecurity;
       final ExternalId legalEntityId = ExternalId.of(ExternalSchemes.CUSIP_ENTITY_STUB, cusip.substring(0, 6));
-      if ((inflationIndicator != null) && (inflationIndicator.trim().toUpperCase().startsWith("Y"))) {
+      if (inflationIndicator != null && inflationIndicator.trim().toUpperCase().startsWith("Y")) {
         // six character stub of CUSIP to link to legal entity.
         final String referenceIndexStr = validateAndGetStringField(fieldData, FIELD_REFERENCE_INDEX);
         final String baseCPI = validateAndGetStringField(fieldData, FIELD_BASE_CPI); // keep as string because going into attributes
@@ -365,7 +367,7 @@ public class BondLoader extends SecurityLoader {
         ((BondSecurity) bondSecurity).addAttribute("interpolationMethod", interpolationMethod);
       } else if (isFloater) {
         // six character stub of CUSIP to link to legal entity.
-        final String benchmarkRateStr = validateAndGetStringField(fieldData, FIELD_RESET_IDX)  + " Index"; //TODO safe to assume the suffix?
+        final String benchmarkRateStr = validateAndGetStringField(fieldData, FIELD_RESET_IDX) + " Index"; // TODO safe to assume the suffix?
         final ExternalId benchmarkRateId = ExternalSchemes.bloombergTickerSecurityId(benchmarkRateStr);
         final ZonedDateTime issueDate = validateAndGetNullableDateField(fieldData, FIELD_ISSUE_DT);
         final int daysToSettle = validateAndGetIntegerField(fieldData, FIELD_DAYS_TO_SETTLE);
@@ -427,16 +429,19 @@ public class BondLoader extends SecurityLoader {
       parseIdentifiers(fieldData, bondSecurity);
       return bondSecurity;
     } catch (final OpenGammaRuntimeException ogre) {
-      s_logger.error("Error loading bond {} - {} - FLOATER={}, Fields are {}",
-          new Object[] {fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage(), fieldData.getString(FIELD_FLOATER), null }); //fieldData });
+      LOGGER.error("Error loading bond {} - {} - FLOATER={}, Fields are {}",
+          new Object[] { fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage(), fieldData.getString(FIELD_FLOATER), null }); // fieldData });
       return null;
     }
   }
 
   /**
-   * Parse the identifiers from the response.  Note that we don't populate BLOOMBERG_TICKER because it's always either S or T.
-   * @param fieldData  the response, not null
-   * @param security  the security to populate, not null
+   * Parse the identifiers from the response. Note that we don't populate BLOOMBERG_TICKER because it's always either S or T.
+   *
+   * @param fieldData
+   *          the response, not null
+   * @param security
+   *          the security to populate, not null
    */
   @Override
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {
@@ -451,7 +456,7 @@ public class BondLoader extends SecurityLoader {
     final String parsekyableDes = fieldData.getString(FIELD_PARSEKYABLE_DES);
     final String idBbSecNumDes = fieldData.getString(FIELD_ID_BB_SEC_NUM_DES);
 
-    final Set<ExternalId> identifiers = new HashSet<ExternalId>();
+    final Set<ExternalId> identifiers = new HashSet<>();
     if (isValidField(bbgUnique)) {
       identifiers.add(ExternalSchemes.bloombergBuidSecurityId(bbgUnique));
       security.setUniqueId(BloombergSecurityProvider.createUniqueId(bbgUnique));
@@ -466,18 +471,18 @@ public class BondLoader extends SecurityLoader {
       identifiers.add(ExternalSchemes.isinSecurityId(isin));
     }
     if (isValidField(idBbSecNumDes) && isValidField(marketSector)) {
-      identifiers.add(ExternalSchemes.bloombergTickerSecurityId(idBbSecNumDes.replaceAll("\\s+", " ").concat(" ").concat(marketSector.trim())));      
+      identifiers.add(ExternalSchemes.bloombergTickerSecurityId(idBbSecNumDes.replaceAll("\\s+", " ").concat(" ").concat(marketSector.trim())));
     } else if (isValidField(parsekyableDes)) {
-      s_logger.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR " + 
-                    "(essentially the Ticker, coupon, maturity + yellow key) so falling back to PARSEKYABLE_DES.  " + 
-                    " This may mean bond future baskets won't link to the underlying correctly as they are in the TCM format.", parsekyableDes);
+      LOGGER.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR "
+          + "(essentially the Ticker, coupon, maturity + yellow key) so falling back to PARSEKYABLE_DES.  "
+          + " This may mean bond future baskets won't link to the underlying correctly as they are in the TCM format.", parsekyableDes);
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(parsekyableDes.replaceAll("\\s+", " ")));
     }
     if (isValidField(ticker) && isValidField(coupon) && isValidField(maturity) && isValidField(marketSector)) {
       try {
         identifiers.add(ExternalSchemes.bloombergTCMSecurityId(ticker, coupon, maturity, marketSector));
       } catch (final Exception e) {
-        s_logger.warn("Couldn't add Bloomberg TCM to bond", e);
+        LOGGER.warn("Couldn't add Bloomberg TCM to bond", e);
       }
     }
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));

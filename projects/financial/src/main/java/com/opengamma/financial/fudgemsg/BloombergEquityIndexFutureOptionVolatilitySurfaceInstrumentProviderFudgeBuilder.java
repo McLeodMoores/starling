@@ -22,7 +22,8 @@ import com.opengamma.financial.analytics.volatility.surface.BloombergEquityIndex
  *
  */
 @FudgeBuilderFor(BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider.class)
-public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProviderFudgeBuilder implements FudgeBuilder<BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider> {
+public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProviderFudgeBuilder
+    implements FudgeBuilder<BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider> {
   /** The field indicating which value is the cutoff for asking for calls or puts */
   private static final String CALL_FIELD_NAME = "useCallAboveStrikeValue";
   /** The exchange id field name */
@@ -51,7 +52,8 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
     final Double useCallAboveValue = message.getDouble(CALL_FIELD_NAME);
     final String exchangeId = message.getString(EXCHANGE_ID_FIELD_NAME);
     final String schemeName = message.getString(TICKER_SCHEME_NAME);
-    return new BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId, schemeName);
+    return new BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId,
+        schemeName);
   }
 
 }

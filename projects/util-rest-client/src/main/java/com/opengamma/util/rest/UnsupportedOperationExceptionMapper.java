@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 /**
- * A JAX-RS exception mapper to convert {@code IllegalArgumentException} to a RESTful 503.
+ * A JAX-RS exception mapper to convert {@code UnsupportedOperationException} to a RESTful 503.
  */
 @Provider
 public class UnsupportedOperationExceptionMapper
@@ -27,20 +27,28 @@ public class UnsupportedOperationExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(UnsupportedOperationException exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final UnsupportedOperationException exception) {
+    final Map<String, String> data = getMessage();
     buildOutputMessage(exception, data);
     return createHtmlErrorPage("error-unavailable.html", data);
   }
 
   @Override
-  protected void logHtmlException(UnsupportedOperationException exception, String htmlPage) {
-    s_logger.error("RESTful website exception caught", exception);
+  protected void logHtmlException(final UnsupportedOperationException exception, final String htmlPage) {
+    LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
-  protected void logRestfulError(UnsupportedOperationException exception) {
-    s_logger.error("RESTful web-service exception caught and tunnelled to client:", exception);
+  protected void logRestfulError(final UnsupportedOperationException exception) {
+    LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
+  /**
+   * Gets the error message.
+   *
+   * @return  the message
+   */
+  Map<String, String> getMessage() {
+    return new HashMap<>();
+  }
 }

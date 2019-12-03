@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class ConfigSourceChangeProvider extends AbstractConfigChangeProvider {
 
-  private static final ConcurrentMap<ConfigSource, ConfigSourceChangeProvider> s_instances = new MapMaker().weakValues().makeMap();
+  private static final ConcurrentMap<ConfigSource, ConfigSourceChangeProvider> INSTANCES = new MapMaker().weakValues().makeMap();
 
   private final ConfigSource _configSource;
 
@@ -28,10 +28,10 @@ public class ConfigSourceChangeProvider extends AbstractConfigChangeProvider {
   }
 
   public static ConfigSourceChangeProvider of(final ConfigSource configSource) {
-    ConfigSourceChangeProvider changes = s_instances.get(configSource);
+    ConfigSourceChangeProvider changes = INSTANCES.get(configSource);
     if (changes == null) {
       changes = new ConfigSourceChangeProvider(configSource);
-      final ConfigSourceChangeProvider existing = s_instances.putIfAbsent(configSource, changes);
+      final ConfigSourceChangeProvider existing = INSTANCES.putIfAbsent(configSource, changes);
       if (existing != null) {
         return existing;
       }

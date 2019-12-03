@@ -51,29 +51,29 @@ public final class ScenarioDslScript implements ImmutableBean, ScenarioDefinitio
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance of {@code ScenarioDslScript}.
-   * 
+   *
    * @param script  the script, not null
    * @return the script, not null
    */
-  public static ScenarioDslScript of(String script) {
+  public static ScenarioDslScript of(final String script) {
     return new ScenarioDslScript(script);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ScenarioDefinition create(Map<String, Object> parameters) {
+  public ScenarioDefinition create(final Map<String, Object> parameters) {
     return SimulationUtils.createScenarioFromDsl(new StringReader(_script), parameters).createDefinition();
   }
 
   //-------------------------------------------------------------------------
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SCRIPT, null, _script);
     return msg;
   }
 
   public static ScenarioDslScript fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    String script = deserializer.fieldValueToObject(String.class, msg.getByName(SCRIPT));
+    final String script = deserializer.fieldValueToObject(String.class, msg.getByName(SCRIPT));
     return new ScenarioDslScript(script);
   }
 
@@ -145,7 +145,7 @@ public final class ScenarioDslScript implements ImmutableBean, ScenarioDefinitio
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ScenarioDslScript other = (ScenarioDslScript) obj;
-      return JodaBeanUtils.equal(getScript(), other.getScript());
+      return JodaBeanUtils.equal(_script, other._script);
     }
     return false;
   }
@@ -153,7 +153,7 @@ public final class ScenarioDslScript implements ImmutableBean, ScenarioDefinitio
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getScript());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_script);
     return hash;
   }
 
@@ -161,7 +161,7 @@ public final class ScenarioDslScript implements ImmutableBean, ScenarioDefinitio
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ScenarioDslScript{");
-    buf.append("script").append('=').append(JodaBeanUtils.toString(getScript()));
+    buf.append("script").append('=').append(JodaBeanUtils.toString(_script));
     buf.append('}');
     return buf.toString();
   }
@@ -299,19 +299,31 @@ public final class ScenarioDslScript implements ImmutableBean, ScenarioDefinitio
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

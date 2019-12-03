@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -77,7 +77,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * 
+ *
  */
 public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -96,7 +96,8 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues)
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues)
       throws AsynchronousExecution {
     final Position position = target.getPosition();
     final Clock snapshotClock = executionContext.getValuationClock();
@@ -116,12 +117,14 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
     final Schedule scheduleCalculator = getScheduleCalculator(desiredValue.getConstraint(ValuePropertyNames.SCHEDULE_CALCULATOR));
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(desiredValue.getConstraint(ValuePropertyNames.SAMPLING_FUNCTION));
     final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
-    final CreditSecurityToIdentifierVisitor identifierVisitor = new CreditSecurityToIdentifierVisitor(OpenGammaExecutionContext.getSecuritySource(executionContext));
+    final CreditSecurityToIdentifierVisitor identifierVisitor = new CreditSecurityToIdentifierVisitor(
+        OpenGammaExecutionContext.getSecuritySource(executionContext));
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
     final String spreadCurveName = security.accept(identifierVisitor).getUniqueId().getValue();
-    //TODO
+    // TODO
     final String curveName = getCurvePrefix() + "_" + spreadCurveName;
-    final CurveSpecification curveSpecification = CurveUtils.getCurveSpecification(snapshotClock.instant(), _curveDefinitionSource, _curveSpecificationBuilder, now, curveName);
+    final CurveSpecification curveSpecification = CurveUtils.getCurveSpecification(snapshotClock.instant(), _curveDefinitionSource, _curveSpecificationBuilder,
+        now, curveName);
     DoubleTimeSeries<?> fxSeries = null;
     boolean isInverse = true;
     if (!desiredCurrency.equals(currency)) {
@@ -130,7 +133,8 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
         throw new OpenGammaRuntimeException("Could not get historical FX series");
       }
       @SuppressWarnings("unchecked")
-      final Map.Entry<UnorderedCurrencyPair, DoubleTimeSeries<?>> entry = Iterables.getOnlyElement(((Map<UnorderedCurrencyPair, DoubleTimeSeries<?>>) fxSeriesObject).entrySet());
+      final Map.Entry<UnorderedCurrencyPair, DoubleTimeSeries<?>> entry = Iterables
+          .getOnlyElement(((Map<UnorderedCurrencyPair, DoubleTimeSeries<?>>) fxSeriesObject).entrySet());
       final Object currencyPairObject = inputs.getValue(ValueRequirementNames.CURRENCY_PAIRS);
       if (currencyPairObject == null) {
         throw new OpenGammaRuntimeException("Could not get currency pairs");
@@ -174,7 +178,11 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueProperties properties = createValueProperties().withAny(CURRENCY).withAny(SAMPLING_PERIOD).withAny(SAMPLING_FUNCTION).withAny(SCHEDULE_CALCULATOR)
+    final ValueProperties properties = createValueProperties()
+        .withAny(CURRENCY)
+        .withAny(SAMPLING_PERIOD)
+        .withAny(SAMPLING_FUNCTION)
+        .withAny(SCHEDULE_CALCULATOR)
         .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, ValueRequirementNames.BUCKETED_CS01).get();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
   }
@@ -255,12 +263,14 @@ public class CreditInstrumentCS01PnLFunction extends AbstractFunction.NonCompile
     return TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionName);
   }
 
-  private DoubleTimeSeries<?> getPnLSeries(final Set<CurveNodeWithIdentifier> nodes, final LocalDateLabelledMatrix1D bucketedCS01, final HistoricalTimeSeriesBundle htsBundle,
+  private DoubleTimeSeries<?> getPnLSeries(final Set<CurveNodeWithIdentifier> nodes, final LocalDateLabelledMatrix1D bucketedCS01,
+      final HistoricalTimeSeriesBundle htsBundle,
       final LocalDate[] schedule, final TimeSeriesSamplingFunction samplingFunction, final DoubleTimeSeries<?> fxSeries, final boolean isInverse) {
     DoubleTimeSeries<?> pnlSeries = null;
     final int nNodes = nodes.size();
     if (bucketedCS01.size() != nNodes) {
-      throw new OpenGammaRuntimeException("Number of nodes in credit spread curve (" + nNodes + ") does not match number of bucketed CS01 values (" + bucketedCS01.size() + ")");
+      throw new OpenGammaRuntimeException(
+          "Number of nodes in credit spread curve (" + nNodes + ") does not match number of bucketed CS01 values (" + bucketedCS01.size() + ")");
     }
     final double[] cs01 = bucketedCS01.getValues();
     int i = 0;

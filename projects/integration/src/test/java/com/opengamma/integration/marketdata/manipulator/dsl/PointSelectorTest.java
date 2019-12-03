@@ -44,12 +44,12 @@ public class PointSelectorTest {
     return new PointSelector.Builder(new Scenario("scenarioName"));
   }
 
-  private ValueSpecification valueSpec(String scheme, String value) {
+  private ValueSpecification valueSpec(final String scheme, final String value) {
     return valueSpec(ExternalId.of(scheme, value));
   }
 
-  private ValueSpecification valueSpec(ExternalId id) {
-    ValueProperties properties =
+  private ValueSpecification valueSpec(final ExternalId id) {
+    final ValueProperties properties =
         ValueProperties
             .with("Id", id.toString())
             .with(ValuePropertyNames.FUNCTION, "foo")
@@ -59,9 +59,9 @@ public class PointSelectorTest {
 
   @Test
   public void valueName() {
-    PointSelector selector = builder().getSelector(); // will match any ExternalId
+    final PointSelector selector = builder().getSelector(); // will match any ExternalId
     assertNotNull(selector.findMatchingSelector(_valueSpec, "default", _noOpResolver));
-    ValueSpecification valueSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE,
+    final ValueSpecification valueSpec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE,
         ComputationTargetSpecification.NULL,
         ValueProperties.with(ValuePropertyNames.FUNCTION, "foo").get());
     assertNull(selector.findMatchingSelector(valueSpec, "default", _noOpResolver));
@@ -69,7 +69,7 @@ public class PointSelectorTest {
 
   @Test
   public void ids() {
-    PointSelector selector = builder().ids("scheme~value1", "scheme~value2").getSelector();
+    final PointSelector selector = builder().ids("scheme~value1", "scheme~value2").getSelector();
     assertNotNull(selector.findMatchingSelector(valueSpec("scheme", "value1"), "calcConfig", _noOpResolver));
     assertNotNull(selector.findMatchingSelector(valueSpec("scheme", "value2"), "calcConfig", _noOpResolver));
     assertNull(selector.findMatchingSelector(valueSpec("scheme", "value3"), "calcConfig", _noOpResolver));
@@ -77,9 +77,9 @@ public class PointSelectorTest {
 
   @Test
   public void idMatchesOnExternalIdBundle() {
-    UniqueId uid = PrimitiveResolver.resolveExternalId(ExternalIdBundle.of(ExternalId.of("scheme-A", "value-1"), ExternalId.of("scheme-B", "value-2")));
+    final UniqueId uid = PrimitiveResolver.resolveExternalId(ExternalIdBundle.of(ExternalId.of("scheme-A", "value-1"), ExternalId.of("scheme-B", "value-2")));
 
-    ValueSpecification valueSpec = new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
+    final ValueSpecification valueSpec = new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
         new ComputationTargetSpecification(ComputationTargetType.ANYTHING, uid), ValueProperties.with(ValuePropertyNames.FUNCTION, "foo").get());
     assertNotNull(builder().idMatches("scheme-A", "value-\\d").getSelector().findMatchingSelector(valueSpec,
         "default",
@@ -108,9 +108,9 @@ public class PointSelectorTest {
 
   @Test
   public void idMatchesExactlyOnExternalIdBundle() {
-    UniqueId uid = PrimitiveResolver.resolveExternalId(ExternalIdBundle.of(ExternalId.of("scheme-A", "value-1"), ExternalId.of("scheme-B", "value-2")));
+    final UniqueId uid = PrimitiveResolver.resolveExternalId(ExternalIdBundle.of(ExternalId.of("scheme-A", "value-1"), ExternalId.of("scheme-B", "value-2")));
 
-    ValueSpecification valueSpec = new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
+    final ValueSpecification valueSpec = new ValueSpecification(MarketDataRequirementNames.MARKET_VALUE,
                                                           new ComputationTargetSpecification(ComputationTargetType.ANYTHING, uid), ValueProperties.with(ValuePropertyNames.FUNCTION, "foo").get());
     assertNotNull(builder().id("scheme-A", "value-1").getSelector().findMatchingSelector(valueSpec,
                                                                                                   "default",
@@ -133,7 +133,7 @@ public class PointSelectorTest {
 
   @Test
   public void calcConfigNames() {
-    PointSelector selector = new PointSelector(Sets.newHashSet("default", "cc1"), null, null, null, null, null, null);
+    final PointSelector selector = new PointSelector(Sets.newHashSet("default", "cc1"), null, null, null, null, null, null);
     assertNotNull(selector.findMatchingSelector(_valueSpec, "default", _noOpResolver));
     assertNotNull(selector.findMatchingSelector(_valueSpec, "cc1", _noOpResolver));
     assertNull(selector.findMatchingSelector(_valueSpec, "cc2", _noOpResolver));
@@ -141,7 +141,7 @@ public class PointSelectorTest {
 
   @Test
   public void idMatches() {
-    PointSelector selector = builder().idMatches("scheme", "value\\d").getSelector();
+    final PointSelector selector = builder().idMatches("scheme", "value\\d").getSelector();
     assertNotNull(selector.findMatchingSelector(valueSpec("scheme", "value1"), "default", _noOpResolver));
     assertNotNull(selector.findMatchingSelector(valueSpec("scheme", "value2"), "default", _noOpResolver));
     assertNull(selector.findMatchingSelector(valueSpec("scheme", "value"), "default", _noOpResolver));
@@ -149,17 +149,17 @@ public class PointSelectorTest {
 
   @Test
   public void idLike() {
-    PointSelector selector1 = builder().idLike("scheme", "value?").getSelector();
+    final PointSelector selector1 = builder().idLike("scheme", "value?").getSelector();
     assertNotNull(selector1.findMatchingSelector(valueSpec("scheme", "value1"), "default", _noOpResolver));
     assertNotNull(selector1.findMatchingSelector(valueSpec("scheme", "value2"), "default", _noOpResolver));
     assertNull(selector1.findMatchingSelector(valueSpec("scheme", "value"), "default", _noOpResolver));
 
-    PointSelector selector2 = builder().idLike("scheme", "val*").getSelector();
+    final PointSelector selector2 = builder().idLike("scheme", "val*").getSelector();
     assertNotNull(selector2.findMatchingSelector(valueSpec("scheme", "value1"), "default", _noOpResolver));
     assertNotNull(selector2.findMatchingSelector(valueSpec("scheme", "value2"), "default", _noOpResolver));
     assertNull(selector2.findMatchingSelector(valueSpec("scheme", "xvalue"), "default", _noOpResolver));
 
-    PointSelector selector3 = builder().idLike("scheme", "val%").getSelector();
+    final PointSelector selector3 = builder().idLike("scheme", "val%").getSelector();
     assertNotNull(selector3.findMatchingSelector(valueSpec("scheme", "value1"), "default", _noOpResolver));
     assertNotNull(selector3.findMatchingSelector(valueSpec("scheme", "value2"), "default", _noOpResolver));
     assertNull(selector3.findMatchingSelector(valueSpec("scheme", "xvalue"), "default", _noOpResolver));
@@ -167,26 +167,26 @@ public class PointSelectorTest {
 
   @Test
   public void securityTypes() {
-    ExternalId equityId = ExternalId.of("sec", "eq");
-    ExternalId optionId = ExternalId.of("sec", "eqo");
-    ExternalId forwardId = ExternalId.of("sec", "fx");
-    EquitySecurity equity = new EquitySecurity("exch", "excd", "ACME", Currency.USD);
-    ExternalId region = ExternalId.of("regionScheme", "regionValue");
-    ZonedDateTime now = ZonedDateTime.now();
-    FXForwardSecurity fxForward = new FXForwardSecurity(Currency.AUD, 123, Currency.CAD, 321, now, region);
-    FXOptionSecurity fxOption = new FXOptionSecurity(Currency.AUD, Currency.CAD, 123, 321, new Expiry(now),
+    final ExternalId equityId = ExternalId.of("sec", "eq");
+    final ExternalId optionId = ExternalId.of("sec", "eqo");
+    final ExternalId forwardId = ExternalId.of("sec", "fx");
+    final EquitySecurity equity = new EquitySecurity("exch", "excd", "ACME", Currency.USD);
+    final ExternalId region = ExternalId.of("regionScheme", "regionValue");
+    final ZonedDateTime now = ZonedDateTime.now();
+    final FXForwardSecurity fxForward = new FXForwardSecurity(Currency.AUD, 123, Currency.CAD, 321, now, region);
+    final FXOptionSecurity fxOption = new FXOptionSecurity(Currency.AUD, Currency.CAD, 123, 321, new Expiry(now),
         now, true, new AmericanExerciseType());
-    SelectorResolver resolver = mock(SelectorResolver.class);
+    final SelectorResolver resolver = mock(SelectorResolver.class);
     when(resolver.resolveSecurity(equityId)).thenReturn(equity);
     when(resolver.resolveSecurity(forwardId)).thenReturn(fxForward);
     when(resolver.resolveSecurity(optionId)).thenReturn(fxOption);
 
-    PointSelector lCaseSelector = builder().securityTypes("equity", "fx_forward").getSelector();
+    final PointSelector lCaseSelector = builder().securityTypes("equity", "fx_forward").getSelector();
     assertNotNull(lCaseSelector.findMatchingSelector(valueSpec(equityId), "default", resolver));
     assertNotNull(lCaseSelector.findMatchingSelector(valueSpec(forwardId), "default", resolver));
     assertNull(lCaseSelector.findMatchingSelector(valueSpec(optionId), "default", resolver));
 
-    PointSelector mixedCaseSelector = builder().securityTypes("Equity", "FX_Forward").getSelector();
+    final PointSelector mixedCaseSelector = builder().securityTypes("Equity", "FX_Forward").getSelector();
     assertNotNull(mixedCaseSelector.findMatchingSelector(valueSpec(equityId), "default", resolver));
     assertNotNull(mixedCaseSelector.findMatchingSelector(valueSpec(forwardId), "default", resolver));
     assertNull(mixedCaseSelector.findMatchingSelector(valueSpec(optionId), "default", resolver));

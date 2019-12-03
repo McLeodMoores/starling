@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -17,14 +17,13 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Expansion from Paulot, Louis, Asymptotic Implied Volatility at the Second Order With Applications to the SABR Model (2009)
- * <b>DO NOT USE This formulating gives very odd (i.e. wrong) smiles for certain parameters. It is not clear whether this is a problem with the actual paper or the
- * Implementation.  </b>
+ * Expansion from Paulot, Louis, Asymptotic Implied Volatility at the Second Order With Applications to the SABR Model (2009) <b>DO NOT USE This formulating
+ * gives very odd (i.e. wrong) smiles for certain parameters. It is not clear whether this is a problem with the actual paper or the Implementation. </b>
  */
 public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
   private static final VolatilityFunctionProvider<SABRFormulaData> HAGAN = new SABRHaganVolatilityFunction();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRPaulotVolatilityFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRPaulotVolatilityFunction.class);
 
   private static final double CUTOFF_MONEYNESS = 1e-6;
   private static final double EPS = 1e-15;
@@ -37,7 +36,7 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
     final double cutoff = forward * CUTOFF_MONEYNESS;
     final double k;
     if (strike < cutoff) {
-      s_logger.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
+      LOGGER.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
       k = cutoff;
     } else {
       k = strike;
@@ -48,7 +47,7 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();
@@ -70,7 +69,7 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
         // the formula behaves very badly close to ATM
         if (CompareUtils.closeEquals(x, 0.0, 1e-3)) {
           final double delta = 1.01e-3;
-          final double a0 = (HAGAN.getVolatilityFunction(option, forward)).evaluate(data);
+          final double a0 = HAGAN.getVolatilityFunction(option, forward).evaluate(data);
           double kPlus, kMinus;
           kPlus = forward * Math.exp(delta);
           kMinus = forward * Math.exp(-delta);
@@ -130,7 +129,7 @@ public class SABRPaulotVolatilityFunction extends VolatilityFunctionProvider<SAB
   private double getG(final double a, final double b, final double c, final double xCap, final double rCap, final double beta, final double t) {
     final double beta1 = 1 - beta;
     double res = Math.atan(t);
-    final double y = square(a + b * xCap) - square((beta1 * rCap));
+    final double y = square(a + b * xCap) - square(beta1 * rCap);
     if (y > 0) {
       final double temp = Math.sqrt(y);
       res -= (a + b * xCap) / temp * Math.atan((c * rCap + t * (a + b * (xCap - rCap))) / temp);

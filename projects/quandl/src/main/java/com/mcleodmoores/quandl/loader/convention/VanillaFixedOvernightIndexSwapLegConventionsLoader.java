@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -12,8 +12,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.StubType;
@@ -28,9 +26,11 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Creates {@link SwapFixedLegConvention}s from a csv file called "vanilla-fixed-ois-leg-conventions.csv".
- * These conventions are used to construct the fixed leg of a vanilla fixed/overnight indexed swap.
+ * Creates {@link SwapFixedLegConvention}s from a csv file called "vanilla-fixed-ois-leg-conventions.csv". These conventions are used to construct the fixed leg
+ * of a vanilla fixed/overnight indexed swap.
  */
 public final class VanillaFixedOvernightIndexSwapLegConventionsLoader implements ConventionsLoader<SwapFixedLegConvention> {
   /** An instance of this loader. */
@@ -48,8 +48,10 @@ public final class VanillaFixedOvernightIndexSwapLegConventionsLoader implements
 
   /**
    * Generates {@link SwapFixedLegConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<SwapFixedLegConvention> loadConventionsFromFile() throws Exception {
@@ -69,7 +71,8 @@ public final class VanillaFixedOvernightIndexSwapLegConventionsLoader implements
             final DayCount dayCount = DayCountFactory.of(line[3]);
             final BusinessDayConvention businessDayConvention = BusinessDayConventionFactory.of(line[4]);
             final ExternalId regionCalendar = line[5].equalsIgnoreCase("TARGET")
-                ? ExternalSchemes.financialRegionId("EU") : ExternalSchemes.countryRegionId(Country.of(line[5]));
+                ? ExternalSchemes.financialRegionId("EU")
+                : ExternalSchemes.countryRegionId(Country.of(line[5]));
             final int settlementDays = Integer.parseInt(line[6]);
             final boolean isEom = Boolean.parseBoolean(line[7]);
             final StubType stubType = StubType.valueOf(line[8].toUpperCase());

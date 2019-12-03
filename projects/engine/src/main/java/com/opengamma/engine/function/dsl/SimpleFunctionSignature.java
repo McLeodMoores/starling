@@ -14,21 +14,23 @@ import com.opengamma.lambdava.streams.Stream;
  */
 class SimpleFunctionSignature implements FunctionSignature {
 
-  private String _name;
+  private final String _name;
   private Functional<FunctionOutput> _outputs = Stream.empty();
   private Functional<FunctionInput> _inputs = Stream.empty();
-  private ComputationTargetType _computationTargetType;
+  private final ComputationTargetType _computationTargetType;
   private Class<?> _computationTargetClass;
 
-  SimpleFunctionSignature(String name, ComputationTargetType computationTargetType) {
+  SimpleFunctionSignature(final String name, final ComputationTargetType computationTargetType) {
     _name = name;
     _computationTargetType = computationTargetType;
   }
 
+  @Override
   public String getName() {
     return _name;
   }
 
+  @Override
   public ComputationTargetType getComputationTargetType() {
     return _computationTargetType;
   }
@@ -39,31 +41,33 @@ class SimpleFunctionSignature implements FunctionSignature {
   }
 
   @Override
-  public FunctionSignature addInput(FunctionInput input) {
-    SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
+  public FunctionSignature addInput(final FunctionInput input) {
+    final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
     signature.setInputs(_inputs.cons(input));
     return signature;
   }
 
   @Override
-  public FunctionSignature addOutput(FunctionOutput output) {
-    SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
+  public FunctionSignature addOutput(final FunctionOutput output) {
+    final SimpleFunctionSignature signature = new SimpleFunctionSignature(_name, _computationTargetType);
     signature.setOutputs(_outputs.cons(output));
     return signature;
   }
 
-  public FunctionSignature outputs(FunctionOutput... outputs) {
+  @Override
+  public FunctionSignature outputs(final FunctionOutput... outputs) {
     _outputs = Stream.of(outputs);
     return this;
   }
 
-  public FunctionSignature inputs(FunctionInput... inputs) {
+  @Override
+  public FunctionSignature inputs(final FunctionInput... inputs) {
     _inputs = Stream.of(inputs);
     return this;
   }
 
   @Override
-  public FunctionSignature targetClass(Class<?> clazz) {
+  public FunctionSignature targetClass(final Class<?> clazz) {
     _computationTargetClass = clazz;
     return this;
   }
@@ -73,7 +77,7 @@ class SimpleFunctionSignature implements FunctionSignature {
     return _outputs;
   }
 
-  private void setOutputs(Functional<FunctionOutput> outputs) {
+  private void setOutputs(final Functional<FunctionOutput> outputs) {
     _outputs = outputs;
   }
 
@@ -82,7 +86,7 @@ class SimpleFunctionSignature implements FunctionSignature {
     return _inputs;
   }
 
-  private void setInputs(Functional<FunctionInput> inputs) {
+  private void setInputs(final Functional<FunctionInput> inputs) {
     _inputs = inputs;
   }
 }

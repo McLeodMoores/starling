@@ -31,16 +31,20 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Method to compute the price of bond future using the Hull-White one factor model to estimate the delivery option.
- * <P> Reference: Henrard, M. Bonds futures and their options: more than the cheapest-to-deliver; quality option and margining. Journal of Fixed Income, 2006, 16, 62-75
+ * <P>
+ * Reference: Henrard, M. Bonds futures and their options: more than the cheapest-to-deliver; quality option and margining. Journal of Fixed
+ * Income, 2006, 16, 62-75
+ *
  * @deprecated Use the {@link BondFuturesTransactionHullWhiteMethod}.
  */
 @Deprecated
-public final class BondFutureHullWhiteMethod extends BondFutureMethod {
+public final class BondFutureHullWhiteMethod {
 
   /**
    * Creates the method unique instance.
@@ -55,6 +59,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Return the method unique instance.
+   *
    * @return The instance.
    */
   public static BondFutureHullWhiteMethod getInstance() {
@@ -79,10 +84,28 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   private static final HullWhiteOneFactorPiecewiseConstantInterestRateModel MODEL = new HullWhiteOneFactorPiecewiseConstantInterestRateModel();
 
   /**
+   * Compute the present value of a future transaction from a quoted price.
+   *
+   * @param future
+   *          The future.
+   * @param price
+   *          The quoted price.
+   * @return The present value.
+   */
+  public CurrencyAmount presentValueFromPrice(final BondFuture future, final double price) {
+    final double pv = (price - future.getReferencePrice()) * future.getNotional();
+    return CurrencyAmount.of(future.getCurrency(), pv);
+  }
+
+  /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model.
-   * @param future The future security.
-   * @param data The curve and Hull-White parameters.
-   * @param nbPoint The number of point in the numerical cross estimation.
+   *
+   * @param future
+   *          The future security.
+   * @param data
+   *          The curve and Hull-White parameters.
+   * @param nbPoint
+   *          The number of point in the numerical cross estimation.
    * @return The future price.
    */
   public double price(final BondFuture future, final HullWhiteIssuerProviderInterface data, final int nbPoint) {
@@ -92,12 +115,13 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     final LegalEntity issuer = future.getDeliveryBasket()[0].getIssuerEntity();
     final HullWhiteOneFactorPiecewiseConstantParameters parameters = data.getHullWhiteParameters();
     final IssuerProviderInterface issuerProvider = data.getIssuerProvider();
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider, future.getCurrency(), issuer);
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider,
+        future.getCurrency(), issuer);
     final double expiry = future.getNoticeLastTime();
     final double delivery = future.getDeliveryLastTime();
     final double dfdelivery = data.getIssuerProvider().getDiscountFactor(issuer, delivery);
     // Constructing non-homogeneous point series for the numerical estimations.
-    final int nbPtWing = ((int) Math.floor(nbPoint / 20.)); // Number of point on each wing.
+    final int nbPtWing = (int) Math.floor(nbPoint / 20.); // Number of point on each wing.
     final int nbPtCenter = nbPoint - 2 * nbPtWing;
     final double prob = 1.0 / (2.0 * nbPtCenter);
     final double xStart = NORMAL.getInverseCDF(prob);
@@ -131,9 +155,11 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
         df[loopbnd][loopcf] = issuerProvider.getDiscountFactor(issuer, cfTime[loopbnd][loopcf]);
         alpha[loopbnd][loopcf] = MODEL.alpha(parameters, 0.0, expiry, delivery, cfTime[loopbnd][loopcf]);
         beta[loopbnd][loopcf] = MODEL.futuresConvexityFactor(parameters, expiry, cfTime[loopbnd][loopcf], delivery);
-        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf] * cf[loopbnd].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[loopbnd];
+        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf]
+            * cf[loopbnd].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[loopbnd];
         for (int looppt = 0; looppt < nbPoint; looppt++) {
-          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf] * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
+          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf]
+              * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
         }
       }
       e[loopbnd] = future.getDeliveryBasket()[loopbnd].getAccruedInterest() / future.getConversionFactor()[loopbnd];
@@ -180,7 +206,8 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
       final double accuracy = 1.0E-8;
       final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
       for (int loopint = 1; loopint < nbInt; loopint++) {
-        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)], e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
+        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)],
+            e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
             alpha[ctd.get(loopint)], e[ctd.get(loopint)]);
         final double[] range = bracketer.getBracketedPoints(cross, refx.get(loopint - 1) - 0.01, refx.get(loopint - 1) + 0.01);
         kappa[loopint - 1] = rootFinder.getRoot(cross, range[0], range[1]);
@@ -193,7 +220,8 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
       // Between cross
       for (int loopint = 1; loopint < nbInt - 1; loopint++) {
         for (int loopcf = 0; loopcf < cfaAdjusted[ctd.get(loopint)].length; loopcf++) {
-          price += cfaAdjusted[ctd.get(loopint)][loopcf] * (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf]) - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf]));
+          price += cfaAdjusted[ctd.get(loopint)][loopcf] * (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf])
+              - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf]));
         }
         price -= e[ctd.get(loopint)] * (NORMAL.getCDF(kappa[loopint]) - NORMAL.getCDF(kappa[loopint - 1]));
       }
@@ -208,9 +236,13 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   }
 
   /**
-   * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. The default number of points is used for the numerical search.
-   * @param future The future security.
-   * @param data The curve and Hull-White parameters.
+   * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model. The default number of
+   * points is used for the numerical search.
+   *
+   * @param future
+   *          The future security.
+   * @param data
+   *          The curve and Hull-White parameters.
    * @return The future price.
    */
   public double price(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
@@ -219,23 +251,31 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * @param future The future.
-   * @param data The curve and Hull-White parameters.
+   *
+   * @param future
+   *          The future.
+   * @param data
+   *          The curve and Hull-White parameters.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
     final double futurePrice = price(future, data);
-    return presentValueFromPrice(future, futurePrice);
+    return MultipleCurrencyAmount.of(presentValueFromPrice(future, futurePrice));
   }
 
   /**
    * Computes the future price curve sensitivity.
-   * @param future The future security.
-   * @param data The curve and Hull-White parameters.
-   * @param nbPoint The number of point in the numerical cross estimation.
+   *
+   * @param future
+   *          The future security.
+   * @param data
+   *          The curve and Hull-White parameters.
+   * @param nbPoint
+   *          The number of point in the numerical cross estimation.
    * @return The curve sensitivity.
    */
-  public MulticurveSensitivity priceCurveSensitivity(final BondFuture future, final HullWhiteIssuerProviderInterface data, final int nbPoint) {
+  public MulticurveSensitivity priceCurveSensitivity(final BondFuture future, final HullWhiteIssuerProviderInterface data,
+      final int nbPoint) {
     ArgumentChecker.notNull(future, "Future");
     ArgumentChecker.notNull(data, "Hull-White data bundle");
     final Currency ccy = future.getCurrency();
@@ -243,13 +283,14 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     final LegalEntity issuer = future.getDeliveryBasket()[0].getIssuerEntity();
     final HullWhiteOneFactorPiecewiseConstantParameters parameters = data.getHullWhiteParameters();
     final IssuerProviderInterface issuerProvider = data.getIssuerProvider();
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider, future.getCurrency(), issuer);
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerProvider,
+        future.getCurrency(), issuer);
 
     final double expiry = future.getNoticeLastTime();
     final double delivery = future.getDeliveryLastTime();
     final double dfdelivery = data.getIssuerProvider().getDiscountFactor(issuer, delivery);
     // Constructing non-homogeneous point series for the numerical estimations.
-    final int nbPtWing = ((int) Math.floor(nbPoint / 20.)); // Number of point on each wing.
+    final int nbPtWing = (int) Math.floor(nbPoint / 20.); // Number of point on each wing.
     final int nbPtCenter = nbPoint - 2 * nbPtWing;
     final double prob = 1.0 / (2.0 * nbPtCenter);
     final double xStart = NORMAL.getInverseCDF(prob);
@@ -283,9 +324,11 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
         df[loopbnd][loopcf] = issuerProvider.getDiscountFactor(issuer, cfTime[loopbnd][loopcf]);
         alpha[loopbnd][loopcf] = MODEL.alpha(parameters, 0.0, expiry, delivery, cfTime[loopbnd][loopcf]);
         beta[loopbnd][loopcf] = MODEL.futuresConvexityFactor(parameters, expiry, cfTime[loopbnd][loopcf], delivery);
-        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf] * cf[loopbnd].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[loopbnd];
+        cfaAdjusted[loopbnd][loopcf] = df[loopbnd][loopcf] / dfdelivery * beta[loopbnd][loopcf]
+            * cf[loopbnd].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[loopbnd];
         for (int looppt = 0; looppt < nbPoint; looppt++) {
-          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf] * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
+          pv[looppt][loopbnd] += cfaAdjusted[loopbnd][loopcf]
+              * Math.exp(-alpha[loopbnd][loopcf] * alpha[loopbnd][loopcf] / 2.0 - alpha[loopbnd][loopcf] * x[looppt]);
         }
       }
       e[loopbnd] = future.getDeliveryBasket()[loopbnd].getAccruedInterest() / future.getConversionFactor()[loopbnd];
@@ -319,14 +362,15 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     // Sum on each interval
     final int nbInt = ctd.size();
     final double[] kappa = new double[nbInt - 1];
-    //    double price = 0.0;
+    // double price = 0.0;
     if (nbInt != 1) {
       // The intersections
       final BracketRoot bracketer = new BracketRoot();
       final double accuracy = 1.0E-8;
       final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(accuracy);
       for (int loopint = 1; loopint < nbInt; loopint++) {
-        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)], e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
+        final BondDifference cross = new BondDifference(cfaAdjusted[ctd.get(loopint - 1)], alpha[ctd.get(loopint - 1)],
+            e[ctd.get(loopint - 1)], cfaAdjusted[ctd.get(loopint)],
             alpha[ctd.get(loopint)], e[ctd.get(loopint)]);
         final double[] range = bracketer.getBracketedPoints(cross, refx.get(loopint - 1) - 0.01, refx.get(loopint - 1) + 0.01);
         kappa[loopint - 1] = rootFinder.getRoot(cross, range[0], range[1]);
@@ -348,9 +392,11 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     if (nbInt == 1) {
       for (int loopcf = 0; loopcf < cfaAdjusted[ctd.get(0)].length; loopcf++) {
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
-        dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[ctd.get(0)]
+        dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
+            / future.getConversionFactor()[ctd.get(0)]
             * cfaAdjustedBar[ctd.get(0)][loopcf];
-        listCredit.add(DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
+        listCredit.add(
+            DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
       }
       listCredit.add(DoublesPair.of(delivery, -delivery * dfdelivery * dfdeliveryBar));
@@ -362,7 +408,8 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
       // Between cross
       for (int loopint = 1; loopint < nbInt - 1; loopint++) {
         for (int loopcf = 0; loopcf < cfaAdjusted[ctd.get(loopint)].length; loopcf++) {
-          cfaAdjustedBar[ctd.get(loopint)][loopcf] = (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf]) - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf])) * priceBar;
+          cfaAdjustedBar[ctd.get(loopint)][loopcf] = (NORMAL.getCDF(kappa[loopint] + alpha[ctd.get(loopint)][loopcf])
+              - NORMAL.getCDF(kappa[loopint - 1] + alpha[ctd.get(loopint)][loopcf])) * priceBar;
         }
       }
       // From last cross to +infinity
@@ -371,7 +418,8 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
       }
       for (int loopbnd = 0; loopbnd < nbBond; loopbnd++) { // Could be reduced to only the ctd intervals.
         for (int loopcf = 0; loopcf < cfaAdjusted[loopbnd].length; loopcf++) {
-          dfBar[loopbnd][loopcf] = beta[loopbnd][loopcf] / dfdelivery * cf[loopbnd].getNthPayment(loopcf).getAmount() / future.getConversionFactor()[loopbnd] * cfaAdjustedBar[loopbnd][loopcf];
+          dfBar[loopbnd][loopcf] = beta[loopbnd][loopcf] / dfdelivery * cf[loopbnd].getNthPayment(loopcf).getAmount()
+              / future.getConversionFactor()[loopbnd] * cfaAdjustedBar[loopbnd][loopcf];
           listCredit.add(DoublesPair.of(cfTime[loopbnd][loopcf], -cfTime[loopbnd][loopcf] * df[loopbnd][loopcf] * dfBar[loopbnd][loopcf]));
           dfdeliveryBar += -cfaAdjusted[loopbnd][loopcf] / dfdelivery * cfaAdjustedBar[loopbnd][loopcf];
         }
@@ -384,8 +432,11 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Computes the future price curve sensitivity. The default number of points is used for the numerical search.
-   * @param future The future derivative.
-   * @param data The curve and Hull-White parameters.
+   *
+   * @param future
+   *          The future derivative.
+   * @param data
+   *          The curve and Hull-White parameters.
    * @return The curve sensitivity.
    */
   public MulticurveSensitivity priceCurveSensitivity(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
@@ -394,14 +445,19 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
 
   /**
    * Compute the present value sensitivity to rates of a bond future by discounting.
-   * @param future The future.
-   * @param data The curve and Hull-White parameters.
+   *
+   * @param future
+   *          The future.
+   * @param data
+   *          The curve and Hull-White parameters.
    * @return The present value rate sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFuture future,
+      final HullWhiteIssuerProviderInterface data) {
     Validate.notNull(future, "Future");
     final MulticurveSensitivity priceSensitivity = priceCurveSensitivity(future, data);
-    final MultipleCurrencyMulticurveSensitivity transactionSensitivity = MultipleCurrencyMulticurveSensitivity.of(future.getCurrency(), priceSensitivity.multipliedBy(future.getNotional()));
+    final MultipleCurrencyMulticurveSensitivity transactionSensitivity = MultipleCurrencyMulticurveSensitivity.of(future.getCurrency(),
+        priceSensitivity.multipliedBy(future.getNotional()));
     return transactionSensitivity;
   }
 
@@ -417,7 +473,8 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
     private final double[] _alpha2;
     private final double _e2;
 
-    public BondDifference(final double[] cfa1, final double[] alpha1, final double e1, final double[] cfa2, final double[] alpha2, final double e2) {
+    BondDifference(final double[] cfa1, final double[] alpha1, final double e1, final double[] cfa2, final double[] alpha2,
+        final double e2) {
       _cfa1 = cfa1;
       _alpha1 = alpha1;
       _e1 = e1;

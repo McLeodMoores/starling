@@ -104,10 +104,10 @@ public class PositionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single position object identifier to the set.
-   * 
+   *
    * @param positionId  the position object identifier to add, not null
    */
-  public void addPositionObjectId(ObjectIdentifiable positionId) {
+  public void addPositionObjectId(final ObjectIdentifiable positionId) {
     ArgumentChecker.notNull(positionId, "positionId");
     if (_positionObjectIds == null) {
       _positionObjectIds = new LinkedHashSet<>();
@@ -118,15 +118,15 @@ public class PositionSearchRequest extends AbstractSearchRequest {
   /**
    * Sets the set of position object identifiers, null to not limit by position object identifiers.
    * Note that an empty set will return no positions.
-   * 
+   *
    * @param positionIds  the new position identifiers, null clears the position id search
    */
-  public void setPositionObjectIds(Iterable<? extends ObjectIdentifiable> positionIds) {
+  public void setPositionObjectIds(final Iterable<? extends ObjectIdentifiable> positionIds) {
     if (positionIds == null) {
       _positionObjectIds = null;
     } else {
       _positionObjectIds = new LinkedHashSet<>();
-      for (ObjectIdentifiable positionId : positionIds) {
+      for (final ObjectIdentifiable positionId : positionIds) {
         _positionObjectIds.add(positionId.getObjectId());
       }
     }
@@ -134,10 +134,10 @@ public class PositionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a single trade object identifier to the set.
-   * 
+   *
    * @param tradeId  the trade object identifier to add, not null
    */
-  public void addTradeObjectId(ObjectIdentifiable tradeId) {
+  public void addTradeObjectId(final ObjectIdentifiable tradeId) {
     ArgumentChecker.notNull(tradeId, "tradeId");
     if (_tradeObjectIds == null) {
       _tradeObjectIds = new LinkedHashSet<>();
@@ -149,15 +149,15 @@ public class PositionSearchRequest extends AbstractSearchRequest {
    * Sets the set of trade object identifiers, null to not limit by trade object identifiers.
    * Each returned position will contain at least one of these trades.
    * Note that an empty set will return no positions.
-   * 
+   *
    * @param tradeIds  the new trade identifiers, null clears the trade id search
    */
-  public void setTradeObjectIds(Iterable<? extends ObjectIdentifiable> tradeIds) {
+  public void setTradeObjectIds(final Iterable<? extends ObjectIdentifiable> tradeIds) {
     if (tradeIds == null) {
       _tradeObjectIds = null;
     } else {
       _tradeObjectIds = new LinkedHashSet<>();
-      for (ObjectIdentifiable tradeId : tradeIds) {
+      for (final ObjectIdentifiable tradeId : tradeIds) {
         _tradeObjectIds.add(tradeId.getObjectId());
       }
     }
@@ -166,24 +166,24 @@ public class PositionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   /**
    * Adds a single security external identifier to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityId  the security key identifier to add, not null
    */
-  public void addSecurityExternalId(ExternalId securityId) {
+  public void addSecurityExternalId(final ExternalId securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     addSecurityExternalIds(Arrays.asList(securityId));
   }
 
   /**
    * Adds a collection of security external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addSecurityExternalIds(ExternalId... securityIds) {
+  public void addSecurityExternalIds(final ExternalId... securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getSecurityIdSearch() == null) {
       setSecurityIdSearch(ExternalIdSearch.of(securityIds));
@@ -194,12 +194,12 @@ public class PositionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Adds a collection of security external identifiers to the collection to search for.
-   * Unless customized, the search will match 
+   * Unless customized, the search will match
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
+   *
    * @param securityIds  the security key identifiers to add, not null
    */
-  public void addSecurityExternalIds(Iterable<ExternalId> securityIds) {
+  public void addSecurityExternalIds(final Iterable<ExternalId> securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getSecurityIdSearch() == null) {
       setSecurityIdSearch(ExternalIdSearch.of(securityIds));
@@ -210,10 +210,10 @@ public class PositionSearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch} for securities.
-   * 
+   *
    * @param type  the type to set, not null
    */
-  public void setSecurityExternalIdSearchType(ExternalIdSearchType type) {
+  public void setSecurityExternalIdSearchType(final ExternalIdSearchType type) {
     if (getSecurityIdSearch() == null) {
       setSecurityIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -224,24 +224,24 @@ public class PositionSearchRequest extends AbstractSearchRequest {
   //-------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof PositionDocument == false) {
+    if (!(obj instanceof PositionDocument)) {
       return false;
     }
     final PositionDocument document = (PositionDocument) obj;
     final ManageablePosition position = document.getPosition();
-    if (getPositionObjectIds() != null && getPositionObjectIds().contains(document.getObjectId()) == false) {
+    if (getPositionObjectIds() != null && !getPositionObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getTradeObjectIds() != null && position.matchesAnyTrade(getTradeObjectIds()) == false) {
+    if (getTradeObjectIds() != null && !position.matchesAnyTrade(getTradeObjectIds())) {
       return false;
     }
-    if (getSecurityIdSearch() != null && getSecurityIdSearch().matches(position.getSecurityLink().getAllExternalIds()) == false) {
+    if (getSecurityIdSearch() != null && !getSecurityIdSearch().matches(position.getSecurityLink().getAllExternalIds())) {
       return false;
     }
-    if (getPositionProviderId() != null && getPositionProviderId().equals(position.getProviderId()) == false) {
+    if (getPositionProviderId() != null && !getPositionProviderId().equals(position.getProviderId())) {
       return false;
     }
-    if (getTradeProviderId() != null && position.matchesAnyTradeProviderId(getTradeProviderId()) == false) {
+    if (getTradeProviderId() != null && !position.matchesAnyTradeProviderId(getTradeProviderId())) {
       return false;
     }
     if (getMinQuantity() != null && (position.getQuantity() == null || position.getQuantity().compareTo(getMinQuantity()) < 0)) {

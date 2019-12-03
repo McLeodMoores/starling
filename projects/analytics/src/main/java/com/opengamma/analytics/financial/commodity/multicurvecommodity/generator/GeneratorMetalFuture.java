@@ -47,7 +47,8 @@ public class GeneratorMetalFuture extends GeneratorInstrument<GeneratorAttribute
    * The quantity is modified to be in line with the required notional.
    */
   @Override
-  public MetalFutureTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional, final GeneratorAttribute attribute) {
+  public MetalFutureTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional,
+      final GeneratorAttribute attribute) {
     final int quantity = (int) Math.ceil(notional / _security.getUnitAmount());
     return new MetalFutureTransactionDefinition(_security, date, marketQuote, quantity);
   }
@@ -59,7 +60,7 @@ public class GeneratorMetalFuture extends GeneratorInstrument<GeneratorAttribute
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_security == null) ? 0 : _security.hashCode());
+    result = prime * result + (_security == null ? 0 : _security.hashCode());
     return result;
   }
 

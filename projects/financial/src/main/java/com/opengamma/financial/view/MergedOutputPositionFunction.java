@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class MergedOutputPositionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MergedOutputPositionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MergedOutputPositionFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -59,19 +59,21 @@ public class MergedOutputPositionFunction extends AbstractFunction.NonCompiledIn
     final Set<ValueRequirement> requirements = new HashSet<>();
     for (final Pair<String, ValueProperties> requirement : mergedOutput.getPortfolioRequirements()) {
       final String valueName = requirement.getFirst();
-      final ValueProperties constraints = requirement.getSecond().copy().with(ValuePropertyNames.NAME, mergedOutputName).withOptional(ValuePropertyNames.NAME).get();
+      final ValueProperties constraints = requirement.getSecond().copy().with(ValuePropertyNames.NAME, mergedOutputName).withOptional(ValuePropertyNames.NAME)
+          .get();
       requirements.add(new ValueRequirement(valueName, target.toSpecification(), constraints));
     }
     return requirements;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 0) {
       return null;
     }
     if (inputs.size() > 1) {
-      s_logger.error("Expected requirements for merged output to be mutually exclusive, but multiple resolved successfully: " + inputs);
+      LOGGER.error("Expected requirements for merged output to be mutually exclusive, but multiple resolved successfully: " + inputs);
       return null;
     }
     final ValueRequirement inputRequirement = Iterables.getOnlyElement(inputs.values());

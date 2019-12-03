@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -49,7 +49,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Creates an instance for a specific node.
-   * 
+   *
    * @param nodeId  the node id, not null
    */
   public CalculationNodeStatistics(final String nodeId) {
@@ -70,7 +70,7 @@ public class CalculationNodeStatistics {
   // -------------------------------------------------------------------------
   /**
    * Gets the node id.
-   * 
+   *
    * @return the node id, not null
    */
   public String getNodeId() {
@@ -79,7 +79,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Gets the number of job items.
-   * 
+   *
    * @return the number of job items
    */
   public synchronized long getJobItems() {
@@ -88,7 +88,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Gets the number of successful jobs.
-   * 
+   *
    * @return the number of successful jobs
    */
   public synchronized long getSuccessfulJobs() {
@@ -97,7 +97,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Gets the number of unsuccessful jobs.
-   * 
+   *
    * @return the number of unsuccessful jobs
    */
   public synchronized long getUnsuccessfulJobs() {
@@ -106,7 +106,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Gets the execution time in nanoseconds.
-   * 
+   *
    * @return the execution time
    */
   public synchronized long getExecutionTime() {
@@ -119,7 +119,7 @@ public class CalculationNodeStatistics {
    * to execution ratio could indicate the jobs being dispatched are too small. High non-execution time could also
    * mean a large number of failed jobs; the entire duration of which is considered overhead as the job must be
    * repeated.
-   * 
+   *
    * @return the non-execution time
    */
   public synchronized long getNonExecutionTime() {
@@ -128,7 +128,7 @@ public class CalculationNodeStatistics {
 
   /**
    * Gets the last instant a job ran.
-   * 
+   *
    * @return the last job instant, null if no job has run
    */
   public synchronized Instant getLastJobTime() {
@@ -141,16 +141,15 @@ public class CalculationNodeStatistics {
    * <p>
    * This method is for debugging only. A snapshot should be taken and then
    * analysis on the values and their relationships to each other be used.
-   * 
+   *
    * @return the average execution time
    */
   public synchronized double getAverageExecutionTime() {
     final long jobs = getSuccessfulJobs();
     if (jobs > 0) {
       return (double) getExecutionTime() / (double) jobs / 1e9;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   /**
@@ -158,16 +157,15 @@ public class CalculationNodeStatistics {
    * <p>
    * This method is for debugging only. A snapshot should be taken and then
    * analysis on the values and their relationships to each other be used.
-   * 
+   *
    * @return the average non-execution time
    */
   public synchronized double getAverageNonExecutionTime() {
     final long jobs = getSuccessfulJobs();
     if (jobs > 0) {
       return (double) getNonExecutionTime() / (double) jobs / 1e9;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   /**
@@ -175,22 +173,21 @@ public class CalculationNodeStatistics {
    * <p>
    * This method is for debugging only. A snapshot should be taken and then
    * analysis on the values and their relationships to each other be used.
-   * 
+   *
    * @return the average number of job items
    */
   public synchronized double getAverageJobItems() {
     final long jobs = getSuccessfulJobs();
     if (jobs > 0) {
       return (double) getJobItems() / (double) jobs;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   // -------------------------------------------------------------------------
   /**
    * Records a successful job.
-   * 
+   *
    * @param jobItems  the number of job items
    * @param executionNanos  the execution time in nanoseconds
    * @param durationNanos  the duration in nanoseconds
@@ -199,13 +196,13 @@ public class CalculationNodeStatistics {
     _successfulJobs++;
     _jobItems += jobItems;
     _executionNanos += executionNanos;
-    _nonExecutionNanos += (durationNanos - executionNanos);
+    _nonExecutionNanos += durationNanos - executionNanos;
     _lastJobInstant = Instant.now();
   }
 
   /**
    * Records an unsuccessful job.
-   * 
+   *
    * @param durationNanos  the duration in nanoseconds
    */
   public synchronized void recordUnsuccessfulJob(final long durationNanos) {
@@ -228,20 +225,20 @@ public class CalculationNodeStatistics {
 
   /**
    * Decays the values by a specific factor.
-   * 
+   *
    * @param factor  the factor to decay by
    */
   public synchronized void decay(final double factor) {
-    _successfulJobs -= ((double) _successfulJobs * factor);
-    _unsuccessfulJobs -= ((double) _unsuccessfulJobs * factor);
-    _jobItems -= ((double) _jobItems * factor);
-    _executionNanos -= ((double) _executionNanos * factor);
-    _nonExecutionNanos -= ((double) _nonExecutionNanos * factor);
+    _successfulJobs -= _successfulJobs * factor;
+    _unsuccessfulJobs -= _unsuccessfulJobs * factor;
+    _jobItems -= _jobItems * factor;
+    _executionNanos -= _executionNanos * factor;
+    _nonExecutionNanos -= _nonExecutionNanos * factor;
   }
 
   /**
    * Creates a snapshot of the current values.
-   * 
+   *
    * @return a snapshot, not null
    */
   public synchronized CalculationNodeStatistics snapshot() {

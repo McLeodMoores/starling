@@ -38,12 +38,12 @@ import com.opengamma.util.async.AsynchronousExecution;
 public class MarketQuotePositionFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, 
-      Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
     final ValueProperties properties = desiredValue.getConstraints();
     final Collection<ComputedValue> marketQuotes = inputs.getAllValues();
-    final Iterator<ComputedValue> iter = marketQuotes.iterator();    
+    final Iterator<ComputedValue> iter = marketQuotes.iterator();
     final Double marketQuote = (Double) iter.next().getValue();
     while (iter.hasNext()) {
       final Double test = (Double) iter.next().getValue();
@@ -51,7 +51,8 @@ public class MarketQuotePositionFunction extends AbstractFunction.NonCompiledInv
         throw new OpenGammaRuntimeException("Have different values for market quote in the same position");
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MARKET_QUOTE, target.toSpecification(), properties), marketQuote));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.MARKET_QUOTE, target.toSpecification(), properties), marketQuote));
   }
 
   @Override
@@ -60,31 +61,31 @@ public class MarketQuotePositionFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Position position = target.getPosition();
     final Collection<Trade> trades = position.getTrades();
-    for (Trade trade : trades) {
-      Security security = trade.getSecurity();
+    for (final Trade trade : trades) {
+      final Security security = trade.getSecurity();
       if (security instanceof InterestRateFutureSecurity || security instanceof DeliverableSwapFutureSecurity) {
         return true;
       }
     }
     return false;
   }
-  
+
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    final ValueProperties properties = ValueProperties.all();    
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    final ValueProperties properties = ValueProperties.all();
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.MARKET_QUOTE, target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties properties = desiredValue.getConstraints();
     final Position position = target.getPosition();
     final Collection<Trade> trades = position.getTrades();
     final Set<ValueRequirement> requirements = new HashSet<>();
-    for (Trade trade : trades) {
+    for (final Trade trade : trades) {
       requirements.add(new ValueRequirement(ValueRequirementNames.MARKET_QUOTE, ComputationTargetSpecification.of(trade), properties));
     }
     return requirements;

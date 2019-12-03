@@ -17,7 +17,7 @@
 
 <#-- SUBSECTION Main data -->
 <@subsection title="Detail" if=deleted>
-    <@rowout label="Data"><textarea readonly style="width:650px;height:300px;">${conventionXml}</textarea></@rowout>
+    <@rowout label="Data"><textarea readonly style="width:650px;height:300px;">${conventionXML}</textarea></@rowout>
 </@subsection>
 </@section>
 
@@ -30,10 +30,10 @@
     <@rowin>
       <div id="ace-xml-editor"></div>
     </@rowin>
-    <input type="hidden" name="conventionxml" id="convention-xml"/>
+    <input type="hidden" name="conventionXML" id="convention-xml"/>
     <@rowin><input type="submit" value="Update" /></@rowin>
     
-    <#noescape><@xmlEditorScript formId="updateForm" inputId="convention-xml" xmlValue="${conventionXml}"></@xmlEditorScript></#noescape>
+    <#noescape><@xmlEditorScript formId="updateForm" inputId="convention-xml" xmlValue="${conventionXML}"></@xmlEditorScript></#noescape>
   </p>
   </@form>
 </@section>

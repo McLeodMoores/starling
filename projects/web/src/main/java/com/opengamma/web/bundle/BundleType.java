@@ -28,17 +28,17 @@ public enum BundleType {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param suffix  the file suffix, not null
    */
-  BundleType(String suffix) {
+  BundleType(final String suffix) {
     _suffix = suffix;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the file suffix used by the type of file.
-   * 
+   *
    * @return the file suffix, not null
    */
   public String getSuffix() {
@@ -47,11 +47,11 @@ public enum BundleType {
 
   /**
    * Lookup the type using the file suffix.
-   * 
+   *
    * @param fileName  the file name including the suffix, null returns null
    * @return the bundle type, null if unable to determine
    */
-  public static BundleType getType(final String fileName) {    
+  public static BundleType getType(final String fileName) {
     if (StringUtils.isNotBlank(fileName)) {
       if (fileName.toLowerCase().endsWith("." + JS.getSuffix())) {
         return JS;

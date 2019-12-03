@@ -16,10 +16,10 @@ import com.opengamma.analytics.financial.provider.description.forex.BlackForexFl
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the sensitivity of the present value to the nodes of the curve(s) used in pricing. The underlying pricing
- * model is a Black model without smile.
+ * Calculates the sensitivity of the present value to the nodes of the curve(s) used in pricing. The underlying pricing model is a Black model without smile.
  */
-public final class PresentValueCurveSensitivityForexBlackFlatCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexFlatProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityForexBlackFlatCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackForexFlatProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -34,6 +34,7 @@ public final class PresentValueCurveSensitivityForexBlackFlatCalculator extends 
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityForexBlackFlatCalculator getInstance() {

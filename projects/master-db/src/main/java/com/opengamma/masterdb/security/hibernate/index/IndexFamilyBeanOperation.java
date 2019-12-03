@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -37,27 +37,27 @@ public final class IndexFamilyBeanOperation extends AbstractSecurityBeanOperatio
   }
 
   @Override
-  public IndexFamilyBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, IndexFamily index) {
+  public IndexFamilyBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final IndexFamily index) {
     final IndexFamilyBean bean = new IndexFamilyBean();
-    SortedMap<Tenor, ExternalId> members = index.getMembers();
-    Set<IndexFamilyEntryBean> entries = new HashSet<>();
-    for (Map.Entry<Tenor, ExternalId> entry : members.entrySet()) {
-      IndexFamilyEntryBean indexFamilyEntryBean = new IndexFamilyEntryBean();
+    final SortedMap<Tenor, ExternalId> members = index.getMembers();
+    final Set<IndexFamilyEntryBean> entries = new HashSet<>();
+    for (final Map.Entry<Tenor, ExternalId> entry : members.entrySet()) {
+      final IndexFamilyEntryBean indexFamilyEntryBean = new IndexFamilyEntryBean();
       indexFamilyEntryBean.setTenor(secMasterSession.getOrCreateTenorBean(entry.getKey().toFormattedString()));
       indexFamilyEntryBean.setIdentifier(externalIdToExternalIdBean(entry.getValue()));
-      entries.add(indexFamilyEntryBean);      
+      entries.add(indexFamilyEntryBean);
     }
     bean.setEntries(entries);
     return bean;
   }
 
   @Override
-  public IndexFamily createSecurity(final OperationContext context, IndexFamilyBean bean) {
-    Set<IndexFamilyEntryBean> entries = bean.getEntries();
-    IndexFamily indexFamily = new IndexFamily();
-    SortedMap<Tenor, ExternalId> map = new TreeMap<>(); // these get ordered when inserting to the indexFamily
-    for (IndexFamilyEntryBean entry : entries) {
-      Tenor tenor = Tenor.parse(entry.getTenor().getName());
+  public IndexFamily createSecurity(final OperationContext context, final IndexFamilyBean bean) {
+    final Set<IndexFamilyEntryBean> entries = bean.getEntries();
+    final IndexFamily indexFamily = new IndexFamily();
+    final SortedMap<Tenor, ExternalId> map = new TreeMap<>(); // these get ordered when inserting to the indexFamily
+    for (final IndexFamilyEntryBean entry : entries) {
+      final Tenor tenor = Tenor.parse(entry.getTenor().getName());
       map.put(tenor, externalIdBeanToExternalId(entry.getIdentifier()));
     }
     indexFamily.setMembers(map);

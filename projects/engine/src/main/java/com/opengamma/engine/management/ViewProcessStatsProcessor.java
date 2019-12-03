@@ -37,51 +37,52 @@ import com.opengamma.util.tuple.Pairs;
  * Class to analyze view processor result sets and return statistics about available results.
  */
 public class ViewProcessStatsProcessor {
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessStatsProcessor.class);
-  
-  private CompiledViewDefinition _compiledViewDef;
-  private ViewComputationResultModel _viewComputationResultModel;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessStatsProcessor.class);
+
+  private final CompiledViewDefinition _compiledViewDef;
+  private final ViewComputationResultModel _viewComputationResultModel;
   private int _successes;
   private int _failures;
   private int _errors;
   private int _total;
 
-  public ViewProcessStatsProcessor(CompiledViewDefinition compiledViewDef, ViewComputationResultModel viewComputationResultModel) {
+  public ViewProcessStatsProcessor(final CompiledViewDefinition compiledViewDef, final ViewComputationResultModel viewComputationResultModel) {
     _compiledViewDef = compiledViewDef;
     _viewComputationResultModel = viewComputationResultModel;
   }
-  
+
   public void processResult() {
 
-    ViewDefinition viewDefinition = _compiledViewDef.getViewDefinition();
+    final ViewDefinition viewDefinition = _compiledViewDef.getViewDefinition();
     for (final String calcConfigName : viewDefinition.getAllCalculationConfigurationNames()) {
-      ViewCalculationConfiguration calcConfig = viewDefinition.getCalculationConfiguration(calcConfigName);
+      final ViewCalculationConfiguration calcConfig = viewDefinition.getCalculationConfiguration(calcConfigName);
       final ValueMappings valueMappings = new ValueMappings(_compiledViewDef);
       final ViewCalculationResultModel calculationResult = _viewComputationResultModel.getCalculationResult(calcConfigName);
       final Map<String, Set<Pair<String, ValueProperties>>> portfolioRequirementsBySecurityType = calcConfig.getPortfolioRequirementsBySecurityType();
-      Portfolio portfolio = _compiledViewDef.getPortfolio();
-      PortfolioNodeTraverser traverser = new DepthFirstPortfolioNodeTraverser(new PortfolioNodeTraversalCallback() {
+      final Portfolio portfolio = _compiledViewDef.getPortfolio();
+      final PortfolioNodeTraverser traverser = new DepthFirstPortfolioNodeTraverser(new PortfolioNodeTraversalCallback() {
 
         @Override
-        public void preOrderOperation(PortfolioNode parentNode, Position position) {
-          UniqueId positionId = position.getUniqueId().toLatest();
+        public void preOrderOperation(final PortfolioNode parentNode, final Position position) {
+          final UniqueId positionId = position.getUniqueId().toLatest();
           // then construct a chained target spec pointing at a specific position.
-          ComputationTargetSpecification breadcrumbTargetSpec = ComputationTargetSpecification.of(parentNode).containing(ComputationTargetType.POSITION, positionId);
-          ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(position);
-          Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
-          String securityType = position.getSecurity().getSecurityType();
-          Set<Pair<String, ValueProperties>> valueRequirements = portfolioRequirementsBySecurityType.get(securityType);
-          s_logger.info("Processing valueRequirement " + valueRequirements + " for security type " + securityType);
+          final ComputationTargetSpecification breadcrumbTargetSpec =
+              ComputationTargetSpecification.of(parentNode).containing(ComputationTargetType.POSITION, positionId);
+          final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(position);
+          final Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
+          final String securityType = position.getSecurity().getSecurityType();
+          final Set<Pair<String, ValueProperties>> valueRequirements = portfolioRequirementsBySecurityType.get(securityType);
+          LOGGER.info("Processing valueRequirement " + valueRequirements + " for security type " + securityType);
           if (valueRequirements != null) {
-            for (Pair<String, ValueProperties> valueRequirement : valueRequirements) {
-              ValueRequirement valueReq = new ValueRequirement(valueRequirement.getFirst(), breadcrumbTargetSpec, valueRequirement.getSecond());
-              ValueSpecification valueSpec = valueMappings.getValueSpecification(calcConfigName, valueReq);
+            for (final Pair<String, ValueProperties> valueRequirement : valueRequirements) {
+              final ValueRequirement valueReq = new ValueRequirement(valueRequirement.getFirst(), breadcrumbTargetSpec, valueRequirement.getSecond());
+              final ValueSpecification valueSpec = valueMappings.getValueSpecification(calcConfigName, valueReq);
               if (valueSpec == null) {
-                s_logger.debug("Couldn't get reverse value spec mapping from requirement: " + valueReq.toString());
+                LOGGER.debug("Couldn't get reverse value spec mapping from requirement: " + valueReq.toString());
                 _failures++;
               } else {
-                Pair<String, ValueProperties> valueKey = Pairs.of(valueSpec.getValueName(), valueSpec.getProperties());
-                ComputedValueResult computedValueResult = values != null ? values.get(valueKey) : null;
+                final Pair<String, ValueProperties> valueKey = Pairs.of(valueSpec.getValueName(), valueSpec.getProperties());
+                final ComputedValueResult computedValueResult = values != null ? values.get(valueKey) : null;
                 if (computedValueResult != null) {
                   if (computedValueResult.getValue() instanceof MissingValue) {
                     _errors++;
@@ -98,13 +99,13 @@ public class ViewProcessStatsProcessor {
         }
 
         @Override
-        public void preOrderOperation(PortfolioNode portfolioNode) {}
+        public void preOrderOperation(final PortfolioNode portfolioNode) { }
 
         @Override
-        public void postOrderOperation(PortfolioNode parentNode, Position position) {}
+        public void postOrderOperation(final PortfolioNode parentNode, final Position position) { }
 
         @Override
-        public void postOrderOperation(PortfolioNode portfolioNode) {}
+        public void postOrderOperation(final PortfolioNode portfolioNode) { }
 
       });
       traverser.traverse(portfolio.getRootNode());
@@ -112,11 +113,11 @@ public class ViewProcessStatsProcessor {
   }
 
 
-  
+
   public int getSuccesses() {
     return _successes;
   }
-  
+
   public int getFailures() {
     return _failures;
   }

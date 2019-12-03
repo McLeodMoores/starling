@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise;
@@ -16,7 +16,7 @@ import com.opengamma.timeseries.DoubleTimeSeriesOperators.UnaryOperator;
  * <p>
  * The "time" key to the time-series is an instant.
  * See {@link PreciseTimeSeries} for details about the "time" represented as a {@code long}.
- * 
+ *
  * @param <T>  the instant type
  */
 public interface PreciseDoubleTimeSeries<T>
@@ -24,7 +24,7 @@ public interface PreciseDoubleTimeSeries<T>
 
   /**
    * Gets the value at the specified index.
-   * 
+   *
    * @param index  the index to retrieve
    * @return the value at the index
    * @throws IndexOutOfBoundsException if the index is invalid
@@ -34,7 +34,7 @@ public interface PreciseDoubleTimeSeries<T>
   //-------------------------------------------------------------------------
   /**
    * Gets the value at the earliest instant in the series.
-   * 
+   *
    * @return the value at the earliest instant
    * @throws NoSuchElementException if empty
    */
@@ -42,7 +42,7 @@ public interface PreciseDoubleTimeSeries<T>
 
   /**
    * Gets the value at the latest instant in the series.
-   * 
+   *
    * @return the value at the latest instant
    * @throws NoSuchElementException if empty
    */
@@ -54,9 +54,10 @@ public interface PreciseDoubleTimeSeries<T>
    * <p>
    * Although the pairs are expressed as instances of {@code Map.Entry},
    * it is recommended to use the primitive methods on {@code PreciseDoubleEntryIterator}.
-   * 
+   *
    * @return the iterator, not null
    */
+  @Override
   PreciseDoubleEntryIterator<T> iterator();
 
   //-------------------------------------------------------------------------
@@ -66,8 +67,32 @@ public interface PreciseDoubleTimeSeries<T>
   @Override  // override for covariant return type
   PreciseDoubleTimeSeries<T> subSeries(T startTime, T endTime);
 
+  /**
+   * Gets part of this series as a sub-series between two instants.
+   * <p>
+   * The instants do not have to match exactly. The sub-series contains
+   * all entries between the two instants with inclusive start and
+   * exclusive end.
+   *
+   * @param startTime  the start instant
+   * @param endTime  the end instant
+   * @return  the sub-series between the instants, not null
+   */
   PreciseDoubleTimeSeries<T> subSeriesFast(long startTime, long endTime);
 
+  /**
+   * Gets part of this series as a sub-series between two instants.
+   * <p>
+   * The instants do not have to match exactly. The sub-series contains
+   * all entries between the two instants as modified by the inclusive
+   * start/end flags.
+   *
+   * @param startTime  the start instant
+   * @param includeStart  true to include the start instant
+   * @param endTime  the end instant
+   * @param includeEnd  true to include the end instant
+   * @return  the sub-series between the instants, not null
+   */
   PreciseDoubleTimeSeries<T> subSeriesFast(long startTime, boolean includeStart, long endTime, boolean includeEnd);
 
   //-------------------------------------------------------------------------
@@ -83,7 +108,7 @@ public interface PreciseDoubleTimeSeries<T>
   //-------------------------------------------------------------------------
   /**
    * Applies a unary operator to each value in the time series.
-   * 
+   *
    * @param operator  the operator, not null
    * @return a copy of this series with the operator applied, not null
    */
@@ -91,7 +116,7 @@ public interface PreciseDoubleTimeSeries<T>
 
   /**
    * Applies a binary operator to each value in the time series.
-   * 
+   *
    * @param other  the single value passed into the binary operator
    * @param operator  the operator, not null
    * @return a copy of this series with the operator applied, not null
@@ -101,7 +126,7 @@ public interface PreciseDoubleTimeSeries<T>
   /**
    * Applies a binary operator to each value in this time series and
    * another time-series, returning the intersection of times.
-   * 
+   *
    * @param otherTimeSeries  the other time-series, not null
    * @param operator  the operator, not null
    * @return a copy of this series with the operator applied, not null
@@ -111,7 +136,7 @@ public interface PreciseDoubleTimeSeries<T>
   /**
    * Applies a binary operator to each value in this time series and
    * another time-series, returning the union of times.
-   * 
+   *
    * @param otherTimeSeries  the other time-series, not null
    * @param operator  the operator, not null
    * @return a copy of this series with the operator applied, not null
@@ -230,7 +255,7 @@ public interface PreciseDoubleTimeSeries<T>
    * <p>
    * The builder has methods to modify the time-series.
    * Entries can be added, or removed via the iterator.
-   * 
+   *
    * @return the builder, not null
    */
   PreciseDoubleTimeSeriesBuilder<T> toBuilder();

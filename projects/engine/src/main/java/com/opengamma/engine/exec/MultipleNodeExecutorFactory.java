@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
-
-import net.sf.ehcache.CacheManager;
 
 import org.springframework.beans.factory.InitializingBean;
 
@@ -13,8 +11,10 @@ import com.opengamma.engine.calcnode.stats.FunctionCosts;
 import com.opengamma.engine.exec.plan.CachingExecutionPlanner;
 import com.opengamma.engine.exec.plan.MultipleNodeExecutionPlanner;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * 
+ *
  */
 public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory implements InitializingBean {
 
@@ -31,7 +31,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
     this(new MultipleNodeExecutionPlanner());
   }
 
-  public void setCacheManager(CacheManager cacheManager) {
+  public void setCacheManager(final CacheManager cacheManager) {
     _cacheManager = cacheManager;
   }
 
@@ -41,9 +41,9 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the minimum number of items that the planner will attempt to put into each job.
-   * 
-   * @param minimumJobItems the number of items
-   * @see MultipleNodeExecutionPlanner#setMinimumJobItems
+   *
+   * @param minimumJobItems
+   *          the number of items. See {@link MultipleNodeExecutionPlanner#setMininumJobItems(int)}
    */
   public void setMinimumJobItems(final int minimumJobItems) {
     _basePlanner.setMininumJobItems(minimumJobItems);
@@ -51,7 +51,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the minimum number of items that the planner will attempt to put into each job.
-   * 
+   *
    * @return the number of items
    * @see MultipleNodeExecutionPlanner#getMinimumJobItems
    */
@@ -61,9 +61,9 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the maximum number of items that the planner will attempt to put into each job.
-   * 
-   * @param maximumJobItems the number of items
-   * @see MultipleNodeExecutionPlanner#setMaximumJobItems
+   *
+   * @param maximumJobItems
+   *          the number of items. See {@link MultipleNodeExecutionPlanner#setMaximimJobItems(int)}
    */
   public void setMaximumJobItems(final int maximumJobItems) {
     _basePlanner.setMaximimJobItems(maximumJobItems);
@@ -71,9 +71,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the maximum number of items that the planner will attempt to put into each job.
-   * 
-   * @return the number of items
-   * @see MultipleNodeExecutionPlanner#getMaximumJobItems
+   *
+   * @return the number of items. See {@link MultipleNodeExecutionPlanner#getMaximumJobItems()}
    */
   public int getMaximumJobItems() {
     return _basePlanner.getMaximumJobItems();
@@ -81,9 +80,9 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the minimum estimated cost of jobs that the planner will attempt to produce.
-   * 
-   * @param minimumJobCost the estimated cost
-   * @see MultipleNodeExecutionPlanner#setMinimumJobCost
+   *
+   * @param minimumJobCost
+   *          the estimated cost. See {@link MultipleNodeExecutionPlanner#setMinimumJobCost(long)}.
    */
   public void setMinimumJobCost(final long minimumJobCost) {
     _basePlanner.setMinimumJobCost(minimumJobCost);
@@ -91,9 +90,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the minimum estimated cost of jobs that the planner will attempt to produce.
-   * 
-   * @return the estimated cost
-   * @see MultipleNodeExecutionPlanner#getMinimumJobCost
+   *
+   * @return the estimated cost. See {@link MultipleNodeExecutionPlanner#getMinimumJobCost()}.
    */
   public long getMinimumJobCost() {
     return _basePlanner.getMinimumJobCost();
@@ -101,9 +99,9 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the maximum estimated cost of jobs that the planner will attempt to produce.
-   * 
-   * @param maximumJobCost the estimated cost
-   * @see MultipleNodeExecutionPlanner#setMaximumJobCost
+   *
+   * @param maximumJobCost
+   *          the estimated cost. See {@link MultipleNodeExecutionPlanner#setMaximumJobCost(long)}
    */
   public void setMaximumJobCost(final long maximumJobCost) {
     _basePlanner.setMaximumJobCost(maximumJobCost);
@@ -111,9 +109,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the maximum estimated cost of jobs that the planner will attempt to produce.
-   * 
-   * @return the estimated cost
-   * @see MultipleNodeExecutionPlanner#getMaximumJobCost
+   *
+   * @return the estimated cost See {@link MultipleNodeExecutionPlanner#getMaximumJobCost()}
    */
   public long getMaximumJobCost() {
     return _basePlanner.getMaximumJobCost();
@@ -121,7 +118,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Sets the concurrency limit for job tails that are streamed to a single node host.
-   * 
+   *
    * @param maximumConcurrency the number of job tails that are expected to be executing in parallel
    */
   public void setMaximumConcurrency(final int maximumConcurrency) {
@@ -130,7 +127,7 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
 
   /**
    * Returns the concurrency limit for job tails that are streamed to a single node host.
-   * 
+   *
    * @return the number of job tails that are expected to be executing in parallel
    */
   public int getMaximumConcurrency() {
@@ -146,8 +143,8 @@ public class MultipleNodeExecutorFactory extends PlanBasedGraphExecutorFactory i
   }
 
   /**
-   * Invalidates any cached execution plans (if caching is enabled). If any of the parameters have been changed then this should be called so that they will take effect instead of any previously
-   * cached plans being used.
+   * Invalidates any cached execution plans (if caching is enabled). If any of the parameters have been changed then this should be
+   * called so that they will take effect instead of any previously cached plans being used.
    */
   public void invalidateCache() {
     final CachingExecutionPlanner planner = _cachingPlanner;

@@ -20,7 +20,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private final ColumnSpecification _columnKey;
   private final TargetLookup _targetLookup;
 
-  /* package */ AnalyticsRenderer(ColumnSpecification columnKey, TargetLookup targetLookup) {
+  /* package */ AnalyticsRenderer(final ColumnSpecification columnKey, final TargetLookup targetLookup) {
     ArgumentChecker.notNull(columnKey, "columnKey");
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     _targetLookup = targetLookup;
@@ -28,27 +28,26 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public ResultsCell getResults(int rowIndex,
-                                TypeFormatter.Format format,
-                                ResultsCache cache,
-                                Class<?> columnType,
-                                Object inlineKey) {
-    Pair<String, ValueSpecification> cellTarget = _targetLookup.getTargetForCell(rowIndex, _columnKey);
+  public ResultsCell getResults(final int rowIndex,
+      final TypeFormatter.Format format,
+      final ResultsCache cache,
+      final Class<?> columnType,
+      final Object inlineKey) {
+    final Pair<String, ValueSpecification> cellTarget = _targetLookup.getTargetForCell(rowIndex, _columnKey);
     if (cellTarget != null) {
-      String calcConfigName = cellTarget.getFirst();
-      ValueSpecification valueSpec = cellTarget.getSecond();
-      ResultsCache.Result cacheResult = cache.getResult(calcConfigName, valueSpec, columnType);
-      Object value = cacheResult.getValue();
+      final String calcConfigName = cellTarget.getFirst();
+      final ValueSpecification valueSpec = cellTarget.getSecond();
+      final ResultsCache.Result cacheResult = cache.getResult(calcConfigName, valueSpec, columnType);
+      final Object value = cacheResult.getValue();
       return ResultsCell.forCalculatedValue(value,
-                                            valueSpec,
-                                            cacheResult.getHistory(),
-                                            cacheResult.getAggregatedExecutionLog(),
-                                            cacheResult.isUpdated(),
-                                            columnType,
-                                            inlineKey, format);
-    } else {
-      Collection<Object> emptyHistory = cache.emptyHistory(columnType);
-      return ResultsCell.empty(emptyHistory, columnType);
+          valueSpec,
+          cacheResult.getHistory(),
+          cacheResult.getAggregatedExecutionLog(),
+          cacheResult.isUpdated(),
+          columnType,
+          inlineKey, format);
     }
+    final Collection<Object> emptyHistory = cache.emptyHistory(columnType);
+    return ResultsCell.empty(emptyHistory, columnType);
   }
 }

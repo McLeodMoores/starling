@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -17,11 +17,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.CompareUtils;
 
 /**
- *  This is the form given in Obloj (2008), "<i>Fine-Tune Your Smile</i>", and supposedly corresponds to that given in Berestycki (2004),
- *  "<i>Computing the implied volatility in stochastic volatility models</i>". However, appears to be the same as Hagan's.
+ * This is the form given in Obloj (2008), "<i>Fine-Tune Your Smile</i>", and supposedly corresponds to that given in Berestycki (2004), "<i>Computing the
+ * implied volatility in stochastic volatility models</i>". However, appears to be the same as Hagan's.
  */
 public class SABRBerestyckiVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRBerestyckiVolatilityFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRBerestyckiVolatilityFunction.class);
 
   private static final double CUTOFF_MONEYNESS = 1e-6;
   private static final double EPS = 1e-15;
@@ -34,7 +34,7 @@ public class SABRBerestyckiVolatilityFunction extends VolatilityFunctionProvider
     final double cutoff = forward * CUTOFF_MONEYNESS;
     final double k;
     if (strike < cutoff) {
-      s_logger.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
+      LOGGER.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
       k = cutoff;
     } else {
       k = strike;
@@ -44,7 +44,7 @@ public class SABRBerestyckiVolatilityFunction extends VolatilityFunctionProvider
     return new Function1D<SABRFormulaData, Double>() {
 
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         ArgumentChecker.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();

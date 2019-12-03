@@ -18,8 +18,7 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Interface for a curve provider for FX instruments where the market data is quoted
- * as forward points.
+ * Interface for a curve provider for FX instruments where the market data is quoted as forward points.
  */
 public class MulticurveForwardPointsProvider implements MulticurveForwardPointsProviderInterface {
 
@@ -38,11 +37,16 @@ public class MulticurveForwardPointsProvider implements MulticurveForwardPointsP
 
   /**
    * Constructor.
-   * @param multicurves The multi-curve provider, not null
-   * @param forwardPoints The forward points curve, not null
-   * @param ccyPair The currency pair for which the points are valid, not null
+   *
+   * @param multicurves
+   *          The multi-curve provider, not null
+   * @param forwardPoints
+   *          The forward points curve, not null
+   * @param ccyPair
+   *          The currency pair for which the points are valid, not null
    */
-  public MulticurveForwardPointsProvider(final MulticurveProviderInterface multicurves, final DoublesCurve forwardPoints, final Pair<Currency, Currency> ccyPair) {
+  public MulticurveForwardPointsProvider(final MulticurveProviderInterface multicurves, final DoublesCurve forwardPoints,
+      final Pair<Currency, Currency> ccyPair) {
     ArgumentChecker.notNull(multicurves, "multicurves");
     ArgumentChecker.notNull(forwardPoints, "forwardPoints");
     ArgumentChecker.notNull(ccyPair, "ccyPair");
@@ -53,6 +57,7 @@ public class MulticurveForwardPointsProvider implements MulticurveForwardPointsP
 
   /**
    * Create a new copy of the provider.
+   *
    * @return The bundle.
    */
   @Override
@@ -63,6 +68,7 @@ public class MulticurveForwardPointsProvider implements MulticurveForwardPointsP
 
   /**
    * Returns the forward points curve.
+   *
    * @return The curve.
    */
   @Override
@@ -72,6 +78,7 @@ public class MulticurveForwardPointsProvider implements MulticurveForwardPointsP
 
   /**
    * Returns the currency pair for which the points are valid.
+   *
    * @return the ccyPair
    */
   @Override
@@ -81,6 +88,7 @@ public class MulticurveForwardPointsProvider implements MulticurveForwardPointsP
 
   /**
    * Returns the MulticurveProvider from which the HullWhiteOneFactorProvider is composed.
+   *
    * @return The multi-curves provider.
    */
   @Override

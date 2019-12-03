@@ -27,15 +27,15 @@ import com.opengamma.util.ResourceUtils;
 @Scriptable
 public class ServerDatabasePopulator {
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ServerDatabasePopulator.class);  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerDatabasePopulator.class);
 
   private final String _configFile;
   private final DatabasePopulatorTool _populatorTool;
-  
-  public ServerDatabasePopulator(String configFile, DatabasePopulatorTool populatorTool) {
+
+  public ServerDatabasePopulator(final String configFile, final DatabasePopulatorTool populatorTool) {
     ArgumentChecker.notNull(configFile, "configFile");
     ArgumentChecker.notNull(populatorTool, "populatorTool");
-    
+
     _configFile = configFile;
     _populatorTool = populatorTool;
   }
@@ -47,33 +47,33 @@ public class ServerDatabasePopulator {
    * @param args  the arguments, unused
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Populating demo server database");
+    LOGGER.info("Populating demo server database");
     try {
-      CommandLineOption option = new CommandLineOption(args, ServerDatabasePopulator.class);
-      String configFile = StringUtils.trimToNull(option.getConfigFile());
-      String serverUrl = StringUtils.trimToNull(option.getServerUrl());
-      
+      final CommandLineOption option = new CommandLineOption(args, ServerDatabasePopulator.class);
+      final String configFile = StringUtils.trimToNull(option.getConfigFile());
+      final String serverUrl = StringUtils.trimToNull(option.getServerUrl());
+
       if (configFile != null && serverUrl != null) {
-        ServerDatabasePopulator populator = new ServerDatabasePopulator(configFile, new DatabasePopulatorTool(serverUrl));
+        final ServerDatabasePopulator populator = new ServerDatabasePopulator(configFile, new DatabasePopulatorTool(serverUrl));
         populator.run();
       }
       System.exit(0);
     } catch (final Exception ex) {
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
       System.exit(1);
     }
   }
 
   public void run() throws Exception {
-    Resource res = ResourceUtils.createResource(_configFile);
-    Properties props = new Properties();
+    final Resource res = ResourceUtils.createResource(_configFile);
+    final Properties props = new Properties();
     try (InputStream in = res.getInputStream()) {
       if (in == null) {
         throw new FileNotFoundException(_configFile);
       }
       props.load(in);
     }
-    _populatorTool.run(ResourceUtils.toResourceLocator(res), ToolContext.class);    
+    _populatorTool.run(ResourceUtils.toResourceLocator(res), ToolContext.class);
   }
 }

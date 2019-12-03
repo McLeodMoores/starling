@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -45,7 +45,7 @@ public class LoggedResolutionTrade extends AbstractLoggedResolution<Trade> imple
     final Security security = getUnderlying().getSecurity();
     if (security != null) {
       final SecurityLink link = getSecurityLink();
-      if ((link.getExternalId() != null) && !link.getExternalId().isEmpty()) {
+      if (link.getExternalId() != null && !link.getExternalId().isEmpty()) {
         log(new ComputationTargetRequirement(ComputationTargetType.SECURITY, link.getExternalId()), security.getUniqueId());
       }
       if (link.getObjectId() != null) {
@@ -61,12 +61,12 @@ public class LoggedResolutionTrade extends AbstractLoggedResolution<Trade> imple
   }
 
   @Override
-  public void setAttributes(Map<String, String> attributes) {
+  public void setAttributes(final Map<String, String> attributes) {
     getUnderlying().setAttributes(attributes);
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     getUnderlying().addAttribute(key, value);
   }
 

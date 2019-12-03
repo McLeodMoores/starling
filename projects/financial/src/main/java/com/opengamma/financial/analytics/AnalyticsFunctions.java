@@ -7,7 +7,7 @@ package com.opengamma.financial.analytics;
 
 import java.util.List;
 
-import com.mcleodmoores.financial.function.trade.TradeFunctions;
+import com.mcleodmoores.financial.function.trade.functions.TradeFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -33,7 +33,7 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package and its sub-packages.
-   *
+   * 
    * @return the configuration source exposing functions from this package and its sub-packages
    */
   public static FunctionConfigurationSource instance() {
@@ -42,9 +42,11 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Adds an aggregation function for the given requirement name that produces the sum of the child position values.
-   *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * 
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addSummingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(FilteringSummingFunction.class, requirementName));
@@ -57,11 +59,13 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds a unit scaling function to deliver the value from position's underlying security or trade at the position level. This is normally used for positions in OTC instruments that are stored with a
-   * quantity of 1 in OpenGamma.
-   *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * Adds a unit scaling function to deliver the value from position's underlying security or trade at the position level. This is normally used for positions
+   * in OTC instruments that are stored with a quantity of 1 in OpenGamma.
+   * 
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addUnitScalingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(UnitPositionOrTradeScalingFunction.class, requirementName));
@@ -75,11 +79,13 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds a scaling function to deliver the value from a position's underlying security or trade multiplied by the quantity at the position level. This is used for positions in exchange traded
-   * instruments.
-   *
-   * @param functions the function configuration list to update, not null
-   * @param requirementName the requirement name, not null
+   * Adds a scaling function to deliver the value from a position's underlying security or trade multiplied by the quantity at the position level. This is used
+   * for positions in exchange traded instruments.
+   * 
+   * @param functions
+   *          the function configuration list to update, not null
+   * @param requirementName
+   *          the requirement name, not null
    */
   public static void addScalingFunction(final List<FunctionConfiguration> functions, final String requirementName) {
     functions.add(functionConfiguration(PositionOrTradeScalingFunction.class, requirementName));
@@ -107,9 +113,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PositionWeightFunction.class));
     functions.add(functionConfiguration(BucketedPV01Function.class));
 
-    //security attribute functions
+    // security attribute functions
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.DIRECTION.name(), ValueRequirementNames.PAY_REC));
-    functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FLOAT_FREQUENCY.name(), ValueRequirementNames.FLOAT_FREQUENCY));
+    functions
+    .add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FLOAT_FREQUENCY.name(), ValueRequirementNames.FLOAT_FREQUENCY));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.FREQUENCY.name(), ValueRequirementNames.FREQUENCY));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.INDEX.name(), ValueRequirementNames.INDEX));
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.MATURITY.name(), ValueRequirementNames.MATURITY));
@@ -132,6 +139,8 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addUnitScalingFunction(functions, ValueRequirementNames.CLEAN_PRICE);
     addUnitScalingFunction(functions, ValueRequirementNames.CONVEXITY);
     addUnitScalingFunction(functions, ValueRequirementNames.CONVEXITY_ADJUSTMENT);
+    addUnitScalingFunction(functions, ValueRequirementNames.CREDIT_SPREAD);
+    addUnitScalingFunction(functions, ValueRequirementNames.HAZARD_RATE);
     addLastHistoricalValueFunction(functions, ValueRequirementNames.DAILY_APPLIED_BETA);
     addLastHistoricalValueFunction(functions, ValueRequirementNames.DAILY_MARKET_CAP);
     addLastHistoricalValueFunction(functions, ValueRequirementNames.DAILY_PRICE);
@@ -327,7 +336,8 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.HEDGE_NOTIONAL);
 
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.BUCKETED_PV01);
-
+    addUnitScalingFunction(functions, ValueRequirementNames.SHARPE_RATIO);
+    addUnitScalingFunction(functions, ValueRequirementNames.CAPM_BETA);
     functions.add(functionConfiguration(MarketQuotePositionFunction.class));
 
   }
@@ -366,16 +376,9 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(),
-        cashFlowFunctionConfiguration(),
-        covarianceFunctionConfiguration(),
-        irCurveFunctionConfiguration(),
-        fxForwardCurveFunctionConfiguration(),
-        modelFunctionConfiguration(),
-        securityFunctionConfiguration(),
-        timeSeriesFunctionConfiguration(),
-        volatilityFunctionConfiguration(),
-        TradeFunctions.instance());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), cashFlowFunctionConfiguration(), covarianceFunctionConfiguration(),
+        irCurveFunctionConfiguration(), fxForwardCurveFunctionConfiguration(), modelFunctionConfiguration(), securityFunctionConfiguration(),
+        timeSeriesFunctionConfiguration(), volatilityFunctionConfiguration(), TradeFunctions.instance());
   }
 
 }

@@ -41,7 +41,8 @@ public class SurfaceDefinitionFunction extends AbstractFunction {
   private ConfigDBSurfaceDefinitionSource _surfaceDefinitionSource;
 
   /**
-   * @param surfaceDefinitionName The surface definition name, not null
+   * @param surfaceDefinitionName
+   *          The surface definition name, not null
    */
   public SurfaceDefinitionFunction(final String surfaceDefinitionName) {
     ArgumentChecker.notNull(surfaceDefinitionName, "surfaceDefinitionName");
@@ -84,7 +85,8 @@ public class SurfaceDefinitionFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
 

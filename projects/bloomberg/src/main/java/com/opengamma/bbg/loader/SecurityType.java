@@ -1,18 +1,15 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.loader;
 
-import com.opengamma.bbg.livedata.normalization.BloombergRateRuleProvider;
-import com.opengamma.master.security.ManageableSecurity;
-
 /**
- * Maps to {@link ManageableSecurity}.getSecurityType()
+ * Maps to {@link com.opengamma.master.security.ManageableSecurity}.getSecurityType()
  * <p>
- * Beware that market data normalisation is performed by security type, so introducing new ones or changing the
- * boundaries could have unintended consequences. See {@link BloombergRateRuleProvider}.
+ * Beware that market data normalisation is performed by security type, so introducing new ones or changing the boundaries could have unintended consequences.
+ * See {@link com.opengamma.bbg.livedata.normalization.BloombergRateRuleProvider}.
  */
 public enum SecurityType {
   /**
@@ -88,7 +85,7 @@ public enum SecurityType {
    */
   FX_FUTURE,
   /**
-   * Index
+   * Index.
    */
   INDEX,
   /**

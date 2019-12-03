@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.provider.calculator.blackstirfutures;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionMarginTransaction;
+import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
 import com.opengamma.analytics.financial.interestrate.future.provider.FuturesTransactionBlackSTIRFuturesMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSTIRFuturesProviderInterface;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -14,7 +15,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueBlackSTIRFutureOptionCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueBlackSTIRFutureOptionCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +25,7 @@ public final class PresentValueBlackSTIRFutureOptionCalculator extends Instrumen
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackSTIRFutureOptionCalculator getInstance() {
@@ -38,13 +41,19 @@ public final class PresentValueBlackSTIRFutureOptionCalculator extends Instrumen
   /**
    * Pricing methods.
    */
-  private static final FuturesTransactionBlackSTIRFuturesMethod METHOD_STIRFUT_MARGIN = new FuturesTransactionBlackSTIRFuturesMethod();
+  private static final FuturesTransactionBlackSTIRFuturesMethod STIR_METHOD = new FuturesTransactionBlackSTIRFuturesMethod();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final BlackSTIRFuturesProviderInterface black) {
-    return METHOD_STIRFUT_MARGIN.presentValue(futures, black);
+  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
+    return STIR_METHOD.presentValue(futures, black);
   }
 
+  @Override
+  public MultipleCurrencyAmount visitInterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
+    return STIR_METHOD.presentValue(futures, black);
+  }
 }

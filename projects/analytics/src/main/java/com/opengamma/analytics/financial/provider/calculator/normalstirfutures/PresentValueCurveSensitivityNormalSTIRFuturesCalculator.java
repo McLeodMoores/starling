@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueCurveSensitivityNormalSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<NormalSTIRFuturesSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityNormalSTIRFuturesCalculator
+extends InstrumentDerivativeVisitorAdapter<NormalSTIRFuturesSmileProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueCurveSensitivityNormalSTIRFuturesCalculator exten
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityNormalSTIRFuturesCalculator getInstance() {
@@ -38,9 +40,10 @@ public final class PresentValueCurveSensitivityNormalSTIRFuturesCalculator exten
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionNormalSmileMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionNormalSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionNormalSmileMethod METHOD_STRIRFUT_MARGIN =
+      InterestRateFutureOptionMarginTransactionNormalSmileMethod.getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,

@@ -20,12 +20,12 @@ import com.opengamma.util.ArgumentChecker;
  * Decodes records read from the input stream and writes them to a queue so that another thread can process them.
  * Once running, the decoding of packets by one thread should be concurrent with the handling of previous data by
  * other thread(s).
- * <p/>
+ * <p>
  * In the case that the queue fills up, the job will drop new messages to avoid blocking the input
  * queue.
  */
 public class RecordConsumptionJob implements Runnable {
-  private static final Logger s_logger = LoggerFactory.getLogger(RecordConsumptionJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RecordConsumptionJob.class);
   
   private final InputStreamFactory _inputStreamFactory;
   private final RecordStream.Factory<?> _recordStreamFactory;
@@ -54,18 +54,18 @@ public class RecordConsumptionJob implements Runnable {
     try {
       while (!_terminated.get()) {
         Object record = _recordStream.readRecord();
-        s_logger.debug("Received record {}", record);
+        LOGGER.debug("Received record {}", record);
         try {
           _queue.put(record);
         } catch (InterruptedException e) {
-          s_logger.warn("Unable to add a new record to the queue.");
+          LOGGER.warn("Unable to add a new record to the queue.");
           // TODO kirk 2013-03-19 -- Determine what else to do in this case.
           // In other words, implement the dropping logic in the javadocs.
         }
       }
     } catch (IOException e) {
-      s_logger.warn("I/O exception caught - {}", e.toString());
-      s_logger.debug("I/O exception", e);
+      LOGGER.warn("I/O exception caught - {}", e.toString());
+      LOGGER.debug("I/O exception", e);
     }
   }
   
@@ -79,7 +79,7 @@ public class RecordConsumptionJob implements Runnable {
     try {
       is = _inputStreamFactory.openConnection();
     } catch (Exception e) {
-      s_logger.warn("Unable to open stream using {}", _inputStreamFactory);
+      LOGGER.warn("Unable to open stream using {}", _inputStreamFactory);
       return;
     }
     assert is != null;
@@ -91,7 +91,7 @@ public class RecordConsumptionJob implements Runnable {
     try {
       _inputStream.close();
     } catch (Exception e) {
-      s_logger.warn("Unable to tear down connection after IOException during read.", e);
+      LOGGER.warn("Unable to tear down connection after IOException during read.", e);
     }
     
     _inputStream = null;
@@ -110,7 +110,7 @@ public class RecordConsumptionJob implements Runnable {
       if (_recordStream == null) {
         // We failed in establishing the connection. Keep trying in case
         // this is a sporadic issue.
-        s_logger.warn("Unable to establish a connection. Looping.");
+        LOGGER.warn("Unable to establish a connection. Looping.");
         continue;
       }
       

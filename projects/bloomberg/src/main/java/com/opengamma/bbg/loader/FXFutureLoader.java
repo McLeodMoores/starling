@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public class FXFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXFutureLoader.class);
 
   /**
    * The fields to load from Bloomberg.
@@ -64,13 +64,12 @@ public class FXFutureLoader extends SecurityLoader {
       FIELD_ID_BBG_UNIQUE,
       FIELD_ID_CUSIP,
       FIELD_ID_ISIN,
-      FIELD_ID_SEDOL1, 
+      FIELD_ID_SEDOL1,
       FIELD_PARSEKYABLE_DES,
       FIELD_FUT_FIRST_TRADE_DT));
-  
+
   /**
-   * Maps from the QUOTE_UNITS field to the unit amount. As more units are encountered, this approach will need to be
-   * improved.
+   * Maps from the QUOTE_UNITS field to the unit amount. As more units are encountered, this approach will need to be improved.
    */
   private static final Map<String, Double> UNIT_AMOUNT_MAP = ImmutableMap.of(
       "cents/CHF", 100d,
@@ -78,33 +77,35 @@ public class FXFutureLoader extends SecurityLoader {
       "cents/CAD", 100d);
 
   /**
-   * The valid Bloomberg future categories for FX Futures
+   * The valid Bloomberg future categories for FX Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_CURRENCY_TYPE));
-  
+
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public FXFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.FX_FUTURE);
+  public FXFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String expiryDate = fieldData.getString(FIELD_LAST_TRADEABLE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyCode = fieldData.getString(FIELD_CRNCY);
-    String quoteUnits = fieldData.getString(FIELD_QUOTE_UNITS);
-    String tradingCurrencyCode = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String quotedCurrencyCode = fieldData.getString(FIELD_QUOTED_CRNCY);
-    
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String expiryDate = fieldData.getString(FIELD_LAST_TRADEABLE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyCode = fieldData.getString(FIELD_CRNCY);
+    final String quoteUnits = fieldData.getString(FIELD_QUOTE_UNITS);
+    final String tradingCurrencyCode = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String quotedCurrencyCode = fieldData.getString(FIELD_QUOTED_CRNCY);
+
     if (!isValidField(bbgUnique)) {
       logMissingData(FIELD_ID_BBG_UNIQUE, name);
       return null;
@@ -139,30 +140,31 @@ public class FXFutureLoader extends SecurityLoader {
     if (!isValidField(category)) {
       logMissingData(FIELD_FUTURES_CATEGORY, name);
     }
-    
-    Double unitAmount = UNIT_AMOUNT_MAP.get(quoteUnits);
+
+    final Double unitAmount = UNIT_AMOUNT_MAP.get(quoteUnits);
     if (unitAmount == null) {
-      s_logger.warn("Unknown quote units: " + quoteUnits);
+      LOGGER.warn("Unknown quote units: " + quoteUnits);
       return null;
     }
-    
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
-      s_logger.warn("Unable to decode expiry '" + expiryDate + "' against trading hours '" + futureTradingHours + "'");
+      LOGGER.warn("Unable to decode expiry '" + expiryDate + "' against trading hours '" + futureTradingHours + "'");
       return null;
     }
-    Currency currency = Currency.parse(currencyCode);
-    Currency tradingCurrency = Currency.parse(tradingCurrencyCode);
-    Currency quotedCurrency = Currency.parse(quotedCurrencyCode);
-    
-    FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency, category);    
+    final Currency currency = Currency.parse(currencyCode);
+    final Currency tradingCurrency = Currency.parse(tradingCurrencyCode);
+    final Currency quotedCurrency = Currency.parse(quotedCurrencyCode);
+
+    final FXFutureSecurity security = new FXFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, tradingCurrency, quotedCurrency,
+        category);
     security.setName(name);
     parseIdentifiers(fieldData, security, FIELD_FUT_FIRST_TRADE_DT, FIELD_LAST_TRADEABLE_DT);
     return security;
   }
-  
-  private void logMissingData(String fieldName, String securityName) {
-    s_logger.warn("Cannot construct FX Future security '" + securityName + "' as " + fieldName + " is missing");
+
+  private void logMissingData(final String fieldName, final String securityName) {
+    LOGGER.warn("Cannot construct FX Future security '" + securityName + "' as " + fieldName + " is missing");
   }
 
   @Override

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.livedata.impl;
@@ -35,7 +35,7 @@ public class DataLiveDataMetaDataProviderResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying provider over REST.
-   * 
+   *
    * @param liveDataProvider  the underlying provider, not null
    */
   public DataLiveDataMetaDataProviderResource(final LiveDataMetaDataProvider liveDataProvider) {
@@ -46,7 +46,7 @@ public class DataLiveDataMetaDataProviderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the live data provider.
-   * 
+   *
    * @return the live data provider, not null
    */
   public LiveDataMetaDataProvider getLiveDataProvider() {
@@ -55,7 +55,7 @@ public class DataLiveDataMetaDataProviderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -68,9 +68,9 @@ public class DataLiveDataMetaDataProviderResource extends AbstractDataResource {
 
   @GET
   @Path("metaData")
-  public Response getMetaData(@Context UriInfo uriInfo) {
-    LiveDataMetaDataProviderRequest request = RestUtils.decodeQueryParams(uriInfo, LiveDataMetaDataProviderRequest.class);
-    LiveDataMetaDataProviderResult result = getLiveDataProvider().metaData(request);
+  public Response getMetaData(@Context final UriInfo uriInfo) {
+    final LiveDataMetaDataProviderRequest request = RestUtils.decodeQueryParams(uriInfo, LiveDataMetaDataProviderRequest.class);
+    final LiveDataMetaDataProviderResult result = getLiveDataProvider().metaData(request);
     return responseOkObject(result);
   }
 

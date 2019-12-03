@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.region;
@@ -32,7 +32,7 @@ public final class RegionDocumentComparator implements Comparator<RegionDocument
 
   //-------------------------------------------------------------------------
   @Override
-  public int compare(RegionDocument r1, RegionDocument r2) {
+  public int compare(final RegionDocument r1, final RegionDocument r2) {
     return RegionComparator.ASC.compare(r1.getRegion(), r2.getRegion());
   }
 

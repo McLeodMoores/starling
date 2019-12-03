@@ -24,46 +24,49 @@ public abstract class AbstractMarketDataAvailabilityProvider implements MarketDa
 
   /**
    * Resolves the availability of an item that can be referenced by external identifier.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifier the external identifier of the target object, not null
    * @param desiredValue the requested value to test and resolve, not null
    * @return the resolved subscription value if available, null otherwise
    */
-  protected abstract ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue);
+  protected abstract ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, ExternalId identifier,
+      ValueRequirement desiredValue);
 
   /**
    * Resolves the availability of an item that can be referenced by one or more external identifiers.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifiers the external identifiers of the target object, not null
    * @param desiredValue the requested value to test and resolve, not null
    * @return the resolved subscription value if available, null otherwise
    */
-  protected abstract ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue);
+  protected abstract ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, ExternalIdBundle identifiers,
+      ValueRequirement desiredValue);
 
   /**
-   * Resolves the availability of an item that can only be referenced by unique identifier
-   * 
+   * Resolves the availability of an item that can only be referenced by unique identifier.
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifier the unique identifier of the target object, not null
    * @param desiredValue the requested value to test and resolve, not null
    * @return the resolved subscription value if available, null otherwise
    */
-  protected abstract ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue);
+  protected abstract ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, UniqueId identifier,
+      ValueRequirement desiredValue);
 
   /**
    * Resolves the availability of the null target.
-   * 
+   *
    * @param targetSpec the target specification, always {@link ComputationTargetSpecification#NULL}
    * @param desiredValue the requested value to test and resolve, not null
    * @return the resolved subscription value if available, null otherwise
    */
-  protected abstract ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue);
+  protected abstract ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, ValueRequirement desiredValue);
 
   /**
    * Tests how the target can be referenced and defers to one of the other {@code getAvailability} methods.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param target the target to evaluate, not null
    * @param desiredValue the requested value to test and resolve, not null
@@ -91,9 +94,8 @@ public abstract class AbstractMarketDataAvailabilityProvider implements MarketDa
     }
     if (target == null) {
       return getAvailability(targetSpec, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -104,41 +106,43 @@ public abstract class AbstractMarketDataAvailabilityProvider implements MarketDa
   public static AbstractMarketDataAvailabilityProvider of(final MarketDataAvailabilityProvider provider) {
     if (provider instanceof AbstractMarketDataAvailabilityProvider) {
       return (AbstractMarketDataAvailabilityProvider) provider;
-    } else {
-      return new AbstractMarketDataAvailabilityProvider() {
-
-        @Override
-        public MarketDataAvailabilityFilter getAvailabilityFilter() {
-          return provider.getAvailabilityFilter();
-        }
-
-        @Override
-        protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
-          return provider.getAvailability(targetSpec, identifier, desiredValue);
-        }
-
-        @Override
-        protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
-          return provider.getAvailability(targetSpec, identifiers, desiredValue);
-        }
-
-        @Override
-        protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
-          return provider.getAvailability(targetSpec, identifier, desiredValue);
-        }
-
-        @Override
-        protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
-          return provider.getAvailability(targetSpec, null, desiredValue);
-        }
-
-        @Override
-        public Serializable getAvailabilityHintKey() {
-          return provider.getAvailabilityHintKey();
-        }
-
-      };
     }
+    return new AbstractMarketDataAvailabilityProvider() {
+
+      @Override
+      public MarketDataAvailabilityFilter getAvailabilityFilter() {
+        return provider.getAvailabilityFilter();
+      }
+
+      @Override
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+          final ValueRequirement desiredValue) {
+        return provider.getAvailability(targetSpec, identifier, desiredValue);
+      }
+
+      @Override
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+          final ValueRequirement desiredValue) {
+        return provider.getAvailability(targetSpec, identifiers, desiredValue);
+      }
+
+      @Override
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+          final ValueRequirement desiredValue) {
+        return provider.getAvailability(targetSpec, identifier, desiredValue);
+      }
+
+      @Override
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
+        return provider.getAvailability(targetSpec, null, desiredValue);
+      }
+
+      @Override
+      public Serializable getAvailabilityHintKey() {
+        return provider.getAvailabilityHintKey();
+      }
+
+    };
   }
 
 }

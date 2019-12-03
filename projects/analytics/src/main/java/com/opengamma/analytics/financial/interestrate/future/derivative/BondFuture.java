@@ -7,8 +7,6 @@ package com.opengamma.analytics.financial.interestrate.future.derivative;
 
 import java.util.Arrays;
 
-import com.opengamma.analytics.financial.instrument.future.BondFuturesSecurityDefinition;
-import com.opengamma.analytics.financial.instrument.future.BondFuturesTransactionDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
@@ -17,7 +15,8 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Description of a bond future (derivative version).
- * @deprecated Use the {@link BondFuturesSecurityDefinition} and {@link BondFuturesTransactionDefinition}.
+ *
+ * @deprecated Use {@link BondFuturesSecurity} and {@link BondFuturesTransaction}.
  */
 @Deprecated
 public class BondFuture implements InstrumentDerivative {
@@ -43,8 +42,8 @@ public class BondFuture implements InstrumentDerivative {
    */
   private final double _deliveryLastTime;
   /**
-   * The notional of the bond future (also called face value or contract value).
-   * TODO _notional is the unitAmount of a BondFuture. Consider changing name in constructor.
+   * The notional of the bond future (also called face value or contract value). TODO _notional is the unitAmount of a BondFuture. Consider changing name in
+   * constructor.
    */
   private final double _notional;
   /**
@@ -56,25 +55,36 @@ public class BondFuture implements InstrumentDerivative {
    */
   private final double[] _conversionFactor;
   /**
-   * The reference price is used to express present value with respect to some level, for example, the transaction price on the transaction date or the last close price afterward.
-   * The price is in relative number and not in percent. A standard price will be 0.985 and not 98.5.
-   * TODO Confirm treatment
+   * The reference price is used to express present value with respect to some level, for example, the transaction price on the transaction date or the last
+   * close price afterward. The price is in relative number and not in percent. A standard price will be 0.985 and not 98.5. TODO Confirm treatment
    */
   private final double _referencePrice;
 
   /**
    * Constructor from all the details.
-   * @param tradingLastTime The last trading time.
-   * @param noticeFirstTime The first notice time.
-   * @param noticeLastTime The last notice time.
-   * @param deliveryFirstTime The first delivery time.
-   * @param deliveryLastTime The last delivery time.
-   * @param notional The notional of the bond future.
-   * @param deliveryBasket The basket of deliverable bonds.
-   * @param conversionFactor The conversion factor of each bond in the basket.
-   * @param referencePrice The price used to express present value with respect to some level, for example, the transaction price on the transaction date or the last close price afterward.
+   * 
+   * @param tradingLastTime
+   *          The last trading time.
+   * @param noticeFirstTime
+   *          The first notice time.
+   * @param noticeLastTime
+   *          The last notice time.
+   * @param deliveryFirstTime
+   *          The first delivery time.
+   * @param deliveryLastTime
+   *          The last delivery time.
+   * @param notional
+   *          The notional of the bond future.
+   * @param deliveryBasket
+   *          The basket of deliverable bonds.
+   * @param conversionFactor
+   *          The conversion factor of each bond in the basket.
+   * @param referencePrice
+   *          The price used to express present value with respect to some level, for example, the transaction price on the transaction date or the last close
+   *          price afterward.
    */
-  public BondFuture(final double tradingLastTime, final double noticeFirstTime, final double noticeLastTime, final double deliveryFirstTime, final double deliveryLastTime, final double notional,
+  public BondFuture(final double tradingLastTime, final double noticeFirstTime, final double noticeLastTime, final double deliveryFirstTime,
+      final double deliveryLastTime, final double notional,
       final BondFixedSecurity[] deliveryBasket, final double[] conversionFactor, final double referencePrice) {
     ArgumentChecker.notNull(deliveryBasket, "Delivery basket");
     ArgumentChecker.notNull(conversionFactor, "Conversion factors");
@@ -93,6 +103,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the last trading time.
+   * 
    * @return The last trading time.
    */
   public double getTradingLastTime() {
@@ -101,6 +112,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the first notice time.
+   * 
    * @return The first notice time.
    */
   public double getNoticeFirstTime() {
@@ -109,6 +121,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the last notice time.
+   * 
    * @return The last notice time.
    */
   public double getNoticeLastTime() {
@@ -117,6 +130,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the first delivery time.
+   * 
    * @return The first delivery time.
    */
   public double getDeliveryFirstTime() {
@@ -125,6 +139,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the last delivery time.
+   * 
    * @return The last delivery time.
    */
   public double getDeliveryLastTime() {
@@ -133,6 +148,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the notional of the bond future.
+   * 
    * @return The notional of the bond future.
    */
   public double getNotional() {
@@ -141,6 +157,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the basket of deliverable bonds.
+   * 
    * @return The basket of deliverable bonds.
    */
   public BondFixedSecurity[] getDeliveryBasket() {
@@ -149,6 +166,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the conversion factor of each bond in the basket.
+   * 
    * @return The conversion factor of each bond in the basket.
    */
   public double[] getConversionFactor() {
@@ -157,6 +175,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the referencePrice.
+   * 
    * @return the referencePrice
    */
   public double getReferencePrice() {
@@ -165,6 +184,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the future currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -173,6 +193,7 @@ public class BondFuture implements InstrumentDerivative {
 
   /**
    * Gets the discount factor name.
+   * 
    * @return The name.
    * @deprecated The discounting curve name should not be set in derivatives
    */
@@ -201,17 +222,17 @@ public class BondFuture implements InstrumentDerivative {
     result = prime * result + Arrays.hashCode(_deliveryBasket);
     long temp;
     temp = Double.doubleToLongBits(_deliveryFirstTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_deliveryLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeFirstTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_tradingLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

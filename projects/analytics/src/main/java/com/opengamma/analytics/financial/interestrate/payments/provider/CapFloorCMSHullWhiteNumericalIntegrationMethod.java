@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -23,8 +23,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Pricing method of a CMS cap/floor in the Hull-White (extended Vasicek) model by approximation.
- * <P> Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008.
- * Available at http://ssrn.com/abstract=985551
+ * <P>
+ * Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008. Available at
+ * http://ssrn.com/abstract=985551
  */
 public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
 
@@ -35,6 +36,7 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CapFloorCMSHullWhiteNumericalIntegrationMethod getInstance() {
@@ -75,7 +77,8 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
 
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, multicurves);
@@ -91,14 +94,16 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
     final double alphaPayment = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, cms.getPaymentTime());
     final double dfPayment = multicurves.getDiscountFactor(ccy, cms.getPaymentTime());
     // Integration
-    final CMSIntegrant integrant = new CMSIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor, alphaPayment, cms.getStrike(), (cms.isCap() ? 1.0 : -1.0));
+    final CMSIntegrant integrant = new CMSIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor, alphaPayment,
+        cms.getStrike(), cms.isCap() ? 1.0 : -1.0);
     final double limit = 10.0;
     final double absoluteTolerance = 1.0E-8;
     final double relativeTolerance = 1.0E-9;
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double pv = 0.0;
     try {
-      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * dfPayment * cms.getNotional() * cms.getPaymentYearFraction();
+      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * dfPayment * cms.getNotional()
+          * cms.getPaymentYearFraction();
     } catch (final Exception e) {
       throw new MathException(e);
     }
@@ -120,15 +125,24 @@ public final class CapFloorCMSHullWhiteNumericalIntegrationMethod {
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlowFixed The discounted cash flows of the underlying swap fixed leg.
-     * @param alphaFixed The bond volatilities of the underlying swap fixed leg.
-     * @param discountedCashFlowIbor The discounted cash flows of the underlying swap Ibor leg.
-     * @param alphaIbor The bond volatilities of the underlying swap Ibor leg.
-     * @param alphaPayment The bond volatilities of the payment discount factor.
-     * @param strike The strike.
-     * @param omega The factor.
+     * 
+     * @param discountedCashFlowFixed
+     *          The discounted cash flows of the underlying swap fixed leg.
+     * @param alphaFixed
+     *          The bond volatilities of the underlying swap fixed leg.
+     * @param discountedCashFlowIbor
+     *          The discounted cash flows of the underlying swap Ibor leg.
+     * @param alphaIbor
+     *          The bond volatilities of the underlying swap Ibor leg.
+     * @param alphaPayment
+     *          The bond volatilities of the payment discount factor.
+     * @param strike
+     *          The strike.
+     * @param omega
+     *          The factor.
      */
-    public CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor, final double alphaPayment,
+    CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+        final double[] alphaIbor, final double alphaPayment,
         final double strike, final double omega) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;

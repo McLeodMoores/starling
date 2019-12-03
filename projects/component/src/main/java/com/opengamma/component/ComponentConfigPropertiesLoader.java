@@ -31,18 +31,18 @@ public class ComponentConfigPropertiesLoader extends AbstractComponentConfigLoad
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param logger  the logger, not null
    * @param properties  the properties being built up, not null
    */
-  public ComponentConfigPropertiesLoader(ComponentLogger logger, ConfigProperties properties) {
+  public ComponentConfigPropertiesLoader(final ComponentLogger logger, final ConfigProperties properties) {
     super(logger, properties);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Loads the properties file.
-   * 
+   *
    * @param resource  the config resource to load, not null
    * @param depth  the depth of the properties file, used for logging
    * @return the next configuration file to load, null if not specified
@@ -51,21 +51,21 @@ public class ComponentConfigPropertiesLoader extends AbstractComponentConfigLoad
   public String load(final Resource resource, final int depth) {
     try {
       return doLoad(resource, depth);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new ComponentConfigException("Unable to load properties file: " + resource, ex);
     }
   }
 
   /**
    * Loads the properties file.
-   * 
+   *
    * @param resource  the config resource to load, not null
    * @param depth  the depth of the properties file, used for logging
    * @return the next configuration file to load, null if not specified
    * @throws ComponentConfigException if the resource cannot be loaded
    */
   private String doLoad(final Resource resource, final int depth) {
-    final Map<String, String> fileProperties = new HashMap<String, String>();
+    final Map<String, String> fileProperties = new HashMap<>();
     final List<String> lines = readLines(resource);
     int lineNum = 0;
     for (String line : lines) {
@@ -74,29 +74,29 @@ public class ComponentConfigPropertiesLoader extends AbstractComponentConfigLoad
       if (line.length() == 0 || line.startsWith("#") || line.startsWith(";")) {
         continue;
       }
-      int equalsPosition = line.indexOf('=');
+      final int equalsPosition = line.indexOf('=');
       if (equalsPosition < 0) {
         throw new ComponentConfigException("Invalid format, line " + lineNum);
       }
-      String key = line.substring(0, equalsPosition).trim();
-      String value = line.substring(equalsPosition + 1).trim();
+      final String key = line.substring(0, equalsPosition).trim();
+      final String value = line.substring(equalsPosition + 1).trim();
       if (key.length() == 0) {
         throw new ComponentConfigException("Invalid empty key, line " + lineNum);
       }
       if (fileProperties.containsKey(key)) {
         throw new ComponentConfigException("Invalid file, key '" + key + "' specified twice, line " + lineNum);
       }
-      
+
       // resolve ${} references
-      ConfigProperty resolved = getProperties().resolveProperty(key, value, lineNum);
-      
+      final ConfigProperty resolved = getProperties().resolveProperty(key, value, lineNum);
+
       // handle includes
       if (key.equals(ComponentManager.MANAGER_INCLUDE)) {
         handleInclude(resource, resolved.getValue(), depth);
       } else {
         // store property
         fileProperties.put(key, resolved.getValue());
-        if (key.equals(ComponentManager.MANAGER_NEXT_FILE) == false) {
+        if (!key.equals(ComponentManager.MANAGER_NEXT_FILE)) {
           getProperties().addIfAbsent(resolved);  // first definition wins
         }
       }
@@ -106,25 +106,25 @@ public class ComponentConfigPropertiesLoader extends AbstractComponentConfigLoad
 
   /**
    * Handle the inclusion of another file.
-   * 
+   *
    * @param baseResource  the base resource, not null
    * @param includeFile  the resource to include, not null
    * @param depth  the depth of the properties file, used for logging
    * @throws ComponentConfigException if the included resource cannot be loaded
    */
-  private void handleInclude(final Resource baseResource, String includeFile, final int depth) {
+  private void handleInclude(final Resource baseResource, final String includeFile, final int depth) {
     // find resource
     Resource include;
     try {
       include = ResourceUtils.createResource(includeFile);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       try {
         include = baseResource.createRelative(includeFile);
-      } catch (Exception ex2) {
+      } catch (final Exception ex2) {
         throw new ComponentConfigException(ex2.getMessage(), ex2);
       }
     }
-    
+
     // load and merge
     getLogger().logInfo(StringUtils.repeat(" ", depth) + "   Including item: " + ResourceUtils.getLocation(include));
     load(include, depth + 1);

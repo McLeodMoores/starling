@@ -48,28 +48,28 @@ public class RemoteLoadersComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
-    ComponentServer server = remote.getComponentServer();
-    for (ComponentInfo info : server.getComponentInfos()) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
+    final ComponentServer server = remote.getComponentServer();
+    for (final ComponentInfo info : server.getComponentInfos()) {
       initComponent(repo, info);
     }
   }
 
   /**
    * Initialize the remote component.
-   * 
+   *
    * @param repo  the local repository, not null
    * @param info  the remote information, not null
    */
-  protected void initComponent(ComponentRepository repo, ComponentInfo info) {
-    URI componentUri = info.getUri();
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) && 
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Loader")) {
-      String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
-      Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
-      Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
-      Object target = ReflectionUtils.newInstance(con, componentUri);
+  protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
+    final URI componentUri = info.getUri();
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Loader")) {
+      final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
+      final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
+      final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
+      final Object target = ReflectionUtils.newInstance(con, componentUri);
       repo.registerComponent(info, target);
       if (isPublishRest()) {
         repo.getRestComponents().republish(info);

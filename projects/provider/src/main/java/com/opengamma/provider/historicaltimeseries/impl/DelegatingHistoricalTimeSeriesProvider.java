@@ -25,17 +25,17 @@ public class DelegatingHistoricalTimeSeriesProvider extends AbstractHistoricalTi
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param providers  the providers to use, keyed by data source, not null
    */
-  public DelegatingHistoricalTimeSeriesProvider(Map<String, HistoricalTimeSeriesProvider> providers) {
+  public DelegatingHistoricalTimeSeriesProvider(final Map<String, HistoricalTimeSeriesProvider> providers) {
     _providers = ImmutableMap.copyOf(providers);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesProviderGetResult doBulkGet(HistoricalTimeSeriesProviderGetRequest request) {
-    HistoricalTimeSeriesProvider underlying = _providers.get(request.getDataSource());
+  protected HistoricalTimeSeriesProviderGetResult doBulkGet(final HistoricalTimeSeriesProviderGetRequest request) {
+    final HistoricalTimeSeriesProvider underlying = _providers.get(request.getDataSource());
     if (underlying == null) {
       throw new IllegalArgumentException("Unknown data source: " + request.getDataSource());
     }

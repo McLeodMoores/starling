@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.compilation;
@@ -48,14 +48,15 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class TargetResolutionLoggerTest {
 
-  @SuppressWarnings("unchecked")
-  public void testResolve_shallow() {
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public void testResolveShallow() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection resolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Foo", "Bar"));
-    final ComputationTarget target = new ComputationTarget(spec.replaceIdentifier(UniqueId.of("Foo", "Bar", "Cow")), new Primitive(UniqueId.of("Foo", "Bar", "Cow")));
+    final ComputationTarget target =
+        new ComputationTarget(spec.replaceIdentifier(UniqueId.of("Foo", "Bar", "Cow")), new Primitive(UniqueId.of("Foo", "Bar", "Cow")));
     Mockito.when(underlying.resolve(spec)).thenReturn(target);
     final ObjectResolver shallowResolver = Mockito.mock(ObjectResolver.class);
     Mockito.when(underlying.getResolver(spec)).thenReturn(shallowResolver);
@@ -63,25 +64,27 @@ public class TargetResolutionLoggerTest {
   }
 
   @SuppressWarnings("unchecked")
-  public void testResolve_deep() {
+  public void testResolveDeep() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection resolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Foo", "Bar"));
-    final ComputationTarget target = new ComputationTarget(spec.replaceIdentifier(UniqueId.of("Foo", "Bar", "Cow")), new Primitive(UniqueId.of("Foo", "Bar", "Cow")));
+    final ComputationTarget target =
+        new ComputationTarget(spec.replaceIdentifier(UniqueId.of("Foo", "Bar", "Cow")), new Primitive(UniqueId.of("Foo", "Bar", "Cow")));
     Mockito.when(underlying.resolve(spec)).thenReturn(target);
+    @SuppressWarnings("rawtypes")
     final ObjectResolver deepResolver = Mockito.mock(ObjectResolver.class);
     Mockito.when(deepResolver.deepResolver()).thenReturn(new DeepResolver() {
       @SuppressWarnings("serial")
       @Override
-      public UniqueIdentifiable withLogger(final UniqueIdentifiable underlying, final ResolutionLogger logger) {
-        assertSame(underlying, target.getValue());
+      public UniqueIdentifiable withLogger(final UniqueIdentifiable uid, final ResolutionLogger logger) {
+        assertSame(uid, target.getValue());
         return new Primitive(UniqueId.of("Foo", "Bar", "Cow")) {
           @Override
           public int hashCode() {
             // Pretend that this is a deep-resolving operation
-            logger.log(spec, underlying.getUniqueId());
+            logger.log(spec, uid.getUniqueId());
             return super.hashCode();
           }
         };
@@ -95,8 +98,8 @@ public class TargetResolutionLoggerTest {
     assertFalse(resolutions.isEmpty());
   }
 
-  private Map<ComputationTargetReference, ComputationTargetSpecification> targets() {
-    final Map<ComputationTargetReference, ComputationTargetSpecification> map = new HashMap<ComputationTargetReference, ComputationTargetSpecification>();
+  private static Map<ComputationTargetReference, ComputationTargetSpecification> targets() {
+    final Map<ComputationTargetReference, ComputationTargetSpecification> map = new HashMap<>();
     map.put(new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "1")), ComputationTargetSpecification.NULL);
     map.put(new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "2")), null);
     map.put(new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "3")),
@@ -110,18 +113,19 @@ public class TargetResolutionLoggerTest {
 
   public void testGetSpecificationResolver_single() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
-    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver = Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
+    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver =
+        Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
     Mockito.when(underlying.getSpecificationResolver()).thenReturn(underlyingResolver);
     final ComputationTargetResolver.AtVersionCorrection targetResolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetSpecificationResolver.AtVersionCorrection specificationResolver = targetResolver.getSpecificationResolver();
     assertNotNull(specificationResolver);
     final Map<ComputationTargetReference, ComputationTargetSpecification> targets = targets();
-    for (Map.Entry<ComputationTargetReference, ComputationTargetSpecification> target : targets.entrySet()) {
+    for (final Map.Entry<ComputationTargetReference, ComputationTargetSpecification> target : targets.entrySet()) {
       Mockito.when(underlyingResolver.getTargetSpecification(target.getKey())).thenReturn(target.getValue());
     }
-    for (Map.Entry<ComputationTargetReference, ComputationTargetSpecification> target : targets.entrySet()) {
+    for (final Map.Entry<ComputationTargetReference, ComputationTargetSpecification> target : targets.entrySet()) {
       assertSame(specificationResolver.getTargetSpecification(target.getKey()), target.getValue());
     }
     assertEquals(resolutions.size(), 2);
@@ -140,15 +144,16 @@ public class TargetResolutionLoggerTest {
 
   public void testGetSpecificationResolver_multi() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
-    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver = Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
+    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver =
+        Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
     Mockito.when(underlying.getSpecificationResolver()).thenReturn(underlyingResolver);
     final ComputationTargetResolver.AtVersionCorrection targetResolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetSpecificationResolver.AtVersionCorrection specificationResolver = targetResolver.getSpecificationResolver();
     assertNotNull(specificationResolver);
     final Map<ComputationTargetReference, ComputationTargetSpecification> targets = targets();
-    final Set<ComputationTargetReference> refs = new HashSet<ComputationTargetReference>(targets.keySet());
+    final Set<ComputationTargetReference> refs = new HashSet<>(targets.keySet());
     targets.remove(new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalId.of("Test", "2")));
     Mockito.when(underlyingResolver.getTargetSpecifications(refs)).thenReturn(targets);
     assertSame(specificationResolver.getTargetSpecifications(refs), targets);
@@ -160,10 +165,11 @@ public class TargetResolutionLoggerTest {
 
   public void testGetSpecificationResolver_null() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver = Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
+    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver =
+        Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
     Mockito.when(underlying.getSpecificationResolver()).thenReturn(underlyingResolver);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection targetResolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     Mockito.when(underlyingResolver.getTargetSpecification(ComputationTargetSpecification.NULL)).thenReturn(ComputationTargetSpecification.NULL);
     assertSame(targetResolver.getSpecificationResolver().getTargetSpecification(ComputationTargetSpecification.NULL), ComputationTargetSpecification.NULL);
@@ -173,19 +179,25 @@ public class TargetResolutionLoggerTest {
 
   public void testGetSpecificationResolver_complex() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver = Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
+    final ComputationTargetSpecificationResolver.AtVersionCorrection underlyingResolver =
+        Mockito.mock(ComputationTargetSpecificationResolver.AtVersionCorrection.class);
     Mockito.when(underlying.getSpecificationResolver()).thenReturn(underlyingResolver);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection targetResolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetSpecification spec1 = ComputationTargetSpecification.of(UniqueId.of("Test", "1")).containing(
         ComputationTargetType.multiple(ComputationTargetType.POSITION, ComputationTargetType.SECURITY), UniqueId.of("Test", "2"));
-    final ComputationTargetSpecification spec1V = ComputationTargetSpecification.of(UniqueId.of("Test", "1", "V")).containing(ComputationTargetType.POSITION, UniqueId.of("Test", "2", "V"));
+    final ComputationTargetSpecification spec1V =
+        ComputationTargetSpecification.of(UniqueId.of("Test", "1", "V")).containing(ComputationTargetType.POSITION, UniqueId.of("Test", "2", "V"));
     Mockito.when(underlyingResolver.getTargetSpecification(spec1)).thenReturn(spec1V);
-    final ComputationTargetSpecification spec2 = new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
-        ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)), UniqueId.of("Test", "3"));
-    final ComputationTargetSpecification spec2V = new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
-        ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)), UniqueId.of("Test", "3", "V"));
+    final ComputationTargetSpecification spec2 =
+        new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
+            ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
+            UniqueId.of("Test", "3"));
+    final ComputationTargetSpecification spec2V =
+        new ComputationTargetSpecification(new ComputationTargetSpecification(ComputationTargetType.POSITION_OR_TRADE, UniqueId.of("Test", "4", "V")),
+            ComputationTargetType.POSITION.containing(ComputationTargetType.TRADE).or(ComputationTargetType.TRADE.containing(ComputationTargetType.SECURITY)),
+            UniqueId.of("Test", "3", "V"));
     Mockito.when(underlyingResolver.getTargetSpecification(spec2)).thenReturn(spec2V);
     assertSame(targetResolver.getSpecificationResolver().getTargetSpecification(spec1), spec1V);
     assertSame(targetResolver.getSpecificationResolver().getTargetSpecification(spec2), spec2V);
@@ -196,8 +208,8 @@ public class TargetResolutionLoggerTest {
 
   public void testSimplifyType() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection resolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final ComputationTargetType type = ComputationTargetType.of(TestSecurity.class);
     Mockito.when(underlying.simplifyType(type)).thenReturn(ComputationTargetType.SECURITY);
@@ -206,8 +218,8 @@ public class TargetResolutionLoggerTest {
 
   public void testGetVersionCorrection() {
     final ComputationTargetResolver.AtVersionCorrection underlying = Mockito.mock(ComputationTargetResolver.AtVersionCorrection.class);
-    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<ComputationTargetReference, UniqueId>();
-    final Set<UniqueId> expiredResolutions = new HashSet<UniqueId>();
+    final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions = new ConcurrentHashMap<>();
+    final Set<UniqueId> expiredResolutions = new HashSet<>();
     final ComputationTargetResolver.AtVersionCorrection resolver = TargetResolutionLogger.of(underlying, resolutions, expiredResolutions);
     final VersionCorrection vc = VersionCorrection.of(Instant.now(), Instant.now());
     Mockito.when(underlying.getVersionCorrection()).thenReturn(vc);

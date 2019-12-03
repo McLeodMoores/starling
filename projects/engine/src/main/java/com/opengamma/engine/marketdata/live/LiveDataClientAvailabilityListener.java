@@ -24,13 +24,13 @@ public class LiveDataClientAvailabilityListener extends AvailabilityNotification
    * @param topic The topic for {@link MarketDataAvailabilityNotification} messages
    * @param jmsConnector For receiving JMS messages
    */
-  public LiveDataClientAvailabilityListener(ResubscribingLiveDataClient client, String topic, JmsConnector jmsConnector) {
+  public LiveDataClientAvailabilityListener(final ResubscribingLiveDataClient client, final String topic, final JmsConnector jmsConnector) {
     super(topic, jmsConnector);
     _client = ArgumentChecker.notNull(client, "client");
   }
 
   @Override
-  protected void notificationReceived(Set<ExternalScheme> schemes) {
+  protected void notificationReceived(final Set<ExternalScheme> schemes) {
     _client.resubscribe();
   }
 }

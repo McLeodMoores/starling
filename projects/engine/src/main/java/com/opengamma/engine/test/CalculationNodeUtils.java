@@ -32,7 +32,7 @@ import com.opengamma.util.money.Currency;
 public class CalculationNodeUtils {
 
   /**
-   * Default calculation configuration name
+   * Default calculation configuration name.
    */
   public static final String CALC_CONF_NAME = "Default";
 
@@ -43,7 +43,8 @@ public class CalculationNodeUtils {
   }
 
   public static void configureTestCalcNode(final TestCalculationNode calcNode, final MockFunction mockFunction) {
-    final InMemoryFunctionRepository functionRepo = (InMemoryFunctionRepository) calcNode.getFunctionCompilationService().getFunctionRepositoryFactory().constructRepository(Instant.now());
+    final InMemoryFunctionRepository functionRepo =
+        (InMemoryFunctionRepository) calcNode.getFunctionCompilationService().getFunctionRepositoryFactory().constructRepository(Instant.now());
     functionRepo.addFunction(mockFunction);
     calcNode.getFunctionCompilationService().initialize();
   }
@@ -74,9 +75,11 @@ public class CalculationNodeUtils {
   public static CalculationJob getCalculationJob(final MockFunction function, final ExecutionLogMode logMode) {
     final Instant valuationTime = Instant.now();
     final CalculationJobSpecification jobSpec = new CalculationJobSpecification(UniqueId.of("Test", "ViewProcess"), CALC_CONF_NAME, valuationTime, 1L);
-    final CalculationJobItem calculationJobItem = new CalculationJobItem(function.getUniqueId(), function.getDefaultParameters(), function.getTarget().toSpecification(),
-        getMockFunctionInputs(function), function.getResultSpecs(), logMode);
-    final CalculationJob calcJob = new CalculationJob(jobSpec, 0L, VersionCorrection.LATEST, null, Collections.singletonList(calculationJobItem), CacheSelectHint.allShared());
+    final CalculationJobItem calculationJobItem = new CalculationJobItem(function.getUniqueId(),
+        function.getDefaultParameters(), function.getTarget().toSpecification(),
+          getMockFunctionInputs(function), function.getResultSpecs(), logMode);
+    final CalculationJob calcJob =
+        new CalculationJob(jobSpec, 0L, VersionCorrection.LATEST, null, Collections.singletonList(calculationJobItem), CacheSelectHint.allShared());
     return calcJob;
   }
 

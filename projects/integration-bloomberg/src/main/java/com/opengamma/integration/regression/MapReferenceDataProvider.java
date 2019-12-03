@@ -20,8 +20,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * An implementation of a reference data provider that gets reference data from an underlying map
- * (identifier -> map(data field -> reference data)). The code is copied from <code>MockReferenceDataProvider</code>.
+ * An implementation of a reference data provider that gets reference data from an underlying map (identifier -&gt; map(data field -&gt; reference data)). The
+ * code is copied from <code>MockReferenceDataProvider</code>.
  */
 public class MapReferenceDataProvider extends AbstractReferenceDataProvider {
   /** A map from identifier to map of data field to reference data */

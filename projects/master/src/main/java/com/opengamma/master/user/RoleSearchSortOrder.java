@@ -20,7 +20,7 @@ public enum RoleSearchSortOrder implements Comparator<ManageableRole> {
    */
   OBJECT_ID_ASC {
     @Override
-    public int compare(ManageableRole obj1, ManageableRole obj2) {
+    public int compare(final ManageableRole obj1, final ManageableRole obj2) {
       return obj1.getObjectId().compareTo(obj2.getObjectId());
     }
   },
@@ -29,7 +29,7 @@ public enum RoleSearchSortOrder implements Comparator<ManageableRole> {
    */
   OBJECT_ID_DESC {
     @Override
-    public int compare(ManageableRole obj1, ManageableRole obj2) {
+    public int compare(final ManageableRole obj1, final ManageableRole obj2) {
       return obj2.getObjectId().compareTo(obj1.getObjectId());
     }
   },
@@ -38,7 +38,7 @@ public enum RoleSearchSortOrder implements Comparator<ManageableRole> {
    */
   NAME_ASC {
     @Override
-    public int compare(ManageableRole obj1, ManageableRole obj2) {
+    public int compare(final ManageableRole obj1, final ManageableRole obj2) {
       return ObjectUtils.compare(obj1.getRoleName(), obj2.getRoleName(), true);
     }
   },
@@ -47,7 +47,7 @@ public enum RoleSearchSortOrder implements Comparator<ManageableRole> {
    */
   NAME_DESC {
     @Override
-    public int compare(ManageableRole obj1, ManageableRole obj2) {
+    public int compare(final ManageableRole obj1, final ManageableRole obj2) {
       return ObjectUtils.compare(obj2.getRoleName(), obj1.getRoleName(), true);
     }
   };

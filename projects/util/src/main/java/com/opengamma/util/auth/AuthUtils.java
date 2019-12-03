@@ -11,10 +11,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.ThreadContext;
 
 import com.opengamma.util.ArgumentChecker;
 
@@ -28,7 +26,7 @@ public final class AuthUtils {
   /**
    * The singleton permission resolver.
    */
-  private static final ShiroPermissionResolver s_permissionResolver = new ShiroPermissionResolver();
+  private static final ShiroPermissionResolver PERMISSION_RESOLVER = new ShiroPermissionResolver();
 
   // always setup a security manager
   static {
@@ -45,26 +43,24 @@ public final class AuthUtils {
   /**
    * Returns the {@code PermissionResolver} that creates authorization {@code Permission} instances.
    * <p>
-   * The authorization system is based on {@link Permission} instances.
-   * A {@link PermissionResolver} is used as a factory to create {@code Permission} instances.
+   * The authorization system is based on {@link Permission} instances. A {@link org.apache.shiro.authz.permission.PermissionResolver} is used as a factory to
+   * create {@code Permission} instances.
    * <p>
-   * The permission resolver returned here is a singleton that provides the ability
-   * to switch the permission implementation based on a prefix.
+   * The permission resolver returned here is a singleton that provides the ability to switch the permission implementation based on a prefix.
    *
    * @return the singleton {@code PermissionResolver}, not null
    */
   public static ShiroPermissionResolver getPermissionResolver() {
-    return s_permissionResolver;
+    return PERMISSION_RESOLVER;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the single shared security manager.
    * <p>
-   * The shared security manager is used as a fallback when there is no manager
-   * in the {@link ThreadContext}.
-   * This will return a permissive security manager by default.
-   * 
+   * The shared security manager is used as a fallback when there is no manager in the {@link org.apache.shiro.util.ThreadContext}. This will return a
+   * permissive security manager by default.
+   *
    * @return the security manager, not null
    */
   public static SecurityManager getSecurityManager() {
@@ -74,13 +70,13 @@ public final class AuthUtils {
   /**
    * Sets the single shared security manager.
    * <p>
-   * The shared security manager is used as a fallback when there is no manager
-   * in the {@link ThreadContext}.
-   * This method can only be called if the current manager is permissive.
-   * 
-   * @param securityManager  the new security manager, not null
+   * The shared security manager is used as a fallback when there is no manager in the {@link org.apache.shiro.util.ThreadContext}. This method can only be
+   * called if the current manager is permissive.
+   *
+   * @param securityManager
+   *          the new security manager, not null
    */
-  public static void initSecurityManager(SecurityManager securityManager) {
+  public static void initSecurityManager(final SecurityManager securityManager) {
     if (isPermissive()) {
       SecurityUtils.setSecurityManager(securityManager);
     } else {
@@ -102,7 +98,7 @@ public final class AuthUtils {
   /**
    * Checks if the authentication and authorization system is in permissive mode.
    * Permissive mode has a logged on user with all permissions granted.
-   * 
+   *
    * @return true if permissive
    */
   public static boolean isPermissive() {
@@ -112,7 +108,7 @@ public final class AuthUtils {
   /**
    * Checks if the authentication and authorization system is still in the
    * default permissive mode.
-   * 
+   *
    * @return true if the security manager has not been set
    */
   public static boolean isDefault() {
@@ -155,25 +151,25 @@ public final class AuthUtils {
   //-------------------------------------------------------------------------
   /**
    * Checks that the user has all the permissions necessary to see the entity.
-   * 
+   *
    * @param permissionable  the entity to be checked, not null
    * @return true if permitted
    */
-  public static boolean isPermitted(Permissionable permissionable) {
+  public static boolean isPermitted(final Permissionable permissionable) {
     ArgumentChecker.notNull(permissionable, "entity");
-    Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
+    final Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
     return AuthUtils.getSubject().isPermittedAll(requiredPermissions);
   }
 
   /**
    * Checks that the user has all the permissions necessary to see the entity.
-   * 
+   *
    * @param permissionable  the entity to be checked, not null
    * @throws AuthorizationException if the user does not have permission
    */
-  public static void checkPermissions(Permissionable permissionable) {
+  public static void checkPermissions(final Permissionable permissionable) {
     ArgumentChecker.notNull(permissionable, "entity");
-    Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
+    final Set<Permission> requiredPermissions = AuthUtils.getPermissionResolver().resolvePermissions(permissionable.getRequiredPermissions());
     AuthUtils.getSubject().checkPermissions(requiredPermissions);
   }
 

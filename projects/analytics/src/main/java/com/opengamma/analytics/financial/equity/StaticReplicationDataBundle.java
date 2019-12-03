@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -39,7 +39,7 @@ public class StaticReplicationDataBundle {
   }
 
   /**
-   * Create a data bundle based upon a new volatility surface
+   * Create a data bundle based upon a new volatility surface.
    * @param volSurf the volatility surface
    * @return StaticReplicationDataBundle
    */
@@ -49,7 +49,7 @@ public class StaticReplicationDataBundle {
   }
 
   /**
-   * Create a data bundle based upon a new forward curve
+   * Create a data bundle based upon a new forward curve.
    * @param forwardCurve the forward curve
    * @return StaticReplicationDataBundle
    */
@@ -59,7 +59,7 @@ public class StaticReplicationDataBundle {
   }
 
   /**
-   * Create a data bundle based upon a new discount curve
+   * Create a data bundle based upon a new discount curve.
    * @param discCrv the discount curve
    * @return StaticReplicationDataBundle
    */

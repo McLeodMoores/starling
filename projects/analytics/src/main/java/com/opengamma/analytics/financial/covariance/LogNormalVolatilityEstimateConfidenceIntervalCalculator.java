@@ -17,7 +17,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
  * The estimate is given by:
  * $$
  * \begin{eqnarray*}
- * P\left[\hat{\sigma}\sqrt{\frac{n-1}{\chi^2(n-1; \frac{\alpha}{2})}} \leq \sigma \leq \hat{\sigma}\sqrt{\frac{n-1}{\chi^2(n-1; 1 - \frac{\alpha}{2})}}\right] = 1 - \alpha
+ * P\left[\hat{\sigma}\sqrt{\frac{n-1}{\chi^2(n-1; \frac{\alpha}{2})}} \leq
+ * \sigma \leq \hat{\sigma}\sqrt{\frac{n-1}{\chi^2(n-1; 1 - \frac{\alpha}{2})}}\right] = 1 - \alpha
  * \end{eqnarray*}
  * $$
  * where $\chi^2(n-1; \frac{\alpha}{2})$ is the value of the $\chi^2$

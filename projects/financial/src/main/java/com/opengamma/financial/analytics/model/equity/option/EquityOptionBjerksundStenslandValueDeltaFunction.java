@@ -31,7 +31,7 @@ public class EquityOptionBjerksundStenslandValueDeltaFunction extends EquityOpti
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBjerksundStenslandValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);

@@ -60,23 +60,23 @@ public final class ExternalId
 
   /**
    * Obtains an {@code ExternalId} from a scheme and value.
-   * 
+   *
    * @param scheme  the scheme of the external identifier, not empty, not null
    * @param value  the value of the external identifier, not empty, not null
    * @return the external identifier, not null
    */
-  public static ExternalId of(ExternalScheme scheme, String value) {
+  public static ExternalId of(final ExternalScheme scheme, final String value) {
     return new ExternalId(scheme, value);
   }
 
   /**
    * Obtains an {@code ExternalId} from a scheme and value.
-   * 
+   *
    * @param scheme  the scheme of the external identifier, not empty, not null
    * @param value  the value of the external identifier, not empty, not null
    * @return the external identifier, not null
    */
-  public static ExternalId of(String scheme, String value) {
+  public static ExternalId of(final String scheme, final String value) {
     return new ExternalId(ExternalScheme.of(scheme), value);
   }
 
@@ -85,29 +85,29 @@ public final class ExternalId
    * <p>
    * This parses the identifier from the form produced by {@code toString()}
    * which is {@code <SCHEME>~<VALUE>}.
-   * 
+   *
    * @param str  the external identifier to parse, not null
    * @return the external identifier, not null
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static ExternalId parse(String str) {
+  public static ExternalId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    str = StringUtils.replace(str, "::", "~");  // leniently parse old data
-    int pos = str.indexOf("~");
+    final String s = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    final int pos = s.indexOf("~");
     if (pos < 0) {
-      throw new IllegalArgumentException("Invalid identifier format: " + str);
+      throw new IllegalArgumentException("Invalid identifier format: " + s);
     }
-    return new ExternalId(ExternalScheme.of(str.substring(0, pos)), str.substring(pos + 1));
+    return new ExternalId(ExternalScheme.of(s.substring(0, pos)), s.substring(pos + 1));
   }
 
   /**
    * Creates an external identifier.
-   * 
+   *
    * @param scheme  the scheme, not null
    * @param value  the value of the identifier, not empty, not null
    */
-  private ExternalId(ExternalScheme scheme, String value) {
+  private ExternalId(final ExternalScheme scheme, final String value) {
     ArgumentChecker.notNull(scheme, "scheme");
     ArgumentChecker.notEmpty(value, "value");
     _scheme = scheme;
@@ -119,7 +119,7 @@ public final class ExternalId
    * Gets the scheme of the identifier.
    * <p>
    * This provides the universe within which the identifier value has meaning.
-   * 
+   *
    * @return the scheme, not null
    */
   public ExternalScheme getScheme() {
@@ -128,7 +128,7 @@ public final class ExternalId
 
   /**
    * Gets the value of the identifier.
-   * 
+   *
    * @return the value, not empty, not null
    */
   public String getValue() {
@@ -138,42 +138,42 @@ public final class ExternalId
   //-------------------------------------------------------------------------
   /**
    * Checks if the scheme of this identifier equals the specified scheme.
-   * 
+   *
    * @param scheme  the scheme to check for, null returns false
    * @return true if the schemes match
    */
-  public boolean isScheme(ExternalScheme scheme) {
+  public boolean isScheme(final ExternalScheme scheme) {
     return _scheme.equals(scheme);
   }
 
   /**
    * Checks if the scheme of this identifier equals the specified scheme.
-   * 
+   *
    * @param scheme  the scheme to check for, null returns false
    * @return true if the schemes match
    */
-  public boolean isScheme(String scheme) {
+  public boolean isScheme(final String scheme) {
     return _scheme.getName().equals(scheme);
   }
 
   /**
    * Checks if the scheme of this identifier equals the specified scheme.
-   * 
+   *
    * @param scheme  the scheme to check for, null returns true
    * @return true if the schemes are different
    */
-  public boolean isNotScheme(ExternalScheme scheme) {
-    return _scheme.equals(scheme) == false;
+  public boolean isNotScheme(final ExternalScheme scheme) {
+    return !_scheme.equals(scheme);
   }
 
   /**
    * Checks if the scheme of this identifier equals the specified scheme.
-   * 
+   *
    * @param scheme  the scheme to check for, null returns true
    * @return true if the schemes are different
    */
-  public boolean isNotScheme(String scheme) {
-    return _scheme.getName().equals(scheme) == false;
+  public boolean isNotScheme(final String scheme) {
+    return !_scheme.getName().equals(scheme);
   }
 
   //-------------------------------------------------------------------------
@@ -181,7 +181,7 @@ public final class ExternalId
    * Gets the external identifier.
    * <p>
    * This method trivially returns {@code this}.
-   * 
+   *
    * @return {@code this}, not null
    */
   @Override
@@ -191,7 +191,7 @@ public final class ExternalId
 
   /**
    * Converts this identifier to a bundle.
-   * 
+   *
    * @return a bundle wrapping this identifier, not null
    */
   @Override
@@ -202,13 +202,13 @@ public final class ExternalId
   //-------------------------------------------------------------------------
   /**
    * Compares the external identifiers, sorting alphabetically by scheme followed by value.
-   * 
+   *
    * @param other  the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(ExternalId other) {
-    int cmp = _scheme.compareTo(other._scheme);
+  public int compareTo(final ExternalId other) {
+    final int cmp = _scheme.compareTo(other._scheme);
     if (cmp != 0) {
       return cmp;
     }
@@ -216,14 +216,14 @@ public final class ExternalId
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof ExternalId) {
-      ExternalId other = (ExternalId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value);
+      final ExternalId other = (ExternalId) obj;
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value);
     }
     return false;
   }
@@ -235,7 +235,7 @@ public final class ExternalId
 
   /**
    * Returns the identifier in the form {@code <SCHEME>~<VALUE>}.
-   * 
+   *
    * @return a parsable representation of the identifier, not null
    */
   @Override
@@ -248,7 +248,7 @@ public final class ExternalId
   /**
    * This is for more efficient code within the .proto representations of securities, allowing this class
    * to be used directly as a message type instead of through the serialization framework.
-   * 
+   *
    * @param serializer  the serializer, not null
    * @param msg  the message to populate, not null
    * @deprecated Use builder
@@ -261,7 +261,7 @@ public final class ExternalId
   /**
    * This is for more efficient code within the .proto representations of securities, allowing this class
    * to be used directly as a message type instead of through the serialization framework.
-   * 
+   *
    * @param deserializer  the deserializer, not null
    * @param msg  the message to decode, not null
    * @return the created object, not null

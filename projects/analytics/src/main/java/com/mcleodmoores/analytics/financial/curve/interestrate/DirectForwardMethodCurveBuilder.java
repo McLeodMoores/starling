@@ -92,14 +92,16 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
           final double[] curveInitialGuess = new double[nNodes];
           for (int k = 0; k < nNodes; k++) {
             final Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double> info = nodesIterator.next();
-            final InstrumentDefinition<?> definition = info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
+            final InstrumentDefinition<?> definition =
+                info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
             instruments[k] = CurveUtils.convert(definition, getFixingTs(), valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }
           final CurveTypeSetUpInterface<MulticurveProviderForward> curveTypeSetUpInterface = getCurveGenerators().get(curveName);
           final GeneratorYDCurve instrumentGenerator;
           if (curveTypeSetUpInterface instanceof DirectForwardMethodCurveTypeSetUp) {
-            instrumentGenerator = ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
+            instrumentGenerator =
+                ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
           } else {
             instrumentGenerator = curveTypeSetUpInterface.buildCurveGenerator(valuationDate).finalGenerator(instruments);
           }
@@ -140,7 +142,8 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
           final CurveTypeSetUpInterface<MulticurveProviderForward> curveTypeSetUpInterface = getCurveGenerators().get(curveName);
           final GeneratorYDCurve instrumentGenerator;
           if (curveTypeSetUpInterface instanceof DirectForwardMethodCurveTypeSetUp) {
-            instrumentGenerator = ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
+            instrumentGenerator =
+                ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
           } else {
             instrumentGenerator = curveTypeSetUpInterface.buildCurveGenerator(valuationDate).finalGenerator(instruments);
           }
@@ -156,8 +159,8 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
 
   @Override
   Pair<MulticurveProviderForward, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles, final MulticurveProviderForward knownData,
-      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
+      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves, final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
     final LinkedHashMap<String, IborIndex> singleIborIndices = new LinkedHashMap<>();
     for (final Map.Entry<String, IborTypeIndex[]> entry : iborCurves.entrySet()) {
       if (entry.getValue().length != 1) {

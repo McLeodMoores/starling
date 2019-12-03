@@ -18,11 +18,14 @@ public abstract class FuturesSecurityMethod {
 
   /**
    * Returns the index used in the futures margining from a quoted price. Correspond to the unit amount multiplied by the price.
-   * @param futures The futures security.
-   * @param quotedPrice The quoted price in the futures convention.
+   * 
+   * @param futures
+   *          The futures security.
+   * @param quotedPrice
+   *          The quoted price in the futures convention.
    * @return The figure used in margining.
    */
-  double marginIndex(final FuturesSecurity futures, final double quotedPrice) {
+  public double marginIndex(final FuturesSecurity futures, final double quotedPrice) {
     return futures.accept(MIC, quotedPrice);
   }
 

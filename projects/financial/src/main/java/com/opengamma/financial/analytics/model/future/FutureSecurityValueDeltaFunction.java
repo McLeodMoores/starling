@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Iterables;
 import com.opengamma.OpenGammaRuntimeException;
@@ -33,8 +34,9 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Calculates the Value (or Dollar) Delta of a FutureSecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1, ValueDelta = S, the spot value of the security.
- * ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It indicates how much currency must be used in order to delta hedge a position.
+ * Calculates the Value (or Dollar) Delta of a FutureSecurity. The value delta is defined as the Delta (dV/dS) multiplied by the spot, S. As dS/dS == 1,
+ * ValueDelta = S, the spot value of the security. ValueDelta can be roughly described as the delta hedge of the position expressed in currency value. It
+ * indicates how much currency must be used in order to delta hedge a position.
  */
 public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -44,9 +46,10 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
 
-    ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
+    final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY,
+        FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
 
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       properties.withAny(ValuePropertyNames.SCALE);
@@ -56,13 +59,13 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (target.getSecurity() instanceof InterestRateFutureSecurity) {
       // Confirm Scale is set, by user or by default
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> scale = constraints.getValues(ValuePropertyNames.SCALE);
       if (scale == null || scale.size() != 1) {
-        s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+        LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
         return null;
       }
     }
@@ -70,15 +73,19 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    FutureSecurity security = (FutureSecurity) target.getSecurity();
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final FutureSecurity security = (FutureSecurity) target.getSecurity();
+    if (!security.getExpiry().getExpiry().isAfter(ZonedDateTime.now(executionContext.getValuationClock()))) {
+      throw new IllegalArgumentException("Future " + security.getExternalIdBundle() + " has expired");
+    }
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     ValueProperties.Builder properties = desiredValue.getConstraints().copy()
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(security).getCode());
 
     String scaleProperty = Double.toString(1);
     double scaleFactor = 1.0;
-    if (target.getSecurity() instanceof InterestRateFutureSecurity) {
+    if (security instanceof InterestRateFutureSecurity) {
       // Add scaling and adjust properties to reflect
       final Set<String> scaleValue = desiredValue.getConstraints().getValues(ValuePropertyNames.SCALE);
       if (scaleValue != null && scaleValue.size() > 0) {
@@ -101,5 +108,5 @@ public class FutureSecurityValueDeltaFunction extends AbstractFunction.NonCompil
     return Collections.singleton(result);
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FutureSecurityValueDeltaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FutureSecurityValueDeltaFunction.class);
 }

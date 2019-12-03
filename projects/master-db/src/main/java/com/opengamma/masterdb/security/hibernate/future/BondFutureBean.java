@@ -14,16 +14,15 @@ import org.joda.beans.MetaProperty;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.future.BondFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link BondFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.BondFutureSecurity}.
  */
 @BeanDefinition
-public class BondFutureBean extends FutureSecurityBean {  
+public class BondFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitBondFutureType(this);
   }
 

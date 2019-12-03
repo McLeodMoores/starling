@@ -39,34 +39,34 @@ import com.sleepycat.je.EnvironmentConfig;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBValueIdentifierMapTest.class);
-  private static Set<File> s_dbDirsToDelete = new HashSet<File>();
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBValueIdentifierMapTest.class);
+  private static Set<File> s_dbDirsToDelete = new HashSet<>();
   private Environment _currDBEnvironment;
 
-  protected File createDbDir(String methodName) {
-    File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-    File dbDir = new File(tmpDir, "BerkeleyDBValueSpecification-" + System.currentTimeMillis() + "-" + methodName);
+  protected File createDbDir(final String methodName) {
+    final File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+    final File dbDir = new File(tmpDir, "BerkeleyDBValueSpecification-" + System.currentTimeMillis() + "-" + methodName);
     dbDir.mkdirs();
     s_dbDirsToDelete.add(dbDir);
     return dbDir;
   }
 
-  protected Environment createDbEnvironment(File dbDir) {
-    EnvironmentConfig envConfig = new EnvironmentConfig();
+  protected Environment createDbEnvironment(final File dbDir) {
+    final EnvironmentConfig envConfig = new EnvironmentConfig();
     envConfig.setAllowCreate(true);
     envConfig.setTransactional(true);
-    Environment dbEnvironment = new Environment(dbDir, envConfig);
+    final Environment dbEnvironment = new Environment(dbDir, envConfig);
     return dbEnvironment;
   }
 
   @AfterClass(alwaysRun = true)
   public static void deleteDbDirs() {
-    for (File f : s_dbDirsToDelete) {
+    for (final File f : s_dbDirsToDelete) {
       try {
-        s_logger.info("Deleting temp directory {}", f);
+        LOGGER.info("Deleting temp directory {}", f);
         FileUtils.deleteDirectory(f);
-      } catch (IOException ioe) {
-        s_logger.warn("Unable to recursively delete directory {}", f);
+      } catch (final IOException ioe) {
+        LOGGER.warn("Unable to recursively delete directory {}", f);
         // Just swallow it.
       }
     }
@@ -74,12 +74,12 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
   }
 
   @Override
-  protected IdentifierMap createIdentifierMap(String testName) {
-    File dbDir = createDbDir("simpleOperation");
+  protected IdentifierMap createIdentifierMap(final String testName) {
+    final File dbDir = createDbDir("simpleOperation");
     _currDBEnvironment = createDbEnvironment(dbDir);
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
 
-    BerkeleyDBIdentifierMap idMap = new BerkeleyDBIdentifierMap(_currDBEnvironment, fudgeContext);
+    final BerkeleyDBIdentifierMap idMap = new BerkeleyDBIdentifierMap(_currDBEnvironment, fudgeContext);
     idMap.start();
     return idMap;
   }
@@ -93,16 +93,16 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
   }
 
   @Test
-  public void reloadPreservesMaxValue() throws IOException {
-    File dbDir = createDbDir("reloadPreservesMaxValue");
+  public void reloadPreservesMaxValue() {
+    final File dbDir = createDbDir("reloadPreservesMaxValue");
     Environment dbEnvironment = createDbEnvironment(dbDir);
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
 
     BerkeleyDBIdentifierMap idSource = new BerkeleyDBIdentifierMap(dbEnvironment, fudgeContext);
     idSource.start();
     String valueName = "value-5";
     ValueSpecification valueSpec = getValueSpec(valueName);
-    long initialIdentifier = idSource.getIdentifier(valueSpec);
+    final long initialIdentifier = idSource.getIdentifier(valueSpec);
 
     // Cycle everything to simulate a clean shutdown and restart.
     idSource.stop();
@@ -135,7 +135,7 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
           try {
             Thread.sleep(1000);
             main.interrupt();
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             throw new OpenGammaRuntimeException("Interrupted", e);
           }
         }
@@ -145,7 +145,7 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
       do {
         try {
           getPerformanceTest();
-        } catch (OpenGammaRuntimeException e) {
+        } catch (final OpenGammaRuntimeException e) {
           assertEquals("Interrupted", e.getMessage());
           count++;
           if (count <= 5) {

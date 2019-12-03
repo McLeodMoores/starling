@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view.rest;
@@ -23,17 +23,17 @@ public class DataDependencyGraphExplorerUris {
   public static final String PATH_SUBGRAPH_PRODUCING = "subgraphProducing";
   // CSON: just constants
 
-  public static URI uriSubgraph(URI baseUri, ValueSpecification output) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_SUBGRAPH_PRODUCING);
+  public static URI uriSubgraph(final URI baseUri, final ValueSpecification output) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_SUBGRAPH_PRODUCING);
     if (output != null) {
       bld.queryParam("msg", RestUtils.encodeBase64(output));
     }
     return bld.build();
   }
 
-  public static URI uriWholeGraph(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path(DataDependencyGraphExplorerUris.PATH_WHOLE_GRAPH);
-    URI uriWholeGraph = bld.build();
+  public static URI uriWholeGraph(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path(DataDependencyGraphExplorerUris.PATH_WHOLE_GRAPH);
+    final URI uriWholeGraph = bld.build();
     return uriWholeGraph;
   }
 

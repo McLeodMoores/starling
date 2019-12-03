@@ -21,12 +21,11 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default properties to define the choices of overhedge (shift of strike)
- * and smoothing (width of ramp created by pricing binary as call or put spread)
+ * Default properties to define the choices of overhedge (shift of strike) and smoothing (width of ramp created by pricing binary as call or put spread).
  */
 public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityVanillaBarrierOptionDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityVanillaBarrierOptionDefaults.class);
   /** Default value for the call spread width */
   private final String _callSpreadFullWidth;
   /** Default value for the overhedge */
@@ -35,26 +34,28 @@ public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction 
   /**
    * Value requirement names for which these properties apply
    */
-  private static final String[] s_valueNames = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.SPOT,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.IMPLIED_VOLATILITY,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.SPOT,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_VOMMA,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.VALUE_RHO
+  private static final String[] VALUE_NAMES = new String[] {
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.VALUE_RHO
   };
 
   /**
-   * @param barrierOverhedge The overhedge value, not null
-   * @param callSpreadFullWidth The call spread width, not null
+   * @param barrierOverhedge
+   *          The overhedge value, not null
+   * @param callSpreadFullWidth
+   *          The call spread width, not null
    */
   public EquityVanillaBarrierOptionDefaults(final String barrierOverhedge, final String callSpreadFullWidth) {
     super(FinancialSecurityTypes.EQUITY_BARRIER_OPTION_SECURITY, true);
@@ -64,24 +65,24 @@ public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction 
     _callSpreadFullWidth = callSpreadFullWidth;
   }
 
-
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_OVERHEDGE);
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.BINARY_OVERHEDGE.equals(propertyName)) {
       return Collections.singleton(_barrierOverhedge);
     }
     if (ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH.equals(propertyName)) {
       return Collections.singleton(_callSpreadFullWidth);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

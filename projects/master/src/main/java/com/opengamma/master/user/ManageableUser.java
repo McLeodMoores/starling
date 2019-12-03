@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -45,7 +45,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @BeanDefinition
 public class ManageableUser
-    implements Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Serializable {
+implements Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ public class ManageableUser
    * The unique identifier of this user.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The user name that uniquely identifies this user.
@@ -106,13 +106,13 @@ public class ManageableUser
    * Permissions are not copied. This is because the permissions of a
    * {@code UserAccount} are the complete set, including any from roles, whereas
    * the permissions on a {@code ManageableUserAccount} are user-level only.
-   * 
+   *
    * @param accountToCopy  the account to copy, not null
    * @return the new account, not null
    */
-  public static ManageableUser from(UserAccount accountToCopy) {
+  public static ManageableUser from(final UserAccount accountToCopy) {
     ArgumentChecker.notNull(accountToCopy, "accountToCopy");
-    ManageableUser copy = new ManageableUser(accountToCopy.getUserName());
+    final ManageableUser copy = new ManageableUser(accountToCopy.getUserName());
     if (accountToCopy instanceof UniqueIdentifiable) {
       copy.setUniqueId(((UniqueIdentifiable) accountToCopy).getUniqueId());
     }
@@ -133,30 +133,30 @@ public class ManageableUser
 
   /**
    * Creates a user, setting the user name.
-   * 
+   *
    * @param userName  the user name, not null
    */
-  public ManageableUser(String userName) {
+  public ManageableUser(final String userName) {
     setUserName(userName);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the object identifier.
-   * 
+   *
    * @return the object identifier, null if not set
    */
   public ObjectId getObjectId() {
-    return (getUniqueId() != null ? getUniqueId().getObjectId() : null);
+    return getUniqueId() != null ? getUniqueId().getObjectId() : null;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds an alternate user identifier to the bundle representing this user.
-   * 
+   *
    * @param alternateId  the identifier to add, not null
    */
-  public void addAlternateId(ExternalId alternateId) {
+  public void addAlternateId(final ExternalId alternateId) {
     setAlternateIds(getAlternateIds().withExternalId(alternateId));
   }
 
@@ -195,6 +195,7 @@ public class ManageableUser
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -204,6 +205,7 @@ public class ManageableUser
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

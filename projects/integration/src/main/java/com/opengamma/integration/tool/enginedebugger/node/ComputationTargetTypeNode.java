@@ -8,22 +8,22 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.target.ComputationTargetType;
 
 /**
- * Node for representing ComputationTargetType
+ * Node for representing ComputationTargetType.
  */
 public class ComputationTargetTypeNode extends AbstractTreeTableLeafNode {
 
   private static final String NAME = "CompuatationTargetType";
-  private ComputationTargetType _targetType;
+  private final ComputationTargetType _targetType;
   @SuppressWarnings("unused")
-  private Object _parent;
+  private final Object _parent;
 
-  public ComputationTargetTypeNode(Object parent, ComputationTargetType targetType) {
+  public ComputationTargetTypeNode(final Object parent, final ComputationTargetType targetType) {
     _parent = parent;
     _targetType = targetType;
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
         return NAME;
@@ -37,12 +37,12 @@ public class ComputationTargetTypeNode extends AbstractTreeTableLeafNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_targetType == null) ? 0 : _targetType.hashCode());
+    result = prime * result + (_targetType == null ? 0 : _targetType.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -52,7 +52,7 @@ public class ComputationTargetTypeNode extends AbstractTreeTableLeafNode {
     if (!(obj instanceof ComputationTargetTypeNode)) {
       return false;
     }
-    ComputationTargetTypeNode other = (ComputationTargetTypeNode) obj;
+    final ComputationTargetTypeNode other = (ComputationTargetTypeNode) obj;
     if (_targetType == null) {
       if (other._targetType != null) {
         return false;

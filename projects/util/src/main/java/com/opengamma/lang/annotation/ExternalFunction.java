@@ -26,11 +26,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.CONSTRUCTOR, ElementType.METHOD })
 public @interface ExternalFunction {
 
-  // TODO: the package name should be com.opengamma.language.annotation to match OG-Language
-
   /**
    * The name of the function exposed to callers. If not specified here, a name
    * will be created from the method name (or class name if on a constructor).
+   *
+   * @return  the name of the function
    */
   String name() default "";
 
@@ -42,8 +42,10 @@ public @interface ExternalFunction {
    *  <li>Class name (for constructors)
    *  <li>Package and class prefixed method name (for methods)
    *  <li>Package and class name (for constructors)
-   * <ul>
+   * </ul>
    * With any of the above omitted if they match the published primary name.
+   *
+   * @return  the alternative names
    */
   String[] alias() default {
   // empty
@@ -51,6 +53,8 @@ public @interface ExternalFunction {
 
   /**
    * Category describing the function's behavior. Typically omit.
+   *
+   * @return  the category
    */
   String category() default "";
 
@@ -62,6 +66,8 @@ public @interface ExternalFunction {
    * <p>
    * This should be written in complete sentences but with no trailing full
    * stop, properly capitalized. For example, "Calculates the foo to bar ratio".
+   *
+   * @return  the description
    */
   String description() default "";
 

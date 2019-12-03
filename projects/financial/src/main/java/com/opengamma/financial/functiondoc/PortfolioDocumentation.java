@@ -33,19 +33,19 @@ import com.opengamma.util.MdcAwareThreadPoolExecutor;
 import com.opengamma.util.NamedThreadPoolFactory;
 
 /**
- * Utility template for generating documentation from a function repository by iterating through
- * the defined portfolios.
+ * Utility template for generating documentation from a function repository by iterating through the defined portfolios.
  */
 public class PortfolioDocumentation extends AbstractDocumentation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioDocumentation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDocumentation.class);
 
   private final PortfolioMaster _portfolioMaster;
   private final PositionSource _positionSource;
   private final SecuritySource _securitySource;
   private final ExecutorService _executorService;
 
-  public PortfolioDocumentation(final CompiledFunctionRepository functionRepository, final FunctionExclusionGroups functionExclusionGroups, final PortfolioMaster portfolioMaster,
+  public PortfolioDocumentation(final CompiledFunctionRepository functionRepository, final FunctionExclusionGroups functionExclusionGroups,
+      final PortfolioMaster portfolioMaster,
       final PositionSource positionSource, final SecuritySource securitySource) {
     super(functionRepository, functionExclusionGroups);
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -55,7 +55,8 @@ public class PortfolioDocumentation extends AbstractDocumentation {
     _positionSource = positionSource;
     _securitySource = securitySource;
     final int threads = 32;
-    final ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(threads, threads, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new NamedThreadPoolFactory("doc"));
+    final ThreadPoolExecutor executor = new MdcAwareThreadPoolExecutor(threads, threads, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+        new NamedThreadPoolFactory("doc"));
     executor.allowCoreThreadTimeOut(true);
     _executorService = executor;
   }
@@ -77,16 +78,16 @@ public class PortfolioDocumentation extends AbstractDocumentation {
   }
 
   protected Collection<UniqueId> getPortfolios() {
-    s_logger.debug("Querying portfolios available");
+    LOGGER.debug("Querying portfolios available");
     final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setDepth(0);
     request.setIncludePositions(false);
     request.setName(null);
-    final Collection<UniqueId> result = new ArrayList<UniqueId>();
-    for (PortfolioDocument document : PortfolioSearchIterator.iterable(_portfolioMaster, request)) {
+    final Collection<UniqueId> result = new ArrayList<>();
+    for (final PortfolioDocument document : PortfolioSearchIterator.iterable(_portfolioMaster, request)) {
       result.add(document.getUniqueId());
     }
-    s_logger.info("Found {} portfolios", result.size());
+    LOGGER.info("Found {} portfolios", result.size());
     return result;
   }
 
@@ -100,26 +101,26 @@ public class PortfolioDocumentation extends AbstractDocumentation {
         final long t2 = System.nanoTime();
         final Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(rawPortfolio, getExecutorService(), getSecuritySource());
         final long t3 = System.nanoTime();
-        s_logger.debug("Got portfolio {} in {}ms", portfolioId, (double) (t2 - t1) / 1e6);
-        s_logger.debug("Resolved portfolio {} in {}ms", portfolioId, (double) (t3 - t2) / 1e6);
+        LOGGER.debug("Got portfolio {} in {}ms", portfolioId, (t2 - t1) / 1.e6);
+        LOGGER.debug("Resolved portfolio {} in {}ms", portfolioId, (t3 - t2) / 1.e6);
         getExecutorService().execute(new Runnable() {
           @Override
           public void run() {
             processAvailablePortfolioOutputs(resolvedPortfolio);
           }
         });
-        if ((++count) > 0) {
+        if (++count > 0) {
           break;
         }
-      } catch (OpenGammaRuntimeException e) {
-        s_logger.debug("Couldn't resolve {} - {}", portfolioId, e);
+      } catch (final OpenGammaRuntimeException e) {
+        LOGGER.debug("Couldn't resolve {} - {}", portfolioId, e);
       }
     }
     try {
-      s_logger.info("Waiting for portfolio analysis");
+      LOGGER.info("Waiting for portfolio analysis");
       getExecutorService().shutdown();
       getExecutorService().awaitTermination(30, TimeUnit.MINUTES);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
     super.run();

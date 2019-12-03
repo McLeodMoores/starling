@@ -24,7 +24,7 @@ import com.opengamma.financial.security.option.NonDeliverableFXOptionSecurity;
 public class SecurityExerciseTypeVisitor extends FinancialSecurityVisitorAdapter<ExerciseType> {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public SecurityExerciseTypeVisitor() {
   }

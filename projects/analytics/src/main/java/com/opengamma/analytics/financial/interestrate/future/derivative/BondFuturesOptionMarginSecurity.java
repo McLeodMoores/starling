@@ -35,13 +35,20 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * Constructor of the option future from the details.
-   * @param underlyingFuture The underlying future security.
-   * @param tradingLastTime The option last trading time.
-   * @param expirationTime The time (in year) to expiration.
-   * @param strike The option strike.
-   * @param isCall The cap (true) / floor (false) flag.
+   *
+   * @param underlyingFuture
+   *          The underlying future security.
+   * @param tradingLastTime
+   *          The option last trading time.
+   * @param expirationTime
+   *          The time (in year) to expiration.
+   * @param strike
+   *          The option strike.
+   * @param isCall
+   *          The cap (true) / floor (false) flag.
    */
-  public BondFuturesOptionMarginSecurity(final BondFuturesSecurity underlyingFuture, final double tradingLastTime, final double expirationTime, final double strike, final boolean isCall) {
+  public BondFuturesOptionMarginSecurity(final BondFuturesSecurity underlyingFuture, final double tradingLastTime, final double expirationTime,
+      final double strike, final boolean isCall) {
     super(tradingLastTime);
     ArgumentChecker.notNull(underlyingFuture, "underlying future");
     _underlyingFuture = underlyingFuture;
@@ -52,6 +59,7 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * Gets the underlying future security.
+   *
    * @return The underlying future security.
    */
   public BondFuturesSecurity getUnderlyingFuture() {
@@ -60,6 +68,7 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * Gets the expiration date.
+   *
    * @return The expiration date.
    */
   public double getExpirationTime() {
@@ -68,6 +77,7 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * Gets the cap (true) / floor (false) flag.
+   *
    * @return The cap/floor flag.
    */
   public boolean isCall() {
@@ -76,6 +86,7 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * Gets the option strike.
+   *
    * @return The option strike.
    */
   public double getStrike() {
@@ -84,6 +95,7 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
 
   /**
    * The future option currency.
+   *
    * @return The currency.
    */
   @Override
@@ -119,10 +131,10 @@ public class BondFuturesOptionMarginSecurity extends FuturesSecurity {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_expirationTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCall ? 1231 : 1237);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingFuture.hashCode();
     return result;
   }

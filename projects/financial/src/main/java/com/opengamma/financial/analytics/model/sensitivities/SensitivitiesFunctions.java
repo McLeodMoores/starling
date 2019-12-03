@@ -87,7 +87,7 @@ public class SensitivitiesFunctions extends AbstractFunctionConfigurationBean {
 
     }
 
-    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
+    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
 
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();
@@ -131,7 +131,6 @@ public class SensitivitiesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesCreditFactorsFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesNonYieldCurveFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurveCS01Function.class));
-    functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurvePV01Function.class));
   }
 

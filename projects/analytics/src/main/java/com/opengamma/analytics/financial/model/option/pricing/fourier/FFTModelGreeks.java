@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -22,30 +22,42 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class FFTModelGreeks {
 
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
   private static final IntegralLimitCalculator LIMIT_CALCULATOR = new IntegralLimitCalculator();
 
- /**
-  * 
-   * @param forward The forward value of the underlying
-   * @param discountFactor 
-   * @param t Time to expiry
-   * @param isCall true for call 
-   * @param ce The Characteristic Exponent (log of characteristic function) of the returns of the underlying
-   * @param lowestStrike The lowest strike to return (the actual value will depend on the set up, but is guaranteed to be less than this) 
-   * @param highestStrike The highest strike to return (the actual value will depend on the set up, but is guaranteed to be greater than this) 
-   * @param minStrikesDisplayed minimum number of strikes returned (actual number depends on set up) 
-   * @param limitSigma An estimate of the implied vol used to calculate limits in the numerical routines 
-   * @param alpha Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended  
-   * @param tol Tolerance - smaller values give higher accuracy 
-  * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc 
-  */
-  //TODO this is cut and paste from FFTPricer - the calculation of the sample size and spacing should be extracted 
-  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final double lowestStrike,
+  /**
+   *
+   * @param forward
+   *          The forward value of the underlying
+   * @param discountFactor
+   *          the discount factor
+   * @param t
+   *          Time to expiry
+   * @param isCall
+   *          true for call
+   * @param ce
+   *          The Characteristic Exponent (log of characteristic function) of the returns of the underlying
+   * @param lowestStrike
+   *          The lowest strike to return (the actual value will depend on the set up, but is guaranteed to be less than this)
+   * @param highestStrike
+   *          The highest strike to return (the actual value will depend on the set up, but is guaranteed to be greater than this)
+   * @param minStrikesDisplayed
+   *          minimum number of strikes returned (actual number depends on set up)
+   * @param limitSigma
+   *          An estimate of the implied vol used to calculate limits in the numerical routines
+   * @param alpha
+   *          Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended
+   * @param tol
+   *          Tolerance - smaller values give higher accuracy
+   * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc
+   */
+  // TODO this is cut and paste from FFTPricer - the calculation of the sample size and spacing should be extracted
+  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall,
+      final MartingaleCharacteristicExponent ce, final double lowestStrike,
       final double highestStrike, final int minStrikesDisplayed, final double limitSigma, final double alpha, final double tol) {
 
     Validate.notNull(ce, "characteristic exponent");
@@ -93,21 +105,33 @@ public class FFTModelGreeks {
   }
 
   /**
-   * 
-   * @param forward The forward value of the underlying
-   * @param discountFactor 
-   * @param t Time to expiry
-   * @param isCall true for call 
-   * @param ce The Characteristic Exponent (log of characteristic function) of the returns of the underlying
-   * @param nStrikesBelowATM maximum number of strikes below ATM to be returned 
-   * @param nStrikesAboveATM maximum number of strikes above ATM to be returned 
-   * @param alpha Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended  
-   * @param delta The spacing for sampling the function 
-   * @param n The (zero padded) array of sample values. <b>Use a power of 2</b>
-   * @param m The actual number of samples. Need n >= 2m-1
-   * @return  an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc 
+   *
+   * @param forward
+   *          The forward value of the underlying
+   * @param discountFactor
+   *          the discount factor
+   * @param t
+   *          Time to expiry
+   * @param isCall
+   *          true for call
+   * @param ce
+   *          The Characteristic Exponent (log of characteristic function) of the returns of the underlying
+   * @param nStrikesBelowATM
+   *          maximum number of strikes below ATM to be returned
+   * @param nStrikesAboveATM
+   *          maximum number of strikes above ATM to be returned
+   * @param alpha
+   *          Regularization factor. Values of 0 or -1 are not allowed. -0.5 is recommended
+   * @param delta
+   *          The spacing for sampling the function
+   * @param n
+   *          The (zero padded) array of sample values. <b>Use a power of 2</b>
+   * @param m
+   *          The actual number of samples. Need n &gt;= 2m-1
+   * @return an array of arrays where is first array is the strikes, the second the prices, the first the derivatives of price wrt the first parameter etc
    */
-  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall, final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
+  public double[][] getGreeks(final double forward, final double discountFactor, final double t, final boolean isCall,
+      final MartingaleCharacteristicExponent ce, final int nStrikesBelowATM,
       final int nStrikesAboveATM, final double alpha, final double delta, final int n, final int m) {
 
     Validate.notNull(ce, "characteristic exponent");
@@ -122,7 +146,7 @@ public class FFTModelGreeks {
     final int halfN = n % 2 == 0 ? n / 2 : (n + 1) / 2;
     final double a = -(halfN - 1) * delta;
     final ComplexNumber[][] z = getPaddedArrays(alpha, delta, n, m, func, halfN);
-    int size = z.length;
+    final int size = z.length;
     final ComplexNumber[][] x = new ComplexNumber[size][];
     for (int i = 0; i < size; i++) {
       x[i] = JTransformsWrapper.transform1DComplex(z[i]);
@@ -151,9 +175,10 @@ public class FFTModelGreeks {
     return res;
   }
 
-  private ComplexNumber[][] getPaddedArrays(final double alpha, final double delta, final int n, final int m, final Function1D<ComplexNumber, ComplexNumber[]> ajointFunc, final int halfN) {
-    //TODO this is a bit of a fudge 
-    int size = ajointFunc.evaluate(MINUS_I).length;
+  private ComplexNumber[][] getPaddedArrays(final double alpha, final double delta, final int n, final int m,
+      final Function1D<ComplexNumber, ComplexNumber[]> ajointFunc, final int halfN) {
+    // TODO this is a bit of a fudge
+    final int size = ajointFunc.evaluate(MINUS_I).length;
 
     final ComplexNumber[][] z = new ComplexNumber[size][n];
 
@@ -177,7 +202,7 @@ public class FFTModelGreeks {
     ComplexNumber v = divide(num, denom);
     z[0][offset] = v;
     for (int j = 1; j < size; j++) {
-      ComplexNumber temp = multiply(v, f[j]);
+      final ComplexNumber temp = multiply(v, f[j]);
       z[j][offset] = temp;
     }
     for (int i = 1; i < m; i++) {
@@ -189,9 +214,9 @@ public class FFTModelGreeks {
       z[0][offset + i] = v;
       z[0][offset - i] = ComplexMathUtils.conjugate(v);
       for (int j = 1; j < size; j++) {
-        ComplexNumber temp = multiply(v, f[j]);
+        final ComplexNumber temp = multiply(v, f[j]);
         z[j][offset + i] = temp;
-        z[j][offset - i] = ComplexMathUtils.conjugate(temp); //TODO the FFT should take care of this
+        z[j][offset - i] = ComplexMathUtils.conjugate(temp); // TODO the FFT should take care of this
       }
     }
     return z;

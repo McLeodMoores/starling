@@ -51,7 +51,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
   /**
    * A cache of trades by identifier.
    */
-  private final ConcurrentMap<ObjectId, ManageableTrade> _storeTrades = new ConcurrentHashMap<ObjectId, ManageableTrade>();
+  private final ConcurrentMap<ObjectId, ManageableTrade> _storeTrades = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
@@ -123,9 +123,8 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
       }
       clone.setPosition(clonedPosition);
       return clone;
-    } else {
-      return document;
     }
+    return document;
   }
 
   //-------------------------------------------------------------------------
@@ -147,7 +146,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
     return document;
   }
 
-  private void setDocumentID(final PositionDocument document, final PositionDocument clonedDoc, final UniqueId uniqueId) {
+  private static void setDocumentID(final PositionDocument document, final PositionDocument clonedDoc, final UniqueId uniqueId) {
     document.getPosition().setUniqueId(uniqueId);
     clonedDoc.getPosition().setUniqueId(uniqueId);
     document.setUniqueId(uniqueId);
@@ -191,7 +190,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
 
     setVersionTimes(document, clonedDoc, now, null, now, null);
 
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     storeTrades(clonedDoc.getPosition().getTrades(), document.getPosition().getTrades(), uniqueId);
@@ -199,7 +198,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
     return document;
   }
 
-  private void setVersionTimes(final PositionDocument document, final PositionDocument clonedDoc,
+  private static void setVersionTimes(final PositionDocument document, final PositionDocument clonedDoc,
       final Instant versionFromInstant, final Instant versionToInstant, final Instant correctionFromInstant, final Instant correctionToInstant) {
 
     clonedDoc.setVersionFromInstant(versionFromInstant);
@@ -250,7 +249,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
   @Override
   public PositionSearchResult search(final PositionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<PositionDocument> list = new ArrayList<PositionDocument>();
+    final List<PositionDocument> list = new ArrayList<>();
     for (final PositionDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(clonePositionDocument(doc));
@@ -258,7 +257,7 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
     }
     Collections.sort(list, new Comparator<PositionDocument>() {
       @Override
-      public int compare(PositionDocument obj1, PositionDocument obj2) {
+      public int compare(final PositionDocument obj1, final PositionDocument obj2) {
         return obj1.getObjectId().compareTo(obj2.getObjectId());
       }
     });

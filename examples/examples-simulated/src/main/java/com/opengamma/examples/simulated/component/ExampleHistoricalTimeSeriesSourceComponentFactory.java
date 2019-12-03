@@ -33,7 +33,7 @@ public class ExampleHistoricalTimeSeriesSourceComponentFactory extends Historica
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesResolver createResolver(ComponentRepository repo) {
+  protected HistoricalTimeSeriesResolver createResolver(final ComponentRepository repo) {
     final ExampleHistoricalTimeSeriesFieldAdjustmentMapFactoryBean factory = new ExampleHistoricalTimeSeriesFieldAdjustmentMapFactoryBean();
     final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldAdjustmentMaps = ImmutableList.of(factory.getObjectCreating());
 

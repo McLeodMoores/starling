@@ -25,17 +25,17 @@ import com.opengamma.engine.value.ValueSpecification;
 public class CommodityFutureOptionBlackForwardGammaFunction extends CommodityFutureOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBlackForwardGammaFunction() {
     super(ValueRequirementNames.FORWARD_GAMMA);
   }
-  
+
   @Override
   protected boolean getFunctionIncludesCurrencyProperty() {
     return false;
   }
-  
+
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {

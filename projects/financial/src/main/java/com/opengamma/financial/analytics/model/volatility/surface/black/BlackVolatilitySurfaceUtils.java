@@ -5,10 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.surface.black;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.doubles.DoubleLinkedOpenHashSet;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,11 +29,15 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 import com.opengamma.util.tuple.Triple;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
+
 /**
  *
  */
 public class BlackVolatilitySurfaceUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfaceUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceUtils.class);
 
   public static double[] getUniqueExpiries(final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final double[] expiries = getArrayOfDoubles(volatilitySurface.getXs());
@@ -60,7 +60,8 @@ public class BlackVolatilitySurfaceUtils {
     return uniqueStrikes;
   }
 
-  public static Pair<double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes, final VolatilitySurfaceData<Object, Object> volatilitySurface) {
+  public static Pair<double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final int nExpiries = expiries.length;
     final int nStrikes = strikes.length;
     final double[][] fullStrikes = new double[nExpiries][];
@@ -84,7 +85,8 @@ public class BlackVolatilitySurfaceUtils {
     return Pairs.of(fullStrikes, fullValues);
   }
 
-  public static Triple<double[], double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes, final VolatilitySurfaceData<Object, Object> volatilitySurface,
+  public static Triple<double[], double[][], double[][]> getStrikesAndValues(final double[] expiries, final double[] strikes,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface,
       final int minNumberOfStrikes) {
     final int nExpiries = expiries.length;
     final int nStrikes = strikes.length;
@@ -135,7 +137,8 @@ public class BlackVolatilitySurfaceUtils {
     return Triple.of(getArrayOfDoubles(expiries), strikes, values);
   }
 
-  public static SmileSurfaceDataBundle getDataFromStandardQuotes(final ForwardCurve forwardCurve, final VolatilitySurfaceData<Object, Object> volatilitySurface) {
+  public static SmileSurfaceDataBundle getDataFromStandardQuotes(final ForwardCurve forwardCurve,
+      final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final double[] uniqueExpiries = getUniqueExpiries(volatilitySurface);
     final double[] uniqueStrikes = getUniqueStrikes(volatilitySurface);
     final Pair<double[][], double[][]> strikesAndValues = getStrikesAndValues(uniqueExpiries, uniqueStrikes, volatilitySurface);
@@ -190,14 +193,14 @@ public class BlackVolatilitySurfaceUtils {
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();
         strangle[i] = strangleList.toDoubleArray();
       }
     }
-    final boolean isCallData = true; //TODO this shouldn't be hard-coded
+    final boolean isCallData = true; // TODO this shouldn't be hard-coded
     return new ForexSmileDeltaSurfaceDataBundle(forwardCurve, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 
@@ -207,16 +210,16 @@ public class BlackVolatilitySurfaceUtils {
       return period.getYears();
     }
     if (period.getMonths() != 0) {
-      return ((double) period.getMonths()) / 12;
+      return (double) period.getMonths() / 12;
     }
     if (period.getDays() != 0) {
-      return ((double) period.getDays()) / 365;
+      return (double) period.getDays() / 365;
     }
     throw new OpenGammaRuntimeException("Should never happen");
   }
 
   private static Number[] getDeltaValues(final Object[] quotes) {
-    final TreeSet<Object> values = new TreeSet<Object>();
+    final TreeSet<Object> values = new TreeSet<>();
     for (final Object pair : quotes) {
       values.add(((Pair<?, ?>) pair).getFirst());
     }
@@ -225,7 +228,7 @@ public class BlackVolatilitySurfaceUtils {
 
   private static double[] getArrayOfDoubles(final Object[] arrayOfObject) {
     final double[] expiries;
-    //TODO there is sometimes a problem with Fudge, where a Double[] is transported as Object[]. Needs to be fixed
+    // TODO there is sometimes a problem with Fudge, where a Double[] is transported as Object[]. Needs to be fixed
     final Object[] xData = arrayOfObject;
     final int n = xData.length;
     expiries = new double[n];

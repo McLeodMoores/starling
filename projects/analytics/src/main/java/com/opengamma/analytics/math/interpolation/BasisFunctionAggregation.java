@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -12,14 +12,14 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
- * @param <T> The domain type of the function (e.g. Double, double[], DoubleMatrix1D etc) 
+ *
+ * @param <T> The domain type of the function (e.g. Double, double[], DoubleMatrix1D etc)
  */
 public class BasisFunctionAggregation<T> extends Function1D<T, Double> {
   private final List<Function1D<T, Double>> _f;
   private final double[] _w;
 
-  public BasisFunctionAggregation(List<Function1D<T, Double>> functions, double[] weights) {
+  public BasisFunctionAggregation(final List<Function1D<T, Double>> functions, final double[] weights) {
     Validate.notEmpty(functions, "no functions");
     Validate.notNull(weights, "no weights");
     Validate.isTrue(functions.size() == weights.length);
@@ -28,9 +28,9 @@ public class BasisFunctionAggregation<T> extends Function1D<T, Double> {
   }
 
   @Override
-  public Double evaluate(T x) {
+  public Double evaluate(final T x) {
     double sum = 0;
-    int n = _w.length;
+    final int n = _w.length;
     for (int i = 0; i < n; i++) {
       sum += _w[i] * _f.get(i).evaluate(x);
     }

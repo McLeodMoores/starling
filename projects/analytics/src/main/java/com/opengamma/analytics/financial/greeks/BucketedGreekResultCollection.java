@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.greeks;
@@ -19,10 +19,10 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class BucketedGreekResultCollection implements Iterable<Pair<Greek, double[][]>> {
-  /** The bucketed vega for a strike / time surface */
+  /** The bucketed vega for a strike / time surface. */
   public static final Greek BUCKETED_VEGA = new Greek(new NthOrderUnderlying(1, UnderlyingType.IMPLIED_VOLATILITY), "Bucketed vega") {
 
     @Override
@@ -56,7 +56,8 @@ public class BucketedGreekResultCollection implements Iterable<Pair<Greek, doubl
     if (result != null) {
       ArgumentChecker.isTrue(result.length == _nExpiries, "Wrong number of expiry buckets; have {}, need {}", result.length, _nExpiries);
       for (int i = 0; i < result.length; i++) {
-        ArgumentChecker.isTrue(result[i].length == _strikes[i].length, "Wrong number of strike buckets; have {}, need {}", result[i].length, _strikes[i].length);
+        ArgumentChecker.isTrue(result[i].length == _strikes[i].length,
+            "Wrong number of strike buckets; have {}, need {}", result[i].length, _strikes[i].length);
       }
     }
     _dataMap.put(greek, result);
@@ -140,7 +141,7 @@ public class BucketedGreekResultCollection implements Iterable<Pair<Greek, doubl
   private static class BackingMapGreekIterator implements Iterator<Pair<Greek, double[][]>> {
     private final Iterator<Map.Entry<Greek, double[][]>> _backingIterator;
 
-    public BackingMapGreekIterator(final Iterator<Map.Entry<Greek, double[][]>> backingIterator) {
+    BackingMapGreekIterator(final Iterator<Map.Entry<Greek, double[][]>> backingIterator) {
       _backingIterator = backingIterator;
     }
 

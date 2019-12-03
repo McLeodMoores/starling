@@ -14,7 +14,10 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ * 
+ * @deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class Interpolator1DFactoryTest {
 

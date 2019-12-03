@@ -33,57 +33,63 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebConventionVersionResource(final AbstractWebConventionResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "conventionversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    ConventionDocument doc = data().getVersioned();
+    final FlexiBean out = createRootData();
+    final ConventionDocument doc = data().getVersioned();
     out.put("type", data().getTypeMap().inverse().get(doc.getConvention().getClass()));
-    String json = getFreemarker().build(JSON_DIR + "convention.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "convention.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ConventionDocument latestDoc = data().getConvention();
-    ConventionDocument versionedConvention = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final ConventionDocument latestDoc = data().getConvention();
+    final ConventionDocument versionedConvention = data().getVersioned();
     out.put("latestConventionDoc", latestDoc);
     out.put("latestConvention", latestDoc.getConvention());
     out.put("conventionDoc", versionedConvention);
     out.put("convention", versionedConvention.getConvention());
     out.put("conventionDescription", getConventionTypesProvider().getDescription(versionedConvention.getConvention().getClass()));
-    out.put("conventionXml", StringEscapeUtils.escapeJavaScript(createXML(versionedConvention.getConvention())));
+    out.put("conventionXML", StringEscapeUtils.escapeJavaScript(createXML(versionedConvention.getConvention())));
     out.put("deleted", !latestDoc.isLatest());
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data) {
@@ -92,13 +98,16 @@ public class WebConventionVersionResource extends AbstractWebConventionResource 
 
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
-   * @param overrideVersionId  the override version id, null uses information from data
+   * 
+   * @param data
+   *          the data, not null
+   * @param overrideVersionId
+   *          the override version id, null uses information from data
    * @return the URI, not null
    */
   public static URI uri(final WebConventionData data, final UniqueId overrideVersionId) {
-    String conventionId = data.getBestConventionUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String conventionId = data.getBestConventionUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebConventionVersionResource.class).build(conventionId, versionId);
   }
 

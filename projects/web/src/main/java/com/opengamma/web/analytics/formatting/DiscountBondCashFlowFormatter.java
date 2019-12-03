@@ -1,5 +1,7 @@
 /**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
+ * Please see distribution for license.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -19,26 +21,27 @@ import com.opengamma.engine.value.ValueSpecification;
  *
  */
 public class DiscountBondCashFlowFormatter extends AbstractFormatter<DiscountBondCashFlows> {
-  private static final String[] COLUMN_LABELS = { NOMINAL_PAYMENT_DATE, NOTIONAL, PAYMENT_TIME, DISCOUNT_FACTOR, DISCOUNTED_PAYMENT_AMOUNT};
+  private static final String[] COLUMN_LABELS = { NOMINAL_PAYMENT_DATE, NOTIONAL, PAYMENT_TIME, DISCOUNT_FACTOR, DISCOUNTED_PAYMENT_AMOUNT };
   private static final String X_LABELS = "xLabels";
   private static final String Y_LABELS = "yLabels";
   private static final String MATRIX = "matrix";
 
   private final DoubleFormatter _doubleFormatter;
-  private final RateFormatter _rateFormatter;
   private final CurrencyAmountFormatter _currencyAmountFormatter;
 
   /**
-   * @param doubleFormatter  formats the discount factors
-   * @param rateFormatter  formats the zero rates
-   * @param currencyAmountFormatter  formats the currency amounts
+   * @param doubleFormatter
+   *          formats the discount factors
+   * @param rateFormatter
+   *          formats the zero rates
+   * @param currencyAmountFormatter
+   *          formats the currency amounts
    */
   DiscountBondCashFlowFormatter(final DoubleFormatter doubleFormatter, final RateFormatter rateFormatter,
       final CurrencyAmountFormatter currencyAmountFormatter) {
     super(DiscountBondCashFlows.class);
     _doubleFormatter = doubleFormatter;
     _currencyAmountFormatter = currencyAmountFormatter;
-    _rateFormatter = rateFormatter;
     addFormatter(new Formatter<DiscountBondCashFlows>(Format.EXPANDED) {
       @Override
       protected Object formatValue(final DiscountBondCashFlows value, final ValueSpecification valueSpec, final Object inlineKey) {
@@ -54,13 +57,16 @@ public class DiscountBondCashFlowFormatter extends AbstractFormatter<DiscountBon
 
   /**
    * Transforms the details object to an amount that can be displayed.
-   * @param value  the FX forward details
-   * @param valueSpec  the value specification
-   * @return  the data
+   * 
+   * @param value
+   *          the FX forward details
+   * @param valueSpec
+   *          the value specification
+   * @return the data
    */
   /* package */ Map<String, Object> formatExpanded(final DiscountBondCashFlows value, final ValueSpecification valueSpec) {
     final int columnCount = COLUMN_LABELS.length;
-    final String[] yLabels = {""};
+    final String[] yLabels = { "" };
     final Map<String, Object> results = new HashMap<>();
     results.put(X_LABELS, COLUMN_LABELS);
     results.put(Y_LABELS, yLabels);

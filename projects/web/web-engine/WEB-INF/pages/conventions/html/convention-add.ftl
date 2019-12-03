@@ -19,14 +19,14 @@
     </@rowin>
     
     <#if err_xmlMissing??><div class="err">The data must be entered</div></#if>
-    <#if err_conventionXmlMsg?has_content><div class="err">${err_conventionXmlMsg}</div></#if>
+    <#if err_conventionXMLMsg?has_content><div class="err">${err_conventionXMLMsg}</div></#if>
     <@rowin>
       <div id="ace-xml-editor"></div>
     </@rowin>
-    <input type="hidden" name="conventionxml" id="convention-xml"/>
+    <input type="hidden" name="conventionXML" id="convention-xml"/>
     <@rowin><input type="submit" value="Add" /></@rowin>
     
-    <#noescape><@xmlEditorScript formId="addForm" inputId="convention-xml" xmlValue="${conventionXml}"></@xmlEditorScript></#noescape>
+    <#noescape><@xmlEditorScript formId="addForm" inputId="convention-xml" xmlValue="${conventionXML}"></@xmlEditorScript></#noescape>
   </p>
   </@form>
 </@section>

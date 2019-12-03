@@ -18,7 +18,7 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class UserMarketDataProviderFactoryFactoryBean extends SingletonFactoryBean<UserMarketDataProviderFactory> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UserMarketDataProviderFactoryFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserMarketDataProviderFactoryFactoryBean.class);
 
   private MarketDataSnapshotSource _snapshotSource;
 
@@ -42,7 +42,7 @@ public class UserMarketDataProviderFactoryFactoryBean extends SingletonFactoryBe
    */
   @Deprecated
   public MarketDataAvailabilityFilter getBaseMarketDataAvailability() {
-    s_logger.error("Call to deprecated method 'getBaseMarketDataAvailability' (PLAT-1459)");
+    LOGGER.error("Call to deprecated method 'getBaseMarketDataAvailability' (PLAT-1459)");
     return _baseMarketDataAvailability;
   }
 
@@ -52,7 +52,7 @@ public class UserMarketDataProviderFactoryFactoryBean extends SingletonFactoryBe
    */
   @Deprecated
   public void setBaseMarketDataAvailability(final MarketDataAvailabilityFilter baseMarketDataAvailability) {
-    s_logger.error("Call to deprecated method 'setBaseMarketDataAvailability' (PLAT-1459)");
+    LOGGER.error("Call to deprecated method 'setBaseMarketDataAvailability' (PLAT-1459)");
     _baseMarketDataAvailability = baseMarketDataAvailability;
   }
 

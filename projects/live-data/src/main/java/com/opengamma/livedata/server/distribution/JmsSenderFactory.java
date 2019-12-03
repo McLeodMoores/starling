@@ -27,7 +27,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsSenderFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsSenderFactory.class);
 
   /**
    * A {@code WeakHashMap} is used here so the senders can be garbage collected
@@ -60,10 +60,10 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param jmsConnector  the JMS connector
    */
-  public JmsSenderFactory(JmsConnector jmsConnector) {
+  public JmsSenderFactory(final JmsConnector jmsConnector) {
     this();
     setJmsConnector(jmsConnector);
   }
@@ -71,7 +71,7 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
   //-------------------------------------------------------------------------
   /**
    * Gets the JMS connector.
-   * 
+   *
    * @return the JMS connector
    */
   public JmsConnector getJmsConnector() {
@@ -80,16 +80,16 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Sets the JMS connector.
-   * 
+   *
    * @param jmsConnector  the connector
    */
-  public void setJmsConnector(JmsConnector jmsConnector) {
+  public void setJmsConnector(final JmsConnector jmsConnector) {
     _jmsConnector = jmsConnector;
   }
 
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the Fudge context
    */
   public FudgeContext getFudgeContext() {
@@ -98,16 +98,16 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Sets the Fudge context.
-   * 
+   *
    * @param fudgeContext  the Fudge context
    */
-  public void setFudgeContext(FudgeContext fudgeContext) {
+  public void setFudgeContext(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
   }
 
   //-------------------------------------------------------------------------
   public synchronized void transportInterrupted() {
-    s_logger.warn("JMS transport interrupted; notifying {} senders", _allActiveSenders.size());
+    LOGGER.warn("JMS transport interrupted; notifying {} senders", _allActiveSenders.size());
     for (final JmsSender sender : _allActiveSenders) {
       _executor.execute(new Runnable() {
         @Override
@@ -119,7 +119,7 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
   }
 
   public synchronized void transportResumed() {
-    s_logger.info("JMS transport resumed; notifying {} senders", _allActiveSenders.size());
+    LOGGER.info("JMS transport resumed; notifying {} senders", _allActiveSenders.size());
     for (final JmsSender sender : _allActiveSenders) {
       _executor.execute(new Runnable() {
         @Override
@@ -131,9 +131,9 @@ public class JmsSenderFactory implements MarketDataSenderFactory {
   }
 
   @Override
-  public synchronized Collection<MarketDataSender> create(MarketDataDistributor distributor) {
-    s_logger.debug("Created JmsSender for {}", distributor);
-    JmsSender sender = new JmsSender(_jmsConnector, distributor, getFudgeContext());
+  public synchronized Collection<MarketDataSender> create(final MarketDataDistributor distributor) {
+    LOGGER.debug("Created JmsSender for {}", distributor);
+    final JmsSender sender = new JmsSender(_jmsConnector, distributor, getFudgeContext());
     _allActiveSenders.add(sender);
     return Collections.<MarketDataSender>singleton(sender);
   }

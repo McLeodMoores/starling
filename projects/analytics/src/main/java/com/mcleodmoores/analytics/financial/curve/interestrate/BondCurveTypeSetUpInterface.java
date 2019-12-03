@@ -21,19 +21,19 @@ import com.opengamma.util.tuple.Pair;
 public interface BondCurveTypeSetUpInterface<T extends ParameterProviderInterface> extends CurveTypeSetUpInterface<T> {
 
   @Override
-  BondCurveTypeSetUpInterface forDiscounting(final Currency currency);
+  BondCurveTypeSetUpInterface forDiscounting(Currency currency);
 
   //TODO versions that only take a single index
   @Override
-  BondCurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
+  BondCurveTypeSetUpInterface forIborIndex(IborTypeIndex... indices);
 
   @Override
-  BondCurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
+  BondCurveTypeSetUpInterface forOvernightIndex(OvernightIndex... indices);
 
   BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>> issuer);
 
   @Override
-  BondCurveTypeSetUpInterface withInterpolator(final Interpolator1D interpolator);
+  BondCurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
   //TODO asSpread under to indicate subtraction?
   @Override
@@ -65,6 +65,6 @@ public interface BondCurveTypeSetUpInterface<T extends ParameterProviderInterfac
   BondCurveTypeSetUpInterface usingLastFixingEndTime();
 
   @Override
-  GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate);
+  GeneratorYDCurve buildCurveGenerator(ZonedDateTime valuationDate);
 
 }

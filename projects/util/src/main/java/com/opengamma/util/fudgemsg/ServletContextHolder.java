@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 McLeod Moores Software Limited.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.
  */
 package com.opengamma.util.fudgemsg;
 
@@ -11,11 +11,11 @@ import javax.servlet.ServletContext;
  */
 public class ServletContextHolder {
   private static ServletContext s_context;
-  
-  public static void setContext(ServletContext context) {
+
+  public static void setContext(final ServletContext context) {
     s_context = context;
   }
-  
+
   public static ServletContext getContext() {
     return s_context;
   }

@@ -24,24 +24,23 @@ public class FudgeBasedJsonGenerator implements JSON.Generator {
   private final FudgeContext _fudgeContext;
   private final Object _value;
 
-  public FudgeBasedJsonGenerator(FudgeContext fudgeContext, Object value) {
+  public FudgeBasedJsonGenerator(final FudgeContext fudgeContext, final Object value) {
     _fudgeContext = fudgeContext;
     _value = value;
   }
 
   @Override
-  public void addJSON(Appendable buffer) {
-    StringWriter stringWriter = new StringWriter();
-    FudgeStreamWriter fudgeWriter = new FudgeJSONStreamWriter(_fudgeContext, stringWriter);
-    FudgeMsgEnvelope msg = _fudgeContext.toFudgeMsg(_value);
+  public void addJSON(final Appendable buffer) {
+    final StringWriter stringWriter = new StringWriter();
+    final FudgeStreamWriter fudgeWriter = new FudgeJSONStreamWriter(_fudgeContext, stringWriter);
+    final FudgeMsgEnvelope msg = _fudgeContext.toFudgeMsg(_value);
     fudgeWriter.writeFields(msg.getMessage());
     fudgeWriter.flush();
     fudgeWriter.close();
     try {
       buffer.append(stringWriter.toString());
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new RuntimeException(ex);
     }
   }
-
 }

@@ -5,9 +5,11 @@
  */
 package com.opengamma.id;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 import static org.threeten.bp.Month.DECEMBER;
 import static org.threeten.bp.Month.JANUARY;
 
@@ -30,302 +32,545 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class ExternalIdBundleWithDatesTest {
+  private static final ExternalId ID_11 = ExternalId.of("D1", "V1");
+  private static final ExternalIdWithDates IDWD_11 = ExternalIdWithDates.of(ID_11, LocalDate.of(2000, JANUARY, 1), LocalDate.of(2001, JANUARY, 1));
+  private static final ExternalId ID_12 = ExternalId.of("D2", "V1");
+  private static final ExternalIdWithDates IDWD_12 = ExternalIdWithDates.of(ID_12, null, null);
+  private static final ExternalId ID_21 = ExternalId.of("D1", "V2");
+  private static final ExternalIdWithDates IDWD_21 = ExternalIdWithDates.of(ID_21, LocalDate.of(2001, JANUARY, 2), null);
+  private static final ExternalId ID_22 = ExternalId.of("D2", "V2");
+  private static final ExternalIdWithDates IDWD_22 = ExternalIdWithDates.of(ID_22, null, LocalDate.of(2010, DECEMBER, 30));
 
-  private final ExternalId _id11 = ExternalId.of("D1", "V1");
-  private final ExternalIdWithDates _idwd11 = ExternalIdWithDates.of(_id11, LocalDate.of(2000, JANUARY, 1), LocalDate.of(2001, JANUARY, 1));
-  private final ExternalId _id21 = ExternalId.of("D2", "V1");
-  private final ExternalIdWithDates _idwd21 = ExternalIdWithDates.of(_id21, null, null);
-  private final ExternalId _id12 = ExternalId.of("D1", "V2");
-  private final ExternalIdWithDates _idwd12 = ExternalIdWithDates.of(_id12, LocalDate.of(2001, JANUARY, 2), null);
-  private final ExternalId _id22 = ExternalId.of("D2", "V2");
-  private final ExternalIdWithDates _idwd22 = ExternalIdWithDates.of(_id22, null, LocalDate.of(2010, DECEMBER, 30));
-  
-  public void singleton_empty() {
+  /**
+   * Tests creation of an empty bundle.
+   */
+  @Test
+  public void testSingletonEmpty() {
     assertEquals(0, ExternalIdBundleWithDates.EMPTY.size());
   }
 
   //-------------------------------------------------------------------------
-  public void factory_of_varargs_noExternalIds() {
-    ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of();
+  /**
+   * Tests creation of an empty bundle.
+   */
+  @Test
+  public void testFactoryOfVarargsNoExternalIds() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of();
     assertEquals(0, test.size());
   }
 
-  public void factory_of_varargs_oneExternalId() {
-    ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(_idwd11);
+  /**
+   * Tests creation of a bundle containing one id using the varargs constructor.
+   */
+  @Test
+  public void testFactoryOfVarargsOneExternalId() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(IDWD_11);
     assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_idwd11), test.getExternalIds());
+    assertEquals(Sets.newHashSet(IDWD_11), test.getExternalIds());
   }
 
-  public void factory_of_varargs_twoExternalIds() {
-    ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(_idwd11, _idwd12);
+  /**
+   * Tests creation of a bundle using the varargs constructor.
+   */
+  @Test
+  public void testFactoryOfVarargsTwoExternalIds() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(IDWD_11, IDWD_21);
     assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_idwd11, _idwd12), test.getExternalIds());
+    assertEquals(Sets.newHashSet(IDWD_11, IDWD_21), test.getExternalIds());
   }
 
+  /**
+   * Tests that the varargs constructor does not accept null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_varargs_null() {
+  public void testFactoryOfVarargsNull() {
     ExternalIdBundleWithDates.of((ExternalIdWithDates[]) null);
   }
 
+  /**
+   * Tests that the varargs constructor does not accept null entries.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_varargs_noNulls() {
-    ExternalIdBundleWithDates.of(_idwd11, null, _idwd12);
+  public void testFactoryOfVarargsNoNulls() {
+    ExternalIdBundleWithDates.of(IDWD_11, null, IDWD_21);
   }
 
   //-------------------------------------------------------------------------
-  public void constructor_noargs() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
+  /**
+   * Tests the no-args constructor.
+   */
+  @Test
+  public void testConstructorNoargs() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
     assertEquals(0, test.size());
   }
 
   //-------------------------------------------------------------------------
-  public void constructor_ExternalId() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11);
-    assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_idwd11), test.getExternalIds());
+  /**
+   * Tests the constructor that takes an external id.
+   */
+  @Test
+  public void testConstructorExternalId() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11);
+    assertEquals(test.size(), 1);
+    assertEquals(test.getExternalIds(), Sets.newHashSet(IDWD_11));
   }
 
+  /**
+   * Tests that the constructor does not accept null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructor_ExternalId_null() {
+  public void testConstructorExternalIdNull() {
     new ExternalIdBundleWithDates((ExternalIdWithDates) null);
   }
 
   //-------------------------------------------------------------------------
-  public void constructor_varargs_empty() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(new ExternalIdWithDates[0]);
-    assertEquals(0, test.size());
+  /**
+   * Tests the bundle constructor.
+   */
+  @Test
+  public void testConstructorBundleEmpty() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(ExternalIdBundle.EMPTY);
+    assertEquals(test.size(), 0);
   }
 
-  public void constructor_varargs_two() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_idwd11, _idwd12), test.getExternalIds());
+  /**
+   * Tests the bundle constructor.
+   */
+  @Test
+  public void testConstructorBundleTwo() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(ExternalIdBundle.of(ID_21, ID_11));
+    assertEquals(test.size(), 2);
+    assertEquals(test.getExternalIds(), Arrays.asList(ExternalIdWithDates.of(ID_11), ExternalIdWithDates.of(ID_21)));
   }
 
-  public void constructor_varargs_null() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates((ExternalIdWithDates[]) null);
-    assertEquals(0, test.size());
-  }
-
+  /**
+   * Tests the bundle constructor with null input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructor_varargs_noNulls() {
-    new ExternalIdBundleWithDates(_idwd11, null, _idwd12);
+  public void testConstructorBundleNull() {
+    ExternalIdBundleWithDates.of((ExternalIdBundle) null);
   }
 
   //-------------------------------------------------------------------------
-  public void constructor_Collection_empty() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(new ArrayList<ExternalIdWithDates>());
-    assertEquals(0, test.size());
+  /**
+   * Tests the varargs constructor.
+   */
+  @Test
+  public void testConstructorVarargsEmpty() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(new ExternalIdWithDates[0]);
+    assertEquals(test.size(), 0);
   }
 
-  public void constructor_Collection_two() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(Arrays.asList(_idwd11, _idwd12));
-    assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_idwd11, _idwd12), test.getExternalIds());
+  /**
+   * Tests the varargs constructor.
+   */
+  @Test
+  public void testConstructorVarargsTwo() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_21, IDWD_11);
+    assertEquals(test.size(), 2);
+    assertEquals(test.getExternalIds(), Arrays.asList(IDWD_11, IDWD_21));
   }
 
-  public void constructor_Collection_null() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates((Collection<ExternalIdWithDates>) null);
-    assertEquals(0, test.size());
+  /**
+   * Tests the varargs constructor with null input.
+   */
+  @Test
+  public void testConstructorVarargsNull() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates((ExternalIdWithDates[]) null);
+    assertEquals(test.size(), 0);
   }
 
+  /**
+   * Tests that the varargs constructor does not allow null elements.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void constructor_Collection_noNulls() {
-    new ExternalIdBundleWithDates(Arrays.asList(_idwd11, null, _idwd12));
+  public void testConstructorVarargsNoNulls() {
+    new ExternalIdBundleWithDates(IDWD_11, null, IDWD_21);
   }
 
   //-------------------------------------------------------------------------
-  public void singleExternalIdDifferentConstructors() {
-    assertTrue(new ExternalIdBundleWithDates(_idwd11).equals(new ExternalIdBundleWithDates(Collections.singleton(_idwd11))));
+  /**
+   * Tests construction of an empty bundle.
+   */
+  @Test
+  public void testConstructorCollectionEmpty() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(new ArrayList<ExternalIdWithDates>());
+    assertEquals(test.size(), 0);
   }
 
-  public void singleVersusMultipleExternalId() {
-    assertFalse(new ExternalIdBundleWithDates(_idwd11).equals(new ExternalIdBundleWithDates(_idwd11, _idwd12)));
-    assertFalse(new ExternalIdBundleWithDates(_idwd11, _idwd12).equals(new ExternalIdBundleWithDates(_idwd11)));
+  /**
+   * Tests construction of an empty bundle.
+   */
+  @Test
+  public void testFactoryCollectionEmpty() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(new ArrayList<ExternalIdWithDates>());
+    assertEquals(test.size(), 0);
+  }
+
+  /**
+   * Tests the construction of a bundle.
+   */
+  @Test
+  public void testConstructorCollectionTwo() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(Arrays.asList(IDWD_22, IDWD_21, IDWD_11));
+    assertEquals(test.size(), 3);
+    assertEquals(test.getExternalIds(), Arrays.asList(IDWD_11, IDWD_21, IDWD_22));
+  }
+
+  /**
+   * Tests the construction of a bundle.
+   */
+  @Test
+  public void testFactoryCollectionTwo() {
+    final ExternalIdBundleWithDates test = ExternalIdBundleWithDates.of(Arrays.asList(IDWD_22, IDWD_21, IDWD_11));
+    assertEquals(test.size(), 3);
+    assertEquals(test.getExternalIds(), Arrays.asList(IDWD_11, IDWD_21, IDWD_22));
+  }
+
+  /**
+   * Tests construction with a null collection.
+   */
+  @Test
+  public void testConstructorCollectionNull() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates((Collection<ExternalIdWithDates>) null);
+    assertEquals(test.size(), 0);
+  }
+
+  /**
+   * Tests construction with a null collection.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testFactoryCollectionNull() {
+    ExternalIdBundleWithDates.of((Collection<ExternalIdWithDates>) null);
+  }
+
+  /**
+   * Tests that nulls are not allowed in the entries.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructorCollectionNoNulls() {
+    new ExternalIdBundleWithDates(Arrays.asList(IDWD_11, null, IDWD_21));
   }
 
   //-------------------------------------------------------------------------
-  public void toBundle() {
-    ExternalIdBundleWithDates bundleWithDates = new ExternalIdBundleWithDates(_idwd11, _idwd22);
-    assertEquals(ExternalIdBundle.of(_id11, _id22), bundleWithDates.toBundle());
+  /**
+   * Tests construction from a single id.
+   */
+  @Test
+  public void testSingleExternalIdDifferentConstructors() {
+    assertEquals(new ExternalIdBundleWithDates(IDWD_11), new ExternalIdBundleWithDates(Collections.singleton(IDWD_11)));
   }
 
-  public void toBundle_LocalDate() {
-    ExternalIdBundleWithDates bundleWithDates = new ExternalIdBundleWithDates(_idwd11, _idwd22);
-    assertEquals(ExternalIdBundle.of(_id11, _id22), bundleWithDates.toBundle(LocalDate.of(2000, 6, 1)));
-    assertEquals(ExternalIdBundle.of(_id22), bundleWithDates.toBundle(LocalDate.of(2002, 6, 1)));
+  /**
+   * Tests construction from multiple ids.
+   */
+  @Test
+  public void testSingleVersusMultipleExternalId() {
+    assertNotEquals(new ExternalIdBundleWithDates(IDWD_11), new ExternalIdBundleWithDates(IDWD_11, IDWD_21));
+    assertNotEquals(new ExternalIdBundleWithDates(IDWD_11, IDWD_21), new ExternalIdBundleWithDates(IDWD_11));
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the toBundle() method.
+   */
+  @Test
+  public void testToBundle() {
+    final ExternalIdBundleWithDates bundleWithDates = new ExternalIdBundleWithDates(IDWD_11, IDWD_22);
+    assertEquals(ExternalIdBundle.of(ID_11, ID_22), bundleWithDates.toBundle());
+  }
+
+  /**
+   * Tests the toBundle() method.
+   */
+  @Test
+  public void testToBundleLocalDate() {
+    final ExternalIdBundleWithDates bundleWithDates = new ExternalIdBundleWithDates(IDWD_11, IDWD_22);
+    assertEquals(ExternalIdBundle.of(ID_11, ID_22), bundleWithDates.toBundle(LocalDate.of(2000, 6, 1)));
+    assertEquals(ExternalIdBundle.of(ID_22), bundleWithDates.toBundle(LocalDate.of(2002, 6, 1)));
     assertEquals(ExternalIdBundle.EMPTY, bundleWithDates.toBundle(LocalDate.of(2011, 6, 1)));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the withExternalId() method.
+   */
+  @Test
   public void withExternalId() {
-    ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(_idwd11);
-    ExternalIdBundleWithDates test = base.withExternalId(_idwd21);
-    assertEquals(1, base.size());
-    assertEquals(2, test.size());
-    assertTrue(test.getExternalIds().contains(_idwd11));
-    assertTrue(test.getExternalIds().contains(_idwd21));
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
+    final ExternalIdBundleWithDates test = base.withExternalId(IDWD_12);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 2);
+    assertTrue(test.getExternalIds().contains(IDWD_11));
+    assertTrue(test.getExternalIds().contains(IDWD_12));
   }
 
+  /**
+   * Tests the withExternalId() method.
+   */
+  @Test
+  public void withExternalIdAlreadyPresent() {
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
+    final ExternalIdBundleWithDates test = base.withExternalId(IDWD_11);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 1);
+    assertSame(test, base);
+    assertEquals(test, base);
+  }
+
+  /**
+   * Tests the withExternalId() method with null input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void withExternalId_null() {
-    ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(_idwd11);
+  public void testWithExternalIdNull() {
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
     base.withExternalId(null);
   }
 
-  public void withoutExternalId_match() {
-    ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(_idwd11);
-    ExternalIdBundleWithDates test = base.withoutExternalId(_idwd11);
-    assertEquals(1, base.size());
-    assertEquals(0, test.size());
+  /**
+   * Tests the withoutExternalId() method that removes an id.
+   */
+  @Test
+  public void testWithoutExternalIdMatch() {
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
+    final ExternalIdBundleWithDates test = base.withoutExternalId(IDWD_11);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 0);
   }
 
-  public void withoutExternalId_noMatch() {
-    ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(_idwd11);
-    ExternalIdBundleWithDates test = base.withoutExternalId(_idwd12);
-    assertEquals(1, base.size());
-    assertEquals(1, test.size());
-    assertTrue(test.getExternalIds().contains(_idwd11));
+  /**
+   * Tests the withoutExternalId() method that does not remove an id.
+   */
+  @Test
+  public void testWithoutExternalIdNoMatch() {
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
+    final ExternalIdBundleWithDates test = base.withoutExternalId(IDWD_21);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 1);
+    assertSame(base, test);
+    assertTrue(test.getExternalIds().contains(IDWD_11));
   }
 
+  /**
+   * Tests the withoutExternalId() method with null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void withoutExternalId_null() {
-    ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(_idwd11);
+  public void testWithoutExternalIdNull() {
+    final ExternalIdBundleWithDates base = new ExternalIdBundleWithDates(IDWD_11);
     base.withoutExternalId(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_size() {
-    assertEquals(0, new ExternalIdBundleWithDates().size());
-    assertEquals(1, new ExternalIdBundleWithDates(_idwd11).size());
-    assertEquals(2, new ExternalIdBundleWithDates(_idwd11, _idwd12).size());
+  /**
+   * Tests the size() method.
+   */
+  @Test
+  public void testSize() {
+    assertEquals(new ExternalIdBundleWithDates().size(), 0);
+    assertEquals(new ExternalIdBundleWithDates(IDWD_11).size(), 1);
+    assertEquals(new ExternalIdBundleWithDates(IDWD_11, IDWD_21).size(), 2);
   }
 
   //-------------------------------------------------------------------------
-  public void test_iterator() {
-    Set<ExternalIdWithDates> expected = new HashSet<ExternalIdWithDates>();
-    expected.add(_idwd11);
-    expected.add(_idwd12);
-    Iterable<ExternalIdWithDates> base = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    Iterator<ExternalIdWithDates> test = base.iterator();
-    assertEquals(true, test.hasNext());
-    assertEquals(true, expected.remove(test.next()));
-    assertEquals(true, test.hasNext());
-    assertEquals(true, expected.remove(test.next()));
-    assertEquals(false, test.hasNext());
-    assertEquals(0, expected.size());
+  /**
+   * Tests the iterator.
+   */
+  @Test
+  public void testIterator() {
+    final Set<ExternalIdWithDates> expected = new HashSet<>();
+    expected.add(IDWD_11);
+    expected.add(IDWD_21);
+    final Iterable<ExternalIdWithDates> base = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    final Iterator<ExternalIdWithDates> test = base.iterator();
+    assertTrue(test.hasNext());
+    assertTrue(expected.remove(test.next()));
+    assertTrue(test.hasNext());
+    assertTrue(expected.remove(test.next()));
+    assertFalse(test.hasNext());
+    assertEquals(expected.size(), 0);
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsAny() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals(true, test.containsAny(new ExternalIdBundleWithDates(_idwd11, _idwd12)));
-    assertEquals(true, test.containsAny(new ExternalIdBundleWithDates(_idwd11)));
-    assertEquals(true, test.containsAny(new ExternalIdBundleWithDates(_idwd12)));
-    assertEquals(false, test.containsAny(new ExternalIdBundleWithDates(_idwd21)));
-    assertEquals(false, test.containsAny(new ExternalIdBundleWithDates()));
+  /**
+   * Tests the containsAny() method.
+   */
+  @Test
+  public void testContainsAny() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertTrue(test.containsAny(new ExternalIdBundleWithDates(IDWD_11, IDWD_21)));
+    assertTrue(test.containsAny(new ExternalIdBundleWithDates(IDWD_11)));
+    assertTrue(test.containsAny(new ExternalIdBundleWithDates(IDWD_21)));
+    assertFalse(test.containsAny(new ExternalIdBundleWithDates(IDWD_12)));
+    assertFalse(test.containsAny(new ExternalIdBundleWithDates()));
   }
 
+  /**
+   * Tests the containsAny() method with null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_containsAny_null() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
+  public void testContainsAnyNull() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
     test.containsAny(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_contains() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals(true, test.contains(_idwd11));
-    assertEquals(true, test.contains(_idwd11));
-    assertEquals(false, test.contains(_idwd21));
+  /**
+   * Tests the containsAll() method.
+   */
+  @Test
+  public void testContainsAll() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertFalse(test.containsAll(new ExternalIdBundleWithDates(IDWD_11, IDWD_21, IDWD_22)));
+    assertTrue(test.containsAll(new ExternalIdBundleWithDates(IDWD_11, IDWD_21)));
+    assertTrue(test.containsAll(new ExternalIdBundleWithDates(IDWD_11)));
+    assertTrue(test.containsAll(new ExternalIdBundleWithDates(IDWD_21)));
+    assertFalse(test.containsAll(new ExternalIdBundleWithDates(IDWD_12)));
+    assertTrue(test.containsAll(new ExternalIdBundleWithDates()));
   }
 
-  public void test_contains_null() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals(false, test.contains(null));
+  /**
+   * Tests the containsAll() method with null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testContainsAllNull() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    test.containsAll(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_toStringList() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals(Arrays.asList(_idwd11.toString(), _idwd12.toString()), test.toStringList());
+  /**
+   * Tests the contains() method.
+   */
+  @Test
+  public void testContains() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertEquals(true, test.contains(IDWD_11));
+    assertEquals(true, test.contains(IDWD_11));
+    assertEquals(false, test.contains(IDWD_12));
   }
 
-  public void test_toStringList_empty() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
+  /**
+   * Tests the contains() method with null.
+   */
+  @Test
+  public void testContainsNull() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertFalse(test.contains(null));
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the toStringList() method.
+   */
+  @Test
+  public void testToStringList() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertEquals(Arrays.asList(IDWD_11.toString(), IDWD_21.toString()), test.toStringList());
+  }
+
+  /**
+   * Tests the toStringList() method on an empty bundle.
+   */
+  @Test
+  public void testToStringListEmpty() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
     assertEquals(new ArrayList<String>(), test.toStringList());
   }
 
   //-------------------------------------------------------------------------
-  public void test_compareTo_differentSizes() {
-    ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates();
-    ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(_idwd11);
-    
-    assertEquals(true, a1.compareTo(a1) == 0);
-    assertEquals(true, a1.compareTo(a2) < 0);
-    assertEquals(true, a2.compareTo(a1) > 0);
-    assertEquals(true, a2.compareTo(a2) == 0);
+  /**
+   * Tests the compareTo() method on bundles with a different number of entries.
+   */
+  @Test
+  public void testCompareToDifferentSizes() {
+    final ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates();
+    final ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(IDWD_11);
+
+    assertEquals(a1.compareTo(a1), 0);
+    assertTrue(a1.compareTo(a2) < 0);
+    assertTrue(a2.compareTo(a1) > 0);
+    assertEquals(a2.compareTo(a2), 0);
   }
 
-  public void test_compareTo_sameSizes() {
-    ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates(_idwd11);
-    ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(_idwd12);
-    
-    assertEquals(true, a1.compareTo(a1) == 0);
-    assertEquals(true, a1.compareTo(a2) < 0);
-    assertEquals(true, a2.compareTo(a1) > 0);
-    assertEquals(true, a2.compareTo(a2) == 0);
+  /**
+   * Tests the compareTo() method on bundles with the same number of entries.
+   */
+  @Test
+  public void testCompareToSameSizes() {
+    final ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates(IDWD_11);
+    final ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(IDWD_21);
+
+    assertEquals(a1.compareTo(a1), 0);
+    assertTrue(a1.compareTo(a2) < 0);
+    assertTrue(a2.compareTo(a1) > 0);
+    assertEquals(a2.compareTo(a2), 0);
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals_same_empty() {
-    ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates();
-    ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates();
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests the equals() method on empty bundles.
+   */
+  @Test
+  public void testEqualsSameEmpty() {
+    final ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates();
+    final ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates();
+    assertEquals(a1, a2);
+    assertEquals(a2, a1);
   }
 
-  public void test_equals_same_nonEmpty() {
-    ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests the equals() method on bundles with the same data.
+   */
+  @Test
+  public void testEqualsSameNonEmpty() {
+    final ExternalIdBundleWithDates a1 = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    final ExternalIdBundleWithDates a2 = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertTrue(a1.equals(a1));
+    assertEquals(a1, a2);
+    assertEquals(a2, a1);
   }
 
-  public void test_equals_different() {
-    ExternalIdBundleWithDates a = new ExternalIdBundleWithDates();
-    ExternalIdBundleWithDates b = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    
-    assertEquals(true, a.equals(a));
-    assertEquals(false, a.equals(b));
-    assertEquals(false, b.equals(a));
-    assertEquals(true, b.equals(b));
-    
-    assertEquals(false, b.equals("Rubbish"));
-    assertEquals(false, b.equals(null));
+  /**
+   * Tests the equals() method on different bundles.
+   */
+  @Test
+  public void testEqualsDifferent() {
+    final ExternalIdBundleWithDates a = new ExternalIdBundleWithDates();
+    final ExternalIdBundleWithDates b = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertNotEquals(a, b);
+    assertNotEquals(b, a);
+    assertNotEquals("a", b);
+    assertNotEquals(null, b);
   }
 
-  public void test_hashCode() {
-    ExternalIdBundleWithDates a = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    ExternalIdBundleWithDates b = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final ExternalIdBundleWithDates a = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    final ExternalIdBundleWithDates b = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+
     assertEquals(a.hashCode(), b.hashCode());
   }
 
-  public void test_toString_empty() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
+  /**
+   * Tests the toString() method for an empty bundle.
+   */
+  @Test
+  public void testToStringEmpty() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates();
     assertEquals("BundleWithDates[]", test.toString());
   }
 
-  public void test_toString_nonEmpty() {
-    ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(_idwd11, _idwd12);
-    assertEquals("BundleWithDates[" + _idwd11.toString() + ", " + _idwd12.toString() + "]", test.toString());
+  /**
+   * Tests the toString() method for a non-empty bundle.
+   */
+  @Test
+  public void testToStringNonEmpty() {
+    final ExternalIdBundleWithDates test = new ExternalIdBundleWithDates(IDWD_11, IDWD_21);
+    assertEquals("BundleWithDates[" + IDWD_11.toString() + ", " + IDWD_21.toString() + "]", test.toString());
   }
 
 }

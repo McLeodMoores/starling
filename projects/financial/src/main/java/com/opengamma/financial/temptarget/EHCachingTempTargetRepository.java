@@ -7,10 +7,6 @@ package com.opengamma.financial.temptarget;
 
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.springframework.context.Lifecycle;
 
 import com.google.common.collect.MapMaker;
@@ -18,6 +14,10 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * EH Cache {@link TempTargetRepository} wrapper.
@@ -53,7 +53,7 @@ public class EHCachingTempTargetRepository implements TempTargetRepository, Life
   // TempTargetRepository
 
   @Override
-  public TempTarget get(UniqueId identifier) {
+  public TempTarget get(final UniqueId identifier) {
     TempTarget cached = _frontCache.get(identifier);
     if (cached != null) {
       return cached;
@@ -72,8 +72,8 @@ public class EHCachingTempTargetRepository implements TempTargetRepository, Life
   }
 
   @Override
-  public UniqueId locateOrStore(TempTarget target) {
-    Element element = getCache().get(target);
+  public UniqueId locateOrStore(final TempTarget target) {
+    final Element element = getCache().get(target);
     if (element != null) {
       return (UniqueId) element.getObjectValue();
     }

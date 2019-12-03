@@ -36,7 +36,7 @@ public class PortfolioPosition {
    * @param securities the security, not null
    * @param portfolioPath the portfolio path, not null
    */
-  public PortfolioPosition(ManageablePosition position, ManageableSecurity[] securities, String[] portfolioPath) {
+  public PortfolioPosition(final ManageablePosition position, final ManageableSecurity[] securities, final String[] portfolioPath) {
     this._position = position;
     this._securities = securities;
     this._portfolioPath = portfolioPath;

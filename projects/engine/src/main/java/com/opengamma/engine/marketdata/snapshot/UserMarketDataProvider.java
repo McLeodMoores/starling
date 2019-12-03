@@ -34,7 +34,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
 
   private final MarketDataSnapshotSource _snapshotSource;
   private final UniqueId _snapshotId;
-  private final CopyOnWriteArraySet<ValueSpecification> _listeningValueSpecifications = new CopyOnWriteArraySet<ValueSpecification>();
+  private final CopyOnWriteArraySet<ValueSpecification> _listeningValueSpecifications = new CopyOnWriteArraySet<>();
   private final MarketDataPermissionProvider _permissionProvider;
   private final MarketDataSnapshotChangeListener _snapshotSourceChangeListener;
   private final Object _listenerLock = new Object();
@@ -50,7 +50,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     _permissionProvider = new PermissiveMarketDataPermissionProvider();
     _snapshotSourceChangeListener = new MarketDataSnapshotChangeListener() {
       @Override
-      public void objectChanged(ObjectId oid) {
+      public void objectChanged(final ObjectId oid) {
         if (!oid.equals(getSnapshotId().getObjectId())) {
           return;
         }
@@ -69,7 +69,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     }
     synchronized (_initSnapshotLock) {
       if (_snapshot == null) {
-        StructuredMarketDataSnapshot structuredSnapshot = getSnapshotSource().get(getSnapshotId());
+        final StructuredMarketDataSnapshot structuredSnapshot = getSnapshotSource().get(getSnapshotId());
         snapshot = new UserMarketDataSnapshot(structuredSnapshot);
         snapshot.init();
         _snapshot = snapshot;
@@ -78,7 +78,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void addListener(final MarketDataListener listener) {
     synchronized (_listenerLock) {
@@ -99,7 +99,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void subscribe(final ValueSpecification valueSpecification) {
     subscribe(Collections.singleton(valueSpecification));
@@ -121,7 +121,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     // TODO
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
     return getSnapshot().getAvailabilityProvider();
@@ -132,7 +132,7 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
     return _permissionProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
     if (!(marketDataSpec instanceof UserMarketDataSpecification)) {
@@ -143,10 +143,10 @@ public class UserMarketDataProvider extends AbstractMarketDataProvider {
   }
 
   @Override
-  public MarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
+  public MarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
     if (!isCompatible(marketDataSpec)) {
-      throw new OpenGammaRuntimeException("Market data specification " + marketDataSpec + " is incompatible with " +
-          UserMarketDataProvider.class.getSimpleName() + " for snapshot " + getSnapshotId());
+      throw new OpenGammaRuntimeException("Market data specification " + marketDataSpec + " is incompatible with "
+          + UserMarketDataProvider.class.getSimpleName() + " for snapshot " + getSnapshotId());
     }
     return getSnapshot();
   }

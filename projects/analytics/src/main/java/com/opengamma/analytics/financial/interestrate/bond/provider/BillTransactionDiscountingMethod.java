@@ -25,7 +25,8 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class with methods related to bill transaction valued by discounting.
- * <P> Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
+ * <P>
+ * Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
  */
 public final class BillTransactionDiscountingMethod {
 
@@ -36,6 +37,7 @@ public final class BillTransactionDiscountingMethod {
 
   /**
    * Return the class instance.
+   * 
    * @return The instance.
    */
   public static BillTransactionDiscountingMethod getInstance() {
@@ -55,8 +57,11 @@ public final class BillTransactionDiscountingMethod {
 
   /**
    * Computes the bill transaction present value.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   * 
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BillTransaction bill, final IssuerProviderInterface issuer) {
@@ -70,9 +75,13 @@ public final class BillTransactionDiscountingMethod {
 
   /**
    * Computes the bill transaction present value from the quoted yield to maturity.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
-   * @param yield The yield.
+   * 
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
+   * @param yield
+   *          The yield.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromYield(final BillTransaction bill, final double yield, final IssuerProviderInterface issuer) {
@@ -86,8 +95,11 @@ public final class BillTransactionDiscountingMethod {
 
   /**
    * Computes the bill present value curve sensitivity.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   * 
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BillTransaction bill, final IssuerProviderInterface issuer) {
@@ -113,9 +125,13 @@ public final class BillTransactionDiscountingMethod {
   }
 
   /**
-   * The par spread for which the present value of the bill transaction is 0. If that spread was added to the transaction yield, the new transaction would have a present value of 0.
-   * @param bill The bill transaction.
-   * @param issuer The issuer and multi-curves provider.
+   * The par spread for which the present value of the bill transaction is 0. If that spread was added to the transaction yield, the new transaction would have
+   * a present value of 0.
+   * 
+   * @param bill
+   *          The bill transaction.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The spread.
    */
   public double parSpread(final BillTransaction bill, final IssuerProviderInterface issuer) {
@@ -126,13 +142,17 @@ public final class BillTransactionDiscountingMethod {
     final double dfDscSettle = issuer.getMulticurveProvider().getDiscountFactor(ccy, bill.getBillPurchased().getSettlementTime());
     final double pricePar = dfCreditEnd / dfDscSettle;
     return METHOD_SECURITY.yieldFromCleanPrice(bill.getBillPurchased(), pricePar)
-        - METHOD_SECURITY.yieldFromCleanPrice(bill.getBillPurchased(), -bill.getSettlementAmount() / (bill.getQuantity() * bill.getBillPurchased().getNotional()));
+        - METHOD_SECURITY.yieldFromCleanPrice(bill.getBillPurchased(),
+            -bill.getSettlementAmount() / (bill.getQuantity() * bill.getBillPurchased().getNotional()));
   }
 
   /**
    * The par spread curve sensitivity.
-   * @param bill The bill transaction.
-   * @param issuer The issuer and multi-curves provider.
+   * 
+   * @param bill
+   *          The bill transaction.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The curve sensitivity.
    */
   public MulticurveSensitivity parSpreadCurveSensitivity(final BillTransaction bill, final IssuerProviderInterface issuer) {

@@ -6,8 +6,9 @@
 package com.opengamma.financial.analytics.ircurve;
 
 /**
- * 
+ * @deprecated Unused
  */
+@Deprecated
 public class YieldCurveConvention {
 
 }

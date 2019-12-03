@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -15,12 +15,11 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Quintic interpolation preserving local monotonicity and C2 continuity based on 
- * R. L. Dougherty, A. Edelman, and J. M. Hyman, "Nonnegativity-, Monotonicity-, or Convexity-Preserving Cubic and Quintic Hermite Interpolation" 
- * Mathematics Of Computation, v. 52, n. 186, April 1989, pp. 471-494. 
- * 
- * The primary interpolant is used for computing first and second derivative at each data point. They are modified such that local monotonicity conditions are satisfied. 
- * Note that shape-preserving three-point formula is used at endpoints 
+ * Quintic interpolation preserving local monotonicity and C2 continuity based on R. L. Dougherty, A. Edelman, and J. M. Hyman, "Nonnegativity-, Monotonicity-,
+ * or Convexity-Preserving Cubic and Quintic Hermite Interpolation" Mathematics Of Computation, v. 52, n. 186, April 1989, pp. 471-494.
+ *
+ * The primary interpolant is used for computing first and second derivative at each data point. They are modified such that local monotonicity conditions are
+ * satisfied. Note that shape-preserving three-point formula is used at endpoints
  */
 public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -30,11 +29,13 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
   private final HermiteCoefficientsProvider _solver = new HermiteCoefficientsProvider();
   private final PiecewisePolynomialFunction1D _function = new PiecewisePolynomialFunction1D();
-  private PiecewisePolynomialInterpolator _method;
+  private final PiecewisePolynomialInterpolator _method;
 
   /**
-   * Primary interpolation method should be passed
-   * @param method PiecewisePolynomialInterpolator
+   * Primary interpolation method should be passed.
+   *
+   * @param method
+   *          PiecewisePolynomialInterpolator
    */
   public MonotonicityPreservingQuinticSplineInterpolator(final PiecewisePolynomialInterpolator method) {
     _method = method;
@@ -45,7 +46,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     ArgumentChecker.notNull(xValues, "xValues");
     ArgumentChecker.notNull(yValues, "yValues");
 
-    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length, "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
+    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length,
+        "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
     ArgumentChecker.isTrue(xValues.length > 2, "Data points should be more than 2");
 
     final int nDataPts = xValues.length;
@@ -66,7 +68,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       }
     }
 
-    double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
+    final double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
     double[] yValuesSrt = new double[nDataPts];
     if (nDataPts == yValuesLen) {
       yValuesSrt = Arrays.copyOf(yValues, nDataPts);
@@ -83,7 +85,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
     final double[] initialFirst = _function.differentiate(result, xValuesSrt).getData()[0];
     final double[] initialSecond = _function.differentiateTwice(result, xValuesSrt).getData()[0];
-    double[] first = firstDerivativeCalculator(yValuesSrt, intervals, slopes, initialFirst);
+    final double[] first = firstDerivativeCalculator(yValuesSrt, intervals, slopes, initialFirst);
 
     boolean modFirst = false;
     int k;
@@ -91,12 +93,12 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     double[] bValues = bValuesCalculator(slopes, first);
     double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
     double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-    while (modFirst == false) {
+    while (!modFirst) {
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
-          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR |
-              intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
+          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR
+              || intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
             ++k;
             first[i + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, i + 1);
           }
@@ -153,7 +155,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     }
 
     double[] xValuesSrt = new double[nDataPts];
-    DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
 
     for (int i = 0; i < dim; ++i) {
       xValuesSrt = Arrays.copyOf(xValues, nDataPts);
@@ -181,12 +183,12 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       double[] bValues = bValuesCalculator(slopes, first);
       double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
       double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-      while (modFirst == false) {
+      while (!modFirst) {
         k = 0;
         for (int j = 0; j < nDataPts - 2; ++j) {
           if (first[j + 1] > 0.) {
-            if (intervalsA[j + 1][1] + Math.abs(intervalsA[j + 1][1]) * ERROR < intervalsB[j][0] - Math.abs(intervalsB[j][0]) * ERROR |
-                intervalsA[j + 1][0] - Math.abs(intervalsA[j + 1][0]) * ERROR > intervalsB[j][1] + Math.abs(intervalsB[j][1]) * ERROR) {
+            if (intervalsA[j + 1][1] + Math.abs(intervalsA[j + 1][1]) * ERROR < intervalsB[j][0] - Math.abs(intervalsB[j][0]) * ERROR
+                || intervalsA[j + 1][0] - Math.abs(intervalsA[j + 1][0]) * ERROR > intervalsB[j][1] + Math.abs(intervalsB[j][1]) * ERROR) {
               ++k;
               first[j + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, j + 1);
             }
@@ -207,7 +209,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
     final int nIntervals = coefMatrix[0].getNumberOfRows();
     final int nCoefs = coefMatrix[0].getNumberOfColumns();
-    double[][] resMatrix = new double[dim * nIntervals][nCoefs];
+    final double[][] resMatrix = new double[dim * nIntervals][nCoefs];
 
     for (int i = 0; i < nIntervals; ++i) {
       for (int j = 0; j < dim; ++j) {
@@ -215,7 +217,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       }
     }
 
-    for (int i = 0; i < (nIntervals * dim); ++i) {
+    for (int i = 0; i < nIntervals * dim; ++i) {
       for (int j = 0; j < nCoefs; ++j) {
         ArgumentChecker.isFalse(Double.isNaN(resMatrix[i][j]), "Too large input");
         ArgumentChecker.isFalse(Double.isInfinite(resMatrix[i][j]), "Too large input");
@@ -231,7 +233,8 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     ArgumentChecker.notNull(xValues, "xValues");
     ArgumentChecker.notNull(yValues, "yValues");
 
-    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length, "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
+    ArgumentChecker.isTrue(xValues.length == yValues.length | xValues.length + 2 == yValues.length,
+        "(xValues length = yValues length) or (xValues length + 2 = yValues length)");
     ArgumentChecker.isTrue(xValues.length > 2, "Data points should be more than 2");
 
     final int nDataPts = xValues.length;
@@ -261,7 +264,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
     final double[] intervals = _solver.intervalsCalculator(xValues);
     final double[] slopes = _solver.slopesCalculator(yValuesSrt, intervals);
-    double[][] slopesSensitivity = _solver.slopeSensitivityCalculator(intervals);
+    final double[][] slopesSensitivity = _solver.slopeSensitivityCalculator(intervals);
     final DoubleMatrix1D[] firstWithSensitivity = new DoubleMatrix1D[nDataPts + 1];
     final DoubleMatrix1D[] secondWithSensitivity = new DoubleMatrix1D[nDataPts + 1];
     final PiecewisePolynomialResult result = _method.interpolate(xValues, yValues);
@@ -270,19 +273,19 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
     final double[] initialFirst = _function.differentiate(result, xValues).getData()[0];
     final double[] initialSecond = _function.differentiateTwice(result, xValues).getData()[0];
-    double[] first = firstDerivativeCalculator(yValuesSrt, intervals, slopes, initialFirst);
+    final double[] first = firstDerivativeCalculator(yValuesSrt, intervals, slopes, initialFirst);
     boolean modFirst = false;
     int k;
     double[] aValues = aValuesCalculator(slopes, first);
     double[] bValues = bValuesCalculator(slopes, first);
     double[][] intervalsA = getIntervalsA(intervals, slopes, first, bValues);
     double[][] intervalsB = getIntervalsB(intervals, slopes, first, aValues);
-    while (modFirst == false) {
+    while (!modFirst) {
       k = 0;
       for (int i = 0; i < nDataPts - 2; ++i) {
         if (first[i + 1] > 0.) {
-          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR |
-              intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
+          if (intervalsA[i + 1][1] + Math.abs(intervalsA[i + 1][1]) * ERROR < intervalsB[i][0] - Math.abs(intervalsB[i][0]) * ERROR
+              || intervalsA[i + 1][0] - Math.abs(intervalsA[i + 1][0]) * ERROR > intervalsB[i][1] + Math.abs(intervalsB[i][1]) * ERROR) {
             ++k;
             first[i + 1] = firstDerivativesRecalculator(intervals, slopes, aValues, bValues, i + 1);
           }
@@ -303,7 +306,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     /*
      * Centered finite difference method is used for computing node sensitivity
      */
-    int nExtra = (nDataPts == yValuesLen) ? 0 : 1;
+    final int nExtra = nDataPts == yValuesLen ? 0 : 1;
     final double[] yValuesUp = Arrays.copyOf(yValues, nDataPts + 2 * nExtra);
     final double[] yValuesDw = Arrays.copyOf(yValues, nDataPts + 2 * nExtra);
     final double[][] tmpFirst = new double[nDataPts][nDataPts];
@@ -315,26 +318,26 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       final double[] yValuesSrtUp = Arrays.copyOfRange(yValuesUp, nExtra, nDataPts + nExtra);
       final double[] yValuesSrtDw = Arrays.copyOfRange(yValuesDw, nExtra, nDataPts + nExtra);
 
-      final DoubleMatrix1D[] yValuesUpDw = new DoubleMatrix1D[] {new DoubleMatrix1D(yValuesUp), new DoubleMatrix1D(yValuesDw) };
-      final DoubleMatrix1D[] yValuesSrtUpDw = new DoubleMatrix1D[] {new DoubleMatrix1D(yValuesSrtUp), new DoubleMatrix1D(yValuesSrtDw) };
+      final DoubleMatrix1D[] yValuesUpDw = new DoubleMatrix1D[] { new DoubleMatrix1D(yValuesUp), new DoubleMatrix1D(yValuesDw) };
+      final DoubleMatrix1D[] yValuesSrtUpDw = new DoubleMatrix1D[] { new DoubleMatrix1D(yValuesSrtUp), new DoubleMatrix1D(yValuesSrtDw) };
       final DoubleMatrix1D[] firstSecondUpDw = new DoubleMatrix1D[4];
       for (int ii = 0; ii < 2; ++ii) {
         final double[] slopesUpDw = _solver.slopesCalculator(yValuesSrtUpDw[ii].getData(), intervals);
         final PiecewisePolynomialResult resultUpDw = _method.interpolate(xValues, yValuesUpDw[ii].getData());
         final double[] initialFirstUpDw = _function.differentiate(resultUpDw, xValues).getData()[0];
         final double[] initialSecondUpDw = _function.differentiateTwice(resultUpDw, xValues).getData()[0];
-        double[] firstUpDw = firstDerivativeCalculator(yValuesSrtUpDw[ii].getData(), intervals, slopesUpDw, initialFirstUpDw);
+        final double[] firstUpDw = firstDerivativeCalculator(yValuesSrtUpDw[ii].getData(), intervals, slopesUpDw, initialFirstUpDw);
         boolean modFirstUpDw = false;
         double[] aValuesUpDw = aValuesCalculator(slopesUpDw, firstUpDw);
         double[] bValuesUpDw = bValuesCalculator(slopesUpDw, firstUpDw);
         double[][] intervalsAUpDw = getIntervalsA(intervals, slopesUpDw, firstUpDw, bValuesUpDw);
         double[][] intervalsBUpDw = getIntervalsB(intervals, slopesUpDw, firstUpDw, aValuesUpDw);
-        while (modFirstUpDw == false) {
+        while (!modFirstUpDw) {
           k = 0;
           for (int i = 0; i < nDataPts - 2; ++i) {
             if (firstUpDw[i + 1] > 0.) {
-              if (intervalsAUpDw[i + 1][1] + Math.abs(intervalsAUpDw[i + 1][1]) * ERROR < intervalsBUpDw[i][0] - Math.abs(intervalsBUpDw[i][0]) * ERROR |
-                  intervalsAUpDw[i + 1][0] - Math.abs(intervalsAUpDw[i + 1][0]) * ERROR > intervalsBUpDw[i][1] + Math.abs(intervalsBUpDw[i][1]) * ERROR) {
+              if (intervalsAUpDw[i + 1][1] + Math.abs(intervalsAUpDw[i + 1][1]) * ERROR < intervalsBUpDw[i][0] - Math.abs(intervalsBUpDw[i][0]) * ERROR
+                  || intervalsAUpDw[i + 1][0] - Math.abs(intervalsAUpDw[i + 1][0]) * ERROR > intervalsBUpDw[i][1] + Math.abs(intervalsBUpDw[i][1]) * ERROR) {
                 ++k;
                 firstUpDw[i + 1] = firstDerivativesRecalculator(intervals, slopesUpDw, aValuesUpDw, bValuesUpDw, i + 1);
               }
@@ -364,10 +367,11 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
       secondWithSensitivity[i + 1] = new DoubleMatrix1D(tmpSecond[i]);
     }
 
-    final DoubleMatrix2D[] resMatrix = _solver.solveWithSensitivity(yValuesSrt, intervals, slopes, slopesSensitivity, firstWithSensitivity, secondWithSensitivity);
+    final DoubleMatrix2D[] resMatrix = _solver.solveWithSensitivity(yValuesSrt, intervals, slopes, slopesSensitivity, firstWithSensitivity,
+        secondWithSensitivity);
 
     for (int l = 0; l < nDataPts; ++l) {
-      DoubleMatrix2D m = resMatrix[l];
+      final DoubleMatrix2D m = resMatrix[l];
       final int rows = m.getNumberOfRows();
       final int cols = m.getNumberOfColumns();
       for (int i = 0; i < rows; ++i) {
@@ -391,16 +395,17 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
   }
 
   /**
-   * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator 
-   * @param yValues 
-   * @param intervals 
-   * @param slopes 
-   * @param initialFirst 
-   * @return first derivative 
+   * First derivatives are modified such that cubic interpolant has the same sign as linear interpolator
+   *
+   * @param yValues
+   * @param intervals
+   * @param slopes
+   * @param initialFirst
+   * @return first derivative
    */
   private double[] firstDerivativeCalculator(final double[] yValues, final double[] intervals, final double[] slopes, final double[] initialFirst) {
     final int nDataPts = yValues.length;
-    double[] res = new double[nDataPts];
+    final double[] res = new double[nDataPts];
 
     res[0] = Math.max(Math.min(Math.max(0., initialFirst[0]), 5. * Math.abs(slopes[0])), -5. * Math.abs(slopes[0]));
     res[nDataPts - 1] = Math.max(Math.min(Math.max(0., initialFirst[nDataPts - 2]), 5. * Math.abs(slopes[nDataPts - 2])), -5. * Math.abs(slopes[nDataPts - 2]));
@@ -418,7 +423,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
   private double[] aValuesCalculator(final double[] slopes, final double[] first) {
     final int nData = slopes.length + 1;
-    double[] res = new double[nData - 1];
+    final double[] res = new double[nData - 1];
 
     for (int i = 0; i < nData - 1; ++i) {
       res[i] = slopes[i] == 0. ? 0. : Math.max(0., first[i] / slopes[i]);
@@ -428,7 +433,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
   private double[] bValuesCalculator(final double[] slopes, final double[] first) {
     final int nData = slopes.length + 1;
-    double[] res = new double[nData - 1];
+    final double[] res = new double[nData - 1];
 
     for (int i = 0; i < nData - 1; ++i) {
       res[i] = slopes[i] == 0. ? 0. : Math.max(0., first[i + 1] / slopes[i]);
@@ -438,7 +443,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
   private double[][] getIntervalsA(final double[] intervals, final double[] slopes, final double[] first, final double[] bValues) {
     final int nData = intervals.length + 1;
-    double[][] res = new double[nData - 1][2];
+    final double[][] res = new double[nData - 1][2];
 
     for (int i = 0; i < nData - 1; ++i) {
       final double dPlus = first[i] * slopes[i] > 0 ? first[i] : 0.;
@@ -464,7 +469,7 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
 
   private double[][] getIntervalsB(final double[] intervals, final double[] slopes, final double[] first, final double[] aValues) {
     final int nData = intervals.length + 1;
-    double[][] res = new double[nData - 1][2];
+    final double[][] res = new double[nData - 1][2];
 
     for (int i = 0; i < nData - 1; ++i) {
       final double dMinus = first[i + 1] * slopes[i] > 0 ? first[i + 1] : 0.;
@@ -488,14 +493,16 @@ public class MonotonicityPreservingQuinticSplineInterpolator extends PiecewisePo
     return res;
   }
 
-  private double firstDerivativesRecalculator(final double[] intervals, final double[] slopes, final double[] aValues, final double[] bValues, final int position) {
-    return ((20. - 2. * bValues[position]) * slopes[position] / intervals[position] + (20. - 2. * aValues[position - 1]) * slopes[position - 1] / intervals[position - 1]) /
-        ((8. + 0.48 * bValues[position]) / intervals[position] + (8. + 0.48 * aValues[position - 1]) / intervals[position - 1]);
+  private double firstDerivativesRecalculator(final double[] intervals, final double[] slopes, final double[] aValues, final double[] bValues,
+      final int position) {
+    return ((20. - 2. * bValues[position]) * slopes[position] / intervals[position]
+        + (20. - 2. * aValues[position - 1]) * slopes[position - 1] / intervals[position - 1])
+        / ((8. + 0.48 * bValues[position]) / intervals[position] + (8. + 0.48 * aValues[position - 1]) / intervals[position - 1]);
   }
 
   private double[] secondDerivativeCalculator(final double[] initialSecond, final double[][] intervalsA, final double[][] intervalsB) {
     final int nData = initialSecond.length;
-    double[] res = new double[nData];
+    final double[] res = new double[nData];
 
     for (int i = 0; i < nData - 2; ++i) {
       res[i + 1] = Math.min(intervalsA[i + 1][1], Math.max(intervalsA[i + 1][0], initialSecond[i + 1]));

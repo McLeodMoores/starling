@@ -27,7 +27,7 @@ public class SecuritySearchIterator extends AbstractSearchIterator<SecurityDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    * @return an iterable suitable for use in a for-each loop, not null
@@ -47,17 +47,17 @@ public class SecuritySearchIterator extends AbstractSearchIterator<SecurityDocum
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public SecuritySearchIterator(SecurityMaster master, SecuritySearchRequest request) {
+  public SecuritySearchIterator(final SecurityMaster master, final SecuritySearchRequest request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecuritySearchResult doSearch(SecuritySearchRequest request) {
+  protected SecuritySearchResult doSearch(final SecuritySearchRequest request) {
     return getMaster().search(request);
   }
 

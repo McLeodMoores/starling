@@ -23,7 +23,7 @@ import com.opengamma.web.analytics.NodeTarget;
   }
 
   @Override
-  public Map<String, Object> formatCell(NodeTarget target, ValueSpecification valueSpec, Object inlineKey) {
+  public Map<String, Object> formatCell(final NodeTarget target, final ValueSpecification valueSpec, final Object inlineKey) {
     return ImmutableMap.<String, Object>of(NAME, target.getName(), NODE_ID, target.getNodeId().getObjectId());
   }
 

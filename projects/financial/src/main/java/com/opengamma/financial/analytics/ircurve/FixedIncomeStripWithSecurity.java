@@ -16,8 +16,10 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.time.Tenor;
 
 /**
+ * @deprecated This method of defining yield curve nodes should not be used. Use {@link CurveNodes} instead.
  *
  */
+@Deprecated
 public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStripWithSecurity> {
   private final FixedIncomeStrip _originalStrip;
   private final Tenor _resolvedTenor;
@@ -27,6 +29,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the fixed income strip.
+   *
    * @return The fixed income strip
    */
   public FixedIncomeStrip getStrip() {
@@ -35,6 +38,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the instrumentType field.
+   *
    * @return the instrumentType
    */
   public StripInstrumentType getInstrumentType() {
@@ -42,7 +46,8 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Gets the tenor field
+   * Gets the tenor field.
+   *
    * @return the tenor
    */
   public Tenor getTenor() {
@@ -50,7 +55,8 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Gets the resolved tenor field
+   * Gets the resolved tenor field.
+   *
    * @return the tenor
    */
   public Tenor getResolvedTenor() {
@@ -58,20 +64,22 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Get the number of the quarterly IR futures after the tenor to choose.
-   * NOTE: THIS DOESN'T REFER TO A GENERIC FUTURE
+   * Get the number of the quarterly IR futures after the tenor to choose. NOTE: THIS DOESN'T REFER TO A GENERIC FUTURE
+   *
    * @return number of futures after the tenor
-   * @throws IllegalStateException if called on a non-future strip
+   * @throws IllegalStateException
+   *           if called on a non-future strip
    */
   public int getNumberOfFuturesAfterTenor() {
     return _originalStrip.getNumberOfFuturesAfterTenor();
   }
 
   /**
-   * Get the periods per year of a periodic zero deposit security
+   * Get the periods per year of a periodic zero deposit security.
    *
    * @return the number of periods per year
-   * @throws IllegalStateException if called on a non-periodic zero deposit strip
+   * @throws IllegalStateException
+   *           if called on a non-periodic zero deposit strip
    */
   public int getPeriodsPerYear() {
     return _originalStrip.getPeriodsPerYear();
@@ -79,6 +87,7 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the years field.
+   *
    * @return the years
    */
   public ZonedDateTime getMaturity() {
@@ -86,8 +95,9 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
   }
 
   /**
-   * Gets the identifier that was used to resolve the security
-   * This is available, just so the same identifier can be conveniently used to retrieve requested market data.
+   * Gets the identifier that was used to resolve the security This is available, just so the same identifier can be conveniently used to retrieve requested
+   * market data.
+   *
    * @return The security identifier
    */
   public ExternalId getSecurityIdentifier() {
@@ -96,17 +106,15 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
 
   /**
    * Gets the security field.
+   *
    * @return the security
    */
   public Security getSecurity() {
     return _security;
   }
 
-  public FixedIncomeStripWithSecurity(final FixedIncomeStrip originalStrip,
-      final Tenor resolvedTenor,
-      final ZonedDateTime maturity,
-      final ExternalId securityIdentifier,
-      final Security security) {
+  public FixedIncomeStripWithSecurity(final FixedIncomeStrip originalStrip, final Tenor resolvedTenor, final ZonedDateTime maturity,
+      final ExternalId securityIdentifier, final Security security) {
     Validate.notNull(originalStrip, "original strip");
     Validate.notNull(resolvedTenor, "resolved tenor");
     Validate.notNull(maturity, "maturity");
@@ -126,9 +134,8 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
     }
     if (obj instanceof FixedIncomeStripWithSecurity) {
       final FixedIncomeStripWithSecurity other = (FixedIncomeStripWithSecurity) obj;
-      return ObjectUtils.equals(_originalStrip, other._originalStrip) &&
-          ObjectUtils.equals(_maturity, other._maturity) &&
-          ObjectUtils.equals(_security, other._security);
+      return ObjectUtils.equals(_originalStrip, other._originalStrip) && ObjectUtils.equals(_maturity, other._maturity)
+          && ObjectUtils.equals(_security, other._security);
     }
     return false;
   }
@@ -163,10 +170,9 @@ public class FixedIncomeStripWithSecurity implements Comparable<FixedIncomeStrip
     if (getSecurity().getUniqueId() == null) {
       if (o.getSecurity().getUniqueId() == null) {
         return 0;
-      } else {
-        //TODO check this
-        return -1;
       }
+      // TODO check this
+      return -1;
     }
     result = getSecurity().getUniqueId().getValue().compareTo(o.getSecurity().getUniqueId().getValue());
     return result;

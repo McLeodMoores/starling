@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.digest;
@@ -15,7 +15,7 @@ import com.opengamma.engine.target.ComputationTargetTypeMap;
  */
 public abstract class AbstractTargetDigests implements TargetDigests {
 
-  private final ComputationTargetTypeMap<TargetDigests> _handlers = new ComputationTargetTypeMap<TargetDigests>();
+  private final ComputationTargetTypeMap<TargetDigests> _handlers = new ComputationTargetTypeMap<>();
 
   protected AbstractTargetDigests() {
   }

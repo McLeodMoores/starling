@@ -128,7 +128,8 @@ public class MarketDataProviderWithOverrideTest {
   }
 
   private ValueSpecification getSpecification(final int number) {
-    return new ValueSpecification("Value-" + number, ComputationTargetSpecification.of(UniqueId.of("Scheme", "Target")), ValueProperties.with(ValuePropertyNames.FUNCTION, "MarketData").get());
+    return new ValueSpecification("Value-" + number, ComputationTargetSpecification.of(UniqueId.of("Scheme", "Target")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "MarketData").get());
   }
 
 }

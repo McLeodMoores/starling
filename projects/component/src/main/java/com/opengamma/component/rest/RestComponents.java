@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.component.rest;
 
 import java.net.URI;
@@ -14,8 +19,8 @@ public interface RestComponents {
    * <p>
    * The instance is a JAX_RS class annotated with {@code Path} on the methods.
    * Any {@code Path} at the class level is ignored.
-   * See {@link DataComponentServerResource}.
-   * 
+   * See DataComponentServerResource
+   *
    * @param info  the managed component info, not null
    * @param instance  the JAX-RS singleton instance, not null
    */
@@ -26,7 +31,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS consumers, producers and filters and unmanaged singleton resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param instance  the JAX-RS singleton instance, not null
    */
   void publishHelper(Object instance);
@@ -36,7 +41,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * The class is not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param singletonInstance  the unmanaged singleton instance, not null
    */
   void publishResource(Object singletonInstance);
@@ -46,7 +51,7 @@ public interface RestComponents {
    * <p>
    * This is used for JAX-RS unmanaged resources.
    * These classes are not managed by {@code DataComponentsResource}.
-   * 
+   *
    * @param factory  the factory for creating the resource per request, not null
    */
   void publishResource(RestResourceFactory factory);
@@ -55,7 +60,7 @@ public interface RestComponents {
    * Re-publishes the component.
    * <p>
    * This is used when a component is read in from a remote location and is then re-published.
-   * 
+   *
    * @param info  the component information, not null
    */
   void republish(ComponentInfo info);
@@ -64,15 +69,15 @@ public interface RestComponents {
   /**
    * Gets the complete set of singletons, handling managed components.
    * <p>
-   * This method wraps the managed components in an instance of {@link DataComponentServerResource}.
-   * 
+   * This method wraps the managed components in a RESTful resource.
+   *
    * @return the complete set of singletons, not null
    */
   Set<Object> buildJaxRsSingletons();
 
   /**
    * Gets the complete set of JaxRs classes.
-   * 
+   *
    * @return the complete set of classes, not null
    */
   Set<Class<?>> buildJaxRsClasses();
@@ -87,16 +92,17 @@ public interface RestComponents {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the managed components.
-   * These will be controlled by {@link DataComponentServerResource}.
+   * Gets the managed components. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   List<RestComponent> getLocalComponents();
 
   /**
-   * Sets the managed components.
-   * These will be controlled by {@link DataComponentServerResource}.
-   * @param localComponents  the new value of the property, not null
+   * Sets the managed components. These will be controlled by a RESTful resource.
+   * 
+   * @param localComponents
+   *          the new value of the property, not null
    */
   void setLocalComponents(List<RestComponent> localComponents);
 
@@ -117,31 +123,33 @@ public interface RestComponents {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of root resources.
-   * These are not managed by {@link DataComponentServerResource}.
+   * Gets the set of root resources. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   Set<Object> getRootResourceSingletons();
 
   /**
-   * Sets the set of root resources.
-   * These are not managed by {@link DataComponentServerResource}.
-   * @param rootResourceSingletons  the new value of the property, not null
+   * Sets the set of root resources. These will be controlled by a RESTful resource.
+   * 
+   * @param rootResourceSingletons
+   *          the new value of the property, not null
    */
   void setRootResourceSingletons(Set<Object> rootResourceSingletons);
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of root resource factories.
-   * These are not managed by {@link DataComponentServerResource}.
+   * Gets the set of root resource factories. These will be controlled by a RESTful resource.
+   * 
    * @return the value of the property, not null
    */
   Set<RestResourceFactory> getRootResourceFactories();
 
   /**
-   * Sets the set of root resource factories.
-   * These are not managed by {@link DataComponentServerResource}.
-   * @param rootResourceFactories  the new value of the property, not null
+   * Sets the set of root resource factories. These will be controlled by a RESTful resource.
+   * 
+   * @param rootResourceFactories
+   *          the new value of the property, not null
    */
   void setRootResourceFactories(Set<RestResourceFactory> rootResourceFactories);
 

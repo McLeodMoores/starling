@@ -22,6 +22,7 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
+
 /**
  * Calculates the rho of an equity index or equity option using the Black formula.
  */
@@ -31,7 +32,7 @@ public class ListedEquityOptionBlackRhoFunction extends ListedEquityOptionBlackF
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackRhoCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackRhoFunction() {
     super(ValueRequirementNames.RHO);
@@ -46,7 +47,8 @@ public class ListedEquityOptionBlackRhoFunction extends ListedEquityOptionBlackF
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }

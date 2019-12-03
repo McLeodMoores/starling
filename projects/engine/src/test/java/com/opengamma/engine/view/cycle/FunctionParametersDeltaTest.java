@@ -34,7 +34,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test the {@link FunctionParametersDelta} class
+ * Test the {@link FunctionParametersDelta} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class FunctionParametersDeltaTest {
@@ -112,18 +112,24 @@ public class FunctionParametersDeltaTest {
     final DistinctMarketDataSelector mB = MarketDataPointSelector.of(ExternalId.of("Test", "B"));
     final DistinctMarketDataSelector mC = MarketDataPointSelector.of(ExternalId.of("Test", "C"));
     final DistinctMarketDataSelector mD = MarketDataPointSelector.of(ExternalId.of("Test", "D"));
-    final ValueSpecification vA = new ValueSpecification("A", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
-    final ValueSpecification vB = new ValueSpecification("B", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
-    final ValueSpecification vC = new ValueSpecification("C", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
-    final ValueSpecification vD = new ValueSpecification("D", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification vA =
+        new ValueSpecification("A", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification vB =
+        new ValueSpecification("B", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification vC =
+        new ValueSpecification("C", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
+    final ValueSpecification vD =
+        new ValueSpecification("D", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get());
     final FunctionParametersDelta delta = FunctionParametersDelta.of(Arrays.asList(mA, mC, mD));
     final CompiledViewDefinition cvd1 = Mockito.mock(CompiledViewDefinition.class);
     final CompiledViewCalculationConfiguration cvcc1 = Mockito.mock(CompiledViewCalculationConfiguration.class);
-    Mockito.when(cvcc1.getMarketDataSelections()).thenReturn(ImmutableMap.of(mA, Collections.singleton(vA), mB, Collections.singleton(vB), mC, Collections.singleton(vC)));
+    Mockito.when(cvcc1.getMarketDataSelections())
+           .thenReturn(ImmutableMap.of(mA, Collections.singleton(vA), mB, Collections.singleton(vB), mC, Collections.singleton(vC)));
     Mockito.when(cvd1.getCompiledCalculationConfiguration("Default")).thenReturn(cvcc1);
     final CompiledViewDefinition cvd2 = Mockito.mock(CompiledViewDefinition.class);
     final CompiledViewCalculationConfiguration cvcc2 = Mockito.mock(CompiledViewCalculationConfiguration.class);
-    Mockito.when(cvcc2.getMarketDataSelections()).thenReturn(ImmutableMap.of(mB, Collections.singleton(vB), mC, Collections.singleton(vC), mD, Collections.singleton(vD)));
+    Mockito.when(cvcc2.getMarketDataSelections())
+           .thenReturn(ImmutableMap.of(mB, Collections.singleton(vB), mC, Collections.singleton(vC), mD, Collections.singleton(vD)));
     Mockito.when(cvd2.getCompiledCalculationConfiguration("Default")).thenReturn(cvcc2);
     final Set<ValueSpecification> changed = delta.getValueSpecifications("Default", cvd1, cvd2);
     assertEquals(changed, ImmutableSet.of(vA, vC, vD));

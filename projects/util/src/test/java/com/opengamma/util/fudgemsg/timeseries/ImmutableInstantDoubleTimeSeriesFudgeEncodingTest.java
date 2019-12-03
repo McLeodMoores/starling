@@ -24,39 +24,54 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ImmutableInstantDoubleTimeSeriesFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private Instant[] instants;
-  private double[] values;
-  private ImmutableInstantDoubleTimeSeries ts;
+  private Instant[] _instants;
+  private double[] _values;
+  private ImmutableInstantDoubleTimeSeries _ts;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    instants = new Instant[] {Instant.ofEpochSecond(30), Instant.ofEpochSecond(31)};
-    values = new double[] {1.1d, 2.2d};
-    ts = ImmutableInstantDoubleTimeSeries.of(instants, values);
+    _instants = new Instant[] { Instant.ofEpochSecond(30), Instant.ofEpochSecond(31) };
+    _values = new double[] { 1.1d, 2.2d };
+    _ts = ImmutableInstantDoubleTimeSeries.of(_instants, _values);
   }
 
+  /**
+   *
+   */
   public void testCycle1() {
-    DoubleTimeSeries<?> cycleObject = cycleObject(DoubleTimeSeries.class, ts);
+    final DoubleTimeSeries<?> cycleObject = cycleObject(DoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
-    assertEquals(ts, cycleObject);
+    assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle2() {
-    PreciseDoubleTimeSeries<?> cycleObject = cycleObject(PreciseDoubleTimeSeries.class, ts);
+    final PreciseDoubleTimeSeries<?> cycleObject = cycleObject(PreciseDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
-    assertEquals(ts, cycleObject);
+    assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle3() {
-    InstantDoubleTimeSeries cycleObject = cycleObject(InstantDoubleTimeSeries.class, ts);
+    final InstantDoubleTimeSeries cycleObject = cycleObject(InstantDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
-    assertEquals(ts, cycleObject);
+    assertEquals(_ts, cycleObject);
   }
 
+  /**
+   *
+   */
   public void testCycle4() {
-    ImmutableInstantDoubleTimeSeries cycleObject = cycleObject(ImmutableInstantDoubleTimeSeries.class, ts);
+    final ImmutableInstantDoubleTimeSeries cycleObject = cycleObject(ImmutableInstantDoubleTimeSeries.class, _ts);
     assertEquals(ImmutableInstantDoubleTimeSeries.class, cycleObject.getClass());
-    assertEquals(ts, cycleObject);
+    assertEquals(_ts, cycleObject);
   }
 
 }

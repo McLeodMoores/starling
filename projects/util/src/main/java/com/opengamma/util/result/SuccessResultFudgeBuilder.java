@@ -21,16 +21,16 @@ public class SuccessResultFudgeBuilder implements FudgeBuilder<SuccessResult<?>>
   private static final String RESULT = "result";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SuccessResult<?> result) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SuccessResult<?> result) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessageWithClassHeaders(msg, RESULT, null, result.getValue());
     return msg;
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
   @Override
-  public SuccessResult<?> buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Object result = deserializer.fieldValueToObject(msg.getByName(RESULT));
+  public SuccessResult<?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Object result = deserializer.fieldValueToObject(msg.getByName(RESULT));
     return new SuccessResult(result);
   }
 

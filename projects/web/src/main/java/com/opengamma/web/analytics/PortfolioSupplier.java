@@ -27,11 +27,11 @@ import com.opengamma.util.ArgumentChecker;
   private final SecuritySource _securitySource;
   private final ExecutorService _executor;
 
-  /* package */ PortfolioSupplier(ObjectId portfolioId,
-                                  VersionCorrection versionCorrection,
-                                  PositionSource positionSource,
-                                  SecuritySource securitySource,
-                                  ExecutorService executor) {
+  /* package */ PortfolioSupplier(final ObjectId portfolioId,
+      final VersionCorrection versionCorrection,
+      final PositionSource positionSource,
+      final SecuritySource securitySource,
+      final ExecutorService executor) {
     _securitySource = securitySource;
     _executor = executor;
     ArgumentChecker.notNull(positionSource, "positionSource");
@@ -43,10 +43,9 @@ import com.opengamma.util.ArgumentChecker;
   @Override
   public Portfolio get() {
     if (_portfolioId != null) {
-      Portfolio unresolvedPortfolio = _positionSource.getPortfolio(_portfolioId, _versionCorrection);
+      final Portfolio unresolvedPortfolio = _positionSource.getPortfolio(_portfolioId, _versionCorrection);
       return PortfolioCompiler.resolvePortfolio(unresolvedPortfolio, _executor, _securitySource);
-    } else {
-      return null;
     }
+    return null;
   }
 }

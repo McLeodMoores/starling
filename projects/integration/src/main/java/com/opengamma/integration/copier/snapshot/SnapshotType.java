@@ -6,31 +6,31 @@
 package com.opengamma.integration.copier.snapshot;
 
 /**
- * A list of snapshot columns and
+ * A list of snapshot types.
  */
 public enum SnapshotType {
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   NAME("name"),
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   BASIS_NAME("basis name"),
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   CURVE("curve"),
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   YIELD_CURVE("yield curve"),
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   GLOBAL_VALUES("global values"),
 
-  /** The Type snapshot name */
+  /** The Type snapshot name. */
   VOL_SURFACE("volatility surface");
 
   private String _text;
 
-  SnapshotType(String text) {
+  SnapshotType(final String text) {
     this._text = text;
 
   }
@@ -39,9 +39,9 @@ public enum SnapshotType {
     return this._text;
   }
 
-  public static SnapshotType from(String text) {
+  public static SnapshotType from(final String text) {
     if (text != null) {
-      for (SnapshotType column : SnapshotType.values()) {
+      for (final SnapshotType column : SnapshotType.values()) {
         if (text.equalsIgnoreCase(column._text)) {
           return column;
         }

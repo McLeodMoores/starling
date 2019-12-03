@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * Websites and web-services are related but different RESTful elements.
  * This is because a website needs to bend the RESTful rules in order to be usable.
- * 
+ *
  * @param <T>  the data subclass
  */
 public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData> extends AbstractWebResource {
@@ -39,21 +39,21 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
   /**
    * The data.
    */
-  private T _data;
+  private final T _data;
 
   /**
    * Creates the resource, used by the root resource.
-   * 
+   *
    * @param data  the per-request data, not null
    */
-  protected AbstractPerRequestWebResource(T data) {
+  protected AbstractPerRequestWebResource(final T data) {
     // see setServletContext()
     _data = ArgumentChecker.notNull(data, "data");
   }
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractPerRequestWebResource(final AbstractPerRequestWebResource<T> parent) {
@@ -66,7 +66,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
   //-------------------------------------------------------------------------
   /**
    * Gets the servlet context.
-   * 
+   *
    * @return the servlet context, not null
    */
   public ServletContext getServletContext() {
@@ -77,7 +77,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
    * Setter used to inject the ServletContext.
    * This is a roundabout approach, because Spring and JSR-311 injection clash.
    * DO NOT CALL THIS METHOD DIRECTLY.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    */
   @Context
@@ -89,7 +89,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
   //-------------------------------------------------------------------------
   /**
    * Gets the URI info.
-   * 
+   *
    * @return the URI info, not null
    */
   public UriInfo getUriInfo() {
@@ -110,7 +110,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
   //-------------------------------------------------------------------------
   /**
    * Gets the data.
-   * 
+   *
    * @return the data, not null
    */
   public T data() {
@@ -120,7 +120,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   protected FlexiBean createRootData() {
@@ -129,7 +129,7 @@ public abstract class AbstractPerRequestWebResource<T extends WebPerRequestData>
 
   /**
    * Gets the Freemarker outputer.
-   * 
+   *
    * @return the Freemarker outputter, not null
    */
   protected FreemarkerOutputter getFreemarker() {

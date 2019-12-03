@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -27,6 +27,7 @@ public final class AnnuityForwardRatesVisitor extends InstrumentDerivativeVisito
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static InstrumentDerivativeVisitor<MulticurveProviderInterface, Double[]> getInstance() {

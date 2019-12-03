@@ -38,8 +38,8 @@ public class CouponCommodityCashSettleDefinition extends CouponCommodityDefiniti
    * @param calendar The holiday calendar, not null
    * @param fixingDate the fixing date
    */
-  public CouponCommodityCashSettleDefinition(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional, final ZonedDateTime settlementDate,
-      final Calendar calendar, final ZonedDateTime fixingDate) {
+  public CouponCommodityCashSettleDefinition(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName,
+      final double notional, final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime fixingDate) {
     super(paymentYearFraction, underlying, unitName, notional, settlementDate, calendar);
     ArgumentChecker.notNull(fixingDate, "fixing date");
     ArgumentChecker.isTrue(settlementDate.isAfter(fixingDate), "settlement date must be after the fixing date");
@@ -142,7 +142,7 @@ public class CouponCommodityCashSettleDefinition extends CouponCommodityDefiniti
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_fixingDate == null) ? 0 : _fixingDate.hashCode());
+    result = prime * result + (_fixingDate == null ? 0 : _fixingDate.hashCode());
     return result;
   }
 

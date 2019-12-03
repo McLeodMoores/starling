@@ -8,7 +8,6 @@ import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -79,7 +78,6 @@ public class IborTypeIndexTest {
   /**
    * Tests the object.
    */
-  @SuppressWarnings("deprecation")
   @Test
   public void testObject() {
     final IborTypeIndex index = new IborTypeIndex(NAME, CURRENCY, TENOR, SPOT_LAG, DAY_COUNT, BUSINESS_DAY_CONVENTION, EOM);

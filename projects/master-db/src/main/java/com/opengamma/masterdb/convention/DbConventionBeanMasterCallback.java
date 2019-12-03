@@ -42,47 +42,47 @@ public class DbConventionBeanMasterCallback extends BeanMasterCallback<Conventio
   }
 
   @Override
-  protected ConventionDocument createDocument(ManageableConvention value) {
+  protected ConventionDocument createDocument(final ManageableConvention value) {
     return new ConventionDocument(value);
   }
 
   @Override
-  protected String getName(ManageableConvention value) {
+  protected String getName(final ManageableConvention value) {
     return value.getName();
   }
 
   @Override
-  protected ExternalIdBundle getExternalIdBundle(ManageableConvention value) {
+  protected ExternalIdBundle getExternalIdBundle(final ManageableConvention value) {
     return value.getExternalIdBundle();
   }
 
   @Override
-  protected Map<String, String> getAttributes(ManageableConvention value) {
+  protected Map<String, String> getAttributes(final ManageableConvention value) {
     return value.getAttributes();
   }
 
   @Override
-  protected Map<String, String> getIndexedProperties(ManageableConvention value) {
+  protected Map<String, String> getIndexedProperties(final ManageableConvention value) {
     return ImmutableMap.of();
   }
 
   /**
    * Builds the indexed properties to search for.
-   * 
+   *
    * @param requestToBuild  the request to set search properties into, not null
    * @param requestToExtractFrom  the request to extract indexed properties from, not null
    */
-  protected void buildIndexedPropertiesSearch(BeanMasterSearchRequest requestToBuild, AbstractSearchRequest requestToExtractFrom) {
+  protected void buildIndexedPropertiesSearch(final BeanMasterSearchRequest requestToBuild, final AbstractSearchRequest requestToExtractFrom) {
     return;
   }
 
   @Override
-  protected char getMainType(ManageableConvention value) {
+  protected char getMainType(final ManageableConvention value) {
     return 'C';
   }
 
   @Override
-  protected String getSubType(ManageableConvention value) {
+  protected String getSubType(final ManageableConvention value) {
     return value.getConventionType().getName();
   }
 

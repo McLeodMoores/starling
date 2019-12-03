@@ -32,7 +32,7 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
   public static final long DEFAULT_CHECK_PERIOD = Heartbeater.DEFAULT_PERIOD / 2;
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExpirationManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExpirationManager.class);
 
   /**
    * The extension to the timeout.
@@ -45,16 +45,16 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
 
   /**
    * Creates the manager with a default period between checks.
-   * 
+   *
    * @param dataServer the live data server, not null
    */
-  /* package */ExpirationManager(StandardLiveDataServer dataServer) {
+  /* package */ExpirationManager(final StandardLiveDataServer dataServer) {
     super(dataServer);
   }
 
   /**
    * Sets the timeout extension.
-   * 
+   *
    * @param timeoutExtension the extension in milliseconds
    */
   public void setTimeoutExtension(final long timeoutExtension) {
@@ -63,7 +63,7 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
 
   /**
    * Sets the check period. This must be set before the manager is started.
-   * 
+   *
    * @param checkPeriod the checking period in milliseconds
    */
   public void setCheckPeriod(final long checkPeriod) {
@@ -72,7 +72,7 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
 
   /**
    * Gets the check period.
-   * 
+   *
    * @return the checking period in milliseconds
    */
   public long getCheckPeriod() {
@@ -81,7 +81,7 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
 
   /**
    * Gets the timeout extension.
-   * 
+   *
    * @return the timeoutExtension the extension in milliseconds
    */
   public long getTimeoutExtension() {
@@ -90,32 +90,32 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
 
   /**
    * Extends the timeout for the live data specification.
-   * 
+   *
    * @param fullyQualifiedSpecs the fully-qualified specifications, not null
    */
-  public void extendPublicationTimeout(Collection<LiveDataSpecification> fullyQualifiedSpecs) {
+  public void extendPublicationTimeout(final Collection<LiveDataSpecification> fullyQualifiedSpecs) {
     final StandardLiveDataServer server = getTarget();
     if (server == null) {
-      s_logger.warn("No live data server set in expiration manager - unable to extend publication timeouts");
+      LOGGER.warn("No live data server set in expiration manager - unable to extend publication timeouts");
       return;
     }
-    
-    Set<LiveDataSpecification> resubscriptions = new HashSet<LiveDataSpecification>();
-    for (LiveDataSpecification fullyQualifiedSpec : fullyQualifiedSpecs) {
-      MarketDataDistributor distributor = server.getMarketDataDistributor(fullyQualifiedSpec);
+
+    final Set<LiveDataSpecification> resubscriptions = new HashSet<>();
+    for (final LiveDataSpecification fullyQualifiedSpec : fullyQualifiedSpecs) {
+      final MarketDataDistributor distributor = server.getMarketDataDistributor(fullyQualifiedSpec);
       if (distributor != null) {
-        s_logger.debug("Heartbeat on {}", fullyQualifiedSpec);
+        LOGGER.debug("Heartbeat on {}", fullyQualifiedSpec);
         distributor.extendExpiry(getTimeoutExtension());
       } else {
         // We have (presumably erroneously) dropped a subscription that a client is
         // expecting. In lieu of determining the underlying cause of dropping the
         // subscription, we automatically create a new subscription
-        s_logger.info("Failed to find distributor for heartbeat on {} from {} - will resubscribe", fullyQualifiedSpec, server);
+        LOGGER.info("Failed to find distributor for heartbeat on {} from {} - will resubscribe", fullyQualifiedSpec, server);
         resubscriptions.add(fullyQualifiedSpec);
       }
     }
     if (!resubscriptions.isEmpty()) {
-      s_logger.warn("Received heartbeat for {} live data specifications. Resubscribing to {} of these.", fullyQualifiedSpecs.size(), resubscriptions.size());
+      LOGGER.warn("Received heartbeat for {} live data specifications. Resubscribing to {} of these.", fullyQualifiedSpecs.size(), resubscriptions.size());
       server.subscribe(resubscriptions, false);
     }
   }
@@ -126,10 +126,10 @@ public class ExpirationManager extends AbstractHousekeeper<StandardLiveDataServe
   }
 
   @Override
-  protected boolean housekeep(StandardLiveDataServer server) {
-    s_logger.debug("Checking for data specifications to time out");
-    int nExpired = server.expireSubscriptions();
-    s_logger.info("Expired {} specifications", nExpired);
+  protected boolean housekeep(final StandardLiveDataServer server) {
+    LOGGER.debug("Checking for data specifications to time out");
+    final int nExpired = server.expireSubscriptions();
+    LOGGER.info("Expired {} specifications", nExpired);
     return server.isRunning();
   }
 

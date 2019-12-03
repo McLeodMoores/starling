@@ -19,7 +19,8 @@ import com.opengamma.util.ArgumentChecker;
  * @param <T> concrete underlying derivative definition
  * @param <U> concrete underlying derivative
  */
-public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureDefinition<?>, U extends InstrumentDerivative> implements InstrumentDefinition<U> {
+public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureDefinition<?>, U extends InstrumentDerivative>
+implements InstrumentDefinition<U> {
   /** Expiry date */
   private final ZonedDateTime _expiryDate;
   /** Identifier of the underlying commodity */
@@ -32,9 +33,10 @@ public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureD
   private final boolean _isCall;
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
-   * @param expiryDate is the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract.
+   * @param expiryDate is the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract.
    * @param underlying underlying
    * @param strike Strike price
    * @param exerciseType Exercise type - European or American
@@ -69,7 +71,7 @@ public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureD
   }
 
   /**
-   * Gets the strike price
+   * Gets the strike price.
    * @return the strike.
    */
   public double getStrike() {
@@ -77,7 +79,7 @@ public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureD
   }
 
   /**
-   * Gets the exercise type
+   * Gets the exercise type.
    * @return the exerciseType.
    */
   public ExerciseDecisionType getExerciseType() {
@@ -101,12 +103,12 @@ public abstract class CommodityFutureOptionDefinition<T extends CommodityFutureD
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

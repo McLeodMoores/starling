@@ -115,8 +115,8 @@ public class InterpolatedDoublesCubeTest extends DoublesCubeTest {
     final double eps = 1e-15;
     assertEquals(CUBE.getValue(0., 1., 2.6), 2.6, eps);
     assertEquals(CUBE.getValue(3., 0., 0.01), 0.01, eps);
-    assertEquals(CUBE.getValue(new Triple<>(0., 1., 2.6)), 2.6, eps);
-    assertEquals(CUBE.getValue(new Triple<>(3., 0., 0.01)), 0.01, eps);
+    assertEquals(CUBE.getValue(Triple.of(0., 1., 2.6)), 2.6, eps);
+    assertEquals(CUBE.getValue(Triple.of(3., 0., 0.01)), 0.01, eps);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -141,17 +141,17 @@ public class InterpolatedDoublesCubeTest extends DoublesCubeTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullX2() {
-    CUBE.getValue(new Triple<Double, Double, Double>(null, 2., 5.));
+    CUBE.getValue(Triple.<Double, Double, Double> of(null, 2., 5.));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullY2() {
-    CUBE.getValue(new Triple<Double, Double, Double>(1., null, 1.));
+    CUBE.getValue(Triple.<Double, Double, Double> of(1., null, 1.));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullZ2() {
-    CUBE.getValue(new Triple<Double, Double, Double>(1., 1., null));
+    CUBE.getValue(Triple.<Double, Double, Double> of(1., 1., null));
   }
 
   private static class MyInterpolator extends InterpolatorND {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -16,17 +16,18 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Visitor for processing resolution failure information. The basic implementation writes messages to a logger. Override these methods for more useful error reporting or handling.
- * 
+ * Visitor for processing resolution failure information. The basic implementation writes messages to a logger. Override these methods for more
+ * useful error reporting or handling.
+ *
  * @param <T> return type of the visit methods
  */
 public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolutionFailureVisitor.class);
-  
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionFailureVisitor.class);
+
+
   @Override
-  public final void notifyFailure(ResolutionFailure resolutionFailure) {
+  public final void notifyFailure(final ResolutionFailure resolutionFailure) {
     resolutionFailure.accept(this);
   }
 
@@ -37,80 +38,80 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
 
     @Override
     protected Void visitCouldNotResolve(final ValueRequirement valueRequirement) {
-      s_logger.info("Could not resolve {}", valueRequirement);
+      LOGGER.info("Could not resolve {}", valueRequirement);
       return super.visitCouldNotResolve(valueRequirement);
     }
 
     @Override
     protected Void visitNoFunctions(final ValueRequirement valueRequirement) {
-      s_logger.info("No functions available for {}", valueRequirement);
+      LOGGER.info("No functions available for {}", valueRequirement);
       return super.visitNoFunctions(valueRequirement);
     }
 
     @Override
     protected Void visitRecursiveRequirement(final ValueRequirement valueRequirement) {
-      s_logger.info("Recursive requirement on {} for function(s) producing it", valueRequirement);
+      LOGGER.info("Recursive requirement on {} for function(s) producing it", valueRequirement);
       return super.visitRecursiveRequirement(valueRequirement);
     }
 
     @Override
     protected Void visitUnsatisfied(final ValueRequirement valueRequirement) {
-      s_logger.info("Unsatisfied requirement {}", valueRequirement);
+      LOGGER.info("Unsatisfied requirement {}", valueRequirement);
       return super.visitUnsatisfied(valueRequirement);
     }
 
     @Override
     protected Void visitMarketDataMissing(final ValueRequirement valueRequirement) {
-      s_logger.info("Market data missing to satisfy requirement {}", valueRequirement);
+      LOGGER.info("Market data missing to satisfy requirement {}", valueRequirement);
       return super.visitMarketDataMissing(valueRequirement);
     }
 
     @Override
     protected Void visitSuccessfulFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> satisfied) {
-      s_logger.info("Applied {} for {}", function, valueRequirement);
+      LOGGER.info("Applied {} for {}", function, valueRequirement);
       return super.visitSuccessfulFunction(valueRequirement, function, desiredOutput, satisfied);
     }
 
     @Override
     protected Void visitFailedFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
-      s_logger.info("Couldn't satisfy {} to produce {}", unsatisfied, desiredOutput);
-      s_logger.info("Caused by:");
+      LOGGER.info("Couldn't satisfy {} to produce {}", unsatisfied, desiredOutput);
+      LOGGER.info("Caused by:");
       return super.visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied);
     }
 
     @Override
     protected Void visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("getAdditionalRequirements method failed on {} with inputs {}", function, requirements);
+      LOGGER.info("getAdditionalRequirements method failed on {} with inputs {}", function, requirements);
       return super.visitGetAdditionalRequirementsFailed(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitGetResultsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("getResults method failed on {} with inputs {}", function, requirements);
+      LOGGER.info("getResults method failed on {} with inputs {}", function, requirements);
       return super.visitGetResultsFailed(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
-      s_logger.info("getRequirements method failed on {} for {}", function, desiredOutput);
+      LOGGER.info("getRequirements method failed on {} for {}", function, desiredOutput);
       return super.visitGetRequirementsFailed(valueRequirement, function, desiredOutput);
     }
 
     @Override
     protected Void visitLateResolutionFailure(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("Provisional result {} not in function output after late resolution", desiredOutput);
+      LOGGER.info("Provisional result {} not in function output after late resolution", desiredOutput);
       return super.visitLateResolutionFailure(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitBlacklistSuppressed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("Function blacklist prevented resolution of {}", valueRequirement);
+      LOGGER.info("Function blacklist prevented resolution of {}", valueRequirement);
       return super.visitBlacklistSuppressed(valueRequirement, function, desiredOutput, requirements);
     }
 
@@ -143,7 +144,7 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
 
   protected T visitFailedFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
-    for (ResolutionFailure requirement : unsatisfied) {
+    for (final ResolutionFailure requirement : unsatisfied) {
       requirement.accept(this);
     }
     return null;
@@ -156,7 +157,7 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
     } else if (unsatisfiedAdditional.isEmpty()) {
       return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied);
     } else {
-      final Set<ResolutionFailure> combined = new HashSet<ResolutionFailure>(unsatisfied);
+      final Set<ResolutionFailure> combined = new HashSet<>(unsatisfied);
       combined.addAll(unsatisfiedAdditional);
       return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, combined);
     }
@@ -166,9 +167,8 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
       final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied, final Set<ResolutionFailure> unsatisfiedAdditional) {
     if (unsatisfied.isEmpty() && unsatisfiedAdditional.isEmpty()) {
       return visitSuccessfulFunction(valueRequirement, function, desiredOutput, satisfied);
-    } else {
-      return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied, unsatisfiedAdditional);
     }
+    return visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied, unsatisfiedAdditional);
   }
 
   protected T visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,

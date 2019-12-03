@@ -8,15 +8,16 @@ package com.opengamma.analytics.financial.interestrate.future.calculator;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuture;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;
-import com.opengamma.analytics.financial.interestrate.future.method.BondFutureDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureTransactionDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.future.provider.BondFutureDiscountingMethod;
+import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureTransactionDiscountingMethod;
 
+// CSOFF
 /**
  * Calculate present value for futures from the quoted price.
- * @deprecated {@link YieldCurveBundle} is deprecated
+ *
+ * @deprecated {@link com.opengamma.analytics.financial.interestrate.YieldCurveBundle} is deprecated
  */
 @Deprecated
 public final class PresentValueFromFuturePriceCalculator extends InstrumentDerivativeVisitorAdapter<Double, Double> {
@@ -24,7 +25,7 @@ public final class PresentValueFromFuturePriceCalculator extends InstrumentDeriv
   /**
    * The calculator instance.
    */
-  private static final PresentValueFromFuturePriceCalculator s_instance = new PresentValueFromFuturePriceCalculator();
+  private static final PresentValueFromFuturePriceCalculator INSTANCE = new PresentValueFromFuturePriceCalculator();
   /**
    * The method to compute bond future prices.
    */
@@ -33,13 +34,16 @@ public final class PresentValueFromFuturePriceCalculator extends InstrumentDeriv
   /**
    * The method to compute interest rate future prices.
    */
-  private static final InterestRateFutureTransactionDiscountingMethod METHOD_RATE_FUTURE = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  private static final InterestRateFutureTransactionDiscountingMethod METHOD_RATE_FUTURE = InterestRateFutureTransactionDiscountingMethod
+      .getInstance();
+
   /**
    * Return the calculator instance.
+   *
    * @return The instance.
    */
   public static PresentValueFromFuturePriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -51,7 +55,7 @@ public final class PresentValueFromFuturePriceCalculator extends InstrumentDeriv
   @Override
   public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final Double futurePrice) {
     Validate.notNull(future);
-    return METHOD_RATE_FUTURE.presentValueFromPrice(future, futurePrice);
+    return METHOD_RATE_FUTURE.presentValueFromPrice(future, futurePrice).getAmount(future.getCurrency());
   }
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math;
@@ -12,7 +12,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * 
+ *
  */
 
 public class TrigonometricFunctionUtils {
@@ -23,13 +23,16 @@ public class TrigonometricFunctionUtils {
   }
 
   /**
-   * arccos - the inverse of cos
-   * @param z A complex number
+   * arccos - the inverse of cos.
+   *
+   * @param z
+   *          A complex number
    * @return acos(z)
    */
   public static ComplexNumber acos(final ComplexNumber z) {
     Validate.notNull(z, "z");
-    return ComplexMathUtils.multiply(NEGATIVE_I, ComplexMathUtils.log(ComplexMathUtils.add(z, ComplexMathUtils.sqrt(ComplexMathUtils.subtract(ComplexMathUtils.multiply(z, z), 1)))));
+    return ComplexMathUtils.multiply(NEGATIVE_I,
+        ComplexMathUtils.log(ComplexMathUtils.add(z, ComplexMathUtils.sqrt(ComplexMathUtils.subtract(ComplexMathUtils.multiply(z, z), 1)))));
   }
 
   public static double acosh(final double x) {
@@ -51,7 +54,8 @@ public class TrigonometricFunctionUtils {
   public static ComplexNumber asin(final ComplexNumber z) {
     Validate.notNull(z, "z");
     return ComplexMathUtils.multiply(NEGATIVE_I,
-        ComplexMathUtils.log(ComplexMathUtils.add(ComplexMathUtils.multiply(I, z), ComplexMathUtils.sqrt(ComplexMathUtils.subtract(1, ComplexMathUtils.multiply(z, z))))));
+        ComplexMathUtils
+            .log(ComplexMathUtils.add(ComplexMathUtils.multiply(I, z), ComplexMathUtils.sqrt(ComplexMathUtils.subtract(1, ComplexMathUtils.multiply(z, z))))));
   }
 
   public static double asinh(final double x) {
@@ -78,11 +82,12 @@ public class TrigonometricFunctionUtils {
     return 0.5 * Math.log((1 + x) / (1 - x));
   }
 
-  //TODO R White 21/07/2011 not sure why this was used over the equivalent below 
-//  public static ComplexNumber atanh(final ComplexNumber z) {
-//    Validate.notNull(z, "z");
-//    return ComplexMathUtils.log(ComplexMathUtils.divide(ComplexMathUtils.sqrt(ComplexMathUtils.subtract(1, ComplexMathUtils.multiply(z, z))), ComplexMathUtils.subtract(1, z)));
-//  }
+  // TODO R White 21/07/2011 not sure why this was used over the equivalent below
+  // public static ComplexNumber atanh(final ComplexNumber z) {
+  // Validate.notNull(z, "z");
+  // return ComplexMathUtils.log(ComplexMathUtils.divide(ComplexMathUtils.sqrt(ComplexMathUtils.subtract(1, ComplexMathUtils.multiply(z, z))),
+  // ComplexMathUtils.subtract(1, z)));
+  // }
 
   public static ComplexNumber atanh(final ComplexNumber z) {
     Validate.notNull(z, "z");

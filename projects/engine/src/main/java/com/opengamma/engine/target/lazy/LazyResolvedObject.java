@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -31,7 +31,7 @@ import com.opengamma.engine.ComputationTargetResolver;
     return _underlying;
   }
 
-  protected abstract TargetResolverObject targetResolverObject(final ComputationTargetResolver.AtVersionCorrection resolver);
+  protected abstract TargetResolverObject targetResolverObject(ComputationTargetResolver.AtVersionCorrection resolver);
 
   protected abstract Serializable simpleObject();
 
@@ -43,9 +43,8 @@ import com.opengamma.engine.ComputationTargetResolver;
       } finally {
         LazyResolveContext.endWrite();
       }
-    } else {
-      return simpleObject();
     }
+    return simpleObject();
   }
 
 }

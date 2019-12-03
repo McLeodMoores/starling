@@ -38,44 +38,48 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * Dividend payments (per share) at discrete times $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$  where $S_{\tau_{i^-}}$ is the stock price immediately before the
- * dividend payment.<p>
- * 
- * This simple version takes three typically available inputs (eg from Activ): the next dividend date, the annual amount, and the payment frequency.
- * From these, we construct a model which pays fixed amounts for the first year, and amounts proportional to the share price thereafter  
+ * Dividend payments (per share) at discrete times $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$ where $S_{\tau_{i^-}}$ is the stock price immediately
+ * before the dividend payment.
+ * <p>
+ *
+ * This simple version takes three typically available inputs (eg from Activ): the next dividend date, the annual amount, and the payment frequency. From these,
+ * we construct a model which pays fixed amounts for the first year, and amounts proportional to the share price thereafter
  */
 public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoker {
-  
+
   private final double _dividendHorizon;
   private final double _timeThatProportionalDividendsBegin;
-  
+
   public DiscreteDividendFunction(final double dividendHorizon, final double timeThatProportionalDividendsBegin) {
     ArgumentChecker.notNull(dividendHorizon, "dividendHorizon is null");
     ArgumentChecker.notNull(timeThatProportionalDividendsBegin, "timeThatProportionalDividendsBegin is null");
     _dividendHorizon = dividendHorizon;
     _timeThatProportionalDividendsBegin = timeThatProportionalDividendsBegin;
   }
-  /** Default constructor */
+
+  /** Default constructor. */
   public DiscreteDividendFunction() {
     _dividendHorizon = 2.0;
-    _timeThatProportionalDividendsBegin = 2.0;    
+    _timeThatProportionalDividendsBegin = 2.0;
   }
-  private static final Logger s_logger = LoggerFactory.getLogger(DiscreteDividendFunction.class);
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
-  
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DiscreteDividendFunction.class);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK,
+      ExternalSchemes.ACTIVFEED_TICKER);
+
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    
-    // The frequency sets up an interval 
+
+    // The frequency sets up an interval
     Double nDividendsPerYear = (Double) inputs.getValue(MarketDataRequirementNames.DIVIDEND_FREQUENCY);
     if (nDividendsPerYear == null) {
-      s_logger.debug("No dividend frequency - defaulting to 4 per year");
+      LOGGER.debug("No dividend frequency - defaulting to 4 per year");
       nDividendsPerYear = 4.0;
     }
     final double dividendInterval = 1.0 / nDividendsPerYear;
     final int nDividends = (int) Math.ceil(getDividendHorizon() * nDividendsPerYear);
-    
+
     // The next dividend date anchors the vector of dividend times
     double firstDivTime;
     final Object nextDividendInput = inputs.getValue(MarketDataRequirementNames.NEXT_DIVIDEND_DATE);
@@ -84,17 +88,17 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
       final LocalDate valuationDate = ZonedDateTime.now(executionContext.getValuationClock()).toLocalDate();
       firstDivTime = TimeCalculator.getTimeBetween(valuationDate, nextDividendDate);
       if (firstDivTime < 0.0) {
-        s_logger.warn("Next_Dividend Date is in the past. We will estimate next future date and continue. See [ACTIV-62]");
+        LOGGER.warn("Next_Dividend Date is in the past. We will estimate next future date and continue. See [ACTIV-62]");
         firstDivTime = dividendInterval; // TODO: Review [ACTIV-62]
       }
     } else {
       firstDivTime = dividendInterval;
     }
-        
-    // The annual amount defines what we model to be known future amounts 
+
+    // The annual amount defines what we model to be known future amounts
     // and the spot share price is used to define the proportional amounts
     final double annualAmount;
-    Object annualDividendInput = inputs.getValue(MarketDataRequirementNames.ANNUAL_DIVIDEND);
+    final Object annualDividendInput = inputs.getValue(MarketDataRequirementNames.ANNUAL_DIVIDEND);
     if (annualDividendInput != null) {
       annualAmount = (double) annualDividendInput;
     } else {
@@ -109,7 +113,7 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
     } else {
       proportionalAmt = 0.0;
     }
-    
+
     // Now we can define vectors of dividends d_i = alpha_i + beta_i * share_price(t_i)
     final double[] divTimes = new double[nDividends];
     final double[] fixedAmounts = new double[nDividends];
@@ -119,13 +123,13 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
       divTimes[i] = firstDivTime + i * dividendInterval;
       if (divTimes[i] < crossover) {
         fixedAmounts[i] = fixedAmt;
-        proportionalAmounts[i] = 0.0; 
+        proportionalAmounts[i] = 0.0;
       } else {
         fixedAmounts[i] = 0.0;
         proportionalAmounts[i] = proportionalAmt;
       }
     }
-    
+
     final AffineDividends dividends = new AffineDividends(divTimes, fixedAmounts, proportionalAmounts);
     final ValueProperties properties = getValuePropertiesBuilder().get();
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.AFFINE_DIVIDENDS, target.toSpecification(), properties);
@@ -136,27 +140,27 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }
-  
+
   @Override
   public ComputationTargetType getTargetType() {
     return ComputationTargetType.PRIMITIVE;
   }
-  
+
   @Override
   /** Any or all of the requirements may not be available. */
   public boolean canHandleMissingInputs() {
     return true;
   }
-  
+
   @Override
   public boolean canHandleMissingRequirements() {
     return true;
   }
-  
+
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.AFFINE_DIVIDENDS, target.toSpecification(), getValuePropertiesBuilder().get()));
@@ -165,13 +169,14 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
   private ValueProperties.Builder getValuePropertiesBuilder() {
     return createValueProperties()
         .with("DividendHorizon", String.valueOf(getDividendHorizon())) // TODO: Add "DividendHorizon" to ValuePropertyNames
-        .with("TimeThatProportionalDividendsBegin", String.valueOf(getTimeThatProportionalDividendsBegin())); // TODO: Add "TimeThatProportionalDividendsBegin" to ValuePropertyNames
+        .with("TimeThatProportionalDividendsBegin", String.valueOf(getTimeThatProportionalDividendsBegin())); // TODO: Add "TimeThatProportionalDividendsBegin"
+                                                                                                              // to ValuePropertyNames
   }
-  
+
   public double getDividendHorizon() {
     return _dividendHorizon;
   }
-  
+
   public double getTimeThatProportionalDividendsBegin() {
     return _timeThatProportionalDividendsBegin;
   }

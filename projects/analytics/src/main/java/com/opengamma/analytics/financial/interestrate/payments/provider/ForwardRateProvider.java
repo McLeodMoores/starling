@@ -11,20 +11,28 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 
 /**
  * Forward rate provider.
- * 
- * @param <T> the coupon to return the correspondng forward rate
+ *
+ * @param <U>
+ *          the coupon to return the corresponding forward rate
  */
-public interface ForwardRateProvider<U extends IndexDeposit> { // <T extends DepositIndexCoupon<U>, U extends IndexDeposit> {
+public interface ForwardRateProvider<U extends IndexDeposit> {
 
   /**
    * Returns a forward rate for a specified fixing start and end, and year fraction.
-   * 
-   * @param multicurves the provider containing curves
-   * @param coupon the coupon to return the corresponding forward rate
-   * @param fixingPeriodStartTime the start of the forward period
-   * @param fixingPeriodEndTime the end of the forward period
-   * @param fixingPeriodYearFraction the year fraction of the period.
+   *
+   * @param multicurves
+   *          the provider containing curves
+   * @param coupon
+   *          the coupon to return the corresponding forward rate
+   * @param fixingPeriodStartTime
+   *          the start of the forward period
+   * @param fixingPeriodEndTime
+   *          the end of the forward period
+   * @param fixingPeriodYearFraction
+   *          the year fraction of the period.
    * @return a forward rate.
+   * @param <T>
+   *          the type of the coupon
    */
   <T extends DepositIndexCoupon<U>> double getRate(
       MulticurveProviderInterface multicurves,

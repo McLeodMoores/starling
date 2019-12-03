@@ -16,8 +16,9 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  A wrapper class for a AnnuityDefinition containing CouponInflationYearOnYearMonthlyDefinition
+ *  A wrapper class for a AnnuityDefinition containing CouponInflationYearOnYearMonthlyDefinition.
  */
+@SuppressWarnings("deprecation")
 public class AnnuityCouponInflationYearOnYearMonthlyDefinition extends AnnuityCouponDefinition<CouponInflationYearOnYearMonthlyDefinition> {
 
   /**
@@ -50,12 +51,15 @@ public class AnnuityCouponInflationYearOnYearMonthlyDefinition extends AnnuityCo
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.isTrue(notional > 0, "notional <= 0");
     ArgumentChecker.notNull(paymentPeriod, "Payment period");
-    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, paymentPeriod, totalPeriod, true, false, businessDayConvention, calendar, endOfMonth);
+    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, paymentPeriod, totalPeriod, true,
+        false, businessDayConvention, calendar, endOfMonth);
 
     final CouponInflationYearOnYearMonthlyDefinition[] coupons = new CouponInflationYearOnYearMonthlyDefinition[paymentDates.length];
-    coupons[0] = CouponInflationYearOnYearMonthlyDefinition.from(settlementDate, paymentDates[0], notional, priceIndex, monthLag, conventionalMonthLag, payNotional);
+    coupons[0] = CouponInflationYearOnYearMonthlyDefinition.from(settlementDate, paymentDates[0], notional, priceIndex,
+        monthLag, conventionalMonthLag, payNotional);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
-      coupons[loopcpn] = CouponInflationYearOnYearMonthlyDefinition.from(paymentDates[loopcpn - 1], paymentDates[loopcpn], notional, priceIndex, monthLag, conventionalMonthLag, payNotional);
+      coupons[loopcpn] = CouponInflationYearOnYearMonthlyDefinition.from(paymentDates[loopcpn - 1], paymentDates[loopcpn],
+          notional, priceIndex, monthLag, conventionalMonthLag, payNotional);
     }
     return new AnnuityCouponInflationYearOnYearMonthlyDefinition(coupons, calendar);
   }

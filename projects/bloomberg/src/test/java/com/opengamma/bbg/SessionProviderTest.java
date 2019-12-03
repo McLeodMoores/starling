@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg;
@@ -36,7 +36,7 @@ public class SessionProviderTest {
     try {
       provider.getSession();
       fail();
-    } catch (ConnectionUnavailableException e) {
+    } catch (final ConnectionUnavailableException e) {
       assertEquals(e.getMessage(), message);
     }
   }
@@ -57,7 +57,7 @@ public class SessionProviderTest {
   }
 
   public void testAvailabilityNotifications() throws Exception {
-    final AtomicReference<Session> session = new AtomicReference<Session>();
+    final AtomicReference<Session> session = new AtomicReference<>();
     final BloombergConnector connector = new BloombergConnector("Test", sessionOptions()) {
       @Override
       public Session createOpenSession() {
@@ -65,7 +65,7 @@ public class SessionProviderTest {
       }
 
       @Override
-      public Session createOpenSession(EventHandler eventHandler) {
+      public Session createOpenSession(final EventHandler eventHandler) {
         return createOpenSession();
       }
 

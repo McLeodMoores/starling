@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo;
@@ -23,7 +23,7 @@ public class MonteCarloDiscountFactorDerivativeDataBundle extends MonteCarloDisc
    * @param pathDiscountingFactor The paths discount factors.
    * @param impactAmount The reference amounts at the impact dates.
    */
-  public MonteCarloDiscountFactorDerivativeDataBundle(Double[][][] pathDiscountingFactor, double[][] impactAmount) {
+  public MonteCarloDiscountFactorDerivativeDataBundle(final Double[][][] pathDiscountingFactor, final double[][] impactAmount) {
     super(pathDiscountingFactor, impactAmount);
     _pathDiscountingFactorDerivative = new Double[0][0][0];
     _impactAmountDerivative = new double[0][0];
@@ -41,7 +41,7 @@ public class MonteCarloDiscountFactorDerivativeDataBundle extends MonteCarloDisc
    * Sets the derivatives of path discounting factors.
    * @param pathDiscountingFactorDerivative The derivatives of path discounting factors.
    */
-  public void setPathDiscountingFactorDerivative(Double[][][] pathDiscountingFactorDerivative) {
+  public void setPathDiscountingFactorDerivative(final Double[][][] pathDiscountingFactorDerivative) {
     _pathDiscountingFactorDerivative = pathDiscountingFactorDerivative;
   }
 
@@ -57,7 +57,7 @@ public class MonteCarloDiscountFactorDerivativeDataBundle extends MonteCarloDisc
    * Sets the derivatives of impact amounts.
    * @param impactAmountDerivative The derivatives of impact amounts.
    */
-  public void setImpactAmountDerivative(double[][] impactAmountDerivative) {
+  public void setImpactAmountDerivative(final double[][] impactAmountDerivative) {
     _impactAmountDerivative = impactAmountDerivative;
   }
 

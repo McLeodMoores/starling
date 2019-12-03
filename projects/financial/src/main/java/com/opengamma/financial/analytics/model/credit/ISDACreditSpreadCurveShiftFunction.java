@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit;
@@ -36,10 +36,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class ISDACreditSpreadCurveShiftFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
   private static final String PREFIX = "Shifted ";
 
   @Override
@@ -105,7 +105,7 @@ public class ISDACreditSpreadCurveShiftFunction extends AbstractFunction.NonComp
     }
     final String shiftType = Iterables.getOnlyElement(shiftTypes);
     if (!(shiftType.equals(ADDITIVE_SPREAD_CURVE_SHIFT) || shiftType.equals(MULTIPLICATIVE_SPREAD_CURVE_SHIFT))) {
-      s_logger.error("Spread curve shift type {} not recognised", shiftType);
+      LOGGER.error("Spread curve shift type {} not recognised", shiftType);
       return null;
     }
     final ValueProperties properties = constraints.copy()
@@ -116,7 +116,8 @@ public class ISDACreditSpreadCurveShiftFunction extends AbstractFunction.NonComp
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = Iterables.getOnlyElement(inputs.keySet());
     final ValueProperties properties = createValueProperties(input)
         .withAny(PROPERTY_SPREAD_CURVE_SHIFT)

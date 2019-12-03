@@ -42,47 +42,47 @@ public class DbSecurityBeanMasterCallback extends BeanMasterCallback<SecurityDoc
   }
 
   @Override
-  protected SecurityDocument createDocument(ManageableSecurity value) {
+  protected SecurityDocument createDocument(final ManageableSecurity value) {
     return new SecurityDocument(value);
   }
 
   @Override
-  protected String getName(ManageableSecurity value) {
+  protected String getName(final ManageableSecurity value) {
     return value.getName();
   }
 
   @Override
-  protected ExternalIdBundle getExternalIdBundle(ManageableSecurity value) {
+  protected ExternalIdBundle getExternalIdBundle(final ManageableSecurity value) {
     return value.getExternalIdBundle();
   }
 
   @Override
-  protected Map<String, String> getAttributes(ManageableSecurity value) {
+  protected Map<String, String> getAttributes(final ManageableSecurity value) {
     return value.getAttributes();
   }
 
   @Override
-  protected Map<String, String> getIndexedProperties(ManageableSecurity value) {
+  protected Map<String, String> getIndexedProperties(final ManageableSecurity value) {
     return ImmutableMap.of();
   }
 
   /**
    * Builds the indexed properties to search for.
-   * 
+   *
    * @param requestToBuild  the request to set search properties into, not null
    * @param requestToExtractFrom  the request to extract indexed properties from, not null
    */
-  protected void buildIndexedPropertiesSearch(BeanMasterSearchRequest requestToBuild, AbstractSearchRequest requestToExtractFrom) {
+  protected void buildIndexedPropertiesSearch(final BeanMasterSearchRequest requestToBuild, final AbstractSearchRequest requestToExtractFrom) {
     return;
   }
 
   @Override
-  protected char getMainType(ManageableSecurity value) {
+  protected char getMainType(final ManageableSecurity value) {
     return 'S';
   }
 
   @Override
-  protected String getSubType(ManageableSecurity value) {
+  protected String getSubType(final ManageableSecurity value) {
     return value.getSecurityType();
   }
 

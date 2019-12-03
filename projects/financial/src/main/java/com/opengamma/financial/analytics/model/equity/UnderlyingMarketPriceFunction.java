@@ -34,14 +34,15 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * Provides the market value for the underlying of a position, when applicable.<p>
+ * Provides the market value for the underlying of a position, when applicable.
+ * <p>
  * For securities that do not have an underlying, such as the {@link EquitySecurity}, their own market value is provided
  */
 public class UnderlyingMarketPriceFunction extends AbstractFunction.NonCompiledInvoker {
   /** Determines whether a security is market-traded */
   private static MarketSecurityVisitor s_judgeOfMarketSecurities = new MarketSecurityVisitor();
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(UnderlyingMarketPriceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UnderlyingMarketPriceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -53,13 +54,18 @@ public class UnderlyingMarketPriceFunction extends AbstractFunction.NonCompiledI
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     final double marketValue = (Double) inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.UNDERLYING_MARKET_PRICE, target.toSpecification(), desiredValue.getConstraints()), marketValue));
+    return Collections.singleton(new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.UNDERLYING_MARKET_PRICE, target.toSpecification(), desiredValue.getConstraints()), marketValue));
   }
 
   /**
-   * Currently set to apply to any market-traded security in {@link MarketSecurityVisitor}.<p>
-   * @param context The compilation context with view-specific parameters and configurations.
-   * @param target the Target for which capability is to be tested
+   * Currently set to apply to any market-traded security in {@link MarketSecurityVisitor}.
+   * <p>
+   * 
+   * @param context
+   *          The compilation context with view-specific parameters and configurations.
+   * @param target
+   *          the Target for which capability is to be tested
    * @return true if FinancialSecurity underlying the Position or Trade is a market-traded Security, else false
    */
   // TODO Constrain this further to those {@link FinancialSecurity}s that have underlyings. [PLAT-5523]
@@ -95,7 +101,7 @@ public class UnderlyingMarketPriceFunction extends AbstractFunction.NonCompiledI
     if (underlyingId != null) {
       return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, underlyingId));
     }
-    s_logger.info("No underlying found for {}. The security itself will be used as its own underlying", security.getName());
+    LOGGER.info("No underlying found for {}. The security itself will be used as its own underlying", security.getName());
     return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, security.getUniqueId()));
   }
 

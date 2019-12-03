@@ -29,7 +29,7 @@ import com.opengamma.util.tuple.Triple;
 public class VolatilityCubeSnapper extends StructuredSnapper<VolatilityCubeKey, VolatilityCubeData<Object, Object, Object>, VolatilityCubeSnapshot> {
 
   /**
-   * Sets the requirement name to {@link ValueRequirementNames#VOLATILITY_CUBE_MARKET_DATA}
+   * Sets the requirement name to {@link ValueRequirementNames#VOLATILITY_CUBE_MARKET_DATA}.
    */
   public VolatilityCubeSnapper() {
     super(ValueRequirementNames.VOLATILITY_CUBE_MARKET_DATA);
@@ -45,7 +45,8 @@ public class VolatilityCubeSnapper extends StructuredSnapper<VolatilityCubeKey, 
   }
 
   @Override
-  VolatilityCubeSnapshot buildSnapshot(final ViewComputationResultModel resultModel, final VolatilityCubeKey key, final VolatilityCubeData<Object, Object, Object> volatilityCubeData) {
+  VolatilityCubeSnapshot buildSnapshot(final ViewComputationResultModel resultModel, final VolatilityCubeKey key,
+      final VolatilityCubeData<Object, Object, Object> volatilityCubeData) {
 
     final Map<Triple<Object, Object, Object>, ValueSnapshot> dict = new HashMap<>();
     for (final Object x : volatilityCubeData.getXs()) {

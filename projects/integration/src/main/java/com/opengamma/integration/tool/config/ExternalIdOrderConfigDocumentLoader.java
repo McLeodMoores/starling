@@ -15,28 +15,30 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 
 /**
- * Class to save a reasonable default ExternalIdOrderConfig in the config database
+ * Class to save a reasonable default ExternalIdOrderConfig in the config database.
  */
 public class ExternalIdOrderConfigDocumentLoader {
   @SuppressWarnings("unused")
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
+
   private final ConfigMaster _configMaster;
   private final String _configName;
 
   /**
    * Creates an instance.
-   * 
-   * @param configMaster  the master for saving the currency pairs
-   * @param configName  the name for the {@link CurrencyPairs} in the config master
+   *
+   * @param configMaster
+   *          the master for saving the currency pairs
+   * @param configName
+   *          the name for the {@link CurrencyPairs} in the config master
    */
-  public ExternalIdOrderConfigDocumentLoader(ConfigMaster configMaster, String configName) {
+  public ExternalIdOrderConfigDocumentLoader(final ConfigMaster configMaster, final String configName) {
     _configMaster = configMaster;
     _configName = configName;
   }
-  
+
   public void run() {
-    ConfigItem<ExternalIdOrderConfig> doc = ConfigItem.of(ExternalIdOrderConfig.DEFAULT_CONFIG);
+    final ConfigItem<ExternalIdOrderConfig> doc = ConfigItem.of(ExternalIdOrderConfig.DEFAULT_CONFIG);
     doc.setName(_configName);
     ConfigMasterUtils.storeByName(_configMaster, doc);
   }

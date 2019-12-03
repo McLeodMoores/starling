@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -29,9 +29,9 @@ public class ResultModelDefinitionFudgeBuilder implements FudgeBuilder<ResultMod
   private static final String PRIMITIVE_OUTPUT_MODE_FIELD = "primitiveOutputMode";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ResultModelDefinition object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ResultModelDefinition object) {
     ArgumentChecker.notNull(serializer, "Fudge Context");
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(AGGREGATE_POSITION_OUTPUT_MODE_FIELD, object.getAggregatePositionOutputMode().name());
     msg.add(POSITION_OUTPUT_MODE_FIELD, object.getPositionOutputMode().name());
     msg.add(TRADE_OUTPUT_MODE_FIELD, object.getTradeOutputMode().name());
@@ -41,11 +41,11 @@ public class ResultModelDefinitionFudgeBuilder implements FudgeBuilder<ResultMod
   }
 
   @Override
-  public ResultModelDefinition buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    ResultModelDefinition result = new ResultModelDefinition();
+  public ResultModelDefinition buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final ResultModelDefinition result = new ResultModelDefinition();
     result.setAggregatePositionOutputMode(message.getFieldValue(ResultOutputMode.class, message.getByName(AGGREGATE_POSITION_OUTPUT_MODE_FIELD)));
     result.setPositionOutputMode(message.getFieldValue(ResultOutputMode.class, message.getByName(POSITION_OUTPUT_MODE_FIELD)));
-    ResultOutputMode tradeMode = message.getFieldValue(ResultOutputMode.class, message.getByName(TRADE_OUTPUT_MODE_FIELD)); // added later, so handle null
+    final ResultOutputMode tradeMode = message.getFieldValue(ResultOutputMode.class, message.getByName(TRADE_OUTPUT_MODE_FIELD)); // added later, so handle null
     result.setTradeOutputMode(tradeMode == null ? ResultOutputMode.TERMINAL_OUTPUTS : tradeMode);
     result.setSecurityOutputMode(message.getFieldValue(ResultOutputMode.class, message.getByName(SECURITY_OUTPUT_MODE_FIELD)));
     result.setPrimitiveOutputMode(message.getFieldValue(ResultOutputMode.class, message.getByName(PRIMITIVE_OUTPUT_MODE_FIELD)));

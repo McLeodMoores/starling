@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.cds;
@@ -17,10 +17,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * ISDA derivative implementation for CDS securities.
- * 
+ *
  * Time values are calculated to match the ISDA standard model. The premium is represented
  * using a specialised {@link Annuity} class which uses {@link ISDACDSCoupon} to describe payments.
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see InstrumentDerivative
  * @see ISDACDSDefinition
@@ -54,8 +54,8 @@ public class ISDACDSDerivative implements InstrumentDerivative {
   private final StubType _stubType;
 
   /**
-   * Create an (immutable) CDS derivative object ready for pricing
-   * 
+   * Create an (immutable) CDS derivative object ready for pricing.
+   *
    * @param discountCurveName Name of the discount curve in the CDS currency (not null)
    * @param spreadCurveName Name of the credit spread curve for the CDS (not null)
    * @param premium Derivative object representing the premium payments (not null)
@@ -76,8 +76,9 @@ public class ISDACDSDerivative implements InstrumentDerivative {
    * @deprecated Use the constructor that does not take curve names.
    */
   @Deprecated
-  public ISDACDSDerivative(final String discountCurveName, final String spreadCurveName, final ISDACDSPremium premium, final double startTime, final double maturity, final double stepinTime,
-      final double settlementTime, final double notional, final double spread, final double recoveryRate, final double accruedInterest, final boolean accrualOnDefault, final boolean payOnDefault,
+  public ISDACDSDerivative(final String discountCurveName, final String spreadCurveName, final ISDACDSPremium premium,
+      final double startTime, final double maturity, final double stepinTime, final double settlementTime, final double notional,
+      final double spread, final double recoveryRate, final double accruedInterest, final boolean accrualOnDefault, final boolean payOnDefault,
       final boolean protectStart, final Frequency couponFrequency, final Convention convention, final StubType stubType) {
 
     _discountCurveName = discountCurveName;
@@ -105,8 +106,8 @@ public class ISDACDSDerivative implements InstrumentDerivative {
   }
 
   /**
-   * Create an (immutable) CDS derivative object ready for pricing
-   * 
+   * Create an (immutable) CDS derivative object ready for pricing.
+   *
    * @param premium Derivative object representing the premium payments (not null)
    * @param startTime Protection start time of the CDS contract (relative to pricing point, may be in the past)
    * @param maturity Maturity of the CDS contract (relative to pricing point)
@@ -123,8 +124,9 @@ public class ISDACDSDerivative implements InstrumentDerivative {
    * @param convention The convention data
    * @param stubType the premium schedule stub type
    */
-  public ISDACDSDerivative(final ISDACDSPremium premium, final double startTime, final double maturity, final double stepinTime, final double settlementTime, final double notional,
-      final double spread, final double recoveryRate, final double accruedInterest, final boolean accrualOnDefault, final boolean payOnDefault, final boolean protectStart,
+  public ISDACDSDerivative(final ISDACDSPremium premium, final double startTime, final double maturity, final double stepinTime,
+      final double settlementTime, final double notional, final double spread, final double recoveryRate, final double accruedInterest,
+      final boolean accrualOnDefault, final boolean payOnDefault, final boolean protectStart,
       final Frequency couponFrequency, final Convention convention, final StubType stubType) {
 
     _discountCurveName = null;

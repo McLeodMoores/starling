@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityFutureOptionBlackDeltaFunction extends EquityFutureOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBlackDeltaFunction() {
     super(ValueRequirementNames.DELTA);

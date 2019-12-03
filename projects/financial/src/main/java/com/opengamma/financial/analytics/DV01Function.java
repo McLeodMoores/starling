@@ -34,7 +34,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class DV01Function extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(DV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DV01Function.class);
 
   @Override
   public String getShortName() {
@@ -54,29 +54,35 @@ public class DV01Function extends AbstractFunction.NonCompiledInvoker {
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Position position = target.getPosition();
-    final ValueRequirement requirement = new ValueRequirement(PV01, ComputationTargetType.POSITION, position.getUniqueId(), desiredValue.getConstraints().withoutAny(
-        ValuePropertyNames.FUNCTION).withoutAny(ValuePropertyNames.SHIFT));
+    final ValueRequirement requirement = new ValueRequirement(PV01, ComputationTargetType.POSITION, position.getUniqueId(),
+        desiredValue.getConstraints().withoutAny(
+            ValuePropertyNames.FUNCTION).withoutAny(ValuePropertyNames.SHIFT));
     return Collections.singleton(requirement);
   }
 
   /**
    * Replaces the {@link ValuePropertyNames#FUNCTION} property.
-   * @param input The input
+   * 
+   * @param input
+   *          The input
    * @return The result properties
    */
   protected ValueProperties getResultProperties(final ValueSpecification input) {
-    return input.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId()).withAny(ValuePropertyNames.SHIFT).get();
+    return input.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
+        .withAny(ValuePropertyNames.SHIFT).get();
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueSpecification specification = new ValueSpecification(DV01, target.toSpecification(), getResultProperties(input));
     return Collections.singleton(specification);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final Object value = input.getValue();
@@ -91,7 +97,7 @@ public class DV01Function extends AbstractFunction.NonCompiledInvoker {
         try {
           shift = Double.parseDouble(shiftStr);
         } catch (final NumberFormatException nfe) {
-          s_logger.error("Constraint Shift on DV01 not a value double, defaulting to 1d");
+          LOGGER.error("Constraint Shift on DV01 not a value double, defaulting to 1d");
           shift = 1d;
         }
       } else {
@@ -100,7 +106,7 @@ public class DV01Function extends AbstractFunction.NonCompiledInvoker {
       doubleValue *= shift;
       scaledValue = new ComputedValue(specification, doubleValue);
     } else {
-      s_logger.error("DV01 is non numeric type {}, value {}", value.getClass(), value);
+      LOGGER.error("DV01 is non numeric type {}, value {}", value.getClass(), value);
     }
     return Collections.singleton(scaledValue);
   }

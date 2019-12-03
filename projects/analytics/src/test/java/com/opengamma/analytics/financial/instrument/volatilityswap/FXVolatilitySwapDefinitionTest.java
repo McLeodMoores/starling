@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestGroup;
  * Tests the volatility swap definition object.
  */
 @Test(groups = TestGroup.UNIT)
-public class FXVolatilitySwapDefinitionTest extends AnalyticsTestBase {
+public final class FXVolatilitySwapDefinitionTest extends AnalyticsTestBase {
   /** The current date */
   private static final ZonedDateTime NOW = ZonedDateTime.of(2014, 02, 27, 12, 0, 0, 0, ZoneId.of("UTC"));
   /** The settlement date */

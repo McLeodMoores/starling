@@ -26,7 +26,7 @@ public class AsynchronousOperationTest {
 
   private static final String RESULT = "Foo";
 
-  private void asyncTask(final ResultCallback<String> callback, final boolean result) {
+  private static void asyncTask(final ResultCallback<String> callback, final boolean result) {
     if (result) {
       callback.setResult(RESULT);
     } else {
@@ -34,22 +34,30 @@ public class AsynchronousOperationTest {
     }
   }
 
-  private String immediateSignal(final boolean result) throws AsynchronousExecution {
+  private static String immediateSignal(final boolean result) throws AsynchronousExecution {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     asyncTask(operation.getCallback(), result);
     return operation.getResult();
   }
 
+  /**
+   * @throws AsynchronousExecution
+   *           if there is a problem
+   */
   public void testResultAvailable() throws AsynchronousExecution {
     assertEquals(immediateSignal(true), RESULT);
   }
 
-  @Test(expectedExceptions = {OpenGammaRuntimeException.class })
+  /**
+   * @throws AsynchronousExecution
+   *           if there is a problem
+   */
+  @Test(expectedExceptions = { OpenGammaRuntimeException.class })
   public void testExceptionAvailable() throws AsynchronousExecution {
     immediateSignal(false);
   }
 
-  private void deferredSignal(final boolean listenerFirst, final boolean result) {
+  private static void deferredSignal(final boolean listenerFirst, final boolean result) {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     try {
       operation.getResult();
@@ -92,23 +100,35 @@ public class AsynchronousOperationTest {
     }
   }
 
+  /**
+   *
+   */
   public void testResultDeferredListenerFirst() {
     deferredSignal(true, true);
   }
 
+  /**
+   *
+   */
   public void testExceptionDeferredListenerFirst() {
     deferredSignal(true, false);
   }
 
+  /**
+   *
+   */
   public void testResultDeferredListenerSecond() {
     deferredSignal(false, true);
   }
 
+  /**
+   *
+   */
   public void testExceptionDeferredListenerSecond() {
     deferredSignal(false, false);
   }
 
-  private String blockingCall(final boolean result) throws InterruptedException {
+  private static String blockingCall(final boolean result) throws InterruptedException {
     final AsynchronousOperation<String> operation = AsynchronousOperation.create(String.class);
     new Thread() {
       @Override
@@ -130,11 +150,19 @@ public class AsynchronousOperationTest {
     }
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   public void testResultBlocking() throws InterruptedException {
     assertEquals(blockingCall(true), RESULT);
   }
 
-  @Test(expectedExceptions = {OpenGammaRuntimeException.class })
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
+  @Test(expectedExceptions = { OpenGammaRuntimeException.class })
   public void testExceptionBlocking() throws InterruptedException {
     blockingCall(false);
   }

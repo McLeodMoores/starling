@@ -46,7 +46,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DependencyGraphTraceProviderResourceTest {
 
-  private static final String s_testUrl = "http://testurl.com/";
+  private static final String TEST_URL = "http://testurl.com/";
 
   private DependencyGraphTraceProviderResource _resource;
   private FudgeContext _fudgeContext;
@@ -61,8 +61,8 @@ public class DependencyGraphTraceProviderResourceTest {
     _sampleResult = DependencyGraphBuildTrace.of(null, null, null, null);
     _resource = new DependencyGraphTraceProviderResource(_provider, _fudgeContext);
     try {
-      _baseUri = new URI(s_testUrl);
-    } catch (URISyntaxException ex) {
+      _baseUri = new URI(TEST_URL);
+    } catch (final URISyntaxException ex) {
       Throwables.propagate(ex);
     }
   }
@@ -75,10 +75,10 @@ public class DependencyGraphTraceProviderResourceTest {
 
   @Test
   public void getTraceWithCalculationConfigurationName() {
-    String calcConfigName = "test";
-    String originalName = _resource.getProperties().getCalculationConfigurationName();
+    final String calcConfigName = "test";
+    final String originalName = _resource.getProperties().getCalculationConfigurationName();
 
-    DependencyGraphTraceProviderResource newResource = _resource.setCalculationConfigurationName(calcConfigName);
+    final DependencyGraphTraceProviderResource newResource = _resource.setCalculationConfigurationName(calcConfigName);
 
     assertEquals(originalName, _resource.getProperties().getCalculationConfigurationName());
     assertEquals(calcConfigName, newResource.getProperties().getCalculationConfigurationName());
@@ -88,13 +88,13 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithDefaultProperties() {
     //input
-    String defaultProperties = "A=[foo,bar],B=*";
+    final String defaultProperties = "A=[foo,bar],B=*";
 
     //expected arg
-    ValueProperties props = ValueProperties.parse(defaultProperties);
-    ValueProperties originalProps = _resource.getProperties().getDefaultProperties();
+    final ValueProperties props = ValueProperties.parse(defaultProperties);
+    final ValueProperties originalProps = _resource.getProperties().getDefaultProperties();
 
-    DependencyGraphTraceProviderResource newResource = _resource.setDefaultProperties(defaultProperties);
+    final DependencyGraphTraceProviderResource newResource = _resource.setDefaultProperties(defaultProperties);
 
     assertEquals(props, newResource.getProperties().getDefaultProperties());
     assertEquals(originalProps, _resource.getProperties().getDefaultProperties());
@@ -104,13 +104,13 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithMarketData() {
     //input
-    String snapshotId = "Foo~1";
+    final String snapshotId = "Foo~1";
 
     //expected arg
-    List<MarketDataSpecification> marketData = Lists.<MarketDataSpecification>newArrayList(MarketData.user(UniqueId.parse(snapshotId)));
-    List<MarketDataSpecification> originalMD = _resource.getProperties().getMarketData();
+    final List<MarketDataSpecification> marketData = Lists.<MarketDataSpecification>newArrayList(MarketData.user(UniqueId.parse(snapshotId)));
+    final List<MarketDataSpecification> originalMD = _resource.getProperties().getMarketData();
 
-    DependencyGraphTraceProviderResource newResource = _resource.setMarketDataSnapshot(snapshotId);
+    final DependencyGraphTraceProviderResource newResource = _resource.setMarketDataSnapshot(snapshotId);
 
     assertEquals(marketData, newResource.getProperties().getMarketData());
     assertEquals(originalMD, _resource.getProperties().getMarketData());
@@ -119,13 +119,13 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithResolutionTime() {
     //input
-    String resolutionTime = "V1970-01-01T00:00:01Z.CLATEST";
+    final String resolutionTime = "V1970-01-01T00:00:01Z.CLATEST";
 
     //expected arg
-    VersionCorrection parsed = VersionCorrection.parse(resolutionTime);
-    VersionCorrection originalRT = _resource.getProperties().getResolutionTime();
+    final VersionCorrection parsed = VersionCorrection.parse(resolutionTime);
+    final VersionCorrection originalRT = _resource.getProperties().getResolutionTime();
 
-    DependencyGraphTraceProviderResource newResource = _resource.setResolutionTime(resolutionTime);
+    final DependencyGraphTraceProviderResource newResource = _resource.setResolutionTime(resolutionTime);
 
     assertEquals(parsed, newResource.getProperties().getResolutionTime());
     assertEquals(originalRT, _resource.getProperties().getResolutionTime());
@@ -134,13 +134,13 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithValuationTime() {
     //input
-    String valuationTimeStr = "2013-06-24T12:18:01.094Z";
+    final String valuationTimeStr = "2013-06-24T12:18:01.094Z";
 
     //expected arg
-    Instant valuationTime = Instant.parse(valuationTimeStr);
-    Instant originalVT = _resource.getProperties().getValuationTime();
+    final Instant valuationTime = Instant.parse(valuationTimeStr);
+    final Instant originalVT = _resource.getProperties().getValuationTime();
 
-    DependencyGraphTraceProviderResource newResource = _resource.setValuationTime(valuationTimeStr);
+    final DependencyGraphTraceProviderResource newResource = _resource.setValuationTime(valuationTimeStr);
 
     assertEquals(valuationTime, newResource.getProperties().getValuationTime());
     assertEquals(originalVT, _resource.getProperties().getValuationTime());
@@ -150,16 +150,16 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithValueRequirementByExternalId() {
     //input
-    String valueName = "name";
-    String targetType = "POSITION";
-    String externalId = "Foo~1";
+    final String valueName = "name";
+    final String targetType = "POSITION";
+    final String externalId = "Foo~1";
 
     //expected arg
-    ComputationTargetType expectedTargetType = ComputationTargetType.POSITION;
-    ExternalId expectedExternalId = ExternalId.parse(externalId);
-    ValueRequirement valueRequirement = new ValueRequirement(valueName, new ComputationTargetRequirement(expectedTargetType, expectedExternalId));
+    final ComputationTargetType expectedTargetType = ComputationTargetType.POSITION;
+    final ExternalId expectedExternalId = ExternalId.parse(externalId);
+    final ValueRequirement valueRequirement = new ValueRequirement(valueName, new ComputationTargetRequirement(expectedTargetType, expectedExternalId));
 
-    DependencyGraphTraceProviderResource newResource = _resource.setValueRequirementByExternalId(valueName, targetType, externalId);
+    final DependencyGraphTraceProviderResource newResource = _resource.setValueRequirementByExternalId(valueName, targetType, externalId);
 
     assertTrue(newResource.getProperties().getRequirements().contains(valueRequirement));
 
@@ -168,16 +168,16 @@ public class DependencyGraphTraceProviderResourceTest {
   @Test
   public void getTraceWithValueRequirementByUniqueId() {
     //input
-    String valueName = "name";
-    String targetType = "POSITION";
-    String uniqueId = "Foo~1";
+    final String valueName = "name";
+    final String targetType = "POSITION";
+    final String uniqueId = "Foo~1";
 
     //expected arg
-    UniqueId expectedUniqueId = UniqueId.parse(uniqueId);
-    ComputationTargetType expectedTargetType = ComputationTargetType.POSITION;
-    ValueRequirement valueRequirement = new ValueRequirement(valueName, new ComputationTargetSpecification(expectedTargetType, expectedUniqueId));
+    final UniqueId expectedUniqueId = UniqueId.parse(uniqueId);
+    final ComputationTargetType expectedTargetType = ComputationTargetType.POSITION;
+    final ValueRequirement valueRequirement = new ValueRequirement(valueName, new ComputationTargetSpecification(expectedTargetType, expectedUniqueId));
 
-    DependencyGraphTraceProviderResource newResource = _resource.setValueRequirementByUniqueId(valueName, targetType, uniqueId);
+    final DependencyGraphTraceProviderResource newResource = _resource.setValueRequirementByUniqueId(valueName, targetType, uniqueId);
 
     assertTrue(newResource.getProperties().getRequirements().contains(valueRequirement));
   }
@@ -189,7 +189,7 @@ public class DependencyGraphTraceProviderResourceTest {
 
     when(_provider.getTrace(_resource.getProperties())).thenReturn(_sampleResult);
 
-    FudgeMsgEnvelope result = _resource.build();
+    final FudgeMsgEnvelope result = _resource.build();
 
     verify(_provider).getTrace(_resource.getProperties());
     assertNotNull(result);
@@ -199,97 +199,97 @@ public class DependencyGraphTraceProviderResourceTest {
 
   @Test
   public void uriCalculationConfigurationName() throws UnsupportedEncodingException {
-    String testStr = "test";
-    URI uriCalculationConfigurationName = DependencyGraphTraceProviderUris.uriCalculationConfigurationName(_baseUri, testStr);
-    String url = decode(uriCalculationConfigurationName);
-    assertEquals(s_testUrl + "calculationConfigurationName/" + testStr, url);
+    final String testStr = "test";
+    final URI uriCalculationConfigurationName = DependencyGraphTraceProviderUris.uriCalculationConfigurationName(_baseUri, testStr);
+    final String url = decode(uriCalculationConfigurationName);
+    assertEquals(TEST_URL + "calculationConfigurationName/" + testStr, url);
   }
 
   @Test
   public void uriDefaultProperties() throws UnsupportedEncodingException {
-    String defaultPropertiesStr1 = "{A=[foo,bar],B=[*]}";
-    String defaultPropertiesStr2 = "{A=[bar,foo],B=[*]}";
-    ValueProperties parsed = ValueProperties.parse(defaultPropertiesStr1);
-    URI uri = DependencyGraphTraceProviderUris.uriDefaultProperties(_baseUri, parsed);
-    String url = decode(uri);
-    assertTrue(url.equals(s_testUrl + "defaultProperties/" + defaultPropertiesStr1) ||
-        url.equals(s_testUrl + "defaultProperties/" + defaultPropertiesStr2));
+    final String defaultPropertiesStr1 = "{A=[foo,bar],B=[*]}";
+    final String defaultPropertiesStr2 = "{A=[bar,foo],B=[*]}";
+    final ValueProperties parsed = ValueProperties.parse(defaultPropertiesStr1);
+    final URI uri = DependencyGraphTraceProviderUris.uriDefaultProperties(_baseUri, parsed);
+    final String url = decode(uri);
+    assertTrue(url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr1) ||
+        url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr2));
   }
 
   @Test
   public void uriMarketDataSnapshot() throws UnsupportedEncodingException {
-    String snapshotId = "Foo~1";
-    MarketDataSpecification marketData = MarketData.user(UniqueId.parse(snapshotId));
-    URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
-    String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataSnapshot/" + snapshotId, url);
+    final String snapshotId = "Foo~1";
+    final MarketDataSpecification marketData = MarketData.user(UniqueId.parse(snapshotId));
+    final URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "marketDataSnapshot/" + snapshotId, url);
   }
   @Test
   public void uriMarketDataLiveDefault() throws UnsupportedEncodingException {
-    MarketDataSpecification marketData = MarketData.live();
-    URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
-    String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataLiveDefault", url);
+    final MarketDataSpecification marketData = MarketData.live();
+    final URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "marketDataLiveDefault", url);
   }
 
   @Test
   public void uriMarketDataLive() throws UnsupportedEncodingException {
-    MarketDataSpecification marketData = MarketData.live("BB");
-    URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
-    String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataLive/BB", url);
+    final MarketDataSpecification marketData = MarketData.live("BB");
+    final URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "marketDataLive/BB", url);
   }
   @Test
   public void uriMarketDataHistorical() throws UnsupportedEncodingException {
-    LocalDate now = LocalDate.now();
-    MarketDataSpecification marketData = MarketData.historical(now, "ts");
-    URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
-    String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataHistorical/" + now + "/ts", url);
+    final LocalDate now = LocalDate.now();
+    final MarketDataSpecification marketData = MarketData.historical(now, "ts");
+    final URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "marketDataHistorical/" + now + "/ts", url);
   }
   @Test
   public void uriResolutionTime() throws UnsupportedEncodingException {
-    String rtStr = "V1970-01-01T00:00:01Z.CLATEST";
-    VersionCorrection rt = VersionCorrection.parse(rtStr);
-    URI uri = DependencyGraphTraceProviderUris.uriResolutionTime(_baseUri, rt);
-    String url = decode(uri);
-    assertEquals(s_testUrl + "resolutionTime/" + rtStr, url);
+    final String rtStr = "V1970-01-01T00:00:01Z.CLATEST";
+    final VersionCorrection rt = VersionCorrection.parse(rtStr);
+    final URI uri = DependencyGraphTraceProviderUris.uriResolutionTime(_baseUri, rt);
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "resolutionTime/" + rtStr, url);
   }
 
   @Test
   public void uriValuationTime() throws UnsupportedEncodingException {
-    String instantStr = "2013-06-24T12:18:01.094Z";
-    Instant instant = Instant.parse(instantStr);
-    URI uri = DependencyGraphTraceProviderUris.uriValuationTime(_baseUri, instant);
-    String url = decode(uri);
-    assertEquals(s_testUrl + "valuationTime/" + instantStr, url);
+    final String instantStr = "2013-06-24T12:18:01.094Z";
+    final Instant instant = Instant.parse(instantStr);
+    final URI uri = DependencyGraphTraceProviderUris.uriValuationTime(_baseUri, instant);
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "valuationTime/" + instantStr, url);
   }
 
   @Test
   public void uriValueRequirementByExternalId() throws UnsupportedEncodingException {
-    String valueName = "test1";
-    String targetType = "test2";
-    String idStr = "GOLDMAN~Foo1";
-    ExternalId id = ExternalId.parse(idStr);
-    URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByExternalId(_baseUri, valueName, targetType, id);
-    String url = decode(uri);
-    assertEquals(s_testUrl + "requirement/" + valueName + "/" + targetType + "/" + idStr, url);
+    final String valueName = "test1";
+    final String targetType = "test2";
+    final String idStr = "GOLDMAN~Foo1";
+    final ExternalId id = ExternalId.parse(idStr);
+    final URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByExternalId(_baseUri, valueName, targetType, id);
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "requirement/" + valueName + "/" + targetType + "/" + idStr, url);
   }
 
   @Test
   public void uriValueRequirementByUniqueId() throws UnsupportedEncodingException {
-    String valueName = "test1";
-    String targetType = "test2";
-    String idStr = "GOLDMAN~Foo1";
-    UniqueId id = UniqueId.parse(idStr);
-    URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByUniqueId(_baseUri, valueName, targetType, id);
-    String url = decode(uri);
-    assertEquals(s_testUrl + "value/" + valueName + "/" + targetType + "/" + idStr, url);
+    final String valueName = "test1";
+    final String targetType = "test2";
+    final String idStr = "GOLDMAN~Foo1";
+    final UniqueId id = UniqueId.parse(idStr);
+    final URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByUniqueId(_baseUri, valueName, targetType, id);
+    final String url = decode(uri);
+    assertEquals(TEST_URL + "value/" + valueName + "/" + targetType + "/" + idStr, url);
   }
 
-  private String decode(URI uriDefaultProperties) throws UnsupportedEncodingException {
-    String urlStr = uriDefaultProperties.toString();
-    String decoded = URLDecoder.decode(urlStr, "UTF-8");
+  private String decode(final URI uriDefaultProperties) throws UnsupportedEncodingException {
+    final String urlStr = uriDefaultProperties.toString();
+    final String decoded = URLDecoder.decode(urlStr, "UTF-8");
     return decoded;
   }
 

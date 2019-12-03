@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.spring.defaults;
@@ -14,7 +14,7 @@ import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePr
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
 
 /**
- * 
+ *
  */
 public abstract class EquityInstrumentDefaultValues {
   private static final String SURFACE_INTERPOLATOR = "Spline";
@@ -101,7 +101,6 @@ public abstract class EquityInstrumentDefaultValues {
     FORWARD_CURVE_NAMES.put("JPM", DISCOUNTING_CURVE_NAME);
     FORWARD_CURVE_NAMES.put("SPY", DISCOUNTING_CURVE_NAME);
 
-
     VOLATILITY_SURFACE_NAMES.put("DJX", SURFACE_NAME);
     VOLATILITY_SURFACE_NAMES.put("SPX", SURFACE_NAME);
     VOLATILITY_SURFACE_NAMES.put("SPXQ", SURFACE_NAME);
@@ -172,7 +171,7 @@ public abstract class EquityInstrumentDefaultValues {
   }
 
   /**
-   * Builder interface
+   * Builder interface.
    */
   public interface Builder {
 
@@ -260,7 +259,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useIdName() {
-      if (_useIdentifierName == true) {
+      if (_useIdentifierName) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -272,7 +271,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useDiscountingCurveNames() {
-      if (_useDiscountingCurveNames == true) {
+      if (_useDiscountingCurveNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -284,7 +283,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useDiscountingCurveCurrency() {
-      if (_useDiscountingCurveCurrency == true) {
+      if (_useDiscountingCurveCurrency) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -296,7 +295,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useDiscountingCurveCalculationConfigNames() {
-      if (_useDiscountingCurveCalculationConfigNames == true) {
+      if (_useDiscountingCurveCalculationConfigNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -308,7 +307,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useForwardCurveNames() {
-      if (_useForwardCurveNames == true) {
+      if (_useForwardCurveNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -320,7 +319,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useForwardCurveCalculationMethodNames() {
-      if (_useForwardCurveCalculationMethodNames == true) {
+      if (_useForwardCurveCalculationMethodNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -332,7 +331,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useForwardCurveCalculationConfigNames() {
-      if (_useForwardCurveCalculationConfigNames == true) {
+      if (_useForwardCurveCalculationConfigNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -344,7 +343,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useVolatilitySurfaceNames() {
-      if (_useVolatilitySurfaceNames == true) {
+      if (_useVolatilitySurfaceNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -356,7 +355,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useInterpolationMethodNames() {
-      if (_useInterpolationMethodNames == true) {
+      if (_useInterpolationMethodNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -368,7 +367,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useVolatilitySurfaceCalculationMethodNames() {
-      if (_useVolatilitySurfaceCalculationMethodNames == true) {
+      if (_useVolatilitySurfaceCalculationMethodNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);
@@ -380,7 +379,7 @@ public abstract class EquityInstrumentDefaultValues {
 
     @Override
     public Builder useDividendTypes() {
-      if (_useForwardCurveCalculationConfigNames == true) {
+      if (_useForwardCurveCalculationConfigNames) {
         return this;
       }
       final List<Integer> order = new ArrayList<>(_order);

@@ -75,10 +75,10 @@ public class ForexOptionVanillaDefinitionTest {
     assertEquals(IS_LONG, FX_OPTION_DEFINITION.isLong());
   }
 
-  @Test
   /**
    * Tests the equal and hashCode methods.
    */
+  @Test
   public void equalHash() {
     assertTrue(FX_OPTION_DEFINITION.equals(FX_OPTION_DEFINITION));
     final ForexOptionVanillaDefinition otherOption = new ForexOptionVanillaDefinition(FX_DEFINITION, EXPIRATION_DATE, IS_CALL, IS_LONG);
@@ -101,28 +101,28 @@ public class ForexOptionVanillaDefinitionTest {
     assertFalse(FX_OPTION_DEFINITION.equals(null));
   }
 
-  @SuppressWarnings("deprecation")
-  @Test
   /**
    * Tests the conversion to derivative.
    */
+  @Test
+  @SuppressWarnings("deprecation")
   public void toDerivativeDeprecated() {
     final String discountingEUR = "Discounting EUR";
     final String discountingUSD = "Discounting USD";
-    final String[] curves_name = new String[] {discountingEUR, discountingUSD};
+    final String[] curveNames = new String[] {discountingEUR, discountingUSD};
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 5, 20);
-    final InstrumentDerivative optionConverted = FX_OPTION_DEFINITION.toDerivative(referenceDate, curves_name);
-    final Forex fx = FX_DEFINITION.toDerivative(referenceDate, curves_name);
+    final InstrumentDerivative optionConverted = FX_OPTION_DEFINITION.toDerivative(referenceDate, curveNames);
+    final Forex fx = FX_DEFINITION.toDerivative(referenceDate, curveNames);
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final double expirationTime = actAct.getDayCountFraction(referenceDate, EXPIRATION_DATE);
     final ForexOptionVanilla optionConstructed = new ForexOptionVanilla(fx, expirationTime, IS_CALL, IS_LONG);
     assertEquals("Convertion to derivative", optionConstructed, optionConverted);
   }
 
-  @Test
   /**
    * Tests the conversion to derivative.
    */
+  @Test
   public void toDerivative() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 5, 20);
     final InstrumentDerivative optionConverted = FX_OPTION_DEFINITION.toDerivative(referenceDate);

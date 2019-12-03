@@ -17,18 +17,18 @@ import com.opengamma.util.money.Currency;
  */
 public interface CurveTypeSetUpInterface<T extends ParameterProviderInterface> {
 
-  public enum CurveFunction {
+  enum CurveFunction {
     NELSON_SIEGEL
   }
 
-  CurveTypeSetUpInterface forDiscounting(final Currency currency);
+  CurveTypeSetUpInterface forDiscounting(Currency currency);
 
   //TODO versions that only take a single index
-  CurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
+  CurveTypeSetUpInterface forIborIndex(IborTypeIndex... indices);
 
-  CurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
+  CurveTypeSetUpInterface forOvernightIndex(OvernightIndex... indices);
 
-  CurveTypeSetUpInterface withInterpolator(final Interpolator1D interpolator);
+  CurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
   //TODO asSpread under to indicate subtraction?
   CurveTypeSetUpInterface asSpreadOver(String otherCurveName);
@@ -51,6 +51,6 @@ public interface CurveTypeSetUpInterface<T extends ParameterProviderInterface> {
 
   CurveTypeSetUpInterface usingLastFixingEndTime();
 
-  GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate);
+  GeneratorYDCurve buildCurveGenerator(ZonedDateTime valuationDate);
 
 }

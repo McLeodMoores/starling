@@ -41,8 +41,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryExchangeMaster
-    extends SimpleAbstractInMemoryMaster<ExchangeDocument>
-    implements ExchangeMaster {
+extends SimpleAbstractInMemoryMaster<ExchangeDocument>
+implements ExchangeMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -86,7 +86,7 @@ public class InMemoryExchangeMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(ExchangeDocument document) {
+  protected void validateDocument(final ExchangeDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getExchange(), "document.exchange");
   }
@@ -95,15 +95,15 @@ public class InMemoryExchangeMaster
   @Override
   public ExchangeSearchResult search(final ExchangeSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<ExchangeDocument> list = new ArrayList<ExchangeDocument>();
-    for (ExchangeDocument doc : _store.values()) {
+    final List<ExchangeDocument> list = new ArrayList<>();
+    for (final ExchangeDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    
-    ExchangeSearchResult result = new ExchangeSearchResult();
+
+    final ExchangeSearchResult result = new ExchangeSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -165,7 +165,7 @@ public class InMemoryExchangeMaster
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
     document.setUniqueId(uniqueId.withVersion(""));
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

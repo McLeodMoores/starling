@@ -27,13 +27,12 @@ public abstract class SingletonFactoryBean<T> implements FactoryBean<T>, Initial
 
   @Override
   public final T getObject() {
-    //System.out.println ("getObject on " + getClass () + " returning " + _instance);
     return _instance;
   }
 
   /**
    * Gets the object, creating if necessary.
-   * 
+   *
    * @return the object
    */
   public final T getObjectCreating() {
@@ -46,12 +45,11 @@ public abstract class SingletonFactoryBean<T> implements FactoryBean<T>, Initial
 
   @Override
   public final Class<?> getObjectType() {
-    T obj = getObject();
+    final T obj = getObject();
     if (obj == null) {
       return null;
-    } else {
-      return obj.getClass();
     }
+    return obj.getClass();
   }
 
   @Override
@@ -62,7 +60,6 @@ public abstract class SingletonFactoryBean<T> implements FactoryBean<T>, Initial
   @Override
   public void afterPropertiesSet() {
     _instance = createObject();
-    //System.out.println ("afterPropertiesSet called on " + getClass ());
   }
 
 }

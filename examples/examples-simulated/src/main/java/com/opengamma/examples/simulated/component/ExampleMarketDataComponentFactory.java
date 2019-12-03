@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -31,9 +32,11 @@ import com.opengamma.engine.marketdata.MarketDataProviderFactory;
 import com.opengamma.engine.marketdata.NamedMarketDataSpecificationRepository;
 import com.opengamma.engine.marketdata.availability.DomainMarketDataAvailabilityFilter;
 import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityFilter;
-import com.opengamma.engine.marketdata.live.LiveDataFactory;
 import com.opengamma.engine.marketdata.live.InMemoryLKVLiveMarketDataProviderFactory;
+import com.opengamma.engine.marketdata.live.LiveDataFactory;
 import com.opengamma.engine.marketdata.spec.LiveMarketDataSpecification;
+import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
+import com.opengamma.financial.analytics.isda.credit.PointsUpFrontQuote;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.livedata.LiveDataClient;
 import com.opengamma.livedata.client.RemoteLiveDataClientFactoryBean;
@@ -42,7 +45,6 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 import com.opengamma.provider.livedata.LiveDataServerTypes;
 import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
-import org.joda.beans.Bean;
 
 /**
  * Component factory for consuming simulated live data.
@@ -71,7 +73,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _jmsConnector;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initLiveMarketDataProviderFactory(repo);
@@ -99,7 +101,7 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
       throw new IllegalStateException();
     }
     JmsConnector jmsConnector = getJmsConnector();
-    if (jmsConnector.getClientBrokerUri().equals(jmsUri) == false) {
+    if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
       final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsConnector);
       jmsFactory.setClientBrokerUri(jmsUri);
       jmsConnector = jmsFactory.getObjectCreating();
@@ -117,6 +119,8 @@ public class ExampleMarketDataComponentFactory extends AbstractComponentFactory 
   private MarketDataAvailabilityFilter createAvailabilityFilter(final LiveDataMetaDataProvider provider) {
     final List<ExternalScheme> acceptableSchemes = provider.metaData().getSupportedSchemes();
     final Collection<String> validMarketDataRequirementNames = MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    validMarketDataRequirementNames.add(FlatSpreadQuote.TYPE);
+    validMarketDataRequirementNames.add(PointsUpFrontQuote.TYPE);
     return new DomainMarketDataAvailabilityFilter(acceptableSchemes, validMarketDataRequirementNames);
   }
 

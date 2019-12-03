@@ -51,44 +51,49 @@ import com.opengamma.util.time.Expiry;
 public class JsonJodaRoundTripTest {
 
   // TODO move to BlotterUtils?
-  private static final BeanVisitorDecorator s_propertyFilter = new PropertyFilter(ManageableSecurity.meta().securityType());
+  private static final BeanVisitorDecorator PROPERTY_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   /**
    * Simple security
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void fxForward() throws JSONException {
-    ZonedDateTime forwardDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ExternalId regionId = ExternalId.of(ExternalSchemes.FINANCIAL, "GB");
-    FXForwardSecurity fxForward = new FXForwardSecurity(Currency.USD, 150, Currency.GBP, 100, forwardDate, regionId);
+    final ZonedDateTime forwardDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ExternalId regionId = ExternalId.of(ExternalSchemes.FINANCIAL, "GB");
+    final FXForwardSecurity fxForward = new FXForwardSecurity(Currency.USD, 150, Currency.GBP, 100, forwardDate, regionId);
     fxForward.setName("GBP/USD forward");
 
-    JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
-    BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(fxForward, sink);
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
-    JSONObject json = (JSONObject) traverser.traverse(FXForwardSecurity.meta(), writingVisitor);
+    final JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
+    final BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(fxForward, sink);
+    final BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
+    final JSONObject json = (JSONObject) traverser.traverse(FXForwardSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
-    JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(FXForwardSecurity.meta()));
-    BeanVisitor<BeanBuilder<Bean>> readingVisitor =
+    final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(FXForwardSecurity.meta()));
+    final BeanVisitor<BeanBuilder<Bean>> readingVisitor =
         new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    BeanBuilder<FXForwardSecurity> beanBuilder =
+    final BeanBuilder<FXForwardSecurity> beanBuilder =
         (BeanBuilder<FXForwardSecurity>) traverser.traverse(FXForwardSecurity.meta(), readingVisitor);
-    FXForwardSecurity fxForward2 = beanBuilder.build();
+    final FXForwardSecurity fxForward2 = beanBuilder.build();
     assertEquals(fxForward, fxForward2);
   }
 
   /**
    * Complicated security with nested beans
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void swap() throws JSONException {
-    ZonedDateTime tradeDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime effectiveDate = zdt(2013, 1, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime maturityDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    SwapLeg payLeg = new FixedInterestRateLeg(
+    final ZonedDateTime tradeDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime effectiveDate = zdt(2013, 1, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime maturityDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final SwapLeg payLeg = new FixedInterestRateLeg(
         DayCounts.ACT_360,
         SimpleFrequency.MONTHLY,
         ExternalId.of(ExternalSchemes.FINANCIAL, "123"),
@@ -96,7 +101,7 @@ public class JsonJodaRoundTripTest {
         new InterestRateNotional(Currency.GBP, 123),
         false,
         0.01);
-    SwapLeg receiveLeg = new FloatingInterestRateLeg(
+    final SwapLeg receiveLeg = new FloatingInterestRateLeg(
         DayCounts.ACT_ACT_ISDA,
         SimpleFrequency.QUARTERLY,
         ExternalId.of(ExternalSchemes.FINANCIAL, "123"),
@@ -105,71 +110,73 @@ public class JsonJodaRoundTripTest {
         false,
         ExternalId.of("Rate", "asdf"),
         FloatingRateType.IBOR);
-    SwapSecurity security = new SwapSecurity(tradeDate, effectiveDate, maturityDate, "cpty", payLeg, receiveLeg);
+    final SwapSecurity security = new SwapSecurity(tradeDate, effectiveDate, maturityDate, "cpty", payLeg, receiveLeg);
     security.setName("Test swap");
 
-    JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
-    BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
-    JSONObject json = (JSONObject) traverser.traverse(SwapSecurity.meta(), writingVisitor);
+    final JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
+    final BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
+    final BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
+    final JSONObject json = (JSONObject) traverser.traverse(SwapSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
-    JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
+    final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
         SwapSecurity.meta(),
         FixedInterestRateLeg.meta(),
         FloatingInterestRateLeg.meta(),
         InterestRateNotional.meta()));
-    BeanVisitor<BeanBuilder<SwapSecurity>> readingVisitor =
+    final BeanVisitor<BeanBuilder<SwapSecurity>> readingVisitor =
         new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    BeanBuilder<SwapSecurity> beanBuilder =
+    final BeanBuilder<SwapSecurity> beanBuilder =
         (BeanBuilder<SwapSecurity>) traverser.traverse(SwapSecurity.meta(), readingVisitor);
-    SwapSecurity security2 = beanBuilder.build();
+    final SwapSecurity security2 = beanBuilder.build();
     assertEquals(security, security2);
   }
 
   /**
-   * BondFutureSecurity contains a collection of bean instances (BondFutureDeliverable)
+   * BondFutureSecurity contains a collection of bean instances
+   * (BondFutureDeliverable)
+   * 
+   * @throws JSONException
+   *           if there is a problem producing the JSON
    */
   @Test
   public void bondFuture() throws JSONException {
-    ZonedDateTime firstDeliveryDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime lastDeliveryDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime expiryDate = zdt(2013, 12, 22, 11, 0, 0, 0, ZoneOffset.UTC);
-    ExternalIdBundle bundle1 = ExternalIdBundle.of(ExternalId.of("sch1", "123"), ExternalId.of("sch1", "234"));
-    ExternalIdBundle bundle2 = ExternalIdBundle.of(ExternalId.of("sch1", "345"));
-    List<BondFutureDeliverable> basket = Lists.newArrayList(
+    final ZonedDateTime firstDeliveryDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime lastDeliveryDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime expiryDate = zdt(2013, 12, 22, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ExternalIdBundle bundle1 = ExternalIdBundle.of(ExternalId.of("sch1", "123"), ExternalId.of("sch1", "234"));
+    final ExternalIdBundle bundle2 = ExternalIdBundle.of(ExternalId.of("sch1", "345"));
+    final List<BondFutureDeliverable> basket = Lists.newArrayList(
         new BondFutureDeliverable(bundle1, 111),
         new BondFutureDeliverable(bundle2, 222));
-    BondFutureSecurity security = new BondFutureSecurity(new Expiry(expiryDate), "exch", "settExch", Currency.GBP, 1234,
-                                                         basket, firstDeliveryDate, lastDeliveryDate, "category");
+    final BondFutureSecurity security = new BondFutureSecurity(new Expiry(expiryDate), "exch", "settExch", Currency.GBP, 1234,
+        basket, firstDeliveryDate, lastDeliveryDate, "category");
     security.setName("a bond future");
 
     // TODO this isn't converting ExternalIdBundle properly
-    JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
-    BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
-    JSONObject json = (JSONObject) traverser.traverse(BondFutureSecurity.meta(), writingVisitor);
+    final JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
+    final BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
+    final BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
+    final JSONObject json = (JSONObject) traverser.traverse(BondFutureSecurity.meta(), writingVisitor);
     assertNotNull(json);
-//    System.out.println(json);
 
-    JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
-    MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
+    final JsonBeanDataSource dataSource = new JsonBeanDataSource(new JSONObject(json.toString()));
+    final MetaBeanFactory metaBeanFactory = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
         BondFutureSecurity.meta(),
         BondFutureDeliverable.meta()));
-    BeanVisitor<BeanBuilder<BondFutureSecurity>> readingVisitor =
+    final BeanVisitor<BeanBuilder<BondFutureSecurity>> readingVisitor =
         new BeanBuildingVisitor<>(dataSource, metaBeanFactory, BlotterUtils.getBeanBuildingConverters());
-    BeanBuilder<BondFutureSecurity> beanBuilder =
+    final BeanBuilder<BondFutureSecurity> beanBuilder =
         (BeanBuilder<BondFutureSecurity>) traverser.traverse(BondFutureSecurity.meta(), readingVisitor);
-    BondFutureSecurity security2 = beanBuilder.build();
+    final BondFutureSecurity security2 = beanBuilder.build();
     assertEquals(security, security2);
   }
 
   // TODO test for FRA to endure region is handled correctly
 
   //-------------------------------------------------------------------------
-  private static ZonedDateTime zdt(int y, int m, int d, int hr, int min, int sec, int nanos, ZoneId zone) {
+  private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }
 

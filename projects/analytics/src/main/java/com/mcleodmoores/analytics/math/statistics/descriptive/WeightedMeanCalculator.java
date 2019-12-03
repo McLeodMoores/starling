@@ -7,7 +7,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.result.Function2;
 
 /**
- * Calculates the weighted mean of a series of values:
+ * Calculates the weighted mean of a series of values.
  * $$
  * \mu^* = \frac{\sum_{i=1}^n w_i x_i}{\sum_{i=1}^n w_i}
  * $$

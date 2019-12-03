@@ -39,15 +39,14 @@ import com.opengamma.web.json.FudgeMsgJSONReader;
 /**
  * Abstract base class for RESTful resources intended for websites.
  * <p>
- * Websites and web-services are related but different RESTful elements.
- * This is because a website needs to bend the RESTful rules in order to be usable.
+ * Websites and web-services are related but different RESTful elements. This is because a website needs to bend the RESTful rules in order to be usable.
  */
 public abstract class AbstractWebResource {
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractWebResource.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebResource.class);
+
   private static final int INDENTATION_SIZE = 4;
   /**
    * The Fudge context.
@@ -60,19 +59,22 @@ public abstract class AbstractWebResource {
   protected AbstractWebResource() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds the paging request.
    * <p>
    * This method is lenient, applying sensible default values.
-   * 
-   * @param pgIdx  the paging first-item index, null if not input
-   * @param pgNum  the paging page, null if not input
-   * @param pgSze  the paging size, null if not input
+   *
+   * @param pgIdx
+   *          the paging first-item index, null if not input
+   * @param pgNum
+   *          the paging page, null if not input
+   * @param pgSze
+   *          the paging size, null if not input
    * @return the paging request, not null
    */
-  protected PagingRequest buildPagingRequest(Integer pgIdx, Integer pgNum, Integer pgSze) {
-    int size = (pgSze != null ? pgSze : PagingRequest.DEFAULT_PAGING_SIZE);
+  protected PagingRequest buildPagingRequest(final Integer pgIdx, final Integer pgNum, final Integer pgSze) {
+    final int size = pgSze != null ? pgSze : PagingRequest.DEFAULT_PAGING_SIZE;
     if (pgIdx != null) {
       return PagingRequest.ofIndex(pgIdx, size);
     } else if (pgNum != null) {
@@ -86,56 +88,62 @@ public abstract class AbstractWebResource {
    * Builds the sort order.
    * <p>
    * This method is lenient, returning the default in case of error.
-   * 
-   * @param <T>  the sort order type
-   * @param order  the sort order, null or empty returns default
-   * @param defaultOrder  the default order, not null
+   *
+   * @param <T>
+   *          the sort order type
+   * @param order
+   *          the sort order, null or empty returns default
+   * @param defaultOrder
+   *          the default order, not null
    * @return the sort order, not null
    */
-  protected <T extends Enum<T>> T buildSortOrder(String order, T defaultOrder) {
+  protected <T extends Enum<T>> T buildSortOrder(final String order, final T defaultOrder) {
     if (StringUtils.isEmpty(order)) {
       return defaultOrder;
     }
-    order = order.toUpperCase(Locale.ENGLISH);
-    if (order.endsWith(" ASC")) {
-      order = StringUtils.replace(order, " ASC", "_ASC");
-    } else if (order.endsWith(" DESC")) {
-      order = StringUtils.replace(order, " DESC", "_DESC");
-    } else if (order.endsWith("_ASC") == false && order.endsWith("_DESC") == false) {
-      order = order + "_ASC";
+    String orderStr = order.toUpperCase(Locale.ENGLISH);
+    if (orderStr.endsWith(" ASC")) {
+      orderStr = StringUtils.replace(orderStr, " ASC", "_ASC");
+    } else if (orderStr.endsWith(" DESC")) {
+      orderStr = StringUtils.replace(orderStr, " DESC", "_DESC");
+    } else if (!orderStr.endsWith("_ASC") && !orderStr.endsWith("_DESC")) {
+      orderStr = orderStr + "_ASC";
     }
     try {
-      Class<T> cls = defaultOrder.getDeclaringClass();
-      return Enum.valueOf(cls, order);
-    } catch (IllegalArgumentException ex) {
+      final Class<T> cls = defaultOrder.getDeclaringClass();
+      return Enum.valueOf(cls, orderStr);
+    } catch (final IllegalArgumentException ex) {
       return defaultOrder;
     }
   }
-  
-  
+
   /**
    * Utility method to convert XML to configuration object.
-   * 
-   * @param <T> the type to parse to
-   * @param xml  the configuration xml, not null
-   * @param type  the type to parse to, not null
+   *
+   * @param <T>
+   *          the type to parse to
+   * @param xml
+   *          the configuration xml, not null
+   * @param type
+   *          the type to parse to, not null
    * @return the configuration object
    */
   @SuppressWarnings("unchecked")
-  protected <T> T parseXML(String xml, Class<T> type) {
+  protected <T> T parseXML(final String xml, final Class<T> type) {
     if (xml.contains("<fudgeEnvelope")) {
       return (T) parseXML(xml);
-    } else {
-      return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
     }
+    return JodaBeanSerialization.deserializer().xmlReader().read(xml, type);
   }
-  
+
   /**
-   * Utility method to convert XML to configuration object
-   * @param xml the configuration xml
+   * Utility method to convert XML to configuration object.
+   *
+   * @param xml
+   *          the configuration xml
    * @return the configuration object
    */
-  protected Object parseXML(String xml) {
+  protected Object parseXML(final String xml) {
     final CharArrayReader car = new CharArrayReader(xml.toCharArray());
     @SuppressWarnings("resource")
     final FudgeMsgReader fmr = new FudgeMsgReader(new FudgeXMLStreamReader(getFudgeContext(), car));
@@ -143,69 +151,72 @@ public abstract class AbstractWebResource {
     return getFudgeContext().fromFudgeMsg(message);
   }
 
-  protected String createBeanXML(Object obj) {
+  protected String createBeanXML(final Object obj) {
     if (obj instanceof Bean) {
       try {
-        // NOTE jim 8-Jan-2014 -- changed last param from false to true so bean type is set.  Not necessary for UI, but enables easier parsing if cut and pasted elsewhere.
+        // NOTE jim 8-Jan-2014 -- changed last param from false to true so bean type is set. Not necessary for UI, but enables easier parsing if cut and pasted
+        // elsewhere.
         return JodaBeanSerialization.serializer(true).xmlWriter().write((Bean) obj, true);
-      } catch (RuntimeException ex) {
-        s_logger.warn("Error serialising bean to XML with JodaBean serializer", ex);
+      } catch (final RuntimeException ex) {
+        LOGGER.warn("Error serialising bean to XML with JodaBean serializer", ex);
         return createXML(obj);
       }
     }
     return createXML(obj);
   }
-  
-  protected String createXML(Object obj) {
+
+  protected String createXML(final Object obj) {
     // get xml and pretty print it
-    FudgeMsgEnvelope msg = getFudgeContext().toFudgeMsg(obj);
-    s_logger.debug("{} converted to fudge {}", obj, msg);
-    StringWriter buf = new StringWriter(1024);
+    final FudgeMsgEnvelope msg = getFudgeContext().toFudgeMsg(obj);
+    LOGGER.debug("{} converted to fudge {}", obj, msg);
+    final StringWriter buf = new StringWriter(1024);
     @SuppressWarnings("resource")
-    FudgeMsgWriter writer = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), buf));
+    final FudgeMsgWriter writer = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), buf));
     writer.writeMessageEnvelope(msg);
-    s_logger.debug("{} converted to xmk {}", obj, buf.toString());
+    LOGGER.debug("{} converted to xmk {}", obj, buf.toString());
     try {
       return prettyXML(buf.toString(), INDENTATION_SIZE);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new IllegalStateException(ex);
     }
   }
-  
-  protected String prettyXML(String input, int indent) throws TransformerException {
-    Source xmlInput = new StreamSource(new StringReader(input));
-    StreamResult xmlOutput = new StreamResult(new StringWriter());
-    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+  protected String prettyXML(final String input, final int indent) throws TransformerException {
+    final Source xmlInput = new StreamSource(new StringReader(input));
+    final StreamResult xmlOutput = new StreamResult(new StringWriter());
+    final TransformerFactory transformerFactory = TransformerFactory.newInstance();
     try {
       transformerFactory.setAttribute("indent-number", indent);
-    } catch (IllegalArgumentException e) {
-      //ignore
+    } catch (final IllegalArgumentException e) {
+      // ignore
     }
-    Transformer transformer = transformerFactory.newTransformer();
+    final Transformer transformer = transformerFactory.newTransformer();
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
     transformer.transform(xmlInput, xmlOutput);
     return xmlOutput.getWriter().toString();
   }
-  
+
   /**
-   * Converts JSON to configuration object
-   * 
-   * @param json the config document in JSON
+   * Converts JSON to configuration object.
+   *
+   * @param json
+   *          the config document in JSON
    * @return the configuration object
    */
-  protected Object parseJSON(String json) {
-    s_logger.debug("converting JSON to java: " + json);
-    FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(getFudgeContext(), new StringReader(json));
-    
-    FudgeMsg fudgeMsg = fudgeJSONReader.readMessage();
-    s_logger.debug("converted FudgeMsg: " + fudgeMsg);
-    
+  protected Object parseJSON(final String json) {
+    LOGGER.debug("converting JSON to java: " + json);
+    final FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(getFudgeContext(), new StringReader(json));
+
+    final FudgeMsg fudgeMsg = fudgeJSONReader.readMessage();
+    LOGGER.debug("converted FudgeMsg: " + fudgeMsg);
+
     return new FudgeDeserializer(getFudgeContext()).fudgeMsgToObject(fudgeMsg);
-    
+
   }
-  
+
   /**
    * Gets the fudgeContext.
+   *
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {

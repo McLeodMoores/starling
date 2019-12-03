@@ -18,28 +18,28 @@ import com.opengamma.analytics.financial.interestrate.payments.provider.IborInte
  * Visitor for ibor-like interpolated stub coupons that return an instance of a ForwardRateProvider.
  */
 public final class IborInterpolatedStubForwardRateProviderVisitor implements InterpolatedStubCouponVisitor<ForwardRateProvider<IborIndex>> {
-  
+
   private static final IborInterpolatedStubForwardRateProviderVisitor INSTANCE = new IborInterpolatedStubForwardRateProviderVisitor();
-  
+
   private IborInterpolatedStubForwardRateProviderVisitor() {
   }
-  
+
   public static IborInterpolatedStubForwardRateProviderVisitor getInstance() {
     return INSTANCE;
   }
 
   @Override
-  public ForwardRateProvider<IborIndex> visitIborCompoundingInterpolatedStub(IborInterpolatedStubCompoundingCoupon coupon) {
+  public ForwardRateProvider<IborIndex> visitIborCompoundingInterpolatedStub(final IborInterpolatedStubCompoundingCoupon coupon) {
     return new IborCompoundingInterpolationStubForwardRateProvider(coupon);
   }
 
   @Override
-  public ForwardRateProvider<IborIndex> visitIborInterpolatedStub(InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex> coupon) {
+  public ForwardRateProvider<IborIndex> visitIborInterpolatedStub(final InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex> coupon) {
     return new IborInterpolatedStubForwardRateProvider(coupon);
   }
-  
+
   @Override
-  public ForwardRateProvider<IborIndex> visitOvernightInterpolatedStub(InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> coupon) {
+  public ForwardRateProvider<IborIndex> visitOvernightInterpolatedStub(final InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> coupon) {
     throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support this operation.");
   }
 }

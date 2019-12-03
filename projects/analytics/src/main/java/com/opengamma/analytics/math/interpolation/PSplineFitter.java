@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -20,7 +20,7 @@ import com.opengamma.analytics.math.statistics.leastsquare.GeneralizedLeastSquar
 import com.opengamma.analytics.math.statistics.leastsquare.GeneralizedLeastSquareResults;
 
 /**
- * 
+ *
  */
 public class PSplineFitter {
   private final MatrixAlgebra _algebra = new ColtMatrixAlgebra();
@@ -28,31 +28,43 @@ public class PSplineFitter {
   private final GeneralizedLeastSquare _gls = new GeneralizedLeastSquare();
 
   /**
-   * Fits a curve to x-y data
-   * @param x The independent variables 
-   * @param y The dependent variables 
-   * @param sigma The error on the y variables 
-   * @param xa The lowest value of x 
-   * @param xb The highest value of x 
-   * @param nKnots Number of knots (note, the actual number of basis splines and thus fitted weights, equals nKnots + degree)
-   * @param degree The degree of the basis function - 0 is piecewise constant, 1 is a sawtooth function (i.e. two straight lines joined in the middle), 2 gives three 
-   * quadratic sections joined together, etc. For a large value of degree, the basis function tends to a gaussian 
-   * @param lambda The weight given to the penalty function 
-   * @param differenceOrder applies the penalty the the nth order difference in the weights, so a differenceOrder of 2 will penalise large 2nd derivatives etc
+   * Fits a curve to x-y data.
+   *
+   * @param x
+   *          The independent variables
+   * @param y
+   *          The dependent variables
+   * @param sigma
+   *          The error on the y variables
+   * @param xa
+   *          The lowest value of x
+   * @param xb
+   *          The highest value of x
+   * @param nKnots
+   *          Number of knots (note, the actual number of basis splines and thus fitted weights, equals nKnots + degree)
+   * @param degree
+   *          The degree of the basis function - 0 is piecewise constant, 1 is a sawtooth function (i.e. two straight lines joined in the middle), 2 gives three
+   *          quadratic sections joined together, etc. For a large value of degree, the basis function tends to a gaussian
+   * @param lambda
+   *          The weight given to the penalty function
+   * @param differenceOrder
+   *          applies the penalty the the nth order difference in the weights, so a differenceOrder of 2 will penalise large 2nd derivatives etc
    * @return The results of the fit
    */
-  public GeneralizedLeastSquareResults<Double> solve(final List<Double> x, final List<Double> y, final List<Double> sigma, double xa, double xb, int nKnots, final int degree, final double lambda,
+  public GeneralizedLeastSquareResults<Double> solve(final List<Double> x, final List<Double> y, final List<Double> sigma, final double xa, final double xb,
+      final int nKnots, final int degree, final double lambda,
       final int differenceOrder) {
-    List<Function1D<Double, Double>> bSplines = _generator.generateSet(xa, xb, nKnots, degree);
+    final List<Function1D<Double, Double>> bSplines = _generator.generateSet(xa, xb, nKnots, degree);
     return _gls.solve(x, y, sigma, bSplines, lambda, differenceOrder);
   }
 
-  public GeneralizedLeastSquareResults<double[]> solve(final List<double[]> x, final List<Double> y, final List<Double> sigma, double[] xa, double[] xb, int[] nKnots, final int[] degree,
+  public GeneralizedLeastSquareResults<double[]> solve(final List<double[]> x, final List<Double> y, final List<Double> sigma, final double[] xa,
+      final double[] xb, final int[] nKnots, final int[] degree,
       final double[] lambda, final int[] differenceOrder) {
-    List<Function1D<double[], Double>> bSplines = _generator.generateSet(xa, xb, nKnots, degree);
+    final List<Function1D<double[], Double>> bSplines = _generator.generateSet(xa, xb, nKnots, degree);
 
-    int dim = xa.length;
-    int[] sizes = new int[dim];
+    final int dim = xa.length;
+    final int[] sizes = new int[dim];
     for (int i = 0; i < dim; i++) {
       sizes[i] = nKnots[i] + degree[i] - 1;
     }
@@ -60,10 +72,13 @@ public class PSplineFitter {
   }
 
   /**
-   * The penalty matrix, P, such the for weights vector, w, (w^T)*P*w is a quadratic penalty term. P is constructed as P = (D^T)*D, where
-   * D is the kth order difference matrix such that D*x is the kth order difference vector of x (with first k terms zero) 
-   * @param m Length of the weights vector.
-   * @param k Difference order. Require m > k 
+   * The penalty matrix, P, such the for weights vector, w, (w^T)*P*w is a quadratic penalty term. P is constructed as P = (D^T)*D, where D is the kth order
+   * difference matrix such that D*x is the kth order difference vector of x (with first k terms zero)
+   *
+   * @param m
+   *          Length of the weights vector.
+   * @param k
+   *          Difference order. Require m &gt; k
    * @return The penalty matrix P.
    */
   public DoubleMatrix2D getPenaltyMatrix(final int m, final int k) {
@@ -72,7 +87,7 @@ public class PSplineFitter {
     if (m == 0) {
       return DoubleMatrixUtils.getIdentityMatrix2D(m);
     }
-      
+
     final double[][] data = new double[m][m];
     final int[] coeff = new int[k + 1];
 

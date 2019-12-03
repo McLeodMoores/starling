@@ -28,6 +28,7 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
+   * 
    * @return The configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -35,9 +36,10 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Returns a configuration source populated with volatility cube definition and specification
-   * functions that listen to changes.
-   * @param configMaster The config master
+   * Returns a configuration source populated with volatility cube definition and specification functions that listen to changes.
+   * 
+   * @param configMaster
+   *          The config master
    * @return A configuration source
    */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
@@ -67,7 +69,8 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
     /**
      * Sets the config master.
      *
-     * @param configMaster The config master, not null
+     * @param configMaster
+     *          The config master, not null
      */
     public void setConfigMaster(final ConfigMaster configMaster) {
       ArgumentChecker.notNull(configMaster, "config master");
@@ -83,6 +86,7 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<VolatilityCubeDefinition<?, ?, ?>> searchRequest = new ConfigSearchRequest<>();
@@ -102,8 +106,10 @@ public class VolatilityCubeFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Returns true if the type is {@link VolatilityCubeDefinition} or {@link VolatilityCubeSpecification}.
+     * 
      * @param type
-     * @return
+     *          the configuration type
+     * @return true if the type is a volatility cube definition or specification
      */
     /* package */ static boolean isMonitoredType(final String type) {
       return VolatilityCubeDefinition.class.getName().equals(type) || VolatilityCubeSpecification.class.getName().equals(type);

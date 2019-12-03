@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -32,10 +32,14 @@ public enum MissingOutput implements MissingValue {
 
   private final String _reason;
 
-  private MissingOutput(final String reason) {
+  /**
+   * @param reason  the error reason string
+   */
+  MissingOutput(final String reason) {
     _reason = reason;
   }
 
+  @Override
   public String toString() {
     return _reason;
   }

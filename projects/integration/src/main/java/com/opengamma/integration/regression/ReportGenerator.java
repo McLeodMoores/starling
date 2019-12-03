@@ -36,7 +36,7 @@ public class ReportGenerator {
     private final String _templateLocation;
     private final String _templateName;
 
-    Format(String templateLocation, String templateName) {
+    Format(final String templateLocation, final String templateName) {
       _templateLocation = templateLocation;
       _templateName = templateName;
     }
@@ -50,32 +50,32 @@ public class ReportGenerator {
     }
   }
 
-  public static String generateReport(RegressionTestResults results) {
-    StringWriter writer = new StringWriter();
+  public static String generateReport(final RegressionTestResults results) {
+    final StringWriter writer = new StringWriter();
     generateReport(results, Format.TEXT, writer);
     return writer.toString();
   }
 
-  public static void generateReport(RegressionTestResults results, Format format, Writer writer) {
-    Configuration cfg = new Configuration();
+  public static void generateReport(final RegressionTestResults results, final Format format, final Writer writer) {
+    final Configuration cfg = new Configuration();
     try {
       cfg.setClassForTemplateLoading(ReportGenerator.class, format.getTemplateLocation());
-      Template template = cfg.getTemplate(format.getTemplateName());
-      Map<String, Object> input = ImmutableMap.<String, Object>of("results", results);
+      final Template template = cfg.getTemplate(format.getTemplateName());
+      final Map<String, Object> input = ImmutableMap.<String, Object>of("results", results);
       template.process(input, writer);
       writer.flush();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Error generating report", e);
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     RegressionTestResults results;
     try (BufferedReader reader = new BufferedReader(new FileReader("/Users/chris/tmp/regression/results.xml"))) {
-      FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
-      FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), reader);
-      FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
-      FudgeMsg msg = fudgeMsgReader.nextMessage();
+      final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+      final FudgeXMLStreamReader streamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), reader);
+      final FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
+      final FudgeMsg msg = fudgeMsgReader.nextMessage();
       results = deserializer.fudgeMsgToObject(RegressionTestResults.class, msg);
     }
     System.out.println(generateReport(results));

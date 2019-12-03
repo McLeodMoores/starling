@@ -29,7 +29,7 @@ public interface LiveDataListener {
 
   /**
    * Used to indicate that a subscription will stop providing updates to this listener.
-   * <p/>
+   * <p>
    * For concurrency reasons, it is possible and plausible that calls to
    * {@link #valueUpdate(LiveDataValueUpdate)} corresponding to this specification
    * will come in after an invocation of this method.

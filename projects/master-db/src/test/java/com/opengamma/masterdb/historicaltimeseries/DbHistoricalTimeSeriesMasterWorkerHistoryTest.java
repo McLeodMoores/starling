@@ -27,21 +27,21 @@ import com.opengamma.util.test.TestGroup;
 public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHistoricalTimeSeriesMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerHistoryTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerHistoryTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerHistoryTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerHistoryTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_history_documents() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(3, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -51,13 +51,13 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(PagingRequest.ALL, test.getPaging().getRequest());
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertEquals(3, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -67,15 +67,15 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants_pageOne() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    PagingRequest pr = PagingRequest.ofPage(1, 2);
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final PagingRequest pr = PagingRequest.ofPage(1, 2);
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setPagingRequest(pr);
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -83,17 +83,17 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
 
   @Test
   public void test_history_noInstants_pageTwo() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    PagingRequest pr = PagingRequest.ofPage(2, 2);
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final PagingRequest pr = PagingRequest.ofPage(2, 2);
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setPagingRequest(pr);
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertNotNull(test);
     assertNotNull(test.getPaging());
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertNotNull(test.getDocuments());
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
@@ -102,13 +102,13 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsFrom_preFirst() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.minusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertEquals(3, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -117,13 +117,13 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
 
   @Test
   public void test_history_versionsFrom_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.plusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertEquals(3, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -132,13 +132,13 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
 
   @Test
   public void test_history_versionsFrom_postSecond() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsFromInstant(_version2Instant.plusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -147,38 +147,38 @@ public class DbHistoricalTimeSeriesMasterWorkerHistoryTest extends AbstractDbHis
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsTo_preFirst() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.minusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(0, test.getPaging().getTotalItems());
-    
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_history_versionsTo_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.plusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
   }
 
   @Test
   public void test_history_versionsTo_postSecond() {
-    ObjectId oid = ObjectId.of("DbHts", "201");
-    HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbHts", "201");
+    final HistoricalTimeSeriesInfoHistoryRequest request = new HistoricalTimeSeriesInfoHistoryRequest(oid);
     request.setVersionsToInstant(_version2Instant.plusSeconds(5));
-    HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
-    
+    final HistoricalTimeSeriesInfoHistoryResult test = _htsMaster.history(request);
+
     assertEquals(3, test.getPaging().getTotalItems());
-    
+
     assertEquals(3, test.getDocuments().size());
     assert203(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));

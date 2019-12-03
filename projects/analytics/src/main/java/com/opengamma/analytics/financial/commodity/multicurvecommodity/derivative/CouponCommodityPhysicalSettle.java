@@ -28,14 +28,14 @@ public class CouponCommodityPhysicalSettle extends CouponCommodity {
    */
   private final double _noticeLastTime;
 
-  /** 
+  /**
    * The first delivery time
    */
   private final double _firstDeliveryTime;
 
-  /** 
-   * The last  delivery time 
-   * The delivery is usually done during a month. 
+  /**
+   * The last  delivery time
+   * The delivery is usually done during a month.
    */
   private final double _lastDeliveryTime;
 
@@ -50,11 +50,12 @@ public class CouponCommodityPhysicalSettle extends CouponCommodity {
    * @param noticeFirstTime The first notice time.
    * @param noticeLastTime The last notice time.
    * @param firstDeliveryTime The first delivery time
-   * @param lastDeliveryTime The last  delivery time 
+   * @param lastDeliveryTime The last  delivery time
    */
 
-  public CouponCommodityPhysicalSettle(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional, final double settlementTime,
-      final Calendar calendar, final double noticeFirstTime, final double noticeLastTime, final double firstDeliveryTime, final double lastDeliveryTime) {
+  public CouponCommodityPhysicalSettle(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName,
+      final double notional, final double settlementTime, final Calendar calendar, final double noticeFirstTime, final double noticeLastTime,
+      final double firstDeliveryTime, final double lastDeliveryTime) {
     super(paymentYearFraction, underlying, unitName, notional, settlementTime, calendar);
     _noticeFirstTime = noticeFirstTime;
     _noticeLastTime = noticeLastTime;
@@ -116,13 +117,13 @@ public class CouponCommodityPhysicalSettle extends CouponCommodity {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_firstDeliveryTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lastDeliveryTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeFirstTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_noticeLastTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

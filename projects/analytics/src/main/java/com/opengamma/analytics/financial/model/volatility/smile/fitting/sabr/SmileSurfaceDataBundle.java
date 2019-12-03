@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public abstract class SmileSurfaceDataBundle {
-  private static final Logger s_logger = LoggerFactory.getLogger(SmileSurfaceDataBundle.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SmileSurfaceDataBundle.class);
 
   public abstract int getNumExpiries();
 
@@ -97,7 +97,7 @@ public abstract class SmileSurfaceDataBundle {
       if (nVars > 1) {
         for (int t = 1; t < nVars; t++) {
           if (intVar.get(t) < intVar.get(t - 1)) {
-            s_logger.error("Integrated variance not increasing, have (" + (t - 1) + "," + intVar.get(t - 1) + "),(" + t + "," + intVar.get(t) + ")");
+            LOGGER.error("Integrated variance not increasing, have (" + (t - 1) + "," + intVar.get(t - 1) + "),(" + t + "," + intVar.get(t) + ")");
           }
         }
       }

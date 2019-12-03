@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -40,7 +40,8 @@ public class SwaptionBlackYieldCurveNodePnLDefaultsDeprecated extends DefaultPro
   private final String[] _applicableCurrencies;
 
   public SwaptionBlackYieldCurveNodePnLDefaultsDeprecated(final String forwardCurveName, final String fundingCurveName, final String curveCalculationMethod,
-      final String surfaceName, final String samplingPeriod, final String scheduleCalculator, final String samplingFunction, final String... applicableCurrencies) {
+      final String surfaceName, final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+      final String... applicableCurrencies) {
     super(ComputationTargetType.POSITION, true);
     ArgumentChecker.notNull(forwardCurveName, "forward curve name");
     ArgumentChecker.notNull(fundingCurveName, "funding curve name");

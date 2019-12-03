@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view.rest;
@@ -36,7 +36,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher implements ViewResultListener  {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewClientJmsResultPublisher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewClientJmsResultPublisher.class);
 
   /**
    * The view client.
@@ -45,12 +45,12 @@ public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher imp
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param viewClient  the view client, not null
    * @param fudgeContext  the Fudge context, not null
    * @param jmsConnector  the JMS connector, not null
    */
-  public ViewClientJmsResultPublisher(ViewClient viewClient, FudgeContext fudgeContext, JmsConnector jmsConnector) {
+  public ViewClientJmsResultPublisher(final ViewClient viewClient, final FudgeContext fudgeContext, final JmsConnector jmsConnector) {
     super(fudgeContext, jmsConnector);
     _viewClient = viewClient;
   }
@@ -58,13 +58,13 @@ public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher imp
   //-------------------------------------------------------------------------
   @Override
   protected void startListener() {
-    s_logger.debug("Setting listener {} on view client {}'s results", this, _viewClient);
+    LOGGER.debug("Setting listener {} on view client {}'s results", this, _viewClient);
     _viewClient.setResultListener(this);
   }
 
   @Override
   protected void stopListener() {
-    s_logger.debug("Removing listener {} on view client {}'s results", this, _viewClient);
+    LOGGER.debug("Removing listener {} on view client {}'s results", this, _viewClient);
     _viewClient.setResultListener(null);
   }
 
@@ -75,47 +75,47 @@ public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher imp
   }
 
   @Override
-  public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+  public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
     send(new ViewDefinitionCompiledCall(compiledViewDefinition, hasMarketDataPermissions));
-  }  
+  }
 
   @Override
-  public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
+  public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
     send(new ViewDefinitionCompilationFailedCall(valuationTime, exception));
   }
-  
+
   @Override
-  public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+  public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
     send(new CycleStartedCall(cycleMetadata));
   }
 
   @Override
-  public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
+  public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
     send(new CycleFragmentCompletedCall(fullFragment, deltaFragment));
   }
 
   @Override
-  public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
     send(new CycleCompletedCall(fullResult, deltaResult));
   }
 
   @Override
-  public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
+  public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
     send(new CycleExecutionFailedCall(executionOptions, exception));
   }
-  
+
   @Override
   public void processCompleted() {
     send(new ProcessCompletedCall());
   }
 
   @Override
-  public void processTerminated(boolean executionInterrupted) {
+  public void processTerminated(final boolean executionInterrupted) {
     send(new ProcessTerminatedCall(executionInterrupted));
   }
 
   @Override
-  public void clientShutdown(Exception e) {
+  public void clientShutdown(final Exception e) {
     send(new ClientShutdownCall(e));
   }
 

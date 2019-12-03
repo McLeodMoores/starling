@@ -8,11 +8,12 @@ package com.opengamma.timeseries;
 /**
  * Unary and binary operators for time-series.
  */
+@SuppressWarnings("synthetic-access")
 public class ObjectTimeSeriesOperators {
 
   /**
    * Binary operator to return the first parameter.
-   * 
+   *
    * @param <R>  the object type
    * @return the operator, not null
    */
@@ -23,7 +24,7 @@ public class ObjectTimeSeriesOperators {
 
   /**
    * Binary operator to return the second parameter.
-   * 
+   *
    * @param <R>  the object type
    * @return the operator, not null
    */
@@ -34,7 +35,7 @@ public class ObjectTimeSeriesOperators {
 
   /**
    * Binary operator to prevent intersection.
-   * 
+   *
    * @param <R>  the object type
    * @return the operator, not null
    */
@@ -47,13 +48,13 @@ public class ObjectTimeSeriesOperators {
   /**
    * A binary operator takes two parameters and produces a single result.
    * For example, the plus, minus and multiply operators are binary.
-   * 
+   *
    * @param <T> the object type
    */
   public interface BinaryOperator<T> {
     /**
      * Performs an operation on the input to produce an output.
-     * 
+     *
      * @param a  the first parameter
      * @param b  the second parameter
      * @return the result
@@ -65,13 +66,13 @@ public class ObjectTimeSeriesOperators {
   /**
    * A unary operator takes a single parameter and produces a result.
    * For example, the increment and decrement operators are unary.
-   * 
+   *
    * @param <T> the object type
    */
   public interface UnaryOperator<T> {
     /**
      * Performs an operation on the input to produce an output.
-     * 
+     *
      * @param a  the input parameter
      * @return the result
      */
@@ -79,23 +80,41 @@ public class ObjectTimeSeriesOperators {
   }
 
   //-------------------------------------------------------------------------
-  private static final FirstOperator<?> FIRST_OPERATOR = new FirstOperator<Object>();
+  private static final FirstOperator<?> FIRST_OPERATOR = new FirstOperator<>();
+  /**
+   * Performs an operation only on the first variable.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class FirstOperator<E> implements BinaryOperator<E> {
-    public E operate(E a, E b) { 
+    @Override
+    public E operate(final E a, final E b) {
       return a;
     }
   }
 
-  private static final SecondOperator<?> SECOND_OPERATOR = new SecondOperator<Object>();
+  private static final SecondOperator<?> SECOND_OPERATOR = new SecondOperator<>();
+  /**
+   * Performs an operation only on the second variable.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class SecondOperator<E> implements BinaryOperator<E> {
-    public E operate(E a, E b) { 
+    @Override
+    public E operate(final E a, final E b) {
       return b;
     }
   }
 
-  private static final NoIntersectionOperator<?> NO_INTERSECTION_OPERATOR = new NoIntersectionOperator<Object>();
+  private static final NoIntersectionOperator<?> NO_INTERSECTION_OPERATOR = new NoIntersectionOperator<>();
+  /**
+   * Does not allow any operations.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class NoIntersectionOperator<E> implements BinaryOperator<E> {
-    public E operate(E a, E b) {
+    @Override
+    public E operate(final E a, final E b) {
       throw new IllegalStateException("No binary operation permitted");
     }
   }

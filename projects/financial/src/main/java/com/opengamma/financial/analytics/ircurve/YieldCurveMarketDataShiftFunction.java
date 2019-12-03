@@ -35,10 +35,13 @@ import com.opengamma.id.ExternalIdBundle;
  * Function to shift a yield curve's market data, implemented using properties and constraints.
  * <p>
  * The shift expression is applied to each of the market data value lines.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveMarketDataShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveMarketDataShiftFunction.class);
 
   /**
    * Property to shift a yield curve's market data.
@@ -64,7 +67,7 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT)) {
       return null;
     }
     final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT).with(SHIFT, "0").withOptional(SHIFT).get();
@@ -76,14 +79,16 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties properties = createValueProperties(input).withAny(SHIFT).get();
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final ValueSpecification inputSpec = input.getSpecification();
     final SnapshotDataBundle marketData = (SnapshotDataBundle) input.getValue();
@@ -94,19 +99,20 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
     if (compiler == null) {
       throw new IllegalStateException("No override operation compiler for " + shift + " in execution context");
     }
-    s_logger.debug("Applying {} to {}", shift, marketData);
+    LOGGER.debug("Applying {} to {}", shift, marketData);
     final OverrideOperation operation = compiler.compile(shift, executionContext.getComputationTargetResolver());
     for (final Map.Entry<ExternalIdBundle, Double> dataPoint : marketData.getDataPointSet()) {
-      s_logger.debug("Applying to {}", dataPoint);
+      LOGGER.debug("Applying to {}", dataPoint);
       final Object result = operation.apply(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, dataPoint.getKey()),
           dataPoint.getValue());
-      s_logger.debug("Got result {}", result);
+      LOGGER.debug("Got result {}", result);
       if (result instanceof Number) {
         dataPoint.setValue(((Number) result).doubleValue());
       } else {
-        s_logger.warn("Result of override operation was not numeric");
+        LOGGER.warn("Result of override operation was not numeric");
       }
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), marketData));
+    return Collections
+        .singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), marketData));
   }
 }

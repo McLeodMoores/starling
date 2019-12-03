@@ -34,19 +34,19 @@ public class DataTrackingHistoricalTimeSeriesMasterComponentFactory extends Abst
 
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   @PropertyDefinition(validate = "notNull")
   private HistoricalTimeSeriesMaster _trackedMaster;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    
-    ComponentInfo componentInfo = new ComponentInfo(HistoricalTimeSeriesMaster.class, _classifier);
-    
-    DataTrackingHistoricalTimeSeriesMaster dataTrackingHistoricalTimeSeriesMaster = new DataTrackingHistoricalTimeSeriesMaster(_trackedMaster);
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+
+    final ComponentInfo componentInfo = new ComponentInfo(HistoricalTimeSeriesMaster.class, _classifier);
+
+    final DataTrackingHistoricalTimeSeriesMaster dataTrackingHistoricalTimeSeriesMaster = new DataTrackingHistoricalTimeSeriesMaster(_trackedMaster);
+
     repo.registerComponent(componentInfo, dataTrackingHistoricalTimeSeriesMaster);
-    
+
     repo.getRestComponents().publish(componentInfo, new DataHistoricalTimeSeriesMasterResource(_trackedMaster));
 
   }

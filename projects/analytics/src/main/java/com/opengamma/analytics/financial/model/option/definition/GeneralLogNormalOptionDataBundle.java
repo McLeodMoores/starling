@@ -14,20 +14,27 @@ import com.opengamma.analytics.financial.model.volatility.surface.DriftSurface;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class GeneralLogNormalOptionDataBundle extends StandardOptionDataBundle {
   private final DriftSurface _drift;
 
   /**
-   * Creates a data bundle for the SDE df/f = mu(f,t)dt + sigma(f,t)dw  
-   * @param discountCurve 
-   * @param localDrift The function mu(f,t)
-   * @param localVolatility The function sigma(f,t)
-   * @param spot Time-zero value of f 
-   * @param date Date created 
+   * Creates a data bundle for the SDE df/f = mu(f,t)dt + sigma(f,t)dw.
+   *
+   * @param discountCurve
+   *          the discounting curve
+   * @param localDrift
+   *          The function mu(f,t)
+   * @param localVolatility
+   *          The function sigma(f,t)
+   * @param spot
+   *          Time-zero value of f
+   * @param date
+   *          Date created
    */
-  public GeneralLogNormalOptionDataBundle(final YieldAndDiscountCurve discountCurve, final DriftSurface localDrift, final VolatilitySurface localVolatility, final double spot, 
+  public GeneralLogNormalOptionDataBundle(final YieldAndDiscountCurve discountCurve, final DriftSurface localDrift, final VolatilitySurface localVolatility,
+      final double spot,
       final ZonedDateTime date) {
     super(discountCurve, 0.0, localVolatility, spot, date);
     Validate.notNull(localDrift, "null localDrift");
@@ -41,6 +48,7 @@ public class GeneralLogNormalOptionDataBundle extends StandardOptionDataBundle {
 
   /**
    * Gets the drift field.
+   *
    * @return the drift
    */
   public DriftSurface getDriftSurface() {

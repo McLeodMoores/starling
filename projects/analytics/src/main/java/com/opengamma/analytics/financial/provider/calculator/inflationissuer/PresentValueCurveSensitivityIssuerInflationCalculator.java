@@ -18,9 +18,10 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.MultipleCurrencyInflationSensitivity;
 
 /**
- * 
+ *
  */
-public final class PresentValueCurveSensitivityIssuerInflationCalculator extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
+public final class PresentValueCurveSensitivityIssuerInflationCalculator
+    extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -29,6 +30,7 @@ public final class PresentValueCurveSensitivityIssuerInflationCalculator extends
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityIssuerInflationCalculator getInstance() {
@@ -49,14 +51,14 @@ public final class PresentValueCurveSensitivityIssuerInflationCalculator extends
   /** Calculator for bond transactions */
   private static final BondTransactionDiscountingMethod METHOD_BOND_TR = BondTransactionDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public MultipleCurrencyInflationSensitivity visitDepositCounterpart(final DepositCounterpart deposit, final InflationIssuerProviderInterface issuercurves) {
     return MultipleCurrencyInflationSensitivity.of(METHOD_DEPO_CTPY.presentValueCurveSensitivity(deposit, issuercurves.getIssuerProvider()));
   }
 
-  //     -----     Bond/Bill     -----
+  // ----- Bond/Bill -----
 
   @Override
   public MultipleCurrencyInflationSensitivity visitBillTransaction(final BillTransaction bill, final InflationIssuerProviderInterface issuercurves) {

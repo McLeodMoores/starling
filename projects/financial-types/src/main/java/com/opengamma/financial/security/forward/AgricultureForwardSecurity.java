@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for agriculture futures.
+ * A security for agriculture forwards.
  */
 @BeanDefinition
 public class AgricultureForwardSecurity extends CommodityForwardSecurity {
@@ -27,17 +27,35 @@ public class AgricultureForwardSecurity extends CommodityForwardSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  AgricultureForwardSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  AgricultureForwardSecurity() {
     super();
   }
 
-  public AgricultureForwardSecurity(String unitName, Double unitNumber, Expiry expiry, Currency currency, double unitAmount, String category) {
+  /**
+   * @param unitName
+   *          the name of the underlying commodity
+   * @param unitNumber
+   *          the number of units of the commodity to be delivered
+   * @param expiry
+   *          the expiry, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the category, not null
+   */
+  public AgricultureForwardSecurity(final String unitName, final Double unitNumber, final Expiry expiry, final Currency currency, final double unitAmount,
+      final String category) {
     super(unitName, unitNumber, expiry, currency, unitAmount, category);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitAgricultureForwardSecurity(this);
   }
 

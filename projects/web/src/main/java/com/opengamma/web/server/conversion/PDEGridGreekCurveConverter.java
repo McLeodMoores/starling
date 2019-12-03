@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -9,23 +9,24 @@ import com.opengamma.analytics.financial.greeks.PDEResultCollection;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class PDEGridGreekCurveConverter implements ResultConverter<PDEResultCollection> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, PDEResultCollection value, ConversionMode mode) {
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final PDEResultCollection value,
+      final ConversionMode mode) {
     return null;
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, PDEResultCollection value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final PDEResultCollection value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, PDEResultCollection value) {
-    
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final PDEResultCollection value) {
+
     valueSpec.getValueName();
     return null;
   }

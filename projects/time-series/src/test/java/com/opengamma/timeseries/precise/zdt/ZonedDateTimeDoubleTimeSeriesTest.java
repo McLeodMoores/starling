@@ -16,7 +16,7 @@ import com.opengamma.timeseries.DoubleTimeSeriesTest;
 public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeriesTest<ZonedDateTime> {
 
   @Override
-  protected ZonedDateTime[] testTimes() {
+  protected ZonedDateTime[] createTestTimes() {
     ZonedDateTime one = ZonedDateTime.of(2010, 2, 8, 0, 0, 0, 0, ZoneOffset.UTC);
     ZonedDateTime two = ZonedDateTime.of(2010, 2, 9, 0, 0, 0, 0, ZoneOffset.UTC);
     ZonedDateTime three = ZonedDateTime.of(2010, 2, 10, 0, 0, 0, 0, ZoneOffset.UTC);
@@ -27,7 +27,7 @@ public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeries
   }
 
   @Override
-  protected ZonedDateTime[] testTimes2() {
+  protected ZonedDateTime[] createTestTimes2() {
     ZonedDateTime one = ZonedDateTime.of(2010, 2, 11, 0, 0, 0, 0, ZoneOffset.UTC);
     ZonedDateTime two = ZonedDateTime.of(2010, 2, 12, 0, 0, 0, 0, ZoneOffset.UTC);
     ZonedDateTime three = ZonedDateTime.of(2010, 2, 13, 0, 0, 0, 0, ZoneOffset.UTC);
@@ -38,7 +38,7 @@ public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeries
   }
 
   @Override
-  protected ZonedDateTime[] emptyTimes() {
+  protected ZonedDateTime[] createEmptyTimes() {
     return new ZonedDateTime[] {};
   }
 

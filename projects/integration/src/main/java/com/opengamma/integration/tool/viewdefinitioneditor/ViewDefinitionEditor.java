@@ -47,7 +47,7 @@ import com.opengamma.scripts.Scriptable;
 public class ViewDefinitionEditor extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinitionEditor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewDefinitionEditor.class);
 
   private JFrame _frame;
 
@@ -108,13 +108,13 @@ public class ViewDefinitionEditor extends AbstractTool<ToolContext> {
 
       @Override
       public void keyTyped(final KeyEvent e) {
-        s_logger.warn("key code = {}", e.getKeyCode());
+        LOGGER.warn("key code = {}", e.getKeyCode());
         actionPerformed(e);
       }
 
       @Override
       public void keyPressed(final KeyEvent e) {
-        s_logger.warn("key pressed = {}", e.getKeyCode());
+        LOGGER.warn("key pressed = {}", e.getKeyCode());
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
           _viewList.requestFocusInWindow();
         }

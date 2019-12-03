@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.impl;
@@ -131,8 +131,8 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the config source
-   * 
+   * Gets the config source.
+   *
    * @return the config source, not null
    */
   public ConfigSource getConfigSource() {
@@ -140,8 +140,8 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the view permission provider
-   * 
+   * Gets the view permission provider.
+   *
    * @return the view permission provider, not null
    */
   public ViewPermissionProvider getViewPermissionProvider() {
@@ -149,7 +149,7 @@ public class ViewProcessContext {
   }
 
   /**
-   * Gets the view portfolio permission provider
+   * Gets the view portfolio permission provider.
    *
    * @return the view portfolio permission provider, not null
    */
@@ -168,7 +168,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the live data override injector.
-   * 
+   *
    * @return the live data override injector, not null
    */
   public MarketDataInjectorImpl getLiveDataOverrideInjector() {
@@ -181,7 +181,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the function resolver.
-   * 
+   *
    * @return the function resolver, not null
    */
   public FunctionResolver getFunctionResolver() {
@@ -190,7 +190,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the dependency graph builder factory.
-   * 
+   *
    * @return the dependency graph builder, not null
    */
   public DependencyGraphBuilderFactory getDependencyGraphBuilderFactory() {
@@ -199,7 +199,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the computation cache source.
-   * 
+   *
    * @return the computation cache source, not null
    */
   public ViewComputationCacheSource getComputationCacheSource() {
@@ -208,7 +208,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the computation job dispatcher.
-   * 
+   *
    * @return the computation job dispatcher, not null
    */
   public JobDispatcher getComputationJobDispatcher() {
@@ -221,7 +221,7 @@ public class ViewProcessContext {
 
   /**
    * Gets the dependency graph executor factory.
-   * 
+   *
    * @return the dependency graph executor factory, not null
    */
   public DependencyGraphExecutorFactory getDependencyGraphExecutorFactory() {
@@ -259,13 +259,15 @@ public class ViewProcessContext {
   // -------------------------------------------------------------------------
   /**
    * Uses this context to form a {@code ViewCompliationServices} instance.
-   * 
-   * @param marketDataAvailabilityProvider the availability provider corresponding to the desired source of market data, not null
+   *
+   * @param marketDataAvailabilityProvider
+   *          the availability provider corresponding to the desired source of market data, not null
    * @return the services, not null
    */
   public ViewCompilationServices asCompilationServices(final MarketDataAvailabilityProvider marketDataAvailabilityProvider) {
-    return new ViewCompilationServices(marketDataAvailabilityProvider, getFunctionResolver(), getFunctionCompilationService().getFunctionCompilationContext(), getFunctionCompilationService()
-        .getExecutorService(), getDependencyGraphBuilderFactory());
+    return new ViewCompilationServices(marketDataAvailabilityProvider, getFunctionResolver(),
+        getFunctionCompilationService().getFunctionCompilationContext(), getFunctionCompilationService().getExecutorService(),
+        getDependencyGraphBuilderFactory());
   }
 
 }

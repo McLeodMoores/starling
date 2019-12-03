@@ -18,9 +18,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ExceptionFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_UTC() {
-    Exception object = new IllegalArgumentException("Testing");
-    Exception cycled = cycleObject(Exception.class, object);
+  /**
+   *
+   */
+  public void testUTC() {
+    final Exception object = new IllegalArgumentException("Testing");
+    final Exception cycled = cycleObject(Exception.class, object);
     assertEquals(IllegalArgumentException.class, cycled.getClass());
     assertEquals("Testing", cycled.getMessage());
   }

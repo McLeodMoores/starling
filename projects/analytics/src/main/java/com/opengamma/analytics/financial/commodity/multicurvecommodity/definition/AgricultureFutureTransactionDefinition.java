@@ -26,7 +26,8 @@ public class AgricultureFutureTransactionDefinition extends CommodityFutureTrans
    * @param transactionPrice The price at which the transaction was done.
    * @param quantity The quantity/number of contract.
    */
-  public AgricultureFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate, final double transactionPrice, final int quantity) {
+  public AgricultureFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate,
+      final double transactionPrice, final int quantity) {
     super(underlying, transactionDate, transactionPrice, quantity);
   }
 
@@ -61,7 +62,8 @@ public class AgricultureFutureTransactionDefinition extends CommodityFutureTrans
 
   @Override
   public AgricultureFutureTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName()
+        + " does not support the two argument method (without margin price data).");
   }
 
   @Override

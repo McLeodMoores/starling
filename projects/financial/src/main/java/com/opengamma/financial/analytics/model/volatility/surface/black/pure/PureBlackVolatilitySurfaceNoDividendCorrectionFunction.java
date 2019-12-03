@@ -24,17 +24,19 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
  *
  */
 public abstract class PureBlackVolatilitySurfaceNoDividendCorrectionFunction extends PureBlackVolatilitySurfaceFunction {
-  /** No dividends */
+  /** No dividends. */
   public static final String NO_DIVIDENDS = "None";
 
   /**
-   * Spline interpolator function for pure Black volatility surfaces
+   * Spline interpolator function for pure Black volatility surfaces.
    */
   public static class Spline extends PureBlackVolatilitySurfaceNoDividendCorrectionFunction {
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils.ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }

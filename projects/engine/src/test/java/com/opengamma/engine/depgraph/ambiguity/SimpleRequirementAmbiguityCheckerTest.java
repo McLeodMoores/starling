@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -88,8 +88,8 @@ public class SimpleRequirementAmbiguityCheckerTest {
   private MockFunction mockFunctionZ1() {
     final MockFunction function = new MockFunction("Z1", ComputationTarget.NULL) {
       @Override
-      public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
-          final Set<ValueSpecification> outputs) {
+      public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
         return Collections.singleton(new ValueRequirement("X", ComputationTargetSpecification.NULL));
       }
     };
@@ -101,8 +101,8 @@ public class SimpleRequirementAmbiguityCheckerTest {
   private MockFunction mockFunctionZ2() {
     final MockFunction function = new MockFunction("Z2", ComputationTarget.NULL) {
       @Override
-      public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
-          final Set<ValueSpecification> outputs) {
+      public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
         return Collections.singleton(new ValueRequirement("A", ComputationTargetSpecification.NULL));
       }
     };
@@ -189,7 +189,7 @@ public class SimpleRequirementAmbiguityCheckerTest {
       assertTrue(resolved.isResolved());
       assertFalse(resolved.isAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 1);
       final RequirementResolution requirementResolution = requirementResolutions.iterator().next();
       assertEquals(requirementResolution.getSpecification(),
@@ -204,19 +204,20 @@ public class SimpleRequirementAmbiguityCheckerTest {
     TestLifecycle.begin();
     try {
       final SimpleRequirementAmbiguityChecker checker = new SimpleRequirementAmbiguityChecker(context(), Instant.now(), VersionCorrection.LATEST);
-      final ValueRequirement requirement = new ValueRequirement("Market_FooBar", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Foobar")
-          .with("X", "Y").get());
+      final ValueRequirement requirement = new ValueRequirement("Market_FooBar", ComputationTargetSpecification.NULL,
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "Foobar").with("X", "Y").get());
       final FullRequirementResolution resolved = checker.resolve(requirement);
       assertNotNull(resolved);
       assertEquals(resolved.getRequirement(), requirement);
       assertTrue(resolved.isResolved());
       assertFalse(resolved.isAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 1);
       final RequirementResolution requirementResolution = requirementResolutions.iterator().next();
       assertEquals(requirementResolution.getSpecification(),
-          new ValueSpecification("Market_FooBar", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Foobar").with("X", "Y").get()));
+          new ValueSpecification("Market_FooBar", ComputationTargetSpecification.NULL,
+              ValueProperties.with(ValuePropertyNames.FUNCTION, "Foobar").with("X", "Y").get()));
     } finally {
       TestLifecycle.end();
     }
@@ -248,7 +249,7 @@ public class SimpleRequirementAmbiguityCheckerTest {
       assertFalse(resolved.isAmbiguous());
       assertFalse(resolved.isDeeplyAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 1);
       final RequirementResolution requirementResolution = requirementResolutions.iterator().next();
       assertEquals(requirementResolution.getSpecification().getFunctionUniqueId(), "X");
@@ -268,7 +269,7 @@ public class SimpleRequirementAmbiguityCheckerTest {
       assertTrue(resolved.isAmbiguous());
       assertTrue(resolved.isDeeplyAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 2);
     } finally {
       TestLifecycle.end();
@@ -286,7 +287,7 @@ public class SimpleRequirementAmbiguityCheckerTest {
       assertFalse(resolved.isAmbiguous());
       assertTrue(resolved.isDeeplyAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 1);
     } finally {
       TestLifecycle.end();
@@ -304,13 +305,13 @@ public class SimpleRequirementAmbiguityCheckerTest {
       assertTrue(resolved.isAmbiguous());
       assertTrue(resolved.isDeeplyAmbiguous());
       assertEquals(resolved.getResolutions().size(), 1);
-      Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
+      final Collection<RequirementResolution> requirementResolutions = resolved.getResolutions().iterator().next();
       assertEquals(requirementResolutions.size(), 2);
-      for (RequirementResolution requirementResolution : requirementResolutions) {
+      for (final RequirementResolution requirementResolution : requirementResolutions) {
         final Collection<FullRequirementResolution> inputs = requirementResolution.getInputs();
         assertEquals(inputs.size(), 2);
         boolean ambiguous = false;
-        for (FullRequirementResolution input : inputs) {
+        for (final FullRequirementResolution input : inputs) {
           ambiguous |= input.isAmbiguous();
         }
         assertTrue(ambiguous);

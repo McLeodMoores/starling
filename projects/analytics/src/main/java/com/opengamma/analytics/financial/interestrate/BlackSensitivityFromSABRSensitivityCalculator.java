@@ -27,13 +27,17 @@ public class BlackSensitivityFromSABRSensitivityCalculator {
   private static final MatrixAlgebra ALGEBRA = MatrixAlgebraFactory.OG_ALGEBRA;
 
   /**
-   * Computes the sensitivities to Black volatilities from the sensitivities to SABR parameters.
-   * The SABR sensitivities are the node sensitivities to the same grid points as the Black volatilities and the inverseJacobian provided.
-   * @param sabrSensitivity The node SABR sensitivities.
-   * @param inverseJacobianMap The inverse Jacobian for each node point.
+   * Computes the sensitivities to Black volatilities from the sensitivities to SABR parameters. The SABR sensitivities are the node sensitivities to the same
+   * grid points as the Black volatilities and the inverseJacobian provided.
+   * 
+   * @param sabrSensitivity
+   *          The node SABR sensitivities.
+   * @param inverseJacobianMap
+   *          The inverse Jacobian for each node point.
    * @return The Black sensitivity.
    */
-  public static Map<DoublesPair, DoubleMatrix1D> blackSensitivity(final PresentValueSABRSensitivityDataBundle sabrSensitivity, final Map<DoublesPair, DoubleMatrix2D> inverseJacobianMap) {
+  public static Map<DoublesPair, DoubleMatrix1D> blackSensitivity(final PresentValueSABRSensitivityDataBundle sabrSensitivity,
+      final Map<DoublesPair, DoubleMatrix2D> inverseJacobianMap) {
     final Set<DoublesPair> alphaSet = sabrSensitivity.getAlpha().getMap().keySet();
     final Set<DoublesPair> ijSet = inverseJacobianMap.keySet();
     ArgumentChecker.isTrue(alphaSet.equals(ijSet), "Point of SABR sensitivity and inverse Jacobian are not the same.");

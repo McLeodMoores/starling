@@ -50,11 +50,11 @@ public class RestComponent extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param info  the managed component info, not null
    * @param instance  the managed component instance, not null
    */
-  public RestComponent(ComponentInfo info, Object instance) {
+  public RestComponent(final ComponentInfo info, final Object instance) {
     setInfo(info);
     setInstance(instance);
   }

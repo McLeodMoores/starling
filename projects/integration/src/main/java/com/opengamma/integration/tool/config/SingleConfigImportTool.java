@@ -41,109 +41,111 @@ import com.opengamma.scripts.Scriptable;
 public class SingleConfigImportTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleConfigImportTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleConfigImportTool.class);
   private static final long DEFAULT_MARK_BUFFER = 1000000; // 1MB should do it.
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new SingleConfigImportTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    ToolContext toolContext = getToolContext();
-    ConfigMaster configMaster = toolContext.getConfigMaster();
-    ConfigSource configSource = toolContext.getConfigSource();
-    ConventionMaster conventionMaster = toolContext.getConventionMaster();
-    MarketDataSnapshotMaster marketDataSnapshotMaster = toolContext.getMarketDataSnapshotMaster();
-    SecurityMaster secMaster = toolContext.getSecurityMaster();
-    CommandLine commandLine = getCommandLine();
+    final ToolContext toolContext = getToolContext();
+    final ConfigMaster configMaster = toolContext.getConfigMaster();
+    final ConfigSource configSource = toolContext.getConfigSource();
+    final ConventionMaster conventionMaster = toolContext.getConventionMaster();
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = toolContext.getMarketDataSnapshotMaster();
+    final SecurityMaster secMaster = toolContext.getSecurityMaster();
+    final CommandLine commandLine = getCommandLine();
     @SuppressWarnings("unchecked")
-    List<String> fileList = commandLine.getArgList();
-    for (String file : fileList) {
+    final List<String> fileList = commandLine.getArgList();
+    for (final String file : fileList) {
       System.err.println(file);
     }
-    boolean verbose = commandLine.hasOption("verbose");
+    final boolean verbose = commandLine.hasOption("verbose");
     if (commandLine.hasOption("load")) {
       checkForInvalidOption("type");
-      SingleConfigLoader configLoader = new SingleConfigLoader(secMaster, configMaster, configSource, conventionMaster, marketDataSnapshotMaster, commandLine.hasOption("do-not-update"));
+      final SingleConfigLoader configLoader = new SingleConfigLoader(secMaster, configMaster, configSource, conventionMaster, marketDataSnapshotMaster,
+          commandLine.hasOption("do-not-update"));
       if (fileList.size() > 0) {
         boolean problems = false;
-        for (String fileName : fileList) {
-          File file = new File(fileName);
+        for (final String fileName : fileList) {
+          final File file = new File(fileName);
           if (!file.exists()) {
-            s_logger.error("Could not find file:" + fileName);
+            LOGGER.error("Could not find file:" + fileName);
             problems = true;
           }
           if (!file.canRead()) {
-            s_logger.error("Not able to read file (permissions?):" + fileName);
+            LOGGER.error("Not able to read file (permissions?):" + fileName);
             problems = true;
           }
         }
         if (problems) {
-          s_logger.error("Problems with one or more files, aborting.");
+          LOGGER.error("Problems with one or more files, aborting.");
           System.exit(1);
         }
         try {
-          for (String fileName : fileList) {
+          for (final String fileName : fileList) {
             if (verbose) {
-              s_logger.info("Processing " + fileName);
+              LOGGER.info("Processing " + fileName);
             }
             FileInputStream inputStream;
-            File file = new File(fileName);
+            final File file = new File(fileName);
             if (file.isFile()) {
               if (file.getName().endsWith(".zip")) {
-                ZipFile zipFile = new ZipFile(file);
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                final ZipFile zipFile = new ZipFile(file);
+                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements()) {
                   final ZipEntry zipEntry = entries.nextElement();
                   if (!zipEntry.isDirectory()) {
                     final String zipFileName = zipEntry.getName();
                     if (zipFileName.endsWith(".xml")) {
                       if (verbose) {
-                        s_logger.info("Processing file {} in zip archive", zipFileName);
+                        LOGGER.info("Processing file {} in zip archive", zipFileName);
                       }
-                      long fileSize = zipEntry.getSize();
+                      final long fileSize = zipEntry.getSize();
                       storeObjectFromStream(configLoader, fileSize, zipFile.getInputStream(zipEntry));
                     } else {
-                      s_logger.warn("File {} not xml, skipping...", zipFileName);
+                      LOGGER.warn("File {} not xml, skipping...", zipFileName);
                     }
                   }
                 }
               } else if (file.getName().endsWith(".xml")) {
                 inputStream = new FileInputStream(fileName);
-                long fileSize = file.length();
+                final long fileSize = file.length();
                 storeObjectFromStream(configLoader, fileSize, inputStream);
               } else {
-                s_logger.error("File type not recognised, pass either a zip or xml file");
+                LOGGER.error("File type not recognised, pass either a zip or xml file");
                 System.exit(1);
               }
             } else {
-              s_logger.error("Path is not a file");
+              LOGGER.error("Path is not a file");
               System.exit(1);
             }
           }
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
           if (verbose) {
-            s_logger.error("An I/O error occurred while processing a file (run with -v to see stack trace)");
+            LOGGER.error("An I/O error occurred while processing a file (run with -v to see stack trace)");
           } else {
-            s_logger.error("An I/O error occurred while processing a file", ioe);
+            LOGGER.error("An I/O error occurred while processing a file", ioe);
           }
         }
       } else {
         if (verbose) {
-          s_logger.info("No file name given, assuming STDIN");
+          LOGGER.info("No file name given, assuming STDIN");
         }
         configLoader.loadConfig(System.in);
       }
     } else {
-      s_logger.info("Specify -load to load a config");
+      LOGGER.info("Specify -load to load a config");
     }
   }
 
@@ -154,51 +156,51 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
    * @param inputStream
    * @return
    */
-  private void storeObjectFromStream(SingleConfigLoader configLoader, long fileSize, InputStream rawInputStream) {
-    InputStream inputStream = new BufferedInputStream(rawInputStream, (int) (fileSize > 0 ? fileSize : DEFAULT_MARK_BUFFER));
+  private void storeObjectFromStream(final SingleConfigLoader configLoader, final long fileSize, final InputStream rawInputStream) {
+    final InputStream inputStream = new BufferedInputStream(rawInputStream, (int) (fileSize > 0 ? fileSize : DEFAULT_MARK_BUFFER));
     if (getCommandLine().hasOption("type")) {
-      List<String> types = getTypes();
+      final List<String> types = getTypes();
       if (types.size() > 1) {
-        s_logger.error("More than one type specified");
+        LOGGER.error("More than one type specified");
         System.exit(1);
       }
       try {
-        Class<?> type = Class.forName(types.get(0));
+        final Class<?> type = Class.forName(types.get(0));
         try {
           inputStream.mark((int) (fileSize > 0 ? fileSize : DEFAULT_MARK_BUFFER));
           configLoader.loadConfig(inputStream, type);
-          s_logger.info("Config loaded successfully");
-        } catch (Exception e) {
+          LOGGER.info("Config loaded successfully");
+        } catch (final Exception e) {
           // try loading it as fudge!
           try {
             inputStream.reset();
             configLoader.loadFudgeConfig(inputStream);
-            s_logger.info("Config loaded successfully");
-          } catch (Exception fe) {
-            s_logger.error("Exception thrown when loading as both JodaXML and as FudgeXML");
-            s_logger.error("JodaXML trace", e);
-            s_logger.error("Fudge trace", e);
+            LOGGER.info("Config loaded successfully");
+          } catch (final Exception fe) {
+            LOGGER.error("Exception thrown when loading as both JodaXML and as FudgeXML");
+            LOGGER.error("JodaXML trace", e);
+            LOGGER.error("Fudge trace", e);
           }
         }
-      } catch (ClassNotFoundException ex) {
-        s_logger.error("Class {} not found", types.get(0));
+      } catch (final ClassNotFoundException ex) {
+        LOGGER.error("Class {} not found", types.get(0));
         System.exit(1);
       }
     } else {
       try {
-        inputStream.mark((int) (fileSize > 0 ? fileSize : DEFAULT_MARK_BUFFER)); 
+        inputStream.mark((int) (fileSize > 0 ? fileSize : DEFAULT_MARK_BUFFER));
         configLoader.loadConfig(inputStream);
-        s_logger.info("Config loaded successfully as JodaXML");
-      } catch (Exception e) {
+        LOGGER.info("Config loaded successfully as JodaXML");
+      } catch (final Exception e) {
         try {
           // close it - we could use mark/reset, but this is simpler.
-          inputStream.reset();               
+          inputStream.reset();
           configLoader.loadFudgeConfig(inputStream);
-          s_logger.info("Config loaded successfully as FudgeXML");
-        } catch (Exception fe) {
-          s_logger.error("Exception thrown when loading as both JodaXML and as FudgeXML");
-          s_logger.error("JodaXML trace", e);
-          s_logger.error("Fudge trace", e);                  
+          LOGGER.info("Config loaded successfully as FudgeXML");
+        } catch (final Exception fe) {
+          LOGGER.error("Exception thrown when loading as both JodaXML and as FudgeXML");
+          LOGGER.error("JodaXML trace", e);
+          LOGGER.error("Fudge trace", e);
         }
       }
     }
@@ -206,14 +208,13 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
 
   private List<String> getTypes() {
     if (getCommandLine().hasOption("type")) {
-      String[] typeValues = getCommandLine().getOptionValues("type");
+      final String[] typeValues = getCommandLine().getOptionValues("type");
       return Arrays.asList(typeValues);
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
-  private void checkForInvalidOption(String longOpt) {
+  private void checkForInvalidOption(final String longOpt) {
     if (getCommandLine().hasOption(longOpt)) {
       System.err.println("Option " + longOpt + " is invalid in this context");
       System.exit(1);
@@ -221,8 +222,8 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
-    Options options = super.createOptions(mandatoryConfig);
+  protected Options createOptions(final boolean mandatoryConfig) {
+    final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createTypeOption());
     options.addOption(createLoadOption());
     options.addOption(createVerboseOption());
@@ -232,14 +233,15 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
 
   @SuppressWarnings("static-access")
   private Option createTypeOption() {
-    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type").create("t");
+    return OptionBuilder.isRequired(false).hasArgs().withArgName("full class name").withDescription("The type(s) you want to export").withLongOpt("type")
+        .create("t");
   }
 
   @SuppressWarnings("static-access")
   private Option createLoadOption() {
     return OptionBuilder.isRequired(false).hasArg(false).withDescription("Load from file to config database").withLongOpt("load").create("load");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createDontUpdateOption() {
     return OptionBuilder.isRequired(false).hasArg(false).withDescription("Don't update configs that already exist").withLongOpt("do-not-update").create("n");
@@ -256,8 +258,8 @@ public class SingleConfigImportTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("single-config-import-tool.sh [file...]", options, true);
   }

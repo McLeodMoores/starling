@@ -30,44 +30,46 @@ public class CalculatedValueFudgeBuilder implements FudgeBuilder<CalculatedValue
   private static final String TARGET_TYPE = "target_type";
   private static final String VALUE = "value";
   private static final Integer TYPES_HEADER_ORDINAL = 0;
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CalculatedValue object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CalculatedValue object) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    
+
     serializer.addToMessage(msg, SPECIFICATION_PROPERTIES, null, object.getSpecificationProperties());
     msg.add(TARGET_NAME, object.getTargetName());
     msg.add(TARGET_TYPE, object.getTargetType());
-    
+
     addToMessageWithHeader(serializer, msg, VALUE, object.getValue());
-    
+
     return msg;
   }
 
   @Override
-  public CalculatedValue buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ValueProperties specificationProperties = deserializer.fieldValueToObject(ValueProperties.class, msg.getByName(SPECIFICATION_PROPERTIES));
-    String targetName = msg.getString(TARGET_NAME);
-    String targetType = msg.getString(TARGET_TYPE);
-    
-    Object value = deserializer.fieldValueToObject(msg.getByName(VALUE));
-    
+  public CalculatedValue buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ValueProperties specificationProperties = deserializer.fieldValueToObject(ValueProperties.class, msg.getByName(SPECIFICATION_PROPERTIES));
+    final String targetName = msg.getString(TARGET_NAME);
+    final String targetType = msg.getString(TARGET_TYPE);
+
+    final Object value = deserializer.fieldValueToObject(msg.getByName(VALUE));
+
     return CalculatedValue.of(value, specificationProperties, targetType, targetName);
   }
 
-  
-  
   /**
    * Bypasses secondary types.
-   * @param serializer serializer 
-   * @param message message
-   * @param name name
-   * @param ordinal ordinal
-   * @param object object
+   *
+   * @param serializer
+   *          serializer
+   * @param message
+   *          message
+   * @param name
+   *          name
+   * @param object
+   *          object
    */
   static void addToMessageWithHeader(final FudgeSerializer serializer, final MutableFudgeMsg message, final String name, final Object object) {
     final Class<?> clazz = object.getClass();
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
     final FudgeFieldType fieldType = fudgeContext.getTypeDictionary().getByJavaType(clazz);
     if (isNative(fieldType, object) && !(fieldType instanceof SecondaryFieldType)) {
       message.add(name, null, fieldType, object);
@@ -83,13 +85,13 @@ public class CalculatedValueFudgeBuilder implements FudgeBuilder<CalculatedValue
     }
 
   }
-  
+
   private static boolean isNative(final FudgeFieldType fieldType, final Object object) {
     if (fieldType == null) {
       return false;
     }
-    return FudgeWireType.SUB_MESSAGE.equals(fieldType) == false ||
-            (FudgeWireType.SUB_MESSAGE.equals(fieldType) && object instanceof FudgeMsg);
+    return !FudgeWireType.SUB_MESSAGE.equals(fieldType)
+        || FudgeWireType.SUB_MESSAGE.equals(fieldType) && object instanceof FudgeMsg;
   }
 
 }

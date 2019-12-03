@@ -37,7 +37,7 @@ public class LastHistoricalValueFunction extends AbstractFunction.NonCompiledInv
   private static HashMap<String, String> s_marketDataRequirementNamesMap;
 
   static {
-    s_marketDataRequirementNamesMap = new HashMap<String, String>();
+    s_marketDataRequirementNamesMap = new HashMap<>();
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_VOLUME, "VOLUME");
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_APPLIED_BETA, "APPLIED_BETA");
     s_marketDataRequirementNamesMap.put(ValueRequirementNames.DAILY_MARKET_CAP, "CUR_MKT_CAP");
@@ -85,10 +85,12 @@ public class LastHistoricalValueFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeries hts = (HistoricalTimeSeries) inputs.getAllValues().iterator().next().getValue();
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), hts.getTimeSeries().getLatestValue()));
+    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()),
+        hts.getTimeSeries().getLatestValue()));
   }
 
 }

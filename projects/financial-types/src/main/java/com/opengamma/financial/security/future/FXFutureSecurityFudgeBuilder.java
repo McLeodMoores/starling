@@ -29,13 +29,13 @@ public class FXFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   public static final String MULTIPLICATION_FACTOR_FIELD_NAME = "multiplicationFactor";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FXFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FXFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FXFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FXFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FXFutureSecurity object, final MutableFudgeMsg msg) {
     FutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, NUMERATOR_FIELD_NAME, object.getNumerator());
     addToMessage(msg, DENOMINATOR_FIELD_NAME, object.getDenominator());
@@ -43,13 +43,13 @@ public class FXFutureSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   @Override
-  public FXFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FXFutureSecurity object = new FXFutureSecurity();
+  public FXFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FXFutureSecurity object = new FXFutureSecurity();
     FXFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FXFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FXFutureSecurity object) {
     FutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setNumerator(msg.getValue(Currency.class, NUMERATOR_FIELD_NAME));
     object.setDenominator(msg.getValue(Currency.class, DENOMINATOR_FIELD_NAME));

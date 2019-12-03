@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.forex.option.localvol;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * 
+ *
  */
 public class FXOptionLocalVolatilityForwardPDEGridForwardDeltaFunction extends FXOptionLocalVolatilityForwardPDEFunction {
 
@@ -37,7 +37,8 @@ public class FXOptionLocalVolatilityForwardPDEGridForwardDeltaFunction extends F
   }
 
   @Override
-  protected Object getResult(final PDELocalVolatilityCalculator<?> calculator, final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+  protected Object getResult(final PDELocalVolatilityCalculator<?> calculator, final LocalVolatilitySurfaceMoneyness localVolatility,
+      final ForwardCurve forwardCurve,
       final EuropeanVanillaOption option, final YieldAndDiscountCurve discountingCurve) {
     final Interpolator1DDataBundle data = (Interpolator1DDataBundle) calculator.getResult(localVolatility, forwardCurve, option, discountingCurve);
     return InterpolatedDoublesCurve.from(data.getKeys(), data.getValues(), ((LocalVolatilityForwardPDESpotGreeksGridCalculator) calculator).getInterpolator());

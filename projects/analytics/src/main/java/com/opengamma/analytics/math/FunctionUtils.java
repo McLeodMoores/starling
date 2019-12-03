@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import org.apache.commons.lang.Validate;
 
 /**
- * A collection of basic useful maths functions 
+ * A collection of basic useful maths functions.
  */
 public final class FunctionUtils {
 
@@ -18,8 +18,10 @@ public final class FunctionUtils {
   }
 
   /**
-   * Returns the square of a number
-   * @param x some number
+   * Returns the square of a number.
+   *
+   * @param x
+   *          some number
    * @return x*x
    */
   public static double square(final double x) {
@@ -27,8 +29,10 @@ public final class FunctionUtils {
   }
 
   /**
-  * Returns the cube of a number
-   * @param x some number
+   * Returns the cube of a number.
+   *
+   * @param x
+   *          some number
    * @return x*x*x
    */
   public static double cube(final double x) {
@@ -73,8 +77,10 @@ public final class FunctionUtils {
   }
 
   /**
-   * Same behaviour as mathlab unique
-   * @param in input array
+   * Same behaviour as mathlab unique.
+   *
+   * @param in
+   *          input array
    * @return a sorted array with no duplicates values
    */
   public static double[] unique(final double[] in) {
@@ -95,8 +101,10 @@ public final class FunctionUtils {
   }
 
   /**
-   * Same behaviour as mathlab unique
-   * @param in input array
+   * Same behaviour as mathlab unique.
+   *
+   * @param in
+   *          input array
    * @return a sorted array with no duplicates values
    */
   public static int[] unique(final int[] in) {
@@ -117,10 +125,13 @@ public final class FunctionUtils {
   }
 
   /**
-   * Find the index of a <b>sorted</b> set that is less than or equal to a given value. If the given value is lower than the lowest member (i.e. the first)
-   *  of the set, zero is returned.  This uses Arrays.binarySearch 
-   * @param set a <b>sorted</b> array of numbers. 
-   * @param value The value to search for
+   * Find the index of a <b>sorted</b> set that is less than or equal to a given value. If the given value is lower than the lowest member (i.e. the first) of
+   * the set, zero is returned. This uses Arrays.binarySearch
+   *
+   * @param set
+   *          a <b>sorted</b> array of numbers.
+   * @param value
+   *          The value to search for
    * @return index in the array
    */
   public static int getLowerBoundIndex(final double[] set, final double value) {

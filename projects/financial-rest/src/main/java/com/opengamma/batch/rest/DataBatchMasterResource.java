@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.batch.BatchMasterWriter;
-import com.opengamma.batch.rest.BatchRunSearchRequest;
 import com.opengamma.batch.domain.MarketData;
 import com.opengamma.batch.domain.RiskRun;
 import com.opengamma.id.ObjectId;
@@ -63,7 +62,7 @@ public class DataBatchMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -73,8 +72,8 @@ public class DataBatchMasterResource extends AbstractDataResource {
   @POST
   @Path("marketData/search")
   @Consumes(FudgeRest.MEDIA)
-  public Response searchMarketData(PagingRequest pagingRequest) {
-    Pair<List<MarketData>, Paging> result = getMaster().getMarketData(pagingRequest);
+  public Response searchMarketData(final PagingRequest pagingRequest) {
+    final Pair<List<MarketData>, Paging> result = getMaster().getMarketData(pagingRequest);
     return responseOkObject(result);
   }
 
@@ -84,21 +83,21 @@ public class DataBatchMasterResource extends AbstractDataResource {
   @GET
   @Path("marketData/{id}")
   public DataMarketDataResource getMarketData(@PathParam("id") final String snapshotId) {
-    ObjectId id = ObjectId.parse(snapshotId);
+    final ObjectId id = ObjectId.parse(snapshotId);
     return new DataMarketDataResource(id, getMaster());
   }
 
   @POST
   @Path("run/search")
   @Consumes(FudgeRest.MEDIA)
-  public Response searchBatchRuns(BatchRunSearchRequest request) {
-    Pair<List<RiskRun>, Paging> result = getMaster().searchRiskRun(request);
+  public Response searchBatchRuns(final BatchRunSearchRequest request) {
+    final Pair<List<RiskRun>, Paging> result = getMaster().searchRiskRun(request);
     return responseOkObject(result);
-  }  
+  }
 
   @Path("run/{id}")
   public DataBatchRunResource batchRuns(@PathParam("id") final String runId) {
-    ObjectId id = ObjectId.parse(runId);
+    final ObjectId id = ObjectId.parse(runId);
     return new DataBatchRunResource(id, getMaster());
   }
 

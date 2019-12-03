@@ -20,18 +20,18 @@ public class FxDigitalOptionTradeSecurityExtractor extends TradeSecurityExtracto
    *
    * @param trade the trade to perform extraction on
    */
-  public FxDigitalOptionTradeSecurityExtractor(FxDigitalOptionTrade trade) {
+  public FxDigitalOptionTradeSecurityExtractor(final FxDigitalOptionTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    FxDigitalOptionTrade trade = getTrade();
-    Currency payoutCurrency = trade.getPayoutCurrency();
-    FxOptionCalculator calculator = new FxOptionCalculator(trade, trade.getPayout(), payoutCurrency);
+    final FxDigitalOptionTrade trade = getTrade();
+    final Currency payoutCurrency = trade.getPayoutCurrency();
+    final FxOptionCalculator calculator = new FxOptionCalculator(trade, trade.getPayout(), payoutCurrency);
 
-    ManageableSecurity security = new FXDigitalOptionSecurity(
+    final ManageableSecurity security = new FXDigitalOptionSecurity(
         calculator.getPutCurrency(),
         calculator.getCallCurrency(),
         calculator.getPutAmount(),

@@ -11,28 +11,6 @@ import com.opengamma.util.time.Expiry;
 
 /**
  * Class defining a cash-or-nothing option.
- * <p>
- * Cash-or-nothing options have European-style exercise with payoff
- * $$
- * \begin{align*}
- * \mathrm{payoff} =
- * \begin{cases}
- * 0 \quad & \mathrm{if} \quad S \leq K\\
- * P \quad & \mathrm{otherwise}
- * \end{cases}
- * \end{align*}
- * $$
- * and
- * $$
- * \begin{align*}
- * \mathrm{payoff} =
- * \begin{cases}
- * 0 \quad & \mathrm{if} \quad S \geq K\\
- * P \quad & \mathrm{otherwise}
- * \end{cases}
- * \end{align*}
- * $$
- * for a put, where $K$ is the strike, $P$ is the payment amount and $S$ is the spot.
  */
 public class CashOrNothingOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -44,7 +22,7 @@ public class CashOrNothingOptionDefinition extends OptionDefinition {
       Validate.notNull(data, "data");
       final double s = data.getSpot();
       final double k = getStrike();
-      return isCall() ? (s < k ? _payment : 0) : s > k ? _payment : 0;
+      return isCall() ? s < k ? _payment : 0 : s > k ? _payment : 0;
     }
 
   };
@@ -91,7 +69,7 @@ public class CashOrNothingOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_payment);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -23,7 +23,7 @@ import com.opengamma.financial.security.option.VanillaPayoffStyle;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the OptionPayoffStyle enum
+ * Custom Hibernate usertype for the OptionPayoffStyle enum.
  */
 public class OptionPayoffStyleUserType extends EnumUserType<OptionPayoffStyle> {
 
@@ -79,7 +79,7 @@ public class OptionPayoffStyleUserType extends EnumUserType<OptionPayoffStyle> {
       public String visitExtremeSpreadPayoffStyle(final ExtremeSpreadPayoffStyle payoffStyle) {
         return EXTREME_SPREAD;
       }
-      
+
       @Override
       public String visitFadeInPayoffStyle(final FadeInPayoffStyle payoffStyle) {
         return FADE_IN;

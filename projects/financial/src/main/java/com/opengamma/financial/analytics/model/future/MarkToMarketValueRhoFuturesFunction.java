@@ -19,12 +19,13 @@ public class MarkToMarketValueRhoFuturesFunction extends MarkToMarketFuturesFunc
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public MarkToMarketValueRhoFuturesFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
-    super(ValueRequirementNames.VALUE_RHO, MarkToMarketFuturesCalculator.RatesDeltaCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
+  public MarkToMarketValueRhoFuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
+    super(ValueRequirementNames.VALUE_RHO,
+        MarkToMarketFuturesCalculator.RatesDeltaCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
   }
-  
+
   @Override
-  protected Double applyTradeScaling(final Trade trade, Double value) {
+  protected Double applyTradeScaling(final Trade trade, final Double value) {
     final double quantity = trade.getQuantity().doubleValue();
     return value * quantity;
   }

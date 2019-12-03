@@ -24,7 +24,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public final class AsynchronousOperation<T> {
 
-  private static final ScheduledExecutorService s_timeouts = createTimeoutExecutor();
+  private static final ScheduledExecutorService TIMEOUTS = createTimeoutExecutor();
 
   private final Class<T> _type;
   private AsynchronousResult<T> _result;
@@ -53,7 +53,7 @@ public final class AsynchronousOperation<T> {
    * @return the new instance, never null
    */
   public static <T> AsynchronousOperation<T> create(final Class<T> type) {
-    return new AsynchronousOperation<T>(type);
+    return new AsynchronousOperation<>(type);
   }
 
   /**
@@ -73,7 +73,7 @@ public final class AsynchronousOperation<T> {
    * @return the callback object
    */
   public ResultCallback<T> getCallback() {
-    return new ResultCallback<T>(this);
+    return new ResultCallback<>(this);
   }
 
   /**
@@ -91,7 +91,7 @@ public final class AsynchronousOperation<T> {
    * @param result the result value
    */
   protected void setResult(final T result) {
-    setAsynchronousResult(new AsynchronousResult<T>(result, null));
+    setAsynchronousResult(new AsynchronousResult<>(result, null));
   }
 
   /**
@@ -150,7 +150,7 @@ public final class AsynchronousOperation<T> {
    * @throws InterruptedException if interrupted waiting for the result
    */
   protected T waitForResult() throws InterruptedException {
-    final LinkedBlockingDeque<AsynchronousResult<T>> results = new LinkedBlockingDeque<AsynchronousResult<T>>();
+    final LinkedBlockingDeque<AsynchronousResult<T>> results = new LinkedBlockingDeque<>();
     setResultListener(new ResultListener<T>() {
       @Override
       public void operationComplete(final AsynchronousResult<T> result) {
@@ -175,9 +175,8 @@ public final class AsynchronousOperation<T> {
     }
     if (result == null) {
       throw new AsynchronousExecution(this);
-    } else {
-      return result.getResult();
     }
+    return result.getResult();
   }
 
   /**
@@ -191,7 +190,7 @@ public final class AsynchronousOperation<T> {
   public static Cancelable timeout(final Cancelable cancelation, final int timeoutMillis) {
     ArgumentChecker.notNull(cancelation, "cancelation");
     ArgumentChecker.notNegativeOrZero(timeoutMillis, "timeoutMillis");
-    final ScheduledFuture<?> future = s_timeouts.schedule(new Runnable() {
+    final ScheduledFuture<?> future = TIMEOUTS.schedule(new Runnable() {
       @Override
       public void run() {
         cancelation.cancel(true);
@@ -206,8 +205,8 @@ public final class AsynchronousOperation<T> {
   }
 
   /**
-   * Returns the result (or throws the signaled exception), blocking the caller until it is available. This is equivalent to {@link AsynchronousExecution#getResult} but wraps any
-   * {@link InterruptedException} in a {@link OpenGammaRuntimeException}.
+   * Returns the result (or throws the signaled exception), blocking the caller until it is available. This is equivalent to
+   * {@link AsynchronousExecution#getResult} but wraps any {@link InterruptedException} in a {@link OpenGammaRuntimeException}.
    *
    * @param <T> type of the result
    * @param ex the caught exception

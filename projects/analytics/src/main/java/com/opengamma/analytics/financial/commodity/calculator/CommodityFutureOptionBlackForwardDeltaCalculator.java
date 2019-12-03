@@ -17,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class CommodityFutureOptionBlackForwardDeltaCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
   /** A static instance of this calculator */
-  private static final CommodityFutureOptionBlackForwardDeltaCalculator s_instance = new CommodityFutureOptionBlackForwardDeltaCalculator();
+  private static final CommodityFutureOptionBlackForwardDeltaCalculator INSTANCE = new CommodityFutureOptionBlackForwardDeltaCalculator();
   /** The Black pricer */
   private static final CommodityFutureOptionBlackMethod PRICER = CommodityFutureOptionBlackMethod.getInstance();
 
@@ -25,7 +25,7 @@ public final class CommodityFutureOptionBlackForwardDeltaCalculator extends Inst
    * @return The static instance of this class
    */
   public static CommodityFutureOptionBlackForwardDeltaCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

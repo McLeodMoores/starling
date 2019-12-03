@@ -13,7 +13,7 @@ import java.util.LinkedList;
  */
 /* package */abstract class LinkedListRunQueue implements RunQueue {
 
-  private final LinkedList<ContextRunnable> _list = new LinkedList<ContextRunnable>();
+  private final LinkedList<ContextRunnable> _list = new LinkedList<>();
 
   public static final class FIFO extends LinkedListRunQueue {
 

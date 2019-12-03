@@ -30,12 +30,19 @@ public final class ZonedDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ZonedDateTime object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ZonedDateTime object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
+  /**
+   * Converts a zoned date time to a message. Returns null if the date is null.
+   *
+   * @param serializer  the serializer
+   * @param object  the date
+   * @return  the message or null
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ZonedDateTime object) {
     if (object == null) {
       return null;
@@ -45,6 +52,13 @@ public final class ZonedDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     return msg;
   }
 
+  /**
+   * Adds a zoned date time to a message.
+   *
+   * @param serializer  the serializer
+   * @param object  the date
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ZonedDateTime object, final MutableFudgeMsg msg) {
     addToMessage(msg, DATETIME_FIELD_NAME, object.toOffsetDateTime());
     addToMessage(msg, ZONE_FIELD_NAME, object.getZone());
@@ -56,6 +70,13 @@ public final class ZonedDateTimeFudgeBuilder extends AbstractFudgeBuilder implem
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Converts a message to zoned date time. If the message is null, returns null.
+   *
+   * @param deserializer  the deserializer
+   * @param msg  the message
+   * @return  the zoned date time or null
+   */
   public static ZonedDateTime fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;

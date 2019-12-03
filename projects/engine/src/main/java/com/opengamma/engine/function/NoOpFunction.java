@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -38,10 +38,12 @@ public final class NoOpFunction extends IntrinsicFunction {
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Set<ComputedValue> result = Sets.newHashSetWithExpectedSize(desiredValues.size());
-    for (ValueRequirement desiredValue : desiredValues) {
-      result.add(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), MissingOutput.SUPPRESSED));
+    for (final ValueRequirement desiredValue : desiredValues) {
+      result.add(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()),
+          MissingOutput.SUPPRESSED));
     }
     return result;
   }

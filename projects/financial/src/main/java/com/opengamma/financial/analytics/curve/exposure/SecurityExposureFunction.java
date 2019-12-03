@@ -27,10 +27,10 @@ public class SecurityExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     final UniqueId uid = security.getUniqueId();
     return Arrays.asList(ExternalId.of(uid.getScheme(), uid.getValue()));
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.annotation;
@@ -33,65 +33,65 @@ public final class ClassNameAnnotationScannerUtils {
 
   /**
    * Scans the specified classpath for an annotation.
-   * 
+   *
    * @param classpathElements  the classpath, not null
    * @param annotationClass  the annotation to find, not null
    * @return the matching elements, not null
    */
-  public static Set<String> scan(String[] classpathElements, Class<?> annotationClass) {
+  public static Set<String> scan(final String[] classpathElements, final Class<?> annotationClass) {
     ArgumentChecker.notNull(annotationClass, "annotationClass");
     return scan(classpathElements, annotationClass.getName());
   }
 
   /**
    * Scans the specified classpath for an annotation.
-   * 
+   *
    * @param classpathElements  the classpath, not null
    * @param annotationClassName  the annotation to find, not null
    * @return the matching elements, not null
    */
-  public static Set<String> scan(String[] classpathElements, String annotationClassName) {
-    URL[] classpathUrls = ClasspathUtils.getClasspathURLs(classpathElements);
+  public static Set<String> scan(final String[] classpathElements, final String annotationClassName) {
+    final URL[] classpathUrls = ClasspathUtils.getClasspathURLs(classpathElements);
     return scan(classpathUrls, annotationClassName);
   }
 
   /**
    * Scans the specified classpath for an annotation.
-   * 
+   *
    * @param classpathUrls  the classpath, not null
    * @param annotationClassName  the annotation to find, not null
    * @return the matching elements, not null
    */
   @SuppressWarnings("unchecked")
-  public static Set<String> scan(URL[] classpathUrls, String annotationClassName) {
+  public static Set<String> scan(final URL[] classpathUrls, final String annotationClassName) {
     try {
       return convertClasses(scan(classpathUrls, (Class<? extends Annotation>) Class.forName(annotationClassName)));
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Couldn't find class " + annotationClassName, ex);
     }
   }
-  
-  private static Set<String> convertClasses(Set<Class<?>> classes) {
-    Set<String> results = new LinkedHashSet<>(classes.size());
-    for (Class<?> clazz : classes) {
+
+  private static Set<String> convertClasses(final Set<Class<?>> classes) {
+    final Set<String> results = new LinkedHashSet<>(classes.size());
+    for (final Class<?> clazz : classes) {
       results.add(clazz.getName());
     }
     return results;
   }
   /**
    * Scans the specified classpath for an annotation.
-   * 
+   *
    * @param classpathUrls  the classpath, not null
    * @param annotationClass  the annotation to find, not null
    * @return the matching elements, not null
    */
-  public static Set<Class<?>> scan(URL[] classpathUrls, Class<? extends Annotation> annotationClass) {
+  public static Set<Class<?>> scan(final URL[] classpathUrls, final Class<? extends Annotation> annotationClass) {
     ArgumentChecker.notNull(annotationClass, "annotationClass");
-    Set<URL> urls = new HashSet<>(Arrays.asList(classpathUrls));
-    AnnotationReflector reflector = new AnnotationReflector(
+    final Set<URL> urls = new HashSet<>(Arrays.asList(classpathUrls));
+    final AnnotationReflector reflector = new AnnotationReflector(
         null, urls, new TypeAnnotationsScanner(),
         ClassNameAnnotationScannerUtils.class.getClassLoader(), Thread.currentThread().getContextClassLoader());
-    Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(annotationClass); // getStore().
+    final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(annotationClass); // getStore().
     if (classes == null) {
       return Collections.emptySet();
     }

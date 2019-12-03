@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -12,10 +12,9 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  PriceIndexCurve created by adding a curve of double (the inflation rates curve which is represent  market quotes) to a PriceIndexCurve.
- *   One curve is fixed and there is no sensitivity to that curve.
- * In general the fixed curve represent a static adjustment like a seasonality adjustment.
- * The term "fixed" for the second curve means that no parameter is associated to that curve.
+ * PriceIndexCurve created by adding a curve of double (the inflation rates curve which is represent market quotes) to a PriceIndexCurve. One curve is fixed and
+ * there is no sensitivity to that curve. In general the fixed curve represent a static adjustment like a seasonality adjustment. The term "fixed" for the
+ * second curve means that no parameter is associated to that curve.
  */
 public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
 
@@ -38,15 +37,21 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
   private final double _referencePriceIndex;
 
   /**
-   * Constructor from an array of curves.
-   * The new price index curve  will be the sum (or the difference) of the different underlying curves.
-   * @param name The curve name.
-   * @param substract If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
-   * @param curve The main curve.
-   * @param curveFixed The fixed curve (as a spread).
-   * @param referencePriceIndex The reference price index value, use to calculate the rate of all the curve.
+   * Constructor from an array of curves. The new price index curve will be the sum (or the difference) of the different underlying curves.
+   *
+   * @param name
+   *          The curve name.
+   * @param substract
+   *          If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
+   * @param curve
+   *          The main curve.
+   * @param curveFixed
+   *          The fixed curve (as a spread).
+   * @param referencePriceIndex
+   *          The reference price index value, use to calculate the rate of all the curve.
    */
-  public PriceIndexCurveAddInflationRateFixedCurve(final String name, final PriceIndexCurve curve, final DoublesCurve curveFixed, final boolean substract, final double referencePriceIndex) {
+  public PriceIndexCurveAddInflationRateFixedCurve(final String name, final PriceIndexCurve curve, final DoublesCurve curveFixed, final boolean substract,
+      final double referencePriceIndex) {
     super(curve.getCurve());
     ArgumentChecker.notNull(curve, "Curve");
     ArgumentChecker.notNull(curveFixed, "Curve fixed");
@@ -89,18 +94,18 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_curve == null) ? 0 : _curve.hashCode());
-    result = prime * result + ((_curveFixed == null) ? 0 : _curveFixed.hashCode());
+    result = prime * result + (_curve == null ? 0 : _curve.hashCode());
+    result = prime * result + (_curveFixed == null ? 0 : _curveFixed.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_referencePriceIndex);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -110,7 +115,7 @@ public class PriceIndexCurveAddInflationRateFixedCurve extends PriceIndexCurve {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    PriceIndexCurveAddInflationRateFixedCurve other = (PriceIndexCurveAddInflationRateFixedCurve) obj;
+    final PriceIndexCurveAddInflationRateFixedCurve other = (PriceIndexCurveAddInflationRateFixedCurve) obj;
     if (_curve == null) {
       if (other._curve != null) {
         return false;

@@ -1,13 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +16,10 @@ import com.opengamma.engine.cache.IdentifierEncodedValueSpecifications;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 /**
  * The definition of a particular job that must be performed by a calculation node.
@@ -44,8 +44,9 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
    */
   private boolean _cancelled;
 
-  public CalculationJob(CalculationJobSpecification specification, long functionInitializationIdentifier, final VersionCorrection resolverVersionCorrection, long[] requiredJobIds,
-      List<CalculationJobItem> jobItems, final CacheSelectHint cacheSelect) {
+  public CalculationJob(final CalculationJobSpecification specification, final long functionInitializationIdentifier,
+      final VersionCorrection resolverVersionCorrection, final long[] requiredJobIds,
+      final List<CalculationJobItem> jobItems, final CacheSelectHint cacheSelect) {
     ArgumentChecker.notNull(specification, "specification");
     ArgumentChecker.notNull(resolverVersionCorrection, "resolverVersionCorrection");
     ArgumentChecker.notNull(jobItems, "jobItems");
@@ -91,7 +92,7 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
 
   public void addTail(final CalculationJob tail) {
     if (_tail == null) {
-      _tail = new LinkedList<CalculationJob>();
+      _tail = new LinkedList<>();
     }
     _tail.add(tail);
   }
@@ -107,7 +108,7 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
   @Override
   public void convertIdentifiers(final Long2ObjectMap<ValueSpecification> identifiers) {
     _cacheSelect.convertIdentifiers(identifiers);
-    for (CalculationJobItem item : _jobItems) {
+    for (final CalculationJobItem item : _jobItems) {
       item.convertIdentifiers(identifiers);
     }
   }
@@ -115,7 +116,7 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
   @Override
   public void collectIdentifiers(final LongSet identifiers) {
     _cacheSelect.collectIdentifiers(identifiers);
-    for (CalculationJobItem item : _jobItems) {
+    for (final CalculationJobItem item : _jobItems) {
       item.collectIdentifiers(identifiers);
     }
   }
@@ -123,7 +124,7 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
   @Override
   public void convertValueSpecifications(final Object2LongMap<ValueSpecification> valueSpecifications) {
     _cacheSelect.convertValueSpecifications(valueSpecifications);
-    for (CalculationJobItem item : _jobItems) {
+    for (final CalculationJobItem item : _jobItems) {
       item.convertValueSpecifications(valueSpecifications);
     }
   }
@@ -131,7 +132,7 @@ public class CalculationJob implements IdentifierEncodedValueSpecifications {
   @Override
   public void collectValueSpecifications(final Set<ValueSpecification> valueSpecifications) {
     _cacheSelect.collectValueSpecifications(valueSpecifications);
-    for (CalculationJobItem item : _jobItems) {
+    for (final CalculationJobItem item : _jobItems) {
       item.collectValueSpecifications(valueSpecifications);
     }
   }

@@ -13,20 +13,28 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test {@link DataNotFoundException}. 
+ * Test {@link DataNotFoundException}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DataNotFoundExceptionTest {
 
-  public void test_constructor_String() {
-    DataNotFoundException test = new DataNotFoundException("Msg");
+  /**
+   * Tests the string constructor.
+   */
+  @Test
+  public void testConstructorString() {
+    final DataNotFoundException test = new DataNotFoundException("Msg");
     assertEquals("Msg", test.getMessage());
     assertEquals(null, test.getCause());
   }
 
-  public void test_constructor_String_Throwable() {
-    Throwable th = new NullPointerException();
-    DataNotFoundException test = new DataNotFoundException("Msg", th);
+  /**
+   * Tests the throwable constructor.
+   */
+  @Test
+  public void testConstructorStringThrowable() {
+    final Throwable th = new NullPointerException();
+    final DataNotFoundException test = new DataNotFoundException("Msg", th);
     assertEquals(true, test.getMessage().contains("Msg"));
     assertSame(th, test.getCause());
   }

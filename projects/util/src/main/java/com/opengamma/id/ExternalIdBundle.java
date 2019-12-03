@@ -14,37 +14,38 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.text.StrBuilder;
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Sets;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
-import org.joda.beans.BeanBuilder;
 
 /**
  * An immutable bundle of external identifiers.
  * <p>
- * A bundle allows multiple {@link ExternalId external identifiers} to be grouped together when they all refer to the same conceptual object. For example, a Reuters RIC and Bloomberg Ticker might both
- * refer to the same equity.
+ * A bundle allows multiple {@link ExternalId external identifiers} to be grouped together when they all refer to the same
+ * conceptual object. For example, a Reuters RIC and Bloomberg Ticker might both refer to the same equity.
  * <p>
- * The bundle holds a <i>set</i> of external identifiers, not a <i>map</i> from scheme to value. This permits multiple values within the same scheme to refer to the same conceptual object. For
- * example, a renamed ticker could be grouped as both the old and new value. In general however, each external identifier in a bundle will be in a different scheme.
+ * The bundle holds a <i>set</i> of external identifiers, not a <i>map</i> from scheme to value. This permits multiple values
+ * within the same scheme to refer to the same conceptual object. For
+ * example, a renamed ticker could be grouped as both the old and new value. In general however, each external identifier
+ * in a bundle will be in a different scheme.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -75,8 +76,9 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   private transient int _hashCode;  // safe via racy single check idiom
 
   /**
-   * Obtains an {@code ExternalIdBundle} from a single scheme and value. This is most useful for testing, as a bundle normally contains more than one identifier.
-   * 
+   * Obtains an {@code ExternalIdBundle} from a single scheme and value. This is most useful for testing, as a bundle normally
+   * contains more than one identifier.
+   *
    * @param scheme the scheme of the single external identifier, not empty, not null
    * @param value the value of the single external identifier, not empty, not null
    * @return the bundle, not null
@@ -86,8 +88,9 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   }
 
   /**
-   * Obtains an {@code ExternalIdBundle} from a single scheme and value. This is most useful for testing, as a bundle normally contains more than one identifier.
-   * 
+   * Obtains an {@code ExternalIdBundle} from a single scheme and value. This is most useful for testing, as a bundle normally
+   * contains more than one identifier.
+   *
    * @param scheme the scheme of the single external identifier, not empty, not null
    * @param value the value of the single external identifier, not empty, not null
    * @return the bundle, not null
@@ -98,7 +101,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Obtains an {@code ExternalIdBundle} from an identifier.
-   * 
+   *
    * @param externalId the external identifier to wrap in a bundle, not null
    * @return the bundle, not null
    */
@@ -109,7 +112,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Obtains an {@code ExternalIdBundle} from an array of identifiers.
-   * 
+   *
    * @param externalIds the array of external identifiers, no nulls, not null
    * @return the bundle, not null
    */
@@ -120,7 +123,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Obtains an {@code ExternalIdBundle} from a collection of identifiers.
-   * 
+   *
    * @param externalIds the collection of external identifiers, no nulls, not null
    * @return the bundle, not null
    */
@@ -133,14 +136,14 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    * Parses a list of strings to an {@code ExternalIdBundle}.
    * <p>
    * This uses {@link ExternalId#parse(String)} to parse each string in the input collection.
-   * 
+   *
    * @param strs the external identifiers to parse, not null
    * @return the bundle, not null
    * @throws IllegalArgumentException if any identifier cannot be parsed
    */
   public static ExternalIdBundle parse(final Iterable<String> strs) {
     ArgumentChecker.noNulls(strs, "strs");
-    final List<ExternalId> externalIds = new ArrayList<ExternalId>();
+    final List<ExternalId> externalIds = new ArrayList<>();
     for (final String str : strs) {
       externalIds.add(ExternalId.parse(str));
     }
@@ -149,7 +152,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Obtains an {@code ExternalIdBundle} from a collection of identifiers.
-   * 
+   *
    * @param externalIds the collection of external identifiers, validated
    * @return the bundle, not null
    */
@@ -166,7 +169,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Creates a bundle from a set of identifiers.
-   * 
+   *
    * @param identifiers the set of identifiers, assigned, not null
    */
   private ExternalIdBundle(final ImmutableSortedSet<ExternalId> identifiers) {
@@ -178,7 +181,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    * Gets the external identifier for the specified scheme.
    * <p>
    * This returns the first identifier in the internal set that matches. The set is not sorted, so this method is not consistent.
-   * 
+   *
    * @param scheme the scheme to query, null returns null
    * @return the identifier, null if not found
    */
@@ -193,7 +196,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns all identifiers for a scheme.
-   * 
+   *
    * @param scheme The scheme, null returns an empty set
    * @return All identifiers for the scheme, not null
    */
@@ -209,7 +212,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns all identifiers for a scheme.
-   * 
+   *
    * @param scheme The scheme, null returns an empty set
    * @return All values for the scheme, not null
    */
@@ -227,7 +230,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    * Gets the identifier value for the specified scheme.
    * <p>
    * This returns the first identifier in the internal set that matches. The set is not sorted, so this method is not consistent.
-   * 
+   *
    * @param scheme the scheme to query, null returns null
    * @return the identifier value, null if not found
    */
@@ -243,14 +246,14 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   //-------------------------------------------------------------------------
   /**
    * Returns a new bundle with the specified identifier added. This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId the identifier to add to the returned bundle, not null
    * @return the new bundle, not null
    */
   public ExternalIdBundle withExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    final Set<ExternalId> ids = new HashSet<ExternalId>(_externalIds);
-    if (ids.add(externalId) == false) {
+    final Set<ExternalId> ids = new HashSet<>(_externalIds);
+    if (!ids.add(externalId)) {
       return this;
     }
     return create(ids);
@@ -258,15 +261,15 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns a new bundle with the specified identifier added. This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalIds the identifiers to add to the returned bundle, not null
    * @return the new bundle, not null
    */
   public ExternalIdBundle withExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     final Set<ExternalId> toAdd = ImmutableSortedSet.copyOf(externalIds);
-    final Set<ExternalId> ids = new HashSet<ExternalId>(_externalIds);
-    if (ids.addAll(toAdd) == false) {
+    final Set<ExternalId> ids = new HashSet<>(_externalIds);
+    if (!ids.addAll(toAdd)) {
       return this;
     }
     return create(ids);
@@ -274,14 +277,14 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns a new bundle with the specified identifier removed. This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId the identifier to remove from the returned bundle, not null
    * @return the new bundle, not null
    */
   public ExternalIdBundle withoutExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    final Set<ExternalId> ids = new HashSet<ExternalId>(_externalIds);
-    if (ids.remove(externalId) == false) {
+    final Set<ExternalId> ids = new HashSet<>(_externalIds);
+    if (!ids.remove(externalId)) {
       return this;
     }
     return create(ids);
@@ -289,14 +292,14 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns a new bundle with all references to the specified scheme removed. This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param scheme the scheme to remove from the returned bundle, null ignored
    * @return the new bundle, not null
    */
   public ExternalIdBundle withoutScheme(final ExternalScheme scheme) {
-    final Set<ExternalId> ids = new HashSet<ExternalId>(_externalIds.size());
+    final Set<ExternalId> ids = new HashSet<>(_externalIds.size());
     for (final ExternalId id : _externalIds) {
-      if (id.isScheme(scheme) == false) {
+      if (!id.isScheme(scheme)) {
         ids.add(id);
       }
     }
@@ -306,7 +309,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   //-------------------------------------------------------------------------
   /**
    * Gets the number of identifiers in the bundle.
-   * 
+   *
    * @return the bundle size, zero or greater
    */
   public int size() {
@@ -315,7 +318,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns true if this bundle contains no identifiers.
-   * 
+   *
    * @return true if this bundle contains no identifiers, false otherwise
    */
   public boolean isEmpty() {
@@ -324,7 +327,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns an iterator over the identifiers in the bundle.
-   * 
+   *
    * @return the identifiers in the bundle, not null
    */
   @Override
@@ -334,14 +337,14 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this bundle contains all the keys from the specified bundle.
-   * 
+   *
    * @param bundle the bundle to search for, empty returns true, not null
    * @return true if this bundle contains all the keys from the specified bundle
    */
   public boolean containsAll(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     for (final ExternalId externalId : bundle.getExternalIds()) {
-      if (_externalIds.contains(externalId) == false) {
+      if (!_externalIds.contains(externalId)) {
         return false;
       }
     }
@@ -350,7 +353,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this bundle contains any key from the specified bundle.
-   * 
+   *
    * @param bundle the bundle to search for, empty returns false, not null
    * @return true if this bundle contains any key from the specified bundle
    */
@@ -366,7 +369,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this bundle contains the specified key.
-   * 
+   *
    * @param externalId the identifier to search for, null returns false
    * @return true if this bundle contains any key from the specified bundle
    */
@@ -376,11 +379,11 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Converts this bundle to a list of formatted strings.
-   * 
+   *
    * @return the list of identifiers as strings, not null
    */
   public List<String> toStringList() {
-    final List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<>();
     for (final ExternalId id : this) {
       list.add(id.toString());
     }
@@ -391,7 +394,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    * Converts this to an external identifier bundle.
    * <p>
    * This method trivially returns {@code this}
-   * 
+   *
    * @return {@code this}, not null
    */
   @Override
@@ -403,7 +406,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    * Converts this to an external identifier bundle.
    * <p>
    * This method trivially returns {@code this}
-   * 
+   *
    * @return {@code this}, not null
    */
   @Override
@@ -414,7 +417,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   //-------------------------------------------------------------------
   /**
    * Compares the bundles.
-   * 
+   *
    * @param other the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
@@ -428,8 +431,8 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
     if (mySet.size() > otherSet.size()) {
       return 1;
     }
-    final List<ExternalId> myList = new ArrayList<ExternalId>(mySet); // already sorted
-    final List<ExternalId> otherList = new ArrayList<ExternalId>(otherSet); // already sorted
+    final List<ExternalId> myList = new ArrayList<>(mySet); // already sorted
+    final List<ExternalId> otherList = new ArrayList<>(otherSet); // already sorted
     for (int i = 0; i < myList.size(); i++) {
       final int c = myList.get(i).compareTo(otherList.get(i));
       if (c != 0) {
@@ -465,7 +468,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns a string representation of the bundle.
-   * 
+   *
    * @return a string representation of the bundle, not null
    */
   @Override
@@ -612,7 +615,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
   /**
    * The bean-builder for {@code ExternalIdBundle}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdBundle> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdBundle> {
 
     private SortedSet<ExternalId> _externalIds = ImmutableSortedSet.of();
 
@@ -620,6 +623,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -643,30 +647,6 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

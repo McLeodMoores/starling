@@ -23,71 +23,71 @@ import com.opengamma.util.test.TestGroup;
 public class QueryPortfolioDbPortfolioMasterWorkerGetTest extends AbstractDbPortfolioMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryPortfolioDbPortfolioMasterWorkerGetTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryPortfolioDbPortfolioMasterWorkerGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryPortfolioDbPortfolioMasterWorkerGetTest(String databaseType, String databaseVersion) {
+  public QueryPortfolioDbPortfolioMasterWorkerGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_get_nullUID() {
-    _prtMaster.get((UniqueId)null);
+    _prtMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
     _prtMaster.get(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_versioned_notFoundVersion() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "101", "1");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "101", "1");
     _prtMaster.get(uniqueId);
   }
 
   @Test
   public void test_get_versioned() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "101", "0");
-    PortfolioDocument test = _prtMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "101", "0");
+    final PortfolioDocument test = _prtMaster.get(uniqueId);
     assert101(test, 999);
   }
 
   @Test
   public void test_get_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "201", "0");
-    PortfolioDocument test = _prtMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "201", "0");
+    final PortfolioDocument test = _prtMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_get_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
-    PortfolioDocument test = _prtMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "201", "1");
+    final PortfolioDocument test = _prtMaster.get(uniqueId);
     assert202(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_get_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "0");
     _prtMaster.get(uniqueId);
   }
 
   @Test
   public void test_get_unversioned_latest() {
-    UniqueId oid = UniqueId.of("DbPrt", "201");
-    PortfolioDocument test = _prtMaster.get(oid);
+    final UniqueId oid = UniqueId.of("DbPrt", "201");
+    final PortfolioDocument test = _prtMaster.get(oid);
     assert202(test);
   }
 
   @Test
   public void test_get_unversioned_nodesLoaded() {
-    UniqueId oid = UniqueId.of("DbPrt", "101");
-    PortfolioDocument test = _prtMaster.get(oid);
+    final UniqueId oid = UniqueId.of("DbPrt", "101");
+    final PortfolioDocument test = _prtMaster.get(oid);
     assert101(test, 999);
   }
 

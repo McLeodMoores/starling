@@ -5,6 +5,8 @@
  */
 package com.opengamma.id;
 
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertSame;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
@@ -14,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.testng.annotations.Test;
@@ -26,191 +29,340 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class ExternalIdSearchTest {
-
-  private final ExternalId _id11 = ExternalId.of("D1", "V1");
-  private final ExternalId _id21 = ExternalId.of("D2", "V1");
-  private final ExternalId _id12 = ExternalId.of("D1", "V2");
+  private static final ExternalId ID_11 = ExternalId.of("D1", "V1");
+  private static final ExternalId ID_21 = ExternalId.of("D2", "V1");
+  private static final ExternalId ID_12 = ExternalId.of("D1", "V2");
 
   //-------------------------------------------------------------------------
-  public void test_constructor_noargs() {
-    ExternalIdSearch test = ExternalIdSearch.of();
+  /**
+   * Tests the no-args constructor.
+   */
+  @Test
+  public void testConstructorNoArgs() {
+    final ExternalIdSearch test = ExternalIdSearch.of();
     assertEquals(0, test.size());
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_ExternalId_null() {
+  public void testConstructorExternalIdNull() {
     ExternalIdSearch.of((ExternalId) null);
   }
 
-  public void test_constructor_ExternalId() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11);
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorExternalId() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11);
     assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+    assertEquals(Sets.newHashSet(ID_11), test.getExternalIds());
     assertEquals(ExternalIdSearchType.ANY, test.getSearchType());
   }
 
   //-------------------------------------------------------------------------
-  public void test_constructor_varargs_noExternalIds() {
-    ExternalId[] args = new ExternalId[0];
-    ExternalIdSearch test = ExternalIdSearch.of(args);
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorVarargsNoExternalIds() {
+    final ExternalId[] args = new ExternalId[0];
+    final ExternalIdSearch test = ExternalIdSearch.of(args);
     assertEquals(0, test.size());
   }
 
-  public void test_constructor_varargs_oneExternalId() {
-    ExternalId[] args = new ExternalId[] {_id11};
-    ExternalIdSearch test = ExternalIdSearch.of(args);
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorVarargsOneExternalId() {
+    final ExternalId[] args = new ExternalId[] {ID_11};
+    final ExternalIdSearch test = ExternalIdSearch.of(args);
     assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+    assertEquals(Sets.newHashSet(ID_11), test.getExternalIds());
   }
 
-  public void test_constructor_varargs_twoExternalIds() {
-    ExternalId[] args = new ExternalId[] {_id11, _id12};
-    ExternalIdSearch test = ExternalIdSearch.of(args);
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorVarargsTwoExternalIds() {
+    final ExternalId[] args = new ExternalId[] {ID_11, ID_12};
+    final ExternalIdSearch test = ExternalIdSearch.of(args);
     assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
+    assertEquals(Sets.newHashSet(ID_11, ID_12), test.getExternalIds());
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_varargs_null() {
-    ExternalId[] args = null;
+  public void testConstructorVarargsNull() {
+    final ExternalId[] args = null;
     ExternalIdSearch.of(args);
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_varargs_noNulls() {
-    ExternalId[] args = new ExternalId[] {_id11, null, _id12};
+  public void testConstructorVarargsNoNulls() {
+    final ExternalId[] args = new ExternalId[] {ID_11, null, ID_12};
     ExternalIdSearch.of(args);
   }
 
   //-------------------------------------------------------------------------
-  public void test_constructor_Iterable_empty() {
-    ExternalIdSearch test = ExternalIdSearch.of(new ArrayList<ExternalId>());
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorIterableEmpty() {
+    final ExternalIdSearch test = ExternalIdSearch.of(new ArrayList<ExternalId>());
     assertEquals(0, test.size());
   }
 
-  public void test_constructor_Iterable_two() {
-    ExternalIdSearch test = ExternalIdSearch.of(Arrays.asList(_id11, _id12));
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorIterableTwo() {
+    final ExternalIdSearch test = ExternalIdSearch.of(Arrays.asList(ID_11, ID_12));
     assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
+    assertEquals(Sets.newHashSet(ID_11, ID_12), test.getExternalIds());
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_Iterable_null() {
+  public void testConstructorIterableNull() {
     ExternalIdSearch.of((Iterable<ExternalId>) null);
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_Iterable_noNulls() {
-    ExternalIdSearch.of(Arrays.asList(_id11, null, _id12));
+  public void testConstructorIterableNoNulls() {
+    ExternalIdSearch.of(Arrays.asList(ID_11, null, ID_12));
   }
 
   //-------------------------------------------------------------------------
-  public void test_constructor_IterableType_empty() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, new ArrayList<ExternalId>());
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorIterableTypeEmpty() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, new ArrayList<ExternalId>());
     assertEquals(0, test.size());
     assertEquals(ExternalIdSearchType.EXACT, test.getSearchType());
   }
 
-  public void test_constructor_IterableType_two() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, Arrays.asList(_id11, _id12));
+  /**
+   * Tests the constructor.
+   */
+  @Test
+  public void testConstructorIterableTypeTwo() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, Arrays.asList(ID_11, ID_12));
     assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
+    assertEquals(Sets.newHashSet(ID_11, ID_12), test.getExternalIds());
     assertEquals(ExternalIdSearchType.EXACT, test.getSearchType());
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_IterableType_null() {
+  public void testConstructorIterableTypeNull() {
     ExternalIdSearch.of(ExternalIdSearchType.EXACT, (Iterable<ExternalId>) null);
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_IterableType_noNulls() {
-    ExternalIdSearch.of(ExternalIdSearchType.EXACT, Arrays.asList(_id11, null, _id12));
+  public void testConstructorIterableTypeNoNulls() {
+    ExternalIdSearch.of(ExternalIdSearchType.EXACT, Arrays.asList(ID_11, null, ID_12));
   }
 
   //-------------------------------------------------------------------------
-  public void test_singleExternalIdDifferentConstructors() {
-    assertTrue(ExternalIdSearch.of(_id11).equals(ExternalIdSearch.of(Collections.singleton(_id11))));
+  /**
+   * Tests that the constructors are equivalent.
+   */
+  @Test
+  public void testSingleExternalIdDifferentConstructors() {
+    assertTrue(ExternalIdSearch.of(ID_11).equals(ExternalIdSearch.of(Collections.singleton(ID_11))));
   }
 
-  public void test_singleVersusMultipleExternalId() {
-    assertFalse(ExternalIdSearch.of(_id11).equals(ExternalIdSearch.of(_id11, _id12)));
-    assertFalse(ExternalIdSearch.of(_id11, _id12).equals(ExternalIdSearch.of(_id11)));
+  /**
+   * Tests that the constructors are equivalent.
+   */
+  @Test
+  public void testSingleVersusMultipleExternalId() {
+    assertFalse(ExternalIdSearch.of(ID_11).equals(ExternalIdSearch.of(ID_11, ID_12)));
+    assertFalse(ExternalIdSearch.of(ID_11, ID_12).equals(ExternalIdSearch.of(ID_11)));
   }
 
   //-------------------------------------------------------------------------
-  public void test_withExternalIdAdded() {
-    ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  /**
+   * Tests the withExternalIdAdded() method.
+   */
+  @Test
+  public void testWithExternalIdAdded() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
     assertEquals(1, base.size());
-    ExternalIdSearch test = base.withExternalIdAdded(ExternalId.of("A", "C"));
+    final ExternalIdSearch test = base.withExternalIdAdded(ExternalId.of("A", "C"));
     assertEquals(1, base.size());
     assertEquals(2, test.size());
     assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
     assertTrue(test.getExternalIds().contains(ExternalId.of("A", "C")));
   }
 
+  /**
+   * Tests that null cannot be added.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_withExternalIdAdded_null() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  public void testWithExternalIdAddedNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
     test.withExternalIdAdded(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_withExternalIdRemoved_match() {
-    ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  /**
+   * Tests the withExternalIdsAdded() method.
+   */
+  @Test
+  public void testWithExternalIdsVarargsAdded() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
     assertEquals(1, base.size());
-    ExternalIdSearch test = base.withExternalIdRemoved(ExternalId.of("A", "B"));
+    final ExternalIdSearch test = base.withExternalIdsAdded(ExternalId.of("A", "C"), ExternalId.of("A", "D"));
+    assertEquals(1, base.size());
+    assertEquals(3, test.size());
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "C")));
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "D")));
+  }
+
+  /**
+   * Tests that null cannot be added.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testWithExternalIdsVarargsAddedNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
+    test.withExternalIdsAdded((ExternalId[]) null);
+  }
+
+  /**
+   * Tests the withExternalIdsAdded() method.
+   */
+  @Test
+  public void testWithExternalIdsIterableAdded() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+    assertEquals(1, base.size());
+    final ExternalIdSearch test = base.withExternalIdsAdded(Arrays.asList(ExternalId.of("A", "C"), ExternalId.of("A", "D")));
+    assertEquals(1, base.size());
+    assertEquals(3, test.size());
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "C")));
+    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "D")));
+  }
+
+  /**
+   * Tests that null cannot be added.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testWithExternalIdsIterableAddedNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
+    test.withExternalIdsAdded((List<ExternalId>) null);
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests after an id is removed.
+   */
+  @Test
+  public void testWithExternalIdRemovedMatch() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+    assertEquals(1, base.size());
+    final ExternalIdSearch test = base.withExternalIdRemoved(ExternalId.of("A", "B"));
     assertEquals(1, base.size());
     assertEquals(0, test.size());
   }
 
-  public void test_withExternalIdRemoved_noMatch() {
-    ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  /**
+   * Tests after an id is not removed.
+   */
+  @Test
+  public void testWithExternalIdRemovedNoMatch() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
     assertEquals(1, base.size());
-    ExternalIdSearch test = base.withExternalIdRemoved(ExternalId.of("A", "C"));
+    final ExternalIdSearch test = base.withExternalIdRemoved(ExternalId.of("A", "C"));
     assertEquals(1, base.size());
     assertEquals(1, test.size());
     assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
   }
 
-  public void test_withExternalIdRemoved_null() {
-    ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  /**
+   * Tests after null is removed.
+   */
+  @Test
+  public void testWithExternalIdRemovedNull() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
     assertEquals(1, base.size());
-    ExternalIdSearch test = base.withExternalIdRemoved(null);
+    final ExternalIdSearch test = base.withExternalIdRemoved(null);
     assertEquals(1, base.size());
     assertEquals(1, test.size());
     assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
   }
 
   //-------------------------------------------------------------------------
-  public void test_withSearchType() {
-    ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  /**
+   * Tests the withSearchType() method.
+   */
+  @Test
+  public void testWithSearchType() {
+    final ExternalIdSearch base = ExternalIdSearch.of(ExternalId.of("A", "B"));
     assertEquals(ExternalIdSearchType.ANY, base.getSearchType());
-    ExternalIdSearch test = base.withSearchType(ExternalIdSearchType.EXACT);
+    final ExternalIdSearch test = base.withSearchType(ExternalIdSearchType.EXACT);
     assertEquals(ExternalIdSearchType.EXACT, test.getSearchType());
+    assertEquals(test, test.withSearchType(ExternalIdSearchType.EXACT));
+    assertSame(test, test.withSearchType(ExternalIdSearchType.EXACT));
   }
 
+  /**
+   * Tests that the withSearchType() method cannot accept null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_withSearchType_null() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
+  public void testWithSearchTypeNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalId.of("A", "B"));
     test.withSearchType(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_size() {
+  /**
+   * Tests the size() method.
+   */
+  @Test
+  public void testSize() {
     assertEquals(0, ExternalIdSearch.of().size());
-    assertEquals(1, ExternalIdSearch.of(_id11).size());
-    assertEquals(2, ExternalIdSearch.of(_id11, _id12).size());
+    assertEquals(1, ExternalIdSearch.of(ID_11).size());
+    assertEquals(2, ExternalIdSearch.of(ID_11, ID_12).size());
   }
 
   //-------------------------------------------------------------------------
-  public void test_iterator() {
-    Set<ExternalId> expected = new HashSet<ExternalId>();
-    expected.add(_id11);
-    expected.add(_id12);
-    Iterable<ExternalId> base = ExternalIdSearch.of(_id11, _id12);
-    Iterator<ExternalId> test = base.iterator();
+  /**
+   * Tests the iterator.
+   */
+  @Test
+  public void testIterator() {
+    final Set<ExternalId> expected = new HashSet<>();
+    expected.add(ID_11);
+    expected.add(ID_12);
+    final Iterable<ExternalId> base = ExternalIdSearch.of(ID_11, ID_12);
+    final Iterator<ExternalId> test = base.iterator();
     assertEquals(true, test.hasNext());
     assertEquals(true, expected.remove(test.next()));
     assertEquals(true, test.hasNext());
@@ -220,228 +372,366 @@ public class ExternalIdSearchTest {
   }
 
   //-------------------------------------------------------------------------
-  public void test_matches1_EXACT() {
-    ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.EXACT, _id11);
-    assertEquals(true, test1.matches(_id11));
-    assertEquals(false, test1.matches(_id21));
-    
-    ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.EXACT, _id11, _id21);
-    assertEquals(false, test2.matches(_id11));
-    assertEquals(false, test2.matches(_id12));
-    assertEquals(false, test2.matches(_id21));
+  /**
+   * Tests EXACT match with one id.
+   */
+  @Test
+  public void testMatchesOneExact() {
+    final ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.EXACT, ID_11);
+    assertTrue(test1.matches(ID_11));
+    assertFalse(test1.matches(ID_21));
+
+    final ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.EXACT, ID_11, ID_21);
+    assertFalse(test2.matches(ID_11));
+    assertFalse(test2.matches(ID_12));
+    assertFalse(test2.matches(ID_21));
   }
 
-  public void test_matches1_ALL() {
-    ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.ALL, _id11);
-    assertEquals(true, test1.matches(_id11));
-    assertEquals(false, test1.matches(_id12));
-    
-    ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.ALL, _id11, _id21);
-    assertEquals(false, test2.matches(_id11));
-    assertEquals(false, test2.matches(_id12));
-    assertEquals(false, test2.matches(_id21));
+  /**
+   * Tests ALL match with one id.
+   */
+  @Test
+  public void testMatchesOneAll() {
+    final ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.ALL, ID_11);
+    assertTrue(test1.matches(ID_11));
+    assertFalse(test1.matches(ID_12));
+
+    final ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.ALL, ID_11, ID_21);
+    assertFalse(test2.matches(ID_11));
+    assertFalse(test2.matches(ID_12));
+    assertFalse(test2.matches(ID_21));
   }
 
-  public void test_matches1_ANY() {
-    ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.ANY, _id11);
-    assertEquals(true, test1.matches(_id11));
-    assertEquals(false, test1.matches(_id12));
-    
-    ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.ANY, _id11, _id21);
-    assertEquals(true, test2.matches(_id11));
-    assertEquals(false, test2.matches(_id12));
-    assertEquals(true, test2.matches(_id21));
+  /**
+   * Tests ANY match with one id.
+   */
+  @Test
+  public void testMatchesOneAny() {
+    final ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.ANY, ID_11);
+    assertTrue(test1.matches(ID_11));
+    assertFalse(test1.matches(ID_12));
+
+    final ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.ANY, ID_11, ID_21);
+    assertTrue(test2.matches(ID_11));
+    assertFalse(test2.matches(ID_12));
+    assertTrue(test2.matches(ID_21));
   }
 
-  public void test_matches1_NONE() {
-    ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.NONE, _id11);
-    assertEquals(false, test1.matches(_id11));
-    assertEquals(true, test1.matches(_id12));
-    
-    ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.NONE, _id11, _id21);
-    assertEquals(false, test2.matches(_id11));
-    assertEquals(true, test2.matches(_id12));
-    assertEquals(false, test2.matches(_id21));
-  }
+  /**
+   * Tests NONE match with one id.
+   */
+  @Test
+  public void testMatchesOneNone() {
+    final ExternalIdSearch test1 = ExternalIdSearch.of(ExternalIdSearchType.NONE, ID_11);
+    assertFalse(test1.matches(ID_11));
+    assertTrue(test1.matches(ID_12));
 
-  //-------------------------------------------------------------------------
-  public void test_matches_EXACT() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, _id11, _id12);
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11, _id12, _id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of()));
-  }
-
-  public void test_matches_ALL() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ALL, _id11, _id12);
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11, _id12, _id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of()));
-  }
-
-  public void test_matches_ANY() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ANY, _id11, _id12);
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11, _id12, _id21)));
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id11)));
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of()));
-  }
-
-  public void test_matches_NONE() {
-    ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.NONE, _id11, _id12);
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11, _id12, _id21)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id11)));
-    assertEquals(false, test.matches(ExternalIdSearch.of(_id12)));
-    assertEquals(true, test.matches(ExternalIdSearch.of(_id21)));
-    assertEquals(true, test.matches(ExternalIdSearch.of()));
+    final ExternalIdSearch test2 = ExternalIdSearch.of(ExternalIdSearchType.NONE, ID_11, ID_21);
+    assertFalse(test2.matches(ID_11));
+    assertTrue(test2.matches(ID_12));
+    assertFalse(test2.matches(ID_21));
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsAll1() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11);
-    assertEquals(false, test.containsAll(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(true, test.containsAll(ExternalIdSearch.of(_id11)));
-    assertEquals(false, test.containsAll(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.containsAll(ExternalIdSearch.of(_id21)));
-    assertEquals(true, test.containsAll(ExternalIdSearch.of()));
+  /**
+   * Tests EXACT.
+   */
+  @Test
+  public void testMatchesExact() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT, ID_11, ID_12);
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11, ID_12)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11, ID_12, ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of()));
   }
 
-  public void test_containsAll2() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
-    assertEquals(true, test.containsAll(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(true, test.containsAll(ExternalIdSearch.of(_id11)));
-    assertEquals(true, test.containsAll(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.containsAll(ExternalIdSearch.of(_id21)));
-    assertEquals(true, test.containsAll(ExternalIdSearch.of()));
+  /**
+   * Tests ALL.
+   */
+  @Test
+  public void testMatchesAll() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ALL, ID_11, ID_12);
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11, ID_12)));
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11, ID_12, ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of()));
   }
 
+  /**
+   * Tests ANY.
+   */
+  @Test
+  public void testMatchesAny() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ANY, ID_11, ID_12);
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11, ID_12)));
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11, ID_12, ID_21)));
+    assertTrue(test.matches(ExternalIdSearch.of(ID_11)));
+    assertTrue(test.matches(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of()));
+  }
+
+  /**
+   * Tests NONE.
+   */
+  @Test
+  public void testMatchesNone() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.NONE, ID_11, ID_12);
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11, ID_12)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11, ID_12, ID_21)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_11)));
+    assertFalse(test.matches(ExternalIdSearch.of(ID_12)));
+    assertTrue(test.matches(ExternalIdSearch.of(ID_21)));
+    assertTrue(test.matches(ExternalIdSearch.of()));
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the containsAll() method.
+   */
+  @Test
+  public void testContainsAll1() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11);
+    assertFalse(test.containsAll(ExternalIdSearch.of(ID_11, ID_12)));
+    assertTrue(test.containsAll(ExternalIdSearch.of(ID_11)));
+    assertFalse(test.containsAll(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.containsAll(ExternalIdSearch.of(ID_21)));
+    assertTrue(test.containsAll(ExternalIdSearch.of()));
+  }
+
+  /**
+   * Tests the containsAll() method.
+   */
+  @Test
+  public void testcontainsAll2() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
+    assertTrue(test.containsAll(ExternalIdSearch.of(ID_11, ID_12)));
+    assertTrue(test.containsAll(ExternalIdSearch.of(ID_11)));
+    assertTrue(test.containsAll(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.containsAll(ExternalIdSearch.of(ID_21)));
+    assertTrue(test.containsAll(ExternalIdSearch.of()));
+  }
+
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_containsAll_null() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
+  public void testContainsAllNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
     test.containsAll(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsAny() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
-    assertEquals(true, test.containsAny(ExternalIdSearch.of(_id11, _id12)));
-    assertEquals(true, test.containsAny(ExternalIdSearch.of(_id11)));
-    assertEquals(true, test.containsAny(ExternalIdSearch.of(_id12)));
-    assertEquals(false, test.containsAny(ExternalIdSearch.of(_id21)));
-    assertEquals(false, test.containsAny(ExternalIdSearch.of()));
+  /**
+   * Tests containsAny().
+   */
+  @Test
+  public void testContainsAny() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
+    assertTrue(test.containsAny(ExternalIdSearch.of(ID_11, ID_12)));
+    assertTrue(test.containsAny(ExternalIdSearch.of(ID_11)));
+    assertTrue(test.containsAny(ExternalIdSearch.of(ID_12)));
+    assertFalse(test.containsAny(ExternalIdSearch.of(ID_21)));
+    assertFalse(test.containsAny(ExternalIdSearch.of()));
   }
 
+  /**
+   * Tests that null is not allowed as an input.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_containsAny_null() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
+  public void testContainsAnyNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
     test.containsAny(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_contains() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
-    assertEquals(true, test.contains(_id11));
-    assertEquals(true, test.contains(_id11));
-    assertEquals(false, test.contains(_id21));
+  /**
+   * Tests the contains() method.
+   */
+  @Test
+  public void testContains() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
+    assertTrue(test.contains(ID_11));
+    assertTrue(test.contains(ID_11));
+    assertFalse(test.contains(ID_21));
   }
 
-  public void test_contains_null() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
-    assertEquals(false, test.contains(null));
+  /**
+   * Tests that null is allowed as an input.
+   */
+  @Test
+  public void testContainsNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
+    assertFalse(test.contains(null));
   }
 
   //-------------------------------------------------------------------------
-  public void test_canMatch_EXACT() {
+  /**
+   * Tests an EXACT match does not match with no ids and does with ids.
+   */
+  @Test
+  public void testCanMatchExact() {
     ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT);
-    assertEquals(false, ExternalIdSearch.canMatch(test));
-    test = test.withExternalIdAdded(_id11);
-    assertEquals(true, ExternalIdSearch.canMatch(test));
+    assertFalse(ExternalIdSearch.canMatch(test));
+    test = test.withExternalIdAdded(ID_11);
+    assertTrue(ExternalIdSearch.canMatch(test));
   }
 
-  public void test_canMatch_ALL() {
+  /**
+   * Tests an ALL match does not match with no ids and does with ids.
+   */
+  @Test
+  public void testCanMatchAll() {
     ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ALL);
-    assertEquals(false, ExternalIdSearch.canMatch(test));
-    test = test.withExternalIdAdded(_id11);
-    assertEquals(true, ExternalIdSearch.canMatch(test));
+    assertFalse(ExternalIdSearch.canMatch(test));
+    test = test.withExternalIdAdded(ID_11);
+    assertTrue(ExternalIdSearch.canMatch(test));
   }
 
-  public void test_canMatch_ANY() {
+  /**
+   * Tests an ANY match does not match with no ids and does with ids.
+   */
+  @Test
+  public void testCanMatchAny() {
     ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ANY);
-    assertEquals(false, ExternalIdSearch.canMatch(test));
-    test = test.withExternalIdAdded(_id11);
-    assertEquals(true, ExternalIdSearch.canMatch(test));
+    assertFalse(ExternalIdSearch.canMatch(test));
+    test = test.withExternalIdAdded(ID_11).withExternalIdAdded(ID_12);
+    assertTrue(ExternalIdSearch.canMatch(test));
   }
 
-  public void test_canMatch_NONE() {
+  /**
+   * Tests a NONE type can match anything.
+   */
+  @Test
+  public void testCanMatchNone() {
     ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.NONE);
-    assertEquals(true, ExternalIdSearch.canMatch(test));
-    test = test.withExternalIdAdded(_id11);
-    assertEquals(true, ExternalIdSearch.canMatch(test));
+    assertTrue(ExternalIdSearch.canMatch(test));
+    test = test.withExternalIdAdded(ID_11);
+    assertTrue(ExternalIdSearch.canMatch(test));
   }
 
-  public void test_canMatch_null() {
-    assertEquals(true, ExternalIdSearch.canMatch(null));
+  /**
+   * Test that null can match anything.
+   */
+  @Test
+  public void testCanMatchNull() {
+    assertTrue(ExternalIdSearch.canMatch(null));
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals_same_empty() {
-    ExternalIdSearch a1 = ExternalIdSearch.of();
-    ExternalIdSearch a2 = ExternalIdSearch.of();
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests that EXACT cannot always match.
+   */
+  @Test
+  public void testAlwaysMatchExact() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.EXACT);
+    assertFalse(test.alwaysMatches());
+    assertFalse(test.withExternalIdAdded(ID_11).alwaysMatches());
   }
 
-  public void test_equals_same_nonEmpty() {
-    ExternalIdSearch a1 = ExternalIdSearch.of(_id11, _id12);
-    ExternalIdSearch a2 = ExternalIdSearch.of(_id11, _id12);
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests that ALL cannot always match.
+   */
+  @Test
+  public void testAlwaysMatchAll() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ALL);
+    assertFalse(test.alwaysMatches());
+    assertFalse(test.withExternalIdAdded(ID_11).alwaysMatches());
   }
 
-  public void test_equals_different() {
-    ExternalIdSearch a = ExternalIdSearch.of();
-    ExternalIdSearch b = ExternalIdSearch.of(_id11, _id12);
-    
+  /**
+   * Tests that ANY cannot always match.
+   */
+  @Test
+  public void testAlwaysMatchAny() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.ANY);
+    assertFalse(test.alwaysMatches());
+    assertFalse(test.withExternalIdAdded(ID_11).alwaysMatches());
+  }
+
+  /**
+   * Tests that NONE can always match only without ids.
+   */
+  @Test
+  public void testAlwaysMatchNull() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ExternalIdSearchType.NONE);
+    assertTrue(test.alwaysMatches());
+    assertFalse(test.withExternalIdAdded(ID_11).alwaysMatches());
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEqualsSameEmpty() {
+    final ExternalIdSearch a = ExternalIdSearch.of();
+    final ExternalIdSearch b = ExternalIdSearch.of();
+
+    assertEquals(a, b);
+  }
+
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEqualsSameNonEmpty() {
+    final ExternalIdSearch a = ExternalIdSearch.of(ID_11, ID_12);
+    final ExternalIdSearch b = ExternalIdSearch.of(ID_11, ID_12);
+
     assertEquals(true, a.equals(a));
-    assertEquals(false, a.equals(b));
-    assertEquals(false, b.equals(a));
-    assertEquals(true, b.equals(b));
-    
-    assertEquals(false, b.equals("Rubbish"));
-    assertEquals(false, b.equals(null));
+    assertEquals(a, b);
   }
 
-  public void test_hashCode() {
-    ExternalIdSearch a = ExternalIdSearch.of(_id11, _id12);
-    ExternalIdSearch b = ExternalIdSearch.of(_id11, _id12);
-    
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEqualsDifferent() {
+    final ExternalIdSearch a = ExternalIdSearch.of();
+    final ExternalIdSearch b = ExternalIdSearch.of(ID_11, ID_12);
+    final ExternalIdSearch c = ExternalIdSearch.of(ID_11, ID_12).withSearchType(ExternalIdSearchType.EXACT);
+
+    assertNotEquals(a, b);
+    assertNotEquals(b, a);
+    assertNotEquals(b, c);
+    assertNotEquals("A", b);
+    assertNotEquals(null, b);
+
+  }
+
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final ExternalIdSearch a = ExternalIdSearch.of(ID_11, ID_12);
+    final ExternalIdSearch b = ExternalIdSearch.of(ID_11, ID_12);
+
     assertEquals(a.hashCode(), b.hashCode());
   }
 
-  public void test_toString_empty() {
-    ExternalIdSearch test = ExternalIdSearch.of();
+  /**
+   * Tests the toString() method.
+   */
+  @Test
+  public void testToStringEmpty() {
+    final ExternalIdSearch test = ExternalIdSearch.of();
     assertTrue(test.toString().contains("[]"));
   }
 
-  public void test_toString_nonEmpty() {
-    ExternalIdSearch test = ExternalIdSearch.of(_id11, _id12);
-    assertTrue(test.toString().contains(_id11.toString()));
-    assertTrue(test.toString().contains(_id12.toString()));
+  /**
+   * Tests the toString() method.
+   */
+  @Test
+  public void testToStringNonEmpty() {
+    final ExternalIdSearch test = ExternalIdSearch.of(ID_11, ID_12);
+    assertTrue(test.toString().contains(ID_11.toString()));
+    assertTrue(test.toString().contains(ID_12.toString()));
   }
 
 }

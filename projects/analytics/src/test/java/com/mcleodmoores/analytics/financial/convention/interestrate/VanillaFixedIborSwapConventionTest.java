@@ -247,7 +247,7 @@ public class VanillaFixedIborSwapConventionTest {
     final Tenor endTenor = Tenor.FIVE_YEARS;
     final double rate = 0.01;
     final GeneratorSwapFixedIbor generator =
-        new GeneratorSwapFixedIbor("", FIXED_LEG_TENOR.getPeriod(), FIXED_LEG_DAYCOUNT, IndexConverter.toIborIndex(INDEX), new CalendarAdapter(CALENDAR));
+        new GeneratorSwapFixedIbor("", FIXED_LEG_TENOR.getPeriod(), FIXED_LEG_DAYCOUNT, IndexConverter.toIborIndex(INDEX), CalendarAdapter.of(CALENDAR));
     final GeneratorAttributeIR attribute = new GeneratorAttributeIR(startTenor.getPeriod(), endTenor.getPeriod());
     assertEquals(CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate), generator.generateInstrument(date, rate, 1, attribute));
   }

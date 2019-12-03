@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.sabr;
@@ -26,19 +26,21 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWit
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * TODO use root finding rather than chi^2 for this
+ * TODO use root finding rather than chi^2 for this.
  */
 public class PiecewiseMixedLogNormalFitter {
 
-  //  private static final ParameterLimitsTransform VOL_TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN); // new DoubleRangeLimitTransform(0.01, 1.0);
-  //  private static final ParameterLimitsTransform DVOL_TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN); //new  DoubleRangeLimitTransform(0.0, 5.0);
-  //  private static final ParameterLimitsTransform THETA_TRANSFORM = new NullTransform(); // new DoubleRangeLimitTransform(0.0, Math.PI / 2);
-  //  private static final ParameterLimitsTransform PHI_TRANSFORM = new NullTransform(); // new DoubleRangeLimitTransform(0.0, Math.PI / 2);
-  //  private static final NonLinearParameterTransforms TRANSFORM = new UncoupledParameterTransforms(new DoubleMatrix1D(4, 0.0),
-  //      new ParameterLimitsTransform[] {VOL_TRANSFORM, DVOL_TRANSFORM, THETA_TRANSFORM, PHI_TRANSFORM }, new BitSet());
+  // private static final ParameterLimitsTransform VOL_TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN); // new
+  // DoubleRangeLimitTransform(0.01, 1.0);
+  // private static final ParameterLimitsTransform DVOL_TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN); //new
+  // DoubleRangeLimitTransform(0.0, 5.0);
+  // private static final ParameterLimitsTransform THETA_TRANSFORM = new NullTransform(); // new DoubleRangeLimitTransform(0.0, Math.PI / 2);
+  // private static final ParameterLimitsTransform PHI_TRANSFORM = new NullTransform(); // new DoubleRangeLimitTransform(0.0, Math.PI / 2);
+  // private static final NonLinearParameterTransforms TRANSFORM = new UncoupledParameterTransforms(new DoubleMatrix1D(4, 0.0),
+  // new ParameterLimitsTransform[] {VOL_TRANSFORM, DVOL_TRANSFORM, THETA_TRANSFORM, PHI_TRANSFORM }, new BitSet());
   private static final WeightingFunction DEFAULT_WEIGHTING_FUNCTION = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
   private static final MixedLogNormalVolatilityFunction MODEL = MixedLogNormalVolatilityFunction.getInstance();
   private final WeightingFunction _weightingFunction;
   private final boolean _globalBetaSearch;
@@ -55,7 +57,8 @@ public class PiecewiseMixedLogNormalFitter {
     _globalBetaSearch = false;
   }
 
-  public final MixedLogNormalModelData[] getFittedfModelParameters(final double forward, final double[] strikes, final double expiry, final double[] impliedVols) {
+  public final MixedLogNormalModelData[] getFittedfModelParameters(final double forward, final double[] strikes, final double expiry,
+      final double[] impliedVols) {
     ArgumentChecker.notNull(strikes, "strikes");
     ArgumentChecker.notNull(impliedVols, "implied volatilities");
     final int n = strikes.length;
@@ -71,49 +74,49 @@ public class PiecewiseMixedLogNormalFitter {
       averageVol2 += vol * vol;
     }
     final double temp = averageVol2 - averageVol * averageVol / n;
-    averageVol2 = temp <= 0.0 ? 0.0 : Math.sqrt(temp) / (n - 1); //while temp should never be negative, rounding errors can make it so
+    averageVol2 = temp <= 0.0 ? 0.0 : Math.sqrt(temp) / (n - 1); // while temp should never be negative, rounding errors can make it so
     averageVol /= n;
 
     DoubleMatrix1D start;
 
-    //    //almost flat surface
-    //    if (averageVol2 / averageVol < 0.01) {
-    //      start = new DoubleMatrix1D(averageVol, 1.0, 0.0, 0.0);
-    //      if (!_globalBetaSearch && _defaultBeta != 1.0) {
-    //        s_logger.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
-    //      }
-    //    } else {
-    //      final double approxAlpha = averageVol * Math.pow(forward, 1 - _defaultBeta);
-    //      start = new DoubleMatrix1D(approxAlpha, _defaultBeta, 0.0, 0.3);
-    //    }
+    // //almost flat surface
+    // if (averageVol2 / averageVol < 0.01) {
+    // start = new DoubleMatrix1D(averageVol, 1.0, 0.0, 0.0);
+    // if (!_globalBetaSearch && _defaultBeta != 1.0) {
+    // LOGGER.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
+    // }
+    // } else {
+    // final double approxAlpha = averageVol * Math.pow(forward, 1 - _defaultBeta);
+    // start = new DoubleMatrix1D(approxAlpha, _defaultBeta, 0.0, 0.3);
+    // }
     start = new DoubleMatrix1D(averageVol, 0.03, 0.4, 0.4);
 
     final MixedLogNormalModelData[] modelParams = new MixedLogNormalModelData[n - 2];
 
     double[] errors = new double[n];
-    Arrays.fill(errors, 0.0001); //1bps
+    Arrays.fill(errors, 0.0001); // 1bps
     final SmileModelFitter<MixedLogNormalModelData> globalFitter = new MixedLogNormalModelFitter(forward, strikes, expiry, impliedVols, errors, MODEL, 2, true);
     final BitSet fixed = new BitSet();
     if (n == 3 || !_globalBetaSearch) {
-      fixed.set(1); //fixed beta
+      fixed.set(1); // fixed beta
     }
 
-    //do a global fit first
+    // do a global fit first
     final LeastSquareResultsWithTransform gRes = globalFitter.solve(start, fixed);
 
     if (n == 3) {
       if (gRes.getChiSq() / n > 1.0) {
-        s_logger.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
+        LOGGER.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
       }
       modelParams[0] = new MixedLogNormalModelData(gRes.getModelParameters().getData());
     } else {
-      //impose a global beta on the remaining 3 point fits
-      //final double[] gFitParms = gRes.getModelParameters().getData();
-      //final double theta = gFitParms[2];
-      //start = new DoubleMatrix1D(gFitParms[0], gFitParms[1], gFitParms[3]);
+      // impose a global beta on the remaining 3 point fits
+      // final double[] gFitParms = gRes.getModelParameters().getData();
+      // final double theta = gFitParms[2];
+      // start = new DoubleMatrix1D(gFitParms[0], gFitParms[1], gFitParms[3]);
       start = gRes.getModelParameters();
-      fixed.set(2); //fixed weight
-      //final BroydenVectorRootFinder rootFinder = new BroydenVectorRootFinder(1e-8, 1e-8, 100, new SVDecompositionCommons());
+      fixed.set(2); // fixed weight
+      // final BroydenVectorRootFinder rootFinder = new BroydenVectorRootFinder(1e-8, 1e-8, 100, new SVDecompositionCommons());
 
       double[] tStrikes = new double[4];
       double[] tVols = new double[4];
@@ -122,18 +125,18 @@ public class PiecewiseMixedLogNormalFitter {
         tStrikes = Arrays.copyOfRange(strikes, i, i + 3);
         tVols = Arrays.copyOfRange(impliedVols, i, i + 3);
         errors = new double[3];
-        Arrays.fill(errors, 0.0001); //1bps
-        //        Function1D<DoubleMatrix1D, DoubleMatrix1D> func = getVolDiffFunc(forward, tStrikes, expiry, tVols, theta);
-        //        Function1D<DoubleMatrix1D, DoubleMatrix2D> jac = getVolJacFunc(forward, tStrikes, expiry, theta);
-        //        NonLinearTransformFunction tf = new NonLinearTransformFunction(func, jac, TRANSFORM);
+        Arrays.fill(errors, 0.0001); // 1bps
+        // Function1D<DoubleMatrix1D, DoubleMatrix1D> func = getVolDiffFunc(forward, tStrikes, expiry, tVols, theta);
+        // Function1D<DoubleMatrix1D, DoubleMatrix2D> jac = getVolJacFunc(forward, tStrikes, expiry, theta);
+        // NonLinearTransformFunction tf = new NonLinearTransformFunction(func, jac, TRANSFORM);
         //
-        //        DoubleMatrix1D res = rootFinder.getRoot(tf.getFittingFunction(),tf.getFittingJacobian(), start);
-        //        double[] root = TRANSFORM.inverseTransform(res).getData();
+        // DoubleMatrix1D res = rootFinder.getRoot(tf.getFittingFunction(),tf.getFittingJacobian(), start);
+        // double[] root = TRANSFORM.inverseTransform(res).getData();
 
         final SmileModelFitter<MixedLogNormalModelData> fitter = new MixedLogNormalModelFitter(forward, tStrikes, expiry, tVols, errors, MODEL, 2, true);
         final LeastSquareResultsWithTransform lRes = fitter.solve(start, fixed);
         if (lRes.getChiSq() > 3.0) {
-          s_logger.warn("chi^2 on 3-point SABR fit #" + i + " is " + lRes.getChiSq());
+          LOGGER.warn("chi^2 on 3-point SABR fit #" + i + " is " + lRes.getChiSq());
         }
         modelParams[i] = new MixedLogNormalModelData(lRes.getModelParameters().getData());
 
@@ -144,7 +147,8 @@ public class PiecewiseMixedLogNormalFitter {
     return modelParams;
   }
 
-  public Function1D<DoubleMatrix1D, DoubleMatrix1D> getVolDiffFunc(final double forward, final double[] strikes, final double expiry, final double[] impliedVols, final double theta) {
+  public Function1D<DoubleMatrix1D, DoubleMatrix1D> getVolDiffFunc(final double forward, final double[] strikes, final double expiry,
+      final double[] impliedVols, final double theta) {
 
     final Function1D<MixedLogNormalModelData, double[]> func = MODEL.getVolatilityFunction(forward, strikes, expiry);
     final int n = strikes.length;
@@ -156,7 +160,7 @@ public class PiecewiseMixedLogNormalFitter {
         final double dSigma = x.getEntry(1);
 
         final double phi = x.getEntry(2);
-        final double[] params = new double[] {sigma, dSigma, theta, phi };
+        final double[] params = new double[] { sigma, dSigma, theta, phi };
         final MixedLogNormalModelData data = new MixedLogNormalModelData(params);
         final double[] vols = func.evaluate(data);
         final double[] res = new double[n];
@@ -179,11 +183,11 @@ public class PiecewiseMixedLogNormalFitter {
         final double sigma = x.getEntry(0);
         final double dTheta = x.getEntry(1);
         final double phi = x.getEntry(2);
-        final double[] params = new double[] {sigma, dTheta, theta, phi };
+        final double[] params = new double[] { sigma, dTheta, theta, phi };
         final MixedLogNormalModelData data = new MixedLogNormalModelData(params);
 
         final double[][] temp = adjointFunc.evaluate(data);
-        //remove the theta sense
+        // remove the theta sense
         final double[][] res = new double[3][3];
         for (int i = 0; i < 3; i++) {
           res[i][0] = temp[i][0];

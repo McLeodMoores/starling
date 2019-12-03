@@ -298,6 +298,11 @@ public class DoublesCurveTestCase {
     new DummyCurve(l, true, NAME1);
   }
 
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNull31() {
+    new DummyCurve((Set<DoublesPair>) null, true, NAME1);
+  }
+
   private static class DummyCurve extends ArraysDoublesCurve {
 
     public DummyCurve(final double[] xData, final double[] yData, final boolean isSorted) {

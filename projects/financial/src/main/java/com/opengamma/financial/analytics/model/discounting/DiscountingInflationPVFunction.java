@@ -28,23 +28,21 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of inflation swaps using curves constructed
- * using the discounting method.
+ * Calculates the present value of inflation swaps using curves constructed using the discounting method.
  */
 public class DiscountingInflationPVFunction extends DiscountingInflationFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueDiscountingInflationCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<InflationProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueDiscountingInflationCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public DiscountingInflationPVFunction() {
     super(PRESENT_VALUE);
@@ -66,7 +64,9 @@ public class DiscountingInflationPVFunction extends DiscountingInflationFunction
         return Collections.singleton(new ComputedValue(spec, mca.getAmount(currency)));
       }
 
-      public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+      @Override
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         return getResults(context, target);
       }
     };

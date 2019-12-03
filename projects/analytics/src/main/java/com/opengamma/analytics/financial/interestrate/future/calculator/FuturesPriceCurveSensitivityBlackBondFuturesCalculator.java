@@ -18,7 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Computes the price for different types of futures. Calculator using a multi-curve and issuer provider.
  */
-public final class FuturesPriceCurveSensitivityBlackBondFuturesCalculator extends InstrumentDerivativeVisitorAdapter<BlackBondFuturesProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityBlackBondFuturesCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackBondFuturesProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -27,6 +28,7 @@ public final class FuturesPriceCurveSensitivityBlackBondFuturesCalculator extend
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityBlackBondFuturesCalculator getInstance() {
@@ -44,10 +46,11 @@ public final class FuturesPriceCurveSensitivityBlackBondFuturesCalculator extend
   /** The method used to compute the future price. */
   private static final BondFuturesSecurityDiscountingMethod METHOD_FUTURE = BondFuturesSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures options    -----
+  // ----- Futures options -----
 
   @Override
-  public MulticurveSensitivity visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity security, final BlackBondFuturesProviderInterface black) {
+  public MulticurveSensitivity visitBondFuturesOptionMarginSecurity(final BondFuturesOptionMarginSecurity security,
+      final BlackBondFuturesProviderInterface black) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(black, "Black  data");
     final double priceFutures = METHOD_FUTURE.price(security.getUnderlyingFuture(), black.getIssuerProvider());

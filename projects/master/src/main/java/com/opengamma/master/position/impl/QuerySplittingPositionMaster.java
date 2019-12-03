@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -23,8 +23,8 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 
 /**
- * A {@link PositionMaster} implementation that divides search operations into a number of smaller operations to pass to the underlying. This is intended for use with some database backed position
- * masters where performance decreases, or becomes unstable, with large queries.
+ * A {@link PositionMaster} implementation that divides search operations into a number of smaller operations to pass to the underlying.
+ * This is intended for use with some database backed position masters where performance decreases, or becomes unstable, with large queries.
  */
 public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<PositionDocument, PositionMaster> implements PositionMaster {
 
@@ -35,7 +35,7 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
 
   /**
    * Creates a new instance wrapping the underlying with default properties.
-   * 
+   *
    * @param underlying the underlying position master to satisfy the requests, not null
    */
   public QuerySplittingPositionMaster(final PositionMaster underlying) {
@@ -44,7 +44,7 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
 
   /**
    * Returns the maximum number of items to pass to the {@link PositionMaster#search} method in each call.
-   * 
+   *
    * @return the current limit, zero or negative if none
    */
   public int getMaxSearchRequest() {
@@ -53,7 +53,7 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
 
   /**
    * Sets the maximum number of items to pass to the {@link PositionMaster#search} method in each call.
-   * 
+   *
    * @param maxSearchRequest the new limit, zero or negative if none
    */
   public void setMaxSearchRequest(final int maxSearchRequest) {
@@ -71,18 +71,18 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
     }
     int chunkSize = getMaxSearchRequest();
     final int count = request.getPositionObjectIds().size();
-    if ((chunkSize <= 0) || (chunkSize >= count)) {
+    if (chunkSize <= 0 || chunkSize >= count) {
       // Request too small, or splitting is disabled
       return null;
     }
     int chunks = (count + chunkSize - 1) / chunkSize;
-    final Collection<PositionSearchRequest> requests = new ArrayList<PositionSearchRequest>();
+    final Collection<PositionSearchRequest> requests = new ArrayList<>();
     final Iterator<ObjectId> positions = request.getPositionObjectIds().iterator();
     for (int i = 0; i < count;) {
-      chunkSize = (count - i) / (chunks--);
+      chunkSize = (count - i) / chunks--;
       final PositionSearchRequest subRequest = request.clone();
       subRequest.getPositionObjectIds().clear();
-      for (int j = 0; (j < chunkSize) && positions.hasNext(); j++) {
+      for (int j = 0; j < chunkSize && positions.hasNext(); j++) {
         subRequest.addPositionObjectId(positions.next());
       }
       requests.add(subRequest);
@@ -94,13 +94,13 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
   protected void mergeSplitSearchResult(final PositionSearchResult mergeWith, final PositionSearchResult result) {
     final Collection<PositionDocument> documents = result.getDocuments();
     mergeWith.getDocuments().addAll(documents);
-    mergeWith.setPaging(Paging.of(PagingRequest.ALL, ((mergeWith.getPaging() != null) ? mergeWith.getPaging().getTotalItems() : 0) + documents.size()));
+    mergeWith.setPaging(Paging.of(PagingRequest.ALL, (mergeWith.getPaging() != null ? mergeWith.getPaging().getTotalItems() : 0) + documents.size()));
     mergeWith.setVersionCorrection(result.getVersionCorrection());
   }
 
   protected PositionSearchResult callSplitSearchRequest(final Collection<PositionSearchRequest> requests) {
     final PositionSearchResult result = new PositionSearchResult();
-    for (PositionSearchRequest request : requests) {
+    for (final PositionSearchRequest request : requests) {
       mergeSplitSearchResult(result, getUnderlying().search(request));
     }
     return result;
@@ -118,14 +118,12 @@ public class QuerySplittingPositionMaster extends AbstractQuerySplittingMaster<P
       if (requests == null) {
         // Small query pass-through
         return getUnderlying().search(request);
-      } else {
-        // Multiple queries
-        return callSplitSearchRequest(requests);
       }
-    } else {
-      // Splitting disabled
-      return getUnderlying().search(request);
+      // Multiple queries
+      return callSplitSearchRequest(requests);
     }
+    // Splitting disabled
+    return getUnderlying().search(request);
   }
 
   @Override

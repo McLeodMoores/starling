@@ -142,7 +142,8 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
 
 
   @Override
-  public DirectForwardMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData) {
+  public DirectForwardMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator,
+      final GeneratorAttribute attributeGenerator, final double marketData) {
     Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new LinkedHashMap<>();

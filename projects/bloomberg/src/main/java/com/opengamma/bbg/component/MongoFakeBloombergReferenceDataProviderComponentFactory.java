@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeMsg;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -30,7 +28,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.bbg.BloombergConnector;
 import com.opengamma.bbg.config.BloombergFieldOverride;
 import com.opengamma.bbg.referencedata.ReferenceData;
 import com.opengamma.bbg.referencedata.ReferenceDataProvider;
@@ -51,6 +48,8 @@ import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.mongo.MongoConnector;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the reference data provider backed by a pre-populated MongoDB rather than BBG.
@@ -81,7 +80,7 @@ public class MongoFakeBloombergReferenceDataProviderComponentFactory extends Abs
    */
   @PropertyDefinition
   private CacheManager _cacheManager;
-  
+
   /**
    * A config source. If specified, overrides will be pulled from
    * here.
@@ -91,7 +90,7 @@ public class MongoFakeBloombergReferenceDataProviderComponentFactory extends Abs
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final ReferenceDataProvider provider = initReferenceDataProvider(repo);
     final ComponentInfo info = new ComponentInfo(ReferenceDataProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -106,56 +105,62 @@ public class MongoFakeBloombergReferenceDataProviderComponentFactory extends Abs
 
   /**
    * Creates the provider.
-   * 
+   *
    * @param repo  the repository, not null
    * @return the provider, not null
    */
-  @SuppressWarnings("unchecked")
-  protected ReferenceDataProvider initReferenceDataProvider(ComponentRepository repo) {
-    ReferenceDataProvider underlying = mock(ReferenceDataProvider.class);
-    when(underlying.getReferenceData(any(ReferenceDataProviderGetRequest.class))).thenReturn(new ReferenceDataProviderGetResult(Collections.<ReferenceData>emptyList()));
-    when(underlying.getReferenceData(any(Iterable.class), any(Iterable.class))).thenReturn(new HashMap<String, FudgeMsg>());
-    when(underlying.getReferenceDataIgnoreCache(any(Iterable.class), any(Iterable.class))).thenReturn(new HashMap<String, FudgeMsg>());
-    when(underlying.getReferenceDataValue(anyString(), anyString())).thenReturn(null);
-    when(underlying.getReferenceDataValues(any(Iterable.class), anyString())).thenReturn(new HashMap<String, String>());
-    when(underlying.getReferenceDataValues(anyString(), any(Iterable.class))).thenReturn(new HashMap<String, String>());
-    
+  protected ReferenceDataProvider initReferenceDataProvider(final ComponentRepository repo) {
+    final ReferenceDataProvider underlying = mock(ReferenceDataProvider.class);
+    when(underlying.getReferenceData(any(ReferenceDataProviderGetRequest.class)))
+        .thenReturn(new ReferenceDataProviderGetResult(Collections.<ReferenceData>emptyList()));
+    when(underlying.getReferenceData(any(Iterable.class), any(Iterable.class)))
+        .thenReturn(new HashMap<String, FudgeMsg>());
+    when(underlying.getReferenceDataIgnoreCache(any(Iterable.class), any(Iterable.class)))
+        .thenReturn(new HashMap<String, FudgeMsg>());
+    when(underlying.getReferenceDataValue(anyString(), anyString()))
+        .thenReturn(null);
+    when(underlying.getReferenceDataValues(any(Iterable.class), anyString()))
+        .thenReturn(new HashMap<String, String>());
+    when(underlying.getReferenceDataValues(anyString(), any(Iterable.class)))
+        .thenReturn(new HashMap<String, String>());
+
     ReferenceDataProvider effectiveProvider = underlying;
     if (getConfigSource() != null) {
       effectiveProvider = applyFieldOverrides(effectiveProvider);
     }
-    
-    MongoConnector mongoConnector = getMongoConnector();
-    CacheManager cacheManager = getCacheManager();
+
+    final MongoConnector mongoConnector = getMongoConnector();
+    final CacheManager cacheManager = getCacheManager();
     if (mongoConnector != null) {
-      MongoDBInvalidFieldCachingReferenceDataProvider fieldCached = new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
+      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached =
+          new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
       return new MongoDBValueCachingReferenceDataProvider(fieldCached, mongoConnector);
-      
+
     } else if (cacheManager != null) {
-      ReferenceDataProvider fieldCached = new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);  // TODO: EHcached version
+      final ReferenceDataProvider fieldCached = new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);  // TODO: EHcached version
       return new EHValueCachingReferenceDataProvider(fieldCached, cacheManager);
-      
+
     } else {
       return new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);
     }
   }
 
   /**
-   * Loads overrides from the config source and applies them to the passed 
+   * Loads overrides from the config source and applies them to the passed
    * reference data provider via a wrapper (a {@link PatchableReferenceDataProvider}).
    * @param underlying the provider to patch
    * @return a patched provider
    */
-  private PatchableReferenceDataProvider applyFieldOverrides(ReferenceDataProvider underlying) {
-    Collection<ConfigItem<BloombergFieldOverride>> overrideItems = getConfigSource().getAll(BloombergFieldOverride.class, VersionCorrection.LATEST);
-    
-    PatchableReferenceDataProvider patchableReferenceDataProvider = new PatchableReferenceDataProvider(underlying);
-    
-    for (ConfigItem<BloombergFieldOverride> configItem : overrideItems) {
-      BloombergFieldOverride fieldOverride = configItem.getValue();
-      
+  private PatchableReferenceDataProvider applyFieldOverrides(final ReferenceDataProvider underlying) {
+    final Collection<ConfigItem<BloombergFieldOverride>> overrideItems = getConfigSource().getAll(BloombergFieldOverride.class, VersionCorrection.LATEST);
+
+    final PatchableReferenceDataProvider patchableReferenceDataProvider = new PatchableReferenceDataProvider(underlying);
+
+    for (final ConfigItem<BloombergFieldOverride> configItem : overrideItems) {
+      final BloombergFieldOverride fieldOverride = configItem.getValue();
+
       patchableReferenceDataProvider.setPatch(fieldOverride.getBloombergId(), fieldOverride.getFieldName(), fieldOverride.getOverrideValue());
-      
+
     }
     return patchableReferenceDataProvider;
 

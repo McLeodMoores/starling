@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.conversion;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.forex.conversion;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForexQuoteConversion {
 
@@ -25,7 +25,8 @@ public class ForexQuoteConversion {
   private final double _absDom;
   private final double _absForeign;
 
-  public ForexQuoteConversion(final double domesticPipsPrice, final double spotRate, final double strike, final double domesticNotional, final double foreignNotional) {
+  public ForexQuoteConversion(final double domesticPipsPrice, final double spotRate, final double strike, final double domesticNotional,
+      final double foreignNotional) {
 
     ArgumentChecker.isTrue(domesticPipsPrice >= 0.0, "Negative price given");
     ArgumentChecker.isTrue(spotRate > 0.0, "Spot rate must be greater than zero. value gvien is {}", spotRate);

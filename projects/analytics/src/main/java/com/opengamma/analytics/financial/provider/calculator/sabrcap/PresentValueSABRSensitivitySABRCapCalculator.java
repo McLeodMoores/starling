@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrcap;
@@ -16,9 +16,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRC
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
-public final class PresentValueSABRSensitivitySABRCapCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, PresentValueSABRSensitivityDataBundle> {
+public final class PresentValueSABRSensitivitySABRCapCalculator
+extends InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, PresentValueSABRSensitivityDataBundle> {
 
   /**
    * The unique instance of the calculator.
@@ -33,6 +34,7 @@ public final class PresentValueSABRSensitivitySABRCapCalculator extends Instrume
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRSensitivitySABRCapCalculator getInstance() {
@@ -49,14 +51,14 @@ public final class PresentValueSABRSensitivitySABRCapCalculator extends Instrume
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitCapFloorIbor(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
     return METHOD_CAP.presentValueSABRSensitivity(cap, sabr);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRCapProviderInterface sabr) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.priceindexmarketmodel;
@@ -14,15 +14,16 @@ import com.opengamma.analytics.financial.provider.description.inflation.BlackSmi
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.MultipleCurrencyInflationSensitivity;
 
 /**
- * 
+ *
  */
 public final class PresentValueSensitivityYearOnYearBlackNormalInflationCalculator extends
-    InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationYearOnYearProviderInterface, MultipleCurrencyInflationSensitivity> {
+InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationYearOnYearProviderInterface, MultipleCurrencyInflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueSensitivityYearOnYearBlackNormalInflationCalculator INSTANCE = new PresentValueSensitivityYearOnYearBlackNormalInflationCalculator();
+  private static final PresentValueSensitivityYearOnYearBlackNormalInflationCalculator INSTANCE =
+      new PresentValueSensitivityYearOnYearBlackNormalInflationCalculator();
 
   /**
    * Constructor.
@@ -32,6 +33,7 @@ public final class PresentValueSensitivityYearOnYearBlackNormalInflationCalculat
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSensitivityYearOnYearBlackNormalInflationCalculator getInstance() {
@@ -41,10 +43,12 @@ public final class PresentValueSensitivityYearOnYearBlackNormalInflationCalculat
   /**
    * Pricing methods.
    */
-  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod.getInstance();
-  private static final CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY = CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod.getInstance();
+  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod.getInstance();
+  private static final CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY =
+      CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod.getInstance();
 
-  //-----     Caplet/Floorlet Year on Year     -----
+  // ----- Caplet/Floorlet Year on Year -----
 
   @Override
   public MultipleCurrencyInflationSensitivity visitCapFloorInflationYearOnYearInterpolation(final CapFloorInflationYearOnYearInterpolation cap,
@@ -53,11 +57,12 @@ public final class PresentValueSensitivityYearOnYearBlackNormalInflationCalculat
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCapFloorInflationYearOnYearMonthly(final CapFloorInflationYearOnYearMonthly cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity visitCapFloorInflationYearOnYearMonthly(final CapFloorInflationYearOnYearMonthly cap,
+      final BlackSmileCapInflationYearOnYearProviderInterface black) {
     return METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY.presentValueCurveSensitivity(cap, black);
   }
 
-  //     -----      Cap/Floor Year on Year     -----
+  // ----- Cap/Floor Year on Year -----
   // TO DO
 
 }

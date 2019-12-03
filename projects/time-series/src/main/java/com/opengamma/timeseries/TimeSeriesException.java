@@ -22,29 +22,29 @@ public class TimeSeriesException extends RuntimeException {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param message  the message, may be null
    */
-  public TimeSeriesException(String message) {
+  public TimeSeriesException(final String message) {
     super(message);
   }
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param cause  the underlying cause, may be null
    */
-  public TimeSeriesException(Throwable cause) {
+  public TimeSeriesException(final Throwable cause) {
     super(cause);
   }
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param message  the message, may be null
    * @param cause  the underlying cause, may be null
    */
-  public TimeSeriesException(String message, Throwable cause) {
+  public TimeSeriesException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

@@ -18,13 +18,10 @@ import com.opengamma.util.money.Currency;
 /**
  * ISDA definition for a CDS coupon.
  *
- * This is structurally identical to the standard definition for a fixed coupon, with the
- * exception that when it is converted to a derivative object an {@link ISDACDSCoupon} is
- * produced rather than a {@link CouponFixed}. The start time, end time and payment time
- * for the accrual period of the ISDACDSCoupon are computed using ACT/365F relative to
- * the pricing point, in accordance with the ISDA model. The payment year fraction must
- * be computed according to the conventions describing the particular CDS contract (this
- * is the responsibility of {@link ISDACDSPremiumDefinition}).
+ * This is structurally identical to the standard definition for a fixed coupon, with the exception that when it is converted to a derivative object an
+ * {@link ISDACDSCoupon} is produced rather than a {@link CouponFixed}. The start time, end time and payment time for the accrual period of the ISDACDSCoupon
+ * are computed using ACT/365F relative to the pricing point, in accordance with the ISDA model. The payment year fraction must be computed according to the
+ * conventions describing the particular CDS contract (this is the responsibility of {@link ISDACDSPremiumDefinition}).
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see CouponFixedDefinition
@@ -34,13 +31,15 @@ public class ISDACDSCouponDefinition extends CouponFixedDefinition {
 
   private static final DayCount ACT_365F = new ActualThreeSixtyFive();
 
-  public ISDACDSCouponDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double paymentYearFraction,
+  public ISDACDSCouponDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate, final double paymentYearFraction,
       final double notional, final double rate) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional, rate);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not refer to yield curve names
    */
   @Deprecated
@@ -73,7 +72,7 @@ public class ISDACDSCouponDefinition extends CouponFixedDefinition {
     final ZonedDateTime rebasedDate2 = date2.withZoneSameInstant(date1.getZone());
 
     return rebasedDate2.isBefore(date1)
-      ? -ACT_365F.getDayCountFraction(rebasedDate2, date1)
-      :  ACT_365F.getDayCountFraction(date1, rebasedDate2);
+        ? -ACT_365F.getDayCountFraction(rebasedDate2, date1)
+        : ACT_365F.getDayCountFraction(date1, rebasedDate2);
   }
 }

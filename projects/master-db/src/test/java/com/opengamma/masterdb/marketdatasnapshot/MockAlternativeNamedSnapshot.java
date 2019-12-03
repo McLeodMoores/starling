@@ -5,8 +5,10 @@
  */
 package com.opengamma.masterdb.marketdatasnapshot;
 
-import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
-import com.opengamma.id.UniqueId;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
@@ -20,9 +22,8 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
+import com.opengamma.id.UniqueId;
 
 /**
  * Named snapshot used to test database insertion/retrieval.
@@ -30,22 +31,22 @@ import java.util.Set;
 @BeanDefinition
 final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean {
 
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final UniqueId _uniqueId;
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final String _name;
   @PropertyDefinition
   private final int _answer;
 
   @ImmutableConstructor
-  MockAlternativeNamedSnapshot(UniqueId uniqueId, String name, int answer) {
+  MockAlternativeNamedSnapshot(final UniqueId uniqueId, final String name, final int answer) {
     _uniqueId = uniqueId;
     _name = name;
     _answer = answer;
   }
 
   @Override
-  public NamedSnapshot withUniqueId(UniqueId uniqueId) {
+  public NamedSnapshot withUniqueId(final UniqueId uniqueId) {
     return new MockAlternativeNamedSnapshot(uniqueId, _name, _answer);
   }
 
@@ -67,7 +68,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
    * Returns a builder used to create an instance of the bean.
    * @return the builder, not null
    */
-  public static MockAlternativeNamedSnapshot.Builder builder() {
+  static MockAlternativeNamedSnapshot.Builder builder() {
     return new MockAlternativeNamedSnapshot.Builder();
   }
 
@@ -91,6 +92,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
    * Gets the uniqueId.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -100,6 +102,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
    * Gets the name.
    * @return the value of the property
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -118,7 +121,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
    * Returns a builder that allows this bean to be mutated.
    * @return the mutable builder, not null
    */
-  public Builder toBuilder() {
+  Builder toBuilder() {
     return new Builder(this);
   }
 
@@ -129,9 +132,9 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MockAlternativeNamedSnapshot other = (MockAlternativeNamedSnapshot) obj;
-      return JodaBeanUtils.equal(getUniqueId(), other.getUniqueId()) &&
-          JodaBeanUtils.equal(getName(), other.getName()) &&
-          (getAnswer() == other.getAnswer());
+      return JodaBeanUtils.equal(_uniqueId, other._uniqueId) &&
+          JodaBeanUtils.equal(_name, other._name) &&
+          (_answer == other._answer);
     }
     return false;
   }
@@ -139,9 +142,9 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAnswer());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_uniqueId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_answer);
     return hash;
   }
 
@@ -149,9 +152,9 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("MockAlternativeNamedSnapshot{");
-    buf.append("uniqueId").append('=').append(getUniqueId()).append(',').append(' ');
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("answer").append('=').append(JodaBeanUtils.toString(getAnswer()));
+    buf.append("uniqueId").append('=').append(_uniqueId).append(',').append(' ');
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("answer").append('=').append(JodaBeanUtils.toString(_answer));
     buf.append('}');
     return buf.toString();
   }
@@ -160,7 +163,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
   /**
    * The meta-bean for {@code MockAlternativeNamedSnapshot}.
    */
-  public static final class Meta extends DirectMetaBean {
+  static final class Meta extends DirectMetaBean {
     /**
      * The singleton instance of the meta-bean.
      */
@@ -278,7 +281,7 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
   /**
    * The bean-builder for {@code MockAlternativeNamedSnapshot}.
    */
-  public static final class Builder extends DirectFieldsBeanBuilder<MockAlternativeNamedSnapshot> {
+  static final class Builder extends DirectFieldsBeanBuilder<MockAlternativeNamedSnapshot> {
 
     private UniqueId _uniqueId;
     private String _name;
@@ -339,19 +342,31 @@ final class MockAlternativeNamedSnapshot implements NamedSnapshot, ImmutableBean
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

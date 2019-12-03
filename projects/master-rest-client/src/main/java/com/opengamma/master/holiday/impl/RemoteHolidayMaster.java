@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.holiday.impl;
@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link HolidayMaster}.
  */
 public class RemoteHolidayMaster
-    extends AbstractRemoteDocumentMaster<HolidayDocument>
-    implements HolidayMaster {
+extends AbstractRemoteDocumentMaster<HolidayDocument>
+implements HolidayMaster {
 
   /**
    * Creates an instance.
@@ -47,16 +47,16 @@ public class RemoteHolidayMaster
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteHolidayMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteHolidayMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public HolidayMetaDataResult metaData(HolidayMetaDataRequest request) {
+  public HolidayMetaDataResult metaData(final HolidayMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataHolidayMasterUris.uriMetaData(getBaseUri(), request);
+    final URI uri = DataHolidayMasterUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(HolidayMetaDataResult.class);
   }
 
@@ -65,7 +65,7 @@ public class RemoteHolidayMaster
   public HolidaySearchResult search(final HolidaySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataHolidayMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataHolidayMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(HolidaySearchResult.class, request);
   }
 
@@ -75,11 +75,10 @@ public class RemoteHolidayMaster
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = (new DataHolidayUris()).uriVersion(getBaseUri(), uniqueId);
+      final URI uri = new DataHolidayUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HolidayDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ public class RemoteHolidayMaster
   public HolidayDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = (new DataHolidayUris()).uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = new DataHolidayUris().uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(HolidayDocument.class);
   }
 
@@ -97,7 +96,7 @@ public class RemoteHolidayMaster
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getHoliday(), "document.holiday");
 
-    URI uri = DataHolidayMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataHolidayMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(HolidayDocument.class, document);
   }
 
@@ -108,7 +107,7 @@ public class RemoteHolidayMaster
     ArgumentChecker.notNull(document.getHoliday(), "document.holiday");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataHolidayUris()).uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = new DataHolidayUris().uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(HolidayDocument.class, document);
   }
 
@@ -117,7 +116,7 @@ public class RemoteHolidayMaster
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = (new DataHolidayUris()).uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = new DataHolidayUris().uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
@@ -127,7 +126,7 @@ public class RemoteHolidayMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    URI uri = (new DataHolidayUris()).uriVersions(getBaseUri(), request.getObjectId(), request);
+    final URI uri = new DataHolidayUris().uriVersions(getBaseUri(), request.getObjectId(), request);
     return accessRemote(uri).get(HolidayHistoryResult.class);
   }
 
@@ -138,48 +137,48 @@ public class RemoteHolidayMaster
     ArgumentChecker.notNull(document.getHoliday(), "document.holiday");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataHolidayUris()).uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = new DataHolidayUris().uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(HolidayDocument.class, document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<HolidayDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<HolidayDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HolidayDocument replacementDocument : replacementDocuments) {
+    for (final HolidayDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getName(), "document.name");
       ArgumentChecker.notNull(replacementDocument.getHoliday(), "document.holiday");
     }
-    URI uri = (new DataHolidayUris()).uriVersion(getBaseUri(), uniqueId);
+    final URI uri = new DataHolidayUris().uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<HolidayDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<HolidayDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HolidayDocument replacementDocument : replacementDocuments) {
+    for (final HolidayDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getName(), "document.name");
       ArgumentChecker.notNull(replacementDocument.getHoliday(), "document.holiday");
     }
-    URI uri = (new DataHolidayUris()).uriAll(getBaseUri(), objectId, null);
+    final URI uri = new DataHolidayUris().uriAll(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<HolidayDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<HolidayDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HolidayDocument replacementDocument : replacementDocuments) {
+    for (final HolidayDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getName(), "document.name");
       ArgumentChecker.notNull(replacementDocument.getHoliday(), "document.holiday");
     }
-    URI uri = (new DataHolidayUris()).uri(getBaseUri(), objectId, null);
+    final URI uri = new DataHolidayUris().uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

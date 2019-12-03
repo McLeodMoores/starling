@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.examples.simulated.loader.securities;
 
 import java.util.Arrays;
@@ -9,18 +12,20 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Security generator that wraps a collection of securities. The securities are generated
- * with repeated calls to {{@link #createSecurity()} and an exception is thrown if more
- * securities are requested than were provided in the original collection. The order in
- * which the securities are returned depends on the original collection.
- * @param <T> The type of the securities
+ * Security generator that wraps a collection of securities. The securities are generated with repeated calls to {{@link #createSecurity()} and an exception is
+ * thrown if more securities are requested than were provided in the original collection. The order in which the securities are returned depends on the original
+ * collection.
+ * 
+ * @param <T>
+ *          The type of the securities
  */
 public class CollectionSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> {
   /** The iterator */
   private final Iterator<T> _iterator;
 
   /**
-   * @param securities The securities, not null
+   * @param securities
+   *          The securities, not null
    */
   public CollectionSecurityGenerator(final Collection<T> securities) {
     ArgumentChecker.notNull(securities, "securities");
@@ -28,7 +33,8 @@ public class CollectionSecurityGenerator<T extends ManageableSecurity> extends S
   }
 
   /**
-   * @param securities The securities, not null
+   * @param securities
+   *          The securities, not null
    */
   public CollectionSecurityGenerator(final T[] securities) {
     ArgumentChecker.notNull(securities, "securities");

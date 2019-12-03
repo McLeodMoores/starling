@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -21,7 +21,8 @@ public class AmbiguityCheckerContext {
   private final FunctionResolver _functionResolver;
   private final FunctionExclusionGroups _functionExclusionGroups;
 
-  public AmbiguityCheckerContext(final MarketDataAvailabilityProvider marketDataAvailabilityProvider, final FunctionCompilationContext compilationContext, final FunctionResolver functionResolver,
+  public AmbiguityCheckerContext(final MarketDataAvailabilityProvider marketDataAvailabilityProvider,
+      final FunctionCompilationContext compilationContext, final FunctionResolver functionResolver,
       final FunctionExclusionGroups functionExclusionGroups) {
     _marketDataAvailabilityProvider = ArgumentChecker.notNull(marketDataAvailabilityProvider, "marketDataAvailabilityProvider");
     _compilationContext = ArgumentChecker.notNull(compilationContext, "compilationContext");

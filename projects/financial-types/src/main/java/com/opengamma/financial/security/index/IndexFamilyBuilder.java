@@ -23,7 +23,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Fudge builder for {@link IndexFamily}
+ * Fudge builder for {@link IndexFamily}.
  */
 @FudgeBuilderFor(IndexFamily.class)
 public class IndexFamilyBuilder implements FudgeBuilder<IndexFamily> {
@@ -36,7 +36,7 @@ public class IndexFamilyBuilder implements FudgeBuilder<IndexFamily> {
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final IndexFamily object) {
     final MutableFudgeMsg message = serializer.newMessage();
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, message);
-    //message.add(null, 0, object.getClass().getName());
+    // message.add(null, 0, object.getClass().getName());
     for (final Map.Entry<Tenor, ExternalId> entry : object.getMembers().entrySet()) {
       serializer.addToMessage(message, TENOR_FIELD, null, entry.getKey());
       serializer.addToMessage(message, EXTERNAL_ID_FIELD, null, entry.getValue());
@@ -46,7 +46,7 @@ public class IndexFamilyBuilder implements FudgeBuilder<IndexFamily> {
 
   @Override
   public IndexFamily buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    IndexFamily indexFamily = new IndexFamily();
+    final IndexFamily indexFamily = new IndexFamily();
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, message, indexFamily);
     final SortedMap<Tenor, ExternalId> entries = new TreeMap<>();
     final List<FudgeField> tenorFields = message.getAllByName(TENOR_FIELD);

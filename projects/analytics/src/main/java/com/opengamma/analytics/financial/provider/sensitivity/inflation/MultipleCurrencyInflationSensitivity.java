@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.inflation;
@@ -19,14 +19,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a the sensitivity of some value (present value, par rate, etc) to a family of yield curves.
- * The currency in which the sensitivity is expressed is indicated through a map.
+ * Class describing a the sensitivity of some value (present value, par rate, etc) to a family of yield curves. The currency in which the sensitivity is
+ * expressed is indicated through a map.
  */
 public class MultipleCurrencyInflationSensitivity {
 
   /**
-   * The backing map for the sensitivities in the different currencies. Not null.
-   * The amount in the different currencies are not conversion of each other, they should be understood in an additive way.
+   * The backing map for the sensitivities in the different currencies. Not null. The amount in the different currencies are not conversion of each other, they
+   * should be understood in an additive way.
    */
   private final TreeMap<Currency, InflationSensitivity> _sensitivity;
 
@@ -39,7 +39,9 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Private constructor from an exiting map.
-   * @param sensitivity The sensitivity map.
+   *
+   * @param sensitivity
+   *          The sensitivity map.
    */
   private MultipleCurrencyInflationSensitivity(final TreeMap<Currency, InflationSensitivity> sensitivity) {
     _sensitivity = sensitivity;
@@ -47,8 +49,11 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Create a new multiple currency sensitivity with one currency.
-   * @param ccy The currency. Not null.
-   * @param sensitivity The sensitivity associated to the currency. Not null.
+   *
+   * @param ccy
+   *          The currency. Not null.
+   * @param sensitivity
+   *          The sensitivity associated to the currency. Not null.
    * @return The multiple currency sensitivity.
    */
   public static MultipleCurrencyInflationSensitivity of(final Currency ccy, final InflationSensitivity sensitivity) {
@@ -61,7 +66,9 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Create a new inflation multiple currency sensitivity form a multicurve multiple currency sensitivity.
-   * @param multicurveSensitivity The multiple currency sensitivity
+   *
+   * @param multicurveSensitivity
+   *          The multiple currency sensitivity
    * @return The infaltion multiple currency sensitivity.
    */
   public static MultipleCurrencyInflationSensitivity of(final MultipleCurrencyMulticurveSensitivity multicurveSensitivity) {
@@ -76,9 +83,11 @@ public class MultipleCurrencyInflationSensitivity {
   }
 
   /**
-   * Returns the (single currency) interest rate sensitivity associated to a given currency.
-   * If the currency is not present in the map, an empty InterestRateCurveSensitivity is returned.
-   * @param ccy The currency. Not null.
+   * Returns the (single currency) interest rate sensitivity associated to a given currency. If the currency is not present in the map, an empty
+   * InterestRateCurveSensitivity is returned.
+   *
+   * @param ccy
+   *          The currency. Not null.
    * @return The (single currency) interest rate sensitivity.
    */
   public InflationSensitivity getSensitivity(final Currency ccy) {
@@ -90,12 +99,14 @@ public class MultipleCurrencyInflationSensitivity {
   }
 
   /**
-   * Create a new multiple currency sensitivity by adding the sensitivity associated to a given currency.
-   * If the currency is not yet present in the existing sensitivity a new map is created with the extra entry.
-   * If the currency is already present, the associated sensitivities are added (in the sense of {@link InterestRateCurveSensitivity}) and a new map is created with all the other
-   * existing entries and the entry with the currency and the sum sensitivity.
-   * @param ccy The currency. Not null.
-   * @param sensitivity The sensitivity associated to the currency. Not null.
+   * Create a new multiple currency sensitivity by adding the sensitivity associated to a given currency. If the currency is not yet present in the existing
+   * sensitivity a new map is created with the extra entry. If the currency is already present, the associated sensitivities are added (in the sense of
+   * {@link InterestRateCurveSensitivity}) and a new map is created with all the other existing entries and the entry with the currency and the sum sensitivity.
+   *
+   * @param ccy
+   *          The currency. Not null.
+   * @param sensitivity
+   *          The sensitivity associated to the currency. Not null.
    * @return The new multiple currency sensitivity.
    */
   public MultipleCurrencyInflationSensitivity plus(final Currency ccy, final InflationSensitivity sensitivity) {
@@ -117,9 +128,11 @@ public class MultipleCurrencyInflationSensitivity {
   }
 
   /**
-   * Create a new multiple currency sensitivity by adding another multiple currency sensitivity.
-   * For each currency in the other multiple currency sensitivity, the currency and its associated sensitivity are added.
-   * @param other The multiple currency sensitivity. Not null.
+   * Create a new multiple currency sensitivity by adding another multiple currency sensitivity. For each currency in the other multiple currency sensitivity,
+   * the currency and its associated sensitivity are added.
+   *
+   * @param other
+   *          The multiple currency sensitivity. Not null.
    * @return The new multiple currency sensitivity.
    */
   public MultipleCurrencyInflationSensitivity plus(final MultipleCurrencyInflationSensitivity other) {
@@ -135,7 +148,9 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Create a new multiple currency sensitivity by multiplying all the sensitivities in a multiple currency sensitivity by a common factor.
-   * @param factor The multiplicative factor.
+   *
+   * @param factor
+   *          The multiplicative factor.
    * @return The new multiple currency sensitivity.
    */
   public MultipleCurrencyInflationSensitivity multipliedBy(final double factor) {
@@ -148,6 +163,7 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Returns a new multiple currency sensitivity by creating clean sensitivity for each currency (see {@link InterestRateCurveSensitivity} clean() method).
+   *
    * @return The cleaned sensitivity.
    */
   public MultipleCurrencyInflationSensitivity cleaned() {
@@ -161,6 +177,7 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Returns the set of currencies in the multiple currency sensitivities.
+   *
    * @return The set of currencies.
    */
   public Set<Currency> getCurrencies() {
@@ -169,8 +186,11 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Create a new sensitivity which is the conversion of the multiple currency sensitivity to the sensitivity in a given currency.
-   * @param ccy The currency in which the sensitivities should be converted.
-   * @param fx The matrix with the exchange rates.
+   *
+   * @param ccy
+   *          The currency in which the sensitivities should be converted.
+   * @param fx
+   *          The matrix with the exchange rates.
    * @return The one currency sensitivity.
    */
   public MultipleCurrencyInflationSensitivity converted(final Currency ccy, final FXMatrix fx) {
@@ -184,6 +204,7 @@ public class MultipleCurrencyInflationSensitivity {
 
   /**
    * Gets all sensitivities.
+   *
    * @return The sensitivities wrapped in an unmodifiable map
    */
   public Map<Currency, InflationSensitivity> getSensitivities() {

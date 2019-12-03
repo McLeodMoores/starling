@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.jmx;
@@ -19,12 +19,13 @@ import com.opengamma.engine.calcnode.SimpleCalculationNodeFactory;
 
 /**
  * JMX exposure of a node container.
- * 
+ *
  * @param <T> the container type
  */
-public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer> implements SimpleCalculationNodeInvocationContainerMBean {
+public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer>
+implements SimpleCalculationNodeInvocationContainerMBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CalculationNodesMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalculationNodesMBean.class);
 
   private final T _container;
   private final SimpleCalculationNodeFactory _nodeFactory;
@@ -46,16 +47,16 @@ public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.en
     final ObjectName name = new ObjectName("com.opengamma:type=CalculationNodes,name=" + getContainer().toString());
     try {
       server.registerMBean(this, name);
-    } catch (InstanceAlreadyExistsException e) {
-      s_logger.warn("JMX MBean {} already exists - replacing", name);
+    } catch (final InstanceAlreadyExistsException e) {
+      LOGGER.warn("JMX MBean {} already exists - replacing", name);
       server.unregisterMBean(name);
       server.registerMBean(this, name);
     }
   }
 
-  public static void registerMBeans(final com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer container, final SimpleCalculationNodeFactory nodeFactory,
-      final MBeanServer server) throws JMException {
-    new SimpleCalculationNodeInvocationContainer<com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer>(container, nodeFactory).registerMBean(server);
+  public static void registerMBeans(final com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer container,
+      final SimpleCalculationNodeFactory nodeFactory, final MBeanServer server) throws JMException {
+    new SimpleCalculationNodeInvocationContainer<>(container, nodeFactory).registerMBean(server);
   }
 
   @Override
@@ -96,7 +97,7 @@ public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.en
       if (i > 1) {
         try {
           Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           throw new OpenGammaRuntimeException("interrupted", e);
         }
       }

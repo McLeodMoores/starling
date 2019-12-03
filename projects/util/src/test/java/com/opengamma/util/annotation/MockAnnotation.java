@@ -1,24 +1,24 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.annotation;
 
 /**
- * 
+ *
  */
 @MockType
 /*package*/class MockAnnotation {
-  
+
   @MockField
   private String _name;
-  
+
   @MockField
   private String _type;
-  
+
   @MockConstructor
-  public MockAnnotation() {
+  MockAnnotation() {
   }
 
   /**
@@ -34,7 +34,7 @@ package com.opengamma.util.annotation;
    * Sets the name.
    * @param name  the name
    */
-  public void setName(@MockParameter String name) {
+  public void setName(@MockParameter final String name) {
     _name = name;
   }
 
@@ -52,8 +52,8 @@ package com.opengamma.util.annotation;
    * @param type  the type
    */
   @MockMethod
-  public void setType(String type) {
+  public void setType(final String type) {
     _type = type;
   }
-  
+
 }

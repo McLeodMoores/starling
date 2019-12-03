@@ -33,12 +33,13 @@ import com.opengamma.util.test.TestGroup;
 public class DependencyNodeJobExecutionResultCacheTest {
 
   private ValueSpecification createValueSpec(final int id) {
-    return new ValueSpecification("V", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").with("Id", Integer.toString(id)).get());
+    return new ValueSpecification("V", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").with("Id", Integer.toString(id)).get());
   }
 
   private DependencyNodeJobExecutionResult createExecutionResult() {
-    return new DependencyNodeJobExecutionResult("Node", new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(),
-        ExecutionLog.EMPTY), AggregatedExecutionLog.EMPTY);
+    return new DependencyNodeJobExecutionResult("Node", new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(),
+        Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY), AggregatedExecutionLog.EMPTY);
   }
 
   public void testPutAndGet() {
@@ -50,8 +51,8 @@ public class DependencyNodeJobExecutionResultCacheTest {
   }
 
   private DependencyNode node(final ValueSpecification... outputs) {
-    return new DependencyNodeImpl(DependencyNodeFunctionImpl.of("Mock", EmptyFunctionParameters.INSTANCE), ComputationTargetSpecification.NULL, Arrays.asList(outputs),
-        Collections.<ValueSpecification, DependencyNode>emptyMap());
+    return new DependencyNodeImpl(DependencyNodeFunctionImpl.of("Mock", EmptyFunctionParameters.INSTANCE),
+        ComputationTargetSpecification.NULL, Arrays.asList(outputs), Collections.<ValueSpecification, DependencyNode>emptyMap());
   }
 
   public void testGet() {

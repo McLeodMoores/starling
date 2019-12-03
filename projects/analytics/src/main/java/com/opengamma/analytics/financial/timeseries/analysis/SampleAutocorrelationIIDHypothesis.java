@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class SampleAutocorrelationIIDHypothesis extends IIDHypothesis {
-  private static final Logger s_logger = LoggerFactory.getLogger(SampleAutocorrelationIIDHypothesis.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SampleAutocorrelationIIDHypothesis.class);
   private final Function1D<DoubleTimeSeries<?>, double[]> _calculator = new AutocorrelationFunctionCalculator();
   private final double _level;
   private final double _criticalValue;
@@ -33,7 +33,7 @@ public class SampleAutocorrelationIIDHypothesis extends IIDHypothesis {
       throw new IllegalArgumentException("Lag cannot be zero");
     }
     if (maxLag < 0) {
-      s_logger.warn("Maximum lag was less than zero; using absolute value");
+      LOGGER.warn("Maximum lag was less than zero; using absolute value");
     }
     _level = level;
     final ProbabilityDistribution<Double> normal = new NormalDistribution(0, 1);

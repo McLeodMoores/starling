@@ -33,7 +33,7 @@ public class ComponentConfig {
   //-------------------------------------------------------------------------
   /**
    * Gets the group names.
-   * 
+   *
    * @return the group names, not null
    */
   public Set<String> getGroups() {
@@ -42,13 +42,13 @@ public class ComponentConfig {
 
   /**
    * Gets a group by name.
-   * 
+   *
    * @param groupKey  the group key, not null
    * @return the modifiable configured group, not null
    * @throws ComponentConfigException if the group is not found
    */
-  public ConfigProperties getGroup(String groupKey) {
-    ConfigProperties config = _config.get(groupKey);
+  public ConfigProperties getGroup(final String groupKey) {
+    final ConfigProperties config = _config.get(groupKey);
     if (config == null) {
       throw new ComponentConfigException("Config group not found: [" + groupKey + "]");
     }
@@ -57,11 +57,11 @@ public class ComponentConfig {
 
   /**
    * Adds an empty group into the config, throwing an exception if it already exists.
-   * 
+   *
    * @param groupKey  the group key, not null
    * @throws ComponentConfigException if the group already exists
    */
-  public void addGroup(String groupKey) {
+  public void addGroup(final String groupKey) {
     ArgumentChecker.notNull(groupKey, "groupKey");
     if (_config.containsKey(groupKey)) {
       throw new ComponentConfigException("Group cannot be added as it already exists: " + groupKey);
@@ -71,22 +71,22 @@ public class ComponentConfig {
 
   /**
    * Checks if the config contains the specified key.
-   * 
+   *
    * @param groupKey  the group key, not null
    * @param innerKey  the inner key, not null
    * @return whether the config contains the key
    */
-  public boolean contains(String groupKey, String innerKey) {
+  public boolean contains(final String groupKey, final String innerKey) {
     ArgumentChecker.notNull(groupKey, "groupKey");
     ArgumentChecker.notNull(innerKey, "innerKey");
-    ConfigProperties config = _config.get(groupKey);
-    return (config != null && config.containsKey(innerKey));
+    final ConfigProperties config = _config.get(groupKey);
+    return config != null && config.containsKey(innerKey);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    return "Config" + new ArrayList<String>(_config.keySet());
+    return "Config" + new ArrayList<>(_config.keySet());
   }
 
 }

@@ -19,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbSecurityTest extends AbstractDbTest {
 
-  public AbstractDbSecurityTest(String databaseType, String databaseVersion) {
+  public AbstractDbSecurityTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -30,7 +30,7 @@ public abstract class AbstractDbSecurityTest extends AbstractDbTest {
   }
 
   @Override
-  protected void initDbConnectorFactory(DbConnectorFactoryBean factory) {
+  protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
     factory.setHibernateMappingFiles(new HibernateMappingFiles[] {new HibernateSecurityMasterFiles() });
   }
 

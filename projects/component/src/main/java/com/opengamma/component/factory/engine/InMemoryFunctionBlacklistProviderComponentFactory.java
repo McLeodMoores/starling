@@ -57,7 +57,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
   @PropertyDefinition
   private JmsConnector _jmsConnector;
   /**
-   * The scheduled executor to use for housekeeping operations
+   * The scheduled executor to use for housekeeping operations.
    */
   @PropertyDefinition
   private ScheduledExecutorService _executor = Executors.newSingleThreadScheduledExecutor();
@@ -69,14 +69,15 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
     infoRO.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoRO.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFunctionBlacklistProvider.class);
     repo.registerComponent(infoRO, provider);
-    
+
     final ComponentInfo infoMng = new ComponentInfo(ManageableFunctionBlacklistProvider.class, getClassifier());
     infoMng.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     infoMng.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteManageableFunctionBlacklistProvider.class);
     repo.registerComponent(infoMng, provider);
     if (isPublishRest()) {
       repo.getRestComponents().publish(infoRO, new DataFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
-      repo.getRestComponents().publish(infoMng, new DataManageableFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
+      repo.getRestComponents().publish(infoMng,
+          new DataManageableFunctionBlacklistProviderResource(provider, OpenGammaFudgeContext.getInstance(), getJmsConnector()));
     }
   }
 
@@ -177,7 +178,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the scheduled executor to use for housekeeping operations
+   * Gets the scheduled executor to use for housekeeping operations.
    * @return the value of the property
    */
   public ScheduledExecutorService getExecutor() {
@@ -185,7 +186,7 @@ public class InMemoryFunctionBlacklistProviderComponentFactory extends AbstractC
   }
 
   /**
-   * Sets the scheduled executor to use for housekeeping operations
+   * Sets the scheduled executor to use for housekeeping operations.
    * @param executor  the new value of the property
    */
   public void setExecutor(ScheduledExecutorService executor) {

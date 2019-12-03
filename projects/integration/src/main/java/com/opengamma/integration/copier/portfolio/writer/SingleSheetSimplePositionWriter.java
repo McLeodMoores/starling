@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio.writer;
@@ -26,26 +26,26 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Writes positions of a single security type to a single sheet
+ * Writes positions of a single security type to a single sheet.
  */
 public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleSheetSimplePositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleSheetSimplePositionWriter.class);
 
-  private RowParser _rowParser;
-  
+  private final RowParser _rowParser;
+
   // current row context
-  private Map<String, String> _currentRow  = new HashMap<String, String>();
-  
-  private ManageablePortfolioNode _currentNode;
-  private ManageablePortfolio _portfolio;
+  private Map<String, String> _currentRow = new HashMap<>();
+
+  private final ManageablePortfolioNode _currentNode;
+  private final ManageablePortfolio _portfolio;
 
   /** Generate one row per trade instead of one row per position */
-  private boolean _includeTrades;
+  private final boolean _includeTrades;
 
-  public SingleSheetSimplePositionWriter(SheetWriter sheet, RowParser rowParser, boolean includeTrades) {
+  public SingleSheetSimplePositionWriter(final SheetWriter sheet, final RowParser rowParser, final boolean includeTrades) {
     super(sheet);
-    
+
     ArgumentChecker.notNull(rowParser, "rowParser");
     _rowParser = rowParser;
 
@@ -57,55 +57,55 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
     _includeTrades = includeTrades;
   }
 
-  public SingleSheetSimplePositionWriter(SheetWriter sheet, RowParser rowParser) {
+  public SingleSheetSimplePositionWriter(final SheetWriter sheet, final RowParser rowParser) {
     this(sheet, rowParser, false);
   }
 
-  public SingleSheetSimplePositionWriter(SheetWriter sheet, String securityType) {
-    this(sheet, JodaBeanRowParser.newJodaBeanRowParser(securityType));    
+  public SingleSheetSimplePositionWriter(final SheetWriter sheet, final String securityType) {
+    this(sheet, JodaBeanRowParser.newJodaBeanRowParser(securityType));
   }
 
-  public SingleSheetSimplePositionWriter(SheetFormat sheetFormat, OutputStream outputStream, RowParser rowParser) {
+  public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final RowParser rowParser) {
     this(SheetWriter.newSheetWriter(sheetFormat, outputStream, rowParser.getColumns()), rowParser);
-  }  
+  }
 
-  public SingleSheetSimplePositionWriter(SheetFormat sheetFormat, OutputStream outputStream, RowParser rowParser,
-                                         boolean includeTrades) {
+  public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final RowParser rowParser,
+      final boolean includeTrades) {
     this(SheetWriter.newSheetWriter(sheetFormat, outputStream, rowParser.getColumns()), rowParser, includeTrades);
   }
 
-  public SingleSheetSimplePositionWriter(String filename, RowParser rowParser) {
+  public SingleSheetSimplePositionWriter(final String filename, final RowParser rowParser) {
     this(SheetWriter.newSheetWriter(filename, rowParser.getColumns()), rowParser);
   }
 
-  public SingleSheetSimplePositionWriter(String filename, RowParser rowParser, boolean includeTrades) {
+  public SingleSheetSimplePositionWriter(final String filename, final RowParser rowParser, final boolean includeTrades) {
     this(SheetWriter.newSheetWriter(filename, rowParser.getColumns()), rowParser, includeTrades);
   }
 
-  public SingleSheetSimplePositionWriter(String filename, String securityType) {
+  public SingleSheetSimplePositionWriter(final String filename, final String securityType) {
     this(filename, JodaBeanRowParser.newJodaBeanRowParser(securityType));
   }
 
-  public SingleSheetSimplePositionWriter(String filename, String securityType, boolean includeTrades) {
+  public SingleSheetSimplePositionWriter(final String filename, final String securityType, final boolean includeTrades) {
     this(filename, JodaBeanRowParser.newJodaBeanRowParser(securityType), includeTrades);
   }
 
-  public SingleSheetSimplePositionWriter(SheetFormat sheetFormat, OutputStream outputStream, String securityType) {
+  public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final String securityType) {
     this(sheetFormat, outputStream, JodaBeanRowParser.newJodaBeanRowParser(securityType));
   }
 
-  public SingleSheetSimplePositionWriter(SheetFormat sheetFormat, OutputStream outputStream, String securityType,
-                                         boolean includeTrades) {
+  public SingleSheetSimplePositionWriter(final SheetFormat sheetFormat, final OutputStream outputStream, final String securityType,
+      final boolean includeTrades) {
     this(sheetFormat, outputStream, JodaBeanRowParser.newJodaBeanRowParser(securityType), includeTrades);
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     // Not supported
   }
 
   @Override
-  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(ManageablePosition position, ManageableSecurity[] securities) {
+  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(final ManageablePosition position, final ManageableSecurity[] securities) {
     ArgumentChecker.notNull(position, "position");
     ArgumentChecker.notNull(securities, "securities");
 
@@ -115,9 +115,9 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
     if (_includeTrades) {
       // Write each trade as a separate row if the current position contains trades
       if (position.getTrades().size() > 0) {
-        ManageablePosition subPosition = JodaBeanUtils.clone(position);
-        for (ManageableTrade trade : position.getTrades()) {
-          Map<String, String> tempRow = new HashMap<>();
+        final ManageablePosition subPosition = JodaBeanUtils.clone(position);
+        for (final ManageableTrade trade : position.getTrades()) {
+          final Map<String, String> tempRow = new HashMap<>();
           tempRow.putAll(_currentRow);
           tempRow.putAll(_rowParser.constructRow(trade));
 
@@ -148,7 +148,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
         _currentRow.putAll(_rowParser.constructRow(position.getTrades().get(0)));
       }
       if (position.getTrades().size() > 1) {
-        s_logger.warn("Omitting extra trades: only one trade per position is supported in the current mode");
+        LOGGER.warn("Omitting extra trades: only one trade per position is supported in the current mode");
       }
       if (!_currentRow.isEmpty()) {
         getSheet().writeNextRow(_currentRow);
@@ -156,9 +156,9 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
     }
 
     // Empty the current row buffer
-    _currentRow = new HashMap<String, String>();
+    _currentRow = new HashMap<>();
 
-    return ObjectsPair.of(position, securities);            
+    return ObjectsPair.of(position, securities);
   }
 
   @Override
@@ -167,7 +167,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
   }
 
   @Override
-  public void setPath(String[] newPath) {
+  public void setPath(final String[] newPath) {
     // Nothing to do
   }
 

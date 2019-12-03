@@ -226,18 +226,18 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bs_price = BS_PRICE.evaluate(standOptData);
-      final double bs_delta = greekResults.get(Greek.DELTA);
-      final double bs_gamma = greekResults.get(Greek.GAMMA);
+      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsDelta = greekResults.get(Greek.DELTA);
+      final double bsGamma = greekResults.get(Greek.GAMMA);
 
       if (print) {
-        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bs_price + "\t" + delta + "\t" + bs_delta + '\t' + gamma + "\t" + bs_gamma);
+        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bsPrice + "\t" + delta + "\t" + bsDelta + '\t' + gamma + "\t" + bsGamma);
       } else {
         if (moneyness >= lowerMoneyness && moneyness <= upperMoneyness) {
           assertEquals(ATM_VOL, impVol, volTol * ATM_VOL);
-          assertEquals(bs_price, price, priceTol * (bs_price + 1e-8));
-          assertEquals(bs_delta, delta, deltaTol * (Math.abs(bs_delta) + 1e-8));
-          assertEquals(bs_gamma, gamma, gammaTol * (bs_gamma + 1e-8));
+          assertEquals(bsPrice, price, priceTol * (bsPrice + 1e-8));
+          assertEquals(bsDelta, delta, deltaTol * (Math.abs(bsDelta) + 1e-8));
+          assertEquals(bsGamma, gamma, gammaTol * (bsGamma + 1e-8));
         }
       }
     }
@@ -302,18 +302,18 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bs_price = BS_PRICE.evaluate(standOptData);
-      final double bs_delta = greekResults.get(Greek.DELTA);
-      final double bs_gamma = greekResults.get(Greek.GAMMA);
+      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsDelta = greekResults.get(Greek.DELTA);
+      final double bsGamma = greekResults.get(Greek.GAMMA);
 
       if (print) {
-        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bs_price + "\t" + delta + "\t" + bs_delta + '\t' + gamma + "\t" + bs_gamma);
+        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bsPrice + "\t" + delta + "\t" + bsDelta + '\t' + gamma + "\t" + bsGamma);
       } else {
         if (moneyness >= lowerMoneyness && moneyness <= upperMoneyness) {
           assertEquals(ATM_VOL, impVol, volTol * ATM_VOL);
-          assertEquals(bs_price, price, priceTol * (bs_price + 1e-8));
-          assertEquals(bs_delta, delta, deltaTol * (Math.abs(bs_delta) + 1e-8));
-          assertEquals(bs_gamma, gamma, gammaTol * (bs_gamma + 1e-8));
+          assertEquals(bsPrice, price, priceTol * (bsPrice + 1e-8));
+          assertEquals(bsDelta, delta, deltaTol * (Math.abs(bsDelta) + 1e-8));
+          assertEquals(bsGamma, gamma, gammaTol * (bsGamma + 1e-8));
         }
       }
     }
@@ -352,18 +352,18 @@ public class ConvectionDiffusionPDESolverTestCase {
         impVol = 0.0;
       }
 
-      final double bs_price = BS_PRICE.evaluate(standOptData);
-      final double bs_delta = greekResults.get(Greek.DELTA);
-      final double bs_gamma = greekResults.get(Greek.GAMMA);
+      final double bsPrice = BS_PRICE.evaluate(standOptData);
+      final double bsDelta = greekResults.get(Greek.DELTA);
+      final double bsGamma = greekResults.get(Greek.GAMMA);
 
       if (print) {
-        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bs_price + "\t" + delta + "\t" + bs_delta + '\t' + gamma + "\t" + bs_gamma);
+        System.out.println(spot + "\t" + impVol + "\t" + price + "\t" + bsPrice + "\t" + delta + "\t" + bsDelta + '\t' + gamma + "\t" + bsGamma);
       } else {
         if (moneyness >= lowerMoneyness && moneyness <= upperMoneyness) {
           assertEquals(ATM_VOL, impVol, volTol * ATM_VOL);
-          assertEquals(bs_price, price, priceTol * (bs_price + 1e-8));
-          assertEquals(bs_delta, delta, deltaTol * (Math.abs(bs_delta) + 1e-8));
-          assertEquals(bs_gamma, gamma, gammaTol * (bs_gamma + 1e-8));
+          assertEquals(bsPrice, price, priceTol * (bsPrice + 1e-8));
+          assertEquals(bsDelta, delta, deltaTol * (Math.abs(bsDelta) + 1e-8));
+          assertEquals(bsGamma, gamma, gammaTol * (bsGamma + 1e-8));
         }
       }
     }
@@ -429,9 +429,9 @@ public class ConvectionDiffusionPDESolverTestCase {
       final double gamma = res.getSecondSpatialDerivative(i);
       final double moneyness = spot / OPTION.getStrike();
       final StandardOptionDataBundle dataBundle = new StandardOptionDataBundle(YIELD_CURVE, RATE, VOL_SURFACE, spot, DATE);
-      final Double anal_price = pFunc.evaluate(dataBundle);
+      final Double analyticPrice = pFunc.evaluate(dataBundle);
       if (print) {
-        System.out.println(spot + "\t" + anal_price + "\t" + price + "\t" + delta + "\t" + gamma);
+        System.out.println(spot + "\t" + analyticPrice + "\t" + price + "\t" + delta + "\t" + gamma);
       } else {
         if (moneyness >= lowerMoneyness && moneyness <= upperMoneyness) {
           assertEquals(price, res.getFunctionValue(i), price * 1e-1);

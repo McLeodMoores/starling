@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -32,8 +32,8 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security for Credit Default Swap Index Definitions. These will then be used as
- * the "underlying" security for individual Credit Default Swap Index securities.
+ * A security for Credit Default Swap Index Definitions. These will then be used as the "underlying" security for individual Credit Default Swap Index
+ * securities.
  */
 @BeanDefinition
 @SecurityDescription(type = IndexCDSDefinitionSecurity.SECURITY_TYPE, description = "Index CDS definition")
@@ -46,7 +46,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
    */
   public static final String SECURITY_TYPE = "INDEX_CDS_DEFINITION";
   /**
-   * the start date
+   * the start date.
    */
   @PropertyDefinition(validate = "notNull")
   private LocalDate _startDate;
@@ -62,7 +62,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private String _series;
   /**
-   * The family
+   * The family.
    */
   @PropertyDefinition(validate = "notNull")
   private String _family;
@@ -92,7 +92,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private CDSIndexComponentBundle _components;
   /**
-   * The coupon (fractional i.e. 100 bps = 0.01)
+   * The coupon (fractional i.e. 100 bps = 0.01).
    */
   @PropertyDefinition(validate = "notNull")
   private Double _coupon;
@@ -108,43 +108,56 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   private BusinessDayConvention _businessDayConvention;
 
   /**
-   * Creates an instance
+   * Creates an instance.
    */
-  IndexCDSDefinitionSecurity() { //For builder
+  IndexCDSDefinitionSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * Index CDS definition
+   * Index CDS definition.
    *
-   * @param ids identifiers representing this cds index definition, used by cds inidicies to reference this definition
-   * @param startDate the start date, not null
-   * @param version  the version, not null
-   * @param series  the series, not null
-   * @param family  the family, not null
-   * @param currency  the currency, not null
-   * @param recoveryRate the recovery rate for the index, not null
-   * @param couponFrequency the coupon frequency, not null
-   * @param coupon the coupon, not null
-   * @param terms the terms, not null
-   * @param components the components, not null
-   * @param calendars the holiday calendars, not null
-   * @param businessDayConvention the business day convention, not null
+   * @param ids
+   *          identifiers representing this CDS index definition, used by CDS indices to reference this definition
+   * @param startDate
+   *          the start date, not null
+   * @param version
+   *          the version, not null
+   * @param series
+   *          the series, not null
+   * @param family
+   *          the family, not null
+   * @param currency
+   *          the currency, not null
+   * @param recoveryRate
+   *          the recovery rate for the index, not null
+   * @param couponFrequency
+   *          the coupon frequency, not null
+   * @param coupon
+   *          the coupon, not null
+   * @param terms
+   *          the terms, not null
+   * @param components
+   *          the components, not null
+   * @param calendars
+   *          the holiday calendars, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
    */
   public IndexCDSDefinitionSecurity(
-      ExternalIdBundle ids,
-      LocalDate startDate,
-      String version,
-      String series,
-      String family,
-      Currency currency,
-      Double recoveryRate,
-      Frequency couponFrequency,
-      Double coupon,
-      CDSIndexTerms terms,
-      CDSIndexComponentBundle components,
-      Set<ExternalId> calendars,
-      BusinessDayConvention businessDayConvention) {
+      final ExternalIdBundle ids,
+      final LocalDate startDate,
+      final String version,
+      final String series,
+      final String family,
+      final Currency currency,
+      final Double recoveryRate,
+      final Frequency couponFrequency,
+      final Double coupon,
+      final CDSIndexTerms terms,
+      final CDSIndexComponentBundle components,
+      final Set<ExternalId> calendars,
+      final BusinessDayConvention businessDayConvention) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
     setStartDate(startDate);
@@ -162,40 +175,55 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   }
 
   /**
-   * Index CDS definition
+   * Index CDS definition.
    *
-   * @param ids identifiers representing this cds index definition, used by cds inidicies to reference this definition
-   * @param name the descriptive name for this cds index definition
-   * @param startDate the start date, not null
-   * @param version  the version, not null
-   * @param series  the series, not null
-   * @param family  the family, not null
-   * @param currency  the currency, not null
-   * @param recoveryRate the recovery rate for the index, not null
-   * @param couponFrequency the coupon frequency, not null
-   * @param coupon the coupon, not null
-   * @param terms the terms, not null
-   * @param components the components, not null
-   * @param calendars the holiday calendars, not null
-   * @param businessDayConvention the business day convention, not null
+   * @param ids
+   *          identifiers representing this CDS index definition, used by CDS indices to reference this definition
+   * @param name
+   *          the descriptive name for this CDS index definition
+   * @param startDate
+   *          the start date, not null
+   * @param version
+   *          the version, not null
+   * @param series
+   *          the series, not null
+   * @param family
+   *          the family, not null
+   * @param currency
+   *          the currency, not null
+   * @param recoveryRate
+   *          the recovery rate for the index, not null
+   * @param couponFrequency
+   *          the coupon frequency, not null
+   * @param coupon
+   *          the coupon, not null
+   * @param terms
+   *          the terms, not null
+   * @param components
+   *          the components, not null
+   * @param calendars
+   *          the holiday calendars, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
    */
   public IndexCDSDefinitionSecurity(
-      ExternalIdBundle ids,
-      String name,
-      LocalDate startDate,
-      String version,
-      String series,
-      String family,
-      Currency currency,
-      Double recoveryRate,
-      Frequency couponFrequency,
-      Double coupon,
-      CDSIndexTerms terms,
-      CDSIndexComponentBundle components,
-      Set<ExternalId> calendars,
-      BusinessDayConvention businessDayConvention) {
+      final ExternalIdBundle ids,
+      final String name,
+      final LocalDate startDate,
+      final String version,
+      final String series,
+      final String family,
+      final Currency currency,
+      final Double recoveryRate,
+      final Frequency couponFrequency,
+      final Double coupon,
+      final CDSIndexTerms terms,
+      final CDSIndexComponentBundle components,
+      final Set<ExternalId> calendars,
+      final BusinessDayConvention businessDayConvention) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
+    setStartDate(startDate);
     setName(name);
     setVersion(version);
     setSeries(series);
@@ -211,7 +239,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   }
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIndexCDSDefinitionSecurity(this);
   }
 
@@ -236,7 +264,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the start date
+   * Gets the start date.
    * @return the value of the property, not null
    */
   public LocalDate getStartDate() {
@@ -244,7 +272,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the start date
+   * Sets the start date.
    * @param startDate  the new value of the property, not null
    */
   public void setStartDate(LocalDate startDate) {
@@ -314,7 +342,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the family
+   * Gets the family.
    * @return the value of the property, not null
    */
   public String getFamily() {
@@ -322,7 +350,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the family
+   * Sets the family.
    * @param family  the new value of the property, not null
    */
   public void setFamily(String family) {
@@ -470,7 +498,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the coupon (fractional i.e. 100 bps = 0.01)
+   * Gets the coupon (fractional i.e. 100 bps = 0.01).
    * @return the value of the property, not null
    */
   public Double getCoupon() {
@@ -478,7 +506,7 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the coupon (fractional i.e. 100 bps = 0.01)
+   * Sets the coupon (fractional i.e. 100 bps = 0.01).
    * @param coupon  the new value of the property, not null
    */
   public void setCoupon(Double coupon) {
@@ -960,6 +988,3 @@ public class IndexCDSDefinitionSecurity extends FinancialSecurity {
   ///CLOVER:ON
   //-------------------------- AUTOGENERATED END --------------------------
 }
-
-
-

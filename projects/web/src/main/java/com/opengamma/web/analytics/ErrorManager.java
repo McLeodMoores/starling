@@ -22,13 +22,13 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ class ErrorManager {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ErrorManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ErrorManager.class);
 
   private final ConcurrentMap<Long, ErrorInfo> _errors = Maps.newConcurrentMap();
   private final AtomicLong _nextId = new AtomicLong(0);
   private final String _errorId;
 
-  /* package */ ErrorManager(String errorId) {
+  /* package */ ErrorManager(final String errorId) {
     _errorId = errorId;
   }
 
@@ -37,11 +37,11 @@ import com.opengamma.util.ArgumentChecker;
    * @param throwable The throwable that triggered the error
    * @return The ID of the error
    */
-  /* package */ String add(Throwable throwable) {
+  /* package */ String add(final Throwable throwable) {
     ArgumentChecker.notNull(throwable, "throwable");
-    long id = _nextId.getAndIncrement();
+    final long id = _nextId.getAndIncrement();
     _errors.put(id, new ErrorInfo(id, throwable));
-    s_logger.info("Added error with ID {}, throwable {}", id, throwable.getMessage());
+    LOGGER.info("Added error with ID {}, throwable {}", id, throwable.getMessage());
     return _errorId;
   }
 
@@ -51,8 +51,8 @@ import com.opengamma.util.ArgumentChecker;
    * @throws DataNotFoundException If the ID is unknown
    */
   /* package */ List<ErrorInfo> get() {
-    List<ErrorInfo> errors = Lists.newArrayList(_errors.values());
-    s_logger.info("Returning errors {}", errors);
+    final List<ErrorInfo> errors = Lists.newArrayList(_errors.values());
+    LOGGER.info("Returning errors {}", errors);
     return errors;
   }
 
@@ -61,8 +61,8 @@ import com.opengamma.util.ArgumentChecker;
    * @param id The ID of the error
    * @throws DataNotFoundException If the ID is unknown
    */
-  /* package */ void delete(long id) {
-    ErrorInfo error = _errors.remove(id);
+  /* package */ void delete(final long id) {
+    final ErrorInfo error = _errors.remove(id);
     if (error == null) {
       throw new DataNotFoundException("No error found with ID " + id);
     }

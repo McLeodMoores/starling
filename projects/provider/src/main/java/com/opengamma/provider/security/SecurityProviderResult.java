@@ -48,10 +48,10 @@ public class SecurityProviderResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    */
-  public SecurityProviderResult(Map<ExternalIdBundle, ? extends Security> result) {
+  public SecurityProviderResult(final Map<ExternalIdBundle, ? extends Security> result) {
     getResultMap().putAll(result);
   }
 

@@ -32,10 +32,13 @@ public abstract class AbstractConfigChangeProvider implements ChangeProvider {
 
   /**
    * Requests the function be reinitialized whenever configurations of the given type change.
-   * 
-   * @param context the compilation context, not null
-   * @param function the function, not null
-   * @param type the type to watch
+   *
+   * @param context
+   *          the compilation context, not null
+   * @param function
+   *          the function, not null
+   * @param type
+   *          the type to watch
    */
   public static void reinitOnChanges(final FunctionCompilationContext context, final FunctionDefinition function, final Class<?> type) {
     final FunctionReinitializer reinit = context.getFunctionReinitializer();
@@ -101,7 +104,8 @@ public abstract class AbstractConfigChangeProvider implements ChangeProvider {
   protected abstract void configRemoved(ChangeEvent event);
 
   private void notifyListeners(final ChangeEvent event, final Class<?> clazz, final ChangeType type) {
-    _changeManager.entityChanged(type, ObjectId.of(CONFIG_TYPE_SCHEME, clazz.getName()), event.getVersionFrom(), event.getVersionTo(), event.getVersionInstant());
+    _changeManager.entityChanged(type, ObjectId.of(CONFIG_TYPE_SCHEME, clazz.getName()), event.getVersionFrom(), event.getVersionTo(),
+        event.getVersionInstant());
   }
 
   protected void added(final ChangeEvent event, final Class<?> type) {

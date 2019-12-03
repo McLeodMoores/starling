@@ -10,7 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
 
 /**
@@ -18,35 +18,37 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
  */
 public class InMemoryViewExecutionCache implements ViewExecutionCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InMemoryViewExecutionCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryViewExecutionCache.class);
 
   /**
    * The buffer to hold compiled view definitions.
    */
-  private final Map<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitions = new MapMaker().softValues().makeMap();
+  private final Map<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> _compiledViewDefinitions = CacheBuilder.newBuilder().softValues()
+      .<ViewExecutionCacheKey, CompiledViewDefinitionWithGraphs> build()
+      .asMap();
 
   @Override
-  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
-    CompiledViewDefinitionWithGraphs viewDefinition = _compiledViewDefinitions.get(key);
-    if (s_logger.isDebugEnabled()) {
+  public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key) {
+    final CompiledViewDefinitionWithGraphs viewDefinition = _compiledViewDefinitions.get(key);
+    if (LOGGER.isDebugEnabled()) {
       if (viewDefinition == null) {
-        s_logger.debug("Cache miss CompiledViewDefinitionWithGraphs for {}", key);
+        LOGGER.debug("Cache miss CompiledViewDefinitionWithGraphs for {}", key);
       } else {
-        s_logger.debug("Cache hit CompiledViewDefinitionWithGraphs for {}", key);
+        LOGGER.debug("Cache hit CompiledViewDefinitionWithGraphs for {}", key);
       }
     }
     return viewDefinition;
   }
 
   @Override
-  public void setCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key, CompiledViewDefinitionWithGraphs viewDefinition) {
-    s_logger.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
+  public void setCompiledViewDefinitionWithGraphs(final ViewExecutionCacheKey key, final CompiledViewDefinitionWithGraphs viewDefinition) {
+    LOGGER.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
     _compiledViewDefinitions.put(key, viewDefinition);
   }
 
   @Override
   public void clear() {
-    s_logger.info("Clearing all CompiledViewDefinitionWithGraphs");
+    LOGGER.info("Clearing all CompiledViewDefinitionWithGraphs");
     _compiledViewDefinitions.clear();
   }
 

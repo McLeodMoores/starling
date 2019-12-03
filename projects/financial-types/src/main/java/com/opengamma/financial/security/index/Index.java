@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.index;
@@ -34,16 +34,18 @@ public abstract class Index extends ManageableSecurity {
    */
   @PropertyDefinition
   private String _description;
-  
+
   /**
-   * An optional linked IndexFamily
+   * An optional linked IndexFamily.
    */
   @PropertyDefinition
   private ExternalId _indexFamilyId;
 
   /**
    * For the builder.
-   * @param indexType The index type, not null
+   * 
+   * @param indexType
+   *          The index type, not null
    */
   public Index(final String indexType) {
     super(indexType);
@@ -51,8 +53,11 @@ public abstract class Index extends ManageableSecurity {
 
   /**
    * Creates an index without a description.
-   * @param indexType The index type, not null
-   * @param name The index name, not null
+   * 
+   * @param indexType
+   *          The index type, not null
+   * @param name
+   *          The index name, not null
    */
   public Index(final String indexType, final String name) {
     super(indexType);
@@ -61,9 +66,13 @@ public abstract class Index extends ManageableSecurity {
 
   /**
    * Creates an index.
-   * @param indexType The index type, not null
-   * @param name The index name, not null
-   * @param description The index description
+   * 
+   * @param indexType
+   *          The index type, not null
+   * @param name
+   *          The index name, not null
+   * @param description
+   *          The index description
    */
   public Index(final String indexType, final String name, final String description) {
     super(indexType);
@@ -117,7 +126,7 @@ public abstract class Index extends ManageableSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets an optional linked IndexFamily
+   * Gets an optional linked IndexFamily.
    * @return the value of the property
    */
   public ExternalId getIndexFamilyId() {
@@ -125,7 +134,7 @@ public abstract class Index extends ManageableSecurity {
   }
 
   /**
-   * Sets an optional linked IndexFamily
+   * Sets an optional linked IndexFamily.
    * @param indexFamilyId  the new value of the property
    */
   public void setIndexFamilyId(ExternalId indexFamilyId) {

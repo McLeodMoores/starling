@@ -20,11 +20,13 @@ public @interface DescriptiveStatistic {
 
   /**
    * The name of the calculator.
+   * @return  the name
    */
   String name();
 
   /**
    * Any aliases of the calculator.
+   * @return  the aliases
    */
   String[] aliases() default { };
 }

@@ -8,6 +8,7 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -27,11 +28,10 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.DataConfigMasterResource;
 import com.opengamma.master.config.impl.DynamicDelegatingConfigMaster;
 import com.opengamma.master.config.impl.RemoteConfigMaster;
-import org.joda.beans.Bean;
 
 /**
- * Component factory for delegating master that maintains a map of delegate masters
- * <p/>
+ * Component factory for delegating master that maintains a map of delegate masters.
+ * <p>
  * Register as both a generic ConfigMaster as well as the concrete type
  * DynamicDelegatingConfigMasterComponentFactory, to allow command processor
  * to access out of band methods like:

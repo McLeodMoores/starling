@@ -15,8 +15,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InflationBuildingCurveSimpleTestEUR {
 
-//  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-//      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+//  private static final Interpolator1D INTERPOLATOR_LOG_LINEAR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, FlatExtrapolator1dAdapter.NAME,
+//      FlatExtrapolator1dAdapter.NAME);
 //
 //  private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
 //  private static final double TOLERANCE_ROOT = 1.0E-10;

@@ -25,7 +25,7 @@ public abstract class AbstractWebBundleResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param bundleManagerFactory  the bundle manager, not null
    * @param compressor  the bundle compressor, not null
    * @param mode  the deploy mode, not null
@@ -36,7 +36,7 @@ public abstract class AbstractWebBundleResource
     ArgumentChecker.notNull(bundleManagerFactory, "bundleManagerFactory");
     ArgumentChecker.notNull(compressor, "compressedBundleSource");
     ArgumentChecker.notNull(mode, "mode");
-    
+
     data().setBundleManagerFactory(bundleManagerFactory);
     data().setCompressor(compressor);
     data().setMode(mode);
@@ -44,7 +44,7 @@ public abstract class AbstractWebBundleResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebBundleResource(final AbstractWebBundleResource parent) {
@@ -54,36 +54,36 @@ public abstract class AbstractWebBundleResource
   //-------------------------------------------------------------------------
   @Override
   @Context
-  public void setServletContext(ServletContext servletContext) {
+  public void setServletContext(final ServletContext servletContext) {
     super.setServletContext(servletContext);
-    
+
     // initialise the manager now that we have the servlet context
-    BundleManager bundleManager = data().getBundleManagerFactory().get(servletContext);
+    final BundleManager bundleManager = data().getBundleManagerFactory().get(servletContext);
     data().setBundleManager(bundleManager);
     data().setDevBundleManager(new DevBundleBuilder(bundleManager).getDevBundleManager());
   }
 
   @Context
-  public void setHttpHeaders(HttpHeaders httpHeaders) {
+  public void setHttpHeaders(final HttpHeaders httpHeaders) {
     data().setHttpHeaders(httpHeaders);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("ogStyle", new StyleTag(data()));
     out.put("ogScript", new ScriptTag(data()));
-    HttpHeaders httpHeaders = data().getHttpHeaders();
+    final HttpHeaders httpHeaders = data().getHttpHeaders();
     String openfin = "";
     if (httpHeaders != null) {
       out.put("httpHeaders", data().getHttpHeaders());
-      List<String> openfinHeader = httpHeaders.getRequestHeader("x-powered-by");
+      final List<String> openfinHeader = httpHeaders.getRequestHeader("x-powered-by");
       if (openfinHeader != null) {
         openfin = Iterables.getFirst(openfinHeader, "");
       }

@@ -41,7 +41,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbPositionMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbPositionMasterWorkerTest.class);
 
   protected DbPositionMaster _posMaster;
   protected Instant _version1Instant;
@@ -52,7 +52,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
 
   public AbstractDbPositionMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -79,8 +79,8 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     _posMaster.setClock(Clock.fixed(_now.toInstant(), ZoneOffset.UTC));
     _version1Instant = _now.toInstant().minusSeconds(100);
     _version2Instant = _now.toInstant().minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _posMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
         100, 100, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "100", BigDecimal.valueOf(100.987));
@@ -308,19 +308,22 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     final List<ManageableTrade> trades = position.getTrades();
     assertEquals(3, trades.size());
 
-    ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(100.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(404), ExternalId.of("CPARTY", "C104"));
+    ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(100.987), secKey, _now.toLocalDate(),
+        _now.toOffsetTime().minusSeconds(404), ExternalId.of("CPARTY", "C104"));
     trade.setUniqueId(UniqueId.of("DbPos", "404", "0"));
     trade.setProviderId(ExternalId.of("B", "404"));
     trade.setParentPositionId(uniqueId);
     assertTrue(trades.contains(trade));
 
-    trade = new ManageableTrade(BigDecimal.valueOf(200.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(405), ExternalId.of("CPARTY", "C105"));
+    trade = new ManageableTrade(BigDecimal.valueOf(200.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(405),
+        ExternalId.of("CPARTY", "C105"));
     trade.setUniqueId(UniqueId.of("DbPos", "405", "0"));
     trade.setProviderId(ExternalId.of("B", "405"));
     trade.setParentPositionId(uniqueId);
     assertTrue(trades.contains(trade));
 
-    trade = new ManageableTrade(BigDecimal.valueOf(300.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(406),ExternalId.of("CPARTY", "C106"));
+    trade = new ManageableTrade(BigDecimal.valueOf(300.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(406),
+        ExternalId.of("CPARTY", "C106"));
     trade.setUniqueId(UniqueId.of("DbPos", "406", "0"));
     trade.setProviderId(ExternalId.of("B", "406"));
     trade.setParentPositionId(uniqueId);

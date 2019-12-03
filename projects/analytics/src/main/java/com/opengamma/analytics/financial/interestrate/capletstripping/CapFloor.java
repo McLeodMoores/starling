@@ -15,7 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 public class CapFloor extends Annuity<CapFloorIbor> {
 
   /**
-   * @param payments The series of caplets or floorlets - note must be all caplets or all floorlets with same strike
+   * @param payments
+   *          The series of caplets or floorlets - note must be all caplets or all floorlets with same strike
    */
   public CapFloor(final CapFloorIbor[] payments) {
     super(payments);
@@ -38,7 +39,8 @@ public class CapFloor extends Annuity<CapFloorIbor> {
   }
 
   /**
-   * The start time is taken as the fixing period start of the first caplet/floorlet
+   * The start time is taken as the fixing period start of the first caplet/floorlet.
+   * 
    * @return The start time
    */
   public double getStartTime() {
@@ -46,7 +48,8 @@ public class CapFloor extends Annuity<CapFloorIbor> {
   }
 
   /**
-   * The end time is taken as the fixing period end of the last caplet/floorlet
+   * The end time is taken as the fixing period end of the last caplet/floorlet.
+   * 
    * @return The end time
    */
   public double getEndTime() {
@@ -64,6 +67,5 @@ public class CapFloor extends Annuity<CapFloorIbor> {
     return new CapFloor(temp);
 
   }
-
 
 }

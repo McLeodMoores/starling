@@ -47,7 +47,7 @@ public final class ResolvedConfigLink<C>
    * @param value the config object to be embedded
    */
   @ImmutableConstructor
-  /* package */ ResolvedConfigLink(C value) {
+  /* package */ ResolvedConfigLink(final C value) {
     _value = ArgumentChecker.notNull(value, "config");
   }
 
@@ -138,7 +138,7 @@ public final class ResolvedConfigLink<C>
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvedConfigLink<?> other = (ResolvedConfigLink<?>) obj;
-      return JodaBeanUtils.equal(getValue(), other.getValue());
+      return JodaBeanUtils.equal(_value, other._value);
     }
     return false;
   }
@@ -146,7 +146,7 @@ public final class ResolvedConfigLink<C>
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_value);
     return hash;
   }
 
@@ -154,7 +154,7 @@ public final class ResolvedConfigLink<C>
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ResolvedConfigLink{");
-    buf.append("value").append('=').append(JodaBeanUtils.toString(getValue()));
+    buf.append("value").append('=').append(JodaBeanUtils.toString(_value));
     buf.append('}');
     return buf.toString();
   }
@@ -298,19 +298,31 @@ public final class ResolvedConfigLink<C>
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<C> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

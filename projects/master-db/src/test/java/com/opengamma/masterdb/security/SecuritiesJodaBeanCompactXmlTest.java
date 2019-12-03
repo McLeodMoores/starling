@@ -20,11 +20,11 @@ import com.opengamma.util.test.TestGroup;
 public class SecuritiesJodaBeanCompactXmlTest extends SecurityTestCase {
 
   @Override
-  protected <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security) {
-    String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(security);
+  protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
+    final String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(security);
 //    System.out.println(xml);
 
-    T readIn = securityClass.cast(JodaBeanSerialization.deserializer().xmlReader().read(xml));
+    final T readIn = securityClass.cast(JodaBeanSerialization.deserializer().xmlReader().read(xml));
     assertEquals(security, readIn);
 
     // fudge equivalent

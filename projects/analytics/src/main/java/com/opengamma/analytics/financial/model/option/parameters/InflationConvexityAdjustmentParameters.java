@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * _atmVolatility
+ *
  */
 public class InflationConvexityAdjustmentParameters {
 
@@ -43,20 +43,28 @@ public class InflationConvexityAdjustmentParameters {
    */
   private final Curve<Double, Double> _priceIndexRateCorrelation;
   /**
-   * The index  price for which the volatility is valid. Not null.
+   * The index price for which the volatility is valid. Not null.
    */
   private final IndexPrice _index;
 
   /**
    * Constructor from the parameter surfaces.
-   * @param inflationTime the inflation times.
-   * @param atmVolatility The atm Black volatility curve.
-   * @param liborCorrelation the inter libor correlation
-   * @param priceIndexCorrelation The price index correlation surface.
-   * @param priceIndexRateCorrelation  The price index\rate volatility surface.
-   * @param index The index price for which the volatility is valid.
+   *
+   * @param inflationTime
+   *          the inflation times.
+   * @param atmVolatility
+   *          The atm Black volatility curve.
+   * @param liborCorrelation
+   *          the inter libor correlation
+   * @param priceIndexCorrelation
+   *          The price index correlation surface.
+   * @param priceIndexRateCorrelation
+   *          The price index\rate volatility surface.
+   * @param index
+   *          The index price for which the volatility is valid.
    */
-  public InflationConvexityAdjustmentParameters(final double[] inflationTime, final double[] atmVolatility, final Surface<Double, Double, Double> priceIndexCorrelation,
+  public InflationConvexityAdjustmentParameters(final double[] inflationTime, final double[] atmVolatility,
+      final Surface<Double, Double, Double> priceIndexCorrelation,
       final Surface<Double, Double, Double> liborCorrelation, final Curve<Double, Double> priceIndexRateCorrelation, final IndexPrice index) {
     ArgumentChecker.notNull(inflationTime, "inflation time");
     ArgumentChecker.notNull(atmVolatility, "price index correlation surface");
@@ -74,6 +82,7 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Return the volatility for a time to expiration and strike.
+   *
    * @return The atm volatility.
    */
   public double[] getInflationTime() {
@@ -82,6 +91,7 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Return the volatility for a time to expiration and strike.
+   *
    * @return The atm volatility.
    */
   public double[] getPriceIndexAtmVolatility() {
@@ -90,6 +100,7 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Return the price index correlation surface.
+   *
    * @return The price index correlation surface.
    */
   public Surface<Double, Double, Double> getPriceIndexCorrelation() {
@@ -98,6 +109,7 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Return the libor correlation surface.
+   *
    * @return The libor correlation surface.
    */
   public Surface<Double, Double, Double> getLiborCorrelation() {
@@ -106,7 +118,8 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Return the libor/price index correlation vector.
-   * @return  The libor/price index correlation vector.
+   *
+   * @return The libor/price index correlation vector.
    */
   public Curve<Double, Double> getPriceIndexRateCorrelation() {
     return _priceIndexRateCorrelation;
@@ -114,6 +127,7 @@ public class InflationConvexityAdjustmentParameters {
 
   /**
    * Gets the Ibor index for which the volatility is valid.
+   *
    * @return The index.
    */
   public IndexPrice getPriceIndex() {

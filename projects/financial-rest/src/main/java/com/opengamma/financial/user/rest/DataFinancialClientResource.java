@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.financial.analytics.ircurve.rest.DataInterpolatedYieldCurveDefinitionMasterResource;
 import com.opengamma.financial.user.FinancialClient;
 import com.opengamma.master.config.impl.DataConfigMasterResource;
 import com.opengamma.master.marketdatasnapshot.impl.DataMarketDataSnapshotMasterResource;
@@ -28,7 +27,7 @@ import com.opengamma.util.rest.AbstractDataResource;
 public class DataFinancialClientResource extends AbstractDataResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DataFinancialClientResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataFinancialClientResource.class);
 
   /**
    * The path used to retrieve user portfolios.
@@ -66,65 +65,60 @@ public class DataFinancialClientResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
-   * @param client  the client, not null
+   *
+   * @param client
+   *          the client, not null
    */
-  public DataFinancialClientResource(FinancialClient client) {
+  public DataFinancialClientResource(final FinancialClient client) {
     _client = client;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the client.
-   * 
+   *
    * @return the client, not null
    */
   public FinancialClient getClient() {
     return _client;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path(SECURITY_MASTER_PATH)
   public DataSecurityMasterResource getSecurityMaster() {
-    s_logger.debug("Accessed UserSecurityMaster for {}", getClient());
+    LOGGER.debug("Accessed UserSecurityMaster for {}", getClient());
     return new DataSecurityMasterResource(getClient().getSecurityMaster());
   }
 
   @Path(POSITION_MASTER_PATH)
   public DataPositionMasterResource getPositionMaster() {
-    s_logger.debug("Accessed UserPositionMaster for {}", getClient());
+    LOGGER.debug("Accessed UserPositionMaster for {}", getClient());
     return new DataPositionMasterResource(getClient().getPositionMaster());
   }
 
   @Path(PORTFOLIO_MASTER_PATH)
   public DataPortfolioMasterResource getPortfolioMaster() {
-    s_logger.debug("Accessed UserPortfolioMaster for {}", getClient());
+    LOGGER.debug("Accessed UserPortfolioMaster for {}", getClient());
     return new DataPortfolioMasterResource(getClient().getPortfolioMaster());
   }
 
   @Path(CONFIG_MASTER_PATH)
   public DataConfigMasterResource getConfigMaster() {
-    s_logger.debug("Accessed UserViewDefinitionMaster for {}", getClient());
+    LOGGER.debug("Accessed UserViewDefinitionMaster for {}", getClient());
     return new DataConfigMasterResource(getClient().getConfigMaster());
-  }
-
-  @Path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH)
-  public DataInterpolatedYieldCurveDefinitionMasterResource getInterpolatedYieldCurveDefinitionMaster() {
-    s_logger.debug("Accessed UserYieldCurveMaster for {}", getClient());
-    return new DataInterpolatedYieldCurveDefinitionMasterResource(getClient().getInterpolatedYieldCurveDefinitionMaster());
   }
 
   @Path(MARKET_DATA_SNAPSHOT_MASTER_PATH)
   public DataMarketDataSnapshotMasterResource getSnapshotMaster() {
-    s_logger.debug("Accessed UserSnapshotMaster for {}", getClient());
+    LOGGER.debug("Accessed UserSnapshotMaster for {}", getClient());
     return new DataMarketDataSnapshotMasterResource(getClient().getSnapshotMaster());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Path(HEARTBEAT_PATH)
   public void heartbeat() {
-    s_logger.debug("Heartbeat received from {}", getClient());
+    LOGGER.debug("Heartbeat received from {}", getClient());
     getClient().updateLastAccessed();
   }
 }

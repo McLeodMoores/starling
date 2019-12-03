@@ -27,6 +27,7 @@ public final class FuturesPriceBlackSTIRFuturesCalculator extends InstrumentDeri
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static FuturesPriceBlackSTIRFuturesCalculator getInstance() {
@@ -44,10 +45,11 @@ public final class FuturesPriceBlackSTIRFuturesCalculator extends InstrumentDeri
   /** The method used to compute the future price. It is a method without convexity adjustment. */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_FUTURE = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures options    -----
+  // ----- Futures options -----
 
   @Override
-  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security, final BlackSTIRFuturesProviderInterface black) {
+  public Double visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security,
+      final BlackSTIRFuturesProviderInterface black) {
     ArgumentChecker.notNull(security, "Option security");
     ArgumentChecker.notNull(black, "Black data");
     final double priceFuture = METHOD_FUTURE.price(security.getUnderlyingFuture(), black.getMulticurveProvider());
@@ -60,9 +62,10 @@ public final class FuturesPriceBlackSTIRFuturesCalculator extends InstrumentDeri
     final double priceSecurity = BLACK_FUNCTION.getPriceFunction(option).evaluate(dataBlack);
     return priceSecurity;
   }
-  
+
   @Override
-  public Double visitInterestRateFutureOptionMarginTransaction(InterestRateFutureOptionMarginTransaction option, BlackSTIRFuturesProviderInterface data) {
+  public Double visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option,
+      final BlackSTIRFuturesProviderInterface data) {
     return visitInterestRateFutureOptionMarginSecurity(option.getUnderlyingSecurity(), data);
   }
 

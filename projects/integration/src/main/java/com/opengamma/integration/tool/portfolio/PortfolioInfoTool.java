@@ -15,30 +15,31 @@ import com.opengamma.integration.copier.portfolio.reader.PositionReader;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to aggregate portfolios
+ * Tool to aggregate portfolios.
  */
 @Scriptable
 public class PortfolioInfoTool extends AbstractTool<ToolContext> {
 
   private static final String PORTFOLIO_NAME = "n";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioInfoTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final PositionReader positionReader = new MasterPositionReader(getCommandLine().getOptionValue(PORTFOLIO_NAME),
-                                                                getToolContext().getPortfolioMaster(),
-                                                                getToolContext().getPositionMaster(),
-                                                                getToolContext().getSecuritySource());
+        getToolContext().getPortfolioMaster(),
+        getToolContext().getPositionMaster(),
+        getToolContext().getSecuritySource());
 
     int positionCount = 0;
     while (positionReader.readNext() != null) {

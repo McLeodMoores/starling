@@ -61,8 +61,8 @@ import com.opengamma.util.paging.Paging;
  * <p>
  * This is a full implementation of the security master using an SQL database. Full details of the API are in {@link SecurityMaster}.
  * <p>
- * The SQL is stored externally in {@code DbSecurityMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific overrides, such as
- * {@code DbSecurityMaster-MySpecialDB.elsql}.
+ * The SQL is stored externally in {@code DbSecurityMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database specific
+ * overrides, such as {@code DbSecurityMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
@@ -71,7 +71,7 @@ public class DbSecurityMaster
     implements SecurityMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbSecurityMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbSecurityMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -86,7 +86,7 @@ public class DbSecurityMaster
   /**
    * SQL order by.
    */
-  protected static final EnumMap<SecuritySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<SecuritySearchSortOrder, String>(SecuritySearchSortOrder.class);
+  protected static final EnumMap<SecuritySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(SecuritySearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(SecuritySearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(SecuritySearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -113,8 +113,9 @@ public class DbSecurityMaster
 
   /**
    * Creates an instance.
-   * 
-   * @param dbConnector the database connector, not null
+   *
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbSecurityMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -122,16 +123,16 @@ public class DbSecurityMaster
   }
 
   @Override
-  public void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     super.registerMetrics(summaryRegistry, detailedRegistry, namePrefix);
     _insertTimer = summaryRegistry.timer(namePrefix + ".insert");
     _metaDataTimer = summaryRegistry.timer(namePrefix + ".metaData");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the detail provider.
-   * 
+   *
    * @return the detail provider
    */
   public SecurityMasterDetailProvider getDetailProvider() {
@@ -140,29 +141,30 @@ public class DbSecurityMaster
 
   /**
    * Sets the detail provider.
-   * 
-   * @param detailProvider the detail provider, not null
+   *
+   * @param detailProvider
+   *          the detail provider, not null
    */
-  public void setDetailProvider(SecurityMasterDetailProvider detailProvider) {
+  public void setDetailProvider(final SecurityMasterDetailProvider detailProvider) {
     ArgumentChecker.notNull(detailProvider, "detailProvider");
     detailProvider.init(this);
     _detailProvider = detailProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    Timer.Context context = _metaDataTimer.time();
+    final Timer.Context context = _metaDataTimer.time();
     try {
-      SecurityMetaDataResult result = new SecurityMetaDataResult();
+      final SecurityMetaDataResult result = new SecurityMetaDataResult();
       if (!matchesUniqueIdScheme(request)) {
         return result;
       }
       if (request.isSecurityTypes()) {
         final String sql = getElSqlBundle().getSql("SelectTypes");
-        List<String> securityTypes = getJdbcTemplate().getJdbcOperations().queryForList(sql, String.class);
+        final List<String> securityTypes = getJdbcTemplate().getJdbcOperations().queryForList(sql, String.class);
         result.getSecurityTypes().addAll(securityTypes);
       }
       if (request.isSchemaVersion()) {
@@ -174,34 +176,34 @@ public class DbSecurityMaster
     }
   }
 
-  private boolean matchesUniqueIdScheme(SecurityMetaDataRequest request) {
+  private boolean matchesUniqueIdScheme(final SecurityMetaDataRequest request) {
     return request.getUniqueIdScheme() == null || getUniqueIdScheme().equals(request.getUniqueIdScheme());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     VersionCorrection vc = request.getVersionCorrection();
     if (vc.containsLatest()) {
       vc = vc.withLatestFixed(now());
     }
-    
+
     final SecuritySearchResult result = new SecuritySearchResult(vc);
-    
+
     if (!matchesUniqueIdScheme(request)) {
       return result;
     }
-    
+
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
     final Map<String, String> attributes = request.getAttributes();
     final List<ObjectId> objectIds = request.getObjectIds();
-    if ((objectIds != null && objectIds.size() == 0) ||
-        (ExternalIdSearch.canMatch(request.getExternalIdSearch()) == false)) {
+    if (objectIds != null && objectIds.size() == 0
+        || !ExternalIdSearch.canMatch(request.getExternalIdSearch())) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
@@ -213,9 +215,9 @@ public class DbSecurityMaster
         .addValueNullIgnored("sec_type", request.getSecurityType())
         .addValueNullIgnored("external_id_scheme", getDialect().sqlWildcardAdjustValue(request.getExternalIdScheme()))
         .addValueNullIgnored("external_id_value", getDialect().sqlWildcardAdjustValue(request.getExternalIdValue()));
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
-      for (ExternalId id : externalIdSearch) {
+      for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
         args.addValue("key_value" + i, id.getValue());
         i++;
@@ -226,7 +228,7 @@ public class DbSecurityMaster
     }
     if (attributes.size() > 0) {
       int i = 0;
-      for (Entry<String, String> entry : attributes.entrySet()) {
+      for (final Entry<String, String> entry : attributes.entrySet()) {
         args.addValue("attr_key" + i, entry.getKey());
         args.addValue("attr_value" + i, getDialect().sqlWildcardAdjustValue(entry.getValue()));
         i++;
@@ -234,8 +236,8 @@ public class DbSecurityMaster
       args.addValue("attr_search_size", attributes.size());
     }
     if (objectIds != null) {
-      StringBuilder buf = new StringBuilder(objectIds.size() * 10);
-      for (ObjectId objectId : objectIds) {
+      final StringBuilder buf = new StringBuilder(objectIds.size() * 10);
+      for (final ObjectId objectId : objectIds) {
         checkScheme(objectId);
         buf.append(extractOid(objectId)).append(", ");
       }
@@ -251,7 +253,7 @@ public class DbSecurityMaster
       detailProvider.extendSearch(request, args);
     }
 
-    String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new SecurityDocumentExtractor(), result);
     if (request.isFullDetail()) {
       loadDetail(detailProvider, result.getDocuments());
@@ -268,19 +270,20 @@ public class DbSecurityMaster
    * Gets the SQL to find all the ids for a single bundle.
    * <p>
    * This is too complex for the elsql mechanism.
-   * 
-   * @param idSearch the identifier search, not null
+   *
+   * @param idSearch
+   *          the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
-    List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<>();
     for (int i = 0; i < idSearch.size(); i++) {
       list.add("(key_scheme = :key_scheme" + i + " AND key_value = :key_value" + i + ") ");
     }
     return StringUtils.join(list, "OR ");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityDocument get(final UniqueId uniqueId) {
     final SecurityDocument doc = doGet(uniqueId, new SecurityDocumentExtractor(), "Security");
@@ -288,7 +291,7 @@ public class DbSecurityMaster
     return doc;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     final SecurityDocument doc = doGetByOidInstants(objectId, versionCorrection, new SecurityDocumentExtractor(), "Security");
@@ -296,7 +299,7 @@ public class DbSecurityMaster
     return doc;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     final SecurityHistoryResult result = doHistory(request, new SecurityHistoryResult(), new SecurityDocumentExtractor());
@@ -306,16 +309,18 @@ public class DbSecurityMaster
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Loads the detail of the security for the document.
-   * 
-   * @param detailProvider the detail provider, null ignored
-   * @param docs the documents to load detail for, not null
+   *
+   * @param detailProvider
+   *          the detail provider, null ignored
+   * @param docs
+   *          the documents to load detail for, not null
    */
   protected void loadDetail(final SecurityMasterDetailProvider detailProvider, final List<SecurityDocument> docs) {
     if (detailProvider != null) {
-      for (SecurityDocument doc : docs) {
+      for (final SecurityDocument doc : docs) {
         if (!(doc.getSecurity() instanceof RawSecurity)) {
           doc.setSecurity(detailProvider.loadSecurityDetail(doc.getSecurity()));
         }
@@ -323,11 +328,12 @@ public class DbSecurityMaster
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Inserts a new document.
-   * 
-   * @param document the document, not null
+   *
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -337,10 +343,10 @@ public class DbSecurityMaster
     ArgumentChecker.notNull(document.getSecurity().getSecurityType(), "document.security.securityTYpe");
     ArgumentChecker.notNull(document.getSecurity().getExternalIdBundle(), "document.security.externalIdBundle");
 
-    Timer.Context context = _insertTimer.time();
+    final Timer.Context context = _insertTimer.time();
     try {
       final long docId = nextId("sec_security_seq");
-      final long docOid = (document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId);
+      final long docOid = document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId;
       // the arguments for inserting into the security table
       final DbMapSqlParameterSource docArgs = createParameterSource()
           .addValue("doc_id", docId)
@@ -359,10 +365,10 @@ public class DbSecurityMaster
         docArgs.addValue("detail_type", "D");
       }
       // the arguments for inserting into the idkey tables
-      final List<DbMapSqlParameterSource> assocList = new ArrayList<DbMapSqlParameterSource>();
-      final List<DbMapSqlParameterSource> idKeyList = new ArrayList<DbMapSqlParameterSource>();
+      final List<DbMapSqlParameterSource> assocList = new ArrayList<>();
+      final List<DbMapSqlParameterSource> idKeyList = new ArrayList<>();
       final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
-      for (ExternalId id : document.getSecurity().getExternalIdBundle()) {
+      for (final ExternalId id : document.getSecurity().getExternalIdBundle()) {
         final DbMapSqlParameterSource assocArgs = createParameterSource()
             .addValue("doc_id", docId)
             .addValue("key_scheme", id.getScheme().getName())
@@ -400,9 +406,9 @@ public class DbSecurityMaster
       }
 
       // store attributes
-      Map<String, String> attributes = new HashMap<String, String>(document.getSecurity().getAttributes());
+      final Map<String, String> attributes = new HashMap<>(document.getSecurity().getAttributes());
       final List<DbMapSqlParameterSource> securityAttributeList = Lists.newArrayList();
-      for (Map.Entry<String, String> entry : attributes.entrySet()) {
+      for (final Map.Entry<String, String> entry : attributes.entrySet()) {
         final long securityAttrId = nextId("sec_security_attr_seq");
         final DbMapSqlParameterSource attributeArgs = createParameterSource()
             .addValue("attr_id", securityAttrId)
@@ -414,7 +420,7 @@ public class DbSecurityMaster
       }
       // store permissions as attributes
       int count = 0;
-      for (String permission : document.getSecurity().getRequiredPermissions()) {
+      for (final String permission : document.getSecurity().getRequiredPermissions()) {
         final long securityAttrId = nextId("sec_security_attr_seq");
         final DbMapSqlParameterSource attributeArgs = createParameterSource()
             .addValue("attr_id", securityAttrId)
@@ -434,7 +440,7 @@ public class DbSecurityMaster
 
   }
 
-  private void storeRawSecurityDetail(RawSecurity security) {
+  private void storeRawSecurityDetail(final RawSecurity security) {
     final DbMapSqlParameterSource rawArgs = createParameterSource()
         .addValue("security_id", extractRowId(security.getUniqueId()))
         .addValue("raw_data", new SqlLobValue(security.getRawData(), getDialect().getLobHandler()), Types.BLOB);
@@ -442,14 +448,14 @@ public class DbSecurityMaster
     getJdbcTemplate().update(sqlRaw, rawArgs);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Mapper from SQL rows to a SecurityDocument.
    */
   protected final class SecurityDocumentExtractor implements ResultSetExtractor<List<SecurityDocument>> {
     private long _lastDocId = -1;
     private ManageableSecurity _security;
-    private List<SecurityDocument> _documents = new ArrayList<SecurityDocument>();
+    private final List<SecurityDocument> _documents = new ArrayList<>();
 
     @Override
     public List<SecurityDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -462,7 +468,7 @@ public class DbSecurityMaster
         final String idScheme = rs.getString("KEY_SCHEME");
         final String idValue = rs.getString("KEY_VALUE");
         if (idScheme != null && idValue != null) {
-          ExternalId id = ExternalId.of(idScheme, idValue);
+          final ExternalId id = ExternalId.of(idScheme, idValue);
           _security.setExternalIdBundle(_security.getExternalIdBundle().withExternalId(id));
         }
 
@@ -487,18 +493,18 @@ public class DbSecurityMaster
       final Timestamp correctionTo = rs.getTimestamp("CORR_TO_INSTANT");
       final String name = rs.getString("NAME");
       final String type = rs.getString("SEC_TYPE");
-      UniqueId uniqueId = createUniqueId(docOid, docId);
-      String detailType = rs.getString("DETAIL_TYPE");
+      final UniqueId uniqueId = createUniqueId(docOid, docId);
+      final String detailType = rs.getString("DETAIL_TYPE");
       if (detailType.equalsIgnoreCase("R")) {
-        LobHandler lob = getDialect().getLobHandler();
-        byte[] rawData = lob.getBlobAsBytes(rs, "RAW_DATA");
+        final LobHandler lob = getDialect().getLobHandler();
+        final byte[] rawData = lob.getBlobAsBytes(rs, "RAW_DATA");
         _security = new RawSecurity(type, rawData);
         _security.setUniqueId(uniqueId);
         _security.setName(name);
       } else {
         _security = new ManageableSecurity(uniqueId, name, type, ExternalIdBundle.EMPTY);
       }
-      SecurityDocument doc = new SecurityDocument(_security);
+      final SecurityDocument doc = new SecurityDocument(_security);
       doc.setVersionFromInstant(DbDateUtils.fromSqlTimestamp(versionFrom));
       doc.setVersionToInstant(DbDateUtils.fromSqlTimestampNullFarFuture(versionTo));
       doc.setCorrectionFromInstant(DbDateUtils.fromSqlTimestamp(correctionFrom));
@@ -509,8 +515,8 @@ public class DbSecurityMaster
   }
 
   @Override
-  protected AbstractHistoryResult<SecurityDocument> historyByVersionsCorrections(AbstractHistoryRequest request) {
-    SecurityHistoryRequest historyRequest = new SecurityHistoryRequest();
+  protected AbstractHistoryResult<SecurityDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
+    final SecurityHistoryRequest historyRequest = new SecurityHistoryRequest();
     historyRequest.setCorrectionsFromInstant(request.getCorrectionsFromInstant());
     historyRequest.setCorrectionsToInstant(request.getCorrectionsToInstant());
     historyRequest.setVersionsFromInstant(request.getVersionsFromInstant());

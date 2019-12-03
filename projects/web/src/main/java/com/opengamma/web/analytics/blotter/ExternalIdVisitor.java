@@ -23,86 +23,85 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Returns an {@link ExternalId} with the scheme {@link UniqueId#EXTERNAL_SCHEME} for on OTC security which can be
- * used as the underlying ID in another security. Currently only supports {@link SwapSecurity}, returns null for all
- * other security types. If the security doesn't have an existing ID then one is created from its unique ID. So
- * this can only be used on a security which have been saved and has an ID.
- * TODO this isn't nice as the security has to be saved twice, once to get the unique ID and once to add the external ID
- * it would be better if SwaptionSecurity referred to its underlying with a SecurityLink. but it doesn't (yet?)
- * TODO update this once Swaption has been updated to use a link to refer to its underlying
+ * Returns an {@link ExternalId} with the scheme {@link UniqueId#EXTERNAL_SCHEME} for an OTC security which can be used as the underlying ID in another
+ * security. Currently only supports {@link SwapSecurity}, returns null for all other security types. If the security doesn't have an existing ID then one is
+ * created from its unique ID. So this can only be used on a security which have been saved and has an ID.
  */
+// TODO this isn't nice as the security has to be saved twice, once to get the unique ID and once to add the external ID
+// it would be better if SwaptionSecurity referred to its underlying with a SecurityLink. but it doesn't (yet?)
+// TODO update this once Swaption has been updated to use a link to refer to its underlying
 /* package */ class ExternalIdVisitor extends FinancialSecurityVisitorSameValueAdapter<ExternalId> {
 
   private final SecurityMaster _securityMaster;
 
-  /* package */  ExternalIdVisitor(SecurityMaster securityMaster) {
+  /* package */ ExternalIdVisitor(final SecurityMaster securityMaster) {
     super(null);
     ArgumentChecker.notNull(securityMaster, "securityMaster");
     _securityMaster = securityMaster;
   }
 
   @Override
-  public ExternalId visitSwapSecurity(SwapSecurity security) {
-    ExternalId id = security.getExternalIdBundle().getExternalId(UniqueId.EXTERNAL_SCHEME);
+  public ExternalId visitSwapSecurity(final SwapSecurity security) {
+    final ExternalId id = security.getExternalIdBundle().getExternalId(UniqueId.EXTERNAL_SCHEME);
     if (id != null) {
       return id;
     }
-    UniqueId uniqueId = security.getUniqueId();
+    final UniqueId uniqueId = security.getUniqueId();
     if (uniqueId == null) {
       throw new IllegalStateException("Security must have a unique ID");
     }
-    ObjectId objectId = uniqueId.getObjectId();
-    ExternalId externalId = ExternalId.of(ObjectId.EXTERNAL_SCHEME, objectId.toString());
+    final ObjectId objectId = uniqueId.getObjectId();
+    final ExternalId externalId = ExternalId.of(ObjectId.EXTERNAL_SCHEME, objectId.toString());
     security.addExternalId(externalId);
     _securityMaster.update(new SecurityDocument(security));
     return externalId;
   }
 
   @Override
-  public ExternalId visitCreditDefaultSwapIndexSecurity(CreditDefaultSwapIndexSecurity security) {
+  public ExternalId visitCreditDefaultSwapIndexSecurity(final CreditDefaultSwapIndexSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitLegacyFixedRecoveryCDSSecurity(LegacyFixedRecoveryCDSSecurity security) {
+  public ExternalId visitLegacyFixedRecoveryCDSSecurity(final LegacyFixedRecoveryCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitLegacyRecoveryLockCDSSecurity(LegacyRecoveryLockCDSSecurity security) {
+  public ExternalId visitLegacyRecoveryLockCDSSecurity(final LegacyRecoveryLockCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitStandardFixedRecoveryCDSSecurity(StandardFixedRecoveryCDSSecurity security) {
+  public ExternalId visitStandardFixedRecoveryCDSSecurity(final StandardFixedRecoveryCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitStandardRecoveryLockCDSSecurity(StandardRecoveryLockCDSSecurity security) {
+  public ExternalId visitStandardRecoveryLockCDSSecurity(final StandardRecoveryLockCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitStandardVanillaCDSSecurity(StandardVanillaCDSSecurity security) {
+  public ExternalId visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
   @Override
-  public ExternalId visitLegacyVanillaCDSSecurity(LegacyVanillaCDSSecurity security) {
+  public ExternalId visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
     return commonCDSSecurityExternalId(security);
   }
 
-  private ExternalId commonCDSSecurityExternalId(AbstractCreditDefaultSwapSecurity security) {
+  private ExternalId commonCDSSecurityExternalId(final AbstractCreditDefaultSwapSecurity security) {
     if (!security.getExternalIdBundle().isEmpty()) {
       return security.getExternalIdBundle().getExternalIds().iterator().next();
     }
-    UniqueId uniqueId = security.getUniqueId();
+    final UniqueId uniqueId = security.getUniqueId();
     if (uniqueId == null) {
       throw new IllegalStateException("Security must have a unique ID");
     }
-    ObjectId objectId = uniqueId.getObjectId();
-    ExternalId externalId = ExternalId.of(ObjectId.EXTERNAL_SCHEME, objectId.toString());
+    final ObjectId objectId = uniqueId.getObjectId();
+    final ExternalId externalId = ExternalId.of(ObjectId.EXTERNAL_SCHEME, objectId.toString());
     security.addExternalId(externalId);
     _securityMaster.update(new SecurityDocument(security));
     return externalId;

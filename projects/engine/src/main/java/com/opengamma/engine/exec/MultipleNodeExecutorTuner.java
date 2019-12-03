@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
@@ -26,10 +26,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * <p>
- * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing cluster change. Schedule this to run periodically to update
- * its sampling and make continuous adjustments.
- * </p>
- * <h2>Tuning rules<h2>
+ * Continuously tunes the parameters to a {@link MultipleNodeExecutorFactory} to maintain good performance while aspects of the computing cluster change.
+ * Schedule this to run periodically to update its sampling and make continuous adjustments.
+ * <h2>Tuning rules</h2>
  * <p>
  * Set maximum concurrency to the average node count of the job invokers. Requires a {@link JobDispatcher}.
  * </p>
@@ -43,7 +42,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
   // should implement the gathering interfaces and make adjustments as statistical data arrives, possibly acting
   // as a pass-through so it can sit on top of other gathering implementations
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
 
   private final MultipleNodeExecutorFactory _factory;
 
@@ -111,13 +110,13 @@ public class MultipleNodeExecutorTuner implements Runnable {
   @Override
   public void run() {
     if (getJobDispatcher() != null) {
-      s_logger.debug("Processing capabilities");
+      LOGGER.debug("Processing capabilities");
       final Map<String, Collection<Capability>> allCapabilities = getJobDispatcher().getAllCapabilities();
       int nodesPerInvokerCount = 0;
       double nodesPerInvoker = 0;
       boolean changed = false;
-      for (Map.Entry<String, Collection<Capability>> capabilities : allCapabilities.entrySet()) {
-        for (Capability capability : capabilities.getValue()) {
+      for (final Map.Entry<String, Collection<Capability>> capabilities : allCapabilities.entrySet()) {
+        for (final Capability capability : capabilities.getValue()) {
           if (PlatformCapabilities.NODE_COUNT.equals(capability.getIdentifier())) {
             nodesPerInvokerCount++;
             nodesPerInvoker += capability.getUpperBoundParameter();
@@ -125,11 +124,11 @@ public class MultipleNodeExecutorTuner implements Runnable {
         }
       }
       if (nodesPerInvokerCount > 0) {
-        s_logger.debug("Found {} nodes at {} invokers", nodesPerInvoker, nodesPerInvokerCount);
-        int maxConcurrency = getFactory().getMaximumConcurrency();
-        int newMaxConcurrency = (int) Math.ceil(nodesPerInvoker / (double) nodesPerInvokerCount);
+        LOGGER.debug("Found {} nodes at {} invokers", nodesPerInvoker, nodesPerInvokerCount);
+        final int maxConcurrency = getFactory().getMaximumConcurrency();
+        final int newMaxConcurrency = (int) Math.ceil(nodesPerInvoker / nodesPerInvokerCount);
         if (newMaxConcurrency != maxConcurrency) {
-          s_logger.info("Changing maximum concurrency to {}", newMaxConcurrency);
+          LOGGER.info("Changing maximum concurrency to {}", newMaxConcurrency);
           getFactory().setMaximumConcurrency(newMaxConcurrency);
           changed = true;
         }
@@ -139,17 +138,17 @@ public class MultipleNodeExecutorTuner implements Runnable {
       }
     }
     if (getGraphExecutionStatistics() != null) {
-      s_logger.debug("Processing graph execution statistics");
-      for (TotallingGraphStatisticsGathererProvider.Statistics gatherer : getGraphExecutionStatistics().getViewStatistics()) {
-        for (GraphExecutionStatistics statistics : gatherer.getExecutionStatistics()) {
+      LOGGER.debug("Processing graph execution statistics");
+      for (final TotallingGraphStatisticsGathererProvider.Statistics gatherer : getGraphExecutionStatistics().getViewStatistics()) {
+        for (final GraphExecutionStatistics statistics : gatherer.getExecutionStatistics()) {
           statistics.decay(getStatisticsDecayRate());
         }
       }
       getGraphExecutionStatistics().dropStatisticsBefore(Instant.now().minusSeconds(getStatisticsKeepAlive()));
     }
     if (getJobDispatchStatistics() != null) {
-      s_logger.debug("Processing job dispatch statistics");
-      for (CalculationNodeStatistics statistics : getJobDispatchStatistics().getNodeStatistics()) {
+      LOGGER.debug("Processing job dispatch statistics");
+      for (final CalculationNodeStatistics statistics : getJobDispatchStatistics().getNodeStatistics()) {
         statistics.decay(getStatisticsDecayRate());
       }
       getJobDispatchStatistics().dropStatisticsBefore(Instant.now().minusSeconds(getStatisticsKeepAlive()));
@@ -159,7 +158,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
   private FudgeMsg dumpCapabilities(final FudgeSerializer serializer, final String invokerId, final Collection<Capability> capabilities) {
     final MutableFudgeMsg message = serializer.newMessage();
     message.add("identifier", invokerId);
-    for (Capability capability : capabilities) {
+    for (final Capability capability : capabilities) {
       serializer.addToMessageWithClassHeaders(message, capability.getIdentifier(), null, capability, Capability.class);
     }
     return message;
@@ -169,7 +168,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
     final MutableFudgeMsg message = serializer.newMessage();
     serializer.addToMessage(message, "factory", null, getFactory());
     if (getJobDispatcher() != null) {
-      for (Map.Entry<String, Collection<Capability>> capabilities : getJobDispatcher().getAllCapabilities().entrySet()) {
+      for (final Map.Entry<String, Collection<Capability>> capabilities : getJobDispatcher().getAllCapabilities().entrySet()) {
         message.add("Invoker", dumpCapabilities(serializer, capabilities.getKey(), capabilities.getValue()));
       }
     }

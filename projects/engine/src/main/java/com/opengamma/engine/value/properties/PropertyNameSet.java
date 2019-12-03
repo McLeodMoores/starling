@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -22,7 +22,7 @@ public final class PropertyNameSet implements Set<String> {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param properties the values backing the set. This class will use this object but not modify it.
    */
   public PropertyNameSet(final AbstractValueProperty[] properties) {
@@ -50,7 +50,7 @@ public final class PropertyNameSet implements Set<String> {
 
   @Override
   public boolean contains(final Object o) {
-    if ((o == null) || !(o instanceof String)) {
+    if (o == null || !(o instanceof String)) {
       return false;
     }
     final int hc = o.hashCode() & 0x7FFFFFFF;
@@ -148,7 +148,7 @@ public final class PropertyNameSet implements Set<String> {
 
   @Override
   public boolean containsAll(final Collection<?> c) {
-    for (Object o : c) {
+    for (final Object o : c) {
       if (!contains(o)) {
         return false;
       }

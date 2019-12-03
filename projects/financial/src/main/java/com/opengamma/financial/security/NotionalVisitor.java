@@ -84,7 +84,7 @@ public class NotionalVisitor extends FinancialSecurityVisitorAdapter<CurrencyAmo
 
   @Override
   public CurrencyAmount visitInterestRateSwapSecurity(final InterestRateSwapSecurity security) {
-    //TODO: Handle more than 2 legs
+    // TODO: Handle more than 2 legs
     final InterestRateSwapLeg payNotional = security.getPayLeg();
     final InterestRateSwapLeg receiveNotional = security.getReceiveLeg();
     final InterestRateNotional pay = payNotional.getNotional();
@@ -259,8 +259,8 @@ public class NotionalVisitor extends FinancialSecurityVisitorAdapter<CurrencyAmo
   public CurrencyAmount visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
     final Security underlying = _securitySource.getSingle(security.getUnderlyingId().toBundle());
     Preconditions.checkState(underlying instanceof InterestRateFutureSecurity,
-        "Failed to resolve underlying InterestRateFutureSecurity. " +
-            "DB record potentially corrupted. '%s' returned.",
+        "Failed to resolve underlying InterestRateFutureSecurity. "
+            + "DB record potentially corrupted. '%s' returned.",
         underlying);
     return ((InterestRateFutureSecurity) underlying).accept(this);
   }
@@ -327,21 +327,21 @@ public class NotionalVisitor extends FinancialSecurityVisitorAdapter<CurrencyAmo
   }
 
   @Override
-  public CurrencyAmount visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public CurrencyAmount visitIndexCDSSecurity(final IndexCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());
   }
 
   @Override
-  public CurrencyAmount visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+  public CurrencyAmount visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());
   }
 
   @Override
-  public CurrencyAmount visitStandardCDSSecurity(StandardCDSSecurity security) {
+  public CurrencyAmount visitStandardCDSSecurity(final StandardCDSSecurity security) {
     final InterestRateNotional notional = security.getNotional();
     final int sign = security.isBuyProtection() ? -1 : 1;
     return CurrencyAmount.of(notional.getCurrency(), sign * notional.getAmount());

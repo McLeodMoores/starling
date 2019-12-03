@@ -65,18 +65,18 @@ public class PortfolioWriterTest {
   @Test
   public void testNewPortfolioInsertsSecurityPositionPortfolio() {
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                           mockSecurityMaster());
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
     root.addPosition(new SimplePosition(BigDecimal.valueOf(1000), securityKey));
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
 
@@ -92,18 +92,18 @@ public class PortfolioWriterTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testCannotInsertSecurityWithoutIdBundle() {
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                     mockSecurityMaster());
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
-    SimplePosition position = new SimplePosition();
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final SimplePosition position = new SimplePosition();
     position.setQuantity(BigDecimal.valueOf(1000));
     root.addPosition(position);
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
   }
@@ -111,21 +111,21 @@ public class PortfolioWriterTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testCannotInsertPositionWithEmptySecurityIdBundle() {
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                     mockSecurityMaster());
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
 
     // Create position with empty Id bundle
     root.addPosition(new SimplePosition(BigDecimal.valueOf(1000), ExternalIdBundle.EMPTY));
 
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
   }
@@ -133,26 +133,26 @@ public class PortfolioWriterTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testCannotInsertTradeWithEmptySecurityIdBundle() {
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                     mockSecurityMaster());
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
 
     // Create position with empty Id bundle
-    SimplePosition position = new SimplePosition(BigDecimal.valueOf(1000), securityKey);
+    final SimplePosition position = new SimplePosition(BigDecimal.valueOf(1000), securityKey);
     position.addTrade(new SimpleTrade(new SimpleSecurityLink(ExternalIdBundle.EMPTY), BigDecimal.valueOf(1000),
                                       new SimpleCounterparty(ExternalId.of("CP", "123")), LocalDate.of(2014, 5, 1),
                                       OffsetTime.MAX));
 
     root.addPosition(position);
 
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
   }
@@ -160,23 +160,23 @@ public class PortfolioWriterTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testCannotInsertPositionWithNullSecurityIdBundle() {
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                     mockSecurityMaster());
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
 
     // Create position with null Id bundle
-    SimplePosition position = new SimplePosition();
+    final SimplePosition position = new SimplePosition();
     position.setQuantity(BigDecimal.valueOf(1000));
     root.addPosition(position);
 
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
   }
@@ -185,19 +185,19 @@ public class PortfolioWriterTest {
   public void testNewPortfolioWithExistingSecurity() {
 
     // Setup the security to appear as if we already have it
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(), mockPositionMaster(),
                                                           mockSecurityMaster(security));
 
-    String portfolioName = "TestPortfolio";
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final String portfolioName = "TestPortfolio";
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
     root.addPosition(new SimplePosition(BigDecimal.valueOf(1000), securityKey));
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
 
@@ -213,20 +213,20 @@ public class PortfolioWriterTest {
   @Test
   public void testReplacementOfExistingPortfolio() {
 
-    String portfolioName = "TestPortfolio";
-    ManageablePortfolio existing = new ManageablePortfolio(portfolioName);
+    final String portfolioName = "TestPortfolio";
+    final ManageablePortfolio existing = new ManageablePortfolio(portfolioName);
 
-    PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(existing), mockPositionMaster(),
+    final PortfolioWriter persister = new PortfolioWriter(true, mockPortfolioMaster(existing), mockPositionMaster(),
                                                           mockSecurityMaster());
 
-    SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
-    ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
-    ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
+    final SimplePortfolioNode root = new SimplePortfolioNode(portfolioName);
+    final ExternalIdBundle securityKey = ExternalIdBundle.of("TEST", "1234");
+    final ManageableSecurity security = new ManageableSecurity("SEC_TYPE_TEST");
     security.setName("TestSec");
     security.setExternalIdBundle(securityKey);
-    Set<ManageableSecurity> securities = ImmutableSet.of(security);
+    final Set<ManageableSecurity> securities = ImmutableSet.of(security);
     root.addPosition(new SimplePosition(BigDecimal.valueOf(1000), securityKey));
-    SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
+    final SimplePortfolio pf = new SimplePortfolio(portfolioName, root);
 
     persister.write(pf, securities);
 
@@ -244,8 +244,8 @@ public class PortfolioWriterTest {
 
     when(mock.add(Matchers.<PositionDocument>any())).thenAnswer(new Answer<Object>() {
       @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        ManageablePosition position = new ManageablePosition();
+      public Object answer(final InvocationOnMock invocation) throws Throwable {
+        final ManageablePosition position = new ManageablePosition();
         position.setUniqueId(UniqueId.of("POSN", "1"));
         _recorder.recordPosition(((PositionDocument) invocation.getArguments()[0]).getPosition());
         return new PositionDocument(position);
@@ -259,15 +259,15 @@ public class PortfolioWriterTest {
     // Create a set of securities that are already stored in the master so
     // we respond to queries about them
     final Map<ExternalIdBundle, ManageableSecurity> existing = new HashMap<>();
-    for (ManageableSecurity security : existingSecurities) {
+    for (final ManageableSecurity security : existingSecurities) {
       existing.put(security.getExternalIdBundle(), security);
     }
 
-    SecurityMaster mock = mock(SecurityMaster.class);
+    final SecurityMaster mock = mock(SecurityMaster.class);
     when(mock.search(Matchers.<SecuritySearchRequest>any())).thenAnswer(new Answer<SecuritySearchResult>() {
       @Override
-      public SecuritySearchResult answer(InvocationOnMock invocation) throws Throwable {
-        SecuritySearchRequest request = (SecuritySearchRequest) invocation.getArguments()[0];
+      public SecuritySearchResult answer(final InvocationOnMock invocation) throws Throwable {
+        final SecuritySearchRequest request = (SecuritySearchRequest) invocation.getArguments()[0];
 
         final ExternalIdBundle idBundle = ExternalIdBundle.of(request.getExternalIdSearch());
         return existing.containsKey(idBundle) ?
@@ -277,7 +277,7 @@ public class PortfolioWriterTest {
     });
     when(mock.add(Matchers.<SecurityDocument>any())).thenAnswer(new Answer<Object>() {
       @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
+      public Object answer(final InvocationOnMock invocation) throws Throwable {
         _recorder.recordSecurity(((SecurityDocument) invocation.getArguments()[0]).getSecurity());
         return new SecurityDocument(new ManageableSecurity());
       }
@@ -285,17 +285,17 @@ public class PortfolioWriterTest {
     return mock;
   }
 
-  private PortfolioMaster mockPortfolioMaster(ManageablePortfolio... existingPortfolios) {
+  private PortfolioMaster mockPortfolioMaster(final ManageablePortfolio... existingPortfolios) {
     final Map<String, ManageablePortfolio> existing = new HashMap<>();
-    for (ManageablePortfolio pf : existingPortfolios) {
+    for (final ManageablePortfolio pf : existingPortfolios) {
       pf.setUniqueId(UniqueId.of("TEST_PORTFOLIO", pf.getName()));
       existing.put(pf.getName(), pf);
     }
     final PortfolioMaster mock = mock(PortfolioMaster.class);
     when(mock.search(Matchers.<PortfolioSearchRequest>any())).thenAnswer(new Answer<PortfolioSearchResult>() {
       @Override
-      public PortfolioSearchResult answer(InvocationOnMock invocation) throws Throwable {
-        PortfolioSearchRequest request = (PortfolioSearchRequest) invocation.getArguments()[0];
+      public PortfolioSearchResult answer(final InvocationOnMock invocation) throws Throwable {
+        final PortfolioSearchRequest request = (PortfolioSearchRequest) invocation.getArguments()[0];
         return existing.containsKey(request.getName()) ?
             new PortfolioSearchResult(ImmutableList.of(new PortfolioDocument(existing.get(request.getName())))) :
             new PortfolioSearchResult();
@@ -303,8 +303,8 @@ public class PortfolioWriterTest {
     });
     when(mock.add(Matchers.<PortfolioDocument>any())).thenAnswer(new Answer<Object>() {
       @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        _recorder.recordPortfolio(((PortfolioDocument) invocation.getArguments()[0]));
+      public Object answer(final InvocationOnMock invocation) throws Throwable {
+        _recorder.recordPortfolio((PortfolioDocument) invocation.getArguments()[0]);
         return new PortfolioDocument(new ManageablePortfolio());
       }
     });
@@ -317,19 +317,19 @@ public class PortfolioWriterTest {
     private final List<ManageablePosition> _positions = new ArrayList<>();
     private final List<PortfolioDocument> _portfolios = new ArrayList<>();
 
-    public void recordSecurity(ManageableSecurity security) {
+    public void recordSecurity(final ManageableSecurity security) {
       _securities.add(security);
     }
-    public void recordPosition(ManageablePosition position) {
+    public void recordPosition(final ManageablePosition position) {
       _positions.add(position);
     }
-    public void recordPortfolio(PortfolioDocument portfolio) {
+    public void recordPortfolio(final PortfolioDocument portfolio) {
       _portfolios.add(portfolio);
     }
 
     public int countPortfolioUpdates() {
       int count = 0;
-      for (PortfolioDocument portfolioDocument : _portfolios) {
+      for (final PortfolioDocument portfolioDocument : _portfolios) {
         if (portfolioDocument.getUniqueId() != null) {
           count++;
         }

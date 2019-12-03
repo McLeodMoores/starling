@@ -42,22 +42,22 @@ import com.opengamma.util.test.TestGroup;
 public class ViewStatusOptionTest {
   
   private static final String PORTFOLIO_NAME = "PORTFOLIO_NAME";
-  private static final Options s_options = ViewStatusOption.createOptions();
-  private static final CommandLineParser s_parser = new PosixParser();
-  private static final ToolContext s_toolContext = new ToolContext();
-  private static final UniqueId s_mockUniqueId = UniqueId.parse("Mock~12345~0");
-  private static final MarketDataSnapshotSearchRequest s_snapshotRequest = makeRequest();
-  private static final MarketDataSnapshotSearchResult s_snapshotSearchResult = makeSearchResult();
+  private static final Options OPTIONS = ViewStatusOption.createOptions();
+  private static final CommandLineParser PARSER = new PosixParser();
+  private static final ToolContext TOOL_CONTEXT = new ToolContext();
+  private static final UniqueId MOCK_UNIQUE_ID = UniqueId.parse("Mock~12345~0");
+  private static final MarketDataSnapshotSearchRequest SNAPSHOT_REQUEST = makeRequest();
+  private static final MarketDataSnapshotSearchResult SNAPSHOT_SEARCH_RESULT = makeSearchResult();
   
   static {
     MarketDataSnapshotMaster snapshotMaster = mock(MarketDataSnapshotMaster.class);
-    when(snapshotMaster.search(s_snapshotRequest)).thenReturn(s_snapshotSearchResult);
-    s_toolContext.setMarketDataSnapshotMaster(snapshotMaster);
+    when(snapshotMaster.search(SNAPSHOT_REQUEST)).thenReturn(SNAPSHOT_SEARCH_RESULT);
+    TOOL_CONTEXT.setMarketDataSnapshotMaster(snapshotMaster);
   }
  
   public void defaultOptions() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME};
-    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
     assertNotNull(statusOption);
     
     assertEquals(PORTFOLIO_NAME, statusOption.getPortfolioName());
@@ -71,14 +71,14 @@ public class ViewStatusOptionTest {
   
   public void userOption() throws Exception {
     ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(
-        s_parser.parse(s_options, new String[] {"-n", PORTFOLIO_NAME, "-u", "test/127.0.0.1"}), s_toolContext);
+        PARSER.parse(OPTIONS, new String[] {"-n", PORTFOLIO_NAME, "-u", "test/127.0.0.1"}), TOOL_CONTEXT);
     assertNotNull(statusOption);
     assertNotNull(statusOption.getUser());
     assertEquals("test", statusOption.getUser().getUserName());
     assertEquals("127.0.0.1", statusOption.getUser().getIpAddress());
     
     statusOption = ViewStatusOption.getViewStatusReporterOption(
-        s_parser.parse(s_options, new String[] {"-n", PORTFOLIO_NAME, "-u", "A/B"}), s_toolContext);
+        PARSER.parse(OPTIONS, new String[] {"-n", PORTFOLIO_NAME, "-u", "A/B"}), TOOL_CONTEXT);
     assertNotNull(statusOption);
     assertNotNull(statusOption.getUser());
     assertEquals("A", statusOption.getUser().getUserName());
@@ -88,18 +88,18 @@ public class ViewStatusOptionTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void invalidSeparatorForUserOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "-u", "test~127.0.0.1"};
-    ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
   }
   
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void blankUsernamePasswordForUserOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "-u", "/"};
-    ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
   }
   
   public void liveMarketDataOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "--live", "liveMarketData"};
-    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
     assertNotNull(statusOption);
     
     assertNotNull(statusOption.getMarketDataSpecification());
@@ -110,7 +110,7 @@ public class ViewStatusOptionTest {
   
   public void historicalMarketDataOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "--historical", "2013-06-20/timeSeriesResolverKey"};
-    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
     assertNotNull(statusOption);
     assertTrue(statusOption.getMarketDataSpecification() instanceof FixedHistoricalMarketDataSpecification);
     FixedHistoricalMarketDataSpecification marketDataSpecification = (FixedHistoricalMarketDataSpecification) statusOption.getMarketDataSpecification();
@@ -122,28 +122,28 @@ public class ViewStatusOptionTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void invalidHistoricalMarketDataOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "--historical", "2013-06-20~timeSeriesResolverKey"};
-    ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
   }
   
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void invalidDateHistoricalMarketDataOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "--historical", "xxxx/timeSeriesResolverKey"};
-    ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
   }
   
   public void userMarketDataOption() throws Exception {
     String[] args = {"-n", PORTFOLIO_NAME, "--snapshot", "snaphshotName"};
-    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(s_parser.parse(s_options, args), s_toolContext);
+    ViewStatusOption statusOption = ViewStatusOption.getViewStatusReporterOption(PARSER.parse(OPTIONS, args), TOOL_CONTEXT);
     assertNotNull(statusOption);
     
     assertTrue(statusOption.getMarketDataSpecification() instanceof UserMarketDataSpecification);
     UserMarketDataSpecification marketDataSpecification = (UserMarketDataSpecification) statusOption.getMarketDataSpecification();
-    assertEquals(s_mockUniqueId, marketDataSpecification.getUserSnapshotId());
+    assertEquals(MOCK_UNIQUE_ID, marketDataSpecification.getUserSnapshotId());
   }
   
   private static MarketDataSnapshotSearchResult makeSearchResult() {
     MarketDataSnapshotSearchResult result = new MarketDataSnapshotSearchResult();
-    result.setDocuments(Lists.newArrayList(new MarketDataSnapshotDocument(s_mockUniqueId, new ManageableMarketDataSnapshot())));
+    result.setDocuments(Lists.newArrayList(new MarketDataSnapshotDocument(MOCK_UNIQUE_ID, new ManageableMarketDataSnapshot())));
     return result;
   }
 

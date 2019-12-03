@@ -11,7 +11,7 @@ import com.opengamma.financial.security.future.BondFutureSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converts a bond future trade to a {@link BondFutureDefinition}
+ * Converts a bond future trade to a {@link BondFutureDefinition}.
  */
 public class BondFutureTradeConverter {
   private final BondFutureSecurityConverter _securityConverter;
@@ -22,9 +22,11 @@ public class BondFutureTradeConverter {
   }
 
   /**
-   * Convert a Trade on a Bond FutureSecurity into the OG-Analytics Definition.
-   * This is currently just a wrapper on the Security converter, but the Trade contains data we may wish to use for risk management.
-   * @param trade A trade containing a BondFutureSecurity
+   * Convert a Trade on a Bond FutureSecurity into the OG-Analytics Definition. This is currently just a wrapper on the Security converter, but the Trade
+   * contains data we may wish to use for risk management.
+   * 
+   * @param trade
+   *          A trade containing a BondFutureSecurity
    * @return BondFutureDefinition
    */
   // TODO Consider extending the function arguments to allow dynamic treatment of the reference price of the future.

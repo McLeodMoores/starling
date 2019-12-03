@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.livedata;
@@ -34,57 +34,57 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class CogdaLiveDataServerFactory extends AbstractComponentFactory {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataServerFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataServerFactory.class);
 
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _listenJmsConnector;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _listenTopicName;
-  
+
   @PropertyDefinition
   private String _dataRedisServer;
-  
+
   @PropertyDefinition
   private Integer _dataRedisPort;
-  
+
   @PropertyDefinition
   private String _dataRedisPrefix;
-  
+
   @PropertyDefinition
   private Integer _listenPort;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    LastKnownValueStoreProvider lkvStoreProvider =
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final LastKnownValueStoreProvider lkvStoreProvider =
         CogdaFactoryUtil.constructLastKnownValueStoreProvider(
             getDataRedisServer(),
             getDataRedisPort(),
             getDataRedisPrefix(),
             false,
-            s_logger);
-    CogdaLiveDataServer liveDataServer = new CogdaLiveDataServer(lkvStoreProvider);
+            LOGGER);
+    final CogdaLiveDataServer liveDataServer = new CogdaLiveDataServer(lkvStoreProvider);
     if (getListenPort() != null) {
       liveDataServer.setPortNumber(getListenPort());
     }
     liveDataServer.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "CogdaLiveDataServer");
-    
-    CogdaLiveDataServerUpdateListener updateListener = new CogdaLiveDataServerUpdateListener(liveDataServer);
-    
-    DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+
+    final CogdaLiveDataServerUpdateListener updateListener = new CogdaLiveDataServerUpdateListener(liveDataServer);
+
+    final DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
     container.setMessageListener(
         new JmsByteArrayMessageDispatcher(
             new ByteArrayFudgeMessageReceiver(updateListener)));
     container.setDestinationName(getListenTopicName());
     container.setPubSubDomain(true);
     container.setConnectionFactory(getListenJmsConnector().getConnectionFactory());
-    
-    CogdaLiveDataServerMBean mbean = new CogdaLiveDataServerMBean(liveDataServer);
-    
+
+    final CogdaLiveDataServerMBean mbean = new CogdaLiveDataServerMBean(liveDataServer);
+
     repo.registerLifecycle(liveDataServer);
     repo.registerLifecycle(container);
     repo.registerMBean(mbean);

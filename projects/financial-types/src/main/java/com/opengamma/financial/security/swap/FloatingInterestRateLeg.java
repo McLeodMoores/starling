@@ -48,7 +48,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   @PropertyDefinition(validate = "notNull")
   private FloatingRateType _floatingRateType;
   /**
-   * The settlement days
+   * The settlement days.
    */
   @PropertyDefinition
   private Integer _settlementDays;
@@ -61,32 +61,41 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   /**
    * Creates an instance.
    */
-  FloatingInterestRateLeg() { //For builder
+  FloatingInterestRateLeg() { // For builder
   }
 
   /**
    * Creates an instance.
-   * 
-   * @param dayCount  the day count, not null
-   * @param frequency  the frequency, not null
-   * @param regionIdentifier  the region, not null
-   * @param businessDayConvention  the business day convention, not null
-   * @param notional  the notional, not null
-   * @param eom  whether this is EOM
-   * @param floatingReferenceRateId  the reference rate, not null
-   * @param floatingRateType  the floating rate type, not null
+   *
+   * @param dayCount
+   *          the day count, not null
+   * @param frequency
+   *          the frequency, not null
+   * @param regionIdentifier
+   *          the region, not null
+   * @param businessDayConvention
+   *          the business day convention, not null
+   * @param notional
+   *          the notional, not null
+   * @param eom
+   *          whether this is EOM
+   * @param floatingReferenceRateId
+   *          the reference rate, not null
+   * @param floatingRateType
+   *          the floating rate type, not null
    */
-  public FloatingInterestRateLeg(DayCount dayCount, Frequency frequency, ExternalId regionIdentifier, BusinessDayConvention businessDayConvention,
-      Notional notional, boolean eom, ExternalId floatingReferenceRateId, FloatingRateType floatingRateType) {
+  public FloatingInterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier,
+      final BusinessDayConvention businessDayConvention, final Notional notional, final boolean eom, final ExternalId floatingReferenceRateId,
+      final FloatingRateType floatingRateType) {
     super(dayCount, frequency, regionIdentifier, businessDayConvention, notional);
     setFloatingReferenceRateId(floatingReferenceRateId);
     setFloatingRateType(floatingRateType);
     setEom(eom);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public <T> T accept(SwapLegVisitor<T> visitor) {
+  public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFloatingInterestRateLeg(this);
   }
 
@@ -188,7 +197,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the settlement days
+   * Gets the settlement days.
    * @return the value of the property
    */
   public Integer getSettlementDays() {
@@ -196,7 +205,7 @@ public class FloatingInterestRateLeg extends InterestRateLeg {
   }
 
   /**
-   * Sets the settlement days
+   * Sets the settlement days.
    * @param settlementDays  the new value of the property
    */
   public void setSettlementDays(Integer settlementDays) {

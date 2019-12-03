@@ -23,8 +23,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 /**
  * Abstract implementation of a provider of reference data.
  * <p>
- * This provides default implementations of the interface methods that delegate to a
- * protected method that subclasses must implement.
+ * This provides default implementations of the interface methods that delegate to a protected method that subclasses must implement.
  */
 public abstract class AbstractReferenceDataProvider implements ReferenceDataProvider {
 
@@ -34,23 +33,23 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
   public AbstractReferenceDataProvider() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public String getReferenceDataValue(String identifier, String dataField) {
+  public String getReferenceDataValue(final String identifier, final String dataField) {
     return getReferenceDataValues(ImmutableSet.of(identifier), dataField).get(identifier);
   }
 
   @Override
-  public Map<String, String> getReferenceDataValues(String identifier, Iterable<String> dataFields) {
-    Set<String> fields = ImmutableSet.copyOf(dataFields);  // copy to avoid implementation bugs
-    Map<String, FudgeMsg> data = getReferenceData(ImmutableSet.of(identifier), dataFields);
-    
+  public Map<String, String> getReferenceDataValues(final String identifier, final Iterable<String> dataFields) {
+    final Set<String> fields = ImmutableSet.copyOf(dataFields); // copy to avoid implementation bugs
+    final Map<String, FudgeMsg> data = getReferenceData(ImmutableSet.of(identifier), dataFields);
+
     // extract field to value
-    Map<String, String> map = Maps.newHashMap();
-    FudgeMsg msg = data.get(identifier);
+    final Map<String, String> map = Maps.newHashMap();
+    final FudgeMsg msg = data.get(identifier);
     if (msg != null) {
-      for (String field : fields) {
-        String value = msg.getString(field);
+      for (final String field : fields) {
+        final String value = msg.getString(field);
         if (value != null) {
           map.put(field, value);
         }
@@ -60,13 +59,13 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
   }
 
   @Override
-  public Map<String, String> getReferenceDataValues(Iterable<String> identifiers, String dataField) {
-    Map<String, FudgeMsg> data = getReferenceData(identifiers, ImmutableSet.of(dataField));
-    
+  public Map<String, String> getReferenceDataValues(final Iterable<String> identifiers, final String dataField) {
+    final Map<String, FudgeMsg> data = getReferenceData(identifiers, ImmutableSet.of(dataField));
+
     // extract identifier to value
-    Map<String, String> map = Maps.newHashMap();
-    for (String identifier : data.keySet()) {
-      String value = data.get(identifier).getString(dataField);
+    final Map<String, String> map = Maps.newHashMap();
+    for (final String identifier : data.keySet()) {
+      final String value = data.get(identifier).getString(dataField);
       if (value != null) {
         map.put(identifier, value);
       }
@@ -75,14 +74,14 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
   }
 
   @Override
-  public Map<String, FudgeMsg> getReferenceData(Iterable<String> identifiers, Iterable<String> dataFields) {
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, true);
+  public Map<String, FudgeMsg> getReferenceData(final Iterable<String> identifiers, final Iterable<String> dataFields) {
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, true);
     return queryMap(request, this);
   }
 
   @Override
-  public Map<String, FudgeMsg> getReferenceDataIgnoreCache(Iterable<String> identifiers, Iterable<String> dataFields) {
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, false);
+  public Map<String, FudgeMsg> getReferenceDataIgnoreCache(final Iterable<String> identifiers, final Iterable<String> dataFields) {
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, false);
     return queryMap(request, this);
   }
 
@@ -91,17 +90,17 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
     final Set<String> fields = ImmutableSet.copyOf(request.getFields()); // copy to avoid implementation bugs
     final ReferenceDataProviderGetResult result = provider.getReferenceData(request);
     // extract identifier to field-values
-    Map<String, FudgeMsg> map = Maps.newHashMap();
-    for (String identifier : identifiers) {
-      ReferenceData data = result.getReferenceDataOrNull(identifier);
+    final Map<String, FudgeMsg> map = Maps.newHashMap();
+    for (final String identifier : identifiers) {
+      final ReferenceData data = result.getReferenceDataOrNull(identifier);
       if (data != null) {
         // filter results by error list (if clause is an optimization)
         if (data.getErrors().size() == 0) {
           map.put(identifier, data.getFieldValues());
         } else {
-          if (data.isIdentifierError() == false) {
-            MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage(data.getFieldValues());
-            for (String field : fields) {
+          if (!data.isIdentifierError()) {
+            final MutableFudgeMsg values = OpenGammaFudgeContext.getInstance().newMessage(data.getFieldValues());
+            for (final String field : fields) {
               if (data.isError(field)) {
                 values.remove(field);
               }
@@ -115,35 +114,36 @@ public abstract class AbstractReferenceDataProvider implements ReferenceDataProv
   }
 
   @Override
-  public ReferenceDataProviderGetResult getReferenceData(ReferenceDataProviderGetRequest request) {
+  public ReferenceDataProviderGetResult getReferenceData(final ReferenceDataProviderGetRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
+
     // short-cut empty case
     if (request.getIdentifiers().isEmpty()) {
       return new ReferenceDataProviderGetResult();
     }
     if (request.getFields().isEmpty()) {
-      ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
-      for (String identifier : request.getIdentifiers()) {
+      final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+      for (final String identifier : request.getIdentifiers()) {
         result.addReferenceData(new ReferenceData(identifier));
       }
       return result;
     }
-    
+
     // get time-series
     return doBulkGet(request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the reference data.
-   * 
-   * @param request  the request, with a non-empty collections, not null
+   *
+   * @param request
+   *          the request, with a non-empty collections, not null
    * @return the result, not null
    */
   protected abstract ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public String toString() {
     return getClass().getSimpleName();

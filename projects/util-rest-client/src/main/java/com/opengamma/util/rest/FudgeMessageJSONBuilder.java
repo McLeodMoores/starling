@@ -16,18 +16,18 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Converter from FudgeMessage to JSON
+ * Converter from FudgeMessage to JSON.
  */
 public class FudgeMessageJSONBuilder {
 
   private final FudgeContext _fudgeContext;
 
   /**
-   * Creates the builder
-   * 
+   * Creates the builder.
+   *
    * @param fudgeContext the fudge context
    */
-  public FudgeMessageJSONBuilder(FudgeContext fudgeContext) {
+  public FudgeMessageJSONBuilder(final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(fudgeContext, "FudgeContext");
     _fudgeContext = fudgeContext;
   }
@@ -40,14 +40,14 @@ public class FudgeMessageJSONBuilder {
   }
 
   /**
-   * Converts the given fudgeMsg to a JSON string representation
-   * 
+   * Converts the given fudgeMsg to a JSON string representation.
+   *
    * @param fudgeMsg the fudge message
    * @return the json representation
    */
-  public String build(FudgeMsg fudgeMsg) {
+  public String build(final FudgeMsg fudgeMsg) {
     ArgumentChecker.notNull(fudgeMsg, "fudge message");
-    
+
     final CharArrayWriter caw = new CharArrayWriter();
     try (FudgeMsgWriter fmw = new FudgeMsgWriter(new FudgeJSONStreamWriter(_fudgeContext, caw))) {
       fmw.writeMessage(fudgeMsg);

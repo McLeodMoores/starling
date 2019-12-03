@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
@@ -17,7 +17,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class PortfolioAnalysisDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String[] _valueNames;
@@ -27,8 +27,9 @@ public class PortfolioAnalysisDefaultPropertiesFunction extends DefaultPropertyF
   private final String _returnCalculatorName;
   private final String _stdDevCalculatorName;
   private final String _expectedExcessReturnCalculatorName;
-  
-  public PortfolioAnalysisDefaultPropertiesFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName, final String returnCalculatorName,  
+
+  public PortfolioAnalysisDefaultPropertiesFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
+      final String returnCalculatorName,
       final String stdDevCalculatorName, final String expectedExcessReturnCalculatorName, final String[] valueNames) {
     super(ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION), true);
     ArgumentChecker.notNull(samplingPeriodName, "sampling period name");
@@ -46,7 +47,7 @@ public class PortfolioAnalysisDefaultPropertiesFunction extends DefaultPropertyF
     _expectedExcessReturnCalculatorName = expectedExcessReturnCalculatorName;
     _valueNames = valueNames;
   }
-  
+
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : _valueNames) {
@@ -58,9 +59,10 @@ public class PortfolioAnalysisDefaultPropertiesFunction extends DefaultPropertyF
       defaults.addValuePropertyName(valueName, ValuePropertyNames.EXCESS_RETURN_CALCULATOR);
     }
   }
-  
+
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriodName);
     }
@@ -81,7 +83,7 @@ public class PortfolioAnalysisDefaultPropertiesFunction extends DefaultPropertyF
     }
     return null;
   }
-  
+
   protected String[] getValueNames() {
     return _valueNames;
   }

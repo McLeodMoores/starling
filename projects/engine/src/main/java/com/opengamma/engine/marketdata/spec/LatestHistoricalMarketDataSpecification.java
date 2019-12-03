@@ -1,38 +1,38 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import java.util.NoSuchElementException;
 
 /**
- * 
+ *
  */
 @BeanDefinition(hierarchy = "immutable")
-public class LatestHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification implements MarketDataSpecification {
-  
+public class LatestHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification {
+
   private static final long serialVersionUID = 1L;
 
   /**
-   * Creates an instance, using the default time series resolver key
+   * Creates an instance, using the default time series resolver key.
    */
   public LatestHistoricalMarketDataSpecification() {
   }
-  
+
   /**
-   * Creates an instance, specifying the time series resolver key
-   * 
+   * Creates an instance, specifying the time series resolver key.
+   *
    * @param timeSeriesResolverKey the time series resolver key, not null
    */
-  public LatestHistoricalMarketDataSpecification(String timeSeriesResolverKey) {
+  public LatestHistoricalMarketDataSpecification(final String timeSeriesResolverKey) {
     super(timeSeriesResolverKey);
   }
 
@@ -176,19 +176,31 @@ public class LatestHistoricalMarketDataSpecification extends HistoricalMarketDat
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

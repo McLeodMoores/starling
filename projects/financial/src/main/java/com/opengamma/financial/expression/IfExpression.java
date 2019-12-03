@@ -24,9 +24,8 @@ public class IfExpression extends UserExpression {
     final Object condition = _condition.evaluate(evaluator);
     if (Boolean.TRUE.equals(condition)) {
       return _result.evaluate(evaluator);
-    } else {
-      return NA;
     }
+    return NA;
   }
 
   @Override

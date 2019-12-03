@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
@@ -9,9 +9,11 @@ import java.util.Arrays;
 
 import com.opengamma.OpenGammaRuntimeException;
 
+// CSOFF
 /**
- * Class containing utilities for bumping credit spread term structures by user defined methods and amounts
- *@deprecated this will be deleted 
+ * Class containing utilities for bumping credit spread term structures by user defined methods and amounts.
+ *
+ * @deprecated this will be deleted
  */
 @Deprecated
 public class CreditSpreadBumpers {
@@ -49,7 +51,8 @@ public class CreditSpreadBumpers {
 
   // Method to bump the credit spread term structure at a single (specified) tenor point by a specified amount
 
-  public double[] getBumpedCreditSpreads(final double[] marketSpreads, final int spreadTenorToBump, final double spreadBump, final SpreadBumpType spreadBumpType) {
+  public double[] getBumpedCreditSpreads(final double[] marketSpreads, final int spreadTenorToBump, final double spreadBump,
+      final SpreadBumpType spreadBumpType) {
 
     final double[] bumpedCreditSpreads = Arrays.copyOf(marketSpreads, marketSpreads.length);
 
@@ -58,7 +61,7 @@ public class CreditSpreadBumpers {
     if (spreadBumpType == SpreadBumpType.ADDITIVE_BUCKETED || spreadBumpType == SpreadBumpType.ADDITIVE) {
       bumpedCreditSpreads[spreadTenorToBump] += spreadBump;
     } else if (spreadBumpType == SpreadBumpType.MULTIPLICATIVE_BUCKETED || spreadBumpType == SpreadBumpType.MULTIPLICATIVE) {
-      bumpedCreditSpreads[spreadTenorToBump] *= (1 + spreadBump);
+      bumpedCreditSpreads[spreadTenorToBump] *= 1 + spreadBump;
     } else {
       throw new OpenGammaRuntimeException("Unsupported spread bump type " + spreadBumpType);
     }
@@ -70,7 +73,8 @@ public class CreditSpreadBumpers {
 
   // Method to bump the credit spread term structure at every tenor point by a specified amount simultaneously for every obligor
 
-  public double[][] getBumpedCreditSpreads(final int numberOfObligors, final int numberOfTenors, final double[][] marketSpreads, final double spreadBump, final SpreadBumpType spreadBumpType) {
+  public double[][] getBumpedCreditSpreads(final int numberOfObligors, final int numberOfTenors, final double[][] marketSpreads, final double spreadBump,
+      final SpreadBumpType spreadBumpType) {
 
     final double[][] bumpedMarketSpreads = new double[numberOfObligors][numberOfTenors];
 
@@ -102,7 +106,8 @@ public class CreditSpreadBumpers {
 
   // Method to bump the credit spread term structure at every tenor point by a specified amount simultaneously for a single obligor i
 
-  public double[][] getBumpedCreditSpreads(final int numberOfObligors, final int numberOfTenors, final int i, final double[][] marketSpreads, final double spreadBump,
+  public double[][] getBumpedCreditSpreads(final int numberOfObligors, final int numberOfTenors, final int i, final double[][] marketSpreads,
+      final double spreadBump,
       final SpreadBumpType spreadBumpType) {
 
     // Assign the bumped spread matrix to be the original input spread matrix

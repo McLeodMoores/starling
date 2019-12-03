@@ -44,12 +44,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyDbConventionBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyDbConventionBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyDbConventionBeanMasterTest(String databaseType, String databaseVersion) {
+  public ModifyDbConventionBeanMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -60,20 +60,20 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noConvention() {
-    ConventionDocument doc = new ConventionDocument();
+    final ConventionDocument doc = new ConventionDocument();
     _cnvMaster.add(doc);
   }
 
   @Test
   public void test_add_add() {
-    Instant now = Instant.now(_cnvMaster.getClock());
-    
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    ConventionDocument doc = new ConventionDocument();
+    final Instant now = Instant.now(_cnvMaster.getClock());
+
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ConventionDocument doc = new ConventionDocument();
     doc.setConvention(convention);
-    ConventionDocument test = _cnvMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final ConventionDocument test = _cnvMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbCnv", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -83,12 +83,12 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableConvention testConvention = test.getConvention();
+    final ManageableConvention testConvention = test.getConvention();
     assertNotNull(testConvention);
     assertEquals(uniqueId, testConvention.getUniqueId());
     assertEquals("TestConvention", convention.getName());
     assertEquals("MOCK", convention.getConventionType().getName());
-    ExternalIdBundle idKey = convention.getExternalIdBundle();
+    final ExternalIdBundle idKey = convention.getExternalIdBundle();
     assertNotNull(idKey);
     assertEquals(1, idKey.size());
     assertEquals(ExternalId.of("A", "B"), idKey.getExternalIds().iterator().next());
@@ -96,52 +96,52 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
 
   @Test
   public void test_add_addThenGet() {
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    ConventionDocument doc = new ConventionDocument();
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ConventionDocument doc = new ConventionDocument();
     doc.setConvention(convention);
-    ConventionDocument added = _cnvMaster.add(doc);
-    
-    ConventionDocument test = _cnvMaster.get(added.getUniqueId());
+    final ConventionDocument added = _cnvMaster.add(doc);
+
+    final ConventionDocument test = _cnvMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingNameProperty() throws Exception {
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    Field field = ManageableConvention.class.getDeclaredField("_name");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Field field = ManageableConvention.class.getDeclaredField("_name");
     field.setAccessible(true);
     field.set(convention, null);
-    ConventionDocument doc = new ConventionDocument(convention);
+    final ConventionDocument doc = new ConventionDocument(convention);
     _cnvMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingExternalIdBundleProperty() throws Exception {
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    Field field = ManageableConvention.class.getDeclaredField("_externalIdBundle");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Field field = ManageableConvention.class.getDeclaredField("_externalIdBundle");
     field.setAccessible(true);
     field.set(convention, null);
-    ConventionDocument doc = new ConventionDocument(convention);
+    final ConventionDocument doc = new ConventionDocument(convention);
     _cnvMaster.add(doc);
   }
 
   @Test
   public void test_add_searchByAttribute() {
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.addAttribute("city", "London");
     convention.addAttribute("office", "Southern");
-    ConventionDocument added = _cnvMaster.add(new ConventionDocument(convention));
-    
-    ManageableConvention convention2 = new MockConvention("TestConvention2", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ConventionDocument added = _cnvMaster.add(new ConventionDocument(convention));
+
+    final ManageableConvention convention2 = new MockConvention("TestConvention2", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention2.addAttribute("office", "Southern");
-    ConventionDocument added2 = _cnvMaster.add(new ConventionDocument(convention2));
-    
+    final ConventionDocument added2 = _cnvMaster.add(new ConventionDocument(convention2));
+
     ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     searchRequest.addAttribute("city", "London");
     ConventionSearchResult searchResult = _cnvMaster.search(searchRequest);
     assertEquals(1, searchResult.getDocuments().size());
     assertEquals(added, searchResult.getDocuments().get(0));
-    
+
     searchRequest = new ConventionSearchRequest();
     searchRequest.setSortOrder(ConventionSearchSortOrder.NAME_ASC);
     searchRequest.addAttribute("office", "Southern");
@@ -149,7 +149,7 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
     assertEquals(2, searchResult.getDocuments().size());
     assertEquals(added, searchResult.getDocuments().get(0));
     assertEquals(added2, searchResult.getDocuments().get(1));
-    
+
     searchRequest = new ConventionSearchRequest();
     searchRequest.addAttribute("city", "London");
     searchRequest.addAttribute("office", "*thern");
@@ -168,87 +168,87 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noConventionId() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument doc = new ConventionDocument();
+    final ConventionDocument doc = new ConventionDocument();
     doc.setConvention(convention);
     _cnvMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noConvention() {
-    ConventionDocument doc = new ConventionDocument();
+    final ConventionDocument doc = new ConventionDocument();
     doc.setUniqueId(UniqueId.of("DbCnv", "101", "0"));
     _cnvMaster.update(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument doc = new ConventionDocument(convention);
+    final ConventionDocument doc = new ConventionDocument(convention);
     _cnvMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_notLatestVersion() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "201", "0");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "201", "0");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument doc = new ConventionDocument(convention);
+    final ConventionDocument doc = new ConventionDocument(convention);
     _cnvMaster.update(doc);
   }
 
   @Test
   public void test_update_getUpdateGet() {
-    Instant now = Instant.now(_cnvMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
-    ConventionDocument base = _cnvMaster.get(uniqueId);
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Instant now = Instant.now(_cnvMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
+    final ConventionDocument base = _cnvMaster.get(uniqueId);
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument input = new ConventionDocument(convention);
-    
-    ConventionDocument updated = _cnvMaster.update(input);
+    final ConventionDocument input = new ConventionDocument(convention);
+
+    final ConventionDocument updated = _cnvMaster.update(input);
     assertEquals(false, base.getUniqueId().equals(updated.getUniqueId()));
     assertEquals(now, updated.getVersionFromInstant());
     assertEquals(null, updated.getVersionToInstant());
     assertEquals(now, updated.getCorrectionFromInstant());
     assertEquals(null, updated.getCorrectionToInstant());
     assertEquals(input.getConvention(), updated.getConvention());
-    
-    ConventionDocument old = _cnvMaster.get(uniqueId);
+
+    final ConventionDocument old = _cnvMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(now, old.getVersionToInstant());  // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getConvention(), old.getConvention());
-    
-    ConventionHistoryRequest search = new ConventionHistoryRequest(base.getUniqueId(), null, now);
-    ConventionHistoryResult searchResult = _cnvMaster.history(search);
+
+    final ConventionHistoryRequest search = new ConventionHistoryRequest(base.getUniqueId(), null, now);
+    final ConventionHistoryResult searchResult = _cnvMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
   @Test
   public void test_update_rollback() {
-    DbConventionBeanMaster w = new DbConventionBeanMaster(_cnvMaster.getDbConnector());
+    final DbConventionBeanMaster w = new DbConventionBeanMaster(_cnvMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbBeanMaster.class));
     final ConventionDocument base = _cnvMaster.get(UniqueId.of("DbCnv", "101", "0"));
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument input = new ConventionDocument(convention);
+    final ConventionDocument input = new ConventionDocument(convention);
     try {
       w.update(input);
       Assert.fail();
-    } catch (BadSqlGrammarException ex) {
+    } catch (final BadSqlGrammarException ex) {
       // expected
     }
     final ConventionDocument test = _cnvMaster.get(UniqueId.of("DbCnv", "101", "0"));
-    
+
     assertEquals(base, test);
   }
 
@@ -262,58 +262,58 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noConventionId() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument doc = new ConventionDocument();
+    final ConventionDocument doc = new ConventionDocument();
     doc.setConvention(convention);
     _cnvMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noConvention() {
-    ConventionDocument doc = new ConventionDocument();
+    final ConventionDocument doc = new ConventionDocument();
     doc.setUniqueId(UniqueId.of("DbCnv", "101", "0"));
     _cnvMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument doc = new ConventionDocument(convention);
+    final ConventionDocument doc = new ConventionDocument(convention);
     _cnvMaster.correct(doc);
   }
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_cnvMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
-    ConventionDocument base = _cnvMaster.get(uniqueId);
-    ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Instant now = Instant.now(_cnvMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
+    final ConventionDocument base = _cnvMaster.get(uniqueId);
+    final ManageableConvention convention = new MockConvention("TestConvention", ExternalIdBundle.of("A", "B"), Currency.GBP);
     convention.setUniqueId(uniqueId);
-    ConventionDocument input = new ConventionDocument(convention);
-    
-    ConventionDocument corrected = _cnvMaster.correct(input);
+    final ConventionDocument input = new ConventionDocument(convention);
+
+    final ConventionDocument corrected = _cnvMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
     assertEquals(now, corrected.getCorrectionFromInstant());
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getConvention(), corrected.getConvention());
-    
-    ConventionDocument old = _cnvMaster.get(UniqueId.of("DbCnv", "101", "0"));
+
+    final ConventionDocument old = _cnvMaster.get(UniqueId.of("DbCnv", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getConvention(), old.getConvention());
-    
-    ConventionHistoryRequest search = new ConventionHistoryRequest(base.getUniqueId(), now, null);
-    ConventionHistoryResult searchResult = _cnvMaster.history(search);
+
+    final ConventionHistoryRequest search = new ConventionHistoryRequest(base.getUniqueId(), now, null);
+    final ConventionHistoryResult searchResult = _cnvMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
@@ -322,24 +322,24 @@ public class ModifyDbConventionBeanMasterTest extends AbstractDbConventionBeanMa
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeConvention_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "0", "0");
     _cnvMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_cnvMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
+    final Instant now = Instant.now(_cnvMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbCnv", "101", "0");
     _cnvMaster.remove(uniqueId);
-    ConventionDocument test = _cnvMaster.get(uniqueId);
-    
+    final ConventionDocument test = _cnvMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableConvention convention = test.getConvention();
+    final ManageableConvention convention = test.getConvention();
     assertNotNull(convention);
     assertEquals(uniqueId, convention.getUniqueId());
     assertEquals("TestConvention101", convention.getName());

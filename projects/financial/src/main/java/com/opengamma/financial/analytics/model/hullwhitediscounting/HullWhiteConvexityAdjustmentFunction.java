@@ -27,22 +27,20 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 
 /**
- * Calculates the convexity adjustment of instruments that have been priced using
- * the Hull-White one factor method.
+ * Calculates the convexity adjustment of instruments that have been priced using the Hull-White one factor method.
  */
 public class HullWhiteConvexityAdjustmentFunction extends HullWhiteDiscountingFunction {
   /** The convexity adjustment calculator */
-  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR =
-      ConvexityAdjustmentHullWhiteCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR = ConvexityAdjustmentHullWhiteCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#CONVEXITY_ADJUSTMENT}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY_ADJUSTMENT}.
    */
   public HullWhiteConvexityAdjustmentFunction() {
     super(CONVEXITY_ADJUSTMENT);
@@ -66,8 +64,8 @@ public class HullWhiteConvexityAdjustmentFunction extends HullWhiteDiscountingFu
       @Override
       public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Security security = target.getTrade().getSecurity();
-        return security instanceof DeliverableSwapFutureSecurity ||
-            security instanceof InterestRateFutureSecurity;
+        return security instanceof DeliverableSwapFutureSecurity
+            || security instanceof InterestRateFutureSecurity;
       }
 
     };

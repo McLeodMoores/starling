@@ -31,7 +31,7 @@ import com.opengamma.util.test.TestGroup;
  */
 public class FinancialTestBase {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FinancialTestBase.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FinancialTestBase.class);
 
   private RegionSource _regionSource;
   private FudgeContext _fudgeContext;
@@ -54,7 +54,7 @@ public class FinancialTestBase {
 
   private FudgeMsg cycleMessage(final FudgeMsg message) {
     final byte[] data = getFudgeContext().toByteArray(message);
-    s_logger.info("{} bytes", data.length);
+    LOGGER.info("{} bytes", data.length);
     return getFudgeContext().deserialize(data).getMessage();
   }
 
@@ -65,17 +65,17 @@ public class FinancialTestBase {
   }
 
   protected <T> T cycleGenericObject(final Class<T> clazz, final T object) {
-    s_logger.info("object {}", object);
+    LOGGER.info("object {}", object);
     final FudgeSerializer fudgeSerializationContext = new FudgeSerializer(getFudgeContext());
     final FudgeDeserializer fudgeDeserializationContext = new FudgeDeserializer(getFudgeContext());
     final MutableFudgeMsg messageIn = fudgeSerializationContext.newMessage();
     fudgeSerializationContext.addToMessageWithClassHeaders(messageIn, "test", null, object, clazz);
-    s_logger.info("message {}", messageIn);
+    LOGGER.info("message {}", messageIn);
     final FudgeMsg messageOut = cycleMessage(messageIn);
-    s_logger.info("message {}", messageOut);
+    LOGGER.info("message {}", messageOut);
     final T newObject = fudgeDeserializationContext.fieldValueToObject(clazz, messageOut.getByName("test"));
     assertNotNull(newObject);
-    s_logger.info("object {}", newObject);
+    LOGGER.info("object {}", newObject);
     assertTrue(clazz.isAssignableFrom(newObject.getClass()));
     return newObject;
   }

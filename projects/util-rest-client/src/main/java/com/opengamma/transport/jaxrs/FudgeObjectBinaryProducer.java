@@ -42,7 +42,7 @@ public class FudgeObjectBinaryProducer extends FudgeBase implements MessageBodyW
 
   /**
    * Creates the producer.
-   * 
+   *
    * @param context the Fudge context to use, not null
    */
   public FudgeObjectBinaryProducer(final FudgeContext context) {
@@ -51,23 +51,24 @@ public class FudgeObjectBinaryProducer extends FudgeBase implements MessageBodyW
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return FudgeRest.MEDIA_TYPE.equals(mediaType) || type == FudgeResponse.class || Bean.class.isAssignableFrom(type) || FudgeMsgEnvelope.class.isAssignableFrom(type) ||
-        FudgeMsg.class.isAssignableFrom(type);
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
+    return FudgeRest.MEDIA_TYPE.equals(mediaType) || type == FudgeResponse.class || Bean.class.isAssignableFrom(type)
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override
-  public long getSize(Object obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public long getSize(final Object obj, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return -1;
   }
 
   @Override
-  public void writeTo(Object obj, Class<?> type, Type genericType, Annotation[] annotations,
-      MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+  public void writeTo(final Object obj, final Class<?> type, final Type genericType, final Annotation[] annotations,
+      final MediaType mediaType, final MultivaluedMap<String, Object> httpHeaders, final OutputStream entityStream)
+          throws IOException, WebApplicationException {
 
     FudgeMsgEnvelope msg;
     if (obj instanceof FudgeResponse) {
-      FudgeResponse wrapper = (FudgeResponse) obj;
+      final FudgeResponse wrapper = (FudgeResponse) obj;
       msg = getFudgeContext().toFudgeMsg(wrapper.getValue());
     } else if (obj instanceof FudgeMsgEnvelope) {
       msg = (FudgeMsgEnvelope) obj;

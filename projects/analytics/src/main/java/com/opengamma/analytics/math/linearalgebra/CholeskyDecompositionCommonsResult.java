@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * Wrapper for results of the Commons implementation of Cholesky decomposition ({@link CholeskyDecompositionCommons})
+ * Wrapper for results of the Commons implementation of Cholesky decomposition ({@link CholeskyDecompositionCommons}).
  */
 public class CholeskyDecompositionCommonsResult implements CholeskyDecompositionResult {
   private final double _determinant;
@@ -24,7 +24,9 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
 
   /**
    * Constructor.
-   * @param ch The result of the Cholesky decomposition.
+   * 
+   * @param ch
+   *          The result of the Cholesky decomposition.
    */
   public CholeskyDecompositionCommonsResult(final CholeskyDecomposition ch) {
     Validate.notNull(ch, "Cholesky decomposition");
@@ -38,7 +40,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public DoubleMatrix1D solve(DoubleMatrix1D b) {
+  public DoubleMatrix1D solve(final DoubleMatrix1D b) {
     Validate.notNull(b);
     return CommonsMathWrapper.unwrap(_solver.solve(CommonsMathWrapper.wrap(b)));
   }
@@ -47,7 +49,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public double[] solve(double[] b) {
+  public double[] solve(final double[] b) {
     Validate.notNull(b);
     return _solver.solve(b);
   }
@@ -56,7 +58,7 @@ public class CholeskyDecompositionCommonsResult implements CholeskyDecomposition
    * {@inheritDoc}
    */
   @Override
-  public DoubleMatrix2D solve(DoubleMatrix2D b) {
+  public DoubleMatrix2D solve(final DoubleMatrix2D b) {
     Validate.notNull(b);
     return CommonsMathWrapper.unwrap(_solver.solve(CommonsMathWrapper.wrap(b)));
   }

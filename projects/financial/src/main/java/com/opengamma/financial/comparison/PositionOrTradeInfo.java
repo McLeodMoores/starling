@@ -14,7 +14,7 @@ import com.opengamma.core.security.Security;
 
   private final SecurityInfo _security;
 
-  public PositionOrTradeInfo(final ComparisonContext context, final T positionOrTrade) {
+  PositionOrTradeInfo(final ComparisonContext context, final T positionOrTrade) {
     super(positionOrTrade);
     final Security security = positionOrTrade.getSecurity();
     if (security == null) {

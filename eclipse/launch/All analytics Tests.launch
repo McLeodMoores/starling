@@ -84,6 +84,10 @@
 <listEntry value="com.opengamma.analytics.financial.forex.derivative"/>
 <listEntry value="com.opengamma.analytics.financial.forex.method"/>
 <listEntry value="com.opengamma.analytics.financial.greeks"/>
+<listEntry value="com.opengamma.analytics.financial.horizon"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.constantspread"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.forwardslide"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.rolldown"/>	
 <listEntry value="com.opengamma.analytics.financial.instrument"/>
 <listEntry value="com.opengamma.analytics.financial.instrument.annuity"/>
 <listEntry value="com.opengamma.analytics.financial.instrument.bond"/>

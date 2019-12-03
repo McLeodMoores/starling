@@ -46,7 +46,8 @@ public class ForexLocalVolatilitySurfaceFunction extends LocalVolatilitySurfaceF
   }
 
   @Override
-  protected ValueProperties getResultProperties(final String definitionName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  protected ValueProperties getResultProperties(final String definitionName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String forwardCurveCalculationMethod, final String forwardCurveName) {
     return createValueProperties()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -61,7 +62,8 @@ public class ForexLocalVolatilitySurfaceFunction extends LocalVolatilitySurfaceF
   }
 
   @Override
-  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String forwardCurveCalculationMethod, final String forwardCurveName, final String h) {
     return createValueProperties()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -76,7 +78,8 @@ public class ForexLocalVolatilitySurfaceFunction extends LocalVolatilitySurfaceF
   }
 
   @Override
-  protected ValueProperties getSurfaceProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  protected ValueProperties getSurfaceProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String forwardCurveCalculationMethod, final String forwardCurveName) {
     return ValueProperties.builder()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)

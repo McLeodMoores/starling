@@ -17,8 +17,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Implementation of a provider of Black smile for options on bond futures. The volatility is time to expiration/delay dependent.
- * The delay is the time difference between the last notice and the option expiration.
+ * Implementation of a provider of Black smile for options on bond futures. The volatility is time to expiration/delay dependent. The delay is the time
+ * difference between the last notice and the option expiration.
  */
 public class BlackBondFuturesExpLogMoneynessProvider implements BlackBondFuturesProviderInterface {
 
@@ -37,11 +37,16 @@ public class BlackBondFuturesExpLogMoneynessProvider implements BlackBondFutures
 
   /**
    * Constructor.
-   * @param issuerProvider The issuer and multi-curve provider, not null
-   * @param parameters The Black parameters, not null
-   * @param legalEntity The legal entity of the bonds underlying the futures for which the volatility data is valid.
+   *
+   * @param issuerProvider
+   *          The issuer and multi-curve provider, not null
+   * @param parameters
+   *          The Black parameters, not null
+   * @param legalEntity
+   *          The legal entity of the bonds underlying the futures for which the volatility data is valid.
    */
-  public BlackBondFuturesExpLogMoneynessProvider(final IssuerProviderInterface issuerProvider, final Surface<Double, Double, Double> parameters, final LegalEntity legalEntity) {
+  public BlackBondFuturesExpLogMoneynessProvider(final IssuerProviderInterface issuerProvider, final Surface<Double, Double, Double> parameters,
+      final LegalEntity legalEntity) {
     ArgumentChecker.notNull(issuerProvider, "issuerProvider");
     ArgumentChecker.notNull(parameters, "parameters");
     ArgumentChecker.notNull(legalEntity, "legal entity");
@@ -65,14 +70,19 @@ public class BlackBondFuturesExpLogMoneynessProvider implements BlackBondFutures
   public IssuerProviderInterface getIssuerProvider() {
     return _issuerProvider;
   }
-  
+
   @Override
   /**
    * Gets the Black volatility at a given expiry-delay point. The strike dimension is ignored.
-   * @param expiry The time to expiration.
-   * @param delay The delay between the option expiry and the futures expiry.
-   * @param strike The option strike. Dimension ignored.
-   * @param futuresPrice The price of the underlying futures. Dimension ignored.
+   *
+   * @param expiry
+   *          The time to expiration.
+   * @param delay
+   *          The delay between the option expiry and the futures expiry.
+   * @param strike
+   *          The option strike. Dimension ignored.
+   * @param futuresPrice
+   *          The price of the underlying futures. Dimension ignored.
    * @return The volatility.
    */
   public double getVolatility(final double expiry, final double delay, final double strike, final double futuresPrice) {
@@ -84,6 +94,7 @@ public class BlackBondFuturesExpLogMoneynessProvider implements BlackBondFutures
 
   /**
    * Returns the Black parameters.
+   *
    * @return The parameters.
    */
   public Surface<Double, Double, Double> getBlackParameters() {

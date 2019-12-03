@@ -27,7 +27,7 @@ import com.opengamma.util.time.ZonedDateTimeFudgeBuilder;
 @FudgeBuilderFor(FXDigitalOptionSecurity.class)
 public class FXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<FXDigitalOptionSecurity> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FXDigitalOptionSecurityFudgeBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXDigitalOptionSecurityFudgeBuilder.class);
   /** Field name. */
   public static final String PUT_CURRENCY_FIELD_NAME = "putCurrency";
   /** Field name. */
@@ -46,13 +46,13 @@ public class FXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder im
   public static final String IS_LONG_FIELD_NAME = "isLong";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FXDigitalOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FXDigitalOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FXDigitalOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FXDigitalOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FXDigitalOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, PUT_CURRENCY_FIELD_NAME, object.getPutCurrency());
     addToMessage(msg, CALL_CURRENCY_FIELD_NAME, object.getCallCurrency());
@@ -65,20 +65,20 @@ public class FXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder im
   }
 
   @Override
-  public FXDigitalOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FXDigitalOptionSecurity object = new FXDigitalOptionSecurity();
+  public FXDigitalOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FXDigitalOptionSecurity object = new FXDigitalOptionSecurity();
     FXDigitalOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FXDigitalOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FXDigitalOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setPutCurrency(msg.getValue(Currency.class, PUT_CURRENCY_FIELD_NAME));
     object.setCallCurrency(msg.getValue(Currency.class, CALL_CURRENCY_FIELD_NAME));
     if (msg.hasField(PAYMENT_CURRENCY_FIELD_NAME)) {
       object.setPaymentCurrency(msg.getValue(Currency.class, PAYMENT_CURRENCY_FIELD_NAME));
     } else {
-      s_logger.warn("Found old version of FXDigitalOption, setting payment currency to put currency - this should not happen, report to support@opengamma.com");
+      LOGGER.warn("Found old version of FXDigitalOption, setting payment currency to put currency - this should not happen, report to support@opengamma.com");
       object.setPaymentCurrency(object.getPutCurrency());
     }
     object.setPutAmount(msg.getDouble(PUT_AMOUNT_FIELD_NAME));

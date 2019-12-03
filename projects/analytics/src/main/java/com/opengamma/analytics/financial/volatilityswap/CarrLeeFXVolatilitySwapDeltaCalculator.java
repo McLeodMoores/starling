@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.financial.provider.description.volatilityswap.Car
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute delta of forward volatility using finite difference approximation
+ * Compute delta of forward volatility using finite difference approximation.
  */
 public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivativeVisitorAdapter<CarrLeeFXData, Double> {
 
@@ -28,15 +28,17 @@ public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivative
   private final double _bumpSpot;
 
   /**
-   * Constructor using default bump amount
+   * Constructor using default bump amount.
    */
   public CarrLeeFXVolatilitySwapDeltaCalculator() {
     this(DEFAULT_BUMP);
   }
 
   /**
-   * Constructor specifying bump amount
-   * @param bump The bump amount
+   * Constructor specifying bump amount.
+   * 
+   * @param bump
+   *          The bump amount
    */
   public CarrLeeFXVolatilitySwapDeltaCalculator(final double bump) {
     _bumpSpot = bump;
@@ -44,9 +46,12 @@ public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivative
   }
 
   /**
-   * Constructor specifying bump amount and base calculator
-   * @param bump The bump amount
-   * @param cal Base calculator
+   * Constructor specifying bump amount and base calculator.
+   * 
+   * @param bump
+   *          The bump amount
+   * @param cal
+   *          Base calculator
    */
   public CarrLeeFXVolatilitySwapDeltaCalculator(final double bump, final CarrLeeFXVolatilitySwapCalculator cal) {
     ArgumentChecker.notNull(cal, "cal");
@@ -55,11 +60,15 @@ public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivative
   }
 
   /**
-   * Delta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, 
-   * i.e., assuming the fair value has been already calculated. 
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
-   * @param data The FX data for Carr-Lee
+   * Delta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
+   * has been already calculated.
+   * 
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return Delta
    */
   public Double getFXVolatilitySwapDelta(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -111,13 +120,13 @@ public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivative
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_bumpSpot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_cal == null) ? 0 : _cal.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_cal == null ? 0 : _cal.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -127,7 +136,7 @@ public class CarrLeeFXVolatilitySwapDeltaCalculator extends InstrumentDerivative
     if (!(obj instanceof CarrLeeFXVolatilitySwapDeltaCalculator)) {
       return false;
     }
-    CarrLeeFXVolatilitySwapDeltaCalculator other = (CarrLeeFXVolatilitySwapDeltaCalculator) obj;
+    final CarrLeeFXVolatilitySwapDeltaCalculator other = (CarrLeeFXVolatilitySwapDeltaCalculator) obj;
     if (Double.doubleToLongBits(_bumpSpot) != Double.doubleToLongBits(other._bumpSpot)) {
       return false;
     }

@@ -59,7 +59,7 @@ public final class Failure implements ImmutableBean {
    * @param message the failure message, not null
    * @param cause the cause, not null
    */
-  Failure(FailureStatus status, String message, Exception cause) {
+  Failure(final FailureStatus status, final String message, final Exception cause) {
     _status = ArgumentChecker.notNull(status, "status");
     _message = ArgumentChecker.notEmpty(message, "message");
     _causeType = ArgumentChecker.notNull(cause, "cause").getClass();
@@ -70,7 +70,7 @@ public final class Failure implements ImmutableBean {
    * @param status the status, not null
    * @param message the failure message, not null
    */
-  Failure(FailureStatus status, String message) {
+  Failure(final FailureStatus status, final String message) {
     _status = ArgumentChecker.notNull(status, "status");
     _message = ArgumentChecker.notEmpty(message, "message");
     _stackTrace = Throwables.getStackTraceAsString(new Exception());
@@ -81,7 +81,7 @@ public final class Failure implements ImmutableBean {
    * @param status the status, not null
    * @param cause the cause, not null
    */
-  Failure(FailureStatus status, Exception cause) {
+  Failure(final FailureStatus status, final Exception cause) {
     this(status, getMessage(cause), cause);
   }
 
@@ -89,25 +89,25 @@ public final class Failure implements ImmutableBean {
    * @param cause the cause, not null
    * @param message the failure message, not null
    */
-  Failure(Exception cause, String message) {
+  Failure(final Exception cause, final String message) {
     this(FailureStatus.ERROR, message, cause);
   }
 
   /**
    * @param cause the cause, not null
    */
-  Failure(Exception cause) {
+  Failure(final Exception cause) {
     this(FailureStatus.ERROR, cause);
   }
 
   /**
    * Extracts the message from an exception.
-   * 
+   *
    * @param cause  an exception that caused a failure
    * @return the exception's message or it's simple class name if it doesn't have one
    */
-  private static String getMessage(Exception cause) {
-    String message = ArgumentChecker.notNull(cause, "cause").getMessage();
+  private static String getMessage(final Exception cause) {
+    final String message = ArgumentChecker.notNull(cause, "cause").getMessage();
     return !StringUtils.isEmpty(message) ? message : cause.getClass().getSimpleName();
   }
 
@@ -216,10 +216,10 @@ public final class Failure implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Failure other = (Failure) obj;
-      return JodaBeanUtils.equal(getStatus(), other.getStatus()) &&
-          JodaBeanUtils.equal(getMessage(), other.getMessage()) &&
-          JodaBeanUtils.equal(getStackTrace(), other.getStackTrace()) &&
-          JodaBeanUtils.equal(getCauseType(), other.getCauseType());
+      return JodaBeanUtils.equal(_status, other._status) &&
+          JodaBeanUtils.equal(_message, other._message) &&
+          JodaBeanUtils.equal(_stackTrace, other._stackTrace) &&
+          JodaBeanUtils.equal(_causeType, other._causeType);
     }
     return false;
   }
@@ -227,10 +227,10 @@ public final class Failure implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCauseType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_status);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_message);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_stackTrace);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_causeType);
     return hash;
   }
 
@@ -238,10 +238,10 @@ public final class Failure implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("Failure{");
-    buf.append("status").append('=').append(getStatus()).append(',').append(' ');
-    buf.append("message").append('=').append(getMessage()).append(',').append(' ');
-    buf.append("stackTrace").append('=').append(getStackTrace()).append(',').append(' ');
-    buf.append("causeType").append('=').append(JodaBeanUtils.toString(getCauseType()));
+    buf.append("status").append('=').append(_status).append(',').append(' ');
+    buf.append("message").append('=').append(_message).append(',').append(' ');
+    buf.append("stackTrace").append('=').append(_stackTrace).append(',').append(' ');
+    buf.append("causeType").append('=').append(JodaBeanUtils.toString(_causeType));
     buf.append('}');
     return buf.toString();
   }
@@ -456,19 +456,31 @@ public final class Failure implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

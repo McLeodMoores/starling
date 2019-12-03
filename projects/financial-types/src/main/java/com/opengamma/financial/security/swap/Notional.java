@@ -34,7 +34,7 @@ public abstract class Notional extends DirectBean implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
-   * 
+   *
    * @param <T> the result type of the visitor
    * @param visitor  the visitor, not null
    * @return the result

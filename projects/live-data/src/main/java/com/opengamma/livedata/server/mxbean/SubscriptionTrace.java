@@ -33,40 +33,64 @@ public class SubscriptionTrace {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param identifier  the identifier
    */
-  public SubscriptionTrace(String identifier) {
+  public SubscriptionTrace(final String identifier) {
     this(identifier, "N/A", ImmutableSet.<DistributorTrace>of(), "N/A");
   }
 
   /**
    * Creates an instance.
-   * 
-   * @param identifier  the identifier
-   * @param created  the subscription creation time as a string
-   * @param distributors  the distributors
-   * @param lastValues  the last value
+   *
+   * @param identifier
+   *          the identifier
+   * @param created
+   *          the subscription creation time as a string
+   * @param distributors
+   *          the distributors
+   * @param lastValues
+   *          the last value
    */
-  public SubscriptionTrace(String identifier, String created, Set<DistributorTrace> distributors, String lastValues) {
+  public SubscriptionTrace(final String identifier, final String created, final Set<DistributorTrace> distributors, final String lastValues) {
     _identifier = identifier;
     _created = created;
     _distributors = distributors;
     _lastValues = lastValues;
   }
 
+  /**
+   * Gets the identifier.
+   *
+   * @return the identifier
+   */
   public String getIdentifier() {
     return _identifier;
   }
 
+  /**
+   * Gets the subscription creation time.
+   *
+   * @return the creation time
+   */
   public String getCreated() {
     return _created;
   }
 
+  /**
+   * Gets the distributors.
+   *
+   * @return the distributors
+   */
   public Set<DistributorTrace> getDistributors() {
     return _distributors;
   }
 
+  /**
+   * Gets the last value.
+   *
+   * @return the last value
+   */
   public String getLastValues() {
     return _lastValues;
   }

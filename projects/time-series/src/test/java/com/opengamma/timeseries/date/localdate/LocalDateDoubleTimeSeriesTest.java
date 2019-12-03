@@ -16,7 +16,7 @@ import com.opengamma.timeseries.DoubleTimeSeriesTest;
 public abstract class LocalDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest<LocalDate> {
 
   @Override
-  protected LocalDate[] testTimes() {
+  protected LocalDate[] createTestTimes() {
     LocalDate one = LocalDate.of(2010, Month.FEBRUARY, 8);
     LocalDate two = LocalDate.of(2010, Month.FEBRUARY, 9);
     LocalDate three = LocalDate.of(2010, Month.FEBRUARY, 10);
@@ -27,7 +27,7 @@ public abstract class LocalDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest
   }
 
   @Override
-  protected LocalDate[] testTimes2() {
+  protected LocalDate[] createTestTimes2() {
     LocalDate one = LocalDate.of(2010, Month.FEBRUARY, 11);
     LocalDate two = LocalDate.of(2010, Month.FEBRUARY, 12);
     LocalDate three = LocalDate.of(2010, Month.FEBRUARY, 13);
@@ -38,7 +38,7 @@ public abstract class LocalDateDoubleTimeSeriesTest extends DoubleTimeSeriesTest
   }
 
   @Override
-  protected LocalDate[] emptyTimes() {
+  protected LocalDate[] createEmptyTimes() {
     return new LocalDate[] {};
   }
 

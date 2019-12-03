@@ -77,7 +77,7 @@ public class SwapTrade extends Trade {
   private static final class IsPayLegPredicate implements Predicate<SwapLeg> {
 
     @Override
-    public boolean apply(SwapLeg input) {
+    public boolean apply(final SwapLeg input) {
       return input.getDirection() == Direction.PAY;
     }
 

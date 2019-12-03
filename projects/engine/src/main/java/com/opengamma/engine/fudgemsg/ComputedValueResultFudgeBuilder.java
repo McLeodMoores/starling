@@ -57,7 +57,8 @@ public class ComputedValueResultFudgeBuilder implements FudgeBuilder<ComputedVal
   public ComputedValueResult buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final ValueSpecification valueSpec = ComputedValueFudgeBuilder.getValueSpecification(deserializer, msg);
     final Object valueObject = ComputedValueFudgeBuilder.getValueObject(deserializer, msg);
-    final AggregatedExecutionLog aggregatedExecutionLog = deserializer.fieldValueToObject(DefaultAggregatedExecutionLog.class, msg.getByName(AGGREGATED_EXECUTION_LOG_FIELD));
+    final AggregatedExecutionLog aggregatedExecutionLog =
+        deserializer.fieldValueToObject(DefaultAggregatedExecutionLog.class, msg.getByName(AGGREGATED_EXECUTION_LOG_FIELD));
     final String computeNodeId = msg.getString(COMPUTE_NODE_ID_FIELD);
     final FudgeMsg missingInputsMsg = msg.getMessage(MISSING_INPUTS_FIELD_NAME);
     final Set<ValueSpecification> missingInputs;

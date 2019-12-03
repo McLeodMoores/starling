@@ -23,7 +23,7 @@ public class WebConfigUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebConfigUris(WebConfigData data) {
+  public WebConfigUris(final WebConfigData data) {
     _data = data;
   }
 

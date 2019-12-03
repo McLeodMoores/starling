@@ -24,14 +24,14 @@ public final class ModifiedDurationFromYieldCalculator extends InstrumentDerivat
   /**
    * The calculator instance.
    */
-  private static final ModifiedDurationFromYieldCalculator s_instance = new ModifiedDurationFromYieldCalculator();
+  private static final ModifiedDurationFromYieldCalculator INSTANCE = new ModifiedDurationFromYieldCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static ModifiedDurationFromYieldCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

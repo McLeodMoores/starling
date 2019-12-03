@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.fittedresults;
@@ -16,7 +16,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class HestonFittedSurfaces {
   private final InterpolatedDoublesSurface _kappaSurface;
@@ -27,13 +27,16 @@ public class HestonFittedSurfaces {
   private final Map<DoublesPair, DoubleMatrix2D> _inverseJacobian;
   private final Currency _currency;
 
-  public HestonFittedSurfaces(final InterpolatedDoublesSurface kappaSurface, final InterpolatedDoublesSurface thetaSurface, final InterpolatedDoublesSurface vol0Surface,
+  public HestonFittedSurfaces(final InterpolatedDoublesSurface kappaSurface, final InterpolatedDoublesSurface thetaSurface,
+      final InterpolatedDoublesSurface vol0Surface,
       final InterpolatedDoublesSurface omegaSurface, final InterpolatedDoublesSurface rhoSurface, final Currency currency) {
     this(kappaSurface, thetaSurface, vol0Surface, omegaSurface, rhoSurface, null, currency);
   }
 
-  public HestonFittedSurfaces(final InterpolatedDoublesSurface kappaSurface, final InterpolatedDoublesSurface thetaSurface, final InterpolatedDoublesSurface vol0Surface,
-      final InterpolatedDoublesSurface omegaSurface, final InterpolatedDoublesSurface rhoSurface, final Map<DoublesPair, DoubleMatrix2D> inverseJacobian, final Currency currency) {
+  public HestonFittedSurfaces(final InterpolatedDoublesSurface kappaSurface, final InterpolatedDoublesSurface thetaSurface,
+      final InterpolatedDoublesSurface vol0Surface,
+      final InterpolatedDoublesSurface omegaSurface, final InterpolatedDoublesSurface rhoSurface, final Map<DoublesPair, DoubleMatrix2D> inverseJacobian,
+      final Currency currency) {
     Validate.notNull(kappaSurface, "kappa surface");
     Validate.notNull(thetaSurface, "theta surface");
     Validate.notNull(vol0Surface, "vol0 surface");

@@ -21,24 +21,24 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class InflationBondSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<InflationBondSecurity> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, InflationBondSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final InflationBondSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     InflationBondSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, InflationBondSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final InflationBondSecurity object, final MutableFudgeMsg msg) {
     BondSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
   @Override
-  public InflationBondSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    InflationBondSecurity object = new InflationBondSecurity();
+  public InflationBondSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final InflationBondSecurity object = new InflationBondSecurity();
     InflationBondSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, InflationBondSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final InflationBondSecurity object) {
     BondSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
 

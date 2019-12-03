@@ -73,14 +73,23 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
    */
   private static final BusinessDayConvention BUSINESS_DAY_FOLLOWING = BusinessDayConventions.FOLLOWING;
 
-  /** Constructor from all details.
-   * @param lastTradingDate The future last trading date. Usually the last business day of the month.
-   * @param index The OIS-like index on which the future fixes.
-   * @param fixingPeriodDate The dates of the fixing periods (start and end). There is one date more than period.
-   * @param fixingPeriodAccrualFactor The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
-   * @param notional The future notional.
-   * @param paymentAccrualFactor The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
-   * @param name The future name.
+  /**
+   * Constructor from all details.
+   * 
+   * @param lastTradingDate
+   *          The future last trading date. Usually the last business day of the month.
+   * @param index
+   *          The OIS-like index on which the future fixes.
+   * @param fixingPeriodDate
+   *          The dates of the fixing periods (start and end). There is one date more than period.
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
+   * @param notional
+   *          The future notional.
+   * @param paymentAccrualFactor
+   *          The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   * @param name
+   *          The future name.
    */
   public FederalFundsFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final IndexON index, final ZonedDateTime[] fixingPeriodDate,
       final double[] fixingPeriodAccrualFactor, final double notional, final double paymentAccrualFactor, final String name) {
@@ -104,17 +113,25 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
   }
 
   /**
-   * Builder for a given month. The future start on the first business day of the month and ends on the first business day of the next month.
-   * The last trading date is the last good business day of the month.
-   * @param monthDate Any date in the future month.
-   * @param index The overnight index.
-   * @param notional The future notional.
-   * @param paymentAccrualFactor The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
-   * @param name The future name.
-   * @param calendar The holiday calendar for the overnight rate.
+   * Builder for a given month. The future start on the first business day of the month and ends on the first business day of the next month. The last trading
+   * date is the last good business day of the month.
+   * 
+   * @param monthDate
+   *          Any date in the future month.
+   * @param index
+   *          The overnight index.
+   * @param notional
+   *          The future notional.
+   * @param paymentAccrualFactor
+   *          The future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   * @param name
+   *          The future name.
+   * @param calendar
+   *          The holiday calendar for the overnight rate.
    * @return The future.
    */
-  public static FederalFundsFutureSecurityDefinition from(final ZonedDateTime monthDate, final IndexON index, final double notional, final double paymentAccrualFactor,
+  public static FederalFundsFutureSecurityDefinition from(final ZonedDateTime monthDate, final IndexON index, final double notional,
+      final double paymentAccrualFactor,
       final String name, final Calendar calendar) {
     ArgumentChecker.notNull(monthDate, "Reference date");
     ArgumentChecker.notNull(index, "Index overnight");
@@ -136,11 +153,16 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
   }
 
   /**
-   * Builder of the CBOT Federal Funds futures for a given month. The future start on the first business day of the month and ends on the first business day of the next month.
-   * The last trading date is the last good business day of the month. The notional is 5m. The payment accrual fraction is 1/12. The name is "FF" + month in format "MMMYY".
-   * @param monthDate Any date in the future month.
-   * @param index The overnight index.
-   * @param calendar The holiday calendar for the overnight rate.
+   * Builder of the CBOT Federal Funds futures for a given month. The future start on the first business day of the month and ends on the first business day of
+   * the next month. The last trading date is the last good business day of the month. The notional is 5m. The payment accrual fraction is 1/12. The name is
+   * "FF" + month in format "MMMYY".
+   * 
+   * @param monthDate
+   *          Any date in the future month.
+   * @param index
+   *          The overnight index.
+   * @param calendar
+   *          The holiday calendar for the overnight rate.
    * @return The future.
    */
   public static FederalFundsFutureSecurityDefinition fromFedFund(final ZonedDateTime monthDate, final IndexON index, final Calendar calendar) {
@@ -151,6 +173,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the OIS-like index on which the future fixes.
+   * 
    * @return The index.
    */
   public IndexON getIndex() {
@@ -159,6 +182,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the dates of the fixing periods (start and end). There is one date more than period.
+   * 
    * @return The dates.
    */
   public ZonedDateTime[] getFixingPeriodDate() {
@@ -167,6 +191,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
+   * 
    * @return The accrual factors.
    */
   public double[] getFixingPeriodAccrualFactor() {
@@ -175,6 +200,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the total accrual factor for all fixing periods.
+   * 
    * @return The accrual factor.
    */
   public double getFixingTotalAccrualFactor() {
@@ -183,6 +209,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -191,6 +218,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future payment accrual factor. Usually a standardized number of 1/12 for a 30-day future.
+   * 
    * @return The payment accrual factor.
    */
   public double getMarginAccrualFactor() {
@@ -199,6 +227,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future name.
+   * 
    * @return The future name.
    */
   public String getName() {
@@ -207,6 +236,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -220,6 +250,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -234,14 +265,15 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
   }
 
   /**
-   * @param indexFixingTimeSeries The time series of the ON index. It is used if the date is in the future month.
-   * The date of the time series is the publication date (for Fed Funds, it is the end date of the period).
-   * {@inheritDoc}
+   * @param indexFixingTimeSeries
+   *          The time series of the ON index. It is used if the date is in the future month. The date of the time series is the publication date (for Fed
+   *          Funds, it is the end date of the period). {@inheritDoc}
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
-  public FederalFundsFutureSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries, final String... yieldCurveNames) {
+  public FederalFundsFutureSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "Date");
     if (date.isBefore(_fixingPeriodDates[1])) { // Fixing period not started
       return toDerivative(date, yieldCurveNames);
@@ -271,13 +303,16 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
           fixingPeriodTime[loopfix] = TimeCalculator.getTimeBetween(date, _fixingPeriodDates[loopfix + fixedPeriod]);
         }
         System.arraycopy(_fixingPeriodAccrualFactor, fixedPeriod, fixingPeriodAccrualFactor, 0, _fixingPeriodDates.length - 1 - fixedPeriod);
-        return new FederalFundsFutureSecurity(_index, accruedInterest, fixingPeriodTime, lastTradingTime, fixingPeriodAccrualFactor, _fixingTotalAccrualFactor, _notional,
+        return new FederalFundsFutureSecurity(_index, accruedInterest, fixingPeriodTime, lastTradingTime, fixingPeriodAccrualFactor, _fixingTotalAccrualFactor,
+            _notional,
             _marginAccrualFactor, _name, yieldCurveNames[0]);
       }
-      return new FederalFundsFutureSecurity(_index, accruedInterest, new double[] {TimeCalculator.getTimeBetween(date, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
+      return new FederalFundsFutureSecurity(_index, accruedInterest,
+          new double[] { TimeCalculator.getTimeBetween(date, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
           lastTradingTime, new double[0], _fixingTotalAccrualFactor, _notional, _marginAccrualFactor, _name, yieldCurveNames[0]);
     }
-    return new FederalFundsFutureSecurity(_index, accruedInterest, new double[] {TimeCalculator.getTimeBetween(date, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
+    return new FederalFundsFutureSecurity(_index, accruedInterest,
+        new double[] { TimeCalculator.getTimeBetween(date, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
         lastTradingTime, new double[0], _fixingTotalAccrualFactor, _notional, _marginAccrualFactor, _name, yieldCurveNames[0]);
   }
 
@@ -287,20 +322,23 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     ArgumentChecker.isTrue(!date.isAfter(_fixingPeriodDates[_index.getPublicationLag()]), "Date should not be after the fixing period start date");
     final double lastTradingTime = TimeCalculator.getTimeBetween(date, getLastTradingDate());
     final double[] fixingPeriodTime = TimeCalculator.getTimeBetween(date, _fixingPeriodDates);
-    return new FederalFundsFutureSecurity(_index, 0.0, fixingPeriodTime, lastTradingTime, _fixingPeriodAccrualFactor, _fixingTotalAccrualFactor, _notional, _marginAccrualFactor, _name);
+    return new FederalFundsFutureSecurity(_index, 0.0, fixingPeriodTime, lastTradingTime, _fixingPeriodAccrualFactor, _fixingTotalAccrualFactor, _notional,
+        _marginAccrualFactor, _name);
   }
 
   /**
    * {@inheritDoc}
-   * @param indexFixingTimeSeries The time series of the ON index. It is used if the date is in the future month.
-   * The date of the time series is the start fixing period date.
+   * 
+   * @param indexFixingTimeSeries
+   *          The time series of the ON index. It is used if the date is in the future month. The date of the time series is the start fixing period date.
    */
   @Override
   public FederalFundsFutureSecurity toDerivative(final ZonedDateTime valZdt, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
     ArgumentChecker.notNull(valZdt, "valZdt - valuation date as ZonedDateTime");
     final LocalDate valDate = valZdt.toLocalDate();
     ArgumentChecker.isTrue(!valDate.isAfter(_fixingPeriodDates[_fixingPeriodDates.length - 1].toLocalDate()), "valuation date is after last trading date");
-    final LocalDate firstPublicationDate = _fixingPeriodDates[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first fixing date
+    final LocalDate firstPublicationDate = _fixingPeriodDates[_index.getPublicationLag()].toLocalDate(); // This is often one business day following the first
+                                                                                                         // fixing date
     if (valDate.isBefore(firstPublicationDate)) {
       return toDerivative(valZdt);
     }
@@ -316,13 +354,14 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     final double lastTradingTime = TimeCalculator.getTimeBetween(valZdt, getLastTradingDate());
     int fixedPeriod = 0;
     double accruedInterest = 0.0;
-    while ((fixedPeriod < _fixingPeriodDates.length - 1) && valDate.isAfter(_fixingPeriodDates[fixedPeriod + _index.getPublicationLag()].toLocalDate())) {
+    while (fixedPeriod < _fixingPeriodDates.length - 1 && valDate.isAfter(_fixingPeriodDates[fixedPeriod + _index.getPublicationLag()].toLocalDate())) {
       final LocalDate currentDate = _fixingPeriodDates[fixedPeriod].toLocalDate();
       // Fixing should have taken place already
       final Double fixedRate = indexFixingDateSeries.getValue(currentDate);
       if (fixedRate == null) {
         final LocalDate latestDate = indexFixingDateSeries.getLatestTime();
-        throw new OpenGammaRuntimeException("Could not get fixing value of index " + _index.getName() + " for date " + currentDate + ". The last data is available on " + latestDate);
+        throw new OpenGammaRuntimeException(
+            "Could not get fixing value of index " + _index.getName() + " for date " + currentDate + ". The last data is available on " + latestDate);
       }
       accruedInterest += _fixingPeriodAccrualFactor[fixedPeriod] * fixedRate;
       fixedPeriod++;
@@ -340,13 +379,16 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
           fixingPeriodTime[loopfix] = TimeCalculator.getTimeBetween(valZdt, _fixingPeriodDates[loopfix + fixedPeriod]);
         }
         System.arraycopy(_fixingPeriodAccrualFactor, fixedPeriod, fixingPeriodAccrualFactor, 0, _fixingPeriodDates.length - 1 - fixedPeriod);
-        return new FederalFundsFutureSecurity(_index, accruedInterest, fixingPeriodTime, lastTradingTime, fixingPeriodAccrualFactor, _fixingTotalAccrualFactor, _notional,
+        return new FederalFundsFutureSecurity(_index, accruedInterest, fixingPeriodTime, lastTradingTime, fixingPeriodAccrualFactor, _fixingTotalAccrualFactor,
+            _notional,
             _marginAccrualFactor, _name);
       }
-      return new FederalFundsFutureSecurity(_index, accruedInterest, new double[] {TimeCalculator.getTimeBetween(valZdt, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
+      return new FederalFundsFutureSecurity(_index, accruedInterest,
+          new double[] { TimeCalculator.getTimeBetween(valZdt, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
           lastTradingTime, new double[0], _fixingTotalAccrualFactor, _notional, _marginAccrualFactor, _name); // Only one period left
     }
-    return new FederalFundsFutureSecurity(_index, accruedInterest, new double[] {TimeCalculator.getTimeBetween(valZdt, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
+    return new FederalFundsFutureSecurity(_index, accruedInterest,
+        new double[] { TimeCalculator.getTimeBetween(valZdt, _fixingPeriodDates[_fixingPeriodDates.length - 1]) },
         lastTradingTime, new double[0], _fixingTotalAccrualFactor, _notional, _marginAccrualFactor, _name); // Only one period left
   }
 
@@ -370,18 +412,18 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     result = prime * result + Arrays.hashCode(_fixingPeriodDates);
     long temp;
     temp = Double.doubleToLongBits(_fixingTotalAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_marginAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _name.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -391,7 +433,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
     if (getClass() != obj.getClass()) {
       return false;
     }
-    FederalFundsFutureSecurityDefinition other = (FederalFundsFutureSecurityDefinition) obj;
+    final FederalFundsFutureSecurityDefinition other = (FederalFundsFutureSecurityDefinition) obj;
     if (!Arrays.equals(_fixingPeriodAccrualFactor, other._fixingPeriodAccrualFactor)) {
       return false;
     }

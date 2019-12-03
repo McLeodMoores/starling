@@ -53,8 +53,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
    */
   @ImmutableConstructor
   public AutoStartViewDefinition(
-      UniqueId underlyingViewDefinitionId,
-      ViewExecutionOptions executionOptions) {
+      final UniqueId underlyingViewDefinitionId,
+      final ViewExecutionOptions executionOptions) {
 
     ArgumentChecker.notNull(underlyingViewDefinitionId, "underlyingViewDefinitionId");
     ArgumentChecker.notNull(executionOptions, "executionOptions");
@@ -133,8 +133,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       AutoStartViewDefinition other = (AutoStartViewDefinition) obj;
-      return JodaBeanUtils.equal(getViewDefinitionId(), other.getViewDefinitionId()) &&
-          JodaBeanUtils.equal(getExecutionOptions(), other.getExecutionOptions());
+      return JodaBeanUtils.equal(_viewDefinitionId, other._viewDefinitionId) &&
+          JodaBeanUtils.equal(_executionOptions, other._executionOptions);
     }
     return false;
   }
@@ -142,8 +142,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getExecutionOptions());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_viewDefinitionId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_executionOptions);
     return hash;
   }
 
@@ -151,8 +151,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("AutoStartViewDefinition{");
-    buf.append("viewDefinitionId").append('=').append(getViewDefinitionId()).append(',').append(' ');
-    buf.append("executionOptions").append('=').append(JodaBeanUtils.toString(getExecutionOptions()));
+    buf.append("viewDefinitionId").append('=').append(_viewDefinitionId).append(',').append(' ');
+    buf.append("executionOptions").append('=').append(JodaBeanUtils.toString(_executionOptions));
     buf.append('}');
     return buf.toString();
   }
@@ -315,19 +315,31 @@ public final class AutoStartViewDefinition implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

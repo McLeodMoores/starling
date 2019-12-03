@@ -6,10 +6,20 @@
 package com.opengamma.analytics.env;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
+import org.joda.beans.JodaBeanUtils;
+import org.joda.beans.MetaProperty;
+import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
+import org.joda.beans.impl.direct.DirectMetaBean;
+import org.joda.beans.impl.direct.DirectMetaProperty;
+import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.analytics.financial.instrument.annuity.FixedAnnuityDefinitionBuilder;
 import com.opengamma.analytics.financial.instrument.annuity.FloatingAnnuityDefinitionBuilder;
@@ -17,21 +27,8 @@ import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
 
-import org.joda.beans.Bean;
-import org.joda.beans.JodaBeanUtils;
-import org.joda.beans.MetaProperty;
-import org.joda.beans.Property;
-import org.joda.beans.impl.direct.DirectMetaProperty;
-import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
-
 /**
- * Environment holding analytics customisations.
- * This allows custom behaviour to be injected into analytics functions.
- * e.g. the model daycount
+ * Environment holding analytics customisations. This allows custom behaviour to be injected into analytics functions. e.g. the model daycount
  */
 @BeanDefinition
 public final class AnalyticsEnvironment implements ImmutableBean {
@@ -39,9 +36,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   /**
    * The default environment, which consists of:
    * <ul>
-   *  <li> model daycount of Act/Act ISDA.
-   *  <li> standard fixed annuity builder
-   *  <li> standard floating annuity builder
+   * <li>model daycount of Act/Act ISDA.
+   * <li>standard fixed annuity builder
+   * <li>standard floating annuity builder
    * </ul>
    */
   public static final AnalyticsEnvironment DEFAULT = AnalyticsEnvironment.builder()
@@ -57,15 +54,16 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * The model daycount. Used to compute fractions of a year when obtaining values from a curve.
-   * Different to the daycount used to price an instrument, which
-   * comes from the instrument or a convention.
+   * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
+   *
    * @see DayCount
    */
   @PropertyDefinition(validate = "notNull")
   private final DayCount _modelDayCount;
 
   /**
-   * Builder for generating fixed annuities
+   * Builder for generating fixed annuities.
+   *
    * @see FixedAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
@@ -73,19 +71,20 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Builder for generating floating (Ibor, OIS etc) annuities.
+   *
    * @see FloatingAnnuityDefinitionBuilder
    */
   @PropertyDefinition(validate = "notNull")
   private final FloatingAnnuityDefinitionBuilder _floatingAnnuityDefinitionBuilder;
 
   /**
-   * Returns the AnalyticsEnvironment
+   * Returns the AnalyticsEnvironment.
    *
    * @return the {@link AnalyticsEnvironment} from the current thread, if not set return {@link #DEFAULT}
    * @see #DEFAULT
    */
   public static AnalyticsEnvironment getInstance() {
-    AnalyticsEnvironment environment = s_instance.get();
+    final AnalyticsEnvironment environment = s_instance.get();
     if (environment != null) {
       return environment;
     }
@@ -94,7 +93,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   /**
    * Set the current {@link AnalyticsEnvironment} for the current thread.
-   * @param analyticsEnvironment the analytics environment to set, not null
+   *
+   * @param analyticsEnvironment
+   *          the analytics environment to set, not null
    */
   public static void setInstance(final AnalyticsEnvironment analyticsEnvironment) {
     ArgumentChecker.notNull(analyticsEnvironment, "analyticsEnvironment");
@@ -153,8 +154,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   //-----------------------------------------------------------------------
   /**
    * Gets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
-   * Different to the daycount used to price an instrument, which
-   * comes from the instrument or a convention.
+   * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
+   * 
    * @see DayCount
    * @return the value of the property, not null
    */
@@ -164,7 +165,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets builder for generating fixed annuities
+   * Gets builder for generating fixed annuities.
+   * 
    * @see FixedAnnuityDefinitionBuilder
    * @return the value of the property, not null
    */
@@ -175,6 +177,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   //-----------------------------------------------------------------------
   /**
    * Gets builder for generating floating (Ibor, OIS etc) annuities.
+   * 
    * @see FloatingAnnuityDefinitionBuilder
    * @return the value of the property, not null
    */
@@ -198,9 +201,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       AnalyticsEnvironment other = (AnalyticsEnvironment) obj;
-      return JodaBeanUtils.equal(getModelDayCount(), other.getModelDayCount()) &&
-          JodaBeanUtils.equal(getFixedAnnuityDefinitionBuilder(), other.getFixedAnnuityDefinitionBuilder()) &&
-          JodaBeanUtils.equal(getFloatingAnnuityDefinitionBuilder(), other.getFloatingAnnuityDefinitionBuilder());
+      return JodaBeanUtils.equal(_modelDayCount, other._modelDayCount) &&
+          JodaBeanUtils.equal(_fixedAnnuityDefinitionBuilder, other._fixedAnnuityDefinitionBuilder) &&
+          JodaBeanUtils.equal(_floatingAnnuityDefinitionBuilder, other._floatingAnnuityDefinitionBuilder);
     }
     return false;
   }
@@ -208,9 +211,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getModelDayCount());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedAnnuityDefinitionBuilder());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFloatingAnnuityDefinitionBuilder());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_modelDayCount);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixedAnnuityDefinitionBuilder);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_floatingAnnuityDefinitionBuilder);
     return hash;
   }
 
@@ -218,9 +221,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("AnalyticsEnvironment{");
-    buf.append("modelDayCount").append('=').append(getModelDayCount()).append(',').append(' ');
-    buf.append("fixedAnnuityDefinitionBuilder").append('=').append(getFixedAnnuityDefinitionBuilder()).append(',').append(' ');
-    buf.append("floatingAnnuityDefinitionBuilder").append('=').append(JodaBeanUtils.toString(getFloatingAnnuityDefinitionBuilder()));
+    buf.append("modelDayCount").append('=').append(_modelDayCount).append(',').append(' ');
+    buf.append("fixedAnnuityDefinitionBuilder").append('=').append(_fixedAnnuityDefinitionBuilder).append(',').append(' ');
+    buf.append("floatingAnnuityDefinitionBuilder").append('=').append(JodaBeanUtils.toString(_floatingAnnuityDefinitionBuilder));
     buf.append('}');
     return buf.toString();
   }
@@ -408,19 +411,31 @@ public final class AnalyticsEnvironment implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
@@ -437,8 +452,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     //-----------------------------------------------------------------------
     /**
      * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
-     * Different to the daycount used to price an instrument, which
-     * comes from the instrument or a convention.
+     * Different to the daycount used to price an instrument, which comes from the instrument or a convention.
+     * 
      * @see DayCount
      * @param modelDayCount  the new value, not null
      * @return this, for chaining, not null
@@ -450,7 +465,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
 
     /**
-     * Sets builder for generating fixed annuities
+     * Sets builder for generating fixed annuities.
+     * 
      * @see FixedAnnuityDefinitionBuilder
      * @param fixedAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null
@@ -463,6 +479,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     /**
      * Sets builder for generating floating (Ibor, OIS etc) annuities.
+     * 
      * @see FloatingAnnuityDefinitionBuilder
      * @param floatingAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null

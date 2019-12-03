@@ -13,11 +13,14 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test Currency.
+ * Test {@link StandardCurrencyPairs}.
  */
 @Test(groups = TestGroup.UNIT)
 public class StandardCurrencyPairsTest {
 
+  /**
+   * Tests whether a numerator / denominator pair is in standard order.
+   */
   public void testCases() {
     assertTrue(StandardCurrencyPairs.isStandardPair(Currency.EUR, Currency.USD));
     assertFalse(StandardCurrencyPairs.isStandardPair(Currency.USD, Currency.EUR));

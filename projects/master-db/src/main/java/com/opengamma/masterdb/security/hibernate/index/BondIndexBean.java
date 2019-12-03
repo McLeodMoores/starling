@@ -39,7 +39,7 @@ public class BondIndexBean extends IndexBean {
     if (!(other instanceof BondIndexBean)) {
       return false;
     }
-    BondIndexBean index = (BondIndexBean) other;
+    final BondIndexBean index = (BondIndexBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getDescription(), index.getDescription())
@@ -47,7 +47,7 @@ public class BondIndexBean extends IndexBean {
       .append(getWeightingType(), index.getWeightingType())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

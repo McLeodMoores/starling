@@ -21,7 +21,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   /**
    * Singleton instance.
    */
-  private static final HSQLDbManagement INSTANCE = new HSQLDbManagement(); 
+  private static final HSQLDbManagement INSTANCE = new HSQLDbManagement();
   /**
    * The underlying Hibernate dialect.
    */
@@ -35,7 +35,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static HSQLDbManagement getInstance() {
@@ -64,23 +64,23 @@ public final class HSQLDbManagement extends AbstractDbManagement {
 
   //-------------------------------------------------------------------------
   @Override
-  public void shutdown(String catalog) {
+  public void shutdown(final String catalog) {
     super.shutdown(catalog);
-    
+
     executeSql(catalog, null, "SHUTDOWN");
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public String getAllSchemasSQL(String catalog) {
+  public String getAllSchemasSQL(final String catalog) {
     return "SELECT TABLE_SCHEM AS name FROM INFORMATION_SCHEMA.SYSTEM_SCHEMAS";
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(String catalog, String schema) {
-    String sql = "SELECT FK_NAME AS name, " +
-      "FKTABLE_NAME AS table_name " +
-      "FROM INFORMATION_SCHEMA.SYSTEM_CROSSREFERENCE";
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
+    String sql = "SELECT FK_NAME AS name, "
+      + "FKTABLE_NAME AS table_name "
+      + "FROM INFORMATION_SCHEMA.SYSTEM_CROSSREFERENCE";
     if (schema != null) {
       sql += " WHERE FKTABLE_SCHEM = '" + schema + "'";
     }
@@ -88,9 +88,9 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllSequencesSQL(String catalog, String schema) {
-    String sql = "SELECT SEQUENCE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_SEQUENCES " +
-      " WHERE SEQUENCE_NAME <> 'LOB_ID'";
+  public String getAllSequencesSQL(final String catalog, final String schema) {
+    String sql = "SELECT SEQUENCE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_SEQUENCES "
+      + " WHERE SEQUENCE_NAME <> 'LOB_ID'";
     if (schema != null) {
       sql += " AND SEQUENCE_SCHEMA =  '" + schema + "'";
     }
@@ -98,7 +98,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllTablesSQL(String catalog, String schema) {
+  public String getAllTablesSQL(final String catalog, final String schema) {
     String sql = "SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE TABLE_TYPE = 'TABLE'";
     if (schema != null) {
       sql += " AND TABLE_SCHEM = '" + schema + "'";
@@ -107,7 +107,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllViewsSQL(String catalog, String schema) {
+  public String getAllViewsSQL(final String catalog, final String schema) {
     String sql = "SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.SYSTEM_TABLES WHERE TABLE_TYPE = 'VIEW'";
     if (schema != null) {
       sql += " AND TABLE_SCHEM = '" + schema + "'";
@@ -116,9 +116,9 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getAllColumnsSQL(String catalog, String schema, String table) {
-    StringBuilder sql = new StringBuilder("SELECT COLUMN_NAME AS name, DATA_TYPE AS datatype, IS_NULLABLE AS allowsnull, COLUMN_DEF AS defaultvalue " +
-        "FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME='");
+  public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
+    final StringBuilder sql = new StringBuilder("SELECT COLUMN_NAME AS name, DATA_TYPE AS datatype, IS_NULLABLE AS allowsnull, COLUMN_DEF AS defaultvalue "
+        + "FROM INFORMATION_SCHEMA.SYSTEM_COLUMNS WHERE TABLE_NAME='");
     sql.append(table).append("'");
     if (schema != null) {
       sql.append(" AND TABLE_SCHEM='").append(schema).append("'");
@@ -127,17 +127,17 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public String getCreateSchemaSQL(String catalog, String schema) {
+  public String getCreateSchemaSQL(final String catalog, final String schema) {
     return "CREATE SCHEMA " + schema;
   }
-  
+
   @Override
-  public String getSchemaVersionTable(String schemaGroupName) {
+  public String getSchemaVersionTable(final String schemaGroupName) {
     return (schemaGroupName + SCHEMA_VERSION_TABLE_SUFFIX).toUpperCase();
   }
-  
+
   @Override
-  public String getSchemaVersionSQL(String catalog, String schemaGroupName) {
+  public String getSchemaVersionSQL(final String catalog, final String schemaGroupName) {
     return "SELECT version_value FROM " + getSchemaVersionTable(schemaGroupName) + " WHERE version_key = 'schema_patch'";
   }
 
@@ -147,17 +147,17 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   @Override
-  public void dropSchema(String catalog, String schema) {
+  public void dropSchema(final String catalog, final String schema) {
     try {
       super.dropSchema(catalog, schema);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       // try deleting database
       if (ex.getCause() instanceof SQLInvalidAuthorizationSpecException) {
         FileUtils.deleteQuietly(getFile());
         super.dropSchema(catalog, schema);
       }
     }
-    
+
     /*
      * NOTE jonathan 2013-04-11 -- this should work but for some reason doesn't
     Connection conn = null;
@@ -168,7 +168,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
       }
 
       conn = connect(catalog);
-      
+
       if (schema == null) {
         schema = "PUBLIC";
       }
@@ -176,7 +176,7 @@ public final class HSQLDbManagement extends AbstractDbManagement {
       Statement statement = conn.createStatement();
       statement.executeUpdate("DROP SCHEMA " + schema + " CASCADE");
       statement.close();
-      
+
     } catch (SQLException e) {
       throw new OpenGammaRuntimeException("Failed to drop schema", e);
     } finally {
@@ -191,8 +191,8 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   }
 
   private File getFile() {
-    String dbHost = getDbHost().trim();
-    String filePart = dbHost.substring("jdbc:hsqldb:file:".length());
+    final String dbHost = getDbHost().trim();
+    final String filePart = dbHost.substring("jdbc:hsqldb:file:".length());
     return new File(filePart);
   }
 
@@ -203,16 +203,16 @@ public final class HSQLDbManagement extends AbstractDbManagement {
   private class HSQLCatalogCreationStrategy implements CatalogCreationStrategy {
 
     @Override
-    public boolean catalogExists(String catalog) {
+    public boolean catalogExists(final String catalog) {
       if (getDbHost().toLowerCase().indexOf("jdbc:hsqldb:file:") != 1) {
         return true;
       }
-      File catalogDir = new File(getFile(), catalog);
+      final File catalogDir = new File(getFile(), catalog);
       return catalogDir.exists();
     }
 
     @Override
-    public void create(String catalog) {
+    public void create(final String catalog) {
       return; // HSQLDB creates DB automatically on first connect
     }
   }

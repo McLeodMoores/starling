@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class LocalVolatilityBackwardPDEPriceGridCalculator implements PDELocalVolatilityCalculator<Interpolator1DDataBundle> {
   private final LocalVolatilityBackwardPDECalculator _pdeCalculator;
@@ -26,7 +26,8 @@ public class LocalVolatilityBackwardPDEPriceGridCalculator implements PDELocalVo
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final PDETerminalResults1D pdeGrid = _pdeCalculator.runPDESolver(localVolatility, option);
     final PDEGrid1D grid = pdeGrid.getGrid();
@@ -42,7 +43,8 @@ public class LocalVolatilityBackwardPDEPriceGridCalculator implements PDELocalVo
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final PDETerminalResults1D pdeGrid = _pdeCalculator.runPDESolver(localVolatility, forwardCurve, option);
     final PDEGrid1D grid = pdeGrid.getGrid();

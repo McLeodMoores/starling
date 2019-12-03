@@ -31,7 +31,7 @@ public class FloatingStrikeLookbackPayoffStyle extends PayoffStyle {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitFloatingStrikeLookbackPayoffStyle(this);
   }
 

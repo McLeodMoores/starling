@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -27,7 +27,7 @@ public class ShermanMorrisonMatrixUpdateFunctionTest {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public DoubleMatrix2D evaluate(DoubleMatrix1D x) {
+    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
       return ALGEBRA.getOuterProduct(x, x);
     }
 

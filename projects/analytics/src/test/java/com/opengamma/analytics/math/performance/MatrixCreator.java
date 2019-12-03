@@ -1,20 +1,20 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.performance;
 
 
 /**
- * 
+ *
  */
 public class MatrixCreator {
-  private int _width;
-  private int _height;
-  private double [] _mem;
-  
-  public MatrixCreator(int height, int width) {
+  private final int _width;
+  private final int _height;
+  private final double [] _mem;
+
+  public MatrixCreator(final int height, final int width) {
     this._width = width;
     this._height = height;
     this._mem = new double [width * height];
@@ -23,9 +23,9 @@ public class MatrixCreator {
   public MatrixCreator() {
     this._height = 0;
     this._width = 0;
-    this._mem = null;        
+    this._mem = null;
   }
-  
+
   /**
    * Gets the _width.
    * @return the _width
@@ -49,17 +49,17 @@ public class MatrixCreator {
   public double[] getmem() {
     return _mem;
   }
-  
-  public double getmem(int val) {
+
+  public double getmem(final int val) {
     return _mem[val];
   }
-  
-  public double getval(int i, int j) {
+
+  public double getval(final int i, final int j) {
     return _mem[i * this._width + j];
   }
-  
-  public void setval(int i, int j) {
+
+  public void setval(final int i, final int j) {
     _mem[i * this._width + j] = i * this._width + j;
-  }  
-  
+  }
+
 }

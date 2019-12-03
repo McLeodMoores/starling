@@ -34,16 +34,19 @@ import com.opengamma.id.ExternalScheme;
  */
 public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVolatilitySurfaceFunction {
   /** The supported schemes */
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK,
+      ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
-   * Spline interpolator function for Black volatility surfaces
+   * Spline interpolator function for Black volatility surfaces.
    */
   public static class Spline extends EquityFutureBlackVolatilitySurfaceFunction {
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils.ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSplineVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -74,13 +77,15 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
   }
 
   /**
-   * SABR interpolator function for Black volatility surfaces
+   * SABR interpolator function for Black volatility surfaces.
    */
   public static class SABR extends EquityFutureBlackVolatilitySurfaceFunction {
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils.ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
+      final Set<ValueRequirement> specificRequirements = BlackVolatilitySurfacePropertyUtils
+          .ensureSABRVolatilityInterpolatorProperties(desiredValue.getConstraints());
       if (specificRequirements == null) {
         return null;
       }
@@ -118,7 +123,7 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }
@@ -138,7 +143,7 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
 
     @SuppressWarnings("unchecked")
     final VolatilitySurfaceData<Object, Object> volatilitySurface = (VolatilitySurfaceData<Object, Object>) volatilitySurfaceObject;
-    return BlackVolatilitySurfaceUtils.getDataFromStandardQuotes(forwardCurve, volatilitySurface, 4); //TODO remove hard-coding
+    return BlackVolatilitySurfaceUtils.getDataFromStandardQuotes(forwardCurve, volatilitySurface, 4); // TODO remove hard-coding
   }
 
   @Override
@@ -163,7 +168,8 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
         .with(SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType())
         .get();
-    final ValueRequirement volDataRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), properties);
+    final ValueRequirement volDataRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        properties);
     return volDataRequirement;
   }
 

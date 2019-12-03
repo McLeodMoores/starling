@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl;
 
@@ -89,7 +89,9 @@ public final class QuandlConstants {
 
   /**
    * Creates an external id for Quandl codes.
-   * @param code The code, not null
+   * 
+   * @param code
+   *          The code, not null
    * @return The id
    */
   public static ExternalId ofCode(final String code) {
@@ -98,7 +100,9 @@ public final class QuandlConstants {
 
   /**
    * Creates an external id for Quandl prefixes.
-   * @param code The prefix, not null
+   * 
+   * @param code
+   *          The prefix, not null
    * @return The id
    */
   public static ExternalId ofPrefix(final String code) {

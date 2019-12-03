@@ -41,16 +41,16 @@ import com.opengamma.util.tuple.Pair;
 @Config(description = "View definition", group = ConfigGroups.VIEWS)
 public class ViewDefinition implements Serializable, UniqueIdentifiable, MutableUniqueIdentifiable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewDefinition.class);
 
   private static final long serialVersionUID = 1L;
-  
+
   /**
    * Default Calculation Configuration name (shows as unlabeled in UI for clarity).
    * You should use this when you don't care about having multiple calculation configurations.
    */
   public static final String DEFAULT_CALCULATION_CONFIGURATION_NAME = "Default";
-  
+
   private UniqueId _uniqueIdentifier;
   private final String _name;
   private final UniqueId _portfolioId;
@@ -63,10 +63,10 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   private Long _minFullCalculationPeriod;
   private Long _maxFullCalculationPeriod;
   private boolean _persistent;
-  
+
   private Currency _defaultCurrency;
 
-  private final Map<String, ViewCalculationConfiguration> _calculationConfigurationsByName = new TreeMap<String, ViewCalculationConfiguration>();
+  private final Map<String, ViewCalculationConfiguration> _calculationConfigurationsByName = new TreeMap<>();
 
   /**
    * If true, when a single computation cycle completes, the outputs are written
@@ -77,7 +77,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, including a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
    *                    no portfolio reference is required
@@ -89,7 +89,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the name of the user who owns the view definition, not null
    */
@@ -99,7 +99,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the user who owns the view definition, not null
    */
@@ -109,7 +109,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   /**
    * Constructs an instance, without a reference portfolio.
-   * 
+   *
    * @param name  the name of the view definition, not null
    * @param marketDataUser  the user who owns the view definition, not null
    * @param resultModelDefinition  configuration of the results from the view
@@ -119,8 +119,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
-   * 
+   * Constructs an instance.
+   *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
    *                    no portfolio reference is required
@@ -132,7 +132,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param name  the name of the view definition, not null
    * @param portfolioId the unique identifier of the portfolio referenced by this view definition, null if
@@ -193,7 +193,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param uniqueId  the unique id of the view definition
    * @param name  the name of the view definition, not null
@@ -206,7 +206,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Constructs an instance
+   * Constructs an instance.
    *
    * @param uniqueId  the unique id of the view definition
    * @param name  the name of the view definition, not null
@@ -215,7 +215,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @param marketDataUser  the user who owns the view definition, not null
    * @param resultModelDefinition  configuration of the results from the view, not null
    */
-  public ViewDefinition(final UniqueId uniqueId, final String name, final UniqueId portfolioId, final UserPrincipal marketDataUser, final ResultModelDefinition resultModelDefinition) {
+  public ViewDefinition(final UniqueId uniqueId, final String name, final UniqueId portfolioId, final UserPrincipal marketDataUser,
+      final ResultModelDefinition resultModelDefinition) {
     ArgumentChecker.notNull(name, "View name");
     ArgumentChecker.notNull(marketDataUser, "User name");
     ArgumentChecker.notNull(resultModelDefinition, "Result model definition");
@@ -262,7 +263,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @return  a set of every required portfolio output across all calculation configurations, not null
    */
   public Set<Pair<String, ValueProperties>> getAllPortfolioRequirementNames() {
-    final Set<Pair<String, ValueProperties>> requirements = new TreeSet<Pair<String, ValueProperties>>();
+    final Set<Pair<String, ValueProperties>> requirements = new TreeSet<>();
     for (final ViewCalculationConfiguration calcConfig : _calculationConfigurationsByName.values()) {
       requirements.addAll(calcConfig.getAllPortfolioRequirements());
     }
@@ -299,7 +300,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Gets the default currency defined for this view
+   * Gets the default currency defined for this view.
    *
    * @return the currency
    */
@@ -308,7 +309,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   }
 
   /**
-   * Sets the default currency to use
+   * Sets the default currency to use.
    *
    * @param currency The default currency
    */
@@ -322,7 +323,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @return the configurations
    */
   public Collection<ViewCalculationConfiguration> getAllCalculationConfigurations() {
-    return new ArrayList<ViewCalculationConfiguration>(_calculationConfigurationsByName.values());
+    return new ArrayList<>(_calculationConfigurationsByName.values());
   }
 
   /**
@@ -376,7 +377,8 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * @param constraints additional constraints on the value produced, not null. For example this could be used to specify a currency
    * rather than use the view or portfolio default.
    */
-  public void addPortfolioRequirement(final String calculationConfigurationName, final String securityType, final String requirementName, final ValueProperties constraints) {
+  public void addPortfolioRequirement(final String calculationConfigurationName, final String securityType, final String requirementName,
+      final ValueProperties constraints) {
     ViewCalculationConfiguration calcConfig = _calculationConfigurationsByName.get(calculationConfigurationName);
     if (calcConfig == null) {
       calcConfig = new ViewCalculationConfiguration(this, calculationConfigurationName);
@@ -518,7 +520,7 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * <p>
    * A shared view process for a persistent view definition remains alive with its dependency graphs compiled even when
    * no clients are connected. This can be useful if compilation is slow.
-   * 
+   *
    * @return true if this is a persistent view definition, false otherwise
    */
   public boolean isPersistent() {
@@ -530,13 +532,13 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
    * <p>
    * A shared view process for a persistent view definition remains alive with its dependency graphs compiled even when
    * no clients are connected. This can be useful if compilation is slow.
-   *  
+   *
    * @param persistent  true to make this a persistent view definition, false otherwise
    */
-  public void setPersistent(boolean persistent) {
+  public void setPersistent(final boolean persistent) {
     _persistent = persistent;
-  }  
-  
+  }
+
   //-------------------------------------------------------------------------
   /**
    * Tests whether to dump the computation cache to disk after execution of the view. This is intended for debugging and
@@ -585,16 +587,20 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
     final ViewDefinition other = (ViewDefinition) obj;
     final boolean basicPropertiesEqual = ObjectUtils.equals(getName(), other.getName()) && ObjectUtils.equals(getPortfolioId(), other.getPortfolioId())
-        && ObjectUtils.equals(getResultModelDefinition(), other.getResultModelDefinition()) && ObjectUtils.equals(getMarketDataUser(), other.getMarketDataUser())
-        && ObjectUtils.equals(_minDeltaCalculationPeriod, other._minDeltaCalculationPeriod) && ObjectUtils.equals(_maxDeltaCalculationPeriod, other._maxDeltaCalculationPeriod)
-        && ObjectUtils.equals(_minFullCalculationPeriod, other._minFullCalculationPeriod) && ObjectUtils.equals(_maxFullCalculationPeriod, other._maxFullCalculationPeriod)
-        && ObjectUtils.equals(_dumpComputationCacheToDisk, other._dumpComputationCacheToDisk) && ObjectUtils.equals(getAllCalculationConfigurationNames(), other.getAllCalculationConfigurationNames())
+        && ObjectUtils.equals(getResultModelDefinition(), other.getResultModelDefinition())
+        && ObjectUtils.equals(getMarketDataUser(), other.getMarketDataUser())
+        && ObjectUtils.equals(_minDeltaCalculationPeriod, other._minDeltaCalculationPeriod)
+        && ObjectUtils.equals(_maxDeltaCalculationPeriod, other._maxDeltaCalculationPeriod)
+        && ObjectUtils.equals(_minFullCalculationPeriod, other._minFullCalculationPeriod)
+        && ObjectUtils.equals(_maxFullCalculationPeriod, other._maxFullCalculationPeriod)
+        && ObjectUtils.equals(_dumpComputationCacheToDisk, other._dumpComputationCacheToDisk)
+        && ObjectUtils.equals(getAllCalculationConfigurationNames(), other.getAllCalculationConfigurationNames())
         && ObjectUtils.equals(_defaultCurrency, other._defaultCurrency);
     if (!basicPropertiesEqual) {
       return false;
     }
-    final Set<ViewCalculationConfiguration> localConfigs = new HashSet<ViewCalculationConfiguration>(_calculationConfigurationsByName.values());
-    final Set<ViewCalculationConfiguration> otherConfigs = new HashSet<ViewCalculationConfiguration>(other.getAllCalculationConfigurations());
+    final Set<ViewCalculationConfiguration> localConfigs = new HashSet<>(_calculationConfigurationsByName.values());
+    final Set<ViewCalculationConfiguration> otherConfigs = new HashSet<>(other.getAllCalculationConfigurations());
     return localConfigs.equals(otherConfigs);
   }
 
@@ -610,11 +616,10 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
 
   @Override
   public String toString() {
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    } else {
-      return "ViewDefinition[" + getName() + "]";
     }
+    return "ViewDefinition[" + getName() + "]";
   }
 
 }

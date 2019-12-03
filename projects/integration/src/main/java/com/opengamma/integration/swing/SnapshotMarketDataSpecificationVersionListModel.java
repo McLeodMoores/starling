@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.swing;
@@ -30,36 +30,38 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * List/ComboBox model for historical market data specifications
+ * List/ComboBox model for historical market data specifications.
  */
 public class SnapshotMarketDataSpecificationVersionListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;
   private List<String> _names = Collections.emptyList();
   private List<UniqueId> _uniqueIds = Collections.emptyList();
   private Object _selected;
-  
+
   public SnapshotMarketDataSpecificationVersionListModel(final MarketDataSnapshotMaster snapshotMaster, final ObjectId objectId) {
-    SwingWorker<List<Pair<String, UniqueId>>, Object> worker = new SwingWorker<List<Pair<String, UniqueId>>, Object>() {
+    final SwingWorker<List<Pair<String, UniqueId>>, Object> worker = new SwingWorker<List<Pair<String, UniqueId>>, Object>() {
 
       private final DateTimeFormatter _formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+
       @Override
       protected List<Pair<String, UniqueId>> doInBackground() throws Exception {
-        List<Pair<String, UniqueId>> resolverNames = new ArrayList<>();
-        MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest();
+        final List<Pair<String, UniqueId>> resolverNames = new ArrayList<>();
+        final MarketDataSnapshotHistoryRequest historyRequest = new MarketDataSnapshotHistoryRequest();
         historyRequest.setIncludeData(false);
         historyRequest.setObjectId(objectId);
-        MarketDataSnapshotHistoryResult searchResults = snapshotMaster.history(historyRequest);
-        for (MarketDataSnapshotDocument item : searchResults.getDocuments()) {
+        final MarketDataSnapshotHistoryResult searchResults = snapshotMaster.history(historyRequest);
+        for (final MarketDataSnapshotDocument item : searchResults.getDocuments()) {
           resolverNames.add(Pairs.of(versionDescription(item), item.getUniqueId()));
         }
         return resolverNames;
       }
-      
-      private String versionDescription(MarketDataSnapshotDocument doc) {
-        StringBuilder sb = new StringBuilder();
-        boolean vcEqual = ObjectUtils.equals(doc.getVersionFromInstant(), doc.getCorrectionFromInstant()) && ObjectUtils.equals(doc.getVersionToInstant(), doc.getCorrectionToInstant());
+
+      private String versionDescription(final MarketDataSnapshotDocument doc) {
+        final StringBuilder sb = new StringBuilder();
+        final boolean vcEqual = ObjectUtils.equals(doc.getVersionFromInstant(), doc.getCorrectionFromInstant())
+            && ObjectUtils.equals(doc.getVersionToInstant(), doc.getCorrectionToInstant());
         if (vcEqual) {
-          sb.append("Valid:");          
+          sb.append("Valid:");
         } else {
           sb.append("Version Valid:");
         }
@@ -96,15 +98,15 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
         }
         return sb.toString();
       }
-      
+
       @Override
       protected void done() {
         try {
-          List<Pair<String, UniqueId>> list = get();
-          List<String> names = new ArrayList<>();
-          List<UniqueId> uniqueIds = new ArrayList<>();
+          final List<Pair<String, UniqueId>> list = get();
+          final List<String> names = new ArrayList<>();
+          final List<UniqueId> uniqueIds = new ArrayList<>();
           // unpack - a bit icky, but I'd prefer to atomically swap out the list in case of multiple threads reading _names;
-          for (Pair<String, UniqueId> pair : list) {
+          for (final Pair<String, UniqueId> pair : list) {
             names.add(pair.getFirst());
             uniqueIds.add(pair.getSecond());
           }
@@ -113,33 +115,32 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
             _uniqueIds = uniqueIds;
           }
           fireIntervalAdded(SnapshotMarketDataSpecificationVersionListModel.this, 0, _names.size() - 1);
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
           throw new OpenGammaRuntimeException("InterruptedException retreiving available market data specifications", ex);
-        } catch (ExecutionException ex) {
+        } catch (final ExecutionException ex) {
           throw new OpenGammaRuntimeException("ExecutionException retreiving available market data specifications", ex);
         }
       }
     };
     worker.execute();
   }
-  
-   
+
   @Override
   public synchronized int getSize() {
     return _names.size();
   }
 
   @Override
-  public synchronized String getElementAt(int index) {
+  public synchronized String getElementAt(final int index) {
     return _names.get(index);
   }
-  
-  public synchronized UniqueId getUniqueIdAt(int index) {
+
+  public synchronized UniqueId getUniqueIdAt(final int index) {
     return _uniqueIds.get(index);
   }
 
   @Override
-  public void setSelectedItem(Object anItem) {
+  public void setSelectedItem(final Object anItem) {
     _selected = anItem;
   }
 
@@ -147,5 +148,5 @@ public class SnapshotMarketDataSpecificationVersionListModel extends AbstractLis
   public Object getSelectedItem() {
     return _selected;
   }
-  
+
 }

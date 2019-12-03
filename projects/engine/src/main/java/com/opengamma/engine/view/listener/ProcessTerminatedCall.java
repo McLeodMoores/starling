@@ -13,17 +13,17 @@ import com.google.common.base.Function;
 public class ProcessTerminatedCall implements Function<ViewResultListener, Object> {
 
   private final boolean _executionInterrupted;
-  
-  public ProcessTerminatedCall(boolean executionInterrupted) {
+
+  public ProcessTerminatedCall(final boolean executionInterrupted) {
     _executionInterrupted = executionInterrupted;
   }
-  
+
   public boolean isExecutionInterrupted() {
     return _executionInterrupted;
   }
-  
+
   @Override
-  public Object apply(ViewResultListener viewProcessListener) {
+  public Object apply(final ViewResultListener viewProcessListener) {
     viewProcessListener.processTerminated(isExecutionInterrupted());
     return null;
   }

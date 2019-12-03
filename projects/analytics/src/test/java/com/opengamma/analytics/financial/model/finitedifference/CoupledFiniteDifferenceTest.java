@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - 2011 by OpenGamma Inc.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -24,7 +24,7 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Tests on a pair of backwards Black-Scholes PDEs. The model is a Black-Scholes SDE where the volatility can take one of two values
  * depending on the state of a hidden Markov chain. Degenerate (both vols the same) and uncoupled cases are tested along with a comparison
- * to Monte Carlo.  
+ * to Monte Carlo.
  */
 @SuppressWarnings("unused")
 @Test(groups = TestGroup.UNIT)
@@ -60,7 +60,7 @@ public class CoupledFiniteDifferenceTest {
     INITIAL_COND = new Function1D<Double, Double>() {
 
       @Override
-      public Double evaluate(Double x) {
+      public Double evaluate(final Double x) {
         return Math.max(0, x - STRIKE);
       }
     };
@@ -68,14 +68,14 @@ public class CoupledFiniteDifferenceTest {
 
   @Test
   public void testNoCoupling() {
-    //making theta 0.55 (rather than 0.5 Crank-Nicolson) cuts down ATM oscillations 
+    //making theta 0.55 (rather than 0.5 Crank-Nicolson) cuts down ATM oscillations
     final CoupledFiniteDifference solver = new CoupledFiniteDifference(0.5, false);
     final double lambda12 = 0.0;
     final double lambda21 = 0.0;
     final double p0 = 0.5;
 
-    TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, lambda12, lambda21, p0);
-    ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
+    final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, lambda12, lambda21, p0);
+    final ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
     final int timeNodes = 20;
     final int spaceNodes = 150;
     final double lowerMoneyness = 0.4;
@@ -96,8 +96,8 @@ public class CoupledFiniteDifferenceTest {
     }
 
     final PDEGrid1D grid = new PDEGrid1D(timeGrid, spaceGrid);
-    CoupledPDEDataBundle d1 = new CoupledPDEDataBundle(pdeData[0], INITIAL_COND, LOWER, UPPER, grid);
-    CoupledPDEDataBundle d2 = new CoupledPDEDataBundle(pdeData[1], INITIAL_COND, LOWER, UPPER, grid);
+    final CoupledPDEDataBundle d1 = new CoupledPDEDataBundle(pdeData[0], INITIAL_COND, LOWER, UPPER, grid);
+    final CoupledPDEDataBundle d2 = new CoupledPDEDataBundle(pdeData[1], INITIAL_COND, LOWER, UPPER, grid);
 
     final PDEResults1D[] res = solver.solve(d1, d2);
     final double df = YIELD_CURVE.getDiscountFactor(T);
@@ -135,8 +135,8 @@ public class CoupledFiniteDifferenceTest {
     final double lambda12 = 0.2;
     final double lambda21 = 0.5;
 
-    TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL1, lambda12, lambda21, 0.5);
-    ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
+    final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL1, lambda12, lambda21, 0.5);
+    final ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
     final int timeNodes = 20;
     final int spaceNodes = 150;
     final double lowerMoneyness = 0.4;
@@ -223,8 +223,8 @@ public class CoupledFiniteDifferenceTest {
     final double lambda12 = 0.2;
     final double lambda21 = 2.0;
 
-    TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, lambda12, lambda21, 1.0);
-    ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
+    final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(VOL1, VOL2, lambda12, lambda21, 1.0);
+    final ConvectionDiffusionPDE1DCoupledCoefficients[] pdeData = PDE_DATA_PROVIDER.getCoupledBackwardsPair(FORWARD, T, chainData);
     final int timeNodes = 20;
     final int spaceNodes = 150;
     final double lowerMoneyness = 0.3;

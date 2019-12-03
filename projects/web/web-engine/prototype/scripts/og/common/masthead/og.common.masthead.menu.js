@@ -118,7 +118,7 @@ $.register_module({
                 $(conventions_link).on('click', function() {hide_all(); });
                 og.api.rest.configs.get({meta: true, cache_for: 15 * 1000}).pipe(function (result) {
                     // remove the first half of groups and assign to 'left', the 'right' will then what is left
-                    var groups = result.data.groups, left = groups.splice(0, Math.floor(groups.length / 2));
+                    var groups = result.data.groups, left = groups.splice(0, Math.ceil(groups.length / 2));
                     config_menu_html = '<table><tr>';
                     config_menu_html += build_config_menu(left);
                     config_menu_html += build_config_menu(groups);
@@ -127,7 +127,7 @@ $.register_module({
                 });
                 og.api.rest.conventions.get({meta: true, cache_for: 15 * 1000}).pipe(function (result) {
                     // remove the first half of groups and assign to 'left', the 'right' will then what is left
-                    var groups = result.data.groups, left = groups.splice(0, Math.floor(groups.length / 2));
+                    var groups = result.data.groups, left = groups.splice(0, Math.ceil(groups.length / 2));
                     convention_menu_html = '<table><tr>';
                     convention_menu_html += build_convention_menu(left);
                     convention_menu_html += build_convention_menu(groups);

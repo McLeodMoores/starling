@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -27,7 +27,7 @@ public class DefaultFunctionBlacklistPolicy extends AbstractFunctionBlacklistPol
   public DefaultFunctionBlacklistPolicy(final UniqueId uniqueId, final String name, final int defaultEntryActivationPeriod, final Collection<Entry> entries) {
     super(uniqueId, name, defaultEntryActivationPeriod);
     ArgumentChecker.notNull(entries, "entries");
-    _entries = Collections.unmodifiableSet(new HashSet<Entry>(entries));
+    _entries = Collections.unmodifiableSet(new HashSet<>(entries));
   }
 
   @Override

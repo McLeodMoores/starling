@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -54,7 +54,7 @@ import com.opengamma.transport.FudgeMessageSender;
  */
 /* package */class RemoteNodeJobInvoker implements JobInvoker, FudgeMessageReceiver, FudgeConnectionStateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteNodeJobInvoker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeJobInvoker.class);
 
   private static final class JobInfo {
 
@@ -68,7 +68,7 @@ import com.opengamma.transport.FudgeMessageSender;
      */
     private final CalculationJob _job;
 
-    public JobInfo(final JobInvocationReceiver receiver, final CalculationJob job) {
+    JobInfo(final JobInvocationReceiver receiver, final CalculationJob job) {
       _receiver = receiver;
       _job = job;
     }
@@ -78,7 +78,7 @@ import com.opengamma.transport.FudgeMessageSender;
     }
 
     public int getLaunchDelta() {
-      return (_job.getTail() != null) ? _job.getTail().size() - 1 : -1;
+      return _job.getTail() != null ? _job.getTail().size() - 1 : -1;
     }
 
     public CalculationJob getJob() {
@@ -87,13 +87,13 @@ import com.opengamma.transport.FudgeMessageSender;
 
   }
 
-  private final ConcurrentMap<CalculationJobSpecification, JobInfo> _pendingJobs = new ConcurrentHashMap<CalculationJobSpecification, JobInfo>();
+  private final ConcurrentMap<CalculationJobSpecification, JobInfo> _pendingJobs = new ConcurrentHashMap<>();
   private final ExecutorService _executorService;
   private final FudgeMessageSender _fudgeMessageSender;
   private final CapabilitySet _capabilitySet = new CapabilitySet();
   private volatile int _capacity;
   private final AtomicInteger _launched = new AtomicInteger();
-  private final AtomicReference<JobInvokerRegister> _dispatchCallback = new AtomicReference<JobInvokerRegister>();
+  private final AtomicReference<JobInvokerRegister> _dispatchCallback = new AtomicReference<>();
   private final IdentifierMap _identifierMap;
   private final FunctionCosts _functionCosts;
   private final FunctionBlacklistQuery _blacklistQuery;
@@ -103,38 +103,38 @@ import com.opengamma.transport.FudgeMessageSender;
 
     @Override
     protected void visitUnexpectedMessage(final RemoteCalcNodeMessage message) {
-      s_logger.warn("Unexpected message - {}", message);
+      LOGGER.warn("Unexpected message - {}", message);
     }
 
     @Override
     protected void visitFailureMessage(final Failure message) {
-      s_logger.info("Received failure for job {}", message.getJob());
+      LOGGER.info("Received failure for job {}", message.getJob());
       if (message.getReady() != null) {
         message.getReady().accept(this);
       }
       // We decrement the count (and re-register) before processing the data as the remote node is already available if it's sent us its data.
       final JobInfo job = getPendingJobs().remove(message.getJob());
       if (job == null) {
-        s_logger.warn("Duplicate or failure for cancelled callback {} received", message.getJob());
+        LOGGER.warn("Duplicate or failure for cancelled callback {} received", message.getJob());
         return;
       }
       if (_launched.addAndGet(job.getLaunchDelta()) < _capacity) {
         // We check for below capacity. We can get "equal" here, but that means there is an invoke taking place which will be dealt with
         // by the notifyWhenAvailable that gets called to reschedule the invoker
         if (registerIfRequired(true)) {
-          s_logger.debug("Notified dispatcher of capacity available");
+          LOGGER.debug("Notified dispatcher of capacity available");
         }
       }
-      s_logger.debug("Failed job on {} with message {}", message.getComputeNodeId(), message.getErrorMessage());
+      LOGGER.debug("Failed job on {} with message {}", message.getComputeNodeId(), message.getErrorMessage());
       jobFailed(job, message.getComputeNodeId(), new OpenGammaRuntimeException(message.getErrorMessage()));
     }
 
     @Override
     protected void visitInvocationsMessage(final Invocations message) {
-      s_logger.info("Received invocation statistics");
+      LOGGER.info("Received invocation statistics");
       final Scaling scaling = FunctionInvocationStatisticsReceiver.messageReceived(getFunctionCosts(), message);
       if (scaling != null) {
-        s_logger.debug("Sending scaling message ", scaling);
+        LOGGER.debug("Sending scaling message ", scaling);
         final MutableFudgeMsg scalingMessage = getFudgeMessageSender().getFudgeContext().newMessage();
         FudgeSerializer.addClassHeader(scalingMessage, scaling.getClass(), RemoteCalcNodeMessage.class);
         scaling.toFudgeMsg(new FudgeSerializer(getFudgeMessageSender().getFudgeContext()), scalingMessage);
@@ -144,7 +144,7 @@ import com.opengamma.transport.FudgeMessageSender;
 
     @Override
     protected void visitReadyMessage(final Ready message) {
-      s_logger.debug("Remote invoker ready message - {}", message);
+      LOGGER.debug("Remote invoker ready message - {}", message);
       getCapabilitySet().setParameterCapability(PlatformCapabilities.NODE_COUNT, message.getCapacity());
       // [ENG-42] this is where we'd detect any other capability changes
       _capacity = message.getCapacity();
@@ -154,30 +154,30 @@ import com.opengamma.transport.FudgeMessageSender;
         _launched.incrementAndGet();
       } else if (launched < _capacity) {
         if (registerIfRequired(true)) {
-          s_logger.info("Remote invoker ready for use by dispatcher, capacity {}", message.getCapacity());
+          LOGGER.info("Remote invoker ready for use by dispatcher, capacity {}", message.getCapacity());
         }
       } else {
-        s_logger.info("Remote invoker over capacity {} with {} jobs", message.getCapacity(), launched);
+        LOGGER.info("Remote invoker over capacity {} with {} jobs", message.getCapacity(), launched);
       }
     }
 
     @Override
     protected void visitResultMessage(final Result message) {
-      s_logger.info("Received result for job {}", message.getResult().getSpecification());
+      LOGGER.info("Received result for job {}", message.getResult().getSpecification());
       if (message.getReady() != null) {
         message.getReady().accept(this);
       }
       // We decrement the count (and re-register) before processing the data as the remote node is already available if it's sent us its data.
       final JobInfo job = getPendingJobs().remove(message.getResult().getSpecification());
       if (job == null) {
-        s_logger.warn("Duplicate or result for cancelled callback {} received", message.getResult().getSpecification());
+        LOGGER.warn("Duplicate or result for cancelled callback {} received", message.getResult().getSpecification());
         return;
       }
       if (_launched.addAndGet(job.getLaunchDelta()) < _capacity) {
         // We check for below capacity. We can get "equal" here, but that means there is an invoke taking place which will be dealt with
         // by the notifyWhenAvailable that gets called to reschedule the invoker
         if (registerIfRequired(true)) {
-          s_logger.debug("Notified dispatcher of capacity available");
+          LOGGER.debug("Notified dispatcher of capacity available");
         }
       }
       final CalculationJobResult result = message.getResult();
@@ -187,7 +187,7 @@ import com.opengamma.transport.FudgeMessageSender;
 
   };
 
-  public RemoteNodeJobInvoker(
+  RemoteNodeJobInvoker(
       final ExecutorService executorService, final Ready initialMessage, final FudgeConnection fudgeConnection,
       final IdentifierMap identifierMap, final FunctionCosts functionCosts, final FunctionBlacklistQuery blacklistQuery,
       final FunctionBlacklistMaintainer blacklistUpdate) {
@@ -201,7 +201,7 @@ import com.opengamma.transport.FudgeMessageSender;
     fudgeConnection.setFudgeMessageReceiver(this);
     fudgeConnection.setConnectionStateListener(this);
     initialMessage.accept(_messageVisitor);
-    s_logger.info("Remote node invoker created with capacity {}", _capacity);
+    LOGGER.info("Remote node invoker created with capacity {}", _capacity);
   }
 
   private CapabilitySet getCapabilitySet() {
@@ -267,7 +267,14 @@ import com.opengamma.transport.FudgeMessageSender;
   }
 
   /**
-   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow continuation of dependent jobs that can operate on missing inputs.
+   * Replaces any blacklisted job items with no-op functions. This keeps the shape of the job the same and may allow continuation of dependent jobs that can
+   * operate on missing inputs.
+   * 
+   * @param query
+   *          the blacklist
+   * @param job
+   *          the original calculation job
+   * @return the calculation job with blacklisted items replaced with no-op functions
    */
   /* package */static CalculationJob blacklist(final FunctionBlacklistQuery query, final CalculationJob job) {
     if (query.isEmpty()) {
@@ -278,7 +285,7 @@ import com.opengamma.transport.FudgeMessageSender;
     for (int i = 0; i < size; i++) {
       CalculationJobItem item = originalItems.get(i);
       if (query.isBlacklisted(item)) {
-        final List<CalculationJobItem> newItems = new ArrayList<CalculationJobItem>(size);
+        final List<CalculationJobItem> newItems = new ArrayList<>(size);
         for (int j = 0; j < i; j++) {
           newItems.add(originalItems.get(j));
         }
@@ -295,7 +302,8 @@ import com.opengamma.transport.FudgeMessageSender;
             newItems.add(item);
           }
         }
-        return new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(), job.getResolverVersionCorrection(), job.getRequiredJobIds(), newItems, job.getCacheSelectHint());
+        return new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(),
+            job.getResolverVersionCorrection(), job.getRequiredJobIds(), newItems, job.getCacheSelectHint());
       }
     }
     return job;
@@ -305,11 +313,11 @@ import com.opengamma.transport.FudgeMessageSender;
   public boolean invoke(final CalculationJob rootJob, final JobInvocationReceiver receiver) {
     while (_launched.incrementAndGet() > _capacity) {
       if (_launched.decrementAndGet() >= _capacity) {
-        s_logger.debug("Capacity reached");
+        LOGGER.debug("Capacity reached");
         return false;
       }
     }
-    s_logger.info("Dispatching job {}", rootJob.getSpecification());
+    LOGGER.info("Dispatching job {}", rootJob.getSpecification());
     // Don't block the dispatcher with outgoing serialization and I/O
     getExecutorService().execute(new Runnable() {
 
@@ -325,7 +333,7 @@ import com.opengamma.transport.FudgeMessageSender;
         try {
           sendJob(rootJob);
           if (rootJob.getTail() != null) {
-            final Queue<CalculationJob> jobs = new LinkedList<CalculationJob>(rootJob.getTail());
+            final Queue<CalculationJob> jobs = new LinkedList<>(rootJob.getTail());
             CalculationJob job = jobs.poll();
             while (job != null) {
               sendJob(job);
@@ -335,15 +343,15 @@ import com.opengamma.transport.FudgeMessageSender;
               job = jobs.poll();
             }
           }
-        } catch (Exception e) {
-          s_logger.warn("Error sending job {}", rootJob.getSpecification().getJobId());
+        } catch (final Exception e) {
+          LOGGER.warn("Error sending job {}", rootJob.getSpecification().getJobId());
           jobFailed(receiver, rootJob, "node on " + getInvokerId(), e);
           // Not knowing where the failure occurred, we may get an additional decrement if any of the jobs started completing. This may have
           // broken the whole connection which will not be a problem. Otherwise We'll check, and adjust, for this when "Ready" messages
           // arrive.
           if (_launched.decrementAndGet() < _capacity) {
             if (registerIfRequired(true)) {
-              s_logger.debug("Notified dispatcher of capacity available");
+              LOGGER.debug("Notified dispatcher of capacity available");
             }
           }
         }
@@ -354,13 +362,13 @@ import com.opengamma.transport.FudgeMessageSender;
 
   @Override
   public void cancel(final Collection<CalculationJobSpecification> jobs) {
-    s_logger.info("Cancelling {} jobs at {}", jobs.size(), getInvokerId());
+    LOGGER.info("Cancelling {} jobs at {}", jobs.size(), getInvokerId());
     sendMessage(new Cancel(jobs));
   }
 
   @Override
   public void cancel(final CalculationJobSpecification job) {
-    s_logger.info("Cancelling {} at {}", job, getInvokerId());
+    LOGGER.info("Cancelling {} at {}", job, getInvokerId());
     sendMessage(new Cancel(Collections.singleton(job)));
   }
 
@@ -369,14 +377,14 @@ import com.opengamma.transport.FudgeMessageSender;
    */
   @Override
   public boolean isAlive(final Collection<CalculationJobSpecification> jobs) {
-    s_logger.info("Querying {} jobs at {}", jobs.size(), getInvokerId());
+    LOGGER.info("Querying {} jobs at {}", jobs.size(), getInvokerId());
     sendMessage(new IsAlive(jobs));
     return true;
   }
 
   @Override
   public boolean isAlive(final CalculationJobSpecification job) {
-    s_logger.info("Querying {} at {}", job.getJobId(), getInvokerId());
+    LOGGER.info("Querying {} at {}", job.getJobId(), getInvokerId());
     sendMessage(new IsAlive(Collections.singleton(job)));
     return true;
   }
@@ -386,7 +394,7 @@ import com.opengamma.transport.FudgeMessageSender;
     _dispatchCallback.set(callback);
     if (_launched.get() < _capacity) {
       if (registerIfRequired(false)) {
-        s_logger.debug("Capacity available at notify");
+        LOGGER.debug("Capacity available at notify");
         return true;
       }
     }
@@ -400,9 +408,8 @@ import com.opengamma.transport.FudgeMessageSender;
         callback.registerJobInvoker(this);
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
@@ -414,15 +421,15 @@ import com.opengamma.transport.FudgeMessageSender;
 
   @Override
   public void connectionFailed(final FudgeConnection connection, final Exception cause) {
-    s_logger.warn("Client connection {} dropped", connection, cause);
+    LOGGER.warn("Client connection {} dropped", connection, cause);
     _launched.addAndGet(_capacity); // Force over capacity to prevent any new submissions
     final String invokerId = _invokerId;
     _invokerId = null;
-    for (CalculationJobSpecification jobSpec : getPendingJobs().keySet()) {
+    for (final CalculationJobSpecification jobSpec : getPendingJobs().keySet()) {
       final JobInfo job = getPendingJobs().remove(jobSpec);
       // There could still be late messages arriving from a buffer even though the connection has now failed
       if (job != null) {
-        s_logger.debug("Cancelling pending operation {}", jobSpec);
+        LOGGER.debug("Cancelling pending operation {}", jobSpec);
         jobFailed(job, "node on " + invokerId, cause);
       }
     }
@@ -430,7 +437,7 @@ import com.opengamma.transport.FudgeMessageSender;
 
   @Override
   public void connectionReset(final FudgeConnection connection) {
-    s_logger.info("Connection reset by client");
+    LOGGER.info("Connection reset by client");
     // We're the server end of a connection, so this isn't going to happen with the socket implementation
   }
 

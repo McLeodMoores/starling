@@ -24,7 +24,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class UnderlyingTimeSeriesProvider {
 
@@ -59,19 +59,21 @@ public class UnderlyingTimeSeriesProvider {
     return getSeriesRequirement(greek, security, DateConstraint.NULL, DateConstraint.VALUATION_TIME);
   }
 
-  public ValueRequirement getSeriesRequirement(final Greek greek, final FinancialSecurity security, final DateConstraint startDate, final DateConstraint endDate) {
+  public ValueRequirement getSeriesRequirement(final Greek greek, final FinancialSecurity security, final DateConstraint startDate,
+      final DateConstraint endDate) {
     final String fieldName = greek.accept(FIELD_VISITOR);
     final ExternalIdBundle underlyingId = security.accept(getSecurityVisitor());
     final HistoricalTimeSeriesResolutionResult timeSeries = getTimeSeriesResolver().resolve(underlyingId, null, null, null, fieldName, getResolutionKey());
     if (timeSeries == null) {
-      throw new OpenGammaRuntimeException("Could not resolve time series for " + underlyingId + " for security " + security + " for " + getResolutionKey() + "/" + fieldName);
+      throw new OpenGammaRuntimeException(
+          "Could not resolve time series for " + underlyingId + " for security " + security + " for " + getResolutionKey() + "/" + fieldName);
     }
     return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, fieldName, startDate, true, endDate, true);
   }
 
   private static class FieldGreekVisitor extends AbstractGreekVisitor<String> {
 
-    public FieldGreekVisitor() {
+    FieldGreekVisitor() {
     }
 
     @Override
@@ -88,7 +90,7 @@ public class UnderlyingTimeSeriesProvider {
   private class UnderlyingFinancialSecurityVisitor extends FinancialSecurityVisitorAdapter<ExternalIdBundle> {
     private final SecuritySource _securitySource;
 
-    public UnderlyingFinancialSecurityVisitor(final SecuritySource securitySource) {
+    UnderlyingFinancialSecurityVisitor(final SecuritySource securitySource) {
       _securitySource = securitySource;
     }
 
@@ -99,7 +101,7 @@ public class UnderlyingTimeSeriesProvider {
 
     @Override
     public ExternalIdBundle visitEquityOptionSecurity(final EquityOptionSecurity security) {
-      Security underlyingSecurity = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+      final Security underlyingSecurity = _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       if (underlyingSecurity == null) {
         throw new NullPointerException("Unable to obtain underlying security for " + security.getUnderlyingId());
       }

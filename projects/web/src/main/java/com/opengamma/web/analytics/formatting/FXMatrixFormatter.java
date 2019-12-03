@@ -17,14 +17,14 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 
 /**
- * Formatter for {@link FXMatrix}
+ * Formatter for {@link FXMatrix}.
  */
 /* package */class FXMatrixFormatter extends AbstractFormatter<FXMatrix> {
-  /** x labels */
+  /** x labels. */
   /* package */ static final String X_LABELS = "xLabels";
-  /** y labels */
+  /** y labels. */
   /* package */ static final String Y_LABELS = "yLabels";
-  /** matrix */
+  /** matrix. */
   /* package */ static final String MATRIX = "matrix";
 
   /**
@@ -56,7 +56,9 @@ import com.opengamma.util.money.Currency;
 
   /**
    * Formats the FX matrix as a 2D labelled matrix.
-   * @param value The FX matrix
+   * 
+   * @param value
+   *          The FX matrix
    * @return The formatted matrix
    */
   private static Map<String, Object> formatExpanded(final FXMatrix value) {

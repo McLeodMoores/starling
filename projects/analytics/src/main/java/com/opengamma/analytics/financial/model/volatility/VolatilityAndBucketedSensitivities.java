@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
@@ -18,8 +18,10 @@ public class VolatilityAndBucketedSensitivities {
   private final double[][] _sensitivities;
 
   /**
-   * @param volatility The volatility
-   * @param sensitivities The bucketed sensitivities, not null
+   * @param volatility
+   *          The volatility
+   * @param sensitivities
+   *          The bucketed sensitivities, not null
    */
   public VolatilityAndBucketedSensitivities(final double volatility, final double[][] sensitivities) {
     ArgumentChecker.notNull(sensitivities, "sensitivities");
@@ -28,7 +30,8 @@ public class VolatilityAndBucketedSensitivities {
   }
 
   /**
-   * Gets the volatility
+   * Gets the volatility.
+   * 
    * @return The volatility
    */
   public double getVolatility() {
@@ -36,7 +39,8 @@ public class VolatilityAndBucketedSensitivities {
   }
 
   /**
-   * Gets the bucketed sensitivities
+   * Gets the bucketed sensitivities.
+   * 
    * @return The bucketed sensitivities
    */
   public double[][] getBucketedSensitivities() {
@@ -50,7 +54,7 @@ public class VolatilityAndBucketedSensitivities {
     result = prime * result + Arrays.deepHashCode(_sensitivities);
     long temp;
     temp = Double.doubleToLongBits(_volatility);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

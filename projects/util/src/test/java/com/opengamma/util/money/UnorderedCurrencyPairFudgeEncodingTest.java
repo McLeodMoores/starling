@@ -16,8 +16,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class UnorderedCurrencyPairFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests a cycle.
+   */
+  @Test
   public void test() {
-    UnorderedCurrencyPair object = UnorderedCurrencyPair.of(Currency.AUD, Currency.NZD);
+    final UnorderedCurrencyPair object = UnorderedCurrencyPair.of(Currency.AUD, Currency.NZD);
     assertEncodeDecodeCycle(UnorderedCurrencyPair.class, object);
   }
 

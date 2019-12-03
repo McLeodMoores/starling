@@ -25,9 +25,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a Inflation Zero-Coupon cap/floor with Black model.
- * Black model for inflation assume a lognormal diffusion of the forward price index.
- * A convexity adjustment is done for payment at non-standard dates.
+ * Class used to compute the price and sensitivity of a Inflation Zero-Coupon cap/floor with Black model. Black model for inflation assume a lognormal diffusion
+ * of the forward price index. A convexity adjustment is done for payment at non-standard dates.
  */
 public final class CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod {
   /**
@@ -43,6 +42,7 @@ public final class CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod getInstance() {
@@ -57,15 +57,20 @@ public final class CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod {
   /**
    * The convexity adjustment function used in the pricing.
    */
-  private static final InflationMarketModelConvexityAdjustmentForCapFloor CONVEXITY_ADJUSTMENT_FUNCTION = new InflationMarketModelConvexityAdjustmentForCapFloor();
+  private static final InflationMarketModelConvexityAdjustmentForCapFloor CONVEXITY_ADJUSTMENT_FUNCTION =
+      new InflationMarketModelConvexityAdjustmentForCapFloor();
 
   /**
    * Computes the net amount.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount netAmount(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount netAmount(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final double timeToMaturity = cap.getReferenceEndTime() - cap.getLastKnownFixingTime();
@@ -83,11 +88,15 @@ public final class CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod {
 
   /**
    * Computes the present value.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount presentValue(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
     final MultipleCurrencyAmount nonDiscountedPresentValue = netAmount(cap, black);
     final double df = black.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     return nonDiscountedPresentValue.multipliedBy(df);
@@ -95,30 +104,39 @@ public final class CapFloorInflationZeroCouponMonthlyConvexityAdjustmentMethod {
 
   /**
    * Computes the present value.
-   * @param instrument The instrument.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument,
+      final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
     ArgumentChecker.isTrue(instrument instanceof CapFloorInflationZeroCouponMonthly, "Inflation Zero Coupon  Cap/floor");
     return presentValue((CapFloorInflationZeroCouponMonthly) instrument, black);
   }
 
   /**
-   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model.
-   * No smile impact is taken into account; equivalent to a sticky strike smile description.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model. No smile impact is taken into account; equivalent to a sticky
+   * strike smile description.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponWithConvexityProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final InflationProviderInterface inflation = black.getInflationProvider();
     final double timeToMaturity = cap.getReferenceEndTime() - cap.getLastKnownFixingTime();
     final EuropeanVanillaOption option = new EuropeanVanillaOption(Math.pow(1 + cap.getStrike(), cap.getMaturity()), timeToMaturity, cap.isCap());
     final double convexityAdjustment = CONVEXITY_ADJUSTMENT_FUNCTION.getZeroCouponConvexityAdjustment(cap, black);
-    final double forward = black.getInflationProvider().getPriceIndex(cap.getPriceIndex(), cap.getReferenceEndTime()) / cap.getIndexStartValue() * convexityAdjustment;
+    final double forward = black.getInflationProvider().getPriceIndex(cap.getPriceIndex(), cap.getReferenceEndTime()) / cap.getIndexStartValue()
+        * convexityAdjustment;
     final double df = black.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final Map<String, List<DoublesPair>> resultMapPrice = new HashMap<>();
     final List<DoublesPair> listPrice = new ArrayList<>();

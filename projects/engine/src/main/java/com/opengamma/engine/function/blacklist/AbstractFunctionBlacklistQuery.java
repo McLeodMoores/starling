@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -30,7 +30,8 @@ public abstract class AbstractFunctionBlacklistQuery implements FunctionBlacklis
   }
 
   @Override
-  public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+  public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target,
+      final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
     return isBlacklisted(function.getFunctionId(), function.getParameters(), target, inputs, outputs);
   }
 
@@ -47,7 +48,8 @@ public abstract class AbstractFunctionBlacklistQuery implements FunctionBlacklis
 
   @Override
   public boolean isBlacklisted(final CalculationJobItem jobItem) {
-    return isBlacklisted(jobItem.getFunctionUniqueIdentifier(), jobItem.getFunctionParameters(), jobItem.getComputationTargetSpecification(), jobItem.getInputs(), jobItem.getOutputs());
+    return isBlacklisted(jobItem.getFunctionUniqueIdentifier(), jobItem.getFunctionParameters(), jobItem.getComputationTargetSpecification(),
+        jobItem.getInputs(), jobItem.getOutputs());
   }
 
 }

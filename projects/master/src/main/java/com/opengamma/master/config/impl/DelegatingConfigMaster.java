@@ -50,7 +50,7 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
    *
    * @param defaultMaster the master to use when no scheme matches, not null
    */
-  public DelegatingConfigMaster(ConfigMaster defaultMaster) {
+  public DelegatingConfigMaster(final ConfigMaster defaultMaster) {
     super(defaultMaster);
     _changeManager = defaultMaster.changeManager();
   }
@@ -61,14 +61,14 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
    * @param defaultMaster the master to use when no scheme matches, not null
    * @param schemePrefixToMasterMap  the map of masters by scheme to switch on, not null
    */
-  public DelegatingConfigMaster(ConfigMaster defaultMaster, Map<String, ConfigMaster> schemePrefixToMasterMap) {
+  public DelegatingConfigMaster(final ConfigMaster defaultMaster, final Map<String, ConfigMaster> schemePrefixToMasterMap) {
     super(defaultMaster, schemePrefixToMasterMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
-    // REVIEW jonathan 2012-08-03 -- this assumes that the delegating master lasts for the lifetime of the engine as we
-    // never detach from the underlying change managers.
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
+    // this assumes that the delegating master lasts for the lifetime of the
+    // engine as we never detach from the underlying change managers.
     changeManager.addChangeManager(defaultMaster.changeManager());
-    for (ConfigMaster master : schemePrefixToMasterMap.values()) {
+    for (final ConfigMaster master : schemePrefixToMasterMap.values()) {
       changeManager.addChangeManager(master.changeManager());
     }
     _changeManager = changeManager;
@@ -76,38 +76,42 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public ConfigDocument get(UniqueId uniqueId) {
+  public ConfigDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public ConfigDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public ConfigDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public ConfigDocument add(ConfigDocument document) {
+  public ConfigDocument add(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
-    return getDefaultDelegate().add(document);
+    final UniqueId uniqueId = document.getUniqueId();
+    if (uniqueId == null) {
+      return getDefaultDelegate().add(document);
+    }
+    return chooseDelegate(uniqueId.getScheme()).add(document);
   }
 
   @Override
-  public ConfigDocument update(ConfigDocument document) {
+  public ConfigDocument update(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     chooseDelegate(objectIdentifiable.getObjectId().getScheme()).remove(objectIdentifiable);
   }
 
   @Override
-  public ConfigDocument correct(ConfigDocument document) {
+  public ConfigDocument correct(final ConfigDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
@@ -118,52 +122,53 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, ConfigDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final ConfigDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<ConfigDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<ConfigDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(ConfigDocument replacementDocument) {
+  public UniqueId replaceVersion(final ConfigDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
-  
-  
+
+
   @Override
-  public Map<UniqueId, ConfigDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, ConfigDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      ConfigDocument doc = get(uniqueId);
+  public Map<UniqueId, ConfigDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
+    final Map<UniqueId, ConfigDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final ConfigDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
@@ -172,32 +177,32 @@ public class DelegatingConfigMaster extends UniqueIdSchemeDelegator<ConfigMaster
   @Override
   public <R> ConfigSearchResult<R> search(final ConfigSearchRequest<R> request) {
     ArgumentChecker.notNull(request, "request");
-    Iterable<ConfigSearchResult<R>> delegateResults = transform(getAllDelegates(), new Function<ConfigMaster, ConfigSearchResult<R>>() {
+    final Iterable<ConfigSearchResult<R>> delegateResults = transform(getAllDelegates(), new Function<ConfigMaster, ConfigSearchResult<R>>() {
       @Override
-      public ConfigSearchResult<R> apply(ConfigMaster input) {
+      public ConfigSearchResult<R> apply(final ConfigMaster input) {
         return input.search(request);
       }
     });
-    ConfigSearchResult<R> result = new ConfigSearchResult<R>();
-    for (ConfigSearchResult<R> delegateResult: delegateResults) {
+    final ConfigSearchResult<R> result = new ConfigSearchResult<>();
+    for (final ConfigSearchResult<R> delegateResult: delegateResults) {
       result.getDocuments().addAll(delegateResult.getDocuments());
     }
     return result;
   }
 
   @Override
-  public <R> ConfigHistoryResult<R> history(ConfigHistoryRequest<R> request) {
+  public <R> ConfigHistoryResult<R> history(final ConfigHistoryRequest<R> request) {
     ArgumentChecker.notNull(request, "request");
-    ObjectId objectId = request.getObjectId();
+    final ObjectId objectId = request.getObjectId();
     ArgumentChecker.notNull(objectId, "objectId");
     return chooseDelegate(objectId.getScheme()).history(request);
   }
 
   @Override
-  public ConfigMetaDataResult metaData(ConfigMetaDataRequest request) {
+  public ConfigMetaDataResult metaData(final ConfigMetaDataRequest request) {
     throw new UnsupportedOperationException("metaData() not supported on DelegatingConfigMaster");
   }
-  
-  
+
+
 
 }

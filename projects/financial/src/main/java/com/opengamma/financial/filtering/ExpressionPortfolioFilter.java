@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.filtering;
@@ -27,16 +27,17 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 
 /**
- * Filters a portfolio according to a provided {@link UserExpression}
+ * Filters a portfolio according to a provided {@link UserExpression}.
  */
 public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
   private final UserExpression _expression;
 
   /**
-   * Creates a new filter from a string expression (in the Expr.g form)
-   * 
-   * @param expression string expression
+   * Creates a new filter from a string expression (in the Expr.g form).
+   *
+   * @param expression
+   *          string expression
    * @deprecated Use the alternative constructor so that the parsing dialect is explicit
    */
   @Deprecated
@@ -45,9 +46,10 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
   }
 
   /**
-   * Creates a new filter from an arbitrary user expression
-   * 
-   * @param expression the parsed user expression
+   * Creates a new filter from an arbitrary user expression.
+   *
+   * @param expression
+   *          the parsed user expression
    */
   public ExpressionPortfolioFilter(final UserExpression expression) {
     super("User expression");
@@ -62,7 +64,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
     private final Collection<Trade> _trades;
 
-    public AnyTradeAttribute(final Collection<Trade> trades) {
+    AnyTradeAttribute(final Collection<Trade> trades) {
       _trades = trades;
     }
 
@@ -96,20 +98,20 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
     @Override
     public Map<String, String> getAttributes() {
-      Map<String, String> allAttributes = Maps.newHashMap();
-      for (Trade trade : _trades) {
+      final Map<String, String> allAttributes = Maps.newHashMap();
+      for (final Trade trade : _trades) {
         allAttributes.putAll(trade.getAttributes());
       }
       return allAttributes;
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
       throw new UnsupportedOperationException();
     }
 
@@ -150,7 +152,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
   }
 
-  private static final DynamicAttributes s_dynamicAttributes = new DynamicAttributes() {
+  private static final DynamicAttributes DYNAMIC_ATTRIBUTES = new DynamicAttributes() {
 
     @Override
     public Object getValue(final Object object, final String name) {
@@ -165,23 +167,21 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
           } else {
             return new AnyTradeAttribute(trades);
           }
-        } else {
-          Object value = position.getAttributes().get(name);
+        }
+        Object value = position.getAttributes().get(name);
+        if (value != null) {
+          return value;
+        }
+        for (final Trade trade : position.getTrades()) {
+          value = trade.getAttributes().get(name);
           if (value != null) {
             return value;
-          } else {
-            for (Trade trade : position.getTrades()) {
-              value = trade.getAttributes().get(name);
-              if (value != null) {
-                return value;
-              }
-            }
-            return UserExpression.NA;
           }
         }
+        return UserExpression.NA;
       } else if (object instanceof AnyTradeAttribute) {
         final AnyTradeAttribute trades = (AnyTradeAttribute) object;
-        for (Trade trade : trades.getTrades()) {
+        for (final Trade trade : trades.getTrades()) {
           final Object value = trade.getAttributes().get(name);
           if (value != null) {
             return value;
@@ -193,9 +193,8 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
         final Object value = trade.getAttributes().get(name);
         if (value != null) {
           return value;
-        } else {
-          return UserExpression.NA;
         }
+        return UserExpression.NA;
       } else {
         return UserExpression.NA;
       }
@@ -212,10 +211,10 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
     eval.setDynamicVariables(new DynamicVariables() {
       @Override
       public Object getValue(final String name) {
-        return s_dynamicAttributes.getValue(position, name);
+        return DYNAMIC_ATTRIBUTES.getValue(position, name);
       }
     });
-    eval.setDynamicAttributes(s_dynamicAttributes);
+    eval.setDynamicAttributes(DYNAMIC_ATTRIBUTES);
     return Boolean.TRUE.equals(eval.evaluate());
   }
 

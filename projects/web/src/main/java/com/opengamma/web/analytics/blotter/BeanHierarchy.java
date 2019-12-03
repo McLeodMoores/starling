@@ -25,46 +25,46 @@ import com.google.common.collect.Sets;
   private final Map<Class<?>, Node> _nodes = Maps.newHashMap();
   private final Set<Class<?>> _classesWithMetaBean = Sets.newHashSet();
 
-  /* package */ BeanHierarchy(Set<MetaBean> metaBeans) {
-    for (MetaBean metaBean : metaBeans) {
+  /* package */ BeanHierarchy(final Set<MetaBean> metaBeans) {
+    for (final MetaBean metaBean : metaBeans) {
       _classesWithMetaBean.add(metaBean.beanType());
     }
-    for (MetaBean metaBean : metaBeans) {
+    for (final MetaBean metaBean : metaBeans) {
       getOrAddNode(metaBean.beanType());
     }
   }
 
-  private Node getOrAddNode(Class<?> type) {
-    Node node = _nodes.get(type);
+  private Node getOrAddNode(final Class<?> type) {
+    final Node node = _nodes.get(type);
     if (node != null) {
       return node;
     }
-    Node newNode = new Node(type);
+    final Node newNode = new Node(type);
     _nodes.put(type, newNode);
-    Class<?> superclass = type.getSuperclass();
+    final Class<?> superclass = type.getSuperclass();
     if (superclass != null) {
       getOrAddNode(superclass).addSubclass(newNode);
     }
     return newNode;
   }
 
-  /* package */ Set<Class<? extends Bean>> subtypes(Class<?> type) {
-    Node node = _nodes.get(type);
+  /* package */ Set<Class<? extends Bean>> subtypes(final Class<?> type) {
+    final Node node = _nodes.get(type);
     if (node == null) {
       return Collections.emptySet();
     }
-    Set<Class<? extends Bean>> types = Sets.newHashSet();
+    final Set<Class<? extends Bean>> types = Sets.newHashSet();
     addSubtypes(node, types);
     return types;
   }
 
   @SuppressWarnings("unchecked")
-  private void addSubtypes(Node node, Set<Class<? extends Bean>> types) {
-    Class<?> type = node.getType();
+  private void addSubtypes(final Node node, final Set<Class<? extends Bean>> types) {
+    final Class<?> type = node.getType();
     if (isConcreteBeanWithMetaBean(type)) {
       types.add((Class<? extends Bean>) type);
     }
-    for (Node subclassNode : node.getSubclasses()) {
+    for (final Node subclassNode : node.getSubclasses()) {
       addSubtypes(subclassNode, types);
     }
   }
@@ -74,7 +74,7 @@ import com.google.common.collect.Sets;
    * @return true if type is a concrete subclass of {@link Bean} whose {@link MetaBean} was in the set passed to
    * the constructor.
    */
-  private boolean isConcreteBeanWithMetaBean(Class<?> type) {
+  private boolean isConcreteBeanWithMetaBean(final Class<?> type) {
     return Bean.class.isAssignableFrom(type) &&
         (type.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT &&
         _classesWithMetaBean.contains(type);
@@ -85,11 +85,11 @@ import com.google.common.collect.Sets;
     private final Class<?> _type;
     private final Set<Node> _subclasses = Sets.newHashSet();
 
-    private Node(Class<?> type) {
+    private Node(final Class<?> type) {
       _type = type;
     }
 
-    private void addSubclass(Node subclassNode) {
+    private void addSubclass(final Node subclassNode) {
       _subclasses.add(subclassNode);
     }
 

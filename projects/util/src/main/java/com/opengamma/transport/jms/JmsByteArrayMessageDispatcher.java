@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 public class JmsByteArrayMessageDispatcher implements MessageListener {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsByteArrayMessageDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsByteArrayMessageDispatcher.class);
 
   /**
    * The underlying message receiver.
@@ -54,10 +54,10 @@ public class JmsByteArrayMessageDispatcher implements MessageListener {
   public void onMessage(final Message message) {
     try {
       final byte[] bytes = JmsByteArrayHelper.extractBytes(message);
-      s_logger.debug("Dispatching byte array of length {}", bytes.length);
+      LOGGER.debug("Dispatching byte array of length {}", bytes.length);
       getUnderlying().messageReceived(bytes);
     } catch (RuntimeException e) {
-      s_logger.error("Caught exception dispatching message", e);
+      LOGGER.error("Caught exception dispatching message", e);
       throw e;
     }
   }

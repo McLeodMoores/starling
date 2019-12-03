@@ -22,7 +22,7 @@ import com.opengamma.engine.value.ValueSpecification;
 @SuppressWarnings("rawtypes")
 /* package */ class ListDoubleArrayFormatter extends AbstractFormatter<List> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ListDoubleArrayFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListDoubleArrayFormatter.class);
 
   /* package */ ListDoubleArrayFormatter() {
     super(List.class);
@@ -46,7 +46,7 @@ import com.opengamma.engine.value.ValueSpecification;
       } else if (value.get(0).getClass().equals(Double[].class)) {
         colCount = ((Double[]) value.get(0)).length;
       } else {
-        s_logger.warn("Unexpected type in list: {}", value.get(0).getClass());
+        LOGGER.warn("Unexpected type in list: {}", value.get(0).getClass());
         return FORMATTING_ERROR;
       }
     }

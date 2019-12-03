@@ -38,12 +38,13 @@ import com.opengamma.util.money.MoneyCalculationUtils;
 public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @SuppressWarnings("unused")
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractPortfolioPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioPnLFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     BigDecimal currentSum = BigDecimal.ZERO;
-    for (ComputedValue input : inputs.getAllValues()) {
+    for (final ComputedValue input : inputs.getAllValues()) {
       currentSum = MoneyCalculationUtils.add(currentSum, new BigDecimal(String.valueOf(input.getValue())));
     }
     final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -56,10 +57,10 @@ public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonC
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final PortfolioNode node = target.getPortfolioNode();
     final Set<Position> allPositions = PositionAccumulator.getAccumulatedPositions(node);
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final Set<String> currencies = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     final ValueProperties constraints;
-    if ((currencies == null) || currencies.isEmpty()) {
+    if (currencies == null || currencies.isEmpty()) {
       constraints = ValueProperties.withAny(ValuePropertyNames.CURRENCY).get();
     } else {
       constraints = ValueProperties.with(ValuePropertyNames.CURRENCY, currencies).get();
@@ -72,17 +73,19 @@ public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonC
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
+    return Collections.singleton(
+        new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties().withAny(ValuePropertyNames.CURRENCY).get()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     Set<String> currencies = null;
     for (final ValueSpecification input : inputs.keySet()) {
       final Set<String> inputCurrencies = input.getProperties().getValues(ValuePropertyNames.CURRENCY);
-      if ((inputCurrencies != null) && !inputCurrencies.isEmpty()) {
+      if (inputCurrencies != null && !inputCurrencies.isEmpty()) {
         if (currencies == null) {
-          currencies = new HashSet<String>(inputCurrencies);
+          currencies = new HashSet<>(inputCurrencies);
         } else {
           currencies.retainAll(inputCurrencies);
           if (currencies.isEmpty()) {
@@ -94,9 +97,9 @@ public abstract class AbstractPortfolioPnLFunction extends AbstractFunction.NonC
     }
     if (currencies == null) {
       return getResults(context, target);
-    } else {
-      return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(), createValueProperties().with(ValuePropertyNames.CURRENCY, currencies).get()));
     }
+    return Collections.singleton(new ValueSpecification(ValueRequirementNames.PNL, target.toSpecification(),
+        createValueProperties().with(ValuePropertyNames.CURRENCY, currencies).get()));
   }
 
   @Override

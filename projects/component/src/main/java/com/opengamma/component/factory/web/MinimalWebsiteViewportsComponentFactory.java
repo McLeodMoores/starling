@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.component.factory.web;
 
@@ -27,6 +27,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.springframework.web.context.ServletContextAware;
 
+import com.mcleodmoores.web.json.convention.WebConventionsUtils;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.core.change.AggregatingChangeManager;
@@ -88,19 +89,18 @@ import com.opengamma.web.analytics.rest.WebUiResource;
 import com.opengamma.web.server.AggregatedViewDefinitionManager;
 
 /**
- * A version of {@link com.opengamma.component.factory.web.WebsiteViewportsComponentFactory} that does not reference deprecated
- * components and only requires:
+ * A version of {@link com.opengamma.component.factory.web.WebsiteViewportsComponentFactory} that does not reference deprecated components and only requires:
  * <ul>
- *  <li> {@link SecurityMaster}: a master for securities that allows updates
- *  <li> {@link SecuritySource}: a source for securities
- *  <li> {@link PositionMaster}: a master for positions that allows updates
- *  <li> {@link PositionSource}: a source for positions
- *  <li> {@link PortfolioMaster}: a master for portfolios
- *  <li> {@link ComputationTargetResolver}: resolves the computation targets of a {@link com.opengamma.engine.function.FunctionDefinition}
- *  to a real target e.g. a security
- *  <li> {@link ViewProcessor}: manages the computation jobs for {@link com.opengamma.engine.view.ViewDefinition}s.
- *  <li> {@link PortfolioAggregationFunctions}: aggregates portfolios e.g. by currency
- *  <li> {@link UserPrincipal}: the user
+ * <li>{@link SecurityMaster}: a master for securities that allows updates
+ * <li>{@link SecuritySource}: a source for securities
+ * <li>{@link PositionMaster}: a master for positions that allows updates
+ * <li>{@link PositionSource}: a source for positions
+ * <li>{@link PortfolioMaster}: a master for portfolios
+ * <li>{@link ComputationTargetResolver}: resolves the computation targets of a {@link com.opengamma.engine.function.FunctionDefinition} to a real target e.g. a
+ * security
+ * <li>{@link ViewProcessor}: manages the computation jobs for {@link com.opengamma.engine.view.ViewDefinition}s.
+ * <li>{@link PortfolioAggregationFunctions}: aggregates portfolios e.g. by currency
+ * <li>{@link UserPrincipal}: the user
  * </ul>
  * All other components are optional.
  */
@@ -240,14 +240,14 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   private LiveMarketDataProviderFactory _liveMarketDataProviderFactory;
 
   /**
-   * Indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    */
   @PropertyDefinition
   private boolean _suppressCurrencyDisplay;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final LongPollingConnectionManager longPolling = buildLongPolling();
@@ -271,14 +271,12 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     } else {
       blotterColumnMapper = null;
     }
-    final AggregatedViewDefinitionManager aggregatedViewDefManager =
-        new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(), getCombinedConfigSource(),
-            getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
-            getPortfolioAggregationFunctions().getMappedFunctions());
-    final AnalyticsViewManager analyticsViewManager =
-        new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager, getComputationTargetResolver(),
-            getFunctionRepository(), null, blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
-            getPositionMaster());
+    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(),
+        getCombinedConfigSource(), getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
+        getPortfolioAggregationFunctions().getMappedFunctions());
+    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager,
+        getComputationTargetResolver(), getFunctionRepository(), null, blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(),
+        getSecurityMaster(), getPositionMaster());
     final ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
     final GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);
     final ViewportResultsJsonCsvWriter viewportResultsWriter = new ViewportResultsJsonCsvWriter(resultsFormatter);
@@ -297,6 +295,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     repo.getRestComponents().publishHelper(new GridColumnGroupsMessageBodyWriter(columnWriter));
     repo.getRestComponents().publishHelper(new ViewportResultsMessageBodyWriter(viewportResultsWriter));
     repo.getRestComponents().publishHelper(new ErrorInfoMessageBodyWriter());
+    repo.getRestComponents().publishResource(new WebConventionsUtils());
 
     // these items need to be available to the servlet, but aren't important enough to be published components
     repo.registerServletContextAware(new ServletContextAware() {
@@ -310,7 +309,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Gets the function repository, returning an empty repository if a {@link FunctionConfigurationSource} is not available.
-   * @return  the function repository
+   *
+   * @return the function repository
    */
   protected FunctionRepositoryFactory getFunctionRepository() {
     // TODO: This is slightly wasteful if the view processor is in the same process and has created its own repository. Ideally we
@@ -325,16 +325,17 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Builds a long polling connection manager.
-   * @return  a long polling connection manager
+   *
+   * @return a long polling connection manager
    */
   protected LongPollingConnectionManager buildLongPolling() {
     return new LongPollingConnectionManager();
   }
 
   /**
-   * Builds a change manager and adds the historical time series master, config master and legal entity master
-   * if they are available.
-   * @return  the change manager
+   * Builds a change manager and adds the historical time series master, config master and legal entity master if they are available.
+   *
+   * @return the change manager
    */
   protected ChangeManager buildChangeManager() {
     final List<ChangeProvider> providers = new ArrayList<>();
@@ -355,7 +356,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Builds a change manager and adds the masters if they are available.
-   * @return  the change manager
+   *
+   * @return the change manager
    */
   protected MasterChangeManager buildMasterChangeManager() {
     final Map<MasterType, ChangeProvider> providers = new HashMap<>();
@@ -964,9 +966,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Gets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the value of the property
    */
   public boolean isSuppressCurrencyDisplay() {
@@ -974,9 +976,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   }
 
   /**
-   * Sets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Sets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @param suppressCurrencyDisplay  the new value of the property
    */
   public void setSuppressCurrencyDisplay(boolean suppressCurrencyDisplay) {
@@ -985,8 +987,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Gets the the {@code suppressCurrencyDisplay} property.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the property, not null
    */
   public final Property<Boolean> suppressCurrencyDisplay() {

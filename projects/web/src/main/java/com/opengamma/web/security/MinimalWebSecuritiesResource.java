@@ -177,62 +177,59 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("type") String type,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam(SECURITY_XML) String securityXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
+      @FormParam("type") final String type, @FormParam("idscheme") final String idScheme, @FormParam("idvalue") final String idValue,
+      @FormParam(SECURITY_XML) final String securityXml, @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
 
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.defaultString(StringUtils.trimToNull(type));
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type));
     final FlexiBean out = createRootData();
     URI responseURI = null;
-    switch (type) {
+    switch (trimmedType) {
       case "xml":
         boolean isValidInput = true;
         try {
-          securityXml = StringUtils.trimToNull(securityXml);
-          if (securityXml == null) {
+          final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
+          if (trimmedSecurityXml == null) {
             out.put("err_securityXmlMissing", true);
             isValidInput = false;
           }
-          if (uniqueIdScheme == null) {
+          if (trimmedUniqueIdScheme == null) {
             out.put("err_unqiueIdSchemeMissing", true);
             isValidInput = false;
           }
           if (!isValidInput) {
-            out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(securityXml)));
-            out.put("selectedUniqueIdScheme", StringUtils.defaultString(uniqueIdScheme));
+            out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(trimmedSecurityXml)));
+            out.put("selectedUniqueIdScheme", StringUtils.defaultString(trimmedUniqueIdScheme));
             return Response.ok(buildResponseHtml(out, "securities-add.ftl")).build();
           }
-          final ManageableSecurity security = addSecurity(securityXml, uniqueIdScheme);
+          final ManageableSecurity security = addSecurity(trimmedSecurityXml, trimmedUniqueIdScheme);
           final MinimalWebSecuritiesUris webSecuritiesUris = new MinimalWebSecuritiesUris(data());
           responseURI =  webSecuritiesUris.security(security);
         } catch (final Exception ex) {
           out.put("err_securityXmlMsg", ex.getMessage());
           out.put(SECURITY_XML, StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(securityXml)));
-          out.put("selectedUniqueIdScheme", StringUtils.defaultString(uniqueIdScheme));
+          out.put("selectedUniqueIdScheme", StringUtils.defaultString(trimmedUniqueIdScheme));
           return Response.ok(buildResponseHtml(out, "securities-add.ftl")).build();
         }
         break;
       case "id":
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
+        final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        final String trimmedIdValue = StringUtils.trimToNull(idValue);
 
-        if (idScheme == null || idValue == null) {
-          if (idScheme == null) {
+        if (trimmedIdScheme == null || trimmedIdValue == null) {
+          if (trimmedIdScheme == null) {
             out.put("err_idschemeMissing", true);
           }
-          if (idValue == null) {
+          if (trimmedIdValue == null) {
             out.put("err_idvalueMissing", true);
           }
-          out.put("idscheme", idScheme);
-          out.put("idvalue", idValue);
+          out.put("idscheme", trimmedIdScheme);
+          out.put("idvalue", trimmedIdValue);
           return Response.ok(buildResponseHtml(out, "securities-add.ftl")).build();
         }
 
-        final ExternalScheme scheme = ExternalScheme.of(idScheme);
-        final Collection<ExternalIdBundle> bundles = buildSecurityRequest(scheme, idValue);
+        final ExternalScheme scheme = ExternalScheme.of(trimmedIdScheme);
+        final Collection<ExternalIdBundle> bundles = buildSecurityRequest(scheme, trimmedIdValue);
         final SecurityLoaderResult loaderResult = data().getSecurityLoader().loadSecurities(SecurityLoaderRequest.create(bundles));
         final Map<ExternalIdBundle, UniqueId> loadedSecurities = loaderResult.getResultMap();
         if (bundles.size() == 1 && loadedSecurities.size() == 1) {
@@ -249,39 +246,39 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
   }
 
   private String buildResponseHtml(final FlexiBean out, final String templateName) {
-    return getFreemarker().build(HTML_DIR + "securities-add.ftl", out);
+    return getFreemarker().build(HTML_DIR + templateName, out);
   }
 
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("type") String type,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam(SECURITY_XML) String securityXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
+      @FormParam("type") final String type,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam(SECURITY_XML) final String securityXml,
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
 
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
     final FlexiBean out = createRootData();
     final ExternalScheme scheme = ExternalScheme.of(idScheme);
     out.put("requestScheme", scheme);
 
-    type = StringUtils.defaultString(StringUtils.trimToNull(type));
-    switch (type) {
+    final String trimmedType = StringUtils.defaultString(StringUtils.trimToNull(type));
+    switch (trimmedType) {
       case "xml":
-        securityXml = StringUtils.trimToNull(securityXml);
-        if (securityXml == null) {
+        final String trimmedSecurityXml = StringUtils.trimToNull(securityXml);
+        if (trimmedSecurityXml == null) {
           return Response.status(Status.BAD_REQUEST).build();
         }
-        final ManageableSecurity security = addSecurity(securityXml, uniqueIdScheme);
+        final ManageableSecurity security = addSecurity(trimmedSecurityXml, trimmedUniqueIdScheme);
         out.put("addedSecurities", getAddedSecurityId(security));
         break;
       case StringUtils.EMPTY: // create security by ID if type is missing
       case "id":
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        if (idScheme == null || idValue == null) {
+        final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        final String trimmedIdValue = StringUtils.trimToNull(idValue);
+        if (trimmedIdScheme == null || trimmedIdValue == null) {
           return Response.status(Status.BAD_REQUEST).build();
         }
         final Collection<ExternalIdBundle> requestBundles = buildSecurityRequest(scheme, idValue);
@@ -305,7 +302,7 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return addedSecDoc.getSecurity();
   }
 
-  private Map<String, String> getAddedSecurityId(final ManageableSecurity security) {
+  private static Map<String, String> getAddedSecurityId(final ManageableSecurity security) {
     final Map<String, String> addedSecurities = new HashMap<>();
     final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
     final UniqueId uniqueId = security.getUniqueId();
@@ -319,8 +316,9 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return addedSecurities;
   }
 
-  private Map<String, String> getLoadedSecuritiesId(final Map<ExternalIdBundle, UniqueId> loadedSecurities, final Collection<ExternalIdBundle> requestBundles, final ExternalScheme scheme) {
-    final Map<String, String> result = new HashMap<String, String>();
+  private static Map<String, String> getLoadedSecuritiesId(final Map<ExternalIdBundle, UniqueId> loadedSecurities,
+      final Collection<ExternalIdBundle> requestBundles, final ExternalScheme scheme) {
+    final Map<String, String> result = new HashMap<>();
     for (final ExternalIdBundle identifierBundle : requestBundles) {
       final UniqueId uniqueIdentifier = loadedSecurities.get(identifierBundle);
       final String objectIdentifier = uniqueIdentifier != null ? uniqueIdentifier.getObjectId().toString() : null;
@@ -329,20 +327,20 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
     return result;
   }
 
-  private ExternalIdBundle buildRequestAsExternalIdBundle(final ExternalScheme scheme, final Collection<ExternalIdBundle> bundles) {
-    final List<ExternalId> identifiers = new ArrayList<ExternalId>();
+  private static ExternalIdBundle buildRequestAsExternalIdBundle(final ExternalScheme scheme, final Collection<ExternalIdBundle> bundles) {
+    final List<ExternalId> identifiers = new ArrayList<>();
     for (final ExternalIdBundle bundle : bundles) {
       identifiers.add(bundle.getExternalId(scheme));
     }
     return ExternalIdBundle.of(identifiers);
   }
 
-  private Collection<ExternalIdBundle> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
+  private static Collection<ExternalIdBundle> buildSecurityRequest(final ExternalScheme identificationScheme, final String idValue) {
     if (idValue == null) {
       return Collections.emptyList();
     }
     final String[] identifiers = StringUtils.split(idValue, "\n");
-    final List<ExternalIdBundle> result = new ArrayList<ExternalIdBundle>(identifiers.length);
+    final List<ExternalIdBundle> result = new ArrayList<>(identifiers.length);
     for (String identifier : identifiers) {
       identifier = StringUtils.trimToNull(identifier);
       if (identifier != null) {
@@ -356,10 +354,10 @@ public class MinimalWebSecuritiesResource extends AbstractMinimalWebSecurityReso
   @GET
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
-  public String getMetaDataJSON(@QueryParam("uniqueIdScheme") String uniqueIdScheme) {
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+  public String getMetaDataJSON(@QueryParam("uniqueIdScheme") final String uniqueIdScheme) {
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
     final FlexiBean out = super.createRootData();
-    out.put("schemaVersion", getSecurityMasterSchemaVersion(uniqueIdScheme));
+    out.put("schemaVersion", getSecurityMasterSchemaVersion(trimmedUniqueIdScheme));
     out.put("securityTypes", data().getSecurityTypes().values());
     out.put("description2type", data().getSecurityTypes());
     return getFreemarker().build(JSON_DIR + "metadata.ftl", out);

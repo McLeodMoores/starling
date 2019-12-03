@@ -39,7 +39,8 @@ public class ForexDefinition implements InstrumentDefinition<InstrumentDerivativ
    * @param amountCurrency1 The amount in the first currency.
    * @param fxRate The forex rate, understood as 1.0 Currency1 is exchanged for fxRate Currency2. The amount in Currency2 will be -amountCurrency1*fxRate.
    */
-  public ForexDefinition(final Currency currency1, final Currency currency2, final ZonedDateTime exchangeDate, final double amountCurrency1, final double fxRate) {
+  public ForexDefinition(final Currency currency1, final Currency currency2, final ZonedDateTime exchangeDate, final double amountCurrency1,
+      final double fxRate) {
     ArgumentChecker.notNull(currency1, "Currency 1");
     ArgumentChecker.notNull(currency2, "Currency 2");
     ArgumentChecker.notNull(exchangeDate, "Exchange date");
@@ -56,12 +57,12 @@ public class ForexDefinition implements InstrumentDefinition<InstrumentDerivativ
   public ForexDefinition(final PaymentFixedDefinition paymentCurrency1, final PaymentFixedDefinition paymentCurrency2) {
     ArgumentChecker.notNull(paymentCurrency1, "Payment 1");
     ArgumentChecker.notNull(paymentCurrency2, "Payment 2");
-    ZonedDateTime paymentDate1 = paymentCurrency1.getPaymentDate();
-    ZonedDateTime paymentDate2 = paymentCurrency2.getPaymentDate();
+    final ZonedDateTime paymentDate1 = paymentCurrency1.getPaymentDate();
+    final ZonedDateTime paymentDate2 = paymentCurrency2.getPaymentDate();
     ArgumentChecker.isTrue(paymentDate1.equals(paymentDate2), "Payments on different date. {} and {}.", paymentCurrency1, paymentCurrency2);
-    double referenceAmount1 = paymentCurrency1.getReferenceAmount();
-    double referenceAmount2 = paymentCurrency2.getReferenceAmount();
-    ArgumentChecker.isTrue((referenceAmount1 * referenceAmount2) <= 0, "Payments with same sign. {} and {}", paymentCurrency1, paymentCurrency2);
+    final double referenceAmount1 = paymentCurrency1.getReferenceAmount();
+    final double referenceAmount2 = paymentCurrency2.getReferenceAmount();
+    ArgumentChecker.isTrue(referenceAmount1 * referenceAmount2 <= 0, "Payments with same sign. {} and {}", paymentCurrency1, paymentCurrency2);
     this._paymentCurrency1 = paymentCurrency1;
     this._paymentCurrency2 = paymentCurrency2;
   }

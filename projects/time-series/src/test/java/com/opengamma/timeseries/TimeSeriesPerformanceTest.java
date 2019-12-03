@@ -20,57 +20,81 @@ public class TimeSeriesPerformanceTest {
   private static final int SMALL = 10;
   private static final int BIG = 10_000;
 
-  public void test_addSimple_small() {
+  /**
+   * Tests adding small series with the same dates.
+   */
+  public void testAddSimpleSmall() {
     for (int i = 0; i < 5; i++) {
       addSimple(SMALL, "addSimple-small");
     }
   }
 
-  public void test_addSimple_big() {
+  /**
+   * Tests adding large series with the same dates.
+   */
+  public void testAddSimpleBig() {
     for (int i = 0; i < 5; i++) {
       addSimple(BIG, "addSimple-big");
     }
   }
 
-  void addSimple(int size, String name) {
-    int loop = 10_000_000 / size;
-    LocalDate base = LocalDate.now().minusYears(2);
-    LocalDate[] dates = new LocalDate[size];
-    double[] values = new double[size];
+  /**
+   * Creates two series of a given size with the same dates and adds them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
+  void addSimple(final int size, final String name) {
+    final int loop = 10_000_000 / size;
+    final LocalDate base = LocalDate.now().minusYears(2);
+    final LocalDate[] dates = new LocalDate[size];
+    final double[] values = new double[size];
     for (int i = 0; i < size; i++) {
       dates[i] = base.plusDays(i);
       values[i] = i * 1.2d;
     }
     DoubleTimeSeries<LocalDate> ts = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    long start = System.nanoTime();
+    final long start = System.nanoTime();
     for (int j = 0; j < loop; j++) {
       ts = ts.add(1.5d);
     }
-    long end = System.nanoTime();
-    double diff = (((double) end) - ((double) start)) / 1_000_000L;
+    final long end = System.nanoTime();
+    final double diff = ((double) end - (double) start) / 1_000_000L;
     System.out.println(diff + " " + ts.getEarliestValue() + " " + name);
   }
 
   //-------------------------------------------------------------------------
-  public void test_addSeries_small() {
+  /**
+   * Tests adding small series with different dates.
+   */
+  public void testAddSeriesSmall() {
     for (int i = 0; i < 5; i++) {
       addSeries(SMALL, "addSeries-small");
     }
   }
 
-  public void test_addSeries_big() {
+  /**
+   * Tests adding large series with different dates.
+   */
+  public void testAddSeriesBig() {
     for (int i = 0; i < 5; i++) {
       addSeries(BIG, "addSeries-big");
     }
   }
 
-  void addSeries(int size, String name) {
-    int loop = 10_000_000 / size;
-    LocalDate base = LocalDate.now().minusYears(2);
-    LocalDate[] dates1 = new LocalDate[size];
-    double[] values1 = new double[size];
-    LocalDate[] dates2 = new LocalDate[size];
-    double[] values2 = new double[size];
+  /**
+   * Creates two series of a given size with different dates and adds them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
+  void addSeries(final int size, final String name) {
+    final int loop = 10_000_000 / size;
+    final LocalDate base = LocalDate.now().minusYears(2);
+    final LocalDate[] dates1 = new LocalDate[size];
+    final double[] values1 = new double[size];
+    final LocalDate[] dates2 = new LocalDate[size];
+    final double[] values2 = new double[size];
     for (int i = 0; i < size; i++) {
       dates1[i] = base.plusDays(i);
       values1[i] = i * 1.2d;
@@ -78,36 +102,48 @@ public class TimeSeriesPerformanceTest {
       values2[i] = i * 1.5d;
     }
     DoubleTimeSeries<LocalDate> ts1 = ImmutableLocalDateDoubleTimeSeries.of(dates1, values1);
-    DoubleTimeSeries<LocalDate> ts2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
-    long start = System.nanoTime();
+    final DoubleTimeSeries<LocalDate> ts2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
+    final long start = System.nanoTime();
     for (int j = 0; j < loop; j++) {
       ts1 = ts1.add(ts2);
     }
-    long end = System.nanoTime();
-    double diff = (((double) end) - ((double) start)) / 1_000_000L;
+    final long end = System.nanoTime();
+    final double diff = ((double) end - (double) start) / 1_000_000L;
     System.out.println(diff + " " + ts1.getEarliestValue() + " " + name);
   }
 
   //-------------------------------------------------------------------------
-  public void test_multiplySeries_small() {
+  /**
+   * Tests multiplying small series.
+   */
+  public void testMultiplySeriesSmall() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(SMALL, "multiplySeries-small");
     }
   }
 
-  public void test_multiplySeries_big() {
+  /**
+   * Tests multiplying large series.
+   */
+  public void testMultiplySeriesBig() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(BIG, "multiplySeries-big");
     }
   }
 
-  void multiplySeries(int size, String name) {
-    int loop = 10_000_000 / size;
-    LocalDate base = LocalDate.now().minusYears(2);
-    LocalDate[] dates1 = new LocalDate[size];
-    double[] values1 = new double[size];
-    LocalDate[] dates2 = new LocalDate[size];
-    double[] values2 = new double[size];
+  /**
+   * Creates two series of a given size and multiplies them.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
+  void multiplySeries(final int size, final String name) {
+    final int loop = 10_000_000 / size;
+    final LocalDate base = LocalDate.now().minusYears(2);
+    final LocalDate[] dates1 = new LocalDate[size];
+    final double[] values1 = new double[size];
+    final LocalDate[] dates2 = new LocalDate[size];
+    final double[] values2 = new double[size];
     for (int i = 0; i < size; i++) {
       dates1[i] = base.plusDays(i);
       values1[i] = i * 1.2d;
@@ -115,45 +151,57 @@ public class TimeSeriesPerformanceTest {
       values2[i] = i * 1.5d;
     }
     DoubleTimeSeries<LocalDate> ts1 = ImmutableLocalDateDoubleTimeSeries.of(dates1, values1);
-    DoubleTimeSeries<LocalDate> ts2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
-    long start = System.nanoTime();
+    final DoubleTimeSeries<LocalDate> ts2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
+    final long start = System.nanoTime();
     for (int j = 0; j < loop; j++) {
       ts1 = ts1.multiply(ts2);
     }
-    long end = System.nanoTime();
-    double diff = (((double) end) - ((double) start)) / 1_000_000L;
+    final long end = System.nanoTime();
+    final double diff = ((double) end - (double) start) / 1_000_000L;
     System.out.println(diff + " " + ts1.getEarliestValue() + " " + name);
   }
 
   //-------------------------------------------------------------------------
-  public void test_reciprocal_small() {
+  /**
+   * Calculates the reciprocal of a small series.
+   */
+  public void testReciprocalSmall() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(SMALL, "reciprocal-small");
     }
   }
 
-  public void test_reciprocal_big() {
+  /**
+   * Calculates the reciprocal of a large series.
+   */
+  public void testReciprocalBig() {
     for (int i = 0; i < 5; i++) {
       multiplySeries(BIG, "reciprocal-big");
     }
   }
 
-  void reciprocal(int size, String name) {
-    int loop = 10_000_000 / size;
-    LocalDate base = LocalDate.now().minusYears(2);
-    LocalDate[] dates = new LocalDate[size];
-    double[] values = new double[size];
+  /**
+   * Creates two series of a given size and calculates the reciprocal.
+   *
+   * @param size  the series size
+   * @param name  the name of the test
+   */
+  void reciprocal(final int size, final String name) {
+    final int loop = 10_000_000 / size;
+    final LocalDate base = LocalDate.now().minusYears(2);
+    final LocalDate[] dates = new LocalDate[size];
+    final double[] values = new double[size];
     for (int i = 0; i < size; i++) {
       dates[i] = base.plusDays(i);
       values[i] = i * 1.2d;
     }
     DoubleTimeSeries<LocalDate> ts = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    long start = System.nanoTime();
+    final long start = System.nanoTime();
     for (int j = 0; j < loop; j++) {
       ts = ts.reciprocal();
     }
-    long end = System.nanoTime();
-    double diff = (((double) end) - ((double) start)) / 1_000_000L;
+    final long end = System.nanoTime();
+    final double diff = ((double) end - (double) start) / 1_000_000L;
     System.out.println(diff + " " + ts.getEarliestValue() + " " + name);
   }
 

@@ -11,13 +11,12 @@ import com.opengamma.analytics.math.MathException;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Class that brackets single root of a function. For a 1-D function ({@link com.opengamma.analytics.math.function.Function1D}) $f(x)$,
- * initial values for the interval, $x_1$ and $x_2$, are supplied.
+ * Class that brackets single root of a function. For a 1-D function ({@link com.opengamma.analytics.math.function.Function1D}) $f(x)$, initial values for the
+ * interval, $x_1$ and $x_2$, are supplied.
  * <p>
- * A root is assumed to be bracketed if $f(x_1)f(x_2) < 0$. If this condition is not satisfied, then either
- * $|f(x_1)| < |f(x_2)|$, in which case the lower value $x_1$ is shifted in the negative $x$ direction, or
- * the upper value $x_2$ is shifted in the positive $x$ direction. The amount by which to shift is the difference between
- * the two $x$ values multiplied by a constant ratio (1.6). If a root is not bracketed after 50 attempts, an exception is thrown.
+ * A root is assumed to be bracketed if $f(x_1)f(x_2) &lt; 0$. If this condition is not satisfied, then either $|f(x_1)| &lt; |f(x_2)|$, in which case the lower
+ * value $x_1$ is shifted in the negative $x$ direction, or the upper value $x_2$ is shifted in the positive $x$ direction. The amount by which to shift is the
+ * difference between the two $x$ values multiplied by a constant ratio (1.6). If a root is not bracketed after 50 attempts, an exception is thrown.
  */
 public class BracketRoot {
   private static final double RATIO = 1.6;

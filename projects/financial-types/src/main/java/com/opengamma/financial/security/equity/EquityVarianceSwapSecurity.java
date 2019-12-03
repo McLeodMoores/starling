@@ -58,8 +58,9 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
   private double _strike;
   /**
    * The notional.
-   * TODO document how the sign of the notional implies pay / receive / fixed / realized
    */
+  // TODO document how the sign of the notional implies pay / receive / fixed /
+  // realized
   @PropertyDefinition
   private double _notional;
   /**
@@ -98,13 +99,42 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private Frequency _observationFrequency;
 
-  EquityVarianceSwapSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EquityVarianceSwapSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public EquityVarianceSwapSecurity(ExternalId spotUnderlyingId, Currency currency, double strike, double notional,
-      boolean parameterizedAsVariance, double annualizationFactor, ZonedDateTime firstObservationDate, ZonedDateTime lastObservationDate,
-      ZonedDateTime settlementDate, ExternalId regionId, Frequency observationFrequency) {
+  /**
+   * @param spotUnderlyingId
+   *          the identifier of the spot price, not null
+   * @param currency
+   *          the currency, not null
+   * @param strike
+   *          the strike
+   * @param notional
+   *          the notional
+   * @param parameterizedAsVariance
+   *          true if the strike is parameterized as variance, false if the
+   *          strike is parameterized as volatility
+   * @param annualizationFactor
+   *          the annualization factor
+   * @param firstObservationDate
+   *          the first observation date, not null
+   * @param lastObservationDate
+   *          the last observation date, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param regionId
+   *          the region for non-working days, not null
+   * @param observationFrequency
+   *          the observation frequency, not null
+   */
+  public EquityVarianceSwapSecurity(final ExternalId spotUnderlyingId, final Currency currency, final double strike, final double notional,
+      final boolean parameterizedAsVariance, final double annualizationFactor, final ZonedDateTime firstObservationDate,
+      final ZonedDateTime lastObservationDate, final ZonedDateTime settlementDate, final ExternalId regionId,
+      final Frequency observationFrequency) {
     super(SECURITY_TYPE);
     setSpotUnderlyingId(spotUnderlyingId);
     setCurrency(currency);
@@ -121,7 +151,7 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityVarianceSwapSecurity(this);
   }
 
@@ -224,7 +254,6 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
   //-----------------------------------------------------------------------
   /**
    * Gets the notional.
-   * TODO document how the sign of the notional implies pay / receive / fixed / realized
    * @return the value of the property
    */
   public double getNotional() {
@@ -233,7 +262,6 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
 
   /**
    * Sets the notional.
-   * TODO document how the sign of the notional implies pay / receive / fixed / realized
    * @param notional  the new value of the property
    */
   public void setNotional(double notional) {
@@ -242,7 +270,6 @@ public class EquityVarianceSwapSecurity extends FinancialSecurity {
 
   /**
    * Gets the the {@code notional} property.
-   * TODO document how the sign of the notional implies pay / receive / fixed / realized
    * @return the property, not null
    */
   public final Property<Double> notional() {

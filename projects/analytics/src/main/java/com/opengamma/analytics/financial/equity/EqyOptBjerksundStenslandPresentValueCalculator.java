@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -25,7 +25,7 @@ public final class EqyOptBjerksundStenslandPresentValueCalculator extends Instru
   private static final BjerksundStenslandModel MODEL = new BjerksundStenslandModel();
 
   /**
-   * Gets the static instance
+   * Gets the static instance.
    * @return The static instance
    */
   public static EqyOptBjerksundStenslandPresentValueCalculator getInstance() {
@@ -39,7 +39,7 @@ public final class EqyOptBjerksundStenslandPresentValueCalculator extends Instru
   public Double visitEquityIndexOption(final EquityIndexOption option, final StaticReplicationDataBundle data) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(data, "data");
-    ForwardCurve forwardCurve = data.getForwardCurve();
+    final ForwardCurve forwardCurve = data.getForwardCurve();
     final double spot = forwardCurve.getSpot();
     final double strike = option.getStrike();
     final double time = option.getTimeToExpiry();
@@ -82,7 +82,7 @@ public final class EqyOptBjerksundStenslandPresentValueCalculator extends Instru
   public Double visitEquityIndexFutureOption(final EquityIndexFutureOption option, final StaticReplicationDataBundle data) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(data, "data");
-    ForwardCurve forwardCurve = data.getForwardCurve();
+    final ForwardCurve forwardCurve = data.getForwardCurve();
     final double spot = forwardCurve.getSpot();
     final double strike = option.getStrike();
     final double time = option.getExpiry();

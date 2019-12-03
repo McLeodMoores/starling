@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the vanna (the derivative of the price with respect to spot and implied volatility) of a vanilla equity barrier option
- * using the Black formula.
+ * Calculates the vanna (the derivative of the price with respect to spot and implied volatility) of a vanilla equity barrier option using the Black formula.
  */
 public class EquityVanillaBarrierOptionSpotVannaFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionSpotVannaFunction() {
     super(ValueRequirementNames.VALUE_VANNA);

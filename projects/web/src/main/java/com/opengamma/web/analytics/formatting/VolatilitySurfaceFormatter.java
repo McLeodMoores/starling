@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class VolatilitySurfaceFormatter extends AbstractFormatter<VolatilitySurface> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceFormatter.class);
 
   /* package */ VolatilitySurfaceFormatter() {
     super(VolatilitySurface.class);
@@ -48,7 +48,7 @@ import com.opengamma.engine.value.ValueSpecification;
     } else if (inputSurface instanceof ConstantDoublesSurface) {
       return "Constant Volatility Surface (z = " + inputSurface.getZValue(0.0, 0.0) + ")";
     } else {
-      s_logger.warn("Unable to format surface of type {}", inputSurface.getClass());
+      LOGGER.warn("Unable to format surface of type {}", inputSurface.getClass());
       return null;
     }
   }

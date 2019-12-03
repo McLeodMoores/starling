@@ -41,7 +41,7 @@ public class SnapshotManager {
    * @param snapshot unititialized market data snapshot, not null
    * @param marketDataManager the market data manager, not null
    */
-  public SnapshotManager(MarketDataSnapshot snapshot, MarketDataManager marketDataManager) {
+  public SnapshotManager(final MarketDataSnapshot snapshot, final MarketDataManager marketDataManager) {
     ArgumentChecker.notNull(snapshot, "snapshot");
     ArgumentChecker.notNull(marketDataManager, "marketDataManager");
     _snapshot = snapshot;
@@ -71,10 +71,10 @@ public class SnapshotManager {
    * Initialise the snapshot, only returning once it has been initialized with all
    * required market data results. In order to achieve this, all required subscriptions
    * will be requested.
-   * 
+   *
    * @param timeoutMillis  the timeout in milliseconds
    */
-  public void initialiseSnapshotWithSubscriptionResults(long timeoutMillis) {
+  public void initialiseSnapshotWithSubscriptionResults(final long timeoutMillis) {
     requestSubscriptions();
     _snapshot.init(_cycleMarketDataRequirements, timeoutMillis, TimeUnit.MILLISECONDS);
   }
@@ -97,7 +97,7 @@ public class SnapshotManager {
    *
    * @param marketDataRequirements the market data requirements, not null
    */
-  public void addMarketDataRequirements(Set<ValueSpecification> marketDataRequirements) {
+  public void addMarketDataRequirements(final Set<ValueSpecification> marketDataRequirements) {
     ArgumentChecker.notNull(marketDataRequirements, "marketDataRequirements");
     _cycleMarketDataRequirements.addAll(marketDataRequirements);
   }

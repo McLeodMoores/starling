@@ -104,7 +104,8 @@ public class PresentValueForexBlackVolatilitySensitivity {
    * @param tolerance The tolerance.
    * @return The comparison flag.
    */
-  public static boolean compare(final PresentValueForexBlackVolatilitySensitivity value1, final PresentValueForexBlackVolatilitySensitivity value2, final double tolerance) {
+  public static boolean compare(final PresentValueForexBlackVolatilitySensitivity value1, final PresentValueForexBlackVolatilitySensitivity value2,
+      final double tolerance) {
     if (!value1._currencyPair.equals(value2._currencyPair)) {
       return false;
     }

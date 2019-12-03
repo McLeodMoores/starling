@@ -24,21 +24,22 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
-/** Calculates the implied volatility of an equity index or equity option using the {@link BaroneAdesiWhaleyModel} */
+/** Calculates the implied volatility of an equity index or equity option using the {@link BaroneAdesiWhaleyModel}. */
 public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFunction {
 
   /** The Barone-Adesi Whaley present value calculator */
-  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator s_pvCalculator = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
-  
-  /** Default constructor */
+  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
+
+  /** Default constructor. */
   public EquityOptionBAWImpliedVolatilityFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
   }
-  
+
   @Override
-  protected Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market, FunctionInputs inputs, Set<ValueRequirement> desiredValues,
-      ComputationTargetSpecification targetSpec, ValueProperties resultProperties) {
-    
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
+      final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
+
     final double optionPrice;
     final double strike;
     final double timeToExpiry;
@@ -48,27 +49,27 @@ public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFun
       strike = option.getStrike();
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
     } else if (derivative instanceof EquityIndexOption) {
       final EquityIndexOption option = (EquityIndexOption) derivative;
       strike = option.getStrike();
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
     } else if (derivative instanceof EquityIndexFutureOption) {
       final EquityIndexFutureOption option = (EquityIndexFutureOption) derivative;
       strike = option.getStrike();
       timeToExpiry = option.getExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getPointValue();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getPointValue();
     } else {
       throw new OpenGammaRuntimeException("Unexpected InstrumentDerivative type");
     }
     final double spot = market.getForwardCurve().getSpot();
     final double discountRate = market.getDiscountCurve().getInterestRate(timeToExpiry);
     final double costOfCarry = discountRate - Math.log(market.getForwardCurve().getForward(timeToExpiry) / spot) / timeToExpiry;
-    final double impliedVol = (new BaroneAdesiWhaleyModel()).impliedVolatility(optionPrice, spot, strike, discountRate, costOfCarry, timeToExpiry, isCall);
-    
+    final double impliedVol = new BaroneAdesiWhaleyModel().impliedVolatility(optionPrice, spot, strike, discountRate, costOfCarry, timeToExpiry, isCall);
+
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     return Collections.singleton(new ComputedValue(resultSpec, impliedVol));
   }

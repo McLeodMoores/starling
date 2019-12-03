@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -22,7 +22,7 @@ public abstract class ResolutionFailure implements Cloneable {
   /**
    * Standard status constants relating to the method calls available here and the callbacks in the visitor.
    */
-  public static enum Status {
+  public enum Status {
     /**
      * An additional requirement (requested by {@link CompiledFunctionDefinition#getAdditionalRequirements}) could not be resolved.
      */
@@ -74,11 +74,11 @@ public abstract class ResolutionFailure implements Cloneable {
 
   // Construction
 
-  protected abstract ResolutionFailure additionalRequirement(final ValueRequirement valueRequirement, final ResolutionFailure failure);
+  protected abstract ResolutionFailure additionalRequirement(ValueRequirement valueRequirement, ResolutionFailure failure);
 
-  protected abstract ResolutionFailure requirement(final ValueRequirement valueRequirement, final ResolutionFailure failure);
+  protected abstract ResolutionFailure requirement(ValueRequirement valueRequirement, ResolutionFailure failure);
 
-  protected abstract ResolutionFailure requirements(final Map<ValueSpecification, ValueRequirement> available);
+  protected abstract ResolutionFailure requirements(Map<ValueSpecification, ValueRequirement> available);
 
   protected abstract ResolutionFailure getResultsFailed();
 
@@ -88,7 +88,7 @@ public abstract class ResolutionFailure implements Cloneable {
 
   protected abstract ResolutionFailure getRequirementsFailed();
 
-  protected abstract ResolutionFailure checkFailure(final ValueRequirement valueRequirement);
+  protected abstract ResolutionFailure checkFailure(ValueRequirement valueRequirement);
 
   protected abstract ResolutionFailure suppressed();
 
@@ -96,16 +96,16 @@ public abstract class ResolutionFailure implements Cloneable {
 
   public abstract ValueRequirement getValueRequirement();
 
-  public abstract <T> Collection<T> accept(final ResolutionFailureVisitor<T> visitor);
+  public abstract <T> Collection<T> accept(ResolutionFailureVisitor<T> visitor);
 
   // Composition
 
   /**
    * Merge the causes of failure from the other into this.
-   * 
+   *
    * @param failure cause of failure
    */
-  protected abstract void merge(final ResolutionFailure failure);
+  protected abstract void merge(ResolutionFailure failure);
 
   // Misc
 
@@ -116,13 +116,14 @@ public abstract class ResolutionFailure implements Cloneable {
   public abstract Object clone();
 
   /**
-   * Tests this resolution failure object with another for equality. Note that the caller must ensure that the monitor for both is held, or a suitable exclusion lock is held at an outer level.
-   * 
+   * Tests this resolution failure object with another for equality. Note that the caller must ensure that the monitor for both is held, or a
+   * suitable exclusion lock is held at an outer level.
+   *
    * @param obj object to compare to
    * @return true if the objects are equal
    */
   @Override
-  public abstract boolean equals(final Object obj);
+  public abstract boolean equals(Object obj);
 
   @Override
   public abstract int hashCode();

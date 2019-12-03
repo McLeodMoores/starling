@@ -25,13 +25,13 @@ import com.opengamma.util.db.DbConnector;
 
 /**
  * A legal entity master implementation based on Joda-Beans using a database for persistence.
- * <p/>
+ * <p>
  * This is a full implementation of the legal entity master using an SQL database.
  * Data is stored based on the Joda-Beans API.
  * Full details of the API are in {@link com.opengamma.master.legalentity.LegalEntityMaster}.
- * <p/>
+ * <p>
  * Applications can configure this master using the callback class passed in.
- * <p/>
+ * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
 public class DbLegalEntityBeanMaster
@@ -81,7 +81,7 @@ public class DbLegalEntityBeanMaster
    * @param dbConnector the database connector, not null
    * @param callback    the callback used to configure the master, not null
    */
-  public DbLegalEntityBeanMaster(final DbConnector dbConnector, DbLegalEntityBeanMasterCallback callback) {
+  public DbLegalEntityBeanMaster(final DbConnector dbConnector, final DbLegalEntityBeanMasterCallback callback) {
     super(new DbBeanMaster<>(dbConnector, IDENTIFIER_SCHEME_DEFAULT, callback));
     _callback = callback;
   }
@@ -99,8 +99,8 @@ public class DbLegalEntityBeanMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public LegalEntityMetaDataResult metaData(LegalEntityMetaDataRequest request) {
-    LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
+  public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
+    final LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
     if (request.isSchemaVersion()) {
       result.setSchemaVersion(getDelegate().getSchemaVersionString());
     }
@@ -108,8 +108,8 @@ public class DbLegalEntityBeanMaster
   }
 
   @Override
-  public LegalEntitySearchResult search(LegalEntitySearchRequest request) {
-    BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
+  public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
+    final BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
     delegatedRequest.setPagingRequest(request.getPagingRequest());
     delegatedRequest.setVersionCorrection(request.getVersionCorrection());
     delegatedRequest.setObjectIds(request.getObjectIds());
@@ -124,7 +124,7 @@ public class DbLegalEntityBeanMaster
   }
 
   @Override
-  public LegalEntityHistoryResult history(LegalEntityHistoryRequest request) {
+  public LegalEntityHistoryResult history(final LegalEntityHistoryRequest request) {
     return getDelegate().history(request, new LegalEntityHistoryResult());
   }
 

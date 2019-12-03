@@ -13,8 +13,9 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 
 /**
- * 
+ *
  */
+@SuppressWarnings("deprecation")
 public class Convention {
   private final int _settlementDays;
   private final DayCount _dayCount;
@@ -22,7 +23,8 @@ public class Convention {
   private final Calendar _workingDayCalendar;
   private final String _name;
 
-  public Convention(final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDayConvention, final Calendar workingDayCalendar, final String name) {
+  public Convention(final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final Calendar workingDayCalendar, final String name) {
     Validate.isTrue(settlementDays >= 0);
     Validate.notNull(dayCount);
     Validate.notNull(businessDayConvention);

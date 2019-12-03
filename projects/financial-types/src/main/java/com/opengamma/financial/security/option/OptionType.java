@@ -18,8 +18,15 @@ public enum OptionType {
    * The option is a call.
    */
   CALL;
-  
-  public static OptionType parse(String text) {
+
+  /**
+   * Parses the type.
+   * 
+   * @param text
+   *          the string to parse
+   * @return the parsed text or null
+   */
+  public static OptionType parse(final String text) {
     if (text == null) {
       return null;
     }

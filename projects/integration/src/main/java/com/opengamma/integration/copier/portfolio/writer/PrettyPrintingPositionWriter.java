@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -17,19 +17,19 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * A dummy portfolio writer, which pretty-prints information instead of persisting
+ * A dummy portfolio writer, which pretty-prints information instead of persisting.
  */
 public class PrettyPrintingPositionWriter implements PositionWriter {
 
   private String[] _currentPath = new String[] {};
-  private boolean _prettyPrint;
-  
-  public PrettyPrintingPositionWriter(boolean prettyPrint) {
+  private final boolean _prettyPrint;
+
+  public PrettyPrintingPositionWriter(final boolean prettyPrint) {
     _prettyPrint = prettyPrint;
   }
-  
-  private ManageableSecurity writeSecurity(ManageableSecurity security) {
-    
+
+  private ManageableSecurity writeSecurity(final ManageableSecurity security) {
+
     if (_prettyPrint && security != null) {
       System.out.println("Security: " + security.toString());
     }
@@ -37,21 +37,21 @@ public class PrettyPrintingPositionWriter implements PositionWriter {
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     // Not supported
   }
-  
+
   @Override
-  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(ManageablePosition position, ManageableSecurity[] securities) {
-    
+  public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(final ManageablePosition position, final ManageableSecurity[] securities) {
+
     ArgumentChecker.notNull(position, "position");
     ArgumentChecker.notNull(securities, "securities");
-    
-    List<ManageableSecurity> writtenSecurities = new ArrayList<ManageableSecurity>();
-    
+
+    final List<ManageableSecurity> writtenSecurities = new ArrayList<>();
+
     // Write securities
-    for (ManageableSecurity security : securities) {
-      ManageableSecurity writtenSecurity = writeSecurity(security);
+    for (final ManageableSecurity security : securities) {
+      final ManageableSecurity writtenSecurity = writeSecurity(security);
       if (writtenSecurity != null) {
         writtenSecurities.add(writtenSecurity);
       }
@@ -60,8 +60,8 @@ public class PrettyPrintingPositionWriter implements PositionWriter {
     if (_prettyPrint) {
       System.out.println("Position: " + position.toString());
     }
-    return ObjectsPair.of(position, 
-        writtenSecurities.toArray(new ManageableSecurity[writtenSecurities.size()]));            
+    return ObjectsPair.of(position,
+        writtenSecurities.toArray(new ManageableSecurity[writtenSecurities.size()]));
   }
 
   @Override
@@ -79,8 +79,8 @@ public class PrettyPrintingPositionWriter implements PositionWriter {
   }
 
   @Override
-  public void setPath(String[] newPath) {
-    
+  public void setPath(final String[] newPath) {
+
     ArgumentChecker.notNull(newPath, "newPath");
     _currentPath = newPath;
     if (_prettyPrint) {
@@ -92,5 +92,5 @@ public class PrettyPrintingPositionWriter implements PositionWriter {
   public String[] getCurrentPath() {
     return _currentPath;
   }
-  
+
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 import org.threeten.bp.Instant;
@@ -23,8 +24,8 @@ import com.opengamma.core.change.ChangeListener;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.ChangeType;
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.financial.convention.ConventionBundle;
+import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
+import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.config.ConfigDocument;
@@ -58,20 +59,20 @@ public class ConfigMasterChangeProviderTest {
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
     final ChangeListener l1 = Mockito.mock(ChangeListener.class);
     final ChangeListener l2 = Mockito.mock(ChangeListener.class);
-    Mockito.verify(cm, Mockito.never()).addChangeListener(Mockito.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Mockito.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.never()).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().addChangeListener(l1);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Mockito.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Mockito.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().addChangeListener(l2);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Mockito.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Mockito.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().removeChangeListener(l1);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Mockito.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.never()).removeChangeListener(Mockito.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.never()).removeChangeListener(Matchers.<ChangeListener> any());
     cp.changeManager().removeChangeListener(l2);
-    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Mockito.<ChangeListener>any());
-    Mockito.verify(cm, Mockito.times(1)).removeChangeListener(Mockito.<ChangeListener>any());
+    Mockito.verify(cm, Mockito.times(1)).addChangeListener(Matchers.<ChangeListener> any());
+    Mockito.verify(cm, Mockito.times(1)).removeChangeListener(Matchers.<ChangeListener> any());
     Mockito.verifyNoMoreInteractions(cm);
   }
 
@@ -84,7 +85,7 @@ public class ConfigMasterChangeProviderTest {
     }
 
     @Override
-    public void entityChanged(ChangeEvent event) {
+    public void entityChanged(final ChangeEvent event) {
       _events.add(event);
     }
 
@@ -93,7 +94,7 @@ public class ConfigMasterChangeProviderTest {
   public void testAddNotification() {
     final ConfigMaster underlying = new InMemoryConfigMaster();
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     underlying.add(new ConfigDocument(ConfigItem.of("Foo", "Test")));
     assertEquals(events.size(), 1);
@@ -102,7 +103,7 @@ public class ConfigMasterChangeProviderTest {
     assertEquals(e.getType(), ChangeType.ADDED);
   }
 
-  private List<ChangeEvent> testChangeNotification(final Class<?> oldType, final Class<?> newType) {
+  private static List<ChangeEvent> testChangeNotification(final Class<?> oldType, final Class<?> newType) {
     final ConfigItem<?> oldItem = ConfigItem.of(Mockito.mock(oldType), "Old", oldType);
     final ConfigItem<?> newItem = ConfigItem.of(Mockito.mock(newType), "New", newType);
     final Instant now = Instant.now();
@@ -111,28 +112,28 @@ public class ConfigMasterChangeProviderTest {
     Mockito.when(underlying.get(ObjectId.of("Test", "Foo"), VersionCorrection.of(now.minusNanos(1), now))).thenReturn(new ConfigDocument(oldItem));
     Mockito.when(underlying.get(ObjectId.of("Test", "Foo"), VersionCorrection.of(now, now))).thenReturn(new ConfigDocument(newItem));
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     underlying.changeManager().entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "Foo"), now, null, now);
     return events;
   }
 
   public void testChangeNotification1() {
-    final List<ChangeEvent> events = testChangeNotification(Convention.class, Convention.class);
+    final List<ChangeEvent> events = testChangeNotification(CurveConstructionConfiguration.class, CurveConstructionConfiguration.class);
     assertEquals(events.size(), 1);
-    ChangeEvent e = events.get(0);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, Convention.class.getName()));
+    final ChangeEvent e = events.get(0);
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, CurveConstructionConfiguration.class.getName()));
     assertEquals(e.getType(), ChangeType.CHANGED);
   }
 
   public void testChangeNotification2() {
-    final List<ChangeEvent> events = testChangeNotification(Convention.class, ConventionBundle.class);
+    final List<ChangeEvent> events = testChangeNotification(CurveConstructionConfiguration.class, InterpolatedCurveDefinition.class);
     assertEquals(events.size(), 2);
     ChangeEvent e = events.get(0);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, Convention.class.getName()));
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, CurveConstructionConfiguration.class.getName()));
     assertEquals(e.getType(), ChangeType.REMOVED);
     e = events.get(1);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, ConventionBundle.class.getName()));
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, InterpolatedCurveDefinition.class.getName()));
     assertEquals(e.getType(), ChangeType.ADDED);
   }
 
@@ -140,7 +141,7 @@ public class ConfigMasterChangeProviderTest {
     final ConfigMaster underlying = new InMemoryConfigMaster();
     final ConfigMasterChangeProvider cp = new ConfigMasterChangeProvider(underlying);
     final ConfigDocument added = underlying.add(new ConfigDocument(ConfigItem.of("Foo", "Test")));
-    final List<ChangeEvent> events = new ArrayList<ChangeEvent>();
+    final List<ChangeEvent> events = new ArrayList<>();
     cp.changeManager().addChangeListener(new GatheringChangeListener(events));
     // Note: we can't remove the object because InMemoryConfigMaster doesn't support versioning
     underlying.changeManager().entityChanged(ChangeType.REMOVED, added.getObjectId(), Instant.now(), null, Instant.now());

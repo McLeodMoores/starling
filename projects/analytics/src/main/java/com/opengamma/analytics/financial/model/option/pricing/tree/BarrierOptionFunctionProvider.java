@@ -11,61 +11,66 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Option function provider for in(out) barrier option
- * In(Out) option comes into existence (becomes worthless) if the asset price hits the barrier
+ * Option function provider for in(out) barrier option. In(Out) option comes into existence (becomes worthless) if the asset price hits the barrier
  */
 public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvider1D {
 
   /**
-   * Use these strings to specify barrier option type.
-   * DownAndIn and UpAndIn MUST be computed via in-out parity if the option is European
+   * Use these strings to specify barrier option type. DownAndIn and UpAndIn MUST be computed via in-out parity if the option is European
    */
-  public static enum BarrierTypes {
+  public enum BarrierTypes {
     /**
-     * Down-and-out option
+     * Down-and-out option.
      */
     DownAndOut,
 
     /**
-     * Up-and-out option
+     * Up-and-out option.
      */
     UpAndOut,
 
     /**
-     * Down-and-in option, not implemented
+     * Down-and-in option.
      */
     DownAndIn,
 
     /**
-     * Up-and-in option, not implemented
+     * Up-and-in option.
      */
     UpAndIn,
 
     /**
-     * Up-and-Out-Down-and-Out
+     * Up-and-Out-Down-and-Out.
      */
     DoubleKnockOut,
 
     /**
-     * Up-and-In-Down-and-In, not implemented
-     * Knock-in type should be priced by another model
+     * Up-and-In-Down-and-In.
      */
     DoubleKnockIn
   }
 
-  private double _barrier;
+  private final double _barrier;
   private CrossBarrierChecker _checker;
 
   /**
-   * Constructor
-   * @param strike The strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps The number of steps
-   * @param isCall True if call option, false if put option
-   * @param barrier The barrier price
-   * @param typeName Type of barrier option
+   * Constructor.
+   *
+   * @param strike
+   *          The strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          The number of steps
+   * @param isCall
+   *          True if call option, false if put option
+   * @param barrier
+   *          The barrier price
+   * @param typeName
+   *          Type of barrier option
    */
-  public BarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double barrier, final BarrierTypes typeName) {
+  public BarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double barrier,
+      final BarrierTypes typeName) {
     super(strike, timeToExpiry, steps, isCall);
     ArgumentChecker.isTrue(barrier > 0., "barrier should be positive");
     ArgumentChecker.isTrue(Doubles.isFinite(barrier), "barrier should be finite");
@@ -85,7 +90,8 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access cross barrier checker
+   * Access cross barrier checker.
+   *
    * @return _checker
    */
   public CrossBarrierChecker getChecker() {
@@ -93,7 +99,8 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Access barrier
+   * Access barrier.
+   *
    * @return _barrier
    */
   public double getBarrier() {
@@ -101,7 +108,8 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * Barrier type
+   * Barrier type.
+   *
    * @return DownAndOut or UpAndOut
    */
   public BarrierTypes getBarrierType() {
@@ -109,35 +117,37 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * The protected class checks barrier crossing
+   * The protected class checks barrier crossing.
    */
   protected abstract class CrossBarrierChecker {
     /**
-     * @param priceTmp The asset price
+     * @param priceTmp
+     *          The asset price
      * @return True if asset price crosses the barrier
      */
-    public abstract boolean checkOut(final double priceTmp);
+    public abstract boolean checkOut(double priceTmp);
 
     /**
-     * When strike is behind the barrier, payoff will never be in-the-money, depending on Call or Put
+     * When strike is behind the barrier, payoff will never be in-the-money, depending on Call or Put.
+     *
      * @return True if option price is trivially 0
      */
     public abstract boolean checkStrikeBehindBarrier();
   }
 
   /**
-   * The inherited class checks lower barrier crossing for down-and-out option
+   * The inherited class checks lower barrier crossing for down-and-out option.
    */
   @SuppressWarnings("synthetic-access")
   protected class CrossLowerBarrier extends CrossBarrierChecker {
     @Override
     public boolean checkOut(final double priceTmp) {
-      return (priceTmp <= _barrier);
+      return priceTmp <= _barrier;
     }
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? false : (_barrier >= getStrike());
+      return getSign() == 1. ? false : _barrier >= getStrike();
     }
 
     @Override
@@ -146,7 +156,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (!(obj instanceof CrossLowerBarrier)) {
         return false;
       }
@@ -155,7 +165,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
   }
 
   /**
-   * The inherited class checks upper barrier crossing for up-and-out option
+   * The inherited class checks upper barrier crossing for up-and-out option.
    */
   @SuppressWarnings("synthetic-access")
   protected class CrossUpperBarrier extends CrossBarrierChecker {
@@ -166,7 +176,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? (_barrier <= getStrike()) : false;
+      return getSign() == 1. ? _barrier <= getStrike() : false;
     }
 
     @Override
@@ -175,7 +185,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (!(obj instanceof CrossUpperBarrier)) {
         return false;
       }
@@ -189,13 +199,13 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_barrier);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_checker == null) ? 0 : _checker.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_checker == null ? 0 : _checker.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
 
     if (!super.equals(obj)) {
       return false;
@@ -203,7 +213,7 @@ public abstract class BarrierOptionFunctionProvider extends OptionFunctionProvid
     if (!(obj instanceof BarrierOptionFunctionProvider)) {
       return false;
     }
-    BarrierOptionFunctionProvider other = (BarrierOptionFunctionProvider) obj;
+    final BarrierOptionFunctionProvider other = (BarrierOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_barrier) != Double.doubleToLongBits(other._barrier)) {
       return false;
     }

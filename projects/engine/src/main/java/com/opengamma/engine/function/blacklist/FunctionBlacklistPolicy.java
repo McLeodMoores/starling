@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -10,10 +10,11 @@ import java.util.Set;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * Defines a blacklisting policy. A policy defines the type of rules that should be constructed and their recommended time-to-live. A policy is typically returned from a
- * {@link FunctionBlacklistPolicySource} and used to update a blacklist using a {@link FunctionBlacklistMaintainer}. A policy entry defines the type of rule that should be constructed and the
- * activation period of that rule (time to live). A typical policy will have the most specific entries having a long activation period and the least specific having the shortest. For example, after a
- * failure of function X applied to Y then all invocations of X might be blacklisted for the next 10 minutes but X applied specifically to Y will remain blacklisted for the next hour.
+ * Defines a blacklisting policy. A policy defines the type of rules that should be constructed and their recommended time-to-live. A policy is typically
+ * returned from a {@link FunctionBlacklistPolicySource} and used to update a blacklist using a {@link FunctionBlacklistMaintainer}. A policy entry defines the
+ * type of rule that should be constructed and the activation period of that rule (time to live). A typical policy will have the most specific entries having a
+ * long activation period and the least specific having the shortest. For example, after a failure of function X applied to Y then all invocations of X might be
+ * blacklisted for the next 10 minutes but X applied specifically to Y will remain blacklisted for the next hour.
  */
 public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
@@ -22,7 +23,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
   /**
    * An entry within a policy describing how to construct and use a blacklisting rule after a failure has been detected.
    */
-  public static final class Entry {
+  final class Entry {
 
     /**
      * An entry that produces rules which will match everything. This can be used, for example, to suppress all behaviors for a brief period.
@@ -30,32 +31,32 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
     public static final Entry WILDCARD = new Entry();
 
     /**
-     * An entry that produces rules which will match only the function identifier. This can be used, for example, to suppress any execution of a generally flawed function implementation.
+     * An entry that produces rules which will match only the function identifier. This can be used, for example, to suppress any execution of a generally
+     * flawed function implementation.
      */
     public static final Entry FUNCTION = WILDCARD.matchFunctionIdentifier();
 
     /**
-     * An entry that produces rules which will match a function identifier when used in a given form. This can be used, for example, to suppress any execution of a function that is flawed under
-     * certain calculation configurations that include erroneous parameters.
+     * An entry that produces rules which will match a function identifier when used in a given form. This can be used, for example, to suppress any execution
+     * of a function that is flawed under certain calculation configurations that include erroneous parameters.
      */
     public static final Entry PARAMETERIZED_FUNCTION = FUNCTION.matchFunctionParameters();
 
     /**
-     * An entry that produces rules which match a node in a dependency graph based on the computation target and parameterized function. This can be used, for example, to suppress any execution of a
-     * function that is only flawed when operating on certain targets.
+     * An entry that produces rules which match a node in a dependency graph based on the computation target and parameterized function. This can be used, for
+     * example, to suppress any execution of a function that is only flawed when operating on certain targets.
      */
     public static final Entry PARTIAL_NODE = PARAMETERIZED_FUNCTION.matchTarget();
 
     /**
-     * An entry that produces while which match a node in a dependency graph based on the computation target, parameterized function and inputs. This can be used, for example, in preference of
-     * {@link #EXACT_NODE} to produce rules which will match during graph construction (as well as execution).
+     * An entry that produces rules which match a node in a dependency graph based on the computation target, parameterized function and inputs.
      */
     public static final Entry BUILD_NODE = PARTIAL_NODE.matchInputs();
 
     /**
-     * An entry that produces rules which match a node in a dependency graph based on the exact shape of the graph. This can be used, for example, to suppress any execution of a function that is only
-     * flawed when operating on certain targets and asked to produce certain outputs from certain inputs. This is best used for execution blacklists - graph construction may not have the full set of
-     * output specifications at the point at which the blacklist is checked.
+     * An entry that produces rules which match a node in a dependency graph based on the exact shape of the graph. This can be used, for example, to suppress
+     * any execution of a function that is only flawed when operating on certain targets and asked to produce certain outputs from certain inputs. This is best
+     * used for execution blacklists - graph construction may not have the full set of output specifications at the point at which the blacklist is checked.
      */
     public static final Entry EXECUTION_NODE = BUILD_NODE.matchInputs().matchOutputs();
 
@@ -92,7 +93,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns a policy entry that will produce rules which include the function identifier.
-     * 
+     *
      * @return the new entry
      */
     public Entry matchFunctionIdentifier() {
@@ -101,7 +102,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns a policy entry that will produce rules which do not include the function identifier.
-     * 
+     *
      * @return the new entry
      */
     public Entry ignoreFunctionIdentifier() {
@@ -110,7 +111,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this entry should produce a rule which will match on function identifiers.
-     * 
+     *
      * @return true if function identifiers should be matched
      */
     public boolean isMatchFunctionIdentifier() {
@@ -119,7 +120,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which include the function parameters.
-     * 
+     *
      * @return the new entry
      */
     public Entry matchFunctionParameters() {
@@ -128,7 +129,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which do not include the function parameters.
-     * 
+     *
      * @return the new entry
      */
     public Entry ignoreFunctionParameters() {
@@ -137,7 +138,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this entry should produce a rule which will match on function parameters.
-     * 
+     *
      * @return true if function parameters should be matched
      */
     public boolean isMatchFunctionParameters() {
@@ -146,7 +147,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which include the computation target.
-     * 
+     *
      * @return the new entry
      */
     public Entry matchTarget() {
@@ -155,7 +156,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which do not include the computation target.
-     * 
+     *
      * @return the new entry
      */
     public Entry ignoreTarget() {
@@ -164,7 +165,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this entry should produce a rule which will match on function parameters.
-     * 
+     *
      * @return true if function parameters should be matched
      */
     public boolean isMatchTarget() {
@@ -173,7 +174,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which include the function inputs.
-     * 
+     *
      * @return the new entry
      */
     public Entry matchInputs() {
@@ -182,7 +183,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which do not include the function inputs.
-     * 
+     *
      * @return the new entry
      */
     public Entry ignoreInputs() {
@@ -191,7 +192,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this entry should produce a rule which will match on the function inputs.
-     * 
+     *
      * @return true if function inputs should be matched
      */
     public boolean isMatchInputs() {
@@ -200,7 +201,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which include the function outputs.
-     * 
+     *
      * @return the new entry
      */
     public Entry matchOutputs() {
@@ -209,7 +210,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which do not include the function outputs.
-     * 
+     *
      * @return the new entry
      */
     public Entry ignoreOutputs() {
@@ -218,7 +219,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this entry should produce a rule which will match on the function outputs.
-     * 
+     *
      * @return true if function outputs should be matched
      */
     public boolean isMatchOutputs() {
@@ -227,8 +228,9 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns an entry that will produce rules which have a specific activation period.
-     * 
-     * @param timeToLive the activation period, null to use the policy default
+     *
+     * @param timeToLive
+     *          the activation period, null to use the policy default
      * @return the new entry
      */
     public Entry activationPeriod(final Integer timeToLive) {
@@ -237,7 +239,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Tests if this is the policy default.
-     * 
+     *
      * @return true if this is the policy default activation period
      */
     public boolean isDefaultActivationPeriod() {
@@ -246,7 +248,7 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns the activation period (time to live) for rules generated by this entry.
-     * 
+     *
      * @return the time to live, in seconds, or null to use the policy default
      */
     public Integer getActivationPeriod() {
@@ -255,16 +257,16 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
     /**
      * Returns the activation period.
-     * 
-     * @param policy the policy to use for the default activation period
+     *
+     * @param policy
+     *          the policy to use for the default activation period
      * @return the activation period, in seconds, when this entry is used as part of the given policy.
      */
     public int getActivationPeriod(final FunctionBlacklistPolicy policy) {
       if (isDefaultActivationPeriod()) {
         return policy.getDefaultEntryActivationPeriod();
-      } else {
-        return getActivationPeriod();
       }
+      return getActivationPeriod();
     }
 
     @Override
@@ -281,9 +283,8 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
       }
       if (_ttl != null) {
         return _ttl.equals(e._ttl);
-      } else {
-        return e._ttl == null;
       }
+      return e._ttl == null;
     }
 
     @Override
@@ -299,46 +300,50 @@ public interface FunctionBlacklistPolicy extends UniqueIdentifiable {
 
   /**
    * Returns the symbolic name of the policy.
-   * 
+   *
    * @return the policy name, not null
    */
   String getName();
 
   /**
    * Returns the default activation period for entries which do not specify one.
-   * 
+   *
    * @return the default activation period, in seconds
    */
   int getDefaultEntryActivationPeriod();
 
   /**
    * Returns the entries in the policy.
-   * 
+   *
    * @return the entries defined in the policy
    */
   Set<Entry> getEntries();
 
   /**
    * Tests if the policy contains no entries.
-   * 
+   *
    * @return true if the policy has no entries, false otherwise
    */
   boolean isEmpty();
 
   /**
-   * Tests equality of two policies. Two policies are equal if they contain the same entries, have the same name, and same activation period. An implementation is available in
-   * AbstractFunctionBlacklistPolicy.
-   * 
-   * @param o other object to test
+   * Tests equality of two policies. Two policies are equal if they contain the same entries, have the same name, and same activation period. An implementation
+   * is available in AbstractFunctionBlacklistPolicy.
+   *
+   * @param o
+   *          other object to test
    * @return true if the policies are equal, false otherwise
    */
+  @Override
   boolean equals(Object o);
 
   /**
-   * Produces a hash code of the policy. The hashcode must be based on the name, activation period and entries. An implementation is available in AbstractFunctionBlacklistPolicy.
-   * 
+   * Produces a hash code of the policy. The hashcode must be based on the name, activation period and entries. An implementation is available in
+   * AbstractFunctionBlacklistPolicy.
+   *
    * @return the hash code
    */
+  @Override
   int hashCode();
 
 }

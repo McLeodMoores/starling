@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.date;
 
@@ -13,12 +13,14 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
-/**
- *
- */
-public class EndOfMonthDateAdjustmentCalculator implements TenorOffsetDateAdjustmentCalculator {
+@SuppressWarnings("deprecation")
+public final class EndOfMonthDateAdjustmentCalculator implements TenorOffsetDateAdjustmentCalculator {
   private static final TenorOffsetDateAdjustmentCalculator INSTANCE = new EndOfMonthDateAdjustmentCalculator();
 
+  /**
+   * Gets an instance.
+   * @return  the instance
+   */
   public static TenorOffsetDateAdjustmentCalculator getInstance() {
     return INSTANCE;
   }
@@ -33,7 +35,7 @@ public class EndOfMonthDateAdjustmentCalculator implements TenorOffsetDateAdjust
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(convention, "convention");
     ArgumentChecker.notNull(workingDayCalendar, "workingDayCalendar");
-    final Calendar calendar = new CalendarAdapter(workingDayCalendar);
+    final Calendar calendar = CalendarAdapter.of(workingDayCalendar);
     final LocalDate endDate = TenorUtils.adjustDateByTenor(date, tenor, calendar, 0);
     if (tenor.isBusinessDayTenor()) { // This handles tenor of the type ON, TN
       return endDate;

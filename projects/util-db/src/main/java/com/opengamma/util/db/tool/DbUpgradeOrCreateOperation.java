@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.tool;
@@ -21,7 +21,7 @@ import com.opengamma.util.db.script.DbScript;
  */
 public class DbUpgradeOrCreateOperation extends AbstractDbScriptOperation<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbUpgradeOrCreateOperation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbUpgradeOrCreateOperation.class);
 
   private boolean _upgradeRequired;
 
@@ -32,67 +32,67 @@ public class DbUpgradeOrCreateOperation extends AbstractDbScriptOperation<DbTool
    * @param write  true to modify the database, false to output the commands that would be run
    * @param outputFile  the file to which the SQL should be written, null not to write to a file
    */
-  public DbUpgradeOrCreateOperation(DbToolContext dbToolContext, boolean write, File outputFile) {
+  public DbUpgradeOrCreateOperation(final DbToolContext dbToolContext, final boolean write, final File outputFile) {
     super(dbToolContext, write, outputFile);
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Gets whether an upgrade was found to be required on the last execution.
-   * 
+   *
    * @return true if an upgrade was required, false otherwise
    */
   public boolean isUpgradeRequired() {
     return _upgradeRequired;
   }
 
-  private void setUpgradeRequired(boolean upgradeRequired) {
+  private void setUpgradeRequired(final boolean upgradeRequired) {
     _upgradeRequired = upgradeRequired;
   }
 
   //-------------------------------------------------------------------------
   @Override
   public void execute() {
-    SqlScriptWriter writer = createSqlScriptWriter();
+    final SqlScriptWriter writer = createSqlScriptWriter();
     boolean upgradeRequired = false;
     try {
-      Set<String> schemaNames = getDbToolContext().getSchemaNames() != null ? getDbToolContext().getSchemaNames() : getAllSchemaNames();
-      for (String schema : schemaNames) {
-        Integer currentVersion = getCurrentGroupVersion(schema);
+      final Set<String> schemaNames = getDbToolContext().getSchemaNames() != null ? getDbToolContext().getSchemaNames() : getAllSchemaNames();
+      for (final String schema : schemaNames) {
+        final Integer currentVersion = getCurrentGroupVersion(schema);
         if (currentVersion == null) {
           //craete
-          s_logger.info("Processing schema " + schema);
-          DbScript script = getCreationScript(schema);
-          s_logger.debug("Using script: " + script);
+          LOGGER.info("Processing schema " + schema);
+          final DbScript script = getCreationScript(schema);
+          LOGGER.debug("Using script: " + script);
           writer.write(schema, script);
         } else {
           //update
-          List<DbScript> scripts = getMigrationScripts(schema);
+          final List<DbScript> scripts = getMigrationScripts(schema);
           if (scripts == null) {
-            s_logger.info(schema + " does not support migration");
+            LOGGER.info(schema + " does not support migration");
             continue;
           }
           if (scripts.isEmpty()) {
-            s_logger.info(schema + " already at latest version");
+            LOGGER.info(schema + " already at latest version");
             continue;
           }
           upgradeRequired = true;
-          s_logger.info(schema + " is behind by " + scripts.size() + " versions");
+          LOGGER.info(schema + " is behind by " + scripts.size() + " versions");
           for (int i = 0; i < scripts.size(); i++) {
-            DbScript script = scripts.get(i);
-            s_logger.debug("Using schema migration file: " + script);
+            final DbScript script = scripts.get(i);
+            LOGGER.debug("Using schema migration file: " + script);
             writer.write(schema + " - " + (i + 1) + " of " + scripts.size(), script);
           }
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Error processing creation/migration scripts", e);
     } finally {
       setUpgradeRequired(upgradeRequired);
       try {
         writer.close();
-      } catch (IOException e) {
-        s_logger.error("Error closing SQL script writer", e);
+      } catch (final IOException e) {
+        LOGGER.error("Error closing SQL script writer", e);
       }
     }
   }

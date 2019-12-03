@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.depgraph.rest;
@@ -42,9 +42,11 @@ public class DependencyGraphTraceBuilderProperties {
 
   /**
    * Copy constructor
-   * @param other instance to copy
+   *
+   * @param other
+   *          instance to copy
    */
-  private DependencyGraphTraceBuilderProperties(DependencyGraphTraceBuilderProperties other) {
+  private DependencyGraphTraceBuilderProperties(final DependencyGraphTraceBuilderProperties other) {
     _calculationConfigurationName = other.getCalculationConfigurationName();
     _valuationTime = other.getValuationTime();
     _resolutionTime = other.getResolutionTime();
@@ -96,11 +98,13 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param calculationConfigurationName calculation configuration name to set
+   * @param calculationConfigurationName
+   *          calculation configuration name to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties calculationConfigurationName(final String calculationConfigurationName) {
     return new DependencyGraphTraceBuilderProperties(this) {
+      @Override
       public String getCalculationConfigurationName() {
         return calculationConfigurationName;
       }
@@ -108,7 +112,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param resolutionTime resolution time to set
+   * @param resolutionTime
+   *          resolution time to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties resolutionTime(final VersionCorrection resolutionTime) {
@@ -121,7 +126,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param valuationTime valuation time to set
+   * @param valuationTime
+   *          valuation time to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties valuationTime(final Instant valuationTime) {
@@ -134,29 +140,33 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param defaultProperties default properties to set
+   * @param defaultProperties
+   *          default properties to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties defaultProperties(final ValueProperties defaultProperties) {
     return new DependencyGraphTraceBuilderProperties(this) {
+      @Override
       public ValueProperties getDefaultProperties() {
         return defaultProperties;
-      };
+      }
     };
   }
 
   /**
-   * @param requirement requirement to add
+   * @param requirement
+   *          requirement to add
    * @return a newly configured instance
    */
-  public DependencyGraphTraceBuilderProperties addRequirement(ValueRequirement requirement) {
+  public DependencyGraphTraceBuilderProperties addRequirement(final ValueRequirement requirement) {
     final Collection<ValueRequirement> currentRequirements = new ArrayList<>(getRequirements());
     currentRequirements.add(requirement);
     return requirements(currentRequirements);
   }
 
   /**
-   * @param requirements requirements to set
+   * @param requirements
+   *          requirements to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties requirements(final Collection<ValueRequirement> requirements) {
@@ -169,7 +179,8 @@ public class DependencyGraphTraceBuilderProperties {
   }
 
   /**
-   * @param marketData market data to set
+   * @param marketData
+   *          market data to set
    * @return a newly configured instance
    */
   public DependencyGraphTraceBuilderProperties marketData(final List<MarketDataSpecification> marketData) {
@@ -180,22 +191,26 @@ public class DependencyGraphTraceBuilderProperties {
       }
     };
   }
-  
+
   /**
-   * Add a market data spec
-   * @param marketData a market data spec
+   * Add a market data spec.
+   *
+   * @param marketData
+   *          a market data spec
    * @return a newly configured instance
    */
-  public DependencyGraphTraceBuilderProperties addMarketData(MarketDataSpecification marketData) {
-    List<MarketDataSpecification> newMarketData = new ArrayList<>(getMarketData());
+  public DependencyGraphTraceBuilderProperties addMarketData(final MarketDataSpecification marketData) {
+    final List<MarketDataSpecification> newMarketData = new ArrayList<>(getMarketData());
     newMarketData.add(marketData);
     return marketData(newMarketData);
   }
 
   @Override
   public String toString() {
-    return "DependencyGraphTraceBuilderProperties [getCalculationConfigurationName()=" + getCalculationConfigurationName() + ", getValuationTime()=" + getValuationTime() + ", getResolutionTime()=" +
-        getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()=" + getMarketData() + "]";
+    return "DependencyGraphTraceBuilderProperties [getCalculationConfigurationName()=" + getCalculationConfigurationName() + ", getValuationTime()="
+        + getValuationTime() + ", getResolutionTime()="
+        + getResolutionTime() + ", getDefaultProperties()=" + getDefaultProperties() + ", getRequirements()=" + getRequirements() + ", getMarketData()="
+        + getMarketData() + "]";
   }
 
 }

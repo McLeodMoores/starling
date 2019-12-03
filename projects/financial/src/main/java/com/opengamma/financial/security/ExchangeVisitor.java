@@ -7,7 +7,6 @@
 package com.opengamma.financial.security;
 
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.security.Security;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.AgricultureFutureSecurity;
 import com.opengamma.financial.security.future.BondFutureSecurity;
@@ -26,7 +25,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- * Get the exchange for a security, null if not applicable
+ * Get the exchange for a security, null if not applicable.
  */
 public class ExchangeVisitor extends FinancialSecurityVisitorSameValueAdapter<ExternalId> {
 

@@ -46,8 +46,8 @@ import com.opengamma.id.UniqueIdentifiable;
  *
  * </pre>
  *
- * When references are nested to give object context, the outermost identifier is listed first followed by inner identifiers. The type is the type that should be assigned to the resultant inner most
- * reference.
+ * When references are nested to give object context, the outermost identifier is listed first followed by inner identifiers.
+ * The type is the type that should be assigned to the resultant inner most reference.
  */
 @GenericFudgeBuilderFor(ComputationTargetReference.class)
 public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<ComputationTargetReference> {
@@ -58,7 +58,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
   private static final String IDENTIFIER_FIELD_NAME = "computationTargetIdentifier";
   private static final String TYPE_FIELD_NAME = "computationTargetType";
 
-  private static final ComputationTargetReferenceVisitor<Object> s_encodeIdentifier = new ComputationTargetReferenceVisitor<Object>() {
+  private static final ComputationTargetReferenceVisitor<Object> ENCODE_IDENTIFIER = new ComputationTargetReferenceVisitor<Object>() {
 
     @Override
     public Object visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -76,7 +76,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
     if (object.getParent() != null) {
       encodeIdentifiers(serializer, msg, object.getParent());
     }
-    serializer.addToMessage(msg, IDENTIFIER_FIELD_NAME, null, object.accept(s_encodeIdentifier));
+    serializer.addToMessage(msg, IDENTIFIER_FIELD_NAME, null, object.accept(ENCODE_IDENTIFIER));
   }
 
   public static void buildMessageImpl(final FudgeSerializer serializer, final MutableFudgeMsg msg, final ComputationTargetReference object) {
@@ -91,7 +91,8 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
     return msg;
   }
 
-  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedType = new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
+  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedType =
+      new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
 
     @Override
     public List<ComputationTargetType> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void reserved) {
@@ -123,13 +124,12 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
       final FudgeField typeFieldName = message.getByName(TYPE_FIELD_NAME);
       if (identifierFieldName == null) {
       return ComputationTargetSpecification.NULL;
-      } else {
-        final Object identifierFieldValue = identifierFieldName.getValue();
-        if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
-          return ComputationTargetSpecification.NULL;
-        }
-        return new ComputationTargetRequirement(type, ExternalIdBundle.EMPTY);
       }
+      final Object identifierFieldValue = identifierFieldName.getValue();
+      if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
+        return ComputationTargetSpecification.NULL;
+      }
+      return new ComputationTargetRequirement(type, ExternalIdBundle.EMPTY);
     } else if (types.isEmpty()) {
       FudgeField field = identifierFieldName;
       if (field == null) {
@@ -137,9 +137,8 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
       }
       if (field.getValue() instanceof FudgeMsg) {
         return new ComputationTargetRequirement(type, deserializer.fieldValueToObject(ExternalIdBundle.class, field));
-      } else {
-        return new ComputationTargetSpecification(type, message.getFieldValue(UniqueId.class, field));
       }
+      return new ComputationTargetSpecification(type, message.getFieldValue(UniqueId.class, field));
     } else {
       ComputationTargetReference result = null;
       final Iterator<ComputationTargetType> itrType = types.iterator();

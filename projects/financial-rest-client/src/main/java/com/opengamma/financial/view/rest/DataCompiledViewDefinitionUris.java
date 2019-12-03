@@ -27,8 +27,8 @@ public class DataCompiledViewDefinitionUris {
   public static final String PATH_COMPILED_CALCULATION_CONFIGURATIONS_MAP = "compiledCalculationConfigurationsMap";
   public static final String PATH_GRAPHS = "graphs";
   //CSON: just constants
- 
-  public static URI uriCompiledCalculationConfiguration(URI baseUri, String calcConfigName) {
+
+  public static URI uriCompiledCalculationConfiguration(final URI baseUri, final String calcConfigName) {
     return UriBuilder.fromUri(baseUri).segment(calcConfigName).build();
   }
 

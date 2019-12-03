@@ -17,13 +17,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class SecurityLoaderSpringContextTest extends AbstractSpringContextValidationTestNG {
 
-  @Test(enabled=false)
+  @Test(enabled = false)
   public void testSecurityLoaderBean(final String opengammaPlatformRunmode) {
     loadClassPathResource(BloombergSecurityFileLoader.CONTEXT_CONFIGURATION_PATH);
     assertContextLoaded();
     assertBeanExists(BloombergSecurityFileLoader.class, "securityLoader");
   }
 
+  @Override
   @AfterMethod
   public void runAfter() {
     getSpringContext().close();

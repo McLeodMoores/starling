@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -37,9 +37,9 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
       final DepGraphTestHelper helper = helper();
       final MockFunction fn = helper.addFunctionProducing2();
       final MockFunction fnBeta = helper.addFunctionProducing2Beta();
-      DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
+      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
         @Override
-        public int getPriority(CompiledFunctionDefinition function) {
+        public int getPriority(final CompiledFunctionDefinition function) {
           if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
             return -1;
           }
@@ -63,9 +63,9 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
       final DepGraphTestHelper helper = helper();
       helper.addFunctionProducing2();
       final MockFunction fnBeta = helper.addFunctionProducing2Beta();
-      DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
+      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
         @Override
-        public int getPriority(CompiledFunctionDefinition function) {
+        public int getPriority(final CompiledFunctionDefinition function) {
           if (function.getFunctionDefinition().getUniqueId().equals(fnBeta.getUniqueId())) {
             return 1;
           }
@@ -137,23 +137,24 @@ public class DepGraphConstraintsTest extends AbstractDependencyGraphBuilderTest 
       final MockFunction fnConv = new MockFunction("conv", helper.getTarget()) {
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req1any = helper.getRequirement1Any();
           return Collections.singleton(new ValueSpecification(req1any.getValueName(), target.toSpecification(), req1any.getConstraints().copy()
               .with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           return Collections.singleton(new ValueRequirement(helper.getRequirement2Any().getValueName(), target.toSpecification(), ValueProperties.with("TEST",
               desiredValue.getConstraints().getValues("TEST")).get()));
         }
 
       };
       helper.getFunctionRepository().addFunction(fnConv);
-      DependencyGraphBuilder builder = helper.createBuilder(null);
+      final DependencyGraphBuilder builder = helper.createBuilder(null);
       builder.addTarget(helper.getRequirement1Bar());
-      DependencyGraph graph = builder.getDependencyGraph();
+      final DependencyGraph graph = builder.getDependencyGraph();
       assertNotNull(graph);
       assertGraphContains(graph, fn2Bar, fnConv);
     } finally {

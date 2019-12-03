@@ -38,22 +38,87 @@ public class MetalFutureSecurity extends CommodityFutureSecurity {
   @PropertyDefinition
   private ExternalId _underlyingId;
 
-  MetalFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  MetalFutureSecurity() {
     super();
   }
 
-  public MetalFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @deprecated Use the constructor that takes the unit number and name and the underlying id
+   */
+  @Deprecated
+  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
   }
-  
-  public MetalFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount, String category, ExternalId underlyingId) {
+
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @param underlyingId
+   *          the identifier of the underlying
+   * @deprecated Use the constructor that takes the unit number and name
+   */
+  @Deprecated
+  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final ExternalId underlyingId) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setUnderlyingId(underlyingId);
   }
 
-  //-------------------------------------------------------------------------
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param category
+   *          the future category, not null
+   * @param unitNumber
+   *          the number of units of the commodity to be delivered (or cash equivalent received)
+   * @param unitName
+   *          the name of the underlying commodity
+   * @param underlyingId
+   *          the identifier of the underlying
+   */
+  public MetalFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final String category, final Double unitNumber, final String unitName, final ExternalId underlyingId) {
+    super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category, unitNumber, unitName);
+    setUnderlyingId(underlyingId);
+  }
+
+  // -------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitMetalFutureSecurity(this);
   }
 

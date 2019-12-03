@@ -98,12 +98,40 @@ public class CapFloorSecurity extends FinancialSecurity {
   @PropertyDefinition
   private boolean _ibor;
 
-  CapFloorSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  CapFloorSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CapFloorSecurity(ZonedDateTime startDate, ZonedDateTime maturityDate, double notional, ExternalId underlyingIdentifier, double strike,
-      Frequency frequency, Currency currency, DayCount dayCount, boolean payer, boolean cap, boolean ibor) {
+  /**
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param notional
+   *          the notional
+   * @param underlyingIdentifier
+   *          the identifier of the underlying rate, not null
+   * @param strike
+   *          the strike
+   * @param frequency
+   *          the fixing frequency, not null
+   * @param currency
+   *          the currency, not null
+   * @param dayCount
+   *          the day count, not null
+   * @param payer
+   *          true if the fixed rate is payed
+   * @param cap
+   *          true if the rate is capped
+   * @param ibor
+   *          true if the underlying is an ibor-type rate
+   */
+  public CapFloorSecurity(final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double notional, final ExternalId underlyingIdentifier,
+      final double strike, final Frequency frequency, final Currency currency, final DayCount dayCount, final boolean payer, final boolean cap,
+      final boolean ibor) {
     super(SECURITY_TYPE);
     setStartDate(startDate);
     setMaturityDate(maturityDate);
@@ -118,9 +146,9 @@ public class CapFloorSecurity extends FinancialSecurity {
     setIbor(ibor);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCapFloorSecurity(this);
   }
 

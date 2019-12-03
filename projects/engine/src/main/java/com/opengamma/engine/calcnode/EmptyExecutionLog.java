@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -65,7 +65,7 @@ public final class EmptyExecutionLog implements ExecutionLog {
   public boolean isEmpty() {
     return true;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public int hashCode() {
@@ -73,7 +73,7 @@ public final class EmptyExecutionLog implements ExecutionLog {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return obj instanceof EmptyExecutionLog;
   }
 
@@ -81,5 +81,5 @@ public final class EmptyExecutionLog implements ExecutionLog {
   public String toString() {
     return "ExecutionLog[]";
   }
-  
+
 }

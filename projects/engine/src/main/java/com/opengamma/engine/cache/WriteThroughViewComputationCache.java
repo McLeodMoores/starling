@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -22,35 +23,36 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to speed up writes rapidly followed by a read.
+ * A wrapper around an existing {@link ViewComputationCache} implementation that will attempt to buffer data in memory to speed up writes rapidly followed by a
+ * read.
  */
 public class WriteThroughViewComputationCache implements ViewComputationCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WriteThroughViewComputationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WriteThroughViewComputationCache.class);
 
   private static final Object NULL = new Object();
 
   private static final Object PENDING = new Object();
 
-  private static final ConcurrentMap<ViewComputationCache, WriteThroughViewComputationCache> s_instances = new MapMaker().weakKeys().weakValues().makeMap();
+  private static final ConcurrentMap<ViewComputationCache, WriteThroughViewComputationCache> INSTANCES = new MapMaker().weakKeys().weakValues().makeMap();
 
   /* package */static final class Pending {
 
     private final ValueSpecification _specification;
     private Object _value;
 
-    public Pending(final ValueSpecification specification) {
+    Pending(final ValueSpecification specification) {
       _specification = specification;
     }
 
     public synchronized Object waitFor() {
       try {
-        s_logger.debug("Waiting for {}", _specification);
+        LOGGER.debug("Waiting for {}", _specification);
         while (_value == null) {
           wait();
         }
         return _value;
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
@@ -59,13 +61,12 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       final Object value = waitFor();
       if (value == NULL) {
         return Pairs.of(_specification, null);
-      } else {
-        return Pairs.of(_specification, value);
       }
+      return Pairs.of(_specification, value);
     }
 
     public synchronized void post(final Object value) {
-      s_logger.debug("Posting result for {}", _specification);
+      LOGGER.debug("Posting result for {}", _specification);
       _value = value;
       notifyAll();
     }
@@ -74,7 +75,8 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   private final ViewComputationCache _underlying;
 
-  private final ConcurrentMap<ValueSpecification, Object> _readCache = new MapMaker().softValues().makeMap();
+  private final ConcurrentMap<ValueSpecification, Object> _readCache = CacheBuilder.newBuilder().softValues().<ValueSpecification, Object> build()
+      .asMap();
 
   private final ConcurrentMap<ValueSpecification, Pending> _pending = new MapMaker().weakValues().makeMap();
 
@@ -84,28 +86,27 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
   }
 
   public static WriteThroughViewComputationCache of(final ViewComputationCache underlying) {
-    WriteThroughViewComputationCache cached = s_instances.get(underlying);
+    WriteThroughViewComputationCache cached = INSTANCES.get(underlying);
     if (cached != null) {
       return cached;
     }
     cached = new WriteThroughViewComputationCache(underlying);
-    final WriteThroughViewComputationCache existing = s_instances.putIfAbsent(underlying, cached);
+    final WriteThroughViewComputationCache existing = INSTANCES.putIfAbsent(underlying, cached);
     if (existing == null) {
       return cached;
-    } else {
-      return existing;
     }
+    return existing;
   }
 
   /**
-   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it is necessary to handle certain memory situations regarding custom View
-   * Processor configurations.
+   * This method will clear all instances of this class. It should be called after confirming with OpenGamma support that it is necessary to handle certain
+   * memory situations regarding custom View Processor configurations.
    */
   public static void clearAllWriteThroughCaches() {
-    for (WriteThroughViewComputationCache cache : s_instances.values()) {
+    for (final WriteThroughViewComputationCache cache : INSTANCES.values()) {
       cache.clear();
     }
-    s_instances.clear();
+    INSTANCES.clear();
   }
 
   public void clear() {
@@ -121,19 +122,19 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     final Pending existingPending = _pending.putIfAbsent(specification, newPending);
     if (existingPending == null) {
       return newPending;
-    } else {
-      return existingPending;
     }
+    return existingPending;
   }
 
-  protected void post(final ValueSpecification specification, Object value) {
-    if (value == null) {
-      value = NULL;
+  protected void post(final ValueSpecification specification, final Object value) {
+    Object val = value;
+    if (val == null) {
+      val = NULL;
     }
-    _readCache.put(specification, value);
-    Pending pending = _pending.remove(specification);
+    _readCache.put(specification, val);
+    final Pending pending = _pending.remove(specification);
     if (pending != null) {
-      pending.post(value);
+      pending.post(val);
     }
   }
 
@@ -148,14 +149,14 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //s_logger.debug("Cached NULL for {}", specification);
+      // LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //s_logger.debug("Cached miss for {}", specification);
+      // LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification);
       post(specification, value);
     } else {
-      s_logger.debug("Cache hit for {}", specification);
+      LOGGER.debug("Cache hit for {}", specification);
     }
     return value;
   }
@@ -171,66 +172,66 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //s_logger.debug("Cached NULL for {}", specification);
+      // LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //s_logger.debug("Cached miss for {}", specification);
+      // LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification, filter);
       post(specification, value);
     } else {
-      s_logger.debug("Cache hit for {}", specification);
+      LOGGER.debug("Cache hit for {}", specification);
     }
     return value;
   }
 
   @Override
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications) {
-    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<>(specifications.size());
     Collection<Pending> pending = null;
     Collection<ValueSpecification> query = null;
-    for (ValueSpecification specification : specifications) {
+    for (final ValueSpecification specification : specifications) {
       Object value = _readCache.putIfAbsent(specification, PENDING);
       if (value == PENDING) {
         final Pending handle = waitFor(specification);
         value = _readCache.get(specification);
         if (value == PENDING) {
           if (pending == null) {
-            pending = new ArrayList<Pending>(specifications.size());
+            pending = new ArrayList<>(specifications.size());
           }
           pending.add(handle);
           continue;
         }
       }
       if (value == NULL) {
-        //s_logger.debug("Cached NULL for {}", specification);
+        // LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //s_logger.debug("Cache miss for {}", specification);
+        // LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
-          query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
+          query = Sets.<ValueSpecification> newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {
-        s_logger.debug("Cache hit for {}", specification);
+        LOGGER.debug("Cache hit for {}", specification);
         result.add(Pairs.of(specification, value));
       }
     }
     if (query != null) {
       final Collection<Pair<ValueSpecification, Object>> values = getUnderlying().getValues(query);
-      for (Pair<ValueSpecification, Object> value : values) {
+      for (final Pair<ValueSpecification, Object> value : values) {
         final ValueSpecification valueSpec = value.getFirst();
         post(valueSpec, value.getSecond());
         query.remove(valueSpec);
       }
       result.addAll(values);
       if (!query.isEmpty()) {
-        for (ValueSpecification value : query) {
+        for (final ValueSpecification value : query) {
           post(value, null);
         }
       }
     }
     if (pending != null) {
-      for (Pending handle : pending) {
+      for (final Pending handle : pending) {
         result.add(handle.waitForPair());
       }
     }
@@ -239,52 +240,52 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications, final CacheSelectHint filter) {
-    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> result = new ArrayList<>(specifications.size());
     Collection<Pending> pending = null;
     Collection<ValueSpecification> query = null;
-    for (ValueSpecification specification : specifications) {
+    for (final ValueSpecification specification : specifications) {
       Object value = _readCache.putIfAbsent(specification, PENDING);
       if (value == PENDING) {
         final Pending handle = waitFor(specification);
         value = _readCache.get(specification);
         if (value == PENDING) {
           if (pending == null) {
-            pending = new ArrayList<Pending>(specifications.size());
+            pending = new ArrayList<>(specifications.size());
           }
           pending.add(handle);
           continue;
         }
       }
       if (value == NULL) {
-        //s_logger.debug("Cached NULL for {}", specification);
+        // LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //s_logger.debug("Cache miss for {}", specification);
+        // LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
-          query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
+          query = Sets.<ValueSpecification> newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {
-        s_logger.debug("Cache hit for {}", specification);
+        LOGGER.debug("Cache hit for {}", specification);
         result.add(Pairs.of(specification, value));
       }
     }
     if (query != null) {
       final Collection<Pair<ValueSpecification, Object>> values = getUnderlying().getValues(query, filter);
-      for (Pair<ValueSpecification, Object> value : values) {
+      for (final Pair<ValueSpecification, Object> value : values) {
         final ValueSpecification valueSpec = value.getFirst();
         post(valueSpec, value.getSecond());
         query.remove(valueSpec);
       }
       result.addAll(values);
       if (!query.isEmpty()) {
-        for (ValueSpecification value : query) {
+        for (final ValueSpecification value : query) {
           post(value, null);
         }
       }
     }
     if (pending != null) {
-      for (Pending handle : pending) {
+      for (final Pending handle : pending) {
         result.add(handle.waitForPair());
       }
     }
@@ -311,7 +312,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putSharedValues(final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putSharedValues(values);
@@ -319,7 +320,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putPrivateValues(final Collection<? extends ComputedValue> values) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putPrivateValues(values);
@@ -327,7 +328,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
   @Override
   public void putValues(final Collection<? extends ComputedValue> values, final CacheSelectHint filter) {
-    for (ComputedValue value : values) {
+    for (final ComputedValue value : values) {
       _readCache.putIfAbsent(value.getSpecification(), value.getValue());
     }
     getUnderlying().putValues(values, filter);

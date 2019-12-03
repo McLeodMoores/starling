@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdamasteragreement;
@@ -9,8 +9,11 @@ import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to specify the terms of a ISDA Master Agreement between two counterparties
+ * Class to specify the terms of a ISDA Master Agreement between two counterparties.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 public class ISDAMasterAgreementDefinition {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

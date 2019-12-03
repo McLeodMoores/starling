@@ -38,13 +38,13 @@ public class SwapMultileg implements InstrumentDerivative {
   }
 
   @Override
-  public <S, T> T accept(InstrumentDerivativeVisitor<S, T> visitor, S data) {
+  public <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitSwapMultileg(this, data);
   }
 
   @Override
-  public <T> T accept(InstrumentDerivativeVisitor<?, T> visitor) {
+  public <T> T accept(final InstrumentDerivativeVisitor<?, T> visitor) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitSwapMultileg(this);
   }
@@ -58,7 +58,7 @@ public class SwapMultileg implements InstrumentDerivative {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -68,7 +68,7 @@ public class SwapMultileg implements InstrumentDerivative {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SwapMultileg other = (SwapMultileg) obj;
+    final SwapMultileg other = (SwapMultileg) obj;
     if (!Arrays.equals(_legs, other._legs)) {
       return false;
     }

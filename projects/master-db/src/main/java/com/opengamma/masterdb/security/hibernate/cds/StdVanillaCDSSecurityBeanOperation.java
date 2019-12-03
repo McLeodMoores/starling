@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -24,22 +24,23 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 
 /**
- * 
+ *
  */
 public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<StandardVanillaCDSSecurity, StandardVanillaCDSSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final StdVanillaCDSSecurityBeanOperation INSTANCE = new StdVanillaCDSSecurityBeanOperation();
-  
+
   private StdVanillaCDSSecurityBeanOperation() {
     super(StandardVanillaCDSSecurity.SECURITY_TYPE, StandardVanillaCDSSecurity.class, StandardVanillaCDSSecurityBean.class);
   }
-  
+
   @Override
-  public StandardVanillaCDSSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, StandardVanillaCDSSecurity security) {
-    StandardVanillaCDSSecurityBean bean = new StandardVanillaCDSSecurityBean();
+  public StandardVanillaCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final StandardVanillaCDSSecurity security) {
+    final StandardVanillaCDSSecurityBean bean = new StandardVanillaCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setQuotedSpread(security.getQuotedSpread());
     bean.setUpfrontAmount(NotionalBeanOperation.createBean(secMasterSession, security.getUpfrontAmount()));
@@ -50,32 +51,32 @@ public final class StdVanillaCDSSecurityBeanOperation extends AbstractSecurityBe
   }
 
   @Override
-  public StandardVanillaCDSSecurity createSecurity(OperationContext context, StandardVanillaCDSSecurityBean bean) {
-    StandardVanillaCDSSecurity security = new StandardVanillaCDSSecurity(
-        bean.getBuy(), 
-        externalIdBeanToExternalId(bean.getProtectionSeller()), 
-        externalIdBeanToExternalId(bean.getProtectionBuyer()), 
-        externalIdBeanToExternalId(bean.getReferenceEntity()), 
-        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()), 
-        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()), 
-        externalIdBeanToExternalId(bean.getRegionId()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()), 
-        stubTypeBeanToStubType(bean.getStubType()), 
-        frequencyBeanToFrequency(bean.getCouponFrequency()), 
-        dayCountBeanToDayCount(bean.getDayCount()), 
-        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()), 
-        bean.getImmAdjustMaturityDate(), 
-        bean.getAdjustEffectiveDate(), 
-        bean.getAdjustMaturityDate(), 
-        (InterestRateNotional) createNotional(bean.getNotional()), 
+  public StandardVanillaCDSSecurity createSecurity(final OperationContext context, final StandardVanillaCDSSecurityBean bean) {
+    final StandardVanillaCDSSecurity security = new StandardVanillaCDSSecurity(
+        bean.getBuy(),
+        externalIdBeanToExternalId(bean.getProtectionSeller()),
+        externalIdBeanToExternalId(bean.getProtectionBuyer()),
+        externalIdBeanToExternalId(bean.getReferenceEntity()),
+        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()),
+        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()),
+        externalIdBeanToExternalId(bean.getRegionId()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
+        stubTypeBeanToStubType(bean.getStubType()),
+        frequencyBeanToFrequency(bean.getCouponFrequency()),
+        dayCountBeanToDayCount(bean.getDayCount()),
+        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
+        bean.getImmAdjustMaturityDate(),
+        bean.getAdjustEffectiveDate(),
+        bean.getAdjustMaturityDate(),
+        (InterestRateNotional) createNotional(bean.getNotional()),
         bean.getIncludeAccruedPremium(),
-        bean.getProtectionStart(), 
-        bean.getQuotedSpread(), 
-        (InterestRateNotional) createNotional(bean.getUpfrontAmount()), 
-        bean.getCoupon(), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getCashSettlementDate()), 
+        bean.getProtectionStart(),
+        bean.getQuotedSpread(),
+        (InterestRateNotional) createNotional(bean.getUpfrontAmount()),
+        bean.getCoupon(),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getCashSettlementDate()),
         bean.getAdjustCashSettlementDate());
     return security;
   }

@@ -49,7 +49,7 @@ public class HolidaySourceFactoryBean extends SpringFactoryBean<HolidaySource> {
   @Deprecated
   @Override
   protected HolidaySource createObject() {
-    HolidaySource source = new CachedHolidaySource(new MasterHolidaySource(getHolidayMaster()));
+    final HolidaySource source = new CachedHolidaySource(new MasterHolidaySource(getHolidayMaster()));
     return source;
   }
 

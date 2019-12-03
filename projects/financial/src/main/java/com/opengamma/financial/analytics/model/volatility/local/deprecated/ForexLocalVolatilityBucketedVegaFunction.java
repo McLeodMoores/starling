@@ -20,7 +20,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 public class ForexLocalVolatilityBucketedVegaFunction extends ForexLocalVolatilityPDEGridFunction {
 
   @Override
-  protected Object getResult(final LocalVolatilityForwardPDEGreekCalculator1<?> calculator, final LocalVolatilitySurface<?> localVolatilitySurface, final ForwardCurve forwardCurve,
+  protected Object getResult(final LocalVolatilityForwardPDEGreekCalculator1<?> calculator, final LocalVolatilitySurface<?> localVolatilitySurface,
+      final ForwardCurve forwardCurve,
       final SmileSurfaceDataBundle data, final EuropeanVanillaOption option) {
     return calculator.getBucketedVega(data, localVolatilitySurface, option);
   }

@@ -17,7 +17,7 @@ import com.opengamma.timeseries.DoubleTimeSeriesTest;
 public abstract class InstantDoubleTimeSeriesTest extends DoubleTimeSeriesTest<Instant> {
 
   @Override
-  protected Instant[] testTimes() {
+  protected Instant[] createTestTimes() {
     Instant one = OffsetDateTime.of(2010, 2, 8, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
     Instant two = OffsetDateTime.of(2010, 2, 9, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
     Instant three = OffsetDateTime.of(2010, 2, 10, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
@@ -28,7 +28,7 @@ public abstract class InstantDoubleTimeSeriesTest extends DoubleTimeSeriesTest<I
   }
 
   @Override
-  protected Instant[] testTimes2() {
+  protected Instant[] createTestTimes2() {
     Instant one = OffsetDateTime.of(2010, 2, 11, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
     Instant two = OffsetDateTime.of(2010, 2, 12, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
     Instant three = OffsetDateTime.of(2010, 2, 13, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
@@ -39,7 +39,7 @@ public abstract class InstantDoubleTimeSeriesTest extends DoubleTimeSeriesTest<I
   }
 
   @Override
-  protected Instant[] emptyTimes() {
+  protected Instant[] createEmptyTimes() {
     return new Instant[] {};
   }
 

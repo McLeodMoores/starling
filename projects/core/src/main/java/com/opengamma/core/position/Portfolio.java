@@ -28,9 +28,10 @@ public interface Portfolio extends UniqueIdentifiable, Attributable {
    * Gets the unique identifier of the portfolio.
    * <p>
    * This specifies a single version-correction of the portfolio.
-   * 
+   *
    * @return the unique identifier for this portfolio, not null within the engine
    */
+  @Override
   UniqueId getUniqueId();
 
   /**
@@ -38,14 +39,14 @@ public interface Portfolio extends UniqueIdentifiable, Attributable {
    * <p>
    * The positions stored in a portfolios are held in a tree structure.
    * This method accesses the root of the tree structure.
-   * 
+   *
    * @return the root node of the tree structure, not null
    */
   PortfolioNode getRootNode();
 
   /**
    * Gets the name of the portfolio intended for display purposes.
-   * 
+   *
    * @return the display name, not null
    */
   String getName();

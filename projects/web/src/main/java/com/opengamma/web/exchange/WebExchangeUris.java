@@ -25,7 +25,7 @@ public class WebExchangeUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebExchangeUris(WebExchangeData data) {
+  public WebExchangeUris(final WebExchangeData data) {
     _data = data;
   }
 

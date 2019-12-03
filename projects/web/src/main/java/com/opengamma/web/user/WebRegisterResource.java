@@ -40,7 +40,7 @@ import com.opengamma.web.AbstractSingletonWebResource;
 public class WebRegisterResource extends AbstractSingletonWebResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebRegisterResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebRegisterResource.class);
   /**
    * The ftl file.
    */
@@ -57,11 +57,11 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param pwService  the password service, not null
    */
-  public WebRegisterResource(UserMaster userMaster, PasswordService pwService) {
+  public WebRegisterResource(final UserMaster userMaster, final PasswordService pwService) {
     _userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
     _pwService = ArgumentChecker.notNull(pwService, "pwService");
   }
@@ -70,11 +70,11 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getGreen(
-      @Context HttpServletRequest request,
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo) {
-    
-    FlexiBean out = createRootData(uriInfo);
+      @Context final HttpServletRequest request,
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo) {
+
+    final FlexiBean out = createRootData(uriInfo);
     out.put("username", "");
     out.put("password", "");
     out.put("timezone", OpenGammaClock.getZone().toString());
@@ -87,25 +87,25 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
   @POST
   @Produces(MediaType.TEXT_HTML)
   public Response loginGreen(
-      @Context ServletContext servletContext,
-      @Context UriInfo uriInfo,
-      @FormParam("username") String userName,
-      @FormParam("password") String password,
-      @FormParam("email") String email,
-      @FormParam("displayname") String displayName,
-      @FormParam("locale") String locale,
-      @FormParam("timezone") String zone,
-      @FormParam("datestyle") String dateStyle,
-      @FormParam("timestyle") String timeStyle) {
+      @Context final ServletContext servletContext,
+      @Context final UriInfo uriInfo,
+      @FormParam("username") final String userName,
+      @FormParam("password") final String password,
+      @FormParam("email") final String email,
+      @FormParam("displayname") final String displayName,
+      @FormParam("locale") final String locale,
+      @FormParam("timezone") final String zone,
+      @FormParam("datestyle") final String dateStyle,
+      @FormParam("timestyle") final String timeStyle) {
     try {
-      UserForm form = new UserForm(userName, password, email, displayName, locale, zone, dateStyle, timeStyle);
+      final UserForm form = new UserForm(userName, password, email, displayName, locale, zone, dateStyle, timeStyle);
       form.add(_userMaster, _pwService);
       AuthUtils.getSubject().getSession().setAttribute(WebLoginResource.LOGIN_USERNAME, userName);
       return Response.seeOther(WebLoginResource.uri(uriInfo)).build();
-      
-    } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
-      FlexiBean out = createRootData(uriInfo);
+
+    } catch (final UserFormException ex) {
+      ex.logUnexpected(LOGGER);
+      final FlexiBean out = createRootData(uriInfo);
       out.put("username", userName);
       out.put("email", email);
       out.put("displayname", displayName);
@@ -114,7 +114,7 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
       out.put("datestyle", dateStyle);
       out.put("timestyle", timeStyle);
       out.put("err", ex.getErrors().size() > 0);
-      for (UserFormError error : ex.getErrors()) {
+      for (final UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker(servletContext).build(REGISTER_GREEN, out)).build();
@@ -124,11 +124,11 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for this page.
-   * 
+   *
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebRegisterResource.class).build();
   }
 

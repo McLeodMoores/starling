@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.simpleinstruments.definition;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class SimpleFXFutureDefinition implements SimpleInstrumentDefinition<SimpleFXFuture> {
   private final ZonedDateTime _expiryDate;
@@ -23,8 +23,9 @@ public class SimpleFXFutureDefinition implements SimpleInstrumentDefinition<Simp
   private final Currency _payCurrency;
   private final Currency _receiveCurrency;
   private final double _unitAmount;
-  
-  public SimpleFXFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double referencePrice, final Currency payCurrency, final Currency recieveCurrency, 
+
+  public SimpleFXFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double referencePrice, final Currency payCurrency,
+      final Currency recieveCurrency,
       final double unitAmount) {
     Validate.notNull(expiryDate, "expiry date");
     Validate.notNull(settlementDate, "settlement date");
@@ -37,40 +38,40 @@ public class SimpleFXFutureDefinition implements SimpleInstrumentDefinition<Simp
     _receiveCurrency = recieveCurrency;
     _unitAmount = unitAmount;
   }
-  
+
   public ZonedDateTime getExpiry() {
     return _expiryDate;
   }
-  
+
   public ZonedDateTime getSettlementDate() {
     return _settlementDate;
   }
-  
+
   public double getReferencePrice() {
     return _referencePrice;
   }
-  
+
   public Currency getPayCurrency() {
     return _payCurrency;
   }
-  
+
   public Currency getReceiveCurrency() {
     return _receiveCurrency;
   }
-  
+
   public double getUnitAmount() {
     return _unitAmount;
   }
-  
+
   @Override
   public SimpleFXFuture toDerivative(final ZonedDateTime date) {
     Validate.notNull(date, "date");
     Validate.isTrue(date.isBefore(_expiryDate));
-    double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
-    double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
+    final double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
+    final double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
     return new SimpleFXFuture(timeToFixing, timeToDelivery, _referencePrice, _unitAmount, _payCurrency, _receiveCurrency);
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -81,9 +82,9 @@ public class SimpleFXFutureDefinition implements SimpleInstrumentDefinition<Simp
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -110,7 +111,7 @@ public class SimpleFXFutureDefinition implements SimpleInstrumentDefinition<Simp
     }
     if (!ObjectUtils.equals(_payCurrency, other._payCurrency)) {
       return false;
-    }   
+    }
     if (!ObjectUtils.equals(_receiveCurrency, other._receiveCurrency)) {
       return false;
     }

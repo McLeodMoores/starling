@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -42,7 +41,8 @@ public class EquityTotalReturnSwapValueDeltaFunction extends EquityTotalReturnSw
       EqyTrsValueDeltaCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_DELTA}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_DELTA}.
    */
   public EquityTotalReturnSwapValueDeltaFunction() {
     super(VALUE_DELTA);
@@ -64,7 +64,7 @@ public class EquityTotalReturnSwapValueDeltaFunction extends EquityTotalReturnSw
         if (expectedCurrency == null) {
           throw new OpenGammaRuntimeException("Expected currency is null");
         }
-        double pvConverted = fxMatrix.convert(valueDelta, Currency.of(expectedCurrency)).getAmount();
+        final double pvConverted = fxMatrix.convert(valueDelta, Currency.of(expectedCurrency)).getAmount();
         return Collections.singleton(new ComputedValue(spec, pvConverted));
       }
 

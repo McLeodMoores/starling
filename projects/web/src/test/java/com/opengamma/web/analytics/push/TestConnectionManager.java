@@ -22,38 +22,38 @@ public class TestConnectionManager implements ConnectionManager {
     this(null);
   }
 
-  public TestConnectionManager(LongPollingConnectionManager longPollingConnectionManager) {
+  public TestConnectionManager(final LongPollingConnectionManager longPollingConnectionManager) {
     _longPollingConnectionManager = longPollingConnectionManager;
   }
 
   @Override
-  public String clientConnected(String userId) {
-    ConnectionTimeoutTask timeoutTask = new ConnectionTimeoutTask(mock(ConnectionManager.class), "user", "client", 60000);
+  public String clientConnected(final String userId) {
+    final ConnectionTimeoutTask timeoutTask = new ConnectionTimeoutTask(mock(ConnectionManager.class), "user", "client", 60000);
     _listener = _longPollingConnectionManager.handshake(userId, LongPollingTest.CLIENT_ID, timeoutTask);
     return LongPollingTest.CLIENT_ID;
   }
 
   @Override
-  public void clientDisconnected(String userId, String clientId) {
+  public void clientDisconnected(final String userId, final String clientId) {
     throw new UnsupportedOperationException("closeViewport not used in this test");
   }
 
   @Override
-  public void subscribe(String userId, String clientId, UniqueId uid, String url) {
+  public void subscribe(final String userId, final String clientId, final UniqueId uid, final String url) {
     throw new UnsupportedOperationException("subscribe not used in this test");
   }
 
   @Override
-  public void subscribe(String userId, String clientId, MasterType masterType, String url) {
+  public void subscribe(final String userId, final String clientId, final MasterType masterType, final String url) {
     throw new UnsupportedOperationException("subscribe not implemented");
   }
 
   @Override
-  public ClientConnection getConnectionByClientId(String userId, String clientId) {
+  public ClientConnection getConnectionByClientId(final String userId, final String clientId) {
     throw new UnsupportedOperationException("getConnectionByClientId not implemented");
   }
 
-  public void sendUpdate(String update) {
+  public void sendUpdate(final String update) {
     _listener.itemUpdated(update);
   }
 }

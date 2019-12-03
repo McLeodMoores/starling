@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.timeseries.snapshot;
@@ -28,29 +28,29 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class SchedulerComponentFactory extends AbstractComponentFactory {
-  
+
   /**
    * The classifier that the factory should publish under.
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-    
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    ComponentInfo info = new ComponentInfo(Scheduler.class, getClassifier());
-    
-    Properties quartzProperties = new Properties();
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final ComponentInfo info = new ComponentInfo(Scheduler.class, getClassifier());
+
+    final Properties quartzProperties = new Properties();
     quartzProperties.setProperty(StdSchedulerFactory.PROP_SCHED_JMX_EXPORT, "true");
     quartzProperties.setProperty(StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK, "true");
-    
-    SchedulerFactoryBean schedulerBean = new SchedulerFactoryBean();
+
+    final SchedulerFactoryBean schedulerBean = new SchedulerFactoryBean();
     schedulerBean.setWaitForJobsToCompleteOnShutdown(true);
     schedulerBean.setQuartzProperties(quartzProperties);
-        
+
     repo.registerComponent(info, schedulerBean);
     repo.registerLifecycle(schedulerBean);
   }

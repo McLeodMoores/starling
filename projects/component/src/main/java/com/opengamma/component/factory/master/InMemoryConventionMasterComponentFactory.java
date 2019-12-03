@@ -44,7 +44,7 @@ public class InMemoryConventionMasterComponentFactory extends AbstractComponentF
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   /**
    * Whether to use change management. If true, requires jms settings to be non-null.
    */
@@ -75,11 +75,11 @@ public class InMemoryConventionMasterComponentFactory extends AbstractComponentF
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final ComponentInfo info = new ComponentInfo(ConventionMaster.class, getClassifier());
-    
+
     // create
     final ConventionMaster master;
     if (isEnableChangeManagement() && isValidJmsConfiguration(getClassifier(), getClass(), getJmsConnector(), getJmsChangeManagerTopic())) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector(), getJmsChangeManagerTopic());
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector(), getJmsChangeManagerTopic());
       master = new InMemoryConventionMaster(cm);
       repo.registerLifecycle(cm);
       if (getJmsConnector().getClientBrokerUri() != null) {
@@ -92,7 +92,7 @@ public class InMemoryConventionMasterComponentFactory extends AbstractComponentF
     if (isPopulateDefaultConventions()) {
       DefaultConventionMasterInitializer.INSTANCE.init(master);
     }
-    
+
     // register
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
@@ -100,7 +100,7 @@ public class InMemoryConventionMasterComponentFactory extends AbstractComponentF
     }
     info.addAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME, InMemoryConventionMaster.DEFAULT_OID_SCHEME);
     repo.registerComponent(info, master);
-    
+
     // publish
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataConventionMasterResource(master));

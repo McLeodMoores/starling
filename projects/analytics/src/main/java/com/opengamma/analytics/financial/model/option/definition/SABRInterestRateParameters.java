@@ -55,24 +55,37 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Constructor from the parameter surfaces. The default SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters.  The first dimension is the expiration and the second the tenor.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
+   * 
+   * @param alpha
+   *          The alpha parameters. The first dimension is the expiration and the second the tenor.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
    */
-  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho, final InterpolatedDoublesSurface nu) {
+  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+      final InterpolatedDoublesSurface nu) {
     this(alpha, beta, rho, nu, new SABRHaganVolatilityFunction());
   }
 
   /**
    * Constructor from the parameter surfaces. The default SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters. The first dimension is the expiration and the second the tenor.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
-   * @param sabrFormula The SABR formula provider.
+   * 
+   * @param alpha
+   *          The alpha parameters. The first dimension is the expiration and the second the tenor.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
+   * @param sabrFormula
+   *          The SABR formula provider.
    */
-  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho, final InterpolatedDoublesSurface nu,
+  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+      final InterpolatedDoublesSurface nu,
       final VolatilityFunctionProvider<SABRFormulaData> sabrFormula) {
     ArgumentChecker.notNull(alpha, "alpha surface");
     ArgumentChecker.notNull(beta, "beta surface");
@@ -89,31 +102,46 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Constructor from the parameter surfaces. The default SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters.  The first dimension is the expiration and the second the tenor.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
-   * @param dayCount The standard day count for which the parameter surfaces are valid.
+   * 
+   * @param alpha
+   *          The alpha parameters. The first dimension is the expiration and the second the tenor.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
+   * @param dayCount
+   *          The standard day count for which the parameter surfaces are valid.
    * @deprecated Used the constructor without day count.
    */
   @Deprecated
-  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho, final InterpolatedDoublesSurface nu,
+  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+      final InterpolatedDoublesSurface nu,
       final DayCount dayCount) {
     this(alpha, beta, rho, nu, dayCount, new SABRHaganVolatilityFunction());
   }
 
   /**
    * Constructor from the parameter surfaces. The default SABR volatility formula is HaganVolatilityFunction.
-   * @param alpha The alpha parameters. The first dimension is the expiration and the second the tenor.
-   * @param beta The beta parameters.
-   * @param rho The rho parameters.
-   * @param nu The nu parameters.
-   * @param dayCount The standard day count for which the parameter surfaces are valid.
-   * @param sabrFormula The SABR formula provider.
+   * 
+   * @param alpha
+   *          The alpha parameters. The first dimension is the expiration and the second the tenor.
+   * @param beta
+   *          The beta parameters.
+   * @param rho
+   *          The rho parameters.
+   * @param nu
+   *          The nu parameters.
+   * @param dayCount
+   *          The standard day count for which the parameter surfaces are valid.
+   * @param sabrFormula
+   *          The SABR formula provider.
    * @deprecated Used the constructor without day count.
    */
   @Deprecated
-  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho, final InterpolatedDoublesSurface nu,
+  public SABRInterestRateParameters(final InterpolatedDoublesSurface alpha, final InterpolatedDoublesSurface beta, final InterpolatedDoublesSurface rho,
+      final InterpolatedDoublesSurface nu,
       final DayCount dayCount, final VolatilityFunctionProvider<SABRFormulaData> sabrFormula) {
     ArgumentChecker.notNull(alpha, "alpha surface");
     ArgumentChecker.notNull(beta, "beta surface");
@@ -131,7 +159,9 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the alpha parameter for a pair of time to expiry and instrument maturity.
-   * @param expiryMaturity The expiry/maturity pair.
+   * 
+   * @param expiryMaturity
+   *          The expiry/maturity pair.
    * @return The alpha parameter.
    */
   public double getAlpha(final DoublesPair expiryMaturity) {
@@ -140,7 +170,9 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the beta parameter for a pair of time to expiry and instrument maturity.
-   * @param expiryMaturity The expiry/maturity pair.
+   * 
+   * @param expiryMaturity
+   *          The expiry/maturity pair.
    * @return The beta parameter.
    */
   public double getBeta(final DoublesPair expiryMaturity) {
@@ -149,7 +181,9 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the rho parameter for a pair of time to expiry and instrument maturity.
-   * @param expiryMaturity The expiry/maturity pair.
+   * 
+   * @param expiryMaturity
+   *          The expiry/maturity pair.
    * @return The rho parameter.
    */
   public double getRho(final DoublesPair expiryMaturity) {
@@ -158,7 +192,9 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the nu parameter for a pair of time to expiry and instrument maturity.
-   * @param expiryMaturity The expiry/maturity pair.
+   * 
+   * @param expiryMaturity
+   *          The expiry/maturity pair.
    * @return The nu parameter.
    */
   public double getNu(final DoublesPair expiryMaturity) {
@@ -167,6 +203,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the standard day count for which the parameter surfaces are valid.
+   * 
    * @return The day count.
    * @deprecated Should be removed from the data structure but available at the provider level.
    */
@@ -177,6 +214,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the SABR function.
+   * 
    * @return The SABR function
    */
   public VolatilityFunctionProvider<SABRFormulaData> getSabrFunction() {
@@ -185,6 +223,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the alpha surface.
+   * 
    * @return The alpha surface.
    */
   public InterpolatedDoublesSurface getAlphaSurface() {
@@ -193,6 +232,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the beta surface.
+   * 
    * @return The beta surface.
    */
   public InterpolatedDoublesSurface getBetaSurface() {
@@ -201,6 +241,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the rho surface.
+   * 
    * @return The rho surface.
    */
   public InterpolatedDoublesSurface getRhoSurface() {
@@ -209,6 +250,7 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Gets the nu surface.
+   * 
    * @return The nu surface.
    */
   public InterpolatedDoublesSurface getNuSurface() {
@@ -217,10 +259,15 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the volatility for a expiry, a maturity, a strike and a forward rate.
-   * @param expiryTime Time to expiry.
-   * @param maturity Tenor.
-   * @param strike The strike.
-   * @param forward The forward.
+   * 
+   * @param expiryTime
+   *          Time to expiry.
+   * @param maturity
+   *          Tenor.
+   * @param strike
+   *          The strike.
+   * @param forward
+   *          The forward.
    * @return The volatility.
    */
   public double getVolatility(final double expiryTime, final double maturity, final double strike, final double forward) {
@@ -234,7 +281,9 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
   @Override
   /**
    * Return the volatility for a expiry/maturity/strike/forward array.
-   * @param data An array of four doubles with [0] the expiry, [1] the maturity, [2] the strike, [3] the forward.
+   * 
+   * @param data
+   *          An array of four doubles with [0] the expiry, [1] the maturity, [2] the strike, [3] the forward.
    * @return The volatility.
    */
   public Double getVolatility(final double[] data) {
@@ -245,12 +294,17 @@ public class SABRInterestRateParameters implements VolatilityModel<double[]> {
 
   /**
    * Return the Black implied volatility in the SABR model and its derivatives when the SABR function is Hagan function.
-   * @param expiryTime Time to expiry.
-   * @param maturity Tenor.
-   * @param strike The strike.
-   * @param forward The forward.
-   * @return The volatility and its derivative. An array with [0] the volatility, [1] Derivative w.r.t the forward, [2] the derivative w.r.t the strike,
-   * [3] the derivative w.r.t. to alpha, [4] the derivative w.r.t. to beta, [5] the derivative w.r.t. to rho, [6] the derivative w.r.t. to nu.
+   * 
+   * @param expiryTime
+   *          Time to expiry.
+   * @param maturity
+   *          Tenor.
+   * @param strike
+   *          The strike.
+   * @param forward
+   *          The forward.
+   * @return The volatility and its derivative. An array with [0] the volatility, [1] Derivative w.r.t the forward, [2] the derivative w.r.t the strike, [3] the
+   *         derivative w.r.t. to alpha, [4] the derivative w.r.t. to beta, [5] the derivative w.r.t. to rho, [6] the derivative w.r.t. to nu.
    */
   public double[] getVolatilityAdjoint(final double expiryTime, final double maturity, final double strike, final double forward) {
     ArgumentChecker.isTrue(_sabrFunction instanceof SABRHaganVolatilityFunction, "Adjoint volatility available only for Hagan formula");

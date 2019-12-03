@@ -40,7 +40,7 @@ public class XmlPositionReader implements PositionReader {
    *
    * @param vph the portfolio handler to create a reader for.
    */
-  public XmlPositionReader(VersionedPortfolioHandler vph) {
+  public XmlPositionReader(final VersionedPortfolioHandler vph) {
     _portfolioName = vph.getPortfolioName();
     _positionIterator = vph.getPositions().iterator();
   }
@@ -50,7 +50,7 @@ public class XmlPositionReader implements PositionReader {
     return _positionIterator.hasNext() ? processPosition(_positionIterator.next()) : null;
   }
 
-  private ObjectsPair<ManageablePosition, ManageableSecurity[]> processPosition(PortfolioPosition position) {
+  private ObjectsPair<ManageablePosition, ManageableSecurity[]> processPosition(final PortfolioPosition position) {
     // Handle a portfolio level change
     _currentPath = position.getPortfolioPath();
     return ObjectsPair.of(position.getPosition(), position.getSecurities());

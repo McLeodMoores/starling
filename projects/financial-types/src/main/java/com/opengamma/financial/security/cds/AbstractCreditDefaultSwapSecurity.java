@@ -128,28 +128,28 @@ public abstract class AbstractCreditDefaultSwapSecurity extends FinancialSecurit
   @PropertyDefinition(validate = "notNull")
   private boolean _protectionStart;
 
-  public AbstractCreditDefaultSwapSecurity(String securityType) {
+  public AbstractCreditDefaultSwapSecurity(final String securityType) {
     super(securityType);
   }
 
-  public AbstractCreditDefaultSwapSecurity(String securityType,
-                                              boolean buy,
-                                              ExternalId protectionBuyer,
-                                              ExternalId protectionSeller,
-                                              ExternalId referenceEntity,
-                                              ZonedDateTime startDate,
-                                              ZonedDateTime effectiveDate,
-                                              ZonedDateTime maturityDate,
-                                              StubType stubType,
-                                              Frequency couponFrequency,
-                                              DayCount dayCount,
-                                              BusinessDayConvention businessDayConvention,
-                                              boolean immAdjustMaturityDate,
-                                              boolean adjustEffectiveDate,
-                                              boolean adjustMaturityDate,
-                                              InterestRateNotional notional,
-                                              boolean includeAccruedPremium,
-                                              boolean protectionStart) {
+  public AbstractCreditDefaultSwapSecurity(final String securityType,
+                                              final boolean buy,
+                                              final ExternalId protectionBuyer,
+                                              final ExternalId protectionSeller,
+                                              final ExternalId referenceEntity,
+                                              final ZonedDateTime startDate,
+                                              final ZonedDateTime effectiveDate,
+                                              final ZonedDateTime maturityDate,
+                                              final StubType stubType,
+                                              final Frequency couponFrequency,
+                                              final DayCount dayCount,
+                                              final BusinessDayConvention businessDayConvention,
+                                              final boolean immAdjustMaturityDate,
+                                              final boolean adjustEffectiveDate,
+                                              final boolean adjustMaturityDate,
+                                              final InterestRateNotional notional,
+                                              final boolean includeAccruedPremium,
+                                              final boolean protectionStart) {
     super(securityType);
     setBuy(buy);
     setProtectionBuyer(protectionBuyer);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -59,17 +59,15 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Computes a Profit and Loss time series for a position based on value greeks.
- * Takes in a set of specified value greeks (which will be part of configuration),
- * converts to sensitivities, loads the underlying time series, and calculates
- * a series of P&L based on {@link SensitivityPnLCalculator}.
- * 
+ * Computes a Profit and Loss time series for a position based on value greeks. Takes in a set of specified value greeks (which will be part of configuration),
+ * converts to sensitivities, loads the underlying time series, and calculates a series of P&amp;L based on {@link SensitivityPnLCalculator}.
+ *
  */
 public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
   private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");
   private static final Greek GREEK = Greek.DELTA;
-  private static final String REQUIREMENT_NAME = ValueRequirementNames.VALUE_DELTA; //TODO remove hard-coding
+  private static final String REQUIREMENT_NAME = ValueRequirementNames.VALUE_DELTA; // TODO remove hard-coding
   private static final SensitivityPnLCalculator PNL_CALCULATOR = new SensitivityPnLCalculator();
   private final String _resolutionKey;
 
@@ -79,7 +77,8 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     String currency = null;
     for (final ComputedValue value : inputs.getAllValues()) {
       final String newCurrency = value.getSpecification().getProperty(ValuePropertyNames.CURRENCY);
@@ -104,13 +103,13 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     final Double value = (Double) inputs.getValue(REQUIREMENT_NAME);
     final ValueGreek valueGreek = AvailableValueGreeks.getValueGreekForValueRequirementName(REQUIREMENT_NAME);
     final Sensitivity<?> sensitivity = new ValueGreekSensitivity(valueGreek, position.getUniqueId().toString());
-    final Map<UnderlyingType, DoubleTimeSeries<?>> tsReturns = new HashMap<UnderlyingType, DoubleTimeSeries<?>>();
+    final Map<UnderlyingType, DoubleTimeSeries<?>> tsReturns = new HashMap<>();
     final Period samplingPeriod = getSamplingPeriod(samplingPeriodName);
     final LocalDate startDate = now.minus(samplingPeriod);
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
     final TimeSeriesReturnCalculator returnCalculator = getTimeSeriesReturnCalculator(returnCalculatorName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     final LocalDateDoubleTimeSeries sampledTS = samplingFunction.getSampledTimeSeries(timeSeries.getTimeSeries(), schedule);
     for (final UnderlyingType underlyingType : valueGreek.getUnderlyingGreek().getUnderlying().getUnderlyings()) {
       if (underlyingType != UnderlyingType.SPOT_PRICE) {
@@ -136,7 +135,7 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getPosition().getSecurity() instanceof EquityOptionSecurity; //TODO need to widen this
+    return target.getPosition().getSecurity() instanceof EquityOptionSecurity; // TODO need to widen this
   }
 
   @Override
@@ -158,18 +157,20 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     if (returnCalculatorName == null || returnCalculatorName.isEmpty() || returnCalculatorName.size() != 1) {
       return null;
     }
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.add(new ValueRequirement(REQUIREMENT_NAME, target.toSpecification()));
-    final UnderlyingTimeSeriesProvider timeSeriesProvider = new UnderlyingTimeSeriesProvider(OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context), _resolutionKey,
+    final UnderlyingTimeSeriesProvider timeSeriesProvider = new UnderlyingTimeSeriesProvider(
+        OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context), _resolutionKey,
         context.getSecuritySource());
-    requirements.add(timeSeriesProvider.getSeriesRequirement(GREEK, (FinancialSecurity) target.getPosition().getSecurity(), DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()),
+    requirements.add(timeSeriesProvider.getSeriesRequirement(GREEK, (FinancialSecurity) target.getPosition().getSecurity(),
+        DateConstraint.VALUATION_TIME.minus(samplingPeriodName.iterator().next()),
         DateConstraint.VALUATION_TIME));
     return requirements;
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about the PROPERTY_PNL_CONTRIBUTIONS constant
     final ValueProperties properties = createValueProperties()
         .withAny(ValuePropertyNames.CURRENCY)
@@ -181,7 +182,6 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
     results.add(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
     return results;
   }
-
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
@@ -207,7 +207,7 @@ public class ValueGreekSensitivityPnLFunction extends AbstractFunction.NonCompil
         .withAny(ValuePropertyNames.SAMPLING_FUNCTION)
         .withAny(ValuePropertyNames.RETURN_CALCULATOR)
         .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, "Delta").get();
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     results.add(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), properties));
     return results;
   }

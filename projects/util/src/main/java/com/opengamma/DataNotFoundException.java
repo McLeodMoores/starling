@@ -17,20 +17,20 @@ public class DataNotFoundException extends OpenGammaRuntimeException {
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    */
-  public DataNotFoundException(String message) {
+  public DataNotFoundException(final String message) {
     super(message);
   }
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    * @param cause  the underlying cause, may be null
    */
-  public DataNotFoundException(String message, Throwable cause) {
+  public DataNotFoundException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

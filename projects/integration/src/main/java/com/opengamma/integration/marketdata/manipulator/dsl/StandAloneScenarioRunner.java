@@ -49,7 +49,7 @@ import groovy.lang.GroovyShell;
 /**
  * Runs a set of scenarios defined in a Groovy DSL script against a running server and returns the results.
  */
-public class StandAloneScenarioRunner {
+public final class StandAloneScenarioRunner {
 
   private StandAloneScenarioRunner() {
   }
@@ -58,30 +58,38 @@ public class StandAloneScenarioRunner {
 
   /**
    * Runs a set of scenarios defined in a Groovy DSL script against a running server.
-   * @param scriptFileName The file containing the scenario definitions
+   * 
+   * @param scriptFileName
+   *          The file containing the scenario definitions
    * @return The results of running the scenarios
-   * @throws IOException If the script file can't be found or read
-   * @throws IllegalArgumentException If any data in the script is invalid or missing
+   * @throws IOException
+   *           If the script file can't be found or read
+   * @throws IllegalArgumentException
+   *           If any data in the script is invalid or missing
    */
-  public static List<ScenarioResultModel> runScenarioScript(String scriptFileName) throws IOException {
+  public static List<ScenarioResultModel> runScenarioScript(final String scriptFileName) throws IOException {
     return runScenarioScript(new File(scriptFileName));
   }
 
   /**
    * Runs a set of scenarios defined in a Groovy DSL script against a running server.
-   * @param scriptFile The file containing the scenario definitions
+   * 
+   * @param scriptFile
+   *          The file containing the scenario definitions
    * @return The results of running the scenarios
-   * @throws IOException If the script file can't be found or read
-   * @throws IllegalArgumentException If any data in the script is invalid or missing
+   * @throws IOException
+   *           If the script file can't be found or read
+   * @throws IllegalArgumentException
+   *           If any data in the script is invalid or missing
    */
-  public static List<ScenarioResultModel> runScenarioScript(File scriptFile) throws IOException {
-    StandAloneScenarioScript script = runScript(scriptFile);
+  public static List<ScenarioResultModel> runScenarioScript(final File scriptFile) throws IOException {
+    final StandAloneScenarioScript script = runScript(scriptFile);
 
     // pull the data out of the script and check it's valid and complete
-    ViewDelegate viewDelegate = script.getViewDelegate();
-    String viewName = viewDelegate.getName();
-    String serverUrl = viewDelegate.getServer();
-    List<MarketDataDelegate.MarketDataSpec> marketDataSpecs = viewDelegate.getMarketDataDelegate().getSpecifications();
+    final ViewDelegate viewDelegate = script.getViewDelegate();
+    final String viewName = viewDelegate.getName();
+    final String serverUrl = viewDelegate.getServer();
+    final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs = viewDelegate.getMarketDataDelegate().getSpecifications();
     validateScript(viewName, serverUrl, marketDataSpecs);
 
     ScenarioListener listener;
@@ -89,32 +97,32 @@ public class StandAloneScenarioRunner {
 
     // connect to the server and execute the scenarios
     try (RemoteServer server = RemoteServer.create(serverUrl)) {
-      ViewDefinition viewDef = server.getConfigSource().getLatestByName(ViewDefinition.class, viewName);
+      final ViewDefinition viewDef = server.getConfigSource().getLatestByName(ViewDefinition.class, viewName);
       if (viewDef == null) {
         throw new IllegalArgumentException("No view definition found with name " + viewName);
       }
-      List<MarketDataSpecification> dataSpecs = convertMarketData(marketDataSpecs, server.getMarketDataSnapshotMaster());
-      Simulation simulation = script.getSimulation();
+      final List<MarketDataSpecification> dataSpecs = convertMarketData(marketDataSpecs, server.getMarketDataSnapshotMaster());
+      final Simulation simulation = script.getSimulation();
       listener = new ScenarioListener(simulation.getScenarioNames());
       simulation.run(viewDef.getUniqueId(), dataSpecs, false, listener, server.getViewProcessor());
       results = listener.getResults();
       populateSecurities(results, server.getSecuritySource());
     }
-    List<ScenarioResultModel> scenarioResults = Lists.newArrayListWithCapacity(results.size());
+    final List<ScenarioResultModel> scenarioResults = Lists.newArrayListWithCapacity(results.size());
 
-    for (SimpleResultModel result : results) {
+    for (final SimpleResultModel result : results) {
       scenarioResults.add(new ScenarioResultModel(result, script.getScenarioParameters(result.getCycleName())));
     }
     return scenarioResults;
   }
 
-  private static void populateSecurities(List<SimpleResultModel> results, SecuritySource securitySource) {
-    for (SimpleResultModel resultModel : results) {
-      for (UniqueIdentifiable uniqueIdentifiable : resultModel.getTargets()) {
-        SecurityLink securityLink = getSecurityLink(uniqueIdentifiable);
+  private static void populateSecurities(final List<SimpleResultModel> results, final SecuritySource securitySource) {
+    for (final SimpleResultModel resultModel : results) {
+      for (final UniqueIdentifiable uniqueIdentifiable : resultModel.getTargets()) {
+        final SecurityLink securityLink = getSecurityLink(uniqueIdentifiable);
 
         if (securityLink != null) {
-          Security security = loadSecurity(securityLink, securitySource);
+          final Security security = loadSecurity(securityLink, securitySource);
 
           if (security != null) {
             setSecurityLink(uniqueIdentifiable, security);
@@ -124,7 +132,7 @@ public class StandAloneScenarioRunner {
     }
   }
 
-  private static Security loadSecurity(SecurityLink securityLink, SecuritySource securitySource) {
+  private static Security loadSecurity(final SecurityLink securityLink, final SecuritySource securitySource) {
     Collection<Security> securities;
 
     if (!securityLink.getExternalId().isEmpty()) {
@@ -140,7 +148,7 @@ public class StandAloneScenarioRunner {
     return null;
   }
 
-  private static SecurityLink getSecurityLink(Object target) {
+  private static SecurityLink getSecurityLink(final Object target) {
     if (target instanceof ManageablePosition) {
       return ((ManageablePosition) target).getSecurityLink();
     } else if (target instanceof SimplePosition) {
@@ -154,7 +162,7 @@ public class StandAloneScenarioRunner {
     }
   }
 
-  private static void setSecurityLink(Object positionOrTrade, Security security) {
+  private static void setSecurityLink(final Object positionOrTrade, final Security security) {
     if (positionOrTrade instanceof ManageablePosition) {
       ((ManageablePosition) positionOrTrade).setSecurityLink(ManageableSecurityLink.of(security));
     } else if (positionOrTrade instanceof ManageableTrade) {
@@ -166,25 +174,25 @@ public class StandAloneScenarioRunner {
     }
   }
 
-  private static StandAloneScenarioScript runScript(File scriptFile) throws IOException {
-    CompilerConfiguration config = new CompilerConfiguration();
+  private static StandAloneScenarioScript runScript(final File scriptFile) throws IOException {
+    final CompilerConfiguration config = new CompilerConfiguration();
     config.setScriptBaseClass(StandAloneScenarioScript.class.getName());
-    GroovyShell shell = new GroovyShell(config);
+    final GroovyShell shell = new GroovyShell(config);
     StandAloneScenarioScript script;
 
     try (Reader reader = new BufferedReader(new FileReader(scriptFile))) {
       script = (StandAloneScenarioScript) shell.parse(reader, scriptFile.getAbsolutePath());
     }
-    Binding binding = new Binding();
+    final Binding binding = new Binding();
     SimulationUtils.registerAliases(binding);
     script.setBinding(binding);
     script.run();
     return script;
   }
 
-  private static void validateScript(String viewName,
-                                     String serverUrl,
-                                     List<MarketDataDelegate.MarketDataSpec> marketDataSpecs) {
+  private static void validateScript(final String viewName,
+      final String serverUrl,
+      final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs) {
     if (StringUtils.isEmpty(viewName)) {
       throw new IllegalArgumentException("A view name must be specified");
     }
@@ -197,17 +205,19 @@ public class StandAloneScenarioRunner {
   }
 
   /**
-   * Converts the market data specified by the script into a format usable by the engine.
-   * This is necessary because snapshot data sources must be created with a {@link UniqueId} but we
-   * want to refer to them by name in the script.
-   * @param marketDataSpecs Market data sources defined in the script
-   * @param snapshotMaster For converting snapshot names to IDs
+   * Converts the market data specified by the script into a format usable by the engine. This is necessary because snapshot data sources must be created with a
+   * {@link UniqueId} but we want to refer to them by name in the script.
+   * 
+   * @param marketDataSpecs
+   *          Market data sources defined in the script
+   * @param snapshotMaster
+   *          For converting snapshot names to IDs
    * @return Market data specifications suitable for the engine
    */
-  private static List<MarketDataSpecification> convertMarketData(List<MarketDataDelegate.MarketDataSpec> marketDataSpecs,
-                                                                 MarketDataSnapshotMaster snapshotMaster) {
-    List<MarketDataSpecification> specifications = Lists.newArrayListWithCapacity(marketDataSpecs.size());
-    for (MarketDataDelegate.MarketDataSpec spec : marketDataSpecs) {
+  private static List<MarketDataSpecification> convertMarketData(final List<MarketDataDelegate.MarketDataSpec> marketDataSpecs,
+      final MarketDataSnapshotMaster snapshotMaster) {
+    final List<MarketDataSpecification> specifications = Lists.newArrayListWithCapacity(marketDataSpecs.size());
+    for (final MarketDataDelegate.MarketDataSpec spec : marketDataSpecs) {
       MarketDataSpecification specification;
       switch (spec.getType()) {
         case LIVE:
@@ -217,9 +227,9 @@ public class StandAloneScenarioRunner {
           LocalDate date;
           try {
             date = LocalDate.parse(spec.getSpec());
-          } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Historical market data date isn't in a valid format. Expected format " +
-                                                   "'yyyy-MM-dd', value: " + spec.getSpec());
+          } catch (final DateTimeParseException e) {
+            throw new IllegalArgumentException("Historical market data date isn't in a valid format. Expected format "
+                + "'yyyy-MM-dd', value: " + spec.getSpec());
           }
           specification = new FixedHistoricalMarketDataSpecification(date);
           break;
@@ -227,10 +237,10 @@ public class StandAloneScenarioRunner {
           specification = new LatestHistoricalMarketDataSpecification();
           break;
         case SNAPSHOT:
-          MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
+          final MarketDataSnapshotSearchRequest searchRequest = new MarketDataSnapshotSearchRequest();
           searchRequest.setName(spec.getSpec());
-          MarketDataSnapshotSearchResult searchResult = snapshotMaster.search(searchRequest);
-          List<ManageableMarketDataSnapshot> snapshots = searchResult.getSnapshots();
+          final MarketDataSnapshotSearchResult searchResult = snapshotMaster.search(searchRequest);
+          final List<ManageableMarketDataSnapshot> snapshots = searchResult.getSnapshots();
           if (snapshots.isEmpty()) {
             throw new IllegalArgumentException("No snapshot found named " + spec.getSpec());
           }

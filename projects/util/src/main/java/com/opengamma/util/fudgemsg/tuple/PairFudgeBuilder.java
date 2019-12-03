@@ -37,7 +37,7 @@ public final class PairFudgeBuilder implements FudgeBuilder<Pair<?, ?>> {
   public static final String SECOND_FIELD_NAME = "second";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Pair<?, ?> object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Pair<?, ?> object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (object instanceof LongObjectPair || object instanceof LongDoublePair) {
       msg.add("firstLong", object.getFirst());
@@ -69,28 +69,26 @@ public final class PairFudgeBuilder implements FudgeBuilder<Pair<?, ?>> {
   }
 
   @Override
-  public Pair<?, ?> buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public Pair<?, ?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final Long firstLong = msg.getLong("firstLong");
     if (firstLong != null) {
       final Double secondDouble = msg.getDouble("secondDouble");
       if (secondDouble != null) {
         return LongDoublePair.of(firstLong.longValue(), secondDouble.doubleValue());
-      } else {
-        final FudgeField secondField = msg.getByName(SECOND_FIELD_NAME);
-        final Object second = secondField != null ? deserializer.fieldValueToObject(secondField) : null;
-        return LongObjectPair.of(firstLong.longValue(), second);
       }
+      final FudgeField secondField = msg.getByName(SECOND_FIELD_NAME);
+      final Object second = secondField != null ? deserializer.fieldValueToObject(secondField) : null;
+      return LongObjectPair.of(firstLong.longValue(), second);
     }
     final Long firstInt = msg.getLong("firstInt");
     if (firstInt != null) {
       final Double secondDouble = msg.getDouble("secondDouble");
       if (secondDouble != null) {
         return IntDoublePair.of(firstInt.intValue(), secondDouble.doubleValue());
-      } else {
-        final FudgeField secondField = msg.getByName(SECOND_FIELD_NAME);
-        final Object second = secondField != null ? deserializer.fieldValueToObject(secondField) : null;
-        return IntObjectPair.of(firstInt.intValue(), second);
       }
+      final FudgeField secondField = msg.getByName(SECOND_FIELD_NAME);
+      final Object second = secondField != null ? deserializer.fieldValueToObject(secondField) : null;
+      return IntObjectPair.of(firstInt.intValue(), second);
     }
     final Double firstDouble = msg.getDouble("firstDouble");
     final Double secondDouble = msg.getDouble("secondDouble");

@@ -24,11 +24,11 @@ import org.threeten.bp.Instant;
 public class FinancialUserManager {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FinancialUserManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FinancialUserManager.class);
   /**
    * The map of users.
    */
-  private final ConcurrentHashMap<String, FinancialUser> _userMap = new ConcurrentHashMap<String, FinancialUser>();
+  private final ConcurrentHashMap<String, FinancialUser> _userMap = new ConcurrentHashMap<>();
   /**
    * The user services.
    */
@@ -44,21 +44,25 @@ public class FinancialUserManager {
 
   /**
    * Creates an instance.
-   * 
-   * @param services  the services, not null
-   * @param clientTracker  the tracker, not null
-   * @param userDataTracker  the tracker, not null
+   *
+   * @param services
+   *          the services, not null
+   * @param clientTracker
+   *          the tracker, not null
+   * @param userDataTracker
+   *          the tracker, not null
    */
-  public FinancialUserManager(FinancialUserServices services, FinancialClientTracker clientTracker, FinancialUserDataTracker userDataTracker) {
+  public FinancialUserManager(final FinancialUserServices services, final FinancialClientTracker clientTracker,
+      final FinancialUserDataTracker userDataTracker) {
     _services = services;
     _clientTracker = clientTracker;
     _userDataTracker = userDataTracker;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the services.
-   * 
+   *
    * @return the services, not null
    */
   public FinancialUserServices getServices() {
@@ -67,7 +71,7 @@ public class FinancialUserManager {
 
   /**
    * Gets the tracker.
-   * 
+   *
    * @return the tracker, not null
    */
   public FinancialClientTracker getClientTracker() {
@@ -76,35 +80,37 @@ public class FinancialUserManager {
 
   /**
    * Gets the tracker.
-   * 
+   *
    * @return the tracker, not null
    */
   public FinancialUserDataTracker getUserDataTracker() {
     return _userDataTracker;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets a user.
-   * 
-   * @param userName  the user name, not null
+   *
+   * @param userName
+   *          the user name, not null
    * @return the user, null if not found
    */
-  public FinancialUser getUser(String userName) {
+  public FinancialUser getUser(final String userName) {
     return _userMap.get(userName);
   }
 
   /**
    * Gets a user, creating if it does not exist.
-   * 
-   * @param userName  the user name, not null
+   *
+   * @param userName
+   *          the user name, not null
    * @return the user, not null
    */
-  public FinancialUser getOrCreateUser(String userName) {
+  public FinancialUser getOrCreateUser(final String userName) {
     FinancialUser user = _userMap.get(userName);
     if (user == null) {
       _clientTracker.userCreated(userName);
-      FinancialUser freshUser = new FinancialUser(this, userName);
+      final FinancialUser freshUser = new FinancialUser(this, userName);
       user = _userMap.putIfAbsent(userName, freshUser);
       if (user == null) {
         user = freshUser;
@@ -113,36 +119,39 @@ public class FinancialUserManager {
     return user;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Discards any users and clients that haven't been accessed since the given timestamp.
-   * 
-   * @param timestamp any client resources with a last accessed time before this will be removed
+   *
+   * @param timestamp
+   *          any client resources with a last accessed time before this will be removed
    */
   public void deleteClients(final Instant timestamp) {
     final Iterator<Map.Entry<String, FinancialUser>> userIterator = _userMap.entrySet().iterator();
     while (userIterator.hasNext()) {
       final Map.Entry<String, FinancialUser> userEntry = userIterator.next();
-      s_logger.debug("deleting clients for user {}", userEntry.getKey());
-      int activeClients = userEntry.getValue().getClientManager().deleteClients(timestamp);
+      LOGGER.debug("deleting clients for user {}", userEntry.getKey());
+      final int activeClients = userEntry.getValue().getClientManager().deleteClients(timestamp);
       if (activeClients == 0) {
-        s_logger.debug("deleting user {}", userEntry.getKey());
+        LOGGER.debug("deleting user {}", userEntry.getKey());
         userIterator.remove();
         getClientTracker().userDiscarded(userEntry.getKey());
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the scheduled deletion task.
-   * 
-   * @param scheduler  the scheduler, not null
-   * @param clientTimeOut  the time out for clients, not null
+   *
+   * @param scheduler
+   *          the scheduler, not null
+   * @param clientTimeOut
+   *          the time out for clients, not null
    */
-  public void createDeleteTask(ScheduledExecutorService scheduler, Duration clientTimeOut) {
-    long timeOutMillis = clientTimeOut.toMillis();
-    DeleteClientsRunnable runnable = new DeleteClientsRunnable(timeOutMillis);
+  public void createDeleteTask(final ScheduledExecutorService scheduler, final Duration clientTimeOut) {
+    final long timeOutMillis = clientTimeOut.toMillis();
+    final DeleteClientsRunnable runnable = new DeleteClientsRunnable(timeOutMillis);
     scheduler.scheduleWithFixedDelay(runnable, timeOutMillis, timeOutMillis, TimeUnit.MILLISECONDS);
   }
 
@@ -152,7 +161,7 @@ public class FinancialUserManager {
   class DeleteClientsRunnable implements Runnable {
     private final long _timeoutMillis;
 
-    public DeleteClientsRunnable(long timeoutMillis) {
+    DeleteClientsRunnable(final long timeoutMillis) {
       super();
       _timeoutMillis = timeoutMillis;
     }

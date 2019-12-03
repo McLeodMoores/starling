@@ -29,14 +29,14 @@ import com.opengamma.util.time.DateUtils;
 public final class DbDialectUtils {
 
   /** Known dialects. */
-  private static final Map<String, DbDialect> s_dbDialects = new ConcurrentHashMap<>();
+  private static final Map<String, DbDialect> DB_DIALECTS = new ConcurrentHashMap<>();
   /** Available dialects. */
-  private static final Map<String, Boolean> s_availableDialects = new ConcurrentHashMap<String, Boolean>();
+  private static final Map<String, Boolean> AVAILABLE_DIALECTS = new ConcurrentHashMap<>();
 
   static {
     // initialize the clock
     DateUtils.initTimeZone();
-    
+
     // setup the known databases
     addDbDialect("hsqldb", new HSQLDbDialect());
     addDbDialect("postgres", new PostgresDbDialect());
@@ -54,11 +54,11 @@ public final class DbDialectUtils {
   //-------------------------------------------------------------------------
   /**
    * Gets the supported database types.
-   * 
+   *
    * @return the supported database types, not null
    */
   public static Collection<String> getSupportedDatabaseTypes() {
-    return new ArrayList<>(s_dbDialects.keySet());
+    return new ArrayList<>(DB_DIALECTS.keySet());
   }
 
   /**
@@ -67,17 +67,17 @@ public final class DbDialectUtils {
    * @return the supported database dialects keyed by type, not null
    */
   public static Map<String, DbDialect> getSupportedDbDialects() {
-    return new HashMap<>(s_dbDialects);
+    return new HashMap<>(DB_DIALECTS);
   }
 
   /**
    * Gets a supported database dialect by type name.
-   * 
+   *
    * @param databaseType  the database type, not null
    * @return the dialect, not null
    */
-  public static DbDialect getSupportedDbDialect(String databaseType) {
-    DbDialect dbDialect = getSupportedDbDialects().get(databaseType);
+  public static DbDialect getSupportedDbDialect(final String databaseType) {
+    final DbDialect dbDialect = getSupportedDbDialects().get(databaseType);
     if (dbDialect == null) {
       throw new OpenGammaRuntimeException("Config error - no DbDialect setup for " + databaseType);
     }
@@ -89,16 +89,16 @@ public final class DbDialectUtils {
    * Gets the available database types.
    * <p>
    * Not all supported database types may be available at runtime.
-   * 
+   *
    * @return the available database types, not null
    */
   public static Collection<String> getAvailableDatabaseTypes() {
-    Collection<String> databaseTypes = Sets.newHashSet(s_dbDialects.keySet());
-    for (Iterator<String> it = databaseTypes.iterator(); it.hasNext(); ) {
-      String dbType = it.next();
-      Boolean available = s_availableDialects.get(dbType);
+    final Collection<String> databaseTypes = Sets.newHashSet(DB_DIALECTS.keySet());
+    for (final Iterator<String> it = databaseTypes.iterator(); it.hasNext();) {
+      final String dbType = it.next();
+      Boolean available = AVAILABLE_DIALECTS.get(dbType);
       if (available == null) {
-        DbDialect dbDialect = s_dbDialects.get(dbType);
+        final DbDialect dbDialect = DB_DIALECTS.get(dbType);
         try {
           Objects.requireNonNull(dbDialect.getJDBCDriverClass());
           available = true;
@@ -106,9 +106,9 @@ public final class DbDialectUtils {
           available = false;
           System.err.println("Database driver not available: " + dbType);
         }
-        s_availableDialects.put(dbType, available);
+        AVAILABLE_DIALECTS.put(dbType, available);
       }
-      if (available == false) {
+      if (!available) {
         it.remove();
       }
     }
@@ -119,26 +119,26 @@ public final class DbDialectUtils {
    * Gets the available database types as {@code DbDialect} objects.
    * <p>
    * Not all supported database types may be available at runtime.
-   * 
+   *
    * @return the available database dialects keyed by type, not null
    */
   public static Map<String, DbDialect> getAvailableDbDialects() {
-    Collection<String> availableTypes = getAvailableDatabaseTypes();
-    Map<String, DbDialect> available = Maps.newHashMap();
-    for (String availableType : availableTypes) {
-      available.put(availableType, s_dbDialects.get(availableType));
+    final Collection<String> availableTypes = getAvailableDatabaseTypes();
+    final Map<String, DbDialect> available = Maps.newHashMap();
+    for (final String availableType : availableTypes) {
+      available.put(availableType, DB_DIALECTS.get(availableType));
     }
     return available;
   }
 
   /**
    * Gets an available database dialect by type name.
-   * 
+   *
    * @param databaseType  the database type, not null
    * @return the dialect, not null
    */
-  public static DbDialect getAvailableDbDialect(String databaseType) {
-    DbDialect dbDialect = getAvailableDbDialects().get(databaseType);
+  public static DbDialect getAvailableDbDialect(final String databaseType) {
+    final DbDialect dbDialect = getAvailableDbDialects().get(databaseType);
     if (dbDialect == null) {
       throw new OpenGammaRuntimeException("Config error - no available DbDialect for " + databaseType);
     }
@@ -152,8 +152,8 @@ public final class DbDialectUtils {
    * @param dbType  the database type, not null
    * @param dialect  the dialect, not null
    */
-  public static void addDbDialect(String dbType, DbDialect dialect) {
-    s_dbDialects.put(dbType, dialect);
+  public static void addDbDialect(final String dbType, final DbDialect dialect) {
+    DB_DIALECTS.put(dbType, dialect);
   }
 
 }

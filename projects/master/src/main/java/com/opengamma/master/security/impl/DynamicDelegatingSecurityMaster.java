@@ -34,13 +34,13 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A security master that uses the scheme of the unique identifier to determine which
  * underlying master should handle the request.
- * <p/>
+ * <p>
  * The underlying masters, or delegates, can be registered or deregistered at run time.
  * By default there is an {@link InMemorySecurityMaster} that will be used if specific scheme/delegate
  * combinations have not been registered.
- * <p/>
+ * <p>
  * Change events are aggregated from the different masters and presented through a single change manager.
- * <p/>
+ * <p>
  * The {@link #register(String, SecurityMaster)}, {@link #deregister(String)} and
  * {@link #add(String, SecurityDocument)} methods are public API outside
  * of the normal Master interface. Therefore to properly use this class the caller must have
@@ -71,7 +71,7 @@ public class DynamicDelegatingSecurityMaster implements SecurityMaster {
 
   /**
    * Registers a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for creating a delegate and registering it before making calls
    * to the DynamicDelegatingSecurityMaster
    *
@@ -87,7 +87,7 @@ public class DynamicDelegatingSecurityMaster implements SecurityMaster {
 
   /**
    * Deregisters a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for deregistering a delegate when it is no longer needed.
    * For example, if delegates are made up of InMemoryMasters and data is no longer needed,
    * call deregister will free up memory
@@ -111,67 +111,67 @@ public class DynamicDelegatingSecurityMaster implements SecurityMaster {
   }
 
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     // result the union of all discovered security types among all the delegates.
     // we never populate the schema version because that is a single value in the result
     // and there is no way to take union of multiple delegates
-    List<String> securityTypes = new ArrayList<>();
-    for (SecurityMaster delegate : _delegator.getDelegates().values()) {
-      SecurityMetaDataResult meta = delegate.metaData(request);
-      for (String securityType : meta.getSecurityTypes()) {
+    final List<String> securityTypes = new ArrayList<>();
+    for (final SecurityMaster delegate : _delegator.getDelegates().values()) {
+      final SecurityMetaDataResult meta = delegate.metaData(request);
+      for (final String securityType : meta.getSecurityTypes()) {
         if (!securityTypes.contains(securityType)) {
           securityTypes.add(securityType);
         }
       }
     }
-    SecurityMetaDataResult result = new SecurityMetaDataResult();
+    final SecurityMetaDataResult result = new SecurityMetaDataResult();
     result.setSecurityTypes(securityTypes);
     return result;
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    Collection<ObjectId> ids = request.getObjectIds();
+    final Collection<ObjectId> ids = request.getObjectIds();
     return chooseDelegate(ids.iterator().next().getScheme()).search(request);
   }
 
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public SecurityDocument get(UniqueId uniqueId) {
+  public SecurityDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public SecurityDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, SecurityDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, SecurityDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      SecurityDocument doc = get(uniqueId);
+  public Map<UniqueId, SecurityDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, SecurityDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final SecurityDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public SecurityDocument add(SecurityDocument document) {
+  public SecurityDocument add(final SecurityDocument document) {
     throw new UnsupportedOperationException("Cannot add document without explicitly specifying the scheme");
   }
 
   @Override
-  public SecurityDocument update(SecurityDocument document) {
+  public SecurityDocument update(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
     Validate.notNull(document.getUniqueId(), "document has no unique id");
     Validate.notNull(document.getObjectId(), "document has no object id");
@@ -179,53 +179,53 @@ public class DynamicDelegatingSecurityMaster implements SecurityMaster {
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     ArgumentChecker.notNull(oid, "objectIdentifiable");
     chooseDelegate(oid.getObjectId().getScheme()).remove(oid);
   }
 
   @Override
-  public SecurityDocument correct(SecurityDocument document) {
+  public SecurityDocument correct(final SecurityDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(SecurityDocument replacementDocument) {
+  public UniqueId replaceVersion(final SecurityDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, SecurityDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final SecurityDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);

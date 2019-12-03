@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.InvalidPermissionStringException;
-import org.apache.shiro.authz.permission.WildcardPermission;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -48,19 +47,19 @@ final class ShiroWildcardPermission implements Permission {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param permissionString  the permission string, not null
    * @return the permission object, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
-  static Permission of(String permissionString) {
+  static Permission of(final String permissionString) {
     return new ShiroWildcardPermission(permissionString);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param permissionString  the permission string, not null
    * @throws InvalidPermissionStringException if the permission string is invalid
    */
@@ -72,20 +71,20 @@ final class ShiroWildcardPermission implements Permission {
     // case insensitive
     permStr = permStr.toLowerCase(Locale.ROOT);
     // split once
-    List<Set<String>> wildcardSegments = new ArrayList<>();
-    String[] segmentStrs = StringUtils.splitPreserveAllTokens(permStr, ':');
-    for (String segmentStr : segmentStrs) {
-      String[] partStrs = StringUtils.splitPreserveAllTokens(segmentStr, ',');
+    final List<Set<String>> wildcardSegments = new ArrayList<>();
+    final String[] segmentStrs = StringUtils.splitPreserveAllTokens(permStr, ':');
+    for (final String segmentStr : segmentStrs) {
+      final String[] partStrs = StringUtils.splitPreserveAllTokens(segmentStr, ',');
       if (partStrs.length == 0) {
         throw new InvalidPermissionStringException("Permission string must not contain an empty segment: " + permissionString, permissionString);
       }
-      Set<String> parts = new LinkedHashSet<>();
+      final Set<String> parts = new LinkedHashSet<>();
       for (String partStr : partStrs) {
         partStr = partStr.trim();
         if (partStr.isEmpty()) {
           throw new InvalidPermissionStringException("Permission string must not contain an empty part: " + permissionString, permissionString);
         }
-        if (partStr.contains("*") && partStr.equals("*") == false) {
+        if (partStr.contains("*") && !partStr.equals("*")) {
           throw new InvalidPermissionStringException("Permission string wildcard can only be applied to whole segment: " + permissionString, permissionString);
         }
         parts.add(partStr);
@@ -103,10 +102,10 @@ final class ShiroWildcardPermission implements Permission {
     _toString = createToString(_segments);
   }
 
-  private static String createToString(List<Set<String>> segments) {
-    StrBuilder buf = new StrBuilder();
-    for (Iterator<Set<String>> it1 = segments.iterator(); it1.hasNext();) {
-      for (Iterator<String> it2 = it1.next().iterator(); it2.hasNext();) {
+  private static String createToString(final List<Set<String>> segments) {
+    final StrBuilder buf = new StrBuilder();
+    for (final Iterator<Set<String>> it1 = segments.iterator(); it1.hasNext();) {
+      for (final Iterator<String> it2 = it1.next().iterator(); it2.hasNext();) {
         buf.append(it2.next());
         if (it2.hasNext()) {
           buf.append(',');
@@ -123,21 +122,21 @@ final class ShiroWildcardPermission implements Permission {
   // this permission is the permission I have
   // the other permission is the permission being checked
   @Override
-  public boolean implies(Permission requiredPermission) {
-    if (requiredPermission instanceof ShiroWildcardPermission == false) {
+  public boolean implies(final Permission requiredPermission) {
+    if (!(requiredPermission instanceof ShiroWildcardPermission)) {
       return false;
     }
-    ShiroWildcardPermission requiredPerm = (ShiroWildcardPermission) requiredPermission;
-    List<Set<String>> thisSegments = _segments;
-    List<Set<String>> otherSegments = requiredPerm._segments;
+    final ShiroWildcardPermission requiredPerm = (ShiroWildcardPermission) requiredPermission;
+    final List<Set<String>> thisSegments = _segments;
+    final List<Set<String>> otherSegments = requiredPerm._segments;
     if (thisSegments.size() > otherSegments.size()) {
       return false;
     }
-    int commonLen = Math.min(thisSegments.size(), otherSegments.size());
+    final int commonLen = Math.min(thisSegments.size(), otherSegments.size());
     for (int i = 0; i < commonLen; i++) {
-      Set<String> thisSegment = thisSegments.get(i);
-      Set<String> otherSegment = otherSegments.get(i);
-      if (thisSegment != WILDCARD_SEGMENT && thisSegment.containsAll(otherSegment) == false) {
+      final Set<String> thisSegment = thisSegments.get(i);
+      final Set<String> otherSegment = otherSegments.get(i);
+      if (thisSegment != WILDCARD_SEGMENT && !thisSegment.containsAll(otherSegment)) {
         return false;
       }
     }
@@ -146,9 +145,9 @@ final class ShiroWildcardPermission implements Permission {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj instanceof ShiroWildcardPermission) {
-      ShiroWildcardPermission other = (ShiroWildcardPermission) obj;
+      final ShiroWildcardPermission other = (ShiroWildcardPermission) obj;
       return _segments.equals(other._segments);
     }
     return false;

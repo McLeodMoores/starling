@@ -36,14 +36,14 @@ public class FunctionInputsImpl implements FunctionInputs, Serializable {
 
   private final ComputationTargetSpecificationResolver.AtVersionCorrection _resolver;
   private final Set<ComputedValue> _values;
-  private final Map<String, ComputedValue> _valuesByRequirementName = new HashMap<String, ComputedValue>();
-  private final Map<Pair<String, Object>, ComputedValue[]> _valuesByRequirement = new HashMap<Pair<String, Object>, ComputedValue[]>();
+  private final Map<String, ComputedValue> _valuesByRequirementName = new HashMap<>();
+  private final Map<Pair<String, Object>, ComputedValue[]> _valuesByRequirement = new HashMap<>();
   private final Collection<ValueSpecification> _missingValues;
 
   public FunctionInputsImpl(final ComputationTargetSpecificationResolver.AtVersionCorrection resolver, final ComputedValue value) {
     _resolver = resolver;
     _missingValues = Collections.emptySet();
-    _values = new HashSet<ComputedValue>();
+    _values = new HashSet<>();
     addValue(value);
   }
 
@@ -71,12 +71,11 @@ public class FunctionInputsImpl implements FunctionInputs, Serializable {
   private Object targetSpecKey(final ComputationTargetSpecification targetSpec) {
     if (targetSpec.getParent() == null) {
       return targetSpec.getUniqueId();
-    } else {
-      final List<UniqueId> uids = new ArrayList<UniqueId>();
-      targetRefKey(targetSpec.getParent(), uids);
-      uids.add(targetSpec.getUniqueId());
-      return uids;
     }
+    final List<UniqueId> uids = new ArrayList<>();
+    targetRefKey(targetSpec.getParent(), uids);
+    uids.add(targetSpec.getUniqueId());
+    return uids;
   }
 
   private void addValue(final ComputedValue value) {

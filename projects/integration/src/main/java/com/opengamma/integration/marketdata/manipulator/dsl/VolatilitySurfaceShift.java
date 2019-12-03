@@ -5,23 +5,24 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutableConstructor;
-import org.joda.beans.PropertyDefinition;
-
-import com.opengamma.util.ArgumentChecker;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
+import org.joda.beans.ImmutableConstructor;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Defines the shift applied to a single point in a volatility surface.
@@ -39,13 +40,12 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   private final Number _shift;
 
   /**
-   * TODO
    * @param x
    * @param y
    * @param shift
    */
   @ImmutableConstructor
-  /* package */ VolatilitySurfaceShift(Object x, Object y, Number shift) {
+  /* package */ VolatilitySurfaceShift(final Object x, final Object y, final Number shift) {
     ArgumentChecker.notNull(x, "x");
     ArgumentChecker.notNull(y, "y");
     ArgumentChecker.notNull(shift, "shift");
@@ -144,9 +144,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceShift other = (VolatilitySurfaceShift) obj;
-      return JodaBeanUtils.equal(getX(), other.getX()) &&
-          JodaBeanUtils.equal(getY(), other.getY()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return JodaBeanUtils.equal(_x, other._x) &&
+          JodaBeanUtils.equal(_y, other._y) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -154,9 +154,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getX());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getY());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_x);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_y);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -164,9 +164,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("VolatilitySurfaceShift{");
-    buf.append("x").append('=').append(getX()).append(',').append(' ');
-    buf.append("y").append('=').append(getY()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("x").append('=').append(_x).append(',').append(' ');
+    buf.append("y").append('=').append(_y).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -354,19 +354,31 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

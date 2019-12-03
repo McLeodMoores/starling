@@ -74,7 +74,8 @@ public class UserMarketDataSnapshotTest {
     assertNotNull(snapshot.query(specification));
     assertEquals(123d, ((SnapshotDataBundle) snapshot.query(specification)).getDataPoint(ExternalId.of("TestScheme", "Value1")));
     specification = provider.getAvailability(target, Currency.USD,
-        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, target, ValueProperties.with(ValuePropertyNames.CURVE, "testCurve").with("SomethingElse", "Value").get()));
+        new ValueRequirement(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, target,
+            ValueProperties.with(ValuePropertyNames.CURVE, "testCurve").with("SomethingElse", "Value").get()));
     assertNull(specification);
     // TODO: Test the surface, cube and global values
   }

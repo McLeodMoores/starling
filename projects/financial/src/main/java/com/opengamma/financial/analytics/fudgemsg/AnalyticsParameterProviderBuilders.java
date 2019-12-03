@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.fudgemsg;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,6 +42,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Contains builders for the objects that analytics needs to perform pricing.
  */
@@ -56,7 +56,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link IborIndex}
+   * Fudge builder for {@link IborIndex}.
    */
   @FudgeBuilderFor(IborIndex.class)
   public static class IborIndexBuilder extends AbstractFudgeBuilder<IborIndex> {
@@ -100,7 +100,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link IndexON}
+   * Fudge builder for {@link IndexON}.
    */
   @FudgeBuilderFor(IndexON.class)
   public static class IndexONBuilder extends AbstractFudgeBuilder<IndexON> {
@@ -133,7 +133,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link IndexPrice}
+   * Fudge builder for {@link IndexPrice}.
    */
   @FudgeBuilderFor(IndexPrice.class)
   public static class IndexPriceBuilder extends AbstractFudgeBuilder<IndexPrice> {
@@ -158,7 +158,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link FXMatrix}
+   * Fudge builder for {@link FXMatrix}.
    */
   @FudgeBuilderFor(FXMatrix.class)
   public static class FXMatrixBuilder extends AbstractFudgeBuilder<FXMatrix> {
@@ -213,7 +213,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link MulticurveProviderDiscount}
+   * Fudge builder for {@link MulticurveProviderDiscount}.
    */
   @FudgeBuilderFor(MulticurveProviderDiscount.class)
   public static class MulticurveProviderDiscountBuilder extends AbstractFudgeBuilder<MulticurveProviderDiscount> {
@@ -285,7 +285,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link MulticurveProviderForward}
+   * Fudge builder for {@link MulticurveProviderForward}.
    */
   @FudgeBuilderFor(MulticurveProviderForward.class)
   public static class MulticurveProviderForwardBuilder extends AbstractFudgeBuilder<MulticurveProviderForward> {
@@ -357,7 +357,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link InflationProviderDiscount}
+   * Fudge builder for {@link InflationProviderDiscount}.
    */
   @FudgeBuilderFor(InflationProviderDiscount.class)
   public static class InflationProviderDiscountBuilder extends AbstractFudgeBuilder<InflationProviderDiscount> {
@@ -396,7 +396,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link IssuerProviderDiscount}
+   * Fudge builder for {@link IssuerProviderDiscount}.
    */
   @FudgeBuilderFor(IssuerProviderDiscount.class)
   public static class IssuerProviderDiscountBuilder extends AbstractFudgeBuilder<IssuerProviderDiscount> {
@@ -424,7 +424,7 @@ public final class AnalyticsParameterProviderBuilders {
         final Object issuerReference = deserializer.fieldValueToObject(clazz, issuerReferenceFields.get(i));
         final LegalEntityFilter<LegalEntity> issuerFilter = deserializer.fieldValueToObject(LegalEntityFilter.class, issuerFilterFields.get(i));
         final YieldAndDiscountCurve curve = deserializer.fieldValueToObject(YieldAndDiscountCurve.class, issuerCurveFields.get(i));
-        issuerCurves.put(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(issuerReference, issuerFilter), curve);
+        issuerCurves.put(Pairs.<Object, LegalEntityFilter<LegalEntity>> of(issuerReference, issuerFilter), curve);
       }
       return new IssuerProviderDiscount(multicurves, issuerCurves);
     }
@@ -443,7 +443,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link HullWhiteOneFactorProviderDiscount}
+   * Fudge builder for {@link HullWhiteOneFactorProviderDiscount}.
    */
   @FudgeBuilderFor(HullWhiteOneFactorProviderDiscount.class)
   public static class HullWhiteOneFactorProviderDiscountBuilder extends AbstractFudgeBuilder<HullWhiteOneFactorProviderDiscount> {
@@ -473,7 +473,7 @@ public final class AnalyticsParameterProviderBuilders {
   }
 
   /**
-   * Fudge builder for {@link HullWhiteOneFactorPiecewiseConstantParameters}
+   * Fudge builder for {@link HullWhiteOneFactorPiecewiseConstantParameters}.
    */
   @FudgeBuilderFor(HullWhiteOneFactorPiecewiseConstantParameters.class)
   public static class HullWhiteOneFactorPiecewiseConstantParametersBuilder extends AbstractFudgeBuilder<HullWhiteOneFactorPiecewiseConstantParameters> {
@@ -509,14 +509,14 @@ public final class AnalyticsParameterProviderBuilders {
       final double[] volatilityTime = object.getVolatilityTime();
       for (int i = 0; i < volatility.length; i++) {
         message.add(VOLATILITY_FIELD, volatility[i]);
-        message.add(TIME_FIELD, volatilityTime[i + 1]); //values are added to the time array in the constructor
+        message.add(TIME_FIELD, volatilityTime[i + 1]); // values are added to the time array in the constructor
       }
     }
 
   }
 
   /**
-   * Fudge builder for {@link G2ppPiecewiseConstantParameters}
+   * Fudge builder for {@link G2ppPiecewiseConstantParameters}.
    */
   @FudgeBuilderFor(G2ppPiecewiseConstantParameters.class)
   public static class G2ppPiecewiseConstantParametersBuilder extends AbstractFudgeBuilder<G2ppPiecewiseConstantParameters> {
@@ -565,7 +565,7 @@ public final class AnalyticsParameterProviderBuilders {
       }
       final double[] volatilityTime = object.getVolatilityTime();
       for (int i = 0; i < volatilityTime.length - 2; i++) {
-        message.add(TIME_FIELD, volatilityTime[i + 1]); //values added to front and back of times array on construction
+        message.add(TIME_FIELD, volatilityTime[i + 1]); // values added to front and back of times array on construction
       }
       message.add(CORRELATION_FIELD, object.getCorrelation());
     }

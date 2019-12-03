@@ -28,10 +28,10 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CommodityForwardCurveFromFuturePerCurrencyDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CommodityForwardCurveFromFuturePerCurrencyDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityForwardCurveFromFuturePerCurrencyDefaults.class);
   /** Value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE
+                ValueRequirementNames.FORWARD_CURVE
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -41,8 +41,10 @@ public class CommodityForwardCurveFromFuturePerCurrencyDefaults extends DefaultP
   private final Map<String, String> _forwardCurveCalculationMethods;
 
   /**
-   * @param priority The priority, not null
-   * @param perCurrencyConfig The default values of forward curve name, forward curve calculation method per currency
+   * @param priority
+   *          The priority, not null
+   * @param perCurrencyConfig
+   *          The default values of forward curve name, forward curve calculation method per currency
    */
   public CommodityForwardCurveFromFuturePerCurrencyDefaults(final String priority, final String... perCurrencyConfig) {
     super(ComputationTargetType.CURRENCY, true);
@@ -75,11 +77,12 @@ public class CommodityForwardCurveFromFuturePerCurrencyDefaults extends DefaultP
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = target.getUniqueId().getValue();
     final String forwardCurveName = _forwardCurveNames.get(currency);
     if (forwardCurveName == null) {
-      s_logger.error("Could not get defaults for {}; should never happen", currency);
+      LOGGER.error("Could not get defaults for {}; should never happen", currency);
       return null;
     }
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
@@ -88,7 +91,7 @@ public class CommodityForwardCurveFromFuturePerCurrencyDefaults extends DefaultP
     if (ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethods.get(currency));
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

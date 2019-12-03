@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.volatility.local.deprecated;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.TreeSet;
@@ -46,13 +44,15 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  * @deprecated Deprecated
  */
 @Deprecated
 public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilityPDEGridFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexLocalVolatilityPDEGridFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexLocalVolatilityPDEGridFunction.class);
 
   public ForexLocalVolatilityPDEGridFunction() {
     super(InstrumentTypeProperties.FOREX);
@@ -81,7 +81,7 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
     }
     final DayCount actAct = DayCounts.ACT_ACT_ISDA;
     final double t = actAct.getDayCountFraction(date, fxOption.getExpiry().getExpiry());
-    return new EuropeanVanillaOption(strike, t, true); //TODO this shouldn't be hard coded to a call
+    return new EuropeanVanillaOption(strike, t, true); // TODO this shouldn't be hard coded to a call
   }
 
   @Override
@@ -94,9 +94,10 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, SurfaceAndCubePropertyNames.VOLATILITY_QUOTE).get());
   }
 
-  //TODO
+  // TODO
   @Override
-  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement, final ValueRequirement forwardCurveRequirement) {
+  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement,
+      final ValueRequirement forwardCurveRequirement) {
     final Object volatilitySurfaceObject = inputs.getValue(volDataRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + volDataRequirement);
@@ -107,7 +108,8 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     final Tenor[] tenors = fxVolatilitySurface.getXs();
     Arrays.sort(tenors);
     final Pair<Number, FXVolQuoteType>[] quotes = fxVolatilitySurface.getYs();
@@ -142,14 +144,14 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();
         strangle[i] = strangleList.toDoubleArray();
       }
     }
-    final boolean isCallData = true; //TODO this shouldn't be hard-coded
+    final boolean isCallData = true; // TODO this shouldn't be hard-coded
     return new ForexSmileDeltaSurfaceDataBundle(forwardCurve, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 
@@ -159,16 +161,16 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
       return period.getYears();
     }
     if (period.getMonths() != 0) {
-      return ((double) period.getMonths()) / 12;
+      return (double) period.getMonths() / 12;
     }
     if (period.getDays() != 0) {
-      return ((double) period.getDays()) / 365;
+      return (double) period.getDays() / 365;
     }
     throw new OpenGammaRuntimeException("Should never happen");
   }
 
   private Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
-    final TreeSet<Number> values = new TreeSet<Number>();
+    final TreeSet<Number> values = new TreeSet<>();
     for (final Pair<Number, FXVolQuoteType> pair : quotes) {
       values.add(pair.getFirst());
     }

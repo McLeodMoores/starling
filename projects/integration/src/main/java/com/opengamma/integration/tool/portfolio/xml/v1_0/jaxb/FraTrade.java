@@ -32,11 +32,11 @@ import com.opengamma.util.money.Currency;
 @XmlRootElement
 @BeanDefinition
 public class FraTrade extends Trade {
-  
+
   @XmlElement(name = "payFixed", required = true)
   @PropertyDefinition
   private boolean _payFixed;
-  
+
   @XmlElement(name = "effectiveDate", required = true)
   @PropertyDefinition
   private LocalDate _effectiveDate;
@@ -64,7 +64,7 @@ public class FraTrade extends Trade {
   @XmlElement(name = "notional", required = true)
   @PropertyDefinition
   private BigDecimal _notional;
-  
+
   @XmlElement(name = "rate", required = true)
   @PropertyDefinition
   private BigDecimal _rate;
@@ -80,7 +80,7 @@ public class FraTrade extends Trade {
   @XmlElement(name = "fixingIndex", required = true)
   @PropertyDefinition
   private FixingIndex _fixingIndex;
-  
+
   @Override
   public boolean canBePositionAggregated() {
     return false;

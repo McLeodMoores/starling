@@ -21,9 +21,9 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Description of a bond future security with cash settlement against a price deduced from a yield average. 
- * In particular used for AUD-SFE bond futures.
- * <P>Reference: Add a reference.
+ * Description of a bond future security with cash settlement against a price deduced from a yield average. In particular used for AUD-SFE bond futures.
+ * <P>
+ * Reference: Add a reference.
  */
 public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDefinition<BondFuturesYieldAverageSecurity> {
 
@@ -58,13 +58,20 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Constructor from the trading and notice dates and the basket.
-   * @param tradingLastDate The last trading date.
-   * @param deliveryBasket The basket of deliverable bonds.
-   * @param couponRate The coupon rate of the synthetic bond used to compute the settlement price from the yield.
-   * @param tenor The underlying synthetic bond tenor (in years).
-   * @param notional The bond future notional.
+   * 
+   * @param tradingLastDate
+   *          The last trading date.
+   * @param deliveryBasket
+   *          The basket of deliverable bonds.
+   * @param couponRate
+   *          The coupon rate of the synthetic bond used to compute the settlement price from the yield.
+   * @param tenor
+   *          The underlying synthetic bond tenor (in years).
+   * @param notional
+   *          The bond future notional.
    */
-  public BondFuturesYieldAverageSecurityDefinition(final ZonedDateTime tradingLastDate, final BondFixedSecurityDefinition[] deliveryBasket, final double couponRate,
+  public BondFuturesYieldAverageSecurityDefinition(final ZonedDateTime tradingLastDate, final BondFixedSecurityDefinition[] deliveryBasket,
+      final double couponRate,
       final int tenor, final double notional) {
     super(tradingLastDate);
     ArgumentChecker.notNull(tradingLastDate, "Last trading date");
@@ -81,6 +88,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Gets the number of days between notice date and delivery date.
+   * 
    * @return The number of days between notice date and delivery date.
    */
   public int getSettlementDays() {
@@ -89,6 +97,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Gets the basket of deliverable bonds.
+   * 
    * @return The basket of deliverable bonds.
    */
   public BondFixedSecurityDefinition[] getDeliveryBasket() {
@@ -97,6 +106,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Returns the coupon rate of the synthetic bond used to compute the settlement price from the yield.
+   * 
    * @return The rate.
    */
   public double getCouponRate() {
@@ -105,6 +115,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Returns The tenor of the synthetic bond used to compute the settlement price from the yield (in year).
+   * 
    * @return The tenor.
    */
   public int getTenor() {
@@ -113,6 +124,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Returns the theoretical delivery date for the bond underlying the futures.
+   * 
    * @return The delivery date.
    */
   public ZonedDateTime getDeliveryDate() {
@@ -121,6 +133,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Gets the notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -129,6 +142,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * Gets the holiday calendar.
+   * 
    * @return The holiday calendar
    */
   public Calendar getCalendar() {
@@ -137,6 +151,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -177,18 +192,18 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
     result = prime * result + _calendar.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_couponRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_deliveryBasket);
     result = prime * result + _deliveryDate.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDays;
     result = prime * result + _tenor;
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -201,7 +216,7 @@ public class BondFuturesYieldAverageSecurityDefinition extends FuturesSecurityDe
     if (getClass() != obj.getClass()) {
       return false;
     }
-    BondFuturesYieldAverageSecurityDefinition other = (BondFuturesYieldAverageSecurityDefinition) obj;
+    final BondFuturesYieldAverageSecurityDefinition other = (BondFuturesYieldAverageSecurityDefinition) obj;
     if (Double.doubleToLongBits(_couponRate) != Double.doubleToLongBits(other._couponRate)) {
       return false;
     }

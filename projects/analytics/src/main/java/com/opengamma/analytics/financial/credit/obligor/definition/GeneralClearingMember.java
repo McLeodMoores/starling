@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.obligor.definition;
@@ -13,14 +13,17 @@ import com.opengamma.analytics.financial.credit.obligor.Region;
 import com.opengamma.analytics.financial.credit.obligor.Sector;
 
 /**
- * Class to define a General Clearing Member of a CCP (an extension of the Obligor class)
+ * Class to define a General Clearing Member of a CCP (an extension of the Obligor class).
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class GeneralClearingMember extends Obligor {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
   // TODO : Add a list of clients (which are NCM's) and give them IM and VM accounts
-  // TODO : Add a boolean to specify if IM and VM accounts  are segregated
+  // TODO : Add a boolean to specify if IM and VM accounts are segregated
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -46,7 +49,8 @@ public class GeneralClearingMember extends Obligor {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 
-    super(obligorTicker, obligorShortName, obligorREDCode, compositeRating, impliedRating, moodysCreditRating, standardAndPoorsCreditRating, fitchCreditRating, hasDefaulted, sector, region, country);
+    super(obligorTicker, obligorShortName, obligorREDCode, compositeRating, impliedRating, moodysCreditRating, standardAndPoorsCreditRating, fitchCreditRating,
+        hasDefaulted, sector, region, country);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 

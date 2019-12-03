@@ -19,7 +19,7 @@ import com.opengamma.master.AbstractSearchResult;
 
 /**
  * Provides access to the results of searching in a {@code DbBeanMaster}.
- * 
+ *
  * @param <D>  the type of the document
  */
 @BeanDefinition

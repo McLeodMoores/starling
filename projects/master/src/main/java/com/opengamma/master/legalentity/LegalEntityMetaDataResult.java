@@ -22,8 +22,8 @@ import com.opengamma.master.AbstractMetaDataResult;
 import com.opengamma.util.PublicSPI;
 
 /**
- * Result from obtaining meta-data for the legalentity master.
- * <p/>
+ * Result from obtaining meta-data for the legal entity master.
+ * <p>
  * Meta-data is only returned if requested.
  */
 @PublicSPI

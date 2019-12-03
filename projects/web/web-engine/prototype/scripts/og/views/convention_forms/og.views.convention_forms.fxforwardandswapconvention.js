@@ -14,15 +14,20 @@ $.register_module({
 			Form = ui.Form,
 			ATTR = 'attributes',
 			EIDS = 'externalIdBundle',
+			SPOT = 'spotConvention',
 			INDX = '<INDEX>',
 			EMPT = '<EMPTY>',
 			type_map = [
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name',											Form.type.STR],
-				['settlementDays',									Form.type.BYT],
-				['useIntermediateUsHolidays',	 					Form.type.BOO],
+				['businessDayConvention',	 						Form.type.STR],
+				['spotConvention', 									Form.type.STR],				
+				['isEOM',											Form.type.BOO],
+				['underlyingConventionName', 						Form.type.STR],
 				['uniqueId',										Form.type.STR],
-				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
+				[[SPOT, 'ID', INDX, 'Scheme'].join('.'),			Form.type.STR],
+				[[SPOT, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
+				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],				
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
 				[['id', EMPT, 'scheme'].join('.'),					Form.type.STR],
 				[['id', EMPT, 'value'].join('.'),					Form.type.STR],
@@ -43,10 +48,10 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-	        	useIntermediateUsHolidays = master.useIntermediateUsHolidays,
-	        	sep = '~', 
+	        	isEOM = master.isEOM,
+	        	underlyingConventionName = master.underlyingConventionName,
 	        	form = new Form({
-	        		module: 'og.views.forms.fx-spot-convention_tash',
+	        		module: 'og.views.forms.fx-forward-and-swap-convention_tash',
 	        		data: master,
 	        		type_map: type_map,
 	        		selector: selector,
@@ -64,8 +69,9 @@ $.register_module({
         			var data = result.data,
         				meta = result.meta,
         				as_new = result.extras.as_new;
-        			data.useIntermediateUsHolidays = useIntermediateUsHolidays;
-        			if (as_new && (orig.name == data.name)) { return window.alert('Please select a new name.') };
+        			data.isEOM = isEOM;
+        			if (as_new && (orig_name == data.name)) { return window.alert('Please select a new name.') };
+        			if (!data.externalIdBundle.ID.length) { return window.alert('Please add at least one external identifier') }; 
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,
@@ -82,28 +88,49 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(FX Spot Convention)\
+            			  &nbsp(FX Forward and Swap Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id);
-            		$(form_id + ' input[name=settlementDays]').val(master.settlementDays.toString());
-            		$(form_id + ' input[name=useIntermediateUsHolidays]').prop('checked', useIntermediateUsHolidays);
+            		$(form_id + ' input[name=isEOM]').prop('checked', isEOM);
+            		$(form_id + ' p[id=warning]')[0].hidden = ($('#' + form.children[1].id)[0].options.length > 1);
             		setTimeout(load_handler.partial(form));
         		};
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
-            	.on('click', form_id + ' input[name=useIntermediateUsHolidays]', function (event) {
-            		useIntermediateUsHolidays = !useIntermediateUsHolidays;
-            	});
-            form.children = [            	
+            	.on('click', form_id + ' input[name=isEOM]', function (event) { isEOM = !isEOM; });
+            form.children = [
             	// item_0
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		resource: 'blotter.businessdayconventions',
+            		index: 'businessDayConvention',
+            		value: master.businessDayConvention ? master.businessDayConvention : ""
+            	}),
+            	// item_1
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		value: !underlyingConventionName ? "" : underlyingConventionName, 
+            		resource: 'conventions.conventionIds',
+            		data_generator: function (handler) {
+            			api.conventions.convention_ids.get({ conventionType: 'FXSpot'}).pipe(function (result) {
+            				handler(result.data.map(function (convention) {
+            					var split = convention.split('|');
+            					return { value: split[0], text: split[0], selected: split[0] === underlyingConventionName };
+            				}))
+            			})
+            		},
+            		index: 'spotConvention',
+            	}),
+            	// item_2
             	new og.views.convention_forms.ExternalIdBundle({
             		form: form,
             		data: master.externalIdBundle,
             		index: 'externalIdBundle'
             	}),
-            	// item_1
+            	// item_3
             	new og.views.convention_forms.Attributes({
             		form: form,
             		attributes: master.attributes,

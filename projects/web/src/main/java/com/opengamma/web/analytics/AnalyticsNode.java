@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
   /** Whether this node represents a position in a fungible security, i.e. it has child nodes which are trades. */
   private final boolean _collapsed;
 
-  /* package */ AnalyticsNode(int startRow, int endRow, List<AnalyticsNode> children, boolean collapsed) {
+  /* package */ AnalyticsNode(final int startRow, final int endRow, final List<AnalyticsNode> children, final boolean collapsed) {
     ArgumentChecker.notNull(children, "children");
     _collapsed = collapsed;
     _startRow = startRow;
@@ -44,11 +44,11 @@ import com.opengamma.util.ArgumentChecker;
    * @param portfolio The portfolio
    * @return The root node of the portfolio's node structure, null if the portfolio is null
    */
-  /* package */ static AnalyticsNode portfolioRoot(Portfolio portfolio) {
+  /* package */ static AnalyticsNode portfolioRoot(final Portfolio portfolio) {
     if (portfolio == null) {
       return null;
     }
-    PortfolioNode root = portfolio.getRootNode();
+    final PortfolioNode root = portfolio.getRootNode();
     return new PortfolioNodeBuilder(root).getRoot();
   }
 
@@ -97,31 +97,31 @@ import com.opengamma.util.ArgumentChecker;
     /** Index of last row, updated as the structure is built. */
     private int _lastRow;
 
-    /* package */ PortfolioNodeBuilder(PortfolioNode root) {
+    /* package */ PortfolioNodeBuilder(final PortfolioNode root) {
       _root = createPortfolioNode(root, 0);
       _lastRow = 0;
     }
 
-    private AnalyticsNode createPortfolioNode(PortfolioNode node, int level) {
-      int nodeStart = _lastRow;
-      List<AnalyticsNode> nodes = Lists.newArrayList();
-      for (Position position : node.getPositions()) {
+    private AnalyticsNode createPortfolioNode(final PortfolioNode node, final int level) {
+      final int nodeStart = _lastRow;
+      final List<AnalyticsNode> nodes = Lists.newArrayList();
+      for (final Position position : node.getPositions()) {
         ++_lastRow;
         if (position.getTrades().size() > 0 && isFungible(position.getSecurity())) {
           nodes.add(createFungiblePositionNode(position));
         }
       }
-      for (PortfolioNode child : node.getChildNodes()) {
+      for (final PortfolioNode child : node.getChildNodes()) {
         ++_lastRow;
         nodes.add(createPortfolioNode(child, level + 1));
       }
       // leave root and first-level children expanded
-      boolean collapse = level >= 2;
+      final boolean collapse = level >= 2;
       return new AnalyticsNode(nodeStart, _lastRow, Collections.unmodifiableList(nodes), collapse);
     }
 
-    private AnalyticsNode createFungiblePositionNode(Position position) {
-      int nodeStart = _lastRow;
+    private AnalyticsNode createFungiblePositionNode(final Position position) {
+      final int nodeStart = _lastRow;
       _lastRow += position.getTrades().size();
       return new AnalyticsNode(nodeStart, _lastRow, Collections.<AnalyticsNode>emptyList(), true);
     }
@@ -130,16 +130,15 @@ import com.opengamma.util.ArgumentChecker;
      * @param security A security
      * @return true if the security is fungible, false if OTC
      */
-    private static boolean isFungible(Security security) {
+    private static boolean isFungible(final Security security) {
       if (security instanceof FinancialSecurity) {
-        Boolean isOTC = ((FinancialSecurity) security).accept(new OtcSecurityVisitor());
+        final Boolean isOTC = ((FinancialSecurity) security).accept(new OtcSecurityVisitor());
         if (isOTC == null) {
           return false;
         }
         return !isOTC;
-      } else {
-        return false;
       }
+      return false;
     }
 
     /* package */ AnalyticsNode getRoot() {

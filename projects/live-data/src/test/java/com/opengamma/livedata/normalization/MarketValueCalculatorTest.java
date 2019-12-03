@@ -21,191 +21,246 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MarketValueCalculatorTest {
 
+  /**
+   * Tests that the average of bid and ask is used.
+   */
   public void bidAskLast() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.80);
     msg.add(MarketDataRequirementNames.ASK, 50.90);
     msg.add(MarketDataRequirementNames.LAST, 50.89);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(50.85, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the mid value is used.
+   */
+  public void midLast() {
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    msg.add(MarketDataRequirementNames.MID, 50.80);
+    msg.add(MarketDataRequirementNames.LAST, 50.89);
+
+    final FieldHistoryStore store = new FieldHistoryStore();
+    store.liveDataReceived(msg);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+    assertEquals(3, normalized.getAllFields().size());
+    assertEquals(50.80, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
+  }
+
+  /**
+   * Tests that the average of bid and ask is used.
+   */
   public void bidAskOnly() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.80);
     msg.add(MarketDataRequirementNames.ASK, 50.90);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(3, normalized.getAllFields().size());
     assertEquals(50.85, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the last price is used.
+   */
   public void lastOnly() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.LAST, 50.89);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(2, normalized.getAllFields().size());
     assertEquals(50.89, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that last is used if the bid/ask spread is too large.
+   */
   public void bigSpread() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.0);
     msg.add(MarketDataRequirementNames.ASK, 100.0);
     msg.add(MarketDataRequirementNames.LAST, 55.12);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(55.12, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that last is used if the bid/ask spread is too large and that the
+   * history is ignored.
+   */
   public void bigSpreadHistory() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
     historicalMsg.add(MarketDataRequirementNames.LAST, 45); // Should never use this
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(historicalMsg);
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.0);
     msg.add(MarketDataRequirementNames.ASK, 100.0);
     msg.add(MarketDataRequirementNames.LAST, 50.52);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(50.52, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the bid is used if the last value is below the bid.
+   */
   public void bigSpreadLowLast() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.0);
     msg.add(MarketDataRequirementNames.ASK, 100.0);
     msg.add(MarketDataRequirementNames.LAST, 44.50);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(50.0, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the ask is used if the last value is above the ask.
+   */
   public void bigSpreadHighLast() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 50.0);
     msg.add(MarketDataRequirementNames.ASK, 100.0);
     msg.add(MarketDataRequirementNames.LAST, 120.0);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(100.0, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the average of the historical bid/ask is used.
+   */
   public void useHistoricalBidAsk() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
     historicalMsg.add(MarketDataRequirementNames.BID, 50.0);
     historicalMsg.add(MarketDataRequirementNames.ASK, 51.0);
     historicalMsg.add(MarketDataRequirementNames.MARKET_VALUE, 50.52);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(historicalMsg);
-    
-    MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
+
+    final MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
     newMsg.add(MarketDataRequirementNames.LAST, 50.89);
-    
-    MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
     assertEquals(2, normalized.getAllFields().size());
     assertEquals(50.5, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that historical data is used if there is no data.
+   */
   public void useHistoricalMarketValueWithEmptyMsg() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg historicalMsg = OpenGammaFudgeContext.getInstance().newMessage();
     historicalMsg.add(MarketDataRequirementNames.MARKET_VALUE, 50.52);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(historicalMsg);
-    
-    MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
-    
-    MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
+
+    final MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
+
+    final MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
     assertEquals(1, normalized.getAllFields().size());
     assertEquals(50.52, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
 
+  /**
+   * Tests that the message is empty if no market data is available.
+   */
   public void noMarketValueAvailable() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    FieldHistoryStore store = new FieldHistoryStore();
-    
-    MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
-    
-    MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
+
+    final MutableFudgeMsg newMsg = OpenGammaFudgeContext.getInstance().newMessage();
+
+    final MutableFudgeMsg normalized = calculator.apply(newMsg, "123", store);
     assertEquals(0, normalized.getAllFields().size());
   }
 
+  /**
+   * Tests that zero is a valid bid.
+   */
   public void zeroBid() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.BID, 0.0);
     msg.add(MarketDataRequirementNames.ASK, 1.0);
     msg.add(MarketDataRequirementNames.LAST, 0.57);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
+
+    final FieldHistoryStore store = new FieldHistoryStore();
     store.liveDataReceived(msg);
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(4, normalized.getAllFields().size());
     assertEquals(0.5, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE), 0.0001);
   }
-  
+
+  /**
+   * Tests that close is used if there is no other data.
+   */
   public void noBidAskLastOrFieldHistory() {
-    MarketValueCalculator calculator = new MarketValueCalculator();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MarketValueCalculator calculator = new MarketValueCalculator();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add(MarketDataRequirementNames.CLOSING_BID, 0.1);
     msg.add(MarketDataRequirementNames.CLOSING_ASK, 0.2);
     msg.add(MarketDataRequirementNames.CLOSE, 0.14);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
-    
-    MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
+
+    final FieldHistoryStore store = new FieldHistoryStore();
+
+    final MutableFudgeMsg normalized = calculator.apply(msg, "123", store);
     assertEquals(0.14, normalized.getDouble(MarketDataRequirementNames.MARKET_VALUE));
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.convention;
@@ -14,22 +14,22 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class ForexQuoteConvention {
-  /** Quote conventions for ATM values */
+  /** Quote conventions for ATM values. */
   public enum ATMType {
-    /** Forward */
+    /** Forward. */
     Forward,
-    /** Delta-neutral straddle */
+    /** Delta-neutral straddle. */
     DeltaNeutralStraddle
   }
 
-  /** Quote conventions for delta values */
+  /** Quote conventions for delta values. */
   public enum DeltaType {
-    /** Spot */
+    /** Spot. */
     Spot,
-    /** Forward */
+    /** Forward. */
     Forward
   }
 
@@ -116,11 +116,11 @@ public class ForexQuoteConvention {
     final int prime = 31;
     int result = 1;
     result = prime * result + Arrays.hashCode(_atmType);
-    result = prime * result + ((_atmTypeCutoff == null) ? 0 : _atmTypeCutoff.hashCode());
+    result = prime * result + (_atmTypeCutoff == null ? 0 : _atmTypeCutoff.hashCode());
     result = prime * result + _ccy1.hashCode();
     result = prime * result + _ccy2.hashCode();
     result = prime * result + Arrays.hashCode(_deltaType);
-    result = prime * result + ((_deltaTypeCutoff == null) ? 0 : _deltaTypeCutoff.hashCode());
+    result = prime * result + (_deltaTypeCutoff == null ? 0 : _deltaTypeCutoff.hashCode());
     result = prime * result + (_isPremiumAdjusted ? 1231 : 1237);
     result = prime * result + _premiumCurrency.hashCode();
     return result;

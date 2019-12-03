@@ -57,7 +57,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawSurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawSurfaceDataFunction.class);
   /** The surface definition source */
   private SurfaceDefinitionSource _surfaceDefinitionSource;
   /** The surface specification source */
@@ -80,6 +80,7 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
    * @return The set of market data ids required to populate to surface data snapshot object
    * @throws OpenGammaRuntimeException If the surface specification or definition is null
    */
+  @SuppressWarnings("unchecked")
   public static <X, Y> Set<ValueRequirement> buildDataRequirements(final SurfaceSpecificationSource specificationSource,
       final SurfaceDefinitionSource definitionSource, final String specificationName, final String definitionName) {
     final SurfaceSpecification specification = specificationSource.getSpecification(specificationName);
@@ -137,8 +138,8 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
       for (final Object y : definition.getYs()) {
         try {
           //TODO the type is not picked up successfully
-          final Tenor xTenor = (x instanceof Tenor) ? (Tenor) x : Tenor.parse((String) x);
-          final Tenor yTenor = (y instanceof Tenor) ? (Tenor) y : Tenor.parse((String) y);
+          final Tenor xTenor = x instanceof Tenor ? (Tenor) x : Tenor.parse((String) x);
+          final Tenor yTenor = y instanceof Tenor ? (Tenor) y : Tenor.parse((String) y);
           final ExternalId identifier = provider.getInstrument(xTenor, yTenor);
 
           final ValueRequirement requirement = new ValueRequirement(provider.getDataFieldName(), ComputationTargetType.PRIMITIVE, identifier);
@@ -148,11 +149,11 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
             final Pair<Tenor, Tenor> coordinate = Pairs.<Tenor, Tenor>of(xTenor, yTenor);
             data.put(coordinate, volatility);
           } else {
-            s_logger.info("Could not get market data for {}", identifier);
+            LOGGER.info("Could not get market data for {}", identifier);
           }
         } catch (final Exception e) {
           final ExternalId identifier = provider.getInstrument(x, y);
-          s_logger.warn("Could not get market data for ticker {}. expiry = {}, maturity = {}", identifier, x, y);
+          LOGGER.warn("Could not get market data for ticker {}. expiry = {}, maturity = {}", identifier, x, y);
         }
       }
     }
@@ -217,7 +218,8 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String definitionName = null;
     String specificationName = null;
     String surfaceQuoteType = null;

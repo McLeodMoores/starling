@@ -17,30 +17,48 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PostgresDbDialectTest extends DbDialectTest {
 
+  /**
+   * Tests a Postgres dialect.
+   */
   public PostgresDbDialectTest() {
-    _dialect = PostgresDbDialect.INSTANCE;
+    setDialect(PostgresDbDialect.INSTANCE);
   }
 
   //-------------------------------------------------------------------------
-  public void test_getJDBCDriver() {
-    assertEquals(org.postgresql.Driver.class, _dialect.getJDBCDriverClass());
+  /**
+   * Tests getting the driver.
+   */
+  public void testGetJDBCDriver() {
+    assertEquals(org.postgresql.Driver.class, getDialect().getJDBCDriverClass());
   }
 
-  public void test_getHibernateDialect() {
-    assertEquals(org.hibernate.dialect.PostgreSQLDialect.class, _dialect.getHibernateDialect().getClass());
+  /**
+   * Tests getting the Hibernate dialect.
+   */
+  public void tesGetHibernateDialect() {
+    assertEquals(org.hibernate.dialect.PostgreSQLDialect.class, getDialect().getHibernateDialect().getClass());
   }
 
-  public void test_getName() {
-    assertEquals("Postgres", _dialect.getName());
+  /**
+   * Tests getting the name.
+   */
+  public void testGetName() {
+    assertEquals("Postgres", getDialect().getName());
   }
 
   //-------------------------------------------------------------------------
-  public void test_sqlNextSequenceValueSelect() {
-    assertEquals("SELECT nextval('MySeq')", _dialect.sqlNextSequenceValueSelect("MySeq"));
+  /**
+   * Tests next sequence value select.
+   */
+  public void testSqlNextSequenceValueSelect() {
+    assertEquals("SELECT nextval('MySeq')", getDialect().sqlNextSequenceValueSelect("MySeq"));
   }
 
-  public void test_sqlNextSequenceValueInline() {
-    assertEquals("nextval('MySeq')", _dialect.sqlNextSequenceValueInline("MySeq"));
+  /**
+   * Tests next sequence value inline.
+   */
+  public void testSqlNextSequenceValueInline() {
+    assertEquals("nextval('MySeq')", getDialect().sqlNextSequenceValueInline("MySeq"));
   }
 
 }

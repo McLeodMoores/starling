@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -46,7 +46,7 @@ public class CommodityFutureOptionSecurityBean extends SecurityBean {
   @PropertyDefinition
   private ExchangeBean _tradingExchange;
   @PropertyDefinition
-  private ExchangeBean _settlementExchange;  
+  private ExchangeBean _settlementExchange;
   @PropertyDefinition
   private Double _pointValue;
   @PropertyDefinition

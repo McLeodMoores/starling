@@ -12,7 +12,7 @@ CREATE TABLE org_schema_version (
 );
 INSERT INTO org_schema_version (version_key, version_value) VALUES ('schema_patch', '1');
   
-CREATE SEQUENCE org_organisation_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS org_organisation_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 

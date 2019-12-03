@@ -94,10 +94,33 @@ public class EquityIndexFutureOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private OptionType _optionType;
 
+  /**
+   * For the builder.
+   */
   EquityIndexFutureOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
+  /**
+   * @param exchange
+   *          the exchange name, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying index, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param margined
+   *          true if the option is margined, false otherwise
+   * @param currency
+   *          the currency, not null
+   * @param strike
+   *          the strike
+   * @param optionType
+   *          the option type, not null
+   */
   public EquityIndexFutureOptionSecurity(final String exchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
       final double pointValue, final boolean margined, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);

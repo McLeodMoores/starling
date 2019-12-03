@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -18,16 +18,19 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Constructs a {@link CurveNodeWithIdentifier} for a curve node and id mapper. If the node is a {@link RateFutureNode}
- * and the curve instrument provider is a {@link QuandlFedFundsFutureCurveInstrumentProvider}, uses the information about
- * the underlying and underlying id to construct a {@link QuandlCurveNodeWithIdentifierAndUnderlying}.
+ * Constructs a {@link CurveNodeWithIdentifier} for a curve node and id mapper. If the node is a {@link RateFutureNode} and the curve instrument provider is a
+ * {@link QuandlFedFundsFutureCurveInstrumentProvider}, uses the information about the underlying and underlying id to construct a
+ * {@link QuandlCurveNodeWithIdentifierAndUnderlying}.
  */
 public class QuandlCurveNodeWithIdentifierBuilder extends CurveNodeWithIdentifierBuilder {
 
   /**
    * Creates an instance.
-   * @param curveDate  the curve date, not null
-   * @param nodeIdMapper  the node id mapper, not null
+   * 
+   * @param curveDate
+   *          the curve date, not null
+   * @param nodeIdMapper
+   *          the node id mapper, not null
    */
   public QuandlCurveNodeWithIdentifierBuilder(final LocalDate curveDate, final CurveNodeIdMapper nodeIdMapper) {
     super(curveDate, nodeIdMapper);

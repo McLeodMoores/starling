@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 
 /**
  * Class describing a monthly seasonal adjustment curve.
- * The curve is piecewise constant on intervals defined by a set of times. 
+ * The curve is piecewise constant on intervals defined by a set of times.
  * Those times should be calculated using first of month dates and the
  * act/act day counter (the one used for derivatives file).
  */
@@ -33,7 +33,7 @@ public final class SeasonalCurve extends FunctionalDoublesCurve {
 
   /**
    * Construct a seasonal curve from a reference time and the monthly factors.
-   * 
+   *
    * @param steps  the steps, not null
    * @param monthlyFactors  the monthly seasonal factors from one month to the next.
    *  The size of the array is 11 (the 12th factor is deduced from the 11 other.
@@ -41,7 +41,7 @@ public final class SeasonalCurve extends FunctionalDoublesCurve {
    *  the multiplicative factor from one month to the next. The reference time represent
    *  the initial month for which there is no adjustment.
    */
-  public SeasonalCurve(double[] steps, double[] monthlyFactors, boolean isAdditive) {
+  public SeasonalCurve(final double[] steps, final double[] monthlyFactors, final boolean isAdditive) {
     super(new SeasonalFunction(steps, monthlyFactors, isAdditive));
   }
 

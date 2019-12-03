@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -46,18 +46,18 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * The user name that uniquely identifies the user.
    * This is used with the password to authenticate.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _userName;
   /**
    * The hashed version of the user password.
    * May be null or empty, particularly if the user is disabled.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _passwordHash;
   /**
    * The account status, determining if the user is allowed to login.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UserAccountStatus _status = UserAccountStatus.ENABLED;
   /**
    * The bundle of alternate user identifiers.
@@ -65,43 +65,43 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * This allows the user identifiers of external systems to be associated with the account
    * Some of these may be unique within the external system, others may be more descriptive.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _alternateIds = ExternalIdBundle.EMPTY;
   /**
    * The roles that the user belongs to.
    * Roles are used to manage groups of multiple users.
    * This is the combined set of all roles that the user has, expressed as strings.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _roles = new TreeSet<>();
   /**
    * The permissions that the user has.
    * Permissions are used to define access control.
    * This is the combined set of all permissions that the user has, expressed as strings.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _permissions = new TreeSet<>();
   /**
    * The primary email address associated with the account.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _emailAddress;
   /**
    * The user profile, containing user settings.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private SimpleUserProfile _profile = new SimpleUserProfile();
 
   //-------------------------------------------------------------------------
   /**
    * Creates a {@code SimpleUserAccount} from another account.
-   * 
+   *
    * @param accountToCopy  the account to copy, not null
    * @return the new account, not null
    */
-  public static SimpleUserAccount from(UserAccount accountToCopy) {
+  public static SimpleUserAccount from(final UserAccount accountToCopy) {
     ArgumentChecker.notNull(accountToCopy, "profileToCopy");
-    SimpleUserAccount copy = new SimpleUserAccount(accountToCopy.getUserName());
+    final SimpleUserAccount copy = new SimpleUserAccount(accountToCopy.getUserName());
     copy.setPasswordHash(accountToCopy.getPasswordHash());
     copy.setStatus(accountToCopy.getStatus());
     copy.setAlternateIds(accountToCopy.getAlternateIds());
@@ -121,20 +121,20 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
 
   /**
    * Creates a user.
-   * 
+   *
    * @param userName  the user name, not null
    */
-  public SimpleUserAccount(String userName) {
+  public SimpleUserAccount(final String userName) {
     setUserName(userName);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds an alternate user identifier to the bundle representing this user.
-   * 
+   *
    * @param alternateId  the identifier to add, not null
    */
-  public void addAlternateId(ExternalId alternateId) {
+  public void addAlternateId(final ExternalId alternateId) {
     setAlternateIds(getAlternateIds().withExternalId(alternateId));
   }
 
@@ -173,6 +173,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * This is used with the password to authenticate.
    * @return the value of the property, not null
    */
+  @Override
   public String getUserName() {
     return _userName;
   }
@@ -202,6 +203,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * May be null or empty, particularly if the user is disabled.
    * @return the value of the property
    */
+  @Override
   public String getPasswordHash() {
     return _passwordHash;
   }
@@ -229,6 +231,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * Gets the account status, determining if the user is allowed to login.
    * @return the value of the property
    */
+  @Override
   public UserAccountStatus getStatus() {
     return _status;
   }
@@ -257,6 +260,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * Some of these may be unique within the external system, others may be more descriptive.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getAlternateIds() {
     return _alternateIds;
   }
@@ -291,6 +295,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * This is the combined set of all roles that the user has, expressed as strings.
    * @return the value of the property, not null
    */
+  @Override
   public Set<String> getRoles() {
     return _roles;
   }
@@ -324,6 +329,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * This is the combined set of all permissions that the user has, expressed as strings.
    * @return the value of the property, not null
    */
+  @Override
   public Set<String> getPermissions() {
     return _permissions;
   }
@@ -355,6 +361,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * Gets the primary email address associated with the account.
    * @return the value of the property
    */
+  @Override
   public String getEmailAddress() {
     return _emailAddress;
   }
@@ -380,6 +387,7 @@ public class SimpleUserAccount implements Bean, UserAccount, Serializable {
    * Gets the user profile, containing user settings.
    * @return the value of the property, not null
    */
+  @Override
   public SimpleUserProfile getProfile() {
     return _profile;
   }

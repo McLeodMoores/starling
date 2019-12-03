@@ -122,7 +122,8 @@ public class CommodityForwardCurve {
     return commodityForwardSensitivity;
   }
 
-  protected static DoublesCurve getForwardCurve(final double spot, final YieldAndDiscountCurve discountCurve, final YieldAndDiscountCurve convenienceYieldCurve) {
+  protected static DoublesCurve getForwardCurve(final double spot, final YieldAndDiscountCurve discountCurve,
+      final YieldAndDiscountCurve convenienceYieldCurve) {
     ArgumentChecker.notNull(discountCurve, "risk-free curve");
     ArgumentChecker.notNull(convenienceYieldCurve, "cost-of-carry curve");
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
@@ -140,7 +141,8 @@ public class CommodityForwardCurve {
     };
   }
 
-  protected static YieldAndDiscountCurve getConvenienceYieldCurve(final double spot, final YieldAndDiscountCurve discountCurve, final DoublesCurve fwdCurve) {
+  protected static YieldAndDiscountCurve getConvenienceYieldCurve(final double spot, final YieldAndDiscountCurve discountCurve,
+      final DoublesCurve fwdCurve) {
     ArgumentChecker.notNull(discountCurve, "discount curve");
     ArgumentChecker.notNull(fwdCurve, "convenience yield curve");
     final Function1D<Double, Double> f = new Function1D<Double, Double>() {
@@ -158,7 +160,7 @@ public class CommodityForwardCurve {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_fwdCurve == null) ? 0 : _fwdCurve.hashCode());
+    result = prime * result + (_fwdCurve == null ? 0 : _fwdCurve.hashCode());
     return result;
   }
 

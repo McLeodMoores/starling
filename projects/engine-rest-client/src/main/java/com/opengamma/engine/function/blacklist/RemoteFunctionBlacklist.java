@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteFunctionBlacklist.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteFunctionBlacklist.class);
 
   private final class Listener extends BaseFunctionBlacklistRuleListener implements FudgeMessageReceiver {
 
@@ -55,9 +55,9 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
 
     @Override
     protected synchronized void replaceRules(final Collection<FunctionBlacklistRule> rules) {
-      final List<FunctionBlacklistRule> newRules = new ArrayList<FunctionBlacklistRule>(rules.size());
-      final Set<FunctionBlacklistRule> oldRules = new HashSet<FunctionBlacklistRule>(_rules);
-      for (FunctionBlacklistRule rule : rules) {
+      final List<FunctionBlacklistRule> newRules = new ArrayList<>(rules.size());
+      final Set<FunctionBlacklistRule> oldRules = new HashSet<>(_rules);
+      for (final FunctionBlacklistRule rule : rules) {
         if (_rules.contains(rule)) {
           oldRules.remove(rule);
           continue;
@@ -107,8 +107,8 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
         if (rulesMsg.size() == 1) {
           ruleAdded(modificationCount, fdc.fieldValueToObject(FunctionBlacklistRule.class, rulesMsg.get(0)), getProvider().getBackgroundTasks());
         } else {
-          final List<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(rulesMsg.size());
-          for (FudgeField ruleField : rulesMsg) {
+          final List<FunctionBlacklistRule> rules = new ArrayList<>(rulesMsg.size());
+          for (final FudgeField ruleField : rulesMsg) {
             rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, ruleField));
           }
           rulesAdded(modificationCount, rules, getProvider().getBackgroundTasks());
@@ -120,8 +120,8 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
         if (rulesMsg.size() == 1) {
           ruleRemoved(modificationCount, fdc.fieldValueToObject(FunctionBlacklistRule.class, rulesMsg.get(0)), getProvider().getBackgroundTasks());
         } else {
-          final List<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(rulesMsg.size());
-          for (FudgeField ruleField : rulesMsg) {
+          final List<FunctionBlacklistRule> rules = new ArrayList<>(rulesMsg.size());
+          for (final FudgeField ruleField : rulesMsg) {
             rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, ruleField));
           }
           rulesRemoved(modificationCount, rules, getProvider().getBackgroundTasks());
@@ -132,23 +132,22 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
   }
 
   private final RemoteFunctionBlacklistProvider _provider;
-  private final Set<FunctionBlacklistRule> _rules = new HashSet<FunctionBlacklistRule>();
+  private final Set<FunctionBlacklistRule> _rules = new HashSet<>();
   private final Listener _listener = new Listener();
   private final Connection _connection;
 
   private static Collection<FunctionBlacklistRule> getRules(final FudgeDeserializer fdc, final FudgeMsg rulesField) {
     if (rulesField != null) {
-      final List<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(rulesField.getNumFields());
-      for (FudgeField rule : rulesField) {
+      final List<FunctionBlacklistRule> rules = new ArrayList<>(rulesField.getNumFields());
+      for (final FudgeField rule : rulesField) {
         rules.add(fdc.fieldValueToObject(FunctionBlacklistRule.class, rule));
       }
       return rules;
-    } else {
-      return Collections.emptyList();
     }
+    return Collections.emptyList();
   }
 
-  public RemoteFunctionBlacklist(final FudgeDeserializer fdc, FudgeMsg info, final RemoteFunctionBlacklistProvider provider) {
+  public RemoteFunctionBlacklist(final FudgeDeserializer fdc, final FudgeMsg info, final RemoteFunctionBlacklistProvider provider) {
     super(info.getString(DataFunctionBlacklistFields.NAME_FIELD), provider.getBackgroundTasks());
     _provider = provider;
     _listener.init(info.getInt(DataFunctionBlacklistFields.MODIFICATION_COUNT_FIELD), getRules(fdc, info.getMessage(DataFunctionBlacklistFields.RULES_FIELD)));
@@ -165,7 +164,7 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
       final MessageConsumer messageConsumer = session.createConsumer(topic);
       messageConsumer.setMessageListener(new JmsByteArrayMessageDispatcher(new ByteArrayFudgeMessageReceiver(listener, getProvider().getFudgeContext())));
       return connection;
-    } catch (JMSException e) {
+    } catch (final JMSException e) {
       throw new OpenGammaRuntimeException("Failed to create JMS connection on " + topicName, e);
     }
   }
@@ -175,8 +174,8 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
     if (_connection != null) {
       try {
         _connection.close();
-      } catch (JMSException e) {
-        s_logger.warn("Failed to close JMS connection", e);
+      } catch (final JMSException e) {
+        LOGGER.warn("Failed to close JMS connection", e);
       }
     }
   }
@@ -188,7 +187,7 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
   @Override
   public Set<FunctionBlacklistRule> getRules() {
     synchronized (_listener) {
-      return new HashSet<FunctionBlacklistRule>(_rules);
+      return new HashSet<>(_rules);
     }
   }
 

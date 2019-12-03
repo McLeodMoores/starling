@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,9 +10,9 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * Log-linear extrapolator: the extrapolant is exp(f(x)) where f(x) is a linear function 
- * which is smoothly connected with a log-interpolator exp(F(x)), such as {@link LogNaturalCubicMonotonicityPreservingInterpolator1D}, 
- * i.e., F'(x) = f'(x) at a respectivie endpoint. 
+ * Log-linear extrapolator: the extrapolant is exp(f(x)) where f(x) is a linear function
+ * which is smoothly connected with a log-interpolator exp(F(x)), such as {@link LogNaturalCubicMonotonicityPreservingInterpolator1D},
+ * i.e., F'(x) = f'(x) at a respectivie endpoint.
  */
 public class LogLinearExtrapolator1D extends Interpolator1D {
   private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class LogLinearExtrapolator1D extends Interpolator1D {
    * @param interpolator Interpolator for specifying the first derivative value at an endpoint
    * @param eps Bump parameter of finite difference approximation for the first derivative value
    */
-  public LogLinearExtrapolator1D(final Interpolator1D interpolator, double eps) {
+  public LogLinearExtrapolator1D(final Interpolator1D interpolator, final double eps) {
     Validate.notNull(interpolator, "interpolator");
     _interpolator = interpolator;
     _eps = eps;

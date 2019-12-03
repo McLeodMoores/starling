@@ -18,21 +18,23 @@ public interface DistributionSpecificationResolver extends Resolver<LiveDataSpec
 
   /**
    * Determines how market data should be distributed to clients.
-   * 
-   * @param liveDataSpecificationFromClient what the client wants. Different specs from the client can map to the same distribution spec. 
-   * @return a valid distribution specification. Null if the distribution spec cannot be built.  
+   *
+   * @param liveDataSpecificationFromClient what the client wants. Different specs from the client can map to the same distribution spec.
+   * @return a valid distribution specification. Null if the distribution spec cannot be built.
    */
+  @Override
   DistributionSpecification resolve(LiveDataSpecification liveDataSpecificationFromClient);
-  
+
   /**
-   * Same as calling {@link #resolve(LiveDataSpecification)} 
-   * individually, but since it works in bulk, may be more efficient. 
-   * 
-   * @param liveDataSpecifications what the client wants. Different specs from the client can map to the same distribution spec. 
-   * @return map from request to result.  
+   * Same as calling {@link #resolve(LiveDataSpecification)}
+   * individually, but since it works in bulk, may be more efficient.
+   *
+   * @param liveDataSpecifications what the client wants. Different specs from the client can map to the same distribution spec.
+   * @return map from request to result.
    * For each input spec, there must be an entry in the map.
-   * The value will be null if the distribution spec cannot be build for that spec  
+   * The value will be null if the distribution spec cannot be build for that spec
    */
+  @Override
   Map<LiveDataSpecification, DistributionSpecification> resolve(Collection<LiveDataSpecification> liveDataSpecifications);
-  
+
 }

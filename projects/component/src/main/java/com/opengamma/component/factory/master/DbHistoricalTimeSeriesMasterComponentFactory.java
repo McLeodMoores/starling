@@ -28,7 +28,8 @@ import com.opengamma.util.rest.AbstractDataResource;
  * Component factory for the database historical time-series master.
  */
 @BeanDefinition
-public class DbHistoricalTimeSeriesMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<HistoricalTimeSeriesMaster, DbHistoricalTimeSeriesMaster> {
+public class DbHistoricalTimeSeriesMasterComponentFactory
+extends AbstractDocumentDbMasterComponentFactory<HistoricalTimeSeriesMaster, DbHistoricalTimeSeriesMaster> {
 
   /**
    * Creates an instance.
@@ -41,27 +42,28 @@ public class DbHistoricalTimeSeriesMasterComponentFactory extends AbstractDocume
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteHistoricalTimeSeriesMaster.class;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected DbHistoricalTimeSeriesMaster createDbDocumentMaster() {
-    DbHistoricalTimeSeriesMaster master = new DbHistoricalTimeSeriesMaster(getDbConnector());
-    master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbHistoricalTimeSeriesMaster" + getClassifier());
+    final DbHistoricalTimeSeriesMaster master = new DbHistoricalTimeSeriesMaster(getDbConnector());
+    master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(),
+        "DbHistoricalTimeSeriesMaster" + getClassifier());
     return master;
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbHistoricalTimeSeriesMaster dbMaster, HistoricalTimeSeriesMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbHistoricalTimeSeriesMaster dbMaster, final HistoricalTimeSeriesMaster postProcessedMaster) {
     return new DataHistoricalTimeSeriesMasterResource(postProcessedMaster);
   }
 
   @Override
-  protected HistoricalTimeSeriesMaster wrapMasterWithTrackingInterface(HistoricalTimeSeriesMaster postProcessedMaster) {
+  protected HistoricalTimeSeriesMaster wrapMasterWithTrackingInterface(final HistoricalTimeSeriesMaster postProcessedMaster) {
     return new DataTrackingHistoricalTimeSeriesMaster(postProcessedMaster);
   }
 
   @Override
-  protected HistoricalTimeSeriesMaster postProcess(DbHistoricalTimeSeriesMaster master) {
+  protected HistoricalTimeSeriesMaster postProcess(final DbHistoricalTimeSeriesMaster master) {
     return PermissionedHistoricalTimeSeriesMaster.wrap(master);
   }
 

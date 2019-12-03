@@ -37,10 +37,10 @@ public class TimeSeriesResolverKeysResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param configMaster  the config master, not null
    */
-  public TimeSeriesResolverKeysResource(ConfigMaster configMaster) {
+  public TimeSeriesResolverKeysResource(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
     _configMaster = configMaster;
   }
@@ -50,10 +50,10 @@ public class TimeSeriesResolverKeysResource {
    */
   @GET
   public String getResolverKeys() {
-    ConfigSearchRequest<HistoricalTimeSeriesRating> request =
-        new ConfigSearchRequest<HistoricalTimeSeriesRating>(HistoricalTimeSeriesRating.class);
-    List<String> keyNames = Lists.newArrayList();
-    for (ConfigDocument doc : ConfigSearchIterator.iterable(_configMaster, request)) {
+    final ConfigSearchRequest<HistoricalTimeSeriesRating> request =
+        new ConfigSearchRequest<>(HistoricalTimeSeriesRating.class);
+    final List<String> keyNames = Lists.newArrayList();
+    for (final ConfigDocument doc : ConfigSearchIterator.iterable(_configMaster, request)) {
       keyNames.add(doc.getName());
     }
     return new JSONArray(keyNames).toString();

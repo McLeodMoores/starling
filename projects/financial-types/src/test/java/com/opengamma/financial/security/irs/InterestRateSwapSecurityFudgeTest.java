@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -35,13 +35,13 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InterestRateSwapSecurityFudgeTest extends AbstractFudgeBuilderTestCase {
 
-  private static HashSet<ExternalId> GBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("GBLO"));
-  private static HashSet<ExternalId> USNYGBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("USNY,GBLO"));
+  private static final HashSet<ExternalId> GBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("GBLO"));
+  private static final HashSet<ExternalId> USNYGBLO = Sets.newHashSet(ExternalSchemes.isdaHoliday("USNY,GBLO"));
 
-  private static FixedInterestRateSwapLegConvention USD_FIXED_3M_EOM_CONVENTION;
-  private static FixedInterestRateSwapLeg USD_FIX_LEG;
-  private static FloatingInterestRateSwapLegConvention USD_LIBOR_3M_EOM_CONVENTION;
-  private static FloatingInterestRateSwapLeg USD_FLOAT_LEG;
+  private static final FixedInterestRateSwapLegConvention USD_FIXED_3M_EOM_CONVENTION;
+  private static final FixedInterestRateSwapLeg USD_FIX_LEG;
+  private static final FloatingInterestRateSwapLegConvention USD_LIBOR_3M_EOM_CONVENTION;
+  private static final FloatingInterestRateSwapLeg USD_FLOAT_LEG;
 
   private static final BusinessDayConvention MF = BusinessDayConventions.MODIFIED_FOLLOWING;
 
@@ -82,19 +82,20 @@ public class InterestRateSwapSecurityFudgeTest extends AbstractFudgeBuilderTestC
     USD_LIBOR_3M_EOM_CONVENTION.setRollConvention(RollConvention.EOM);
     USD_LIBOR_3M_EOM_CONVENTION.setRateType(FloatingRateType.IBOR);
     USD_LIBOR_3M_EOM_CONVENTION.setCompoundingMethod(CompoundingMethod.NONE);
-
-    USD_FIX_LEG = USD_FIXED_3M_EOM_CONVENTION.toLeg(InterestRateSwapNotional.of(Currency.USD, Lists.newArrayList(LocalDate.MIN, LocalDate.MAX), Lists.newArrayList(1e6, 1e5)), PayReceiveType.PAY, new Rate(0.01234));
-
+    USD_FIX_LEG = USD_FIXED_3M_EOM_CONVENTION.toLeg(
+        InterestRateSwapNotional.of(Currency.USD, Lists.newArrayList(LocalDate.MIN, LocalDate.MAX), Lists.newArrayList(1e6, 1e5)), PayReceiveType.PAY,
+        new Rate(0.01234));
     USD_FLOAT_LEG = USD_LIBOR_3M_EOM_CONVENTION.toLeg(new InterestRateSwapNotional(Currency.USD, 1e6), PayReceiveType.RECEIVE);
   }
 
+  /**
+   * Tests a cycle.
+   */
   @Test
   public void testSwapSecurity() {
-    final InterestRateSwapSecurity security = new InterestRateSwapSecurity(ExternalIdBundle.EMPTY, "a swap",
-                                                                           LocalDate.now(), LocalDate.now(),
-                                                                           Sets.newHashSet(USD_FIX_LEG, USD_FLOAT_LEG));
+    final InterestRateSwapSecurity security = new InterestRateSwapSecurity(ExternalIdBundle.EMPTY, "a swap", LocalDate.now(), LocalDate.now(),
+        Sets.newHashSet(USD_FIX_LEG, USD_FLOAT_LEG));
     assertEncodeDecodeCycle(InterestRateSwapSecurity.class, security);
   }
-
 
 }

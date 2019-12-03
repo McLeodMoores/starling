@@ -27,29 +27,29 @@ public class LiveDataSpecificationFudgeBuilder implements FudgeBuilder<LiveDataS
   public static final String DOMAIN_SPECIFIC_IDS_FIELD_NAME = "DomainSpecificIdentifiers";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LiveDataSpecification object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LiveDataSpecification object) {
     return LiveDataSpecificationFudgeBuilder.toFudgeMsg(serializer, object);
   }
 
-  public static MutableFudgeMsg toFudgeMsg(FudgeSerializer serializer, LiveDataSpecification object) {
+  public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final LiveDataSpecification object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     LiveDataSpecificationFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, LiveDataSpecification object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final LiveDataSpecification object, final MutableFudgeMsg msg) {
     msg.add(NORMALIZATION_RULE_SET_ID_FIELD_NAME, object.getNormalizationRuleSetId());
     msg.add(DOMAIN_SPECIFIC_IDS_FIELD_NAME, ExternalIdBundleFudgeBuilder.toFudgeMsg(serializer, object.getIdentifiers()));
   }
 
   @Override
-  public LiveDataSpecification buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public LiveDataSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return LiveDataSpecificationFudgeBuilder.fromFudgeMsg(deserializer, msg);
   }
 
-  public static LiveDataSpecification fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    String normalizationRuleSetId = msg.getString(NORMALIZATION_RULE_SET_ID_FIELD_NAME);
-    ExternalIdBundle ids = ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(DOMAIN_SPECIFIC_IDS_FIELD_NAME));
+  public static LiveDataSpecification fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final String normalizationRuleSetId = msg.getString(NORMALIZATION_RULE_SET_ID_FIELD_NAME);
+    final ExternalIdBundle ids = ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(DOMAIN_SPECIFIC_IDS_FIELD_NAME));
     return new LiveDataSpecification(normalizationRuleSetId, ids);
   }
 

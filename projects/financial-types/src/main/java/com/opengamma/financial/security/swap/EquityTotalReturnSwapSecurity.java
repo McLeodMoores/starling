@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Equity total return swap security. 
+ * Equity total return swap security.
  */
 @BeanDefinition
 @SecurityDescription(type = EquityTotalReturnSwapSecurity.SECURITY_TYPE, description = "Equity total return swap")

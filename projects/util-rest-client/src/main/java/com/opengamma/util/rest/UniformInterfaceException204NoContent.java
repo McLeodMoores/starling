@@ -11,7 +11,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 
 /**
- * An extension to {@code UniformInterfaceException} to represent a 404.
+ * An extension to {@code UniformInterfaceException} to represent a 204.
  * <p>
  * This allows catch clauses to be simpler.
  */
@@ -21,19 +21,43 @@ public class UniformInterfaceException204NoContent extends UniformInterfaceExcep
   /** Serialization version. */
   private static final long serialVersionUID = -8266318713789190845L;
 
-  public UniformInterfaceException204NoContent(ClientResponse response, boolean bufferResponseEntity) {
+  /**
+   * Creates an exception.
+   *
+   * @param response  the response
+   * @param bufferResponseEntity  true to buffer the response entity
+   */
+  public UniformInterfaceException204NoContent(final ClientResponse response, final boolean bufferResponseEntity) {
     super(response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException204NoContent(ClientResponse response) {
+  /**
+   * Creates an exception that buffers the response entity.
+   *
+   * @param response  the response
+   */
+  public UniformInterfaceException204NoContent(final ClientResponse response) {
     super(response);
   }
 
-  public UniformInterfaceException204NoContent(String message, ClientResponse response, boolean bufferResponseEntity) {
+  /**
+   * Creates an exception.
+   *
+   * @param message  the message
+   * @param response  the response
+   * @param bufferResponseEntity  true to buffer the response entity
+   */
+  public UniformInterfaceException204NoContent(final String message, final ClientResponse response, final boolean bufferResponseEntity) {
     super(message, response, bufferResponseEntity);
   }
 
-  public UniformInterfaceException204NoContent(String message, ClientResponse response) {
+  /**
+   * Creates an exception that buffers the response entity.
+   *
+   * @param message  the message
+   * @param response  the response
+   */
+  public UniformInterfaceException204NoContent(final String message, final ClientResponse response) {
     super(message, response);
   }
 

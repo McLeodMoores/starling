@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.firehose;
@@ -20,27 +20,27 @@ import com.opengamma.util.ArgumentChecker;
  * An implementation of {@link InputStreamFactory} that opens a {@link File}.
  */
 public class FileInputStreamFactory implements InputStreamFactory {
-  private static final Logger s_logger = LoggerFactory.getLogger(FileInputStreamFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FileInputStreamFactory.class);
   private final File _inputFile;
-  private String _description;
-  
-  public FileInputStreamFactory(String fileName) {
+  private final String _description;
+
+  public FileInputStreamFactory(final String fileName) {
     this(new File(fileName));
   }
-  
-  public FileInputStreamFactory(File inputFile) {
+
+  public FileInputStreamFactory(final File inputFile) {
     ArgumentChecker.notNull(inputFile, "inputFile");
     _inputFile = inputFile;
-    
+
     _description = "File[" + _inputFile.getAbsolutePath() + "]";
   }
 
   @Override
   public InputStream openConnection() {
-    s_logger.info("Opening connection to {}", _inputFile.getAbsolutePath());
+    LOGGER.info("Opening connection to {}", _inputFile.getAbsolutePath());
     try {
       return new FileInputStream(_inputFile);
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException("Unable to open file " + _inputFile.getAbsolutePath(), ex);
     }
   }

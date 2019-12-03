@@ -15,7 +15,7 @@ public class MarketBean extends EnumBean {
   protected MarketBean() {
   }
 
-  public MarketBean(String market) {
+  public MarketBean(final String market) {
     super(market);
   }
 

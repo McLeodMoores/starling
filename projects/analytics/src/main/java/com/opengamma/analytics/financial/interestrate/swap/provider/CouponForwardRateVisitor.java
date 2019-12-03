@@ -18,17 +18,20 @@ public class CouponForwardRateVisitor extends InstrumentDerivativeVisitorAdapter
 
   @Override
   public Double visitCouponIbor(final CouponIbor payment, final MulticurveProviderInterface curves) {
-    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
   }
 
   @Override
   public Double visitCouponIborSpread(final CouponIborSpread payment, final MulticurveProviderInterface curves) {
-    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
   }
 
   @Override
   public Double visitCouponIborGearing(final CouponIborGearing payment, final MulticurveProviderInterface curves) {
-    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(), payment.getFixingAccrualFactor());
+    return curves.getSimplyCompoundForwardRate(payment.getIndex(), payment.getFixingPeriodStartTime(), payment.getFixingPeriodEndTime(),
+        payment.getFixingAccrualFactor());
   }
 
 }

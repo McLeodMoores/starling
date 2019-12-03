@@ -29,26 +29,22 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the sensitivities of a cap/floor to the bundle of curves used
- * in pricing. The Black method is used.
+ * Calculates the sensitivities of a cap/floor to the bundle of curves used in pricing. The Black method is used.
  */
 public class BlackDiscountingBCSCapFloorFunction extends BlackDiscountingCapFloorFunction {
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<BlackSmileCapProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =
       PresentValueCurveSensitivityBlackSmileCapCalculator.getInstance();
   /** The parameter sensitivity calculator */
-  private static final ParameterSensitivityParameterCalculator<BlackSmileCapProviderInterface> PSC =
-      new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<BlackSmileCapProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   /** The market quote sensitivity calculator */
-  private static final MarketQuoteSensitivityBlockCalculator<BlackSmileCapProviderInterface> CALCULATOR =
-      new MarketQuoteSensitivityBlockCalculator<>(PSC);
+  private static final MarketQuoteSensitivityBlockCalculator<BlackSmileCapProviderInterface> CALCULATOR = new MarketQuoteSensitivityBlockCalculator<>(PSC);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#BLOCK_CURVE_SENSITIVITIES}.
    */
   public BlackDiscountingBCSCapFloorFunction() {
     super(BLOCK_CURVE_SENSITIVITIES);
@@ -67,7 +63,8 @@ public class BlackDiscountingBCSCapFloorFunction extends BlackDiscountingCapFloo
         final CurveBuildingBlockBundle blocks = getMergedCurveBuildingBlocks(inputs);
         final MultipleCurrencyParameterSensitivity sensitivities = CALCULATOR.fromInstrument(derivative, blackData, blocks);
         for (final ValueRequirement desiredValue : desiredValues) {
-          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints().copy().get());
+          final ValueSpecification spec = new ValueSpecification(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(),
+              desiredValue.getConstraints().copy().get());
           result.add(new ComputedValue(spec, sensitivities));
         }
         return result;

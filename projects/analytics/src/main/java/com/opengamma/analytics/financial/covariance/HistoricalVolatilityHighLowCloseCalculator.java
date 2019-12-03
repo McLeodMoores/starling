@@ -11,7 +11,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.RelativeTimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculator;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
@@ -20,35 +19,34 @@ import com.opengamma.util.CalculationMode;
 
 /**
  * The historical high-low-close volatility of a price time series can be
- * calculated using:
- * $$
- * \begin{eqnarray*}
- * \sigma = \frac{1}{n}\sum\limits_{i=1}^n \frac{rr_i}{2} - \frac{1}{n}\sum\limits_{i=1}^n (2\ln{2} - 1) r_i^2
- * \end{eqnarray*}
- * $$
- * where $rr_i$ is the $i^\text{th}$ period *relative* return of the high and
- * low prices, $rr_i$ is the $i^\text{th}$ period return of the close price and
- * $n$ is the number of data points in the price series.
+ * calculated using: $$ \begin{eqnarray*} \sigma =
+ * \frac{1}{n}\sum\limits_{i=1}^n \frac{rr_i}{2} -
+ * \frac{1}{n}\sum\limits_{i=1}^n (2\ln{2} - 1) r_i^2 \end{eqnarray*} $$ where
+ * $rr_i$ is the $i^\text{th}$ period *relative* return of the high and low
+ * prices, $rr_i$ is the $i^\text{th}$ period return of the close price and $n$
+ * is the number of data points in the price series.
  * <p>
  * Although any relative return calculator can be used, to get correct results
- * the calculator should be a {@link ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
+ * the calculator should be a
+ * {@link com.opengamma.analytics.financial.timeseries.returns.ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator}.
  */
 public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolatilityCalculator {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalVolatilityHighLowCloseCalculator.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(HistoricalVolatilityHighLowCloseCalculator.class);
   /** The  return calculator */
   private final TimeSeriesReturnCalculator _returnCalculator;
   /** The relative return calculator */
   private final RelativeTimeSeriesReturnCalculator _relativeReturnCalculator;
 
   /**
-   * Creates a calculator with the given return and relative return calculation
+   * Creates a calculator with the given return and relative return calculation.
    * method and default values for the calculation mode and allowable
    * percentage of bad data points
    * @param returnCalculator The return calculator, not null
    * @param relativeReturnCalculator The relative return calculator, not null
    */
-  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator, final RelativeTimeSeriesReturnCalculator relativeReturnCalculator) {
+  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator,
+      final RelativeTimeSeriesReturnCalculator relativeReturnCalculator) {
     super();
     ArgumentChecker.notNull(returnCalculator, "return calculator");
     ArgumentChecker.notNull(relativeReturnCalculator, "relative return calculator");
@@ -57,12 +55,14 @@ public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolati
   }
 
   /**
-   * Creates a calculator with the given return and relative return calculation method and default values for the calculation mode and allowable percentage of bad data points
+   * Creates a calculator with the given return and relative return calculation method and default values
+   * for the calculation mode and allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    * @param relativeReturnCalculator The relative return calculator, not null
    * @param mode The calculation mode, not null
    */
-  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator, final RelativeTimeSeriesReturnCalculator relativeReturnCalculator, final CalculationMode mode) {
+  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator,
+      final RelativeTimeSeriesReturnCalculator relativeReturnCalculator, final CalculationMode mode) {
     super(mode);
     ArgumentChecker.notNull(returnCalculator, "return calculator");
     ArgumentChecker.notNull(relativeReturnCalculator, "relative return calculator");
@@ -71,13 +71,15 @@ public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolati
   }
 
   /**
-   * Creates a calculator with the given return and relative return calculation method and default values for the calculation mode and allowable percentage of bad data points
+   * Creates a calculator with the given return and relative return calculation method and default values for
+   * the calculation mode and allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    * @param relativeReturnCalculator The relative return calculator, not null
    * @param mode The calculation mode, not null
    * @param percentBadDataPoints The maximum allowable percentage of bad data points
    */
-  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator, final RelativeTimeSeriesReturnCalculator relativeReturnCalculator, final CalculationMode mode,
+  public HistoricalVolatilityHighLowCloseCalculator(final TimeSeriesReturnCalculator returnCalculator,
+      final RelativeTimeSeriesReturnCalculator relativeReturnCalculator, final CalculationMode mode,
       final double percentBadDataPoints) {
     super(mode, percentBadDataPoints);
     ArgumentChecker.notNull(returnCalculator, "return calculator");
@@ -91,7 +93,8 @@ public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolati
    * @param x The array of price time series
    * @return The historical close volatility
    * @throws IllegalArgumentException If the array is null or empty; if the first element of the array is null; if the array does not contain three time series;
-   * if the high, low and close time series do not satisfy the requirements (see {@link HistoricalVolatilityCalculator#testHighLowClose}); if the price series does not contain at
+   * if the high, low and close time series do not satisfy the requirements
+   * (see {@link HistoricalVolatilityCalculator#testHighLowClose}); if the price series does not contain at
    * least two data points
    */
   @Override
@@ -101,7 +104,7 @@ public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolati
       throw new IllegalArgumentException("Need high, low and close time series to calculate high-low-close volatility");
     }
     if (x.length > 3) {
-      s_logger.info("Time series array contained more than three series; only using the first three");
+      INSTANCE.info("Time series array contained more than three series; only using the first three");
     }
     final LocalDateDoubleTimeSeries high = x[0];
     final LocalDateDoubleTimeSeries low = x[1];
@@ -129,8 +132,8 @@ public class HistoricalVolatilityHighLowCloseCalculator extends HistoricalVolati
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_relativeReturnCalculator == null) ? 0 : _relativeReturnCalculator.hashCode());
-    result = prime * result + ((_returnCalculator == null) ? 0 : _returnCalculator.hashCode());
+    result = prime * result + (_relativeReturnCalculator == null ? 0 : _relativeReturnCalculator.hashCode());
+    result = prime * result + (_returnCalculator == null ? 0 : _returnCalculator.hashCode());
     return result;
   }
 

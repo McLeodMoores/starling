@@ -121,7 +121,7 @@ $.register_module({
 						view.notify(null);
 						return view.error(result.message);
 					}
-					current_type = details_json.template_data.configJSON.data['0'][0].split('.').reverse()[0];
+					current_type = details_json.template_data.configJSON ? details_json.template_data.configJSON.data['0'][0].split('.').reverse()[0] : details_json.template_data.type;
 					convention_type = current_type.toLowerCase();
 					if (is_new) {
 						if (!result.data) {
@@ -135,8 +135,9 @@ $.register_module({
 					} else {
 						history.put({ name: details_json.template_data.name, item: 'history.' + page_name + '.recent', value: routes.current().hash });
 					}
-					render_type = convention_type;
-					if (!og.views.convention_forms[convention_type]) {
+					if (og.views.convention_forms[convention_type]) {
+						render_type = convention_type;
+					} else {
 						render_type = 'default';
 					}
 					render_options = {
@@ -146,7 +147,7 @@ $.register_module({
 						save_new_handler: function (result) {
 							var args = routes.current().args;
 							view.notify(null);
-							if (result.error()) {
+							if (result.error) {
 								return view.error(result.message);
 							}
 							toolbar_action = true;
@@ -168,7 +169,7 @@ $.register_module({
 						},
 						handler: function (form) {
 							var json = details_json.template_data,
-								error_html = '<section class="OG-box og-box-glass og-box-error OG-shadow-light">This configuration has been deleted</section>';
+								error_html = '<section class="OG-box og-box-glass og-box-error OG-shadow-light">This convention has been deleted</section>';
 							if (json.deleted) {
 								$('.OG-layout-admin-details-north').html(error_html);
 								view.layout.inner.sizePane('north', '0');

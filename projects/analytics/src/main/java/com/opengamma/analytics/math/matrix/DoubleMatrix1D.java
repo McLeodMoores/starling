@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -15,11 +15,12 @@ import org.apache.commons.lang.Validate;
 public class DoubleMatrix1D implements Matrix<Double> {
   private final double[] _data;
   private final int _elements;
-  /** Empty vector */
+  /** Empty vector. */
   public static final DoubleMatrix1D EMPTY_MATRIX = new DoubleMatrix1D(new double[0]);
 
   /**
-   * @param data The data, not null
+   * @param data
+   *          The data, not null
    */
   public DoubleMatrix1D(final Double[] data) {
     Validate.notNull(data);
@@ -31,7 +32,8 @@ public class DoubleMatrix1D implements Matrix<Double> {
   }
 
   /**
-   * @param data The data, not null
+   * @param data
+   *          The data, not null
    */
   public DoubleMatrix1D(final double... data) {
     Validate.notNull(data);
@@ -40,11 +42,14 @@ public class DoubleMatrix1D implements Matrix<Double> {
   }
 
   /**
-   * Create an vector of length n with all entries equal to value
-   * @param n number of elements
-   * @param value value of elements
+   * Create an vector of length n with all entries equal to value.
+   * 
+   * @param n
+   *          number of elements
+   * @param value
+   *          value of elements
    */
-  public DoubleMatrix1D(final int n, double value) {
+  public DoubleMatrix1D(final int n, final double value) {
     _elements = n;
     _data = new double[_elements];
     Arrays.fill(_data, value);
@@ -52,6 +57,7 @@ public class DoubleMatrix1D implements Matrix<Double> {
 
   /**
    * Returns the underlying vector data. If this is changed so is the vector.
+   * 
    * @see #toArray to get a copy of data
    * @return An array containing the vector elements
    */
@@ -60,8 +66,8 @@ public class DoubleMatrix1D implements Matrix<Double> {
   }
 
   /**
-   * Convert the vector to a double array.
-   * As its elements are copied, the array is independent from the vector data.
+   * Convert the vector to a double array. As its elements are copied, the array is independent from the vector data.
+   * 
    * @return An array containing a copy of vector elements
    */
   public double[] toArray() {
@@ -77,8 +83,7 @@ public class DoubleMatrix1D implements Matrix<Double> {
   }
 
   /**
-   * {@inheritDoc}
-   * This method expects one index - any subsequent indices will be ignored.
+   * {@inheritDoc} This method expects one index - any subsequent indices will be ignored.
    */
   @Override
   public Double getEntry(final int... index) {
@@ -116,7 +121,7 @@ public class DoubleMatrix1D implements Matrix<Double> {
     final StringBuffer sb = new StringBuffer();
     final int n = _data.length;
     sb.append(" (");
-    for (int i = 0; i < (n - 1); i++) {
+    for (int i = 0; i < n - 1; i++) {
       sb.append(_data[i] + ", ");
     }
     sb.append(_data[n - 1] + ") ");

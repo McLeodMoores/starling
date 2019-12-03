@@ -26,26 +26,26 @@ public class ListedFutureOptionSecurityExtractor
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityDefinition  the definition, not null
    */
-  public ListedFutureOptionSecurityExtractor(FutureOptionSecurityDefinition securityDefinition) {
+  public ListedFutureOptionSecurityExtractor(final FutureOptionSecurityDefinition securityDefinition) {
     super(securityDefinition);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity() {
-    FutureOptionSecurityDefinition defn = getSecurityDefinition();
-    ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
-    Expiry expiry = new Expiry(defn.getFutureExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC), ExpiryAccuracy.MONTH_YEAR);
-    String exchange = defn.getExchange();
-    Currency currency = defn.getCurrency();
-    int pointValue = defn.getPointValue();
-    boolean isMargined = defn.isIsMargined();
-    double strike = defn.getStrike().doubleValue();
-    OptionType optionType = defn.getOptionType();
-    ExerciseType exerciseType = defn.getExerciseType().convert();
+    final FutureOptionSecurityDefinition defn = getSecurityDefinition();
+    final ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
+    final Expiry expiry = new Expiry(defn.getFutureExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC), ExpiryAccuracy.MONTH_YEAR);
+    final String exchange = defn.getExchange();
+    final Currency currency = defn.getCurrency();
+    final int pointValue = defn.getPointValue();
+    final boolean isMargined = defn.isIsMargined();
+    final double strike = defn.getStrike().doubleValue();
+    final OptionType optionType = defn.getOptionType();
+    final ExerciseType exerciseType = defn.getExerciseType().convert();
 
     switch (defn.getListedFutureOptionType()) {
       case EQUITY_INDEX_FUTURE_OPTION:

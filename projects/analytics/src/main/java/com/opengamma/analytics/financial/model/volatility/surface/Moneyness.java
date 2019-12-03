@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.surface;
 import org.apache.commons.lang.Validate;
 
 /**
- * This is defined as strike/forward
+ * This is defined as strike/forward.
  */
 public class Moneyness implements StrikeType {
 
@@ -30,10 +30,8 @@ public class Moneyness implements StrikeType {
     return _value;
   }
 
-
-
   @Override
-  public Moneyness with(double value) {
+  public Moneyness with(final double value) {
     return new Moneyness(value);
   }
 

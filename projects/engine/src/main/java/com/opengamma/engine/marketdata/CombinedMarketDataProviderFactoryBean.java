@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata;
@@ -20,7 +20,7 @@ public class CombinedMarketDataProviderFactoryBean extends SingletonFactoryBean<
     return _preferredProvider;
   }
 
-  public void setPreferredProvider(MarketDataProvider preferredProvider) {
+  public void setPreferredProvider(final MarketDataProvider preferredProvider) {
     _preferredProvider = preferredProvider;
   }
 
@@ -28,7 +28,7 @@ public class CombinedMarketDataProviderFactoryBean extends SingletonFactoryBean<
     return _fallbackProvider;
   }
 
-  public void setFallbackProvider(MarketDataProvider fallbackProvider) {
+  public void setFallbackProvider(final MarketDataProvider fallbackProvider) {
     _fallbackProvider = fallbackProvider;
   }
 

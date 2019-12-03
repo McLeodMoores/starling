@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Shifts an {@link InterpolatedDoublesCube}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the
- * original cube, they are added (with shift) to the nodal points of the new cube.
+ * Shifts an {@link InterpolatedDoublesCube}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the original cube, they are added
+ * (with shift) to the nodal points of the new cube.
  */
 public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFunction<InterpolatedDoublesCube> {
 
@@ -56,7 +56,8 @@ public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFun
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double x, final double y, final double z, final double percentage, final String newName) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double x, final double y, final double z, final double percentage,
+      final String newName) {
     Validate.notNull(cube, "cube");
     final double[] xData = cube.getXDataAsPrimitive();
     final double[] yData = cube.getYDataAsPrimitive();
@@ -93,7 +94,8 @@ public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFun
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] percentage) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] percentage) {
     Validate.notNull(cube, "cube");
     return evaluate(cube, xShift, yShift, zShift, percentage, "MULTIPLE_MULTIPLIER_" + cube.getName());
   }
@@ -102,7 +104,8 @@ public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFun
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] percentage, final String newName) {
+  public InterpolatedDoublesCube evaluate(final InterpolatedDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] percentage, final String newName) {
     Validate.notNull(cube, "cube");
     Validate.notNull(xShift, "x shift");
     Validate.notNull(yShift, "y shift");
@@ -110,7 +113,8 @@ public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFun
     Validate.notNull(percentage, "shifts");
     final int n = xShift.length;
     if (n == 0) {
-      return InterpolatedDoublesCube.from(cube.getXDataAsPrimitive(), cube.getYDataAsPrimitive(), cube.getZDataAsPrimitive(), cube.getValuesAsPrimitive(), cube.getInterpolator(), newName);
+      return InterpolatedDoublesCube.from(cube.getXDataAsPrimitive(), cube.getYDataAsPrimitive(), cube.getZDataAsPrimitive(), cube.getValuesAsPrimitive(),
+          cube.getInterpolator(), newName);
     }
     Validate.isTrue(n == yShift.length && n == zShift.length && n == percentage.length);
     final Double[] x = cube.getXData();
@@ -125,8 +129,8 @@ public class InterpolatedCubeMultiplicativeShiftFunction implements CubeShiftFun
     for (int i = 0; i < n; i++) {
       boolean foundValue = false;
       for (int j = 0; j < size; j++) {
-        if (Double.doubleToLongBits(x[j]) == Double.doubleToLongBits(xShift[i]) && Double.doubleToLongBits(y[j]) == Double.doubleToLongBits(yShift[i]) &&
-            Double.doubleToLongBits(z[j]) == Double.doubleToLongBits(zShift[i])) {
+        if (Double.doubleToLongBits(x[j]) == Double.doubleToLongBits(xShift[i]) && Double.doubleToLongBits(y[j]) == Double.doubleToLongBits(yShift[i])
+            && Double.doubleToLongBits(z[j]) == Double.doubleToLongBits(zShift[i])) {
           newV.set(j, v[j] * (1 + percentage[i]));
           foundValue = true;
         }

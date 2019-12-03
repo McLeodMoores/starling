@@ -130,8 +130,8 @@ public class BondSecurityDiscountingMethodTest {
   private static final ModifiedDurationFromCurvesCalculator MDFC = ModifiedDurationFromCurvesCalculator.getInstance();
   private static final ModifiedDurationFromCleanPriceCalculator MDFP = ModifiedDurationFromCleanPriceCalculator.getInstance();
   private static final ModifiedDurationFromYieldCalculator MDFY = ModifiedDurationFromYieldCalculator.getInstance();
-  private static final MacaulayDurationFromCurvesCalculator McDFC = MacaulayDurationFromCurvesCalculator.getInstance();
-  private static final MacaulayDurationFromYieldCalculator McDFY = MacaulayDurationFromYieldCalculator.getInstance();
+  private static final MacaulayDurationFromCurvesCalculator MCDFC = MacaulayDurationFromCurvesCalculator.getInstance();
+  private static final MacaulayDurationFromYieldCalculator MCDFY = MacaulayDurationFromYieldCalculator.getInstance();
   private static final DirtyPriceFromYieldCalculator DPFY = DirtyPriceFromYieldCalculator.getInstance();
   private static final DirtyPriceFromCurvesCalculator DPFC = DirtyPriceFromCurvesCalculator.getInstance();
   private static final ConvexityFromCurvesCalculator CFC = ConvexityFromCurvesCalculator.getInstance();
@@ -621,8 +621,8 @@ public class BondSecurityDiscountingMethodTest {
     final MultipleCurrencyAmount pv = METHOD_BOND_SECURITY.presentValue(BOND_FIXED_SECURITY_UK, ISSUER_SPECIFIC_MULTICURVES);
     final BondFixedSecurityDefinition bondNoExDefinition = BondFixedSecurityDefinition.from(GBP, MATURITY_DATE_UK, START_ACCRUAL_DATE_UK, PAYMENT_TENOR_UK, RATE_UK, SETTLEMENT_DAYS_UK, NOTIONAL_UK,
         0, CALENDAR_UK, DAY_COUNT_UK, BUSINESS_DAY_UK, YIELD_CONVENTION_UK, IS_EOM_UK, ISSUER_UK_NAME, "RepoType");
-    final BondFixedSecurity BondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3);
-    final MultipleCurrencyAmount pvNoEx = METHOD_BOND_SECURITY.presentValue(BondNoEx, ISSUER_SPECIFIC_MULTICURVES);
+    final BondFixedSecurity bondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3);
+    final MultipleCurrencyAmount pvNoEx = METHOD_BOND_SECURITY.presentValue(bondNoEx, ISSUER_SPECIFIC_MULTICURVES);
     final CouponFixedDefinition couponDefinitionEx = BOND_FIXED_SECURITY_DEFINITION_UK.getCoupons().getNthPayment(17);
     final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(ISSUER_SPECIFIC_MULTICURVES, GBP, ISSUER_UK);
     final MultipleCurrencyAmount pvCpn = couponDefinitionEx.toDerivative(REFERENCE_DATE_3).accept(PVDC, multicurvesDecorated);
@@ -751,10 +751,10 @@ public class BondSecurityDiscountingMethodTest {
   @Test
   public void macaulayDurationMethodVsCalculator() {
     double method = METHOD_BOND_SECURITY.macaulayDurationFromCurves(BOND_FIXED_SECURITY_G2, ISSUER_SPECIFIC_MULTICURVES);
-    double calculator = BOND_FIXED_SECURITY_G2.accept(McDFC, ISSUER_SPECIFIC_MULTICURVES);
+    double calculator = BOND_FIXED_SECURITY_G2.accept(MCDFC, ISSUER_SPECIFIC_MULTICURVES);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
     method = METHOD_BOND_SECURITY.macaulayDurationFromYield(BOND_FIXED_SECURITY_G2, 0.05);
-    calculator = BOND_FIXED_SECURITY_G2.accept(McDFY, 0.05);
+    calculator = BOND_FIXED_SECURITY_G2.accept(MCDFY, 0.05);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
   }
 

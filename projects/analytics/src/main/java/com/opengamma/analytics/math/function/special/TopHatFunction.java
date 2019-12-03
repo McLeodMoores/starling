@@ -10,20 +10,9 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Class representing the top-hat function, defined as:
- * $$
- * \begin{align*}
- * T(x)=
- * \begin{cases}
- * 0 & x < x_1\\
- * y & x_1 < x < x_2\\
- * 0 & x > x_2
- * \end{cases}
- * \end{align*}
- * $$
- * where $x_1$ is the lower edge of the "hat", $x_2$ is the upper edge and $y$
- * is the height of the function.
- * 
+ * Class representing the top-hat function, defined as: $$ \begin{align*} T(x)= \begin{cases} 0 &amp; x &lt; x_1\\ y &amp; x_1 &lt; x &lt; x_2\\ 0 &amp; x &gt;
+ * x_2 \end{cases} \end{align*} $$ where $x_1$ is the lower edge of the "hat", $x_2$ is the upper edge and $y$ is the height of the function.
+ *
  * This function is discontinuous at $x_1$ and $x_2$.
  */
 public class TopHatFunction extends Function1D<Double, Double> {
@@ -32,9 +21,9 @@ public class TopHatFunction extends Function1D<Double, Double> {
   private final double _y;
 
   /**
-   * @param x1 The lower edge 
+   * @param x1 The lower edge
    * @param x2 The upper edge, must be greater than x1
-   * @param y The height 
+   * @param y The height
    */
   public TopHatFunction(final double x1, final double x2, final double y) {
     Validate.isTrue(x1 < x2, "x1 must be less than x2");
@@ -44,7 +33,8 @@ public class TopHatFunction extends Function1D<Double, Double> {
   }
 
   /**
-   * @param x The argument of the function, not null. Must have $x_1 < x < x_2$
+   * @param x
+   *          The argument of the function, not null. Must have $x_1 &lt; x &lt; x_2$
    * @return The value of the function
    */
   @Override

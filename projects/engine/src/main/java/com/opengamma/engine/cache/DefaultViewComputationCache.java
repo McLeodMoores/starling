@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -37,8 +37,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class DefaultViewComputationCache implements ViewComputationCache,
     Iterable<Pair<ValueSpecification, FudgeMsg>> {
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultViewComputationCache.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultViewComputationCache.class);
 
   /**
    * Callback to locate missing data.
@@ -64,12 +64,13 @@ public class DefaultViewComputationCache implements ViewComputationCache,
    * The size of recent values that have gone into or come out of this cache.
    */
   @SuppressWarnings({"rawtypes", "unchecked" })
-  private final ThreadLocal<Map<ValueSpecification, Integer>> _valueSizeCache = new ThreadLocal(); //NOTE: this being thread local is dangerous, but avoids blocking
+  //NOTE: this being thread local is dangerous, but avoids blocking
+  private final ThreadLocal<Map<ValueSpecification, Integer>> _valueSizeCache = new ThreadLocal();
 
   private Map<ValueSpecification, Integer> getValueSizeCache() {
     Map<ValueSpecification, Integer> c = _valueSizeCache.get();
     if (c == null) {
-      c = new HashMap<ValueSpecification, Integer>();
+      c = new HashMap<>();
       _valueSizeCache.set(c);
     }
     return c;
@@ -110,7 +111,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
     //All of these classes must be have consistent sizes
     final ArrayList<Object> templates = Lists.<Object>newArrayList(Double.valueOf(12.0), MissingInput.MISSING_MARKET_DATA);
 
-    final Map<Class<?>, Integer> valueSizeByClass = new HashMap<Class<?>, Integer>(templates.size());
+    final Map<Class<?>, Integer> valueSizeByClass = new HashMap<>(templates.size());
     for (final Object obj : templates) {
       final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
       final FudgeMsg data = serializeValue(serializer, obj);
@@ -130,7 +131,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
 
   /**
    * Gets the identifierSource field.
-   * 
+   *
    * @return the identifierSource
    */
   public IdentifierMap getIdentifierMap() {
@@ -139,7 +140,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
 
   /**
    * Gets the private / local data store.
-   * 
+   *
    * @return the dataStore
    */
   public FudgeMessageStore getPrivateDataStore() {
@@ -152,7 +153,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
 
   /**
    * Gets the fudgeContext field.
-   * 
+   *
    * @return the fudgeContext
    */
   public FudgeContext getFudgeContext() {
@@ -202,7 +203,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications) {
     ArgumentChecker.notNull(specifications, "specifications");
     final Map<ValueSpecification, Long> identifiers = getIdentifierMap().getIdentifiers(specifications);
-    final Collection<Pair<ValueSpecification, Object>> returnValues = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> returnValues = new ArrayList<>(specifications.size());
     final Collection<Long> identifierValues = identifiers.values();
     final FudgeDeserializer deserializer = new FudgeDeserializer(getFudgeContext());
     Map<Long, FudgeMsg> rawValues = getPrivateDataStore().get(identifierValues);
@@ -263,23 +264,23 @@ public class DefaultViewComputationCache implements ViewComputationCache,
   public Collection<Pair<ValueSpecification, Object>> getValues(final Collection<ValueSpecification> specifications, final CacheSelectHint filter) {
     ArgumentChecker.notNull(specifications, "specifications");
     final Map<ValueSpecification, Long> identifiers = getIdentifierMap().getIdentifiers(specifications);
-    final Collection<Pair<ValueSpecification, Object>> returnValues = new ArrayList<Pair<ValueSpecification, Object>>(specifications.size());
+    final Collection<Pair<ValueSpecification, Object>> returnValues = new ArrayList<>(specifications.size());
     List<Long> privateIdentifiers = null;
     List<Long> sharedIdentifiers = null;
     for (final ValueSpecification specification : specifications) {
       if (filter.isPrivateValue(specification)) {
         if (privateIdentifiers == null) {
-          privateIdentifiers = new ArrayList<Long>(specifications.size());
+          privateIdentifiers = new ArrayList<>(specifications.size());
         }
         privateIdentifiers.add(identifiers.get(specification));
       } else {
         if (sharedIdentifiers == null) {
-          sharedIdentifiers = new ArrayList<Long>(specifications.size());
+          sharedIdentifiers = new ArrayList<>(specifications.size());
         }
         sharedIdentifiers.add(identifiers.get(specification));
       }
     }
-    final Map<Long, FudgeMsg> rawValues = new HashMap<Long, FudgeMsg>();
+    final Map<Long, FudgeMsg> rawValues = new HashMap<>();
     // TODO Can we overlay the fetch of shared and private data?
     if (sharedIdentifiers != null) {
       if (sharedIdentifiers.size() == 1) {
@@ -338,12 +339,12 @@ public class DefaultViewComputationCache implements ViewComputationCache,
 
   protected void putValues(final Collection<? extends ComputedValue> values, final FudgeMessageStore dataStore) {
     ArgumentChecker.notNull(values, "values");
-    final Collection<ValueSpecification> specifications = new ArrayList<ValueSpecification>(values.size());
+    final Collection<ValueSpecification> specifications = new ArrayList<>(values.size());
     for (final ComputedValue value : values) {
       specifications.add(value.getSpecification());
     }
     final Map<ValueSpecification, Long> identifiers = getIdentifierMap().getIdentifiers(specifications);
-    final Map<Long, FudgeMsg> data = new HashMap<Long, FudgeMsg>();
+    final Map<Long, FudgeMsg> data = new HashMap<>();
     final FudgeSerializer serializer = new FudgeSerializer(getFudgeContext());
     for (final ComputedValue value : values) {
       final Object obj = value.getValue();
@@ -367,7 +368,7 @@ public class DefaultViewComputationCache implements ViewComputationCache,
   @Override
   public void putValues(final Collection<? extends ComputedValue> values, final CacheSelectHint filter) {
     ArgumentChecker.notNull(values, "values");
-    final Collection<ValueSpecification> specifications = new ArrayList<ValueSpecification>(values.size());
+    final Collection<ValueSpecification> specifications = new ArrayList<>(values.size());
     for (final ComputedValue value : values) {
       specifications.add(value.getSpecification());
     }
@@ -381,12 +382,12 @@ public class DefaultViewComputationCache implements ViewComputationCache,
       cacheValueSize(value.getSpecification(), valueData, value.getValue());
       if (filter.isPrivateValue(value.getSpecification())) {
         if (privateData == null) {
-          privateData = new HashMap<Long, FudgeMsg>();
+          privateData = new HashMap<>();
         }
         privateData.put(identifiers.get(value.getSpecification()), valueData);
       } else {
         if (sharedData == null) {
-          sharedData = new HashMap<Long, FudgeMsg>();
+          sharedData = new HashMap<>();
         }
         sharedData.put(identifiers.get(value.getSpecification()), valueData);
       }
@@ -417,17 +418,16 @@ public class DefaultViewComputationCache implements ViewComputationCache,
     final MutableFudgeMsg message = serializer.newMessage();
     try {
       serializer.addToMessageWithClassHeaders(message, null, NATIVE_FIELD_INDEX, WriteReplaceHelper.writeReplace(value));
-    } catch (FudgeRuntimeException e) {
-      s_logger.error("Can't encode value {}", value);
-      s_logger.warn("Caught exception", e);
+    } catch (final FudgeRuntimeException e) {
+      LOGGER.error("Can't encode value {}", value);
+      LOGGER.warn("Caught exception", e);
     }
     // Optimize the "value encoded as sub-message" case to reduce space requirement
     final Object svalue = message.getValue(NATIVE_FIELD_INDEX);
     if (svalue instanceof FudgeMsg) {
       return (FudgeMsg) svalue;
-    } else {
-      return message;
     }
+    return message;
   }
 
   protected static Object deserializeValue(final FudgeDeserializer deserializer, final FudgeMsg message) {

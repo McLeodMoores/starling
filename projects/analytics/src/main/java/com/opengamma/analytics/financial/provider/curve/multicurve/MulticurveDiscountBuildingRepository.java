@@ -71,9 +71,13 @@ public class MulticurveDiscountBuildingRepository {
 
   /**
    * Constructor.
-   * @param toleranceAbs The absolute tolerance for the root finder.
-   * @param toleranceRel The relative tolerance for the root finder.
-   * @param stepMaximum The maximum number of step for the root finder.
+   *
+   * @param toleranceAbs
+   *          The absolute tolerance for the root finder.
+   * @param toleranceRel
+   *          The relative tolerance for the root finder.
+   * @param stepMaximum
+   *          The maximum number of step for the root finder.
    */
   public MulticurveDiscountBuildingRepository(final double toleranceAbs, final double toleranceRel, final int stepMaximum) {
     _toleranceAbs = toleranceAbs;
@@ -87,20 +91,30 @@ public class MulticurveDiscountBuildingRepository {
 
   /**
    * Build a unit of curves.
-   * @param instruments The instruments used for the unit calibration.
-   * @param initGuess The initial parameters guess.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param generatorsMap The generators map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
-   * (recommended) or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param instruments
+   *          The instruments used for the unit calibration.
+   * @param initGuess
+   *          The initial parameters guess.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param generatorsMap
+   *          The generators map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return The new curves and the calibrated parameters.
    */
   private MulticurveProviderDiscount makeUnit(final InstrumentDerivative[] instruments, final double[] initGuess, final MulticurveProviderDiscount knownData,
-      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
+      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+      final LinkedHashMap<String, IndexON[]> forwardONMap,
       final LinkedHashMap<String, GeneratorYDCurve> generatorsMap, final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
     final GeneratorMulticurveProviderDiscount generator = new GeneratorMulticurveProviderDiscount(knownData, discountingMap, forwardIborMap, forwardONMap,
@@ -116,14 +130,18 @@ public class MulticurveDiscountBuildingRepository {
 
   /**
    * Construct the CurveBuildingBlock associated to all the curve built so far and updates the CurveBuildingBlockBundle.
-   * @param instruments The instruments used for the block calibration.
-   * @param multicurves The known curves including the current unit.
-   * @param currentCurvesList The list of current curves
-   * @param blockBundle The curve building block bundle
-   * @param sensitivityCalculator The parameter sensitivity calculator for the value on which the calibration is done
-  (usually ParSpreadMarketQuoteDiscountingProviderCalculator (recommended) or converted present value).
-   * @return The part of the inverse Jacobian matrix associated to each curve. Only the part for the curve in the current unit (not the previous units).
-   * The Jacobian matrix is the transition matrix between the curve parameters and the par spread.
+   *
+   * @param instruments
+   *          The instruments used for the block calibration.
+   * @param multicurves
+   *          The known curves including the current unit.
+   * @param currentCurvesList
+   *          The list of current curves
+   * @param blockBundle
+   *          The curve building block bundle
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator for the value on which the calibration is done (usually ParSpreadMarketQuoteDiscountingProviderCalculator
+   *          (recommended) or converted present value).
    */
   private void updateBlockBundle(final InstrumentDerivative[] instruments, final MulticurveProviderDiscount multicurves, final List<String> currentCurvesList,
       final CurveBuildingBlockBundle blockBundle, final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
@@ -141,8 +159,8 @@ public class MulticurveDiscountBuildingRepository {
     final LinkedHashSet<String> beforeCurveNameCopy = new LinkedHashSet<>(allCurveName1);
     final LinkedHashSet<String> allCurveName = new LinkedHashSet<>(beforeCurveName);
     allCurveName.addAll(currentCurves); // Manipulation to ensure that the new curves are at the end.
-    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName.
-    //Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
+    // Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from beforeCurveName.
+    // Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
     for (final String name : beforeCurveNameCopy) {
       if (!blockBundle.getData().containsKey(name)) {
         beforeCurveName.remove(name);
@@ -257,16 +275,23 @@ public class MulticurveDiscountBuildingRepository {
 
   /**
    * Build a block of curves without a known CurveBuildingBlockBundle.
-   * @param curveBundles The bundles of curve data used in construction.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
-   * (recommended) or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
-   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the
-   * relevant inverse Jacobian Matrix.
+   *
+   * @param curveBundles
+   *          The bundles of curve data used in construction.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
+   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the relevant inverse Jacobian
+   *         Matrix.
    */
 
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,
@@ -281,17 +306,25 @@ public class MulticurveDiscountBuildingRepository {
 
   /**
    * Build a block of curves with a known CurveBuildingBlockBundle.
-   * @param curveBundles The bundles of curve data used in construction.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param knownBlockBundle The already build CurveBuildingBlockBundle.
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
-   * (recommended) or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
-   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with
-   * the relevant inverse Jacobian Matrix.
+   *
+   * @param curveBundles
+   *          The bundles of curve data used in construction.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param knownBlockBundle
+   *          The already build CurveBuildingBlockBundle.
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
+   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the relevant inverse Jacobian
+   *         Matrix.
    */
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,
       final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBlockBundle,

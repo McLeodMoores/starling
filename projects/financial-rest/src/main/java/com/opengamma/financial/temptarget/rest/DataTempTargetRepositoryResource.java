@@ -22,7 +22,7 @@ import com.opengamma.transport.jaxrs.FudgeRest;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * RESTful resource for a {@link TempTargetRepository}
+ * RESTful resource for a {@link TempTargetRepository}.
  */
 @Path("tempTarget")
 public class DataTempTargetRepositoryResource extends DataTempTargetSourceResource {
@@ -30,7 +30,8 @@ public class DataTempTargetRepositoryResource extends DataTempTargetSourceResour
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param underlying the underlying source, not null
+   * @param underlying
+   *          the underlying source, not null
    */
   public DataTempTargetRepositoryResource(final TempTargetRepository underlying) {
     super(underlying);

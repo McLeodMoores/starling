@@ -42,9 +42,8 @@ public class UnderlyingTypeToValueRequirementMapper {
       final EquitySecurity equity = (EquitySecurity) security;
       if (underlying == UnderlyingType.SPOT_PRICE) {
         return new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, equity.getUniqueId());
-      } else {
-        throw new NotImplementedException("Don't know how to get ValueRequirement for " + underlying);
       }
+      throw new NotImplementedException("Don't know how to get ValueRequirement for " + underlying);
     } else {
       throw new NotImplementedException("Can only get ValueRequirements for EquityOptionSecurity and EquitySecurity. Was " + security + ")");
     }

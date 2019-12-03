@@ -24,17 +24,17 @@ import com.opengamma.util.ArgumentChecker;
 @Deprecated
 public class ForexLocalVolatilityPDEGreekDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final String[] GREEK_NAMES = new String[] {
-    ValueRequirementNames.LOCAL_VOLATILITY_DELTA,
-    ValueRequirementNames.LOCAL_VOLATILITY_DUAL_DELTA,
-    ValueRequirementNames.LOCAL_VOLATILITY_DUAL_GAMMA,
-    ValueRequirementNames.LOCAL_VOLATILITY_GAMMA,
-    ValueRequirementNames.LOCAL_VOLATILITY_VANNA,
-    ValueRequirementNames.LOCAL_VOLATILITY_VEGA,
-    ValueRequirementNames.LOCAL_VOLATILITY_VOMMA,
-    ValueRequirementNames.LOCAL_VOLATILITY_GRID_PRICE,
-    ValueRequirementNames.BLACK_VOLATILITY_GRID_PRICE,
-    ValueRequirementNames.LOCAL_VOLATILITY_GRID_IMPLIED_VOL,
-    ValueRequirementNames.LOCAL_VOLATILITY_DOMESTIC_PRICE };
+                ValueRequirementNames.LOCAL_VOLATILITY_DELTA,
+                ValueRequirementNames.LOCAL_VOLATILITY_DUAL_DELTA,
+                ValueRequirementNames.LOCAL_VOLATILITY_DUAL_GAMMA,
+                ValueRequirementNames.LOCAL_VOLATILITY_GAMMA,
+                ValueRequirementNames.LOCAL_VOLATILITY_VANNA,
+                ValueRequirementNames.LOCAL_VOLATILITY_VEGA,
+                ValueRequirementNames.LOCAL_VOLATILITY_VOMMA,
+                ValueRequirementNames.LOCAL_VOLATILITY_GRID_PRICE,
+                ValueRequirementNames.BLACK_VOLATILITY_GRID_PRICE,
+                ValueRequirementNames.LOCAL_VOLATILITY_GRID_IMPLIED_VOL,
+                ValueRequirementNames.LOCAL_VOLATILITY_DOMESTIC_PRICE };
   private final String _forwardCurveCalculationMethod;
   private final String _forwardCurveName;
   private final String _surfaceType;
@@ -52,7 +52,8 @@ public class ForexLocalVolatilityPDEGreekDefaultPropertiesFunction extends Defau
   private final String _maxMoneyness;
   private final String _strikeInterpolatorName;
 
-  public ForexLocalVolatilityPDEGreekDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType,
+  public ForexLocalVolatilityPDEGreekDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName,
+      final String surfaceType,
       final String xAxis, final String yAxis, final String yAxisType, final String surfaceName, final String h, final String pdeDirection, final String theta,
       final String timeSteps, final String spaceSteps, final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness,
       final String strikeInterpolatorName) {
@@ -114,7 +115,8 @@ public class ForexLocalVolatilityPDEGreekDefaultPropertiesFunction extends Defau
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethod);
     }

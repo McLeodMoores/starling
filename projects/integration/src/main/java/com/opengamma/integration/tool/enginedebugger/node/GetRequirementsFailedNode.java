@@ -15,23 +15,24 @@ public class GetRequirementsFailedNode extends AbstractFailureNode {
 
   private static final String NAME = "GetRequirementsFailed";
 
-  public GetRequirementsFailedNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput) {
+  public GetRequirementsFailedNode(final Object parent, final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput) {
     super(parent, valueRequirement, function, desiredOutput);
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     } else if (column == 1) {
-      return _functionEntry.getFunctionName();      
+      return _functionEntry.getFunctionName();
     }
     return null;
   }
-  
+
   @Override
-  public boolean equals(Object o) {
-    boolean result = super.equals(o);
+  public boolean equals(final Object o) {
+    final boolean result = super.equals(o);
     return result && o instanceof GetRequirementsFailedNode;
   }
 

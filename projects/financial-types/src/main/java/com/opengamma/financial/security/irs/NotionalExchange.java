@@ -27,18 +27,18 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 @BeanDefinition
 public final class NotionalExchange implements ImmutableBean {
 
-  /** Exchange the final notional */
+  /** Exchange the final notional. */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeFinalNotional;
 
   /**
-   * Exchange the initial notional
+   * Exchange the initial notional.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeInitialNotional;
 
   /**
-   * Exchange the interim notional
+   * Exchange the interim notional.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _exchangeInterimNotional;
@@ -99,7 +99,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the final notional
+   * Gets exchange the final notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeFinalNotional() {
@@ -108,7 +108,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the initial notional
+   * Gets exchange the initial notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeInitialNotional() {
@@ -117,7 +117,7 @@ public final class NotionalExchange implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets exchange the interim notional
+   * Gets exchange the interim notional.
    * @return the value of the property, not null
    */
   public boolean isExchangeInterimNotional() {
@@ -140,9 +140,9 @@ public final class NotionalExchange implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       NotionalExchange other = (NotionalExchange) obj;
-      return (isExchangeFinalNotional() == other.isExchangeFinalNotional()) &&
-          (isExchangeInitialNotional() == other.isExchangeInitialNotional()) &&
-          (isExchangeInterimNotional() == other.isExchangeInterimNotional());
+      return (_exchangeFinalNotional == other._exchangeFinalNotional) &&
+          (_exchangeInitialNotional == other._exchangeInitialNotional) &&
+          (_exchangeInterimNotional == other._exchangeInterimNotional);
     }
     return false;
   }
@@ -150,9 +150,9 @@ public final class NotionalExchange implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeFinalNotional());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeInitialNotional());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeInterimNotional());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_exchangeFinalNotional);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_exchangeInitialNotional);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_exchangeInterimNotional);
     return hash;
   }
 
@@ -160,9 +160,9 @@ public final class NotionalExchange implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("NotionalExchange{");
-    buf.append("exchangeFinalNotional").append('=').append(isExchangeFinalNotional()).append(',').append(' ');
-    buf.append("exchangeInitialNotional").append('=').append(isExchangeInitialNotional()).append(',').append(' ');
-    buf.append("exchangeInterimNotional").append('=').append(JodaBeanUtils.toString(isExchangeInterimNotional()));
+    buf.append("exchangeFinalNotional").append('=').append(_exchangeFinalNotional).append(',').append(' ');
+    buf.append("exchangeInitialNotional").append('=').append(_exchangeInitialNotional).append(',').append(' ');
+    buf.append("exchangeInterimNotional").append('=').append(JodaBeanUtils.toString(_exchangeInterimNotional));
     buf.append('}');
     return buf.toString();
   }
@@ -350,19 +350,31 @@ public final class NotionalExchange implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
@@ -378,7 +390,7 @@ public final class NotionalExchange implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets exchange the final notional
+     * Sets exchange the final notional.
      * @param exchangeFinalNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -389,7 +401,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets exchange the initial notional
+     * Sets exchange the initial notional.
      * @param exchangeInitialNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -400,7 +412,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets exchange the interim notional
+     * Sets exchange the interim notional.
      * @param exchangeInterimNotional  the new value, not null
      * @return this, for chaining, not null
      */

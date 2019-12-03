@@ -40,12 +40,19 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from all details but accrual dates.
-   * @param currency  the payment currency, not null
-   * @param paymentTime  time in years up to the payment
-   * @param fundingCurveName  name of the funding curve, not null
-   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
-   * @param notional  coupon notional
-   * @param rate  the coupon fixed rate
+   * 
+   * @param currency
+   *          the payment currency, not null
+   * @param paymentTime
+   *          time in years up to the payment
+   * @param fundingCurveName
+   *          name of the funding curve, not null
+   * @param paymentYearFraction
+   *          the year fraction (or accrual factor) for the coupon payment
+   * @param notional
+   *          coupon notional
+   * @param rate
+   *          the coupon fixed rate
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
@@ -60,14 +67,23 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from all details.
-   * @param currency  the payment currency, not null
-   * @param paymentTime  time in years up to the payment
-   * @param fundingCurveName  name of the funding curve, not null
-   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
-   * @param notional  coupon notional
-   * @param rate  the coupon fixed rate
-   * @param accrualStartDate  the start date of the coupon accrual period, not null
-   * @param accrualEndDate  the end date of the coupon accrual period, not null
+   * 
+   * @param currency
+   *          the payment currency, not null
+   * @param paymentTime
+   *          time in years up to the payment
+   * @param fundingCurveName
+   *          name of the funding curve, not null
+   * @param paymentYearFraction
+   *          the year fraction (or accrual factor) for the coupon payment
+   * @param notional
+   *          coupon notional
+   * @param rate
+   *          the coupon fixed rate
+   * @param accrualStartDate
+   *          the start date of the coupon accrual period, not null
+   * @param accrualEndDate
+   *          the end date of the coupon accrual period, not null
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
@@ -82,11 +98,17 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from details with notional defaulted to 1.
-   * @param currency  the payment currency, not null
-   * @param paymentTime  time in years up to the payment
-   * @param fundingCurveName  name of the funding curve, not null
-   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
-   * @param rate  the coupon fixed rate
+   * 
+   * @param currency
+   *          the payment currency, not null
+   * @param paymentTime
+   *          time in years up to the payment
+   * @param fundingCurveName
+   *          name of the funding curve, not null
+   * @param paymentYearFraction
+   *          the year fraction (or accrual factor) for the coupon payment
+   * @param rate
+   *          the coupon fixed rate
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
@@ -96,11 +118,17 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from all details but accrual dates.
-   * @param currency  the payment currency, not null
-   * @param paymentTime  time in years up to the payment
-   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
-   * @param notional  coupon notional
-   * @param rate  the coupon fixed rate
+   * 
+   * @param currency
+   *          the payment currency, not null
+   * @param paymentTime
+   *          time in years up to the payment
+   * @param paymentYearFraction
+   *          the year fraction (or accrual factor) for the coupon payment
+   * @param notional
+   *          coupon notional
+   * @param rate
+   *          the coupon fixed rate
    */
   public CouponFixed(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double rate) {
     super(currency, paymentTime, paymentYearFraction, notional);
@@ -112,13 +140,21 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from all details.
-   * @param currency  the payment currency, not null
-   * @param paymentTime  time in years up to the payment
-   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
-   * @param notional  coupon notional
-   * @param rate  the coupon fixed rate
-   * @param accrualStartDate  the start date of the coupon accrual period, not null
-   * @param accrualEndDate  the end date of the coupon accrual period, not null
+   * 
+   * @param currency
+   *          the payment currency, not null
+   * @param paymentTime
+   *          time in years up to the payment
+   * @param paymentYearFraction
+   *          the year fraction (or accrual factor) for the coupon payment
+   * @param notional
+   *          coupon notional
+   * @param rate
+   *          the coupon fixed rate
+   * @param accrualStartDate
+   *          the start date of the coupon accrual period, not null
+   * @param accrualEndDate
+   *          the end date of the coupon accrual period, not null
    */
   public CouponFixed(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double rate,
       final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate) {
@@ -131,10 +167,15 @@ public class CouponFixed extends Coupon {
 
   /**
    * Constructor from details with notional defaulted to 1.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param rate The coupon fixed rate.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param rate
+   *          The coupon fixed rate.
    */
   public CouponFixed(final Currency currency, final double paymentTime, final double paymentYearFraction, final double rate) {
     this(currency, paymentTime, paymentYearFraction, 1.0, rate);
@@ -142,7 +183,8 @@ public class CouponFixed extends Coupon {
 
   /**
    * Gets the coupon fixed rate.
-   * @return  the fixed rate
+   * 
+   * @return the fixed rate
    */
   public double getFixedRate() {
     return _fixedRate;
@@ -150,7 +192,8 @@ public class CouponFixed extends Coupon {
 
   /**
    * Gets the start date of the coupon accrual period.
-   * @return  the accrual start date
+   * 
+   * @return the accrual start date
    */
   public ZonedDateTime getAccrualStartDate() {
     return _accrualStartDate;
@@ -158,7 +201,8 @@ public class CouponFixed extends Coupon {
 
   /**
    * Gets the end date of the coupon accrual period.
-   * @return  the accrual end date
+   * 
+   * @return the accrual end date
    */
   public ZonedDateTime getAccrualEndDate() {
     return _accrualEndDate;
@@ -166,7 +210,8 @@ public class CouponFixed extends Coupon {
 
   /**
    * Gets the paid amount.
-   * @return  the amount
+   * 
+   * @return the amount
    */
   public double getAmount() {
     return _amount;
@@ -174,7 +219,8 @@ public class CouponFixed extends Coupon {
 
   /**
    * Creates a new coupon with the same characteristics, except the rate which is 1.0.
-   * @return  the new coupon
+   * 
+   * @return the new coupon
    */
   @SuppressWarnings("deprecation")
   public CouponFixed withUnitCoupon() {
@@ -187,14 +233,16 @@ public class CouponFixed extends Coupon {
 
   /**
    * Create a new fixed coupon with all the details unchanged except that the rate is the one provided.
-   * @param rate  the new rate
-   * @return  the coupon
+   * 
+   * @param rate
+   *          the new rate
+   * @return the coupon
    */
   @SuppressWarnings("deprecation")
   public CouponFixed withRate(final double rate) {
     try {
-      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(),
-          rate, getAccrualStartDate(), getAccrualEndDate());
+      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(), rate, getAccrualStartDate(),
+          getAccrualEndDate());
     } catch (final IllegalStateException e) {
       return new CouponFixed(getCurrency(), getPaymentTime(), getPaymentYearFraction(), getNotional(), rate, getAccrualStartDate(), getAccrualEndDate());
     }
@@ -202,17 +250,19 @@ public class CouponFixed extends Coupon {
 
   /**
    * Create a new fixed coupon with all the details unchanged except that the rate is shifted by the spread.
-   * @param spread  the rate spread
-   * @return  the coupon
+   * 
+   * @param spread
+   *          the rate spread
+   * @return the coupon
    */
   @SuppressWarnings("deprecation")
   public CouponFixed withRateShifted(final double spread) {
     try {
-      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(),
-          getFixedRate() + spread, getAccrualStartDate(), getAccrualEndDate());
-    } catch (final IllegalStateException e) {
-      return new CouponFixed(getCurrency(), getPaymentTime(), getPaymentYearFraction(), getNotional(), getFixedRate() + spread,
+      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(), getFixedRate() + spread,
           getAccrualStartDate(), getAccrualEndDate());
+    } catch (final IllegalStateException e) {
+      return new CouponFixed(getCurrency(), getPaymentTime(), getPaymentYearFraction(), getNotional(), getFixedRate() + spread, getAccrualStartDate(),
+          getAccrualEndDate());
     }
   }
 
@@ -220,16 +270,16 @@ public class CouponFixed extends Coupon {
   @Override
   public CouponFixed withNotional(final double notional) {
     try {
-      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixedRate(),
-          getAccrualStartDate(), getAccrualEndDate());
+      return new CouponFixed(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixedRate(), getAccrualStartDate(),
+          getAccrualEndDate());
     } catch (final IllegalStateException e) {
-      return new CouponFixed(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixedRate(),
-          getAccrualStartDate(), getAccrualEndDate());
+      return new CouponFixed(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixedRate(), getAccrualStartDate(), getAccrualEndDate());
     }
   }
 
   /**
    * Returns a fixed payment with the same features (currency, payment time, amount) as the fixed coupon.
+   * 
    * @return A fixed payment.
    */
   @SuppressWarnings("deprecation")
@@ -253,6 +303,7 @@ public class CouponFixed extends Coupon {
     return visitor.visitCouponFixed(this);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public String toString() {
     final StringBuilder builder = new StringBuilder();

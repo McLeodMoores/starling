@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePo
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 
 /**
- * 
+ *
  */
 public class MonotoneConvexSplineInterpolator1D extends PiecewisePolynomialInterpolator1D {
 
@@ -25,7 +25,7 @@ public class MonotoneConvexSplineInterpolator1D extends PiecewisePolynomialInter
   private static final MonotoneConvexSplineInterpolator BASE_METHOD = new MonotoneConvexSplineInterpolator();
 
   /**
-   * Default constructor where the interpolation method is fixed
+   * Default constructor where the interpolation method is fixed.
    */
   public MonotoneConvexSplineInterpolator1D() {
     super(BASE_METHOD);

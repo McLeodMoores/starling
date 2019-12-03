@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -20,7 +20,7 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.E
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  */
 public class LocalVolatilityForwardPDECalculator extends LocalVolatilityPDECalculator {
   private final int _nTimeSteps;
@@ -30,7 +30,8 @@ public class LocalVolatilityForwardPDECalculator extends LocalVolatilityPDECalcu
   private final double _maxProxyDelta;
   private final double _centreMoneyness;
 
-  public LocalVolatilityForwardPDECalculator(final double theta, final int nTimeSteps, final int nSpaceSteps, final double timeMeshLambda, final double spaceMeshBunching,
+  public LocalVolatilityForwardPDECalculator(final double theta, final int nTimeSteps, final int nSpaceSteps, final double timeMeshLambda,
+      final double spaceMeshBunching,
       final double maxProxyDelta, final double centreMoneyness) {
     super(theta);
     _nTimeSteps = nTimeSteps;
@@ -57,7 +58,8 @@ public class LocalVolatilityForwardPDECalculator extends LocalVolatilityPDECalcu
   }
 
   @Override
-  public PDETerminalResults1D runPDESolver(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option) {
+  public PDETerminalResults1D runPDESolver(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option) {
     final boolean isCall = option.isCall();
     final double expiry = option.getTimeToExpiry();
     final double minMoneyness = Math.exp(-_maxProxyDelta * Math.sqrt(expiry));
@@ -104,12 +106,12 @@ public class LocalVolatilityForwardPDECalculator extends LocalVolatilityPDECalcu
   }
 
   private BoundaryCondition getLowerBoundaryCondition(final EuropeanVanillaOption option, final double minMoneyness) {
-    //call option with strike zero is worth the forward, while a put is worthless
+    // call option with strike zero is worth the forward, while a put is worthless
     return option.isCall() ? new DirichletBoundaryCondition(1.0 - minMoneyness, minMoneyness) : new DirichletBoundaryCondition(0.0, minMoneyness);
   }
 
   private BoundaryCondition getUpperBoundaryCondition(final EuropeanVanillaOption option, final double maxMoneyness) {
-    //call option with strike zero is worth the forward, while a put is worthless
+    // call option with strike zero is worth the forward, while a put is worthless
     return option.isCall() ? new DirichletBoundaryCondition(0.0, maxMoneyness) : new NeumannBoundaryCondition(1.0, maxMoneyness, false);
   }
 

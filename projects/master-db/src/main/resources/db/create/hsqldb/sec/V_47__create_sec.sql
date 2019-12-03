@@ -13,9 +13,9 @@ CREATE TABLE sec_schema_version (
 );
 INSERT INTO sec_schema_version (version_key, version_value) VALUES ('schema_patch', '47');
 
-CREATE SEQUENCE sec_security_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS sec_security_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE sec_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS sec_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 
@@ -751,7 +751,7 @@ CREATE TABLE  sec_equity_variance_swap (
   CONSTRAINT sec_fk_equityvarianceswap2frequency FOREIGN KEY (observation_frequency_id) REFERENCES sec_frequency (id)
 );
 
-CREATE SEQUENCE sec_security_attr_seq
+CREATE SEQUENCE IF NOT EXISTS sec_security_attr_seq
     start with 1000 increment by 1 no cycle;
 
 CREATE TABLE sec_security_attribute (

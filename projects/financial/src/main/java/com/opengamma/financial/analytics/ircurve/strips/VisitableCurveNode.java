@@ -8,5 +8,5 @@ package com.opengamma.financial.analytics.ircurve.strips;
  */
 public interface VisitableCurveNode {
 
-  <T> T accept(final CurveNodeVisitor<T> visitor);
+  <T> T accept(CurveNodeVisitor<T> visitor);
 }

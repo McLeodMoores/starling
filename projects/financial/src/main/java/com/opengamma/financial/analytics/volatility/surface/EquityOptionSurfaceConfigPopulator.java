@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -15,7 +15,7 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 
 /**
- * 
+ *
  */
 public class EquityOptionSurfaceConfigPopulator {
 
@@ -31,16 +31,17 @@ public class EquityOptionSurfaceConfigPopulator {
 
   private static void populateVolatilitySurfaceDefinitions(final ConfigMaster configMaster) {
     final LocalDate[] equityOptionExpiries = new LocalDate[] {LocalDate.of(2011, 7, 16), LocalDate.of(2011, 8, 20),
-        LocalDate.of(2011, 9, 17), LocalDate.of(2011, 12, 17),
-        LocalDate.of(2012, 3, 17), LocalDate.of(2012, 6, 16),
-        LocalDate.of(2012, 12, 22), LocalDate.of(2013, 6, 22) };
+                  LocalDate.of(2011, 9, 17), LocalDate.of(2011, 12, 17),
+                  LocalDate.of(2012, 3, 17), LocalDate.of(2012, 6, 16),
+                  LocalDate.of(2012, 12, 22), LocalDate.of(2013, 6, 22) };
     final Double[] strikes = new Double[31];
     int j = 0;
     for (int i = 50; i <= 200; i += 5) {
       strikes[j++] = (double) i;
     }
     final VolatilitySurfaceDefinition<LocalDate, Double> usVolSurfaceDefinition =
-        new VolatilitySurfaceDefinition<LocalDate, Double>("DEFAULT_EQUITY_OPTION", UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), "DJX Index"), equityOptionExpiries, strikes);
+        new VolatilitySurfaceDefinition<>("DEFAULT_EQUITY_OPTION", UniqueId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), "DJX Index"),
+            equityOptionExpiries, strikes);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(usVolSurfaceDefinition));
   }
 

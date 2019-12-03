@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -20,14 +20,14 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * Publishes a {@link FunctionBlacklistProvider} to remote clients
+ * Publishes a {@link FunctionBlacklistProvider} to remote clients.
  */
 public class DataFunctionBlacklistProviderResource extends AbstractDataResource {
 
   private final FunctionBlacklistProvider _underlying;
   private final FudgeContext _fudgeContext;
   private final JmsConnector _jmsConnector;
-  private final Map<FunctionBlacklist, DataFunctionBlacklistResource> _blacklists = new WeakHashMap<FunctionBlacklist, DataFunctionBlacklistResource>();
+  private final Map<FunctionBlacklist, DataFunctionBlacklistResource> _blacklists = new WeakHashMap<>();
 
   public DataFunctionBlacklistProviderResource(final FunctionBlacklistProvider underlying, final FudgeContext fudgeContext, final JmsConnector jmsConnector) {
     ArgumentChecker.notNull(underlying, "underlying");

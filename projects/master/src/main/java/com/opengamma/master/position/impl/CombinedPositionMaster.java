@@ -22,30 +22,30 @@ import com.opengamma.master.position.PositionSearchResult;
 
 /**
  * A {@link PositionMaster} which delegates its calls to a list of underlying {@link PositionMaster}s.
- * 
+ *
  * This class extends {@link ChangeProvidingCombinedMaster} to implement methods specific to the {@link PositionMaster}.
  */
 public class CombinedPositionMaster extends ChangeProvidingCombinedMaster<PositionDocument, PositionMaster> implements PositionMaster {
 
-  public CombinedPositionMaster(List<PositionMaster> masters) {
+  public CombinedPositionMaster(final List<PositionMaster> masters) {
     super(masters);
   }
 
   @Override
   public PositionSearchResult search(final PositionSearchRequest overallRequest) {
     final PositionSearchResult overallResult = new PositionSearchResult();
-    
+
     pagedSearch(new PositionSearchStrategy() {
-      
+
       @Override
-      public AbstractDocumentsResult<PositionDocument> search(PositionMaster master, PositionSearchRequest searchRequest) {
-        PositionSearchResult masterResult = master.search(searchRequest);
+      public AbstractDocumentsResult<PositionDocument> search(final PositionMaster master, final PositionSearchRequest searchRequest) {
+        final PositionSearchResult masterResult = master.search(searchRequest);
         overallResult.setVersionCorrection(masterResult.getVersionCorrection());
         return masterResult;
       }
     }, overallResult, overallRequest);
-    
-    
+
+
     return overallResult;
   }
 
@@ -54,7 +54,7 @@ public class CombinedPositionMaster extends ChangeProvidingCombinedMaster<Positi
    */
   private interface PositionSearchStrategy extends SearchStrategy<PositionDocument, PositionMaster, PositionSearchRequest> { }
 
-  
+
   /**
    * Callback interface for the search operation to sort, filter and process results.
    */
@@ -63,8 +63,8 @@ public class CombinedPositionMaster extends ChangeProvidingCombinedMaster<Positi
 
   public void search(final PositionSearchRequest request, final SearchCallback callback) {
     // TODO: parallel operation of any search requests
-    List<PositionSearchResult> results = Lists.newArrayList();
-    for (PositionMaster master : getMasterList()) {
+    final List<PositionSearchResult> results = Lists.newArrayList();
+    for (final PositionMaster master : getMasterList()) {
       results.add(master.search(request));
     }
     search(results, callback);
@@ -76,16 +76,16 @@ public class CombinedPositionMaster extends ChangeProvidingCombinedMaster<Positi
     if (master != null) {
       return master.history(request);
     }
-    return (new Try<PositionHistoryResult>() {
+    return new Try<PositionHistoryResult>() {
       @Override
-      public PositionHistoryResult tryMaster(final PositionMaster master) {
-        return master.history(request);
+      public PositionHistoryResult tryMaster(final PositionMaster pm) {
+        return pm.history(request);
       }
-    }).each(request.getObjectId().getScheme());
+    }.each(request.getObjectId().getScheme());
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     return null;
   }
 

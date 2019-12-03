@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -19,10 +20,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 
@@ -31,7 +32,6 @@ import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Stores a pair of currencies without any implied ordering.
@@ -69,34 +69,35 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
 
   /**
    * Obtains an {@code UnorderedCurrencyPair} from two currencies.
-   * 
+   *
    * @param ccy1  one of the currencies, not null
    * @param ccy2  one of the currencies, not null
    * @return the pair, not null
    */
-  public static UnorderedCurrencyPair of(Currency ccy1, Currency ccy2) {
+  public static UnorderedCurrencyPair of(final Currency ccy1, final Currency ccy2) {
     return new UnorderedCurrencyPair(ccy1, ccy2);
   }
 
   /**
    * Extracts an {@code UnorderedCurrencyPair} from a unique identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @return the pair, not null
    * @throws IllegalArgumentException if the input is invalid
    */
-  public static UnorderedCurrencyPair of(UniqueId uniqueId) {
+  public static UnorderedCurrencyPair of(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "unique id");
     if (uniqueId.getScheme().equals(OBJECT_SCHEME)) {
-      Pattern validate = Pattern.compile("[A-Z]{6}");
-      String value = uniqueId.getValue();
+      final Pattern validate = Pattern.compile("[A-Z]{6}");
+      final String value = uniqueId.getValue();
       if (validate.matcher(value).matches()) {
-        Currency ccy1 = Currency.of(value.substring(0, 3));
-        Currency ccy2 = Currency.of(value.substring(3));
+        final Currency ccy1 = Currency.of(value.substring(0, 3));
+        final Currency ccy2 = Currency.of(value.substring(3));
         return new UnorderedCurrencyPair(ccy1, ccy2);
       }
     }
-    throw new IllegalArgumentException("Cannot create an UnorderedCurrencyPair from this UniqueId; need an ObjectScheme of UnorderedCurrencyPair, have " + uniqueId.getScheme());
+    throw new IllegalArgumentException("Cannot create an UnorderedCurrencyPair from this UniqueId; need an ObjectScheme of "
+        + "UnorderedCurrencyPair, have " + uniqueId.getScheme());
   }
 
   /**
@@ -104,7 +105,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
    * <p>
    * This parses the {@code toString} format of '${currency1}${currency2}'
    * where the currencies are in alphabetical order.
-   * 
+   *
    * @param pairStr  the amount string, not null
    * @return the currency amount
    * @throws IllegalArgumentException if the amount cannot be parsed
@@ -116,10 +117,10 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
       throw new IllegalArgumentException("Unable to parse amount, invalid format: " + pairStr);
     }
     try {
-      Currency cur1 = Currency.parse(pairStr.substring(0, 3));
-      Currency cur2 = Currency.parse(pairStr.substring(3));
+      final Currency cur1 = Currency.parse(pairStr.substring(0, 3));
+      final Currency cur2 = Currency.parse(pairStr.substring(3));
       return new UnorderedCurrencyPair(cur1, cur2);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("Unable to parse pair: " + pairStr, ex);
     }
   }
@@ -127,12 +128,12 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
   //-------------------------------------------------------------------------
   /**
    * Constructs a new instance.
-   * 
+   *
    * @param currency1  one of the currencies, not null
    * @param currency2  one of the currencies, not null
    */
   @ImmutableConstructor
-  private UnorderedCurrencyPair(Currency currency1, Currency currency2) {
+  private UnorderedCurrencyPair(final Currency currency1, final Currency currency2) {
     ArgumentChecker.notNull(currency1, "currency1");
     ArgumentChecker.notNull(currency2, "currency2");
     if (currency1.getCode().compareTo(currency2.getCode()) <= 0) {
@@ -150,7 +151,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
   /**
    * Gets one of the two currencies.
    * The name 'first' has no meaning as this pair is unordered.
-   * 
+   *
    * @return one of the two currencies, not null
    */
   public Currency getFirstCurrency() {
@@ -160,7 +161,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
   /**
    * Gets one of the two currencies.
    * The name 'second' has no meaning as this pair is unordered.
-   * 
+   *
    * @return one of the two currencies, not null
    */
   public Currency getSecondCurrency() {
@@ -172,7 +173,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
    * Gets the object identifier for the pair.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME UnorderedCurrencyPair}.
-   * 
+   *
    * @return the object identifier, not null
    */
   @Override
@@ -184,7 +185,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
    * Gets the unique identifier for the pair.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME UnorderedCurrencyPair}.
-   * 
+   *
    * @return the unique identifier, not null
    */
   @Override
@@ -197,12 +198,12 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
    * Checks if this unordered pair equals another unordered pair.
    * <p>
    * The comparison checks both currencies.
-   * 
+   *
    * @param obj  the other currency, null returns false
    * @return true if equal
    */
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
@@ -214,7 +215,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
 
   /**
    * Returns a suitable hash code for the unordered pair.
-   * 
+   *
    * @return the hash code
    */
   @Override
@@ -228,7 +229,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
    * <p>
    * This uses the format of '${currency1}${currency2}'
    * where the currencies are in alphabetical order.
-   * 
+   *
    * @return the unordered pair, not null
    */
   @Override
@@ -370,7 +371,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
   /**
    * The bean-builder for {@code UnorderedCurrencyPair}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<UnorderedCurrencyPair> {
+  private static final class Builder extends DirectPrivateBeanBuilder<UnorderedCurrencyPair> {
 
     private Currency _firstCurrency;
     private Currency _secondCurrency;
@@ -379,6 +380,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -406,30 +408,6 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

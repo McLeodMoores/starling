@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -11,19 +11,17 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
- * A floating-strike lookback call(put) option gives the holder the right to
- * buy(sell) the underlying security at the lowest(highest) price observed
- * during the option's lifetime.
+ *
+ * A floating-strike lookback call(put) option gives the holder the right to buy(sell) the underlying security at the lowest(highest) price observed during the
+ * option's lifetime.
  * <p>
- * If the spot price is <i>S</i>, the payoff from a call is <i>S -
- * S<sub>min</sub></i>, where <i>S<sub>min</sub> is the minimum observed price.
- * The payoff from a put is <i>S<sub>max</sub> - S</i>, where <i>S<sub>max</sub>
- * is the maximum observed price.
- * 
+ * If the spot price is <i>S</i>, the payoff from a call is <i>S - S<sub>min</sub></i>, where <i>S<sub>min</sub></i> is the minimum observed price. The payoff
+ * from a put is <i>S<sub>max</sub> - S</i>, where <i>S<sub>max</sub></i> is the maximum observed price.
+ *
  */
 public class FloatingStrikeLookbackOptionDefinition extends OptionDefinition {
-  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
+  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction =
+      new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
 
     @Override
     public double getPayoff(final StandardOptionWithSpotTimeSeriesDataBundle data, final Double optionPrice) {

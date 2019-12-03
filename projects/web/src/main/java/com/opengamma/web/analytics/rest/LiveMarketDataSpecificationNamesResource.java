@@ -24,7 +24,7 @@ public class LiveMarketDataSpecificationNamesResource {
 
   private final NamedMarketDataSpecificationRepository _marketDataSpecRepo;
 
-  public LiveMarketDataSpecificationNamesResource(NamedMarketDataSpecificationRepository marketDataSpecRepo) {
+  public LiveMarketDataSpecificationNamesResource(final NamedMarketDataSpecificationRepository marketDataSpecRepo) {
     ArgumentChecker.notNull(marketDataSpecRepo, "marketDataSpecRepo");
     _marketDataSpecRepo = marketDataSpecRepo;
   }
@@ -37,5 +37,5 @@ public class LiveMarketDataSpecificationNamesResource {
   public String getLiveDataSourceNames() {
     return new JSONArray(_marketDataSpecRepo.getNames()).toString();
   }
-  
+
 }

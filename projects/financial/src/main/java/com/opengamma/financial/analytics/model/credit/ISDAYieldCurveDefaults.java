@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.credit;
 
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class ISDAYieldCurveDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDAYieldCurveDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDAYieldCurveDefaults.class);
   private final PriorityClass _priority;
   private final Map<String, String> _offsetsForCurrency;
 
@@ -55,13 +54,14 @@ public class ISDAYieldCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = target.getUniqueId().getValue();
     final String offset = _offsetsForCurrency.get(currency);
     if (offset != null) {
       return Collections.singleton(offset);
     }
-    s_logger.error("Could not get number of offset days for {}; should never happen", currency);
+    LOGGER.error("Could not get number of offset days for {}; should never happen", currency);
     return null;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.MonitoringType;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the MonitoringType enum
+ * Custom Hibernate usertype for the MonitoringType enum.
  */
 public class MonitoringTypeUserType extends EnumUserType<MonitoringType> {
 
@@ -19,7 +19,7 @@ public class MonitoringTypeUserType extends EnumUserType<MonitoringType> {
   }
 
   @Override
-  protected String enumToStringNoCache(MonitoringType value) {
+  protected String enumToStringNoCache(final MonitoringType value) {
     switch (value) {
       case CONTINUOUS:
         return "continuous";

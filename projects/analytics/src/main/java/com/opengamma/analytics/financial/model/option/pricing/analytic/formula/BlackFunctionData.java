@@ -11,7 +11,7 @@ import com.opengamma.analytics.financial.model.option.definition.BlackOptionData
 import com.opengamma.analytics.financial.model.option.definition.EuropeanVanillaOptionDefinition;
 
 /**
- * 
+ *
  */
 public class BlackFunctionData {
   private final double _f;
@@ -19,11 +19,15 @@ public class BlackFunctionData {
   private final double _sigma;
 
   /**
-   * Data bundle for pricing in a Black framework. That is, the forward value of the underlying asset is a martingale in the chosen numeraire measure. 
-   * @param forward The forward value of the underlying asset (i.e. the forward value of a stock, the forward Libor rate, etc)
-   * @param numeraire The present value of the instrument used to discount the payoff (e.g. the zero coupon bond in the T-forward measure, the swap annuity for pricing 
-   * swaptions, etc)
-   * @param sigma The Black volatility 
+   * Data bundle for pricing in a Black framework. That is, the forward value of the underlying asset is a martingale in the chosen numeraire measure.
+   *
+   * @param forward
+   *          The forward value of the underlying asset (i.e. the forward value of a stock, the forward Libor rate, etc)
+   * @param numeraire
+   *          The present value of the instrument used to discount the payoff (e.g. the zero coupon bond in the T-forward measure, the swap annuity for pricing
+   *          swaptions, etc)
+   * @param sigma
+   *          The Black volatility
    */
   public BlackFunctionData(final double forward, final double numeraire, final double sigma) {
     _f = forward;
@@ -63,18 +67,18 @@ public class BlackFunctionData {
     sb.append("]");
     return sb.toString();
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_numeraire);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_f);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sigma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

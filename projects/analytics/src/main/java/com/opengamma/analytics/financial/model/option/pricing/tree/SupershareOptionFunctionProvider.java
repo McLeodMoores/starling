@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,17 +9,21 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Supershare option pays S/KL if KL <= S < KH at expiry. 
+ * Supershare option pays S/KL if KL &lt;= S &lt; KH at expiry.
  */
 public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _upperBound;
+  private final double _upperBound;
 
   /**
-   * @param timeToExpiry Time to expiry
-   * @param lowerBound Lower bound, KL
-   * @param upperBound Upper bound, KH
-   * @param steps Number of steps
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param lowerBound
+   *          Lower bound, KL
+   * @param upperBound
+   *          Upper bound, KH
+   * @param steps
+   *          Number of steps
    */
   public SupershareOptionFunctionProvider(final double timeToExpiry, final double lowerBound, final double upperBound, final int steps) {
     super(lowerBound, timeToExpiry, steps, true);
@@ -60,7 +64,8 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access lower bound
+   * Access lower bound.
+   * 
    * @return _strike in superclass
    */
   public double getLowerBound() {
@@ -68,7 +73,8 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access upper bound 
+   * Access upper bound.
+   * 
    * @return _upperBound
    */
   public double getUpperBound() {
@@ -86,12 +92,12 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_upperBound);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -101,7 +107,7 @@ public class SupershareOptionFunctionProvider extends OptionFunctionProvider1D {
     if (!(obj instanceof SupershareOptionFunctionProvider)) {
       return false;
     }
-    SupershareOptionFunctionProvider other = (SupershareOptionFunctionProvider) obj;
+    final SupershareOptionFunctionProvider other = (SupershareOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_upperBound) != Double.doubleToLongBits(other._upperBound)) {
       return false;
     }

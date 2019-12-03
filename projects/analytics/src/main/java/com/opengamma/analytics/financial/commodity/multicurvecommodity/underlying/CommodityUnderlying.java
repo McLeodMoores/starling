@@ -5,18 +5,19 @@
  */
 package com.opengamma.analytics.financial.commodity.multicurvecommodity.underlying;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a commodity underlying, used in commodity instruments. It is useful to call the curve 
+ * Class describing a commodity underlying, used in commodity instruments. It is useful to call the curve
  */
 public class CommodityUnderlying {
 
   /**
-   * Identifier of the underlying commodity. For cash settle (or physical settle with cash settle optionality) commodity contract this identifier should be used to 
+   * Identifier of the underlying commodity. For cash settle (or physical settle with cash settle optionality)
+   * commodity contract this should be used to uniquely identify the trade for e.g. selecting the correct
+   * forward curve.
    */
   private final ExternalId _identifier;
 
@@ -37,9 +38,9 @@ public class CommodityUnderlying {
    * @param ccy The currency in which the underlying is computed. Not null.
    */
   public CommodityUnderlying(final ExternalId identifier, final String name, final Currency ccy) {
-    Validate.notNull(identifier, "Identifier");
-    Validate.notNull(name, "Name");
-    Validate.notNull(ccy, "Currency");
+    ArgumentChecker.notNull(identifier, "Identifier");
+    ArgumentChecker.notNull(name, "Name");
+    ArgumentChecker.notNull(ccy, "Currency");
     _identifier = identifier;
     _name = name;
     _currency = ccy;
@@ -78,8 +79,8 @@ public class CommodityUnderlying {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_currency == null) ? 0 : _currency.hashCode());
-    result = prime * result + ((_identifier == null) ? 0 : _identifier.hashCode());
+    result = prime * result + (_currency == null ? 0 : _currency.hashCode());
+    result = prime * result + (_identifier == null ? 0 : _identifier.hashCode());
     return result;
   }
 

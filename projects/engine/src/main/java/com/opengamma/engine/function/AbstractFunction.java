@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -21,7 +21,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * The base class from which most {@link FunctionDefinition} implementations should inherit.
- * 
+ *
  * @author kirk
  */
 @PublicSPI
@@ -40,7 +40,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Creates an instance.
-     * 
+     *
      * @param earliestInvocation earliest time this metadata and invoker are valid, null to indicate no lower validity bound
      * @param latestInvocation latest time this metadata and invoker are valid, null to indicate no upper validity bound
      */
@@ -55,8 +55,9 @@ public abstract class AbstractFunction implements FunctionDefinition {
     }
 
     /**
-     * Default implementation always returns true - the function is applicable. Overload this if there is a cheap test that should suppress the call to {@link #getResults}.
-     * 
+     * Default implementation always returns true - the function is applicable. Overload this if there is a cheap test that
+     * should suppress the call to {@link #getResults}.
+     *
      * @param context The compilation context with view-specific parameters and configurations.
      * @param target the Target for which capability is to be tests
      * @return always true
@@ -68,26 +69,27 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Default implementation returns the same results as {@link #getResults (FunctionCompilationContext, ComputationTarget)}.
-     * 
+     *
      * @param context The compilation context with view-specific parameters and configurations.
      * @param target The target for which calculation is desired.
      * @param inputs The resolved inputs to the function.
      * @return the same results as {@link #getResults (FunctionCompilationContext, ComputationTarget)}
      */
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       return getResults(context, target);
     }
 
     @Override
-    public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
-        final Set<ValueSpecification> outputs) {
+    public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
       return getAdditionalRequirementsImpl(context, target, inputs, outputs);
     }
 
     /**
      * Sets the earliest time that this metadata and invoker will be valid for.
-     * 
+     *
      * @param timestamp the earliest time, null to indicate no lower validity bound
      */
     public void setEarliestInvocationTime(final Instant timestamp) {
@@ -96,7 +98,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Sets the latest time that this metadata and invoker will be valid for.
-     * 
+     *
      * @param timestamp the latest time, null to indicate no upper validity bound
      */
     public void setLatestInvocationTime(final Instant timestamp) {
@@ -115,7 +117,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Returns false indicating the requirements to the function must be produced within the dependency graph.
-     * 
+     *
      * @return always false
      */
     @Override
@@ -126,7 +128,8 @@ public abstract class AbstractFunction implements FunctionDefinition {
   }
 
   /**
-   * Extension to {@link AbstractCompiledFunction} that also implements the {@link FunctionInvoker} interface for functions that can be invoked directly at the local node.
+   * Extension to {@link AbstractCompiledFunction} that also implements the {@link FunctionInvoker} interface for functions
+   * that can be invoked directly at the local node.
    */
   protected abstract class AbstractInvokingCompiledFunction extends AbstractCompiledFunction implements FunctionInvoker {
 
@@ -136,7 +139,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Creates an instance.
-     * 
+     *
      * @param earliestInvocation earliest time this metadata and invoker are valid, null to indicate no lower validity bound
      * @param latestInvocation latest time this metadata and invoker are valid, null to indicate no upper validity bound
      */
@@ -146,7 +149,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Creates an instance.
-     * 
+     *
      * @param earliestInvocation earliest time this metadata and invoker are valid, null to indicate no lower validity bound
      * @param latestInvocation latest time this metadata and invoker are valid, null to indicate no upper validity bound
      */
@@ -156,7 +159,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Returns this instance.
-     * 
+     *
      * @return this instance
      */
     @Override
@@ -183,7 +186,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
   /**
    * Sets the unique identifier for the function. Once set, the identifier cannot be changed.
-   * 
+   *
    * @param uniqueId the unique identifier to set
    */
   public void setUniqueId(final String uniqueId) {
@@ -203,7 +206,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
   //-------------------------------------------------------------------------
   /**
    * Default implementation performs no initialization action.
-   * 
+   *
    * @param context the function compilation context
    * @deprecated See [PLAT-2240]. Sub-classes should avoid overriding this function and use {@code compile} instead.
    */
@@ -213,22 +216,23 @@ public abstract class AbstractFunction implements FunctionDefinition {
   }
 
   /**
-   * Default implementation of {@link CompiledFunctionDefinition#getAdditionalRequirements (FunctionCompilationContext, ComputationTarget, Set<ValueSpecification>)}.
-   * 
+   * Default implementation of
+   * {@link CompiledFunctionDefinition#getAdditionalRequirements(FunctionCompilationContext, ComputationTarget, Set, Set)}.
+   *
    * @param context the function compilation context
    * @param target the computation target
    * @param inputs the resolved inputs
    * @param outputs the resolved outputs
    * @return the empty set indicating no additional data requirements
    */
-  protected static Set<ValueRequirement> getAdditionalRequirementsImpl(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
-      final Set<ValueSpecification> outputs) {
+  protected static Set<ValueRequirement> getAdditionalRequirementsImpl(final FunctionCompilationContext context,
+      final ComputationTarget target, final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
     return Collections.emptySet();
   }
 
   /**
    * Creates a value property builder populated with the function identifier and otherwise empty.
-   * 
+   *
    * @return the builder
    */
   protected ValueProperties.Builder createValueProperties() {
@@ -237,7 +241,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
   /**
    * Default implementation indicates no parameters.
-   * 
+   *
    * @return an {@link EmptyFunctionParameters} instance
    */
   @Override
@@ -256,14 +260,15 @@ public abstract class AbstractFunction implements FunctionDefinition {
     }
 
     @Override
-    public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
+    public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final Set<ValueSpecification> inputs,
         final Set<ValueSpecification> outputs) {
       return getAdditionalRequirementsImpl(context, target, inputs, outputs);
     }
 
     /**
      * Returns this instance - there is no compile time state.
-     * 
+     *
      * @param context the function compilation context
      * @param atInstant the compilation time
      * @return this instance
@@ -274,8 +279,9 @@ public abstract class AbstractFunction implements FunctionDefinition {
     }
 
     /**
-     * Default implementation always returns true - the function is applicable. Overload this if there is a cheap test that should suppress the call to {@link #getResults}.
-     * 
+     * Default implementation always returns true - the function is applicable. Overload this if there is a cheap test that
+     * should suppress the call to {@link #getResults}.
+     *
      * @param context The compilation context with view-specific parameters and configurations.
      * @param target the Target for which capability is to be tests
      * @return always true
@@ -287,20 +293,21 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Default implementation returns the same results as {@link #getResults (FunctionCompilationContext, ComputationTarget)}.
-     * 
+     *
      * @param context The compilation context with view-specific parameters and configurations.
      * @param target The target for which calculation is desired.
      * @param inputs The resolved inputs to the function.
      * @return the same results as {@link #getResults (FunctionCompilationContext, ComputationTarget)}
      */
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       return getResults(context, target);
     }
 
     /**
      * Returns null indicating always valid.
-     * 
+     *
      * @return null always
      */
     @Override
@@ -310,7 +317,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Returns null indicating always valid.
-     * 
+     *
      * @return null always
      */
     @Override
@@ -320,7 +327,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Returns false indicating the requirements to the function must be produced within the dependency graph.
-     * 
+     *
      * @return always false
      */
     @Override
@@ -337,7 +344,7 @@ public abstract class AbstractFunction implements FunctionDefinition {
 
     /**
      * Returns this instance.
-     * 
+     *
      * @return this instance
      */
     @Override

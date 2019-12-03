@@ -20,8 +20,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Method to computes the present value of physical delivery European swaptions with the G2++ model through efficient approximation.
- * <p>Reference: Henrard, M. Swaptions in Libor Market Model with local volatility. Wilmott Journal, 2010, 2, 135-154.
- * Preprint available at http://ssrn.com/abstract=1098420
+ * <p>
+ * Reference: Henrard, M. Swaptions in Libor Market Model with local volatility. Wilmott Journal, 2010, 2, 135-154. Preprint available at
+ * http://ssrn.com/abstract=1098420
  */
 public final class SwaptionPhysicalFixedIborG2ppApproximationMethod {
 
@@ -32,6 +33,7 @@ public final class SwaptionPhysicalFixedIborG2ppApproximationMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborG2ppApproximationMethod getInstance() {
@@ -55,8 +57,11 @@ public final class SwaptionPhysicalFixedIborG2ppApproximationMethod {
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param g2Data The G2++ parameters and the curves.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param g2Data
+   *          The G2++ parameters and the curves.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final G2ppProviderInterface g2Data) {
@@ -66,9 +71,13 @@ public final class SwaptionPhysicalFixedIborG2ppApproximationMethod {
 
   /**
    * Computes the present value of the Physical delivery swaption through approximation..
-   * @param swaption The swaption.
-   * @param cfe The swaption cash flow equiovalent.
-   * @param g2Data The G2++ parameters and the curves.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param cfe
+   *          The swaption cash flow equiovalent.
+   * @param g2Data
+   *          The G2++ parameters and the curves.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final AnnuityPaymentFixed cfe, final G2ppProviderInterface g2Data) {
@@ -77,57 +86,59 @@ public final class SwaptionPhysicalFixedIborG2ppApproximationMethod {
     final int nbCf = cfe.getNumberOfPayments();
     final double[] cfa = new double[nbCf];
     final double[] t = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      cfa[loopcf] = -Math.signum(cfe.getNthPayment(0).getAmount()) * cfe.getNthPayment(loopcf).getAmount();
-      t[loopcf] = cfe.getNthPayment(loopcf).getPaymentTime();
+    for (int i = 0; i < nbCf; i++) {
+      cfa[i] = -Math.signum(cfe.getNthPayment(0).getAmount()) * cfe.getNthPayment(i).getAmount();
+      t[i] = cfe.getNthPayment(i).getPaymentTime();
     }
     final double rhog2pp = g2Data.getG2ppParameters().getCorrelation();
     final double[][] ht0 = MODEL_G2PP.volatilityMaturityPart(g2Data.getG2ppParameters(), t[0], t);
     final double[] dfswap = new double[nbCf];
     final double[] p0 = new double[nbCf];
     final double[] cP = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      dfswap[loopcf] = multicurves.getDiscountFactor(ccy, t[loopcf]);
-      p0[loopcf] = dfswap[loopcf] / dfswap[0];
-      cP[loopcf] = cfa[loopcf] * p0[loopcf];
+    for (int i = 0; i < nbCf; i++) {
+      dfswap[i] = multicurves.getDiscountFactor(ccy, t[i]);
+      p0[i] = dfswap[i] / dfswap[0];
+      cP[i] = cfa[i] * p0[i];
     }
     final double k = -cfa[0];
     double b0 = 0.0;
-    for (int loopcf = 1; loopcf < nbCf; loopcf++) {
-      b0 += cP[loopcf];
+    for (int i = 1; i < nbCf; i++) {
+      b0 += cP[i];
     }
     final double[] alpha0 = new double[nbCf - 1];
     final double[] beta0 = new double[2];
-    for (int loopcf = 0; loopcf < nbCf - 1; loopcf++) {
-      alpha0[loopcf] = cfa[loopcf + 1] * p0[loopcf + 1] / b0;
-      beta0[0] += alpha0[loopcf] * ht0[0][loopcf + 1];
-      beta0[1] += alpha0[loopcf] * ht0[1][loopcf + 1];
+    for (int i = 0; i < nbCf - 1; i++) {
+      alpha0[i] = cfa[i + 1] * p0[i + 1] / b0;
+      beta0[0] += alpha0[i] * ht0[0][i + 1];
+      beta0[1] += alpha0[i] * ht0[1][i + 1];
     }
     final double[][] gamma = MODEL_G2PP.gamma(g2Data.getG2ppParameters(), 0, swaption.getTimeToExpiry());
     final double[] tau = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      tau[loopcf] = gamma[0][0] * ht0[0][loopcf] * ht0[0][loopcf] + gamma[1][1] * ht0[1][loopcf] * ht0[1][loopcf] + 2 * rhog2pp * gamma[0][1] * ht0[0][loopcf] * ht0[1][loopcf];
+    for (int i = 0; i < nbCf; i++) {
+      tau[i] = gamma[0][0] * ht0[0][i] * ht0[0][i] + gamma[1][1] * ht0[1][i] * ht0[1][i]
+          + 2 * rhog2pp * gamma[0][1] * ht0[0][i] * ht0[1][i];
     }
     double xbarnum = 0.0;
     double xbarde = 0.0;
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      xbarnum += cP[loopcf] - cP[loopcf] * tau[loopcf] * tau[loopcf] / 2.0;
-      xbarde += cP[loopcf] * tau[loopcf];
+    for (int i = 0; i < nbCf; i++) {
+      xbarnum += cP[i] - cP[i] * tau[i] * tau[i] / 2.0;
+      xbarde += cP[i] * tau[i];
     }
     final double xbar = xbarnum / xbarde;
     final double[] pK = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      pK[loopcf] = p0[loopcf] * (1.0 - tau[loopcf] * xbar - tau[loopcf] * tau[loopcf] / 2.0);
+    for (int i = 0; i < nbCf; i++) {
+      pK[i] = p0[i] * (1.0 - tau[i] * xbar - tau[i] * tau[i] / 2.0);
     }
     final double[] alphaK = new double[nbCf - 1];
     final double[] betaK = new double[2];
-    for (int loopcf = 0; loopcf < nbCf - 1; loopcf++) {
-      alphaK[loopcf] = cfa[loopcf + 1] * pK[loopcf + 1] / k;
-      betaK[0] += alphaK[loopcf] * ht0[0][loopcf + 1];
-      betaK[1] += alphaK[loopcf] * ht0[1][loopcf + 1];
+    for (int i = 0; i < nbCf - 1; i++) {
+      alphaK[i] = cfa[i + 1] * pK[i + 1] / k;
+      betaK[0] += alphaK[i] * ht0[0][i + 1];
+      betaK[1] += alphaK[i] * ht0[1][i + 1];
     }
-    final double[] betaBar = new double[] {(beta0[0] + betaK[0]) / 2.0, (beta0[1] + betaK[1]) / 2.0};
-    final double sigmaBar2 = gamma[0][0] * betaBar[0] * betaBar[0] + gamma[1][1] * betaBar[1] * betaBar[1] + 2 * rhog2pp * gamma[0][1] * betaBar[0] * betaBar[1];
+    final double[] betaBar = new double[] { (beta0[0] + betaK[0]) / 2.0, (beta0[1] + betaK[1]) / 2.0 };
+    final double sigmaBar2 = gamma[0][0] * betaBar[0] * betaBar[0] + gamma[1][1] * betaBar[1] * betaBar[1]
+        + 2 * rhog2pp * gamma[0][1] * betaBar[0] * betaBar[1];
     final double sigmaBar = Math.sqrt(sigmaBar2);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(k, 1, !swaption.isCall());
     final BlackPriceFunction blackFunction = new BlackPriceFunction();

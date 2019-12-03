@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -21,39 +21,39 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.option.FXOptionSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExpiryBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link FXOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.FXOptionSecurity}.
  */
 @BeanDefinition
 public class FXOptionSecurityBean extends SecurityBean {
-  
+
   @PropertyDefinition
   private double _putAmount;
-  
+
   @PropertyDefinition
   private double _callAmount;
-  
+
   @PropertyDefinition
   private ExpiryBean _expiry;
-  
+
   @PropertyDefinition
   private CurrencyBean _putCurrency;
-  
+
   @PropertyDefinition
   private CurrencyBean _callCurrency;
-  
+
   @PropertyDefinition
   private ZonedDateTimeBean _settlementDate;
-  
+
   @PropertyDefinition
   private Boolean _isLong;
-  
+
   @PropertyDefinition
   private OptionExerciseType _optionExerciseType;
 
@@ -70,29 +70,29 @@ public class FXOptionSecurityBean extends SecurityBean {
     final FXOptionSecurityBean option = (FXOptionSecurityBean) other;
 
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getExpiry(), option.getExpiry())
-      .append(getPutCurrency(), option.getPutCurrency())
-      .append(getCallCurrency(), option.getCallCurrency())
-      .append(getCallAmount(), option.getCallAmount())
-      .append(getPutAmount(), option.getPutAmount())
-      .append(getSettlementDate(), option.getSettlementDate())
-      .append(getIsLong(), option.getIsLong())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getExpiry(), option.getExpiry())
+        .append(getPutCurrency(), option.getPutCurrency())
+        .append(getCallCurrency(), option.getCallCurrency())
+        .append(getCallAmount(), option.getCallAmount())
+        .append(getPutAmount(), option.getPutAmount())
+        .append(getSettlementDate(), option.getSettlementDate())
+        .append(getIsLong(), option.getIsLong())
+        .isEquals();
   }
 
   //-----------------------------------------------------------------
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getExpiry())
-      .append(getPutCurrency())
-      .append(getCallCurrency())
-      .append(getSettlementDate())
-      .append(getPutAmount())
-      .append(getCallAmount())
-      .append(getIsLong())
-      .toHashCode();
+        .append(getExpiry())
+        .append(getPutCurrency())
+        .append(getCallCurrency())
+        .append(getSettlementDate())
+        .append(getPutAmount())
+        .append(getCallAmount())
+        .append(getIsLong())
+        .toHashCode();
   }
 
   //-----------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -21,7 +21,7 @@ public class RemoteFunctionCostsMaster extends AbstractRemoteClient implements F
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteFunctionCostsMaster(final URI baseUri) {
@@ -30,23 +30,23 @@ public class RemoteFunctionCostsMaster extends AbstractRemoteClient implements F
 
   //-------------------------------------------------------------------------
   @Override
-  public FunctionCostsDocument load(String configurationName, String functionId, Instant versionAsOf) {
+  public FunctionCostsDocument load(final String configurationName, final String functionId, final Instant versionAsOf) {
     ArgumentChecker.notNull(configurationName, "configurationName");
     ArgumentChecker.notNull(functionId, "functionId");
-    
-    URI uri = DataFunctionCostsMasterUris.uriLoad(getBaseUri(), configurationName, functionId, versionAsOf);
+
+    final URI uri = DataFunctionCostsMasterUris.uriLoad(getBaseUri(), configurationName, functionId, versionAsOf);
     try {
       return accessRemote(uri).get(FunctionCostsDocument.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public FunctionCostsDocument store(FunctionCostsDocument costs) {
+  public FunctionCostsDocument store(final FunctionCostsDocument costs) {
     ArgumentChecker.notNull(costs, "costs");
-    
-    URI uri = DataFunctionCostsMasterUris.uriStore(getBaseUri());
+
+    final URI uri = DataFunctionCostsMasterUris.uriStore(getBaseUri());
     return accessRemote(uri).post(FunctionCostsDocument.class, costs);
   }
 

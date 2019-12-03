@@ -29,8 +29,11 @@ public abstract class PaymentDefinition implements InstrumentDefinition<Payment>
 
   /**
    * Constructor from payment date.
-   * @param currency The payment currency.
-   * @param paymentDate The payment date.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          The payment date.
    */
   public PaymentDefinition(final Currency currency, final ZonedDateTime paymentDate) {
     ArgumentChecker.notNull(currency, "currency");
@@ -41,6 +44,7 @@ public abstract class PaymentDefinition implements InstrumentDefinition<Payment>
 
   /**
    * Gets the payment currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -49,6 +53,7 @@ public abstract class PaymentDefinition implements InstrumentDefinition<Payment>
 
   /**
    * Gets the payment date.
+   * 
    * @return The payment date.
    */
   public ZonedDateTime getPaymentDate() {
@@ -56,7 +61,9 @@ public abstract class PaymentDefinition implements InstrumentDefinition<Payment>
   }
 
   /**
-   * Return a reference amount. For coupon it is the notional, for simple payments it is the paid amount. Used mainly to assess if the amount is paid or received.
+   * Return a reference amount. For coupon it is the notional, for simple payments it is the paid amount. Used mainly to assess if the amount is paid or
+   * received.
+   * 
    * @return The amount.
    */
   public abstract double getReferenceAmount();

@@ -28,17 +28,18 @@ import com.opengamma.engine.view.execution.ViewExecutionOptions;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link SequencePartitioningViewProcessWorkerFactory} class
+ * Tests the {@link SequencePartitioningViewProcessWorkerFactory} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class SequencePartitioningViewProcessWorkerFactoryTest {
 
   private class ViewProcessWorkerFactoryMock implements ViewProcessWorkerFactory {
 
-    private final List<ViewExecutionOptions> _executionOptions = new LinkedList<ViewExecutionOptions>();
+    private final List<ViewExecutionOptions> _executionOptions = new LinkedList<>();
 
     @Override
-    public ViewProcessWorker createWorker(ViewProcessWorkerContext context, ViewExecutionOptions executionOptions, ViewDefinition viewDefinition) {
+    public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+        final ViewDefinition viewDefinition) {
       _executionOptions.add(executionOptions);
       return Mockito.mock(ViewProcessWorker.class);
     }
@@ -77,7 +78,7 @@ public class SequencePartitioningViewProcessWorkerFactoryTest {
     final ViewProcessWorkerFactoryMock underlying = new ViewProcessWorkerFactoryMock();
     final SequencePartitioningViewProcessWorkerFactory test = createFactory(underlying);
     final Instant t = Instant.now();
-    final List<ViewCycleExecutionOptions> cycles = new ArrayList<ViewCycleExecutionOptions>(20);
+    final List<ViewCycleExecutionOptions> cycles = new ArrayList<>(20);
     for (int i = 0; i < 20; i++) {
       cycles.add(ViewCycleExecutionOptions.builder().setValuationTime(t.plusSeconds(i)).create());
     }
@@ -85,7 +86,7 @@ public class SequencePartitioningViewProcessWorkerFactoryTest {
     final ViewExecutionOptions options = ExecutionOptions.of(sequence, EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE));
     test.createWorker(Mockito.mock(ViewProcessWorkerContext.class), options, Mockito.mock(ViewDefinition.class));
     assertEquals(underlying._executionOptions.size(), 3);
-    for (ViewExecutionOptions spawned : underlying._executionOptions) {
+    for (final ViewExecutionOptions spawned : underlying._executionOptions) {
       assertEquals(spawned.getDefaultExecutionOptions(), options.getDefaultExecutionOptions());
       assertEquals(spawned.getFlags(), options.getFlags());
       assertEquals(spawned.getMaxSuccessiveDeltaCycles(), options.getMaxSuccessiveDeltaCycles());
@@ -102,7 +103,7 @@ public class SequencePartitioningViewProcessWorkerFactoryTest {
     final ViewExecutionOptions options = ExecutionOptions.of(sequence, EnumSet.of(ViewExecutionFlags.RUN_AS_FAST_AS_POSSIBLE));
     test.createWorker(Mockito.mock(ViewProcessWorkerContext.class), options, Mockito.mock(ViewDefinition.class));
     assertEquals(underlying._executionOptions.size(), 4);
-    for (ViewExecutionOptions spawned : underlying._executionOptions) {
+    for (final ViewExecutionOptions spawned : underlying._executionOptions) {
       assertEquals(spawned.getDefaultExecutionOptions(), options.getDefaultExecutionOptions());
       assertEquals(spawned.getFlags(), options.getFlags());
       assertEquals(spawned.getMaxSuccessiveDeltaCycles(), options.getMaxSuccessiveDeltaCycles());

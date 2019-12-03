@@ -16,13 +16,13 @@ public class DataFinancialUserManagerUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @return the URI, not null
    */
-  public static URI uriUser(URI baseUri, String userName) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("users/{userName}");
+  public static URI uriUser(final URI baseUri, final String userName) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("users/{userName}");
     return bld.build(userName);
   }
 

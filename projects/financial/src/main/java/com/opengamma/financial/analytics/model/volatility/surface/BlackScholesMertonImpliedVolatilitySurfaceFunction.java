@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
@@ -44,7 +44,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -68,13 +68,14 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties.Builder props = createValueProperties((EquityOptionSecurity) target.getSecurity());
     props.withAny(ValuePropertyNames.CURVE);
-    return Sets.newHashSet(createVolSurfaceResultSpecification(target.toSpecification(), props), createImpliedVolResultSpecification(target.toSpecification(), props));
+    return Sets.newHashSet(createVolSurfaceResultSpecification(target.toSpecification(), props),
+        createImpliedVolResultSpecification(target.toSpecification(), props));
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> curveNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
-    if ((curveNames == null) || (curveNames.size() != 1)) {
+    if (curveNames == null || curveNames.size() != 1) {
       return null;
     }
     final String curveName = curveNames.iterator().next();
@@ -83,7 +84,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
     final ValueRequirement underlyingMarketDataReq = getPriceRequirement(optionSec.getUnderlyingId());
     final ValueRequirement discountCurveReq = getDiscountCurveMarketDataRequirement(optionSec.getCurrency(), curveName);
     // TODO will need a cost-of-carry model as well
-    final Set<ValueRequirement> optionRequirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> optionRequirements = new HashSet<>();
     optionRequirements.add(optionMarketDataReq);
     optionRequirements.add(underlyingMarketDataReq);
     optionRequirements.add(discountCurveReq);
@@ -91,7 +92,8 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final ValueSpecification input : inputs.keySet()) {
       if (ValueRequirementNames.YIELD_CURVE.equals(input.getValueName())) {
@@ -100,11 +102,13 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
     }
     final ValueProperties.Builder props = createValueProperties((EquityOptionSecurity) target.getSecurity());
     props.with(ValuePropertyNames.CURVE, curveName);
-    return Sets.newHashSet(createVolSurfaceResultSpecification(target.toSpecification(), props), createImpliedVolResultSpecification(target.toSpecification(), props));
+    return Sets.newHashSet(createVolSurfaceResultSpecification(target.toSpecification(), props),
+        createImpliedVolResultSpecification(target.toSpecification(), props));
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ZonedDateTime today = ZonedDateTime.now(executionContext.getValuationClock());
     final EquityOptionSecurity optionSec = (EquityOptionSecurity) target.getSecurity();
 
@@ -127,13 +131,15 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
     final Expiry expiry = optionSec.getExpiry();
     final double years = DateUtils.getDifferenceInYears(today, expiry.getExpiry());
     final double b = discountCurve.getInterestRate(years); // TODO
-    final OptionDefinition europeanVanillaOptionDefinition = new EuropeanVanillaOptionDefinition(optionSec.getStrike(), expiry, (optionSec.getOptionType() == OptionType.CALL));
-    final Map<OptionDefinition, Double> prices = new HashMap<OptionDefinition, Double>();
+    final OptionDefinition europeanVanillaOptionDefinition = new EuropeanVanillaOptionDefinition(optionSec.getStrike(), expiry,
+        optionSec.getOptionType() == OptionType.CALL);
+    final Map<OptionDefinition, Double> prices = new HashMap<>();
     prices.put(europeanVanillaOptionDefinition, optionPrice);
-    final VolatilitySurface volatilitySurface = _volatilitySurfaceModel.getSurface(prices, new StandardOptionDataBundle(discountCurve, b, null, underlyingPrice, today));
+    final VolatilitySurface volatilitySurface = _volatilitySurfaceModel.getSurface(prices,
+        new StandardOptionDataBundle(discountCurve, b, null, underlyingPrice, today));
 
-    //This is so cheap no need to check desired values
-    final double impliedVol = volatilitySurface.getVolatility(0.0, 0.0); //This surface is constant
+    // This is so cheap no need to check desired values
+    final double impliedVol = volatilitySurface.getVolatility(0.0, 0.0); // This surface is constant
 
     // Package the result
     final ValueProperties.Builder properties = createValueProperties(optionSec);
@@ -166,6 +172,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceFunction extends Abstract
   }
 
   private ValueRequirement getDiscountCurveMarketDataRequirement(final Currency currency, final String curveName) {
-    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
+    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
   }
 }

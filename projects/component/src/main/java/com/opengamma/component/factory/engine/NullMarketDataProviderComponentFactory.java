@@ -54,12 +54,12 @@ public class NullMarketDataProviderComponentFactory extends AbstractComponentFac
   private FudgeContext _fudgeContext = OpenGammaFudgeContext.getInstance();
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initMarketDataProviderFactory(repo);
   }
 
   protected MarketDataProviderFactory initMarketDataProviderFactory(final ComponentRepository repo) {
-    InMemoryNamedMarketDataSpecificationRepository specRepository = new InMemoryNamedMarketDataSpecificationRepository();
+    final InMemoryNamedMarketDataSpecificationRepository specRepository = new InMemoryNamedMarketDataSpecificationRepository();
 
     final ComponentInfo specRepositoryInfo = new ComponentInfo(NamedMarketDataSpecificationRepository.class, getClassifier());
     repo.registerComponent(specRepositoryInfo, specRepository);

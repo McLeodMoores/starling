@@ -28,10 +28,14 @@ public class IssuerDiscountFinderFunction extends Function1D<DoubleMatrix1D, Dou
 
   /**
    * Constructor.
-   * @param calculator The instrument value calculator.
-   * @param data The data required for curve building.
+   *
+   * @param calculator
+   *          The instrument value calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public IssuerDiscountFinderFunction(final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, Double> calculator, final IssuerDiscountBuildingData data) {
+  public IssuerDiscountFinderFunction(final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, Double> calculator,
+      final IssuerDiscountBuildingData data) {
     ArgumentChecker.notNull(calculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
     _calculator = calculator;

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.opengamma.core.value.MarketDataRequirementNames;
+import com.opengamma.financial.analytics.isda.credit.FlatSpreadQuote;
+import com.opengamma.financial.analytics.isda.credit.PointsUpFrontQuote;
 import com.opengamma.livedata.normalization.FieldHistoryUpdater;
 import com.opengamma.livedata.normalization.FieldNameChange;
 import com.opengamma.livedata.normalization.MarketValueCalculator;
@@ -45,6 +47,8 @@ public final class NormalizationRules {
     rules.add(new FieldNameChange("PX_DIRTY_MID", MarketDataRequirementNames.DIRTY_PRICE_MID));
     rules.add(new FieldNameChange("LAST_IMPVOL", MarketDataRequirementNames.IMPLIED_VOLATILITY));
     rules.add(new FieldNameChange("LAST_YIELD", MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID));
+    rules.add(new FieldNameChange("LAST_SPREAD", FlatSpreadQuote.TYPE));
+    rules.add(new FieldNameChange("LAST_PUF", PointsUpFrontQuote.TYPE));
 
     rules.add(new MarketValueCalculator());
     rules.add(new FieldHistoryUpdater());

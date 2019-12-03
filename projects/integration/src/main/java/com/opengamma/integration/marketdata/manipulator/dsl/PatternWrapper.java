@@ -12,34 +12,34 @@ import java.util.regex.Pattern;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Wraps a {@link Pattern} and defines meaningful {@code equals()} and {@code hashCode()} methods. {@code Pattern}
- * inherits the default implementations from {@code Object} which aren't helpful for comparing logical equality.
- * This class removes the need to hand-code the {@code equals()} and {@code hashCode()} methods of any class that
- * holds a {@code Pattern}.
+ * Wraps a {@link Pattern} and defines meaningful {@code equals()} and {@code hashCode()} methods. {@code Pattern} inherits the default implementations from
+ * {@code Object} which aren't helpful for comparing logical equality. This class removes the need to hand-code the {@code equals()} and {@code hashCode()}
+ * methods of any class that holds a {@code Pattern}.
  */
 public final class PatternWrapper implements Serializable {
 
   private final Pattern _pattern;
 
   /**
-   * @param pattern The pattern to wrap, not null
+   * @param pattern
+   *          The pattern to wrap, not null
    */
-  private PatternWrapper(Pattern pattern) {
+  private PatternWrapper(final Pattern pattern) {
     ArgumentChecker.notNull(pattern, "p");
     _pattern = pattern;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PatternWrapper that = (PatternWrapper) o;
-    return Objects.equals(_pattern.pattern(), that._pattern.pattern()) &&
-        Objects.equals(_pattern.flags(), that._pattern.flags());
+    final PatternWrapper that = (PatternWrapper) o;
+    return Objects.equals(_pattern.pattern(), that._pattern.pattern())
+        && Objects.equals(_pattern.flags(), that._pattern.flags());
   }
 
   @Override
@@ -55,11 +55,13 @@ public final class PatternWrapper implements Serializable {
   }
 
   /**
-   * Wraps a {@link Pattern}
-   * @param pattern The pattern to wrap, may be null
+   * Wraps a {@link Pattern}.
+   *
+   * @param pattern
+   *          The pattern to wrap, may be null
    * @return A wrapped pattern or null if the argument is null
    */
-  public static PatternWrapper wrap(Pattern pattern) {
+  public static PatternWrapper wrap(final Pattern pattern) {
     if (pattern == null) {
       return null;
     }

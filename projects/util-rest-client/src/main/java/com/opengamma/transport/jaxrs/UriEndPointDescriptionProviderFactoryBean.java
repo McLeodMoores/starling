@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.jaxrs;
@@ -19,30 +19,29 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.transport.EndPointDescriptionProvider;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * An implementation of {@link EndPointDescriptionProvider} that produces values from a local or remote URI.
+ * An implementation of {@link com.opengamma.transport.EndPointDescriptionProvider} that produces values from a local or remote URI.
  */
 public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryBean<UriEndPointDescriptionProvider> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UriEndPointDescriptionProviderFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UriEndPointDescriptionProviderFactoryBean.class);
 
-  private static final boolean s_enableIPv4 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.disableIPv4") == null;
-  private static final boolean s_enableIPv6 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.enableIPv6") != null;
+  private static final boolean ENABLE_IPV4 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.disableIPv4") == null;
+  private static final boolean ENABLE_IPV6 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.enableIPv6") != null;
 
-  private final List<String> _uris = new LinkedList<String>();
+  private final List<String> _uris = new LinkedList<>();
 
   private String _local;
   private int _port = 80;
   private int _securePort = 443;
   private boolean _secure;
 
-  //-------------------------------------------------------------------------
+  // ---------------------------------------------------------- ---------------
   /**
-   * Sets an absolute URI. 
-   * 
+   * Sets an absolute URI.
+   *
    * @param uri the absolute URI, e.g. {@code http://hostname.domain:port/foo/bar}
    */
   public void setAbsolute(final String uri) {
@@ -51,7 +50,7 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
 
   /**
    * Sets a local path using the default host and port.
-   * 
+   *
    * @param local  the local path, e.g. {@code /foo/bar}
    */
   public void setLocal(final String local) {
@@ -59,30 +58,55 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   }
 
   /**
-   * Sets the default port
-   * 
+   * Sets the default port.
+   *
    * @param port  the default port
    */
   public void setPort(final int port) {
     _port = port;
   }
 
+  /**
+   * Gets the port.
+   *
+   * @return  the port
+   */
   public int getPort() {
     return _port;
   }
 
+  /**
+   * Sets the secure port.
+   *
+   * @param securePort  the secure port
+   */
   public void setSecurePort(final int securePort) {
     _securePort = securePort;
   }
 
+  /**
+   * Gets the secure port.
+   *
+   * @return  the secure port
+   */
   public int getSecurePort() {
     return _securePort;
   }
 
+  /**
+   * Sets whether or not the port is secure.
+   *
+   * @param isSecure  true if the port should be secure
+   */
   public void setSecure(final boolean isSecure) {
     _secure = isSecure;
   }
 
+  /**
+   * True if the port is secure.
+   *
+   * @return  true if the port is secure
+   */
   public boolean isSecure() {
     return _secure;
   }
@@ -92,13 +116,13 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   protected UriEndPointDescriptionProvider createObject() {
     if (_local != null) {
       if (_secure) {
-        s_logger.warn("Secure local connections not available - using unsecured connections");
+        LOGGER.warn("Secure local connections not available - using unsecured connections");
       }
-      Collection<String> localAddresses = getLocalNetworkAddresses();
-      for (String address : localAddresses) {
-        String uri = "http://" + address + ":" + _port + _local;
+      final Collection<String> localAddresses = getLocalNetworkAddresses();
+      for (final String address : localAddresses) {
+        final String uri = "http://" + address + ":" + _port + _local;
         _uris.add(uri);
-        s_logger.debug("Publishing {}", uri);
+        LOGGER.debug("Publishing {}", uri);
       }
     }
     return new UriEndPointDescriptionProvider(_uris);
@@ -106,14 +130,14 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
 
   //-------------------------------------------------------------------------
   private Collection<String> getLocalNetworkAddresses() {
-    final List<String> addresses = new LinkedList<String>();
+    final List<String> addresses = new LinkedList<>();
     try {
-      Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
+      final Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
       while (ni.hasMoreElements()) {
         loadInterfaceAddress(ni.nextElement(), addresses);
       }
-    } catch (IOException e) {
-      s_logger.warn("Error resolving local addresses; no local connections available", e);
+    } catch (final IOException e) {
+      LOGGER.warn("Error resolving local addresses; no local connections available", e);
       return Collections.emptySet();
     }
     return addresses;
@@ -131,11 +155,11 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
         continue;
       }
       if (a instanceof Inet4Address) {
-        if (s_enableIPv4) {
+        if (ENABLE_IPV4) {
           addresses.add(a.getHostAddress());
         }
       } else if (a instanceof Inet6Address) {
-        if (s_enableIPv6) {
+        if (ENABLE_IPV6) {
           addresses.add("[" + a.getHostAddress() + "]");
         }
       }

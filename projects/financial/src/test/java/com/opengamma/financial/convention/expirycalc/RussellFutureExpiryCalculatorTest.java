@@ -10,8 +10,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -19,17 +19,16 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class RussellFutureExpiryCalculatorTest {
-  
+
   private static final RussellFutureExpiryCalculator CALCULATOR = RussellFutureExpiryCalculator.getInstance();
-  static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("a");
-  private static final Calendar MY_CALENDAR = new MyCalendar();
+  static final WorkingDayCalendar WEEKEND_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  private static final WorkingDayCalendar MY_CALENDAR = new MyCalendar();
   private static final LocalDate AUGUST = LocalDate.of(2012, 8, 1);
   private static final LocalDate SEPTEMBER_START = LocalDate.of(2012, 9, 1);
-  private static final LocalDate SEPTEMBER_EXPIRY = LocalDate.of(2012, 9, 21);  // TODO - Add this to tests
+  private static final LocalDate SEPTEMBER_EXPIRY = LocalDate.of(2012, 9, 21); // TODO - Add this to tests
   private static final LocalDate SEPTEMBER_END = LocalDate.of(2012, 9, 29);
   private static final LocalDate OCTOBER = LocalDate.of(2012, 10, 1);
 
-  
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeN() {
     CALCULATOR.getExpiryDate(-1, AUGUST, MY_CALENDAR);
@@ -47,9 +46,9 @@ public class RussellFutureExpiryCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    CALCULATOR.getExpiryDate(2, AUGUST, null);
+    CALCULATOR.getExpiryDate(2, AUGUST, (WorkingDayCalendar) null);
   }
-  
+
   @Test
   public void testCases() {
     assertEquals(LocalDate.of(2012, 9, 21), CALCULATOR.getExpiryDate(1, SEPTEMBER_START, WEEKEND_CALENDAR));
@@ -58,29 +57,29 @@ public class RussellFutureExpiryCalculatorTest {
     assertEquals(LocalDate.of(2012, 12, 21), CALCULATOR.getExpiryDate(1, SEPTEMBER_END, MY_CALENDAR));
     assertEquals(LocalDate.of(2012, 12, 21), CALCULATOR.getExpiryDate(2, SEPTEMBER_START, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 3, 14), CALCULATOR.getExpiryDate(2, SEPTEMBER_END, MY_CALENDAR)); // 3/14 is a holiday in CALENDAR
-    assertEquals(LocalDate.of(2013, 3, 15), CALCULATOR.getExpiryDate(3, SEPTEMBER_EXPIRY, WEEKEND_CALENDAR));    
-    assertEquals(LocalDate.of(2013, 6, 21), CALCULATOR.getExpiryDate(3, SEPTEMBER_EXPIRY, MY_CALENDAR)); 
+    assertEquals(LocalDate.of(2013, 3, 15), CALCULATOR.getExpiryDate(3, SEPTEMBER_EXPIRY, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 6, 21), CALCULATOR.getExpiryDate(3, SEPTEMBER_EXPIRY, MY_CALENDAR));
     assertEquals(LocalDate.of(2013, 12, 20), CALCULATOR.getExpiryDate(6, SEPTEMBER_START, MY_CALENDAR));
     assertEquals(LocalDate.of(2014, 3, 21), CALCULATOR.getExpiryDate(6, SEPTEMBER_END, MY_CALENDAR));
 
     assertEquals(LocalDate.of(2012, 9, 21), CALCULATOR.getExpiryDate(1, AUGUST, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2012, 9, 20), CALCULATOR.getExpiryDate(1, AUGUST, MY_CALENDAR)); 
+    assertEquals(LocalDate.of(2012, 9, 20), CALCULATOR.getExpiryDate(1, AUGUST, MY_CALENDAR));
     assertEquals(LocalDate.of(2012, 12, 21), CALCULATOR.getExpiryDate(2, AUGUST, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 12, 20), CALCULATOR.getExpiryDate(6, AUGUST, MY_CALENDAR));
-    
+
     assertEquals(LocalDate.of(2012, 12, 21), CALCULATOR.getExpiryDate(1, OCTOBER, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2012, 12, 21), CALCULATOR.getExpiryDate(1, OCTOBER, MY_CALENDAR));
     assertEquals(LocalDate.of(2013, 3, 15), CALCULATOR.getExpiryDate(2, OCTOBER, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 3, 14), CALCULATOR.getExpiryDate(2, OCTOBER, MY_CALENDAR));
     assertEquals(LocalDate.of(2014, 3, 21), CALCULATOR.getExpiryDate(6, OCTOBER, MY_CALENDAR));
   }
-  
-  private static class MyCalendar implements Calendar {
+
+  private static class MyCalendar implements WorkingDayCalendar {
     private static final LocalDate HOLIDAY1 = LocalDate.of(2012, 9, 21);
     private static final LocalDate HOLIDAY2 = LocalDate.of(2012, 11, 23);
     private static final LocalDate HOLIDAY3 = LocalDate.of(2013, 2, 2);
     private static final LocalDate HOLIDAY4 = LocalDate.of(2013, 3, 15);
-    
+
     public MyCalendar() {
     }
 
@@ -93,15 +92,20 @@ public class RussellFutureExpiryCalculatorTest {
     }
 
     @Override
-    public String getConventionName() {
-      return null;
-    }
-
-    @Override
     public String getName() {
       return null;
     }
 
+    @Override
+    public boolean isHoliday(final LocalDate date) {
+      return !isWorkingDay(date);
+    }
+
+    @Override
+    public boolean isWeekend(final LocalDate date) {
+      return WEEKEND_CALENDAR.isWeekend(date);
+    }
+
   }
-  
+
 }

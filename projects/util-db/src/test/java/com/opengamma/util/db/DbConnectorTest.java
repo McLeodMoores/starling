@@ -24,45 +24,56 @@ import com.opengamma.util.test.TestGroup;
 public class DbConnectorTest {
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the inputs cannot be null.
+   */
   @SuppressWarnings("resource")
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_nulls() {
+  public void testNulls() {
     new DbConnector(null, null, null, null, null, null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_basics() {
-    BoneCPDataSource ds = new BoneCPDataSource();
-    HSQLDbDialect dialect = HSQLDbDialect.INSTANCE;
-    NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(ds);
-    DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
-    DataSourceTransactionManager transMgr = new DataSourceTransactionManager();
-    TransactionTemplate transTemplate = new TransactionTemplate(transMgr, transDefn);
-    DbConnector test = new DbConnector("Test", dialect, ds, jdbcTemplate, null, transTemplate);
-    
-    assertSame(ds, test.getDataSource());
-    assertSame(dialect, test.getDialect());
-    assertSame(jdbcTemplate, test.getJdbcTemplate());
-    assertSame(jdbcTemplate.getJdbcOperations(), test.getJdbcOperations());
-    assertEquals(null, test.getHibernateSessionFactory());
-    assertEquals(null, test.getHibernateTemplate());
-    assertSame(transMgr, test.getTransactionManager());
-    assertSame(transTemplate, test.getTransactionTemplate());
-    test.close();
+  /**
+   * Tests that the fields are set correctly.
+   */
+  public void testBasics() {
+    try (BoneCPDataSource ds = new BoneCPDataSource()) {
+      final HSQLDbDialect dialect = HSQLDbDialect.INSTANCE;
+      final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(ds);
+      final DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
+      final DataSourceTransactionManager transMgr = new DataSourceTransactionManager();
+      final TransactionTemplate transTemplate = new TransactionTemplate(transMgr, transDefn);
+      try (DbConnector test = new DbConnector("Test", dialect, ds, jdbcTemplate, null, transTemplate)) {
+        assertSame(ds, test.getDataSource());
+        assertSame(dialect, test.getDialect());
+        assertSame(jdbcTemplate, test.getJdbcTemplate());
+        assertSame(jdbcTemplate.getJdbcOperations(), test.getJdbcOperations());
+        assertEquals(null, test.getHibernateSessionFactory());
+        assertEquals(null, test.getHibernateTemplate());
+        assertSame(transMgr, test.getTransactionManager());
+        assertSame(transTemplate, test.getTransactionTemplate());
+        test.close();
+      }
+    }
   }
 
   //-------------------------------------------------------------------------
-  public void test_toString() {
-    BoneCPDataSource ds = new BoneCPDataSource();
-    HSQLDbDialect dialect = HSQLDbDialect.INSTANCE;
-    NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(ds);
-    DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
-    DataSourceTransactionManager transMgr = new DataSourceTransactionManager();
-    TransactionTemplate transTemplate = new TransactionTemplate(transMgr, transDefn);
-    DbConnector test = new DbConnector("Test", dialect, ds, jdbcTemplate, null, transTemplate);
-    
-    assertEquals("DbConnector[Test]", test.toString());
-    test.close();
+  /**
+   * Tests the toString method.
+   */
+  public void testToString() {
+    try (BoneCPDataSource ds = new BoneCPDataSource()) {
+      final HSQLDbDialect dialect = HSQLDbDialect.INSTANCE;
+      final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(ds);
+      final DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
+      final DataSourceTransactionManager transMgr = new DataSourceTransactionManager();
+      final TransactionTemplate transTemplate = new TransactionTemplate(transMgr, transDefn);
+      try (DbConnector test = new DbConnector("Test", dialect, ds, jdbcTemplate, null, transTemplate)) {
+        assertEquals("DbConnector[Test]", test.toString());
+        test.close();
+      }
+    }
   }
 
 }

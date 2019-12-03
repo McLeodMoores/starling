@@ -32,8 +32,8 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
+import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.VolatilitySwapSecurityConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.security.FinancialSecurity;
@@ -43,11 +43,12 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
  * Base function for all volatility swap pricing and risk function that use the Carr-Lee method.
  */
 public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction {
-  /** The calculation method */
+  /** The calculation method. */
   public static final String CARR_LEE = "CarrLee";
 
   /**
-   * @param valueRequirements The value requirement names, not null
+   * @param valueRequirements
+   *          The value requirement names, not null
    */
   public CarrLeeVolatilitySwapFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -66,11 +67,15 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
   protected abstract class CarrLeeVolatilitySwapCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
      */
-    protected CarrLeeVolatilitySwapCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected CarrLeeVolatilitySwapCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -97,7 +102,8 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
       if (requirements == null) {
         return null;
@@ -137,8 +143,10 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
     /**
      * Gets the volatility surface requirement.
      *
-     * @param desiredValue The desired value
-     * @param target The target
+     * @param desiredValue
+     *          The desired value
+     * @param target
+     *          The target
      * @return The volatility surface requirement
      */
     protected abstract ValueRequirement getVolatilitySurfaceRequirement(ValueRequirement desiredValue, ComputationTarget target);
@@ -146,7 +154,8 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
     /**
      * Gets the spot requirement.
      *
-     * @param target The target
+     * @param target
+     *          The target
      * @return The spot requirement
      */
     protected abstract ValueRequirement getSpotRequirement(ComputationTarget target);
@@ -154,8 +163,10 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
     /**
      * Gets the realized variance requirement.
      *
-     * @param desiredValue The desired vale
-     * @param target The target
+     * @param desiredValue
+     *          The desired vale
+     * @param target
+     *          The target
      * @return The realized variance requirement
      */
     protected abstract ValueRequirement getRealizedVarianceRequirement(ValueRequirement desiredValue, ComputationTarget target);
@@ -163,13 +174,17 @@ public abstract class CarrLeeVolatilitySwapFunction extends DiscountingFunction 
     /**
      * Gets the Carr-Lee data.
      *
-     * @param executionContext The execution context, not null
-     * @param inputs The function inputs, not null
-     * @param target The computation target, not null
-     * @param fxMatrix The FX matrix, not null
+     * @param executionContext
+     *          The execution context, not null
+     * @param inputs
+     *          The function inputs, not null
+     * @param target
+     *          The computation target, not null
+     * @param fxMatrix
+     *          The FX matrix, not null
      * @return The Carr-Lee data
      */
-    protected abstract CarrLeeData<? extends MulticurveProviderInterface, ?> getCarrLeeData(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
-        final ComputationTarget target, final FXMatrix fxMatrix);
+    protected abstract CarrLeeData<? extends MulticurveProviderInterface, ?> getCarrLeeData(FunctionExecutionContext executionContext, FunctionInputs inputs,
+        ComputationTarget target, FXMatrix fxMatrix);
   }
 }

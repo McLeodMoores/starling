@@ -33,12 +33,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PlatformConfigUtils;
 
 /**
- * Updates the timeseries identifiers with loaded identifiers from Bloomberg
+ * Updates the timeseries identifiers with loaded identifiers from Bloomberg.
  */
 public class BloombergTimeSeriesIdentifiersUpdater {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTimeSeriesIdentifiersUpdater.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTimeSeriesIdentifiersUpdater.class);
 
   /**
    * The Spring config file.
@@ -56,9 +56,11 @@ public class BloombergTimeSeriesIdentifiersUpdater {
 
   /**
    * Creates a new instance of the updater.
-   * 
-   * @param htsMaster  the historical time-series master, not null
-   * @param bbgIdentifierProvider  the identifier provider, not null
+   *
+   * @param htsMaster
+   *          the historical time-series master, not null
+   * @param bbgIdentifierProvider
+   *          the identifier provider, not null
    */
   public BloombergTimeSeriesIdentifiersUpdater(final HistoricalTimeSeriesMaster htsMaster, final ExternalIdResolver bbgIdentifierProvider) {
     ArgumentChecker.notNull(htsMaster, "htsMaster");
@@ -67,53 +69,54 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     _bbgIdentifierProvider = bbgIdentifierProvider;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main processing.
    */
   public void run() {
     // fetch the documents to update
-    Iterable<HistoricalTimeSeriesInfoDocument> documents = getCurrentTimeSeriesDocuments();
-    
+    final Iterable<HistoricalTimeSeriesInfoDocument> documents = getCurrentTimeSeriesDocuments();
+
     // find the BUIDs
-    Map<ExternalId, HistoricalTimeSeriesInfoDocument> buidDocMap = extractBuids(documents);
-    Set<ExternalId> buids = new HashSet<ExternalId>(buidDocMap.keySet());
-    
+    final Map<ExternalId, HistoricalTimeSeriesInfoDocument> buidDocMap = extractBuids(documents);
+    final Set<ExternalId> buids = new HashSet<>(buidDocMap.keySet());
+
     // query Bloomberg
-    Map<ExternalId, ExternalIdBundleWithDates> buidToUpdated = _bbgIdentifierProvider.getExternalIds(buids);
-    for (Entry<ExternalId, ExternalIdBundleWithDates> entry : buidToUpdated.entrySet()) {
+    final Map<ExternalId, ExternalIdBundleWithDates> buidToUpdated = _bbgIdentifierProvider.getExternalIds(buids);
+    for (final Entry<ExternalId, ExternalIdBundleWithDates> entry : buidToUpdated.entrySet()) {
       entry.setValue(BloombergDataUtils.addTwoDigitYearCode(entry.getValue()));
     }
-    
+
     // update the database
     updateIdentifiers(buidDocMap, buidToUpdated);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets all the current Bloomberg-based time-series.
-   * 
+   *
    * @return the current documents, not null
    */
   private Iterable<HistoricalTimeSeriesInfoDocument> getCurrentTimeSeriesDocuments() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setDataSource(BLOOMBERG_DATA_SOURCE_NAME);
     return HistoricalTimeSeriesInfoSearchIterator.iterable(_htsMaster, request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts the BUID from each document.
-   * 
-   * @param documents  the documents, not null
+   *
+   * @param documents
+   *          the documents, not null
    * @return the map of BIUD to unique identifier, not null
    */
-  private Map<ExternalId, HistoricalTimeSeriesInfoDocument> extractBuids(Iterable<HistoricalTimeSeriesInfoDocument> documents) {
-    Map<ExternalId, HistoricalTimeSeriesInfoDocument> buids = Maps.newHashMap();
-    for (HistoricalTimeSeriesInfoDocument doc : documents) {
-      ExternalIdBundleWithDates identifierBundleWithDates = doc.getInfo().getExternalIdBundle();
-      ExternalIdBundle bundle = identifierBundleWithDates.toBundle();
-      ExternalId buid = bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
+  private Map<ExternalId, HistoricalTimeSeriesInfoDocument> extractBuids(final Iterable<HistoricalTimeSeriesInfoDocument> documents) {
+    final Map<ExternalId, HistoricalTimeSeriesInfoDocument> buids = Maps.newHashMap();
+    for (final HistoricalTimeSeriesInfoDocument doc : documents) {
+      final ExternalIdBundleWithDates identifierBundleWithDates = doc.getInfo().getExternalIdBundle();
+      final ExternalIdBundle bundle = identifierBundleWithDates.toBundle();
+      final ExternalId buid = bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
       if (buid == null) {
         throw new OpenGammaRuntimeException("no buid for " + bundle);
       }
@@ -122,49 +125,51 @@ public class BloombergTimeSeriesIdentifiersUpdater {
     return buids;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Updates the identifiers.
-   * 
-   * @param buidDocMap  the map from BUID to document, not null
-   * @param buidToUpdated  the map from BUID to updated identifier, not null
+   *
+   * @param buidDocMap
+   *          the map from BUID to document, not null
+   * @param buidToUpdated
+   *          the map from BUID to updated identifier, not null
    */
   private void updateIdentifiers(
-      Map<ExternalId, HistoricalTimeSeriesInfoDocument> buidDocMap,
-      Map<ExternalId, ExternalIdBundleWithDates> buidToUpdated) {
-    for (Entry<ExternalId, ExternalIdBundleWithDates> entry : buidToUpdated.entrySet()) {
-      HistoricalTimeSeriesInfoDocument doc = buidDocMap.get(entry.getKey());
-      ExternalIdBundleWithDates updatedId = entry.getValue();
-      if (doc != null && doc.getInfo().getExternalIdBundle().equals(updatedId) == false) {
+      final Map<ExternalId, HistoricalTimeSeriesInfoDocument> buidDocMap,
+      final Map<ExternalId, ExternalIdBundleWithDates> buidToUpdated) {
+    for (final Entry<ExternalId, ExternalIdBundleWithDates> entry : buidToUpdated.entrySet()) {
+      final HistoricalTimeSeriesInfoDocument doc = buidDocMap.get(entry.getKey());
+      final ExternalIdBundleWithDates updatedId = entry.getValue();
+      if (doc != null && !doc.getInfo().getExternalIdBundle().equals(updatedId)) {
         doc.getInfo().setExternalIdBundle(updatedId);
-        s_logger.debug("Updated {} with {}", doc.getUniqueId(), updatedId);
+        LOGGER.debug("Updated {} with {}", doc.getUniqueId(), updatedId);
         _htsMaster.update(doc);
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Main method to run the updater.
-   * This uses the updater configured by Spring.
-   * 
-   * @param args  not used
+   * Main method to run the updater. This uses the updater configured by Spring.
+   *
+   * @param args
+   *          not used
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     PlatformConfigUtils.configureSystemProperties();
-    BloombergTimeSeriesIdentifiersUpdater updater = loadUpdater();
+    final BloombergTimeSeriesIdentifiersUpdater updater = loadUpdater();
     updater.run();
   }
 
   /**
    * Gets the loader from Spring config.
-   * 
+   *
    * @return the identifier loader, not null
    */
-  private static BloombergTimeSeriesIdentifiersUpdater loadUpdater() {    
-    ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CONTEXT_CONFIGURATION_PATH);
+  private static BloombergTimeSeriesIdentifiersUpdater loadUpdater() {
+    final ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(CONTEXT_CONFIGURATION_PATH);
     context.start();
-    BloombergTimeSeriesIdentifiersUpdater loader = (BloombergTimeSeriesIdentifiersUpdater) context.getBean("identifiersLoader");
+    final BloombergTimeSeriesIdentifiersUpdater loader = (BloombergTimeSeriesIdentifiersUpdater) context.getBean("identifiersLoader");
     return loader;
   }
 

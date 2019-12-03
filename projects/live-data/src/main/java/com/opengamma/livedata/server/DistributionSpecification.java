@@ -38,12 +38,12 @@ public class DistributionSpecification {
 
   /**
    * Creates a specification.
-   * 
+   *
    * @param marketDataId  the external identifier, such as the ticker, not null
    * @param normalizationRuleSet  the rule set describing the data format, not null
    * @param jmsTopic  the JMS topic, not null
    */
-  public DistributionSpecification(ExternalId marketDataId, NormalizationRuleSet normalizationRuleSet, String jmsTopic) {
+  public DistributionSpecification(final ExternalId marketDataId, final NormalizationRuleSet normalizationRuleSet, final String jmsTopic) {
     ArgumentChecker.notNull(marketDataId, "marketDataId");
     ArgumentChecker.notNull(normalizationRuleSet, "normalizationRuleSet");
     ArgumentChecker.notNull(jmsTopic, "jmsTopic");
@@ -55,7 +55,7 @@ public class DistributionSpecification {
   //-------------------------------------------------------------------------
   /**
    * Gets the external identifier of the data, such as the ticker.
-   * 
+   *
    * @return the external identifier, not null
    */
   public ExternalId getMarketDataId() {
@@ -64,7 +64,7 @@ public class DistributionSpecification {
 
   /**
    * Gets the format that the data should be sent to the client.
-   * 
+   *
    * @return the data format, not null
    */
   public NormalizationRuleSet getNormalizationRuleSet() {
@@ -73,7 +73,7 @@ public class DistributionSpecification {
 
   /**
    * Gets the JMS topic.
-   * 
+   *
    * @return the JMS topic, not null
    */
   public String getJmsTopic() {
@@ -83,7 +83,7 @@ public class DistributionSpecification {
   //-------------------------------------------------------------------------
   /**
    * Converts this specification to a {@code LiveDataSpecification}.
-   * 
+   *
    * @return the live data specification, not null
    */
   public LiveDataSpecification getFullyQualifiedLiveDataSpecification() {
@@ -92,38 +92,38 @@ public class DistributionSpecification {
 
   /**
    * Checks if the specified live data specification matches this specification.
-   * 
+   *
    * @param liveDataSpec  the specification to compare to, not null
    * @return true if equal
    */
-  public boolean matches(LiveDataSpecification liveDataSpec) {
+  public boolean matches(final LiveDataSpecification liveDataSpec) {
     return getFullyQualifiedLiveDataSpecification().equals(liveDataSpec);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the normalized message using an empty history store.
-   * 
+   *
    * @param msg  the message received from underlying market data API in its native format
    * @param securityUniqueId  the data provider's unique ID of the security, not null
    * @return the normalized message, calculated assuming there is no market data history
    */
-  public FudgeMsg getNormalizedMessage(FudgeMsg msg, String securityUniqueId) {
-    FieldHistoryStore history = new FieldHistoryStore();
-    return getNormalizedMessage(msg, securityUniqueId, history);  
+  public FudgeMsg getNormalizedMessage(final FudgeMsg msg, final String securityUniqueId) {
+    final FieldHistoryStore history = new FieldHistoryStore();
+    return getNormalizedMessage(msg, securityUniqueId, history);
   }
 
   /**
    * Gets a normalized message.
-   * 
+   *
    * @param msg  the message received from underlying market data API in its native format.
-   * @param securityUniqueId  the data provider's unique security ID 
-   * @param history  the history of field values  
+   * @param securityUniqueId  the data provider's unique security ID
+   * @param history  the history of field values
    * @return the normalized message, null if in the process of normalization,
    *  the message became empty and therefore should not be sent.
    */
-  public FudgeMsg getNormalizedMessage(FudgeMsg msg, String securityUniqueId, FieldHistoryStore history) {
-    FudgeMsg normalizedMsg = _normalizationRuleSet.getNormalizedMessage(msg, securityUniqueId, history);
+  public FudgeMsg getNormalizedMessage(final FudgeMsg msg, final String securityUniqueId, final FieldHistoryStore history) {
+    final FudgeMsg normalizedMsg = _normalizationRuleSet.getNormalizedMessage(msg, securityUniqueId, history);
     if (normalizedMsg == null) {
       return null;
     }
@@ -135,15 +135,15 @@ public class DistributionSpecification {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof DistributionSpecification) {
-      DistributionSpecification other = (DistributionSpecification) obj;
-      return _marketDataId.equals(other._marketDataId) &&
-          _normalizationRuleSet.equals(other._normalizationRuleSet) &&
-          _jmsTopic.equals(other._jmsTopic);
+      final DistributionSpecification other = (DistributionSpecification) obj;
+      return _marketDataId.equals(other._marketDataId)
+          && _normalizationRuleSet.equals(other._normalizationRuleSet)
+          && _jmsTopic.equals(other._jmsTopic);
     }
     return false;
   }
@@ -155,7 +155,7 @@ public class DistributionSpecification {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append("DistributionSpecification[");
     sb.append(_jmsTopic);
     sb.append(":").append(_normalizationRuleSet.getId());

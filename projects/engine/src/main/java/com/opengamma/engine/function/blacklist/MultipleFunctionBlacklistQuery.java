@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -25,7 +25,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   public MultipleFunctionBlacklistQuery(final Collection<FunctionBlacklistQuery> underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
-    _underlying = new ArrayList<FunctionBlacklistQuery>(underlying);
+    _underlying = new ArrayList<>(underlying);
   }
 
   private Collection<FunctionBlacklistQuery> getUnderlying() {
@@ -34,7 +34,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isEmpty() {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (!underlying.isEmpty()) {
         return false;
       }
@@ -44,7 +44,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(functionIdentifier, functionParameters)) {
         return true;
       }
@@ -54,7 +54,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final DependencyNodeFunction function) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(function)) {
         return true;
       }
@@ -64,7 +64,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final ComputationTargetSpecification target) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(target)) {
         return true;
       }
@@ -74,7 +74,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(functionIdentifier, functionParameters, target)) {
         return true;
       }
@@ -84,7 +84,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(function, target)) {
         return true;
       }
@@ -93,9 +93,9 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final ValueSpecification[] inputs,
-      final ValueSpecification[] outputs) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(functionIdentifier, functionParameters, target, inputs, outputs)) {
         return true;
       }
@@ -104,9 +104,9 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs,
-      final Collection<ValueSpecification> outputs) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(functionIdentifier, functionParameters, target, inputs, outputs)) {
         return true;
       }
@@ -115,8 +115,9 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
   }
 
   @Override
-  public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+  public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target,
+      final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(function, target, inputs, outputs)) {
         return true;
       }
@@ -127,7 +128,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
   @Override
   public boolean isBlacklisted(final DependencyNodeFunction function, final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs,
       final Collection<ValueSpecification> outputs) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(function, target, inputs, outputs)) {
         return true;
       }
@@ -137,7 +138,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final DependencyNode node) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(node)) {
         return true;
       }
@@ -147,7 +148,7 @@ public class MultipleFunctionBlacklistQuery implements FunctionBlacklistQuery {
 
   @Override
   public boolean isBlacklisted(final CalculationJobItem jobItem) {
-    for (FunctionBlacklistQuery underlying : getUnderlying()) {
+    for (final FunctionBlacklistQuery underlying : getUnderlying()) {
       if (underlying.isBlacklisted(jobItem)) {
         return true;
       }

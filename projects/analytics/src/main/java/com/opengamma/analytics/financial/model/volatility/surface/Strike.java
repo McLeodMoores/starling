@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.surface;
 import org.apache.commons.lang.Validate;
 
 /**
- * 
+ *
  */
 public class Strike implements StrikeType {
 
@@ -26,7 +26,7 @@ public class Strike implements StrikeType {
 
 
   @Override
-  public Strike with(double value) {
+  public Strike with(final double value) {
     return new Strike(value);
   }
 

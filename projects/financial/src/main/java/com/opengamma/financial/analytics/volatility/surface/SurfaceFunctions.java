@@ -32,7 +32,8 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
     return factory.getObject();
   }
 
-  public static FunctionConfigurationSource defaults(final String leftXExtrapolatorName, final String rightXExtrapolatorName, final String xInterpolatorName, final String leftYExtrapolatorName,
+  public static FunctionConfigurationSource defaults(final String leftXExtrapolatorName, final String rightXExtrapolatorName, final String xInterpolatorName,
+      final String leftYExtrapolatorName,
       final String rightYExtrapolatorName, final String yInterpolatorName) {
     final Defaults factory = new Defaults();
     factory.setLeftXExtrapolatorName(leftXExtrapolatorName);
@@ -118,7 +119,8 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
 
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      functions.add(functionConfiguration(InterpolatedVolatilitySurfaceDefaultPropertiesFunction.class, getLeftXExtrapolatorName(), getRightXExtrapolatorName(), getXInterpolatorName(),
+      functions.add(functionConfiguration(InterpolatedVolatilitySurfaceDefaultPropertiesFunction.class, getLeftXExtrapolatorName(), getRightXExtrapolatorName(),
+          getXInterpolatorName(),
           getLeftYExtrapolatorName(), getRightYExtrapolatorName(), getYInterpolatorName()));
     }
 

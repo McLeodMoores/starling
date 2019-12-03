@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.impl;
@@ -51,7 +51,7 @@ public class RootDiscardingSubgrapherTest {
 
   /**
    * Creates a graph of the form:
-   * 
+   *
    * <pre>
    *      N1 -> N2*
    * </pre>
@@ -68,7 +68,7 @@ public class RootDiscardingSubgrapherTest {
 
   /**
    * Creates a graph of the form:
-   * 
+   *
    * <pre>
    *    N1 ---> N4*-------
    *                       \
@@ -141,14 +141,14 @@ public class RootDiscardingSubgrapherTest {
 
   public void testLeafNode1() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(1)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     assertEquals(filter.subGraph(largeGraph(), missing).getSize(), 5);
     assertEquals(missing, ImmutableSet.of(req(4), req(8)));
   }
 
   public void testLeafNode2() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(2)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     assertEquals(filter.subGraph(largeGraph(), missing).getSize(), 3);
     assertEquals(missing, ImmutableSet.of(req(7), req(8)));
     missing.clear();
@@ -166,7 +166,7 @@ public class RootDiscardingSubgrapherTest {
 
   public void testLeafNode3() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(3)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     final DependencyGraph graph = largeGraph();
     assertEquals(filter.subGraph(graph, missing).getSize(), 4);
     assertEquals(missing, ImmutableSet.of(req(7), req(8)));
@@ -177,7 +177,7 @@ public class RootDiscardingSubgrapherTest {
 
   public void testLeafNodes1and3() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(1), id(3)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     final DependencyGraph graph = largeGraph();
     assertEquals(filter.subGraph(graph, missing).getSize(), 2);
     assertEquals(missing, ImmutableSet.of(req(4), req(7), req(8)));
@@ -188,7 +188,7 @@ public class RootDiscardingSubgrapherTest {
 
   public void testMiddleNode() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(5)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     final DependencyGraph graph = largeGraph();
     assertEquals(filter.subGraph(graph, missing).getSize(), 5);
     assertEquals(missing, ImmutableSet.of(req(7), req(8)));
@@ -199,7 +199,7 @@ public class RootDiscardingSubgrapherTest {
 
   public void testRootNode() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(8)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     final DependencyGraph graph = largeGraph();
     assertEquals(filter.subGraph(graph, missing).getSize(), 7);
     assertEquals(missing, ImmutableSet.of(req(8)));
@@ -210,7 +210,7 @@ public class RootDiscardingSubgrapherTest {
 
   public void testRootAndLeafNode3() {
     final RootDiscardingSubgrapher filter = new InvalidTargetDependencyNodeFilter(ImmutableSet.of(id(3), id(8)));
-    final Set<ValueRequirement> missing = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> missing = new HashSet<>();
     final DependencyGraph graph = largeGraph();
     assertEquals(filter.subGraph(graph, missing).getSize(), 4);
     assertEquals(missing, ImmutableSet.of(req(7), req(8)));

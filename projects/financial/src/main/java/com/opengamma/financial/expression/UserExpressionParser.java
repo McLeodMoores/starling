@@ -23,38 +23,43 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Parses a string representation of a user expression into a {@link UserExpression}
- * object that can be evaluated.
+ * Parses a string representation of a user expression into a {@link UserExpression} object that can be evaluated.
  */
 public abstract class UserExpressionParser {
 
-  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> s_resolver = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
+  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<>();
 
   /**
-   * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
+   * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing
+   * deep resolution of referenced entities.
    *
    * @return the thread's resolver
    */
   public static ComputationTargetResolver.AtVersionCorrection getResolver() {
-    return s_resolver.get();
+    return RESOLVER.get();
   }
 
   /**
-   * Sets the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
+   * Sets the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing
+   * deep resolution of referenced entities.
    *
-   * @param resolver the thread's resolver
+   * @param resolver
+   *          the thread's resolver
    */
   public static void setResolver(final ComputationTargetResolver.AtVersionCorrection resolver) {
-    s_resolver.set(resolver);
+    RESOLVER.set(resolver);
   }
 
   /**
-   * Resolves an identifier as part of expression evaluation using the thread's resolver. The identifier may be the object already resolved, a unique identifier, an external identifier, or an external
-   * identifier bundle.
+   * Resolves an identifier as part of expression evaluation using the thread's resolver. The identifier may be the object already resolved, a unique
+   * identifier, an external identifier, or an external identifier bundle.
    *
-   * @param <T> the resolved type
-   * @param type the type to resolve to, not null
-   * @param id the identifier to resolve
+   * @param <T>
+   *          the resolved type
+   * @param type
+   *          the type to resolve to, not null
+   * @param id
+   *          the identifier to resolve
    * @return the resolved object or null if it could not be resolved
    */
   @SuppressWarnings("unchecked")
@@ -62,7 +67,7 @@ public abstract class UserExpressionParser {
     if (id == null) {
       return null;
     }
-    if ((id instanceof UniqueIdentifiable) && type.isCompatible((UniqueIdentifiable) id)) {
+    if (id instanceof UniqueIdentifiable && type.isCompatible((UniqueIdentifiable) id)) {
       return (T) id;
     }
     ComputationTargetSpecification spec;
@@ -92,38 +97,49 @@ public abstract class UserExpressionParser {
   private final Map<Class<?>, Map<String, Pair<Class<?>, Function<?, ?>>>> _synthetics;
 
   protected UserExpressionParser() {
-    _synthetics = new HashMap<Class<?>, Map<String, Pair<Class<?>, Function<?, ?>>>>();
+    _synthetics = new HashMap<>();
   }
 
   /**
    * Registers a constant that should be replaced at parse time.
    *
-   * @param name name of the constant
-   * @param value constant value
+   * @param name
+   *          name of the constant
+   * @param value
+   *          constant value
    */
   public abstract void setConstant(String name, Object value);
 
   /**
-   * Registers a function. The function might appear as <name><object> (e.g. getSecurity)
-   * or <object>:<name> (e.g. Security:get) depending on the parser.
+   * Registers a function. The function might appear as &lt;name&gt;&lt;object&gt; (e.g. getSecurity) or &lt;object&gt;:&lt;name&gt; (e.g. Security:get)
+   * depending on the parser.
    *
-   * @param object the object type being returned, e.g. Security
-   * @param name the name of the operation, e.g. get
-   * @param method the static method to invoke to evaluate this
+   * @param object
+   *          the object type being returned, e.g. Security
+   * @param name
+   *          the name of the operation, e.g. get
+   * @param method
+   *          the static method to invoke to evaluate this
    */
   public abstract void setFunction(String object, String name, Method method);
 
   /**
    * Registers a synthetic property to pass to all evaluation contexts created.
    *
-   * @param <T> class of object to declare the synthetic property on, e.g. Security
-   * @param <S> class of the synthetic property, e.g. Currency
-   * @param object class of object to declare the synthetic property on, e.g. Security
-   * @param type class of synthetic property on, e.g. Currency
-   * @param name name of the property, e.g. currency
-   * @param method the function to supply the synthetic value
+   * @param <T>
+   *          class of object to declare the synthetic property on, e.g. Security
+   * @param <S>
+   *          class of the synthetic property, e.g. Currency
+   * @param object
+   *          class of object to declare the synthetic property on, e.g. Security
+   * @param type
+   *          class of synthetic property on, e.g. Currency
+   * @param name
+   *          name of the property, e.g. currency
+   * @param method
+   *          the function to supply the synthetic value
    */
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public <T, S> void setSynthetic(final Class<T> object, final Class<S> type, final String name, final Function<T, S> method) {
     Map synthetics = _synthetics.get(object);
     if (synthetics == null) {
@@ -133,7 +149,7 @@ public abstract class UserExpressionParser {
     synthetics.put(name, Pairs.of(type, method));
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   protected Pair<Class<?>, Function<Object, Object>> getSynthetic(final Object value, final String name) {
     Class clazz = value.getClass();
     do {

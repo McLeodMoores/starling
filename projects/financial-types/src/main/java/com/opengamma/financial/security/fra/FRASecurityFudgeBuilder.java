@@ -42,13 +42,13 @@ public class FRASecurityFudgeBuilder extends AbstractFudgeBuilder implements Fud
   public static final String FIXING_DATE_FIELD_NAME = "fixingDate";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FRASecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FRASecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FRASecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FRASecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FRASecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
     addToMessage(msg, REGION_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getRegionId()));
@@ -61,13 +61,13 @@ public class FRASecurityFudgeBuilder extends AbstractFudgeBuilder implements Fud
   }
 
   @Override
-  public FRASecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FRASecurity object = new FRASecurity();
+  public FRASecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FRASecurity object = new FRASecurity();
     FRASecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FRASecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FRASecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setCurrency(msg.getValue(Currency.class, CURRENCY_FIELD_NAME));
     object.setRegionId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(REGION_FIELD_NAME)));

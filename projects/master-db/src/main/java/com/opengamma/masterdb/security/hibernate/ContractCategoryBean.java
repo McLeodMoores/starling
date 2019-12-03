@@ -13,11 +13,11 @@ public class ContractCategoryBean extends EnumWithDescriptionBean {
   protected ContractCategoryBean() {
   }
 
-  public ContractCategoryBean(String categoryName) {
+  public ContractCategoryBean(final String categoryName) {
     super(categoryName, null);
   }
 
-  public ContractCategoryBean(String categoryName, String description) {
+  public ContractCategoryBean(final String categoryName, final String description) {
     super(categoryName, description);
   }
 

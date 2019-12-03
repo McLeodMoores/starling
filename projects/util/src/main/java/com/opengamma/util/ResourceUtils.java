@@ -54,11 +54,11 @@ public final class ResourceUtils {
    * <p>
    * This accepts locations starting with "classpath:" or "file:".
    * It also accepts plain locations, treated as "file:".
-   * 
+   *
    * @param resourceLocation  the resource location, not null
    * @return the resource, not null
    */
-  public static Resource createResource(String resourceLocation) {
+  public static Resource createResource(final String resourceLocation) {
     return createResource(resourceLocation, null);
   }
 
@@ -67,24 +67,24 @@ public final class ResourceUtils {
    * <p>
    * This accepts locations starting with "classpath:" or "file:".
    * It also accepts plain locations, treated as "file:".
-   * 
+   *
    * @param resourceLocation  the resource location, not null
    * @param classLoader  the class loader, null defaults to {@code ClassUtils.getDefaultClassLoader()}
    * @return the resource, not null
    */
-  public static Resource createResource(String resourceLocation, ClassLoader classLoader) {
+  public static Resource createResource(final String resourceLocation, final ClassLoader classLoader) {
     ArgumentChecker.notNull(resourceLocation, "resourceLocation");
     if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
-      classLoader = (classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader());
-      return new ClassPathResource(resourceLocation.substring(CLASSPATH_URL_PREFIX.length()), classLoader);
+      final ClassLoader classLoaderToUse = classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader();
+      return new ClassPathResource(resourceLocation.substring(CLASSPATH_URL_PREFIX.length()), classLoaderToUse);
     }
     if (resourceLocation.startsWith(FILE_URL_PREFIX)) {
       return new FileSystemResource(resourceLocation.substring(FILE_URL_PREFIX.length()));
     }
     try {
-      URL url = new URL(resourceLocation);
+      final URL url = new URL(resourceLocation);
       return new UrlResource(url);
-    } catch (MalformedURLException ex) {
+    } catch (final MalformedURLException ex) {
       return new FileSystemResource(resourceLocation);
     }
   }
@@ -94,11 +94,11 @@ public final class ResourceUtils {
    * <p>
    * This converts the resource back to a string.
    * Any class loader will be lost.
-   * 
+   *
    * @param resource  the resource to convert, not null
    * @return the resource locator, not null
    */
-  public static String toResourceLocator(Resource resource) {
+  public static String toResourceLocator(final Resource resource) {
     ArgumentChecker.notNull(resource, "resource");
     if (resource instanceof ClassPathResource) {
       return CLASSPATH_URL_PREFIX + ((ClassPathResource) resource).getPath();
@@ -109,7 +109,7 @@ public final class ResourceUtils {
     if (resource instanceof UrlResource) {
       try {
         return resource.getURL().toExternalForm();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new IllegalArgumentException("Invalid UrlResource", ex);
       }
     }
@@ -120,11 +120,11 @@ public final class ResourceUtils {
    * Normalizes a resource locator.
    * <p>
    * This creates the resource and converts it back to a string.
-   * 
+   *
    * @param resourceLocator  the resource to load, not null
    * @return the resource locator, not null
    */
-  public static String normalizeResourceLocator(String resourceLocator) {
+  public static String normalizeResourceLocator(final String resourceLocator) {
     return toResourceLocator(createResource(resourceLocator));
   }
 
@@ -134,44 +134,44 @@ public final class ResourceUtils {
    * <p>
    * No check is made for whether the resource exists.
    * This directly invokes Spring.
-   * 
+   *
    * @param resourceLocator  the resource locator to resolve: either a
    *  "classpath:" pseudo URL, a "file:" URL, or a plain file path
    * @return a corresponding URL object
    * @throws FileNotFoundException if the resource cannot be resolved to a URL
    */
-  public static URL getURL(String resourceLocator) throws FileNotFoundException {
+  public static URL getURL(final String resourceLocator) throws FileNotFoundException {
     return org.springframework.util.ResourceUtils.getURL(resourceLocator);
   }
 
   /**
    * Gets the location of the resource, typically for logging.
-   * 
+   *
    * @param resource  the resource, may be null
    * @return the description of the resource location, not null
    */
-  public static String getLocation(Resource resource) {
+  public static String getLocation(final Resource resource) {
     if (resource == null) {
       return "null";
     }
     if (resource instanceof FileSystemResource) {
       try {
         return "file: " + resource.getFile().getCanonicalPath();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         return resource.getDescription();
       }
     }
     if (resource instanceof ClassPathResource) {
       try {
         return "classpath: " + resource.getURL().toExternalForm();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         return resource.getDescription();
       }
     }
     if (resource instanceof UrlResource) {
       try {
         return "url: " + resource.getURL().toExternalForm();
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         return resource.getDescription();
       }
     }

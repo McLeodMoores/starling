@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The underlying data. */
   private final JSONObject _json;
 
-  /* package */ JsonBeanDataSource(JSONObject json) {
+  /* package */ JsonBeanDataSource(final JSONObject json) {
     ArgumentChecker.notNull(json, "json");
     _json = json;
   }
@@ -35,37 +35,37 @@ import com.opengamma.util.ArgumentChecker;
    * The JSON library has a NULL sentinel but doesn't document where it's used and where null is used.
    * @return true if value is null or equals JSONObject.NULL
    */
-  private static boolean isNull(Object value) {
+  private static boolean isNull(final Object value) {
     return value == null || value == JSONObject.NULL;
   }
 
   @Override
-  public Object getValue(String propertyName) {
+  public Object getValue(final String propertyName) {
     return createValue(_json.opt(propertyName));
   }
 
   @Override
-  public List<Object> getCollectionValues(String propertyName) {
-    JSONArray array = _json.optJSONArray(propertyName);
+  public List<Object> getCollectionValues(final String propertyName) {
+    final JSONArray array = _json.optJSONArray(propertyName);
     return createCollection(array);
   }
 
   // TODO this won't cope with maps with beans as keys or values. need to fix
   @Override
-  public Map<?, ?> getMapValues(String propertyName) {
-    JSONObject jsonObject = _json.optJSONObject(propertyName);
+  public Map<?, ?> getMapValues(final String propertyName) {
+    final JSONObject jsonObject = _json.optJSONObject(propertyName);
     if (isNull(jsonObject)) {
       return null;
     }
-    Map<String, Object> map = Maps.newHashMap();
-    for (Iterator<?> it = jsonObject.keys(); it.hasNext(); ) {
-      String key = (String) it.next();
+    final Map<String, Object> map = Maps.newHashMap();
+    for (final Iterator<?> it = jsonObject.keys(); it.hasNext();) {
+      final String key = (String) it.next();
       map.put(key, jsonObject.opt(key));
     }
     return map;
   }
 
-  private static Object createValue(Object object) {
+  private static Object createValue(final Object object) {
     if (isNull(object)) {
       return null;
     } else if (object instanceof JSONObject) {
@@ -77,16 +77,16 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static List<Object> createCollection(JSONArray array) {
+  private static List<Object> createCollection(final JSONArray array) {
     if (isNull(array)) {
       return null;
     }
-    List<Object> items = Lists.newArrayList();
+    final List<Object> items = Lists.newArrayList();
     for (int i = 0; i < array.length(); i++) {
       Object item;
       try {
         item = array.get(i);
-      } catch (JSONException e) {
+      } catch (final JSONException e) {
         return null;
       }
       items.add(createValue(item));
@@ -99,7 +99,7 @@ import com.opengamma.util.ArgumentChecker;
     // TODO should this be configurable?
     try {
       return _json.getString("type");
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new OpenGammaRuntimeException("Failed to read JSON", e);
     }
   }

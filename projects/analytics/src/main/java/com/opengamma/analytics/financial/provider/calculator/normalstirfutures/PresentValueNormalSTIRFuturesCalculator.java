@@ -14,7 +14,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount.
  */
-public final class PresentValueNormalSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<NormalSTIRFuturesSmileProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueNormalSTIRFuturesCalculator
+extends InstrumentDerivativeVisitorAdapter<NormalSTIRFuturesSmileProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueNormalSTIRFuturesCalculator extends InstrumentDer
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueNormalSTIRFuturesCalculator getInstance() {
@@ -38,12 +40,14 @@ public final class PresentValueNormalSTIRFuturesCalculator extends InstrumentDer
   /**
    * Pricing methods.
    */
-  private static final InterestRateFutureOptionMarginTransactionNormalSmileMethod METHOD_STRIRFUT_MARGIN = InterestRateFutureOptionMarginTransactionNormalSmileMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionNormalSmileMethod METHOD_STRIRFUT_MARGIN =
+      InterestRateFutureOptionMarginTransactionNormalSmileMethod.getInstance();
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures, final NormalSTIRFuturesSmileProviderInterface black) {
+  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
+      final NormalSTIRFuturesSmileProviderInterface black) {
     return METHOD_STRIRFUT_MARGIN.presentValue(futures, black);
   }
 

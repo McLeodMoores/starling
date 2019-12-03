@@ -43,7 +43,7 @@ import net.sf.ehcache.CacheManager;
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingMasterHolidaySourceTest {
 
   private static final LocalDate DATE_MONDAY = LocalDate.of(2010, 10, 25);
@@ -57,6 +57,9 @@ public class EHCachingMasterHolidaySourceTest {
   private EHCachingMasterHolidaySource _cachingHolidaySource = null;
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingMasterHolidaySourceTest.class);
@@ -70,74 +73,93 @@ public class EHCachingMasterHolidaySourceTest {
       public VersionCorrection getConfigVersionCorrection() {
         return VersionCorrection.LATEST;
       }
-    }));  }
+    }));
+  }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
-    ThreadLocalServiceContext.init(ServiceContext.of(ImmutableMap.<Class<?>, Object>of()));
+    ThreadLocalServiceContext.init(ServiceContext.of(ImmutableMap.<Class<?>, Object> of()));
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     _underlyingHolidayMaster = mock(HolidayMaster.class);
     _cachingHolidaySource = new EHCachingMasterHolidaySource(_underlyingHolidayMaster, _cacheManager);
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void tearDown() {
     EHCacheUtils.clear(_cacheManager, EHCachingMasterHolidaySource.HOLIDAY_CACHE);
   }
 
-  //-------------------------------------------------------------------------
-  public void isHoliday_dateAndCurrency() {
-    HolidaySearchRequest request = new HolidaySearchRequest(GBP);
-    
-    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
-    HolidaySearchResult result = new HolidaySearchResult();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void isHolidayDateAndCurrency() {
+    final HolidaySearchRequest request = new HolidaySearchRequest(GBP);
+
+    final ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
+    final HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
-    
+
     when(_underlyingHolidayMaster.search(request)).thenReturn(result);
-    
+
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, GBP));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, GBP));
     assertFalse(_cachingHolidaySource.isHoliday(DATE_TUESDAY, GBP));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_SUNDAY, GBP)); // weekend
-    
+
     verify(_underlyingHolidayMaster, times(1)).search(request);
   }
 
-  public void isHoliday_dateTypeAndBundle() {
-    HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, BUNDLE);
-    
-    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
-    HolidaySearchResult result = new HolidaySearchResult();
+  /**
+   *
+   */
+  public void isHolidayDateTypeAndBundle() {
+    final HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, BUNDLE);
+
+    final ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
+    final HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
-    
+
     when(_underlyingHolidayMaster.search(request)).thenReturn(result);
-    
+
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, HolidayType.BANK, BUNDLE));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, HolidayType.BANK, BUNDLE));
     assertFalse(_cachingHolidaySource.isHoliday(DATE_TUESDAY, HolidayType.BANK, BUNDLE));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_SUNDAY, HolidayType.BANK, BUNDLE)); // weekend
-    
+
     verify(_underlyingHolidayMaster, times(1)).search(request);
   }
 
-  public void isHoliday_dateTypeAndExternalId() {
-    HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, ExternalIdBundle.of(ID));
-    
-    ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
-    HolidaySearchResult result = new HolidaySearchResult();
+  /**
+   *
+   */
+  public void isHolidayDateTypeAndExternalId() {
+    final HolidaySearchRequest request = new HolidaySearchRequest(HolidayType.BANK, ExternalIdBundle.of(ID));
+
+    final ManageableHoliday holiday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
+    final HolidaySearchResult result = new HolidaySearchResult();
     result.getDocuments().add(new HolidayDocument(holiday));
-    
+
     when(_underlyingHolidayMaster.search(request)).thenReturn(result);
-    
+
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, HolidayType.BANK, ID));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_MONDAY, HolidayType.BANK, ID));
     assertFalse(_cachingHolidaySource.isHoliday(DATE_TUESDAY, HolidayType.BANK, ID));
     assertTrue(_cachingHolidaySource.isHoliday(DATE_SUNDAY, HolidayType.BANK, ID)); // weekend
-    
+
     verify(_underlyingHolidayMaster, times(1)).search(request);
   }
 

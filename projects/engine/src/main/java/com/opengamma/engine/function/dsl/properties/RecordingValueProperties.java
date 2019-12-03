@@ -14,13 +14,13 @@ import com.opengamma.lambdava.streams.StreamI;
 public final class RecordingValueProperties {
 
   private StreamI<ValuePropertiesModifier> _recordedValueProperties = Stream.empty();
-  private String _copiedFrom;
+  private final String _copiedFrom;
 
-  private RecordingValueProperties(String copiedFrom) {
+  private RecordingValueProperties(final String copiedFrom) {
     _copiedFrom = copiedFrom;
   }
 
-  public static RecordingValueProperties copyFrom(String copiedFrom) {
+  public static RecordingValueProperties copyFrom(final String copiedFrom) {
     return new RecordingValueProperties(copiedFrom);
   }
 
@@ -36,14 +36,13 @@ public final class RecordingValueProperties {
     return _recordedValueProperties;
   }
 
-  public RecordingValueProperties withoutAny(String propertyName) {
+  public RecordingValueProperties withoutAny(final String propertyName) {
     _recordedValueProperties = _recordedValueProperties.cons(new WithoutAny(propertyName));
     return this;
   }
 
-  public RecordingValueProperties with(String propertyName, String... propertyValue) {
-    for (int i = 0; i < propertyValue.length; i++) {
-      String s = propertyValue[i];
+  public RecordingValueProperties with(final String propertyName, final String... propertyValue) {
+    for (final String s : propertyValue) {
       if (s == null) {
         throw new IllegalArgumentException("propertyValues cannot contain null");
       }
@@ -52,9 +51,8 @@ public final class RecordingValueProperties {
     return this;
   }
 
-  public RecordingValueProperties withReplacement(String propertyName, String... propertyValue) {
-    for (int i = 0; i < propertyValue.length; i++) {
-      String s = propertyValue[i];
+  public RecordingValueProperties withReplacement(final String propertyName, final String... propertyValue) {
+    for (final String s : propertyValue) {
       if (s == null) {
         throw new IllegalArgumentException("propertyValues cannot contain null");
       }
@@ -63,12 +61,12 @@ public final class RecordingValueProperties {
     return this;
   }
 
-  public RecordingValueProperties withAny(String propertyName) {
+  public RecordingValueProperties withAny(final String propertyName) {
     _recordedValueProperties = _recordedValueProperties.cons(new WithAny(propertyName));
     return this;
   }
 
-  public RecordingValueProperties withOptional(String propertyName) {
+  public RecordingValueProperties withOptional(final String propertyName) {
     _recordedValueProperties = _recordedValueProperties.cons(new WithOptional(propertyName));
     return this;
   }

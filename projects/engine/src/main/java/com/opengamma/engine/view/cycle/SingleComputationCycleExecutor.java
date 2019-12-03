@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 /* package */class SingleComputationCycleExecutor implements DependencyGraphExecutionFuture.Listener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleComputationCycleExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleComputationCycleExecutor.class);
 
   private abstract static class Event {
 
@@ -66,17 +66,17 @@ import com.opengamma.util.tuple.Pair;
 
     private final String _calculationConfiguration;
 
-    public GraphExecutionComplete(final String calculationConfiguration) {
+    GraphExecutionComplete(final String calculationConfiguration) {
       _calculationConfiguration = calculationConfiguration;
     }
 
     @Override
     public void run(final SingleComputationCycleExecutor executor) {
-      s_logger.info("Execution of {} complete", _calculationConfiguration);
+      LOGGER.info("Execution of {} complete", _calculationConfiguration);
       final ExecutingCalculationConfiguration calcConfig = executor._executing.remove(_calculationConfiguration);
 
       if (calcConfig != null) {
-        SingleComputationCycle cycle = executor.getCycle();
+        final SingleComputationCycle cycle = executor.getCycle();
         final InMemoryViewComputationResultModel fragmentResultModel = cycle.constructTemplateResultModel();
         calcConfig.buildResults(fragmentResultModel, cycle.getResultModel());
         // TODO: Populate with durations from the component jobs
@@ -92,14 +92,14 @@ import com.opengamma.util.tuple.Pair;
     private final CalculationJob _job;
     private final CalculationJobResult _jobResult;
 
-    public CalculationJobComplete(final CalculationJob job, final CalculationJobResult jobResult) {
+    CalculationJobComplete(final CalculationJob job, final CalculationJobResult jobResult) {
       _job = job;
       _jobResult = jobResult;
     }
 
     @Override
     public void run(final SingleComputationCycleExecutor executor) {
-      s_logger.debug("Execution of {} complete", _job);
+      LOGGER.debug("Execution of {} complete", _job);
       executor.buildResults(_job, _jobResult);
     }
 
@@ -111,9 +111,9 @@ import com.opengamma.util.tuple.Pair;
     private final DependencyGraph _graph;
     private final DependencyNodeJobExecutionResultCache _resultCache;
     private final ViewComputationCache _computationCache;
-    private final Set<ValueSpecification> _terminalOutputs = new HashSet<ValueSpecification>();
+    private final Set<ValueSpecification> _terminalOutputs = new HashSet<>();
 
-    public ExecutingCalculationConfiguration(final SingleComputationCycle cycle, final DependencyGraph graph, final Cancelable handle) {
+    ExecutingCalculationConfiguration(final SingleComputationCycle cycle, final DependencyGraph graph, final Cancelable handle) {
       _handle = handle;
       _graph = graph;
       _resultCache = cycle.getJobExecutionResultCache(graph.getCalculationConfigurationName());
@@ -141,11 +141,12 @@ import com.opengamma.util.tuple.Pair;
         return;
       }
       final String calculationConfiguration = _graph.getCalculationConfigurationName();
-      for (Pair<ValueSpecification, Object> value : _computationCache.getValues(_terminalOutputs, CacheSelectHint.allShared())) {
+      for (final Pair<ValueSpecification, Object> value : _computationCache.getValues(_terminalOutputs, CacheSelectHint.allShared())) {
         final ValueSpecification valueSpec = value.getFirst();
         final Object calculatedValue = value.getSecond();
         if (calculatedValue != null) {
-          final ComputedValueResult computedValueResult = SingleComputationCycle.createComputedValueResult(valueSpec, calculatedValue, _resultCache.get(valueSpec));
+          final ComputedValueResult computedValueResult = SingleComputationCycle.createComputedValueResult(valueSpec, calculatedValue,
+              _resultCache.get(valueSpec));
           fragmentResultModel.addValue(calculationConfiguration, computedValueResult);
           fullResultModel.addValue(calculationConfiguration, computedValueResult);
         }
@@ -154,12 +155,12 @@ import com.opengamma.util.tuple.Pair;
     }
   }
 
-  private final BlockingQueue<Event> _events = new LinkedBlockingQueue<Event>();
-  private final Map<String, ExecutingCalculationConfiguration> _executing = new HashMap<String, ExecutingCalculationConfiguration>();
+  private final BlockingQueue<Event> _events = new LinkedBlockingQueue<>();
+  private final Map<String, ExecutingCalculationConfiguration> _executing = new HashMap<>();
   private final SingleComputationCycle _cycle;
   private boolean _issueFragmentResults;
 
-  public SingleComputationCycleExecutor(final SingleComputationCycle cycle) {
+  SingleComputationCycleExecutor(final SingleComputationCycle cycle) {
     _cycle = cycle;
   }
 
@@ -170,11 +171,11 @@ import com.opengamma.util.tuple.Pair;
   public void execute() throws InterruptedException {
     final DependencyGraphExecutor executor = getCycle().getViewProcessContext().getDependencyGraphExecutorFactory().createExecutor(getCycle());
     for (final String calcConfigurationName : getCycle().getAllCalculationConfigurationNames()) {
-      s_logger.info("Executing plans for calculation configuration {}", calcConfigurationName);
+      LOGGER.info("Executing plans for calculation configuration {}", calcConfigurationName);
       final DependencyGraph depGraph = getCycle().getDependencyGraph(calcConfigurationName);
       final Set<ValueSpecification> sharedData = getCycle().getSharedValues(calcConfigurationName);
       final Map<ValueSpecification, FunctionParameters> parameters = getCycle().createFunctionParameters(calcConfigurationName);
-      s_logger.info("Submitting {} for execution by {}", depGraph, executor);
+      LOGGER.info("Submitting {} for execution by {}", depGraph, executor);
       final DependencyGraphExecutionFuture future = executor.execute(depGraph, sharedData, parameters);
       _executing.put(calcConfigurationName, new ExecutingCalculationConfiguration(getCycle(), depGraph, future));
       future.setListener(this);
@@ -191,15 +192,15 @@ import com.opengamma.util.tuple.Pair;
         }
         if (_issueFragmentResults) {
           if (_executing.isEmpty()) {
-            s_logger.info("Discarding fragment completion message - overall execution is complete");
+            LOGGER.info("Discarding fragment completion message - overall execution is complete");
           } else {
-            s_logger.debug("Building result fragment");
+            LOGGER.debug("Building result fragment");
             final InMemoryViewComputationResultModel fragmentResultModel = getCycle().constructTemplateResultModel();
             final InMemoryViewComputationResultModel fullResultModel = getCycle().getResultModel();
-            for (ExecutingCalculationConfiguration calcConfig : _executing.values()) {
+            for (final ExecutingCalculationConfiguration calcConfig : _executing.values()) {
               calcConfig.buildResults(fragmentResultModel, fullResultModel);
             }
-            s_logger.info("Fragment execution complete");
+            LOGGER.info("Fragment execution complete");
             // TODO: Populate the calculation duration with information from the component jobs
             fragmentResultModel.setCalculationTime(Instant.now());
             getCycle().notifyFragmentCompleted(fragmentResultModel);
@@ -210,7 +211,7 @@ import com.opengamma.util.tuple.Pair;
     } catch (final InterruptedException e) {
       Thread.interrupted();
       // Cancel all outstanding jobs to free up resources
-      for (ExecutingCalculationConfiguration execution : _executing.values()) {
+      for (final ExecutingCalculationConfiguration execution : _executing.values()) {
         execution.cancel();
       }
       throw e;
@@ -222,7 +223,7 @@ import com.opengamma.util.tuple.Pair;
     if (values.size() > 1) {
       sb.append("s - { ");
       int count = 0;
-      for (Object value : values) {
+      for (final Object value : values) {
         count++;
         if (count > 1) {
           sb.append(", ");
@@ -244,7 +245,7 @@ import com.opengamma.util.tuple.Pair;
     final String calculationConfiguration = jobResult.getSpecification().getCalcConfigName();
     final ExecutingCalculationConfiguration calcConfig = _executing.get(calculationConfiguration);
     if (calcConfig == null) {
-      s_logger.warn("Job fragment result for already completed configuration {}", calculationConfiguration);
+      LOGGER.warn("Job fragment result for already completed configuration {}", calculationConfiguration);
       return;
     }
     final DependencyGraph graph = calcConfig.getDependencyGraph();
@@ -265,7 +266,7 @@ import com.opengamma.util.tuple.Pair;
       if (executionLogMode == ExecutionLogMode.FULL) {
         final ExecutionLog log = jobResultItem.getExecutionLog();
         MutableExecutionLog logCopy = null;
-        final Set<AggregatedExecutionLog> inputLogs = new LinkedHashSet<AggregatedExecutionLog>();
+        final Set<AggregatedExecutionLog> inputLogs = new LinkedHashSet<>();
         Set<ValueSpecification> missing = jobResultItem.getMissingInputs();
         if (!missing.isEmpty()) {
           logCopy = new MutableExecutionLog(log);
@@ -293,7 +294,8 @@ import com.opengamma.util.tuple.Pair;
         } else {
           functionName = jobItem.getFunctionUniqueIdentifier();
         }
-        aggregatedExecutionLog = DefaultAggregatedExecutionLog.fullLogMode(functionName, jobItem.getComputationTargetSpecification(), (logCopy != null) ? logCopy : log, inputLogs);
+        aggregatedExecutionLog = DefaultAggregatedExecutionLog.fullLogMode(functionName, jobItem.getComputationTargetSpecification(),
+            logCopy != null ? logCopy : log, inputLogs);
       } else {
         EnumSet<LogLevel> logs = jobResultItem.getExecutionLog().getLogLevels();
         boolean copied = false;
@@ -326,11 +328,13 @@ import com.opengamma.util.tuple.Pair;
   }
 
   /**
-   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be received (for example the execution framework might have
-   * repeated/duplicated jobs to handle node failures).
-   * 
-   * @param job the job that was executed, not null
-   * @param jobResult the job result, not null
+   * Receives a job result fragment. These will be streamed in by the execution framework. Only one notification per job will be received (for example the
+   * execution framework might have repeated/duplicated jobs to handle node failures).
+   *
+   * @param job
+   *          the job that was executed, not null
+   * @param jobResult
+   *          the job result, not null
    */
   public void jobCompleted(final CalculationJob job, final CalculationJobResult jobResult) {
     _events.add(new CalculationJobComplete(job, jobResult));

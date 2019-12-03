@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -50,7 +50,7 @@ public abstract class ViewResultModelFudgeBuilder {
     serializer.addToMessage(message, FIELD_VERSION_CORRECTION, null, resultModel.getVersionCorrection());
     final Collection<String> calculationConfigurations = resultModel.getCalculationConfigurationNames();
     final MutableFudgeMsg resultMsg = serializer.newMessage();
-    for (String calculationConfiguration : calculationConfigurations) {
+    for (final String calculationConfiguration : calculationConfigurations) {
       resultMsg.add(null, 1, calculationConfiguration);
       serializer.addToMessage(resultMsg, null, 2, resultModel.getCalculationResult(calculationConfiguration));
     }
@@ -61,15 +61,16 @@ public abstract class ViewResultModelFudgeBuilder {
   protected InMemoryViewResultModel bootstrapCommonDataFromMessage(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final UniqueId viewProcessId = message.getValue(UniqueId.class, FIELD_VIEWPROCESSID);
     final UniqueId viewCycleId = message.getValue(UniqueId.class, FIELD_VIEWCYCLEID);
-    final ViewCycleExecutionOptions viewCycleExecutionOptions = deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, message.getByName(FIELD_VIEW_CYCLE_EXECUTION_OPTIONS));
+    final ViewCycleExecutionOptions viewCycleExecutionOptions =
+        deserializer.fieldValueToObject(ViewCycleExecutionOptions.class, message.getByName(FIELD_VIEW_CYCLE_EXECUTION_OPTIONS));
     final Instant calculationTime = message.getFieldValue(Instant.class, message.getByName(FIELD_CALCULATION_TIME));
-    FudgeField durationField = message.getByName(FIELD_CALCULATION_DURATION);
+    final FudgeField durationField = message.getByName(FIELD_CALCULATION_DURATION);
     final Duration calculationDuration = durationField != null ? deserializer.fieldValueToObject(Duration.class, durationField) : null;
     final VersionCorrection versionCorrection = deserializer.fieldValueToObject(VersionCorrection.class, message.getByName(FIELD_VERSION_CORRECTION));
-    final Map<String, ViewCalculationResultModel> configurationMap = new HashMap<String, ViewCalculationResultModel>();
-    final Queue<String> keys = new LinkedList<String>();
-    final Queue<ViewCalculationResultModel> values = new LinkedList<ViewCalculationResultModel>();
-    for (FudgeField field : message.getFieldValue(FudgeMsg.class, message.getByName(FIELD_RESULTS))) {
+    final Map<String, ViewCalculationResultModel> configurationMap = new HashMap<>();
+    final Queue<String> keys = new LinkedList<>();
+    final Queue<ViewCalculationResultModel> values = new LinkedList<>();
+    for (final FudgeField field : message.getFieldValue(FudgeMsg.class, message.getByName(FIELD_RESULTS))) {
       if (field.getOrdinal() == 1) {
         final String key = deserializer.fieldValueToObject(String.class, field);
         if (values.isEmpty()) {
@@ -86,26 +87,26 @@ public abstract class ViewResultModelFudgeBuilder {
         }
       }
     }
-    
-    InMemoryViewResultModel resultModel = constructImpl();
-    for (Map.Entry<String, ViewCalculationResultModel> configurationEntry : configurationMap.entrySet()) {
-      for (ComputationTargetSpecification targetSpec : configurationEntry.getValue().getAllTargets()) {
-        for (ComputedValueResult value : configurationEntry.getValue().getAllValues(targetSpec)) {
+
+    final InMemoryViewResultModel resultModel = constructImpl();
+    for (final Map.Entry<String, ViewCalculationResultModel> configurationEntry : configurationMap.entrySet()) {
+      for (final ComputationTargetSpecification targetSpec : configurationEntry.getValue().getAllTargets()) {
+        for (final ComputedValueResult value : configurationEntry.getValue().getAllValues(targetSpec)) {
           resultModel.addValue(configurationEntry.getKey(), value);
         }
       }
     }
-    
+
     resultModel.setViewProcessId(viewProcessId);
     resultModel.setViewCycleId(viewCycleId);
     resultModel.setViewCycleExecutionOptions(viewCycleExecutionOptions);
     resultModel.setCalculationTime(calculationTime);
     resultModel.setCalculationDuration(calculationDuration);
     resultModel.setVersionCorrection(versionCorrection);
-    
+
     return resultModel;
   }
-  
+
   protected abstract InMemoryViewResultModel constructImpl();
 
 }

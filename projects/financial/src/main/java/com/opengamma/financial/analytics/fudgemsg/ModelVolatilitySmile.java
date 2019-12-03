@@ -41,7 +41,8 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 
     @Override
     public VolatilitySurfaceInterpolator buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      final GeneralSmileInterpolator smileInterpolator = deserializer.fieldValueToObject(GeneralSmileInterpolator.class, message.getByName(SMILE_INTERPOLATOR_FIELD_NAME));
+      final GeneralSmileInterpolator smileInterpolator = deserializer.fieldValueToObject(GeneralSmileInterpolator.class,
+          message.getByName(SMILE_INTERPOLATOR_FIELD_NAME));
       final Interpolator1D timeInterpolator = deserializer.fieldValueToObject(Interpolator1D.class, message.getByName(TIME_INTERPOLATOR_FIELD_NAME));
       final boolean useLogTime = message.getBoolean(LOG_TIME_FIELD_NAME);
       final boolean useIntegratedVariance = message.getBoolean(INTEGRATED_VARIANCE_FIELD_NAME);
@@ -107,7 +108,8 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
       final String weightingFunctionName = message.getString(WEIGHTING_FUNCTION_FIELD_NAME);
       final boolean externalBeta = message.getBoolean(EXTERNAL_BETA_FIELD_NAME);
       @SuppressWarnings("unchecked")
-      final VolatilityFunctionProvider<SABRFormulaData> model = (VolatilityFunctionProvider<SABRFormulaData>) VolatilityFunctionFactory.getCalculator(volatilityFunctionName);
+      final VolatilityFunctionProvider<SABRFormulaData> model = (VolatilityFunctionProvider<SABRFormulaData>) VolatilityFunctionFactory
+          .getCalculator(volatilityFunctionName);
       final WeightingFunction weightingFunction = WeightingFunctionFactory.getWeightingFunction(weightingFunctionName);
       if (externalBeta) {
         final double beta = message.getDouble(BETA_FIELD_NAME);

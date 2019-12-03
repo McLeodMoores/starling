@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -14,9 +14,8 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldA
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Extension of the historical time series field adjustment map that allows multiple Quandl fields to
- * be mapped to single OpenGamma fields (e.g. mapping {@link com.mcleodmoores.quandl.QuandlConstants#RATE_FIELD_NAME}
- * and {@link com.mcleodmoores.quandl.QuandlConstants#VALUE_FIELD_NAME} to
+ * Extension of the historical time series field adjustment map that allows multiple Quandl fields to be mapped to single OpenGamma fields (e.g. mapping
+ * {@link com.mcleodmoores.quandl.QuandlConstants#RATE_FIELD_NAME} and {@link com.mcleodmoores.quandl.QuandlConstants#VALUE_FIELD_NAME} to
  * {@link com.opengamma.core.value.MarketDataRequirementNames#MARKET_VALUE}.
  */
 public class QuandlHistoricalTimeSeriesFieldAdjustmentMap extends HistoricalTimeSeriesFieldAdjustmentMap {
@@ -25,7 +24,9 @@ public class QuandlHistoricalTimeSeriesFieldAdjustmentMap extends HistoricalTime
 
   /**
    * Creates an instance.
-   * @param dataSource  the data source, not null
+   * 
+   * @param dataSource
+   *          the data source, not null
    */
   public QuandlHistoricalTimeSeriesFieldAdjustmentMap(final String dataSource) {
     super(dataSource);
@@ -34,7 +35,8 @@ public class QuandlHistoricalTimeSeriesFieldAdjustmentMap extends HistoricalTime
   /**
    * Gets any field adjustment for a given requested field.
    *
-   * @param requestedField  the requested field, not null
+   * @param requestedField
+   *          the requested field, not null
    * @return the field adjustment, or null if no adjustment applies
    */
   @Override
@@ -43,12 +45,16 @@ public class QuandlHistoricalTimeSeriesFieldAdjustmentMap extends HistoricalTime
   }
 
   /**
-   * Adds a field adjustment to the map, allowing multiple underlying fields to be mapped to a single requested
-   * field.
-   * @param requestedField  the requested field, not null
-   * @param underlyingProvider  the underlying provider
-   * @param underlyingFields  the underlying fields, not null
-   * @param adjuster  the adjuster
+   * Adds a field adjustment to the map, allowing multiple underlying fields to be mapped to a single requested field.
+   * 
+   * @param requestedField
+   *          the requested field, not null
+   * @param underlyingProvider
+   *          the underlying provider
+   * @param underlyingFields
+   *          the underlying fields, not null
+   * @param adjuster
+   *          the adjuster
    */
   public void addFieldAdjustment(final String requestedField, final String underlyingProvider, final List<String> underlyingFields,
       final HistoricalTimeSeriesAdjuster adjuster) {
@@ -59,10 +65,14 @@ public class QuandlHistoricalTimeSeriesFieldAdjustmentMap extends HistoricalTime
   /**
    * Adds a field adjustment to the map.
    *
-   * @param requestedField  the requested field, not null
-   * @param underlyingProvider  the underlying provider, null for any
-   * @param underlyingField  the underlying field, not null
-   * @param adjuster  the adjuster, null for none
+   * @param requestedField
+   *          the requested field, not null
+   * @param underlyingProvider
+   *          the underlying provider, null for any
+   * @param underlyingField
+   *          the underlying field, not null
+   * @param adjuster
+   *          the adjuster, null for none
    */
   @Override
   public void addFieldAdjustment(final String requestedField, final String underlyingProvider, final String underlyingField,

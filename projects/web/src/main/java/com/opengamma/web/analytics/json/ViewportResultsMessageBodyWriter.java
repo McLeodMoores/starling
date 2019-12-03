@@ -31,39 +31,39 @@ import com.opengamma.web.analytics.ViewportResultsJsonCsvWriter;
 public class ViewportResultsMessageBodyWriter implements MessageBodyWriter<ViewportResults> {
 
   private final ViewportResultsJsonCsvWriter _resultWriter;
-  
-  public ViewportResultsMessageBodyWriter(ViewportResultsJsonCsvWriter resultWriter) {
+
+  public ViewportResultsMessageBodyWriter(final ViewportResultsJsonCsvWriter resultWriter) {
     ArgumentChecker.notNull(resultWriter, "resultWriter");
     _resultWriter = resultWriter;
   }
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return type.equals(ViewportResults.class);
   }
 
   @Override
-  public long getSize(ViewportResults results,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType) {
+  public long getSize(final ViewportResults results,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType) {
     return -1;
   }
 
   @Override
-  public void writeTo(ViewportResults results,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType,
-                      MultivaluedMap<String, Object> httpHeaders,
-                      OutputStream entityStream) throws IOException, WebApplicationException {
-    if (mediaType.getType().equals(MediaType.APPLICATION_JSON_TYPE.getType()) && 
+  public void writeTo(final ViewportResults results,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType,
+                      final MultivaluedMap<String, Object> httpHeaders,
+                      final OutputStream entityStream) throws IOException, WebApplicationException {
+    if (mediaType.getType().equals(MediaType.APPLICATION_JSON_TYPE.getType()) &&
         mediaType.getSubtype().equalsIgnoreCase(MediaType.APPLICATION_JSON_TYPE.getSubtype())) {
       entityStream.write(_resultWriter.getJson(results).getBytes());
     }
-    if (mediaType.getType().equals(RestUtils.TEXT_CSV_TYPE.getType()) && 
+    if (mediaType.getType().equals(RestUtils.TEXT_CSV_TYPE.getType()) &&
         mediaType.getSubtype().equalsIgnoreCase(RestUtils.TEXT_CSV_TYPE.getSubtype())) {
       entityStream.write(_resultWriter.getCsv(results).getBytes());
     }

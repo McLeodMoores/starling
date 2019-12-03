@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.date.localdate;
@@ -41,19 +41,19 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
   }
 
   //-------------------------------------------------------------------------
-  private void ensureCapacity(int newSize) {
+  private void ensureCapacity(final int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, (_size * 3) / 2);
-      _times = Arrays.copyOf(_times, newSize);
-      _values = Arrays.copyOf(_values, newSize);
+      final int size = Math.max(newSize + 8, _size * 3 / 2);
+      _times = Arrays.copyOf(_times, size);
+      _values = Arrays.copyOf(_values, size);
     }
   }
 
-  private static int convertToInt(LocalDate date) {
+  private static int convertToInt(final LocalDate date) {
     return LocalDateToIntConverter.convertToInt(date);
   }
 
-  private static LocalDate convertFromInt(int date) {
+  private static LocalDate convertFromInt(final int date) {
     return LocalDateToIntConverter.convertToLocalDate(date);
   }
 
@@ -63,6 +63,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
     return _size;
   }
 
+  @SuppressWarnings("synthetic-access")
   @Override
   public LocalDateDoubleEntryIterator iterator() {
     return new LocalDateDoubleEntryIterator() {
@@ -70,27 +71,27 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
 
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
 
       @Override
       public Entry<LocalDate, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
-        int date = _times[_index];
-        double value = _values[_index];
+        final int date = _times[_index];
+        final double value = _values[_index];
         return makeMapEntry(convertFromInt(date), value);
       }
 
-      private Entry<LocalDate, Double> makeMapEntry(LocalDate key, Double value) {
+      private Entry<LocalDate, Double> makeMapEntry(final LocalDate key, final Double value) {
         return new SimpleImmutableEntry<>(key, value);
       }
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -153,18 +154,18 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeriesBuilder put(LocalDate time, double value) {
+  public LocalDateDoubleTimeSeriesBuilder put(final LocalDate time, final double value) {
     return put(convertToInt(time), value);
   }
 
   @Override
-  public LocalDateDoubleTimeSeriesBuilder put(int time, double value) {
-    int search = Arrays.binarySearch(_times, 0, _size, time);
+  public LocalDateDoubleTimeSeriesBuilder put(final int time, final double value) {
+    final int search = Arrays.binarySearch(_times, 0, _size, time);
     if (search >= 0) {
       _values[search] = value;
     } else {
       ensureCapacity(_size + 1);
-      int pos = -(search + 1);
+      final int pos = -(search + 1);
       System.arraycopy(_times, pos, _times, pos + 1, _size - pos);
       System.arraycopy(_values, pos, _values, pos + 1, _size - pos);
       _times[pos] = time;
@@ -175,7 +176,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
   }
 
   @Override
-  public LocalDateDoubleTimeSeriesBuilder putAll(LocalDate[] times, double[] values) {
+  public LocalDateDoubleTimeSeriesBuilder putAll(final LocalDate[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -187,7 +188,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
   }
 
   @Override
-  public LocalDateDoubleTimeSeriesBuilder putAll(int[] times, double[] values) {
+  public LocalDateDoubleTimeSeriesBuilder putAll(final int[] times, final double[] values) {
     if (times.length != values.length) {
       throw new IllegalArgumentException("Arrays are of different sizes: " + times.length + ", " + values.length);
     }
@@ -200,12 +201,12 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeriesBuilder putAll(DateDoubleTimeSeries<?> timeSeries) {
+  public LocalDateDoubleTimeSeriesBuilder putAll(final DateDoubleTimeSeries<?> timeSeries) {
     return putAll(timeSeries, 0, timeSeries.size());
   }
 
   @Override
-  public LocalDateDoubleTimeSeriesBuilder putAll(DateDoubleTimeSeries<?> timeSeries, int startPos, int endPos) {
+  public LocalDateDoubleTimeSeriesBuilder putAll(final DateDoubleTimeSeries<?> timeSeries, final int startPos, final int endPos) {
     if (startPos < 0 || startPos > timeSeries.size()) {
       throw new IndexOutOfBoundsException("Invalid start index: " + startPos);
     }
@@ -218,7 +219,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
     if (startPos == endPos) {
       return this;
     }
-    int sizeToAdd = endPos - startPos;
+    final int sizeToAdd = endPos - startPos;
     ensureCapacity(_size + sizeToAdd);
     if (_size == 0) {
       System.arraycopy(timeSeries.timesArrayFast(), startPos, _times, 0, sizeToAdd);
@@ -233,12 +234,12 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
   }
 
   @Override
-  public LocalDateDoubleTimeSeriesBuilder putAll(Map<LocalDate, Double> timeSeriesMap) {
+  public LocalDateDoubleTimeSeriesBuilder putAll(final Map<LocalDate, Double> timeSeriesMap) {
     if (timeSeriesMap.size() == 0) {
       return this;
     }
     ensureCapacity(_size + timeSeriesMap.size());
-    for (Entry<LocalDate, Double> entry : timeSeriesMap.entrySet()) {
+    for (final Entry<LocalDate, Double> entry : timeSeriesMap.entrySet()) {
       put(entry.getKey(), entry.getValue());
     }
     return this;

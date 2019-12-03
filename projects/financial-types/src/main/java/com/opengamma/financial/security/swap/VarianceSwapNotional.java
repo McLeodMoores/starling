@@ -41,17 +41,17 @@ public class VarianceSwapNotional extends Notional {
   private double _amount;
 
   @Override
-  public <T> T accept(NotionalVisitor<T> visitor) {
+  public <T> T accept(final NotionalVisitor<T> visitor) {
     return visitor.visitVarianceSwapNotional(this);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param currency The notional curency, not null
    * @param amount The notional amount
    */
-  public VarianceSwapNotional(Currency currency, double amount) {
+  public VarianceSwapNotional(final Currency currency, final double amount) {
     _currency = currency;
     _amount = amount;
     setCurrency(currency);

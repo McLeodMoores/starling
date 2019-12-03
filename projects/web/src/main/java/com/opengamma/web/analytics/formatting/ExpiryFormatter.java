@@ -16,14 +16,14 @@ import com.opengamma.util.time.Expiry;
 
   private final ZonedDateTimeFormatter _zonedDateTimeFormatter;
 
-  /* package */ ExpiryFormatter(ZonedDateTimeFormatter zonedDateTimeFormatter) {
+  /* package */ ExpiryFormatter(final ZonedDateTimeFormatter zonedDateTimeFormatter) {
     super(Expiry.class);
     _zonedDateTimeFormatter = zonedDateTimeFormatter;
     ArgumentChecker.notNull(zonedDateTimeFormatter, "zonedDateTimeFormatter");
   }
 
   @Override
-  public Object formatCell(Expiry value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final Expiry value, final ValueSpecification valueSpec, final Object inlineKey) {
     return _zonedDateTimeFormatter.formatCell(value.getExpiry(), valueSpec, inlineKey);
   }
 

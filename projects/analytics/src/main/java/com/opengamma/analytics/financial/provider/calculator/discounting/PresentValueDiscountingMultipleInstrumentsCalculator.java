@@ -13,10 +13,11 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Calculator of the present value as a multiple currency amount using cash-flow discounting and forward estimation.
- * Allows multiple instruments to be passed in and the aggregate PV to be calculated.
+ * Calculator of the present value as a multiple currency amount using cash-flow discounting and forward estimation. Allows multiple instruments to be passed in
+ * and the aggregate PV to be calculated.
  */
-public final class PresentValueDiscountingMultipleInstrumentsCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<Pair<InstrumentDerivative[], MulticurveProviderInterface>, MultipleCurrencyAmount> {
+public final class PresentValueDiscountingMultipleInstrumentsCalculator
+    extends InstrumentDerivativeVisitorSameMethodAdapter<Pair<InstrumentDerivative[], MulticurveProviderInterface>, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -30,6 +31,7 @@ public final class PresentValueDiscountingMultipleInstrumentsCalculator extends 
 
   /**
    * Get an instance of this calculator.
+   * 
    * @return the instance
    */
   public static PresentValueDiscountingMultipleInstrumentsCalculator getInstance() {
@@ -43,19 +45,21 @@ public final class PresentValueDiscountingMultipleInstrumentsCalculator extends 
   }
 
   @Override
-  public MultipleCurrencyAmount visit(InstrumentDerivative derivative) {
+  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative) {
     throw new UnsupportedOperationException(this.getClass().getSimpleName() + " requires data passed in");
   }
 
   /**
    * Price instrument plus others.
    *
-   * @param derivative the derivative
-   * @param data Array of other derivatives to price, not null, may be empty. The curve provider to price with.
+   * @param derivative
+   *          the derivative
+   * @param data
+   *          Array of other derivatives to price, not null, may be empty. The curve provider to price with.
    * @return the multiple currency amount discounted pv.
    */
   @Override
-  public MultipleCurrencyAmount visit(InstrumentDerivative derivative, Pair<InstrumentDerivative[], MulticurveProviderInterface> data) {
+  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative, final Pair<InstrumentDerivative[], MulticurveProviderInterface> data) {
     ArgumentChecker.notNull(data, "data");
     final MulticurveProviderInterface curves = data.getSecond();
     ArgumentChecker.notNull(curves, "multicurveprovider");

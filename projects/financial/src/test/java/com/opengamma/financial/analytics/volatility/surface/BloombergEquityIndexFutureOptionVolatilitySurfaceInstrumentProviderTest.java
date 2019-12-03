@@ -56,10 +56,10 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
         final String expected = RESULTS[i][j];
         final ExternalId actual = PROVIDER.getInstrument(EXPIRY_OFFSETS[i], STRIKES[j], DATE);
         assertEquals(ExternalSchemes.BLOOMBERG_TICKER_WEAK, actual.getScheme());
-        if (!(expected.equals(actual.getValue()))) {
-          assertEquals(expected, actual.getValue());  
+        if (!expected.equals(actual.getValue())) {
+          assertEquals(expected, actual.getValue());
         }
-        
+
       }
     }
   }
@@ -68,7 +68,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
   public void testUtils() {
     assertEquals(EXPIRY_DATES[0], FutureOptionExpiries.EQUITY.getMonthlyExpiry(1, DATE));
     assertEquals(EXPIRY_DATES[1], FutureOptionExpiries.EQUITY.getMonthlyExpiry(2, DATE));
-    assertEquals(EXPIRY_DATES[2], FutureOptionExpiries.EQUITY.getQuarterlyExpiry(EXPIRY_OFFSETS[2]-6, UTILS.getMonthlyExpiry(6, DATE)));
+    assertEquals(EXPIRY_DATES[2], FutureOptionExpiries.EQUITY.getQuarterlyExpiry(EXPIRY_OFFSETS[2] - 6, UTILS.getMonthlyExpiry(6, DATE)));
   }
 
 

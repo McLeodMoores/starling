@@ -5,6 +5,15 @@
  */
 package com.opengamma.fudge.inner;
 
+/**
+ *
+ */
 public interface TestOuterInterface {
-  public double eval(double arg);
+
+  /**
+   * @param arg
+   *          the argument
+   * @return the evaluated result
+   */
+  double eval(double arg);
 }

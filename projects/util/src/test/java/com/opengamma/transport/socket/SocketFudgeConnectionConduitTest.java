@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -30,11 +30,11 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests the SocketFudgeConnection and ServerSocketFudgeConnectionReceiver classes
+ * Tests the SocketFudgeConnection and ServerSocketFudgeConnectionReceiver classes.
  */
 @Test(groups = TestGroup.INTEGRATION, singleThreaded = true)
 public class SocketFudgeConnectionConduitTest {
-  
+
   private final AtomicInteger _counter = new AtomicInteger();
 
   private FudgeMsg createMessage() {
@@ -43,13 +43,17 @@ public class SocketFudgeConnectionConduitTest {
     return message;
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void simpleTest() throws Exception {
     final FudgeMsg testMessage1 = createMessage();
     final FudgeMsg testMessage2 = createMessage();
     // receiver will respond to testMessage1 with testMessage2
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       @Override
-      public void connectionReceived(FudgeContext fudgeContext, FudgeMsgEnvelope message, FudgeConnection connection) {
+      public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope message, final FudgeConnection connection) {
         assertNotNull(fudgeContext);
         assertNotNull(message);
         assertNotNull(connection);
@@ -72,7 +76,11 @@ public class SocketFudgeConnectionConduitTest {
     client.stop();
     server.stop();
   }
-  
+
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   public void messageReceiverTest() throws Exception {
     final FudgeMsg testMessage1 = createMessage();
     final FudgeMsg testMessage2 = createMessage();
@@ -83,6 +91,7 @@ public class SocketFudgeConnectionConduitTest {
     // it shouldn't be called again - messages should be dispatched to the connection's receiver
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       private int _count;
+
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope message, final FudgeConnection connection) {
         assertNotNull(fudgeContext);
@@ -105,8 +114,8 @@ public class SocketFudgeConnectionConduitTest {
     final ServerSocketFudgeConnectionReceiver server = new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver);
     server.start();
     final SocketFudgeConnection client = new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
-    client.setInetAddress (InetAddress.getLocalHost ());
-    client.setPortNumber (server.getPortNumber ());
+    client.setInetAddress(InetAddress.getLocalHost());
+    client.setPortNumber(server.getPortNumber());
     // send messages 1, 2, 3 and verify 3 went to the test receiver
     client.getFudgeMessageSender().send(testMessage1);
     assertTrue(message3Receiver.getMessages().isEmpty());
@@ -119,14 +128,17 @@ public class SocketFudgeConnectionConduitTest {
     server.stop();
     client.stop();
   }
-  
+
+  /**
+   *
+   */
   private class MessageReadWrite extends Thread implements FudgeMessageReceiver {
 
     private static final int NUM_MESSAGES = 1000;
 
     private FudgeMessageSender _sender;
     private int _received;
-    
+
     @Override
     public void run() {
       for (int i = 0; i < NUM_MESSAGES; i++) {
@@ -136,7 +148,7 @@ public class SocketFudgeConnectionConduitTest {
     }
 
     @Override
-    public synchronized void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+    public synchronized void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
       _received++;
       if (_received == NUM_MESSAGES) {
         notify();
@@ -148,7 +160,7 @@ public class SocketFudgeConnectionConduitTest {
     public synchronized boolean waitForMessages() throws InterruptedException {
       final long period = Timeout.standardTimeoutMillis();
       final long timeout = System.currentTimeMillis() + period;
-      while ((_received < NUM_MESSAGES) && (System.currentTimeMillis() < timeout)) {
+      while (_received < NUM_MESSAGES && System.currentTimeMillis() < timeout) {
         wait(period);
       }
       return _received == NUM_MESSAGES;
@@ -156,6 +168,10 @@ public class SocketFudgeConnectionConduitTest {
 
   }
 
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void parallelIOTest() throws Exception {
     final MessageReadWrite serverThread = new MessageReadWrite();
@@ -187,48 +203,52 @@ public class SocketFudgeConnectionConduitTest {
     server.stop();
     client.stop();
   }
-  
-  private int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer, final AtomicInteger concurrencyMax) throws Exception {
+
+  private static int[] parallelSendTest(final ExecutorService executorClient, final ExecutorService executorServer, final AtomicInteger concurrencyMax)
+      throws Exception {
     final FudgeConnectionReceiver serverReceiver = new FudgeConnectionReceiver() {
       @Override
       public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope, final FudgeConnection connection) {
         connection.setFudgeMessageReceiver(new FudgeMessageReceiver() {
           @Override
-          public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-            MutableFudgeMsg message = fudgeContext.newMessage();
+          public void messageReceived(final FudgeContext receivedFudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+            MutableFudgeMsg message = receivedFudgeContext.newMessage();
             message.add("foo", 1);
             connection.getFudgeMessageSender().send(message);
             try {
               Thread.sleep(Timeout.standardTimeoutMillis());
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
-            message = fudgeContext.newMessage();
+            message = receivedFudgeContext.newMessage();
             message.add("foo", 2);
             connection.getFudgeMessageSender().send(message);
           }
         });
       }
     };
-    final ServerSocketFudgeConnectionReceiver server = (executorServer != null) ? new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver, executorServer)
+    final ServerSocketFudgeConnectionReceiver server = executorServer != null
+        ? new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver, executorServer)
         : new ServerSocketFudgeConnectionReceiver(FudgeContext.GLOBAL_DEFAULT, serverReceiver);
     server.start();
-    final SocketFudgeConnection client = (executorClient != null) ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient) : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
+    final SocketFudgeConnection client = executorClient != null ? new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT, executorClient)
+        : new SocketFudgeConnection(FudgeContext.GLOBAL_DEFAULT);
     client.setInetAddress(InetAddress.getLocalHost());
     client.setPortNumber(server.getPortNumber());
-    final CollectingFudgeMessageReceiver responses = new CollectingFudgeMessageReceiver () {
-      private final AtomicInteger _concurrency = new AtomicInteger (0);
+    final CollectingFudgeMessageReceiver responses = new CollectingFudgeMessageReceiver() {
+      private final AtomicInteger _concurrency = new AtomicInteger(0);
+
       @Override
-      public void messageReceived (final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
-        final int concurrency = _concurrency.incrementAndGet ();
-        if (concurrency > concurrencyMax.get ()) {
-          concurrencyMax.set (concurrency);
+      public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope envelope) {
+        final int concurrency = _concurrency.incrementAndGet();
+        if (concurrency > concurrencyMax.get()) {
+          concurrencyMax.set(concurrency);
         }
         try {
           Thread.sleep(Timeout.standardTimeoutMillis() / 2L);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
-        _concurrency.decrementAndGet ();
-        super.messageReceived (fudgeContext, envelope);
+        _concurrency.decrementAndGet();
+        super.messageReceived(fudgeContext, envelope);
       }
     };
     client.setFudgeMessageReceiver(responses);
@@ -238,13 +258,17 @@ public class SocketFudgeConnectionConduitTest {
     final int[] result = new int[4];
     for (int i = 0; i < 4; i++) {
       final FudgeMsgEnvelope envelope = responses.waitForMessage(Timeout.standardTimeoutMillis() * 2L);
-      assertNotNull (envelope);
+      assertNotNull(envelope);
       result[i] = envelope.getMessage().getInt("foo");
     }
     return result;
   }
 
-  public void parallelSendTest_single_single() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
+  public void parallelSendTestSingleSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, null, concurrencyMax);
     assertEquals(1, concurrencyMax.get());
@@ -254,7 +278,11 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_multi_single() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
+  public void parallelSendTestMultiSingle() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), null, concurrencyMax);
     assertEquals(2, concurrencyMax.get());
@@ -270,7 +298,11 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_single_multi() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
+  public void parallelSendTestSingleMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(null, Executors.newCachedThreadPool(), concurrencyMax);
     assertEquals(1, concurrencyMax.get());
@@ -280,7 +312,11 @@ public class SocketFudgeConnectionConduitTest {
     assertEquals(2, result[3]);
   }
 
-  public void parallelSendTest_multi_multi() throws Exception {
+  /**
+   * @throws Exception
+   *           if there is a problem
+   */
+  public void parallelSendTestMultiMulti() throws Exception {
     final AtomicInteger concurrencyMax = new AtomicInteger(0);
     final int[] result = parallelSendTest(Executors.newCachedThreadPool(), Executors.newCachedThreadPool(), concurrencyMax);
     assertEquals(2, concurrencyMax.get());

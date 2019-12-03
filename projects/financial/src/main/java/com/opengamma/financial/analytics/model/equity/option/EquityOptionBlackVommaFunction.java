@@ -24,15 +24,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Returns the spot vomma, i.e. the 2nd order sensitivity of the spot price to the implied vol,
- *          $\frac{\partial^2 (PV)}{\partial \sigma^2}$
+ * Returns the spot vomma, i.e. the 2nd order sensitivity of the spot price to the implied vol, $\frac{\partial^2 (PV)}{\partial \sigma^2}$
  */
 public class EquityOptionBlackVommaFunction extends EquityOptionBlackFunction {
   /** Vomma calculator */
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackVommaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackVommaFunction() {
     super(ValueRequirementNames.VOMMA);
@@ -47,7 +46,8 @@ public class EquityOptionBlackVommaFunction extends EquityOptionBlackFunction {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }

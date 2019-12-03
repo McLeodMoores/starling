@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management.jmx;
@@ -21,6 +21,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DatabaseMBeanTest {
 
+  /**
+   * Tests construction of a database manager.
+   */
   public void testDefaultConstruction() {
     final DataSource ds = Mockito.mock(DataSource.class);
     final DatabaseMBean.Local impl = new DatabaseMBean.Local("com.opengamma.util.db.management.jmx.DatabaseMBeanTest", ds);

@@ -19,7 +19,7 @@ public class VarianceSwapTypeUserType extends EnumUserType<VarianceSwapType> {
   }
 
   @Override
-  protected String enumToStringNoCache(VarianceSwapType value) {
+  protected String enumToStringNoCache(final VarianceSwapType value) {
     switch (value) {
       case VARIANCE:
         return "variance";

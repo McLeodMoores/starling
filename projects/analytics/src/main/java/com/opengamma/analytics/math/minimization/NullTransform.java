@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -11,8 +11,7 @@ package com.opengamma.analytics.math.minimization;
 public class NullTransform implements ParameterLimitsTransform {
 
   /**
-   * Performs the null inverse transform {y -> y}
-   * {@inheritDoc}
+   * Performs the null inverse transform {y -&gt; y} {@inheritDoc}.
    */
   @Override
   public double inverseTransform(final double y) {
@@ -20,8 +19,7 @@ public class NullTransform implements ParameterLimitsTransform {
   }
 
   /**
-   * The gradient of a null transform is one.
-   * {@inheritDoc}
+   * The gradient of a null transform is one. {@inheritDoc}
    */
   @Override
   public double inverseTransformGradient(final double y) {
@@ -29,8 +27,7 @@ public class NullTransform implements ParameterLimitsTransform {
   }
 
   /**
-   * Performs the null transform {x -> x}
-   * {@inheritDoc}
+   * Performs the null transform {x -&gt; x} {@inheritDoc}.
    */
   @Override
   public double transform(final double x) {
@@ -38,8 +35,7 @@ public class NullTransform implements ParameterLimitsTransform {
   }
 
   /**
-   * The gradient of a null transform is one
-   * {@inheritDoc}
+   * The gradient of a null transform is one. {@inheritDoc}
    */
   @Override
   public double transformGradient(final double x) {

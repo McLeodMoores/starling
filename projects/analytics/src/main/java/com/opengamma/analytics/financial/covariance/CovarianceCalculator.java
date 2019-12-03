@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.covariance;
@@ -17,10 +17,9 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 public abstract class CovarianceCalculator implements Function<DoubleTimeSeries<?>, Double> {
 
   /**
-   * 
+   * Throws an exception if either time series is: null; empty; contains fewer than two data points; are not the same length; do not contain the same dates.
    * @param ts1 The first time series
    * @param ts2 The second time series
-   * @throws IllegalArgumentException If either time series is: null; empty; contains fewer than two data points; are not the same length; do not contain the same dates 
    */
   protected void testTimeSeries(final DoubleTimeSeries<?> ts1, final DoubleTimeSeries<?> ts2) {
     testTimeSeriesSize(ts1, 2);

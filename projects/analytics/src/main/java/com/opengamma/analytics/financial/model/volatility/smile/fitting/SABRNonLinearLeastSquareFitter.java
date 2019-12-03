@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -58,23 +58,27 @@ public class SABRNonLinearLeastSquareFitter extends LeastSquareSmileFitter {
   }
 
   @Override
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] initialFitParameters, final BitSet fixed) {
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data,
+      final double[] initialFitParameters, final BitSet fixed) {
     return getFitResult(options, data, initialFitParameters, fixed, 0, false);
   }
 
   @Override
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors, final double[] initialFitParameters,
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors,
+      final double[] initialFitParameters,
       final BitSet fixed) {
     return getFitResult(options, data, errors, initialFitParameters, fixed, 0, false);
   }
 
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] initialFitParameters, final BitSet fixed,
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data,
+      final double[] initialFitParameters, final BitSet fixed,
       final double atmVol,
       final boolean recoverATMVol) {
     return getFitResult(options, data, null, initialFitParameters, fixed, atmVol, recoverATMVol);
   }
 
-  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors, final double[] initialFitParameters,
+  public LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors,
+      final double[] initialFitParameters,
       final BitSet fixed,
       final double atmVol, final boolean recoverATMVol) {
     testData(options, data, errors, initialFitParameters, fixed, N_PARAMETERS);
@@ -135,6 +139,7 @@ public class SABRNonLinearLeastSquareFitter extends LeastSquareSmileFitter {
       lsRes = new LeastSquareResults(lsRes.getChiSq(), new DoubleMatrix1D(mp), lsRes.getCovariance());
     }
     return new LeastSquareResultsWithTransform(lsRes, transforms);
-    //return new LeastSquareResults(lsRes.getChiSq(), new DoubleMatrix1D(mp), new DoubleMatrix2D(new double[N_PARAMETERS][N_PARAMETERS]), lsRes.getFittingParameterSensitivityToData());
+    // return new LeastSquareResults(lsRes.getChiSq(), new DoubleMatrix1D(mp), new DoubleMatrix2D(new double[N_PARAMETERS][N_PARAMETERS]),
+    // lsRes.getFittingParameterSensitivityToData());
   }
 }

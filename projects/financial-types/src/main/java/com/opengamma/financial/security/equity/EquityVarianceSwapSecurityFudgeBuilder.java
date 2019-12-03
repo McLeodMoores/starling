@@ -49,13 +49,13 @@ public class EquityVarianceSwapSecurityFudgeBuilder extends AbstractFudgeBuilder
   public static final String OBSERVATION_FREQUENCY_FIELD_NAME = "observationFrequency";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquityVarianceSwapSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquityVarianceSwapSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquityVarianceSwapSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquityVarianceSwapSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquityVarianceSwapSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, SPOT_UNDERLYING_IDENTIFIER_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getSpotUnderlyingId()));
     addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
@@ -71,13 +71,13 @@ public class EquityVarianceSwapSecurityFudgeBuilder extends AbstractFudgeBuilder
   }
 
   @Override
-  public EquityVarianceSwapSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquityVarianceSwapSecurity object = new EquityVarianceSwapSecurity();
+  public EquityVarianceSwapSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquityVarianceSwapSecurity object = new EquityVarianceSwapSecurity();
     EquityVarianceSwapSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquityVarianceSwapSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityVarianceSwapSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setSpotUnderlyingId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(SPOT_UNDERLYING_IDENTIFIER_FIELD_NAME)));
     object.setCurrency(msg.getValue(Currency.class, CURRENCY_FIELD_NAME));

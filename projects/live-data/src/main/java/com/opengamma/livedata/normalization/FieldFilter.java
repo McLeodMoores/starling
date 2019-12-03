@@ -20,29 +20,49 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 /**
  * Strips all fields out of the message except the ones you want to explicitly accept.
  * <p>
- * If no field is accepted, the message is extinguished. 
+ * If no field is accepted, the message is extinguished.
  */
 public class FieldFilter implements NormalizationRule {
-  
+
   private final Collection<String> _fieldsToAccept;
   private final FudgeContext _context;
-  
-  public FieldFilter(String... fieldsToAccept) {
+
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept
+   */
+  public FieldFilter(final String... fieldsToAccept) {
     this(OpenGammaFudgeContext.getInstance(), fieldsToAccept);
   }
-  
-  public FieldFilter(FudgeContext context, String... fieldsToAccept) {
+
+  /**
+   * @param context
+   *          a Fudge context, not null
+   * @param fieldsToAccept
+   *          the fields to accept
+   */
+  public FieldFilter(final FudgeContext context, final String... fieldsToAccept) {
     this(Sets.newHashSet(fieldsToAccept), context);
   }
-  
-  public FieldFilter(Collection<String> fieldsToAccept) {
+
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept, not null
+   */
+  public FieldFilter(final Collection<String> fieldsToAccept) {
     this(fieldsToAccept, OpenGammaFudgeContext.getInstance());
   }
 
-  public FieldFilter(Collection<String> fieldsToAccept, FudgeContext fudgeContext) {
+  /**
+   * @param fieldsToAccept
+   *          the fields to accept, not null
+   * @param fudgeContext
+   *          a Fudge context, not null
+   */
+  public FieldFilter(final Collection<String> fieldsToAccept, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(fieldsToAccept, "fieldsToAccept");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
-    _fieldsToAccept = new HashSet<String>(fieldsToAccept);
+    _fieldsToAccept = new HashSet<>(fieldsToAccept);
     _context = fudgeContext;
   }
 
@@ -54,14 +74,14 @@ public class FieldFilter implements NormalizationRule {
   }
 
   @Override
-  public MutableFudgeMsg apply(MutableFudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
-    
-    MutableFudgeMsg normalizedMsg = getContext().newMessage();
+  public MutableFudgeMsg apply(final MutableFudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
+
+    final MutableFudgeMsg normalizedMsg = getContext().newMessage();
     // REVIEW kirk 2010-04-15 -- Run through the fields in the order of the
     // original message and check for containment in _fieldsToAccept as it's
     // faster for large messages.
     // It also supports multiple values with the same name.
-    for (FudgeField field : msg) {
+    for (final FudgeField field : msg) {
       if (field.getName() == null) {
         // Don't allow non-named fields.
         continue;
@@ -71,12 +91,12 @@ public class FieldFilter implements NormalizationRule {
       }
       normalizedMsg.add(field);
     }
-    
+
     if (normalizedMsg.getAllFields().isEmpty()) {
       return null; // extinguish message
     }
-    
+
     return normalizedMsg;
   }
-  
+
 }

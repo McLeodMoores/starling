@@ -35,7 +35,7 @@ public class DoubleConverter implements ResultConverter<Object> {
   // types of client.
 
   private static final DoubleValueFormatter DEFAULT_CONVERSION = DoubleValueSignificantFiguresFormatter.NON_CCY_5SF;
-  private static final Map<String, DoubleValueFormatter> VALUE_CONVERSION_MAP = new HashMap<String, DoubleValueFormatter>();
+  private static final Map<String, DoubleValueFormatter> VALUE_CONVERSION_MAP = new HashMap<>();
 
   static {
     // General
@@ -89,7 +89,7 @@ public class DoubleConverter implements ResultConverter<Object> {
     addConversion(ValueRequirementNames.THETA, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
     addConversion(ValueRequirementNames.RHO, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
     addConversion(ValueRequirementNames.CARRY_RHO, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
-    addConversion(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,  DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
+    addConversion(ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES, DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
     addConversion(ValueRequirementNames.YIELD_CURVE_JACOBIAN, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
     addConversion(ValueRequirementNames.FX_IMPLIED_TRANSITION_MATRIX, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
     addConversion(ValueRequirementNames.ULTIMA, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
@@ -176,9 +176,9 @@ public class DoubleConverter implements ResultConverter<Object> {
       final DoubleValueFormatter conversionSettings) {
     final Pattern pattern = Pattern.compile(valueRequirementFieldNamePattern);
     for (final Field field : ValueRequirementNames.class.getFields()) {
-      if ((field.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) == (Modifier.STATIC | Modifier.PUBLIC) &&
-          field.isSynthetic() == false &&
-          String.class.equals(field.getType()) && pattern.matcher(field.getName()).matches()) {
+      if ((field.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) == (Modifier.STATIC | Modifier.PUBLIC)
+          && !field.isSynthetic()
+          && String.class.equals(field.getType()) && pattern.matcher(field.getName()).matches()) {
         String fieldValue;
         try {
           fieldValue = (String) field.get(null);
@@ -194,9 +194,9 @@ public class DoubleConverter implements ResultConverter<Object> {
     VALUE_CONVERSION_MAP.put(valueName, conversionSettings);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
-  //TODO putting the conversion for CurrencyAmount into here right now, but this is probably not the place for it.
+  // TODO putting the conversion for CurrencyAmount into here right now, but this is probably not the place for it.
   @Override
   public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value, final ConversionMode mode) {
     String displayValue = null;
@@ -239,7 +239,7 @@ public class DoubleConverter implements ResultConverter<Object> {
     return displayValue;
   }
 
-  //TODO putting the conversion for CurrencyAmount into here right now, but this is probably not the place for it.
+  // TODO putting the conversion for CurrencyAmount into here right now, but this is probably not the place for it.
   @Override
   public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final Object value) {
     final Pair<Double, BigDecimal> processedValue = processValue(value);
@@ -248,7 +248,7 @@ public class DoubleConverter implements ResultConverter<Object> {
 
     if (doubleValue != null) {
       if (Double.isInfinite(doubleValue) || Double.isNaN(doubleValue)) {
-        //REVIEW emcleod 7-6-2011 This is awful - 0 is a legitimate value to return, whereas NaN or infinity show an error in the calculation
+        // REVIEW emcleod 7-6-2011 This is awful - 0 is a legitimate value to return, whereas NaN or infinity show an error in the calculation
         bigDecimalValue = BigDecimal.ZERO;
       } else {
         bigDecimalValue = BigDecimal.valueOf(doubleValue);
@@ -268,12 +268,12 @@ public class DoubleConverter implements ResultConverter<Object> {
       return Pairs.of(currencyAmount.getAmount(), (BigDecimal) null);
     }
     if (value instanceof BigDecimal) {
-      return Pairs.of((Double) null, ((BigDecimal) value));
+      return Pairs.of((Double) null, (BigDecimal) value);
     }
     throw new OpenGammaRuntimeException(getClass().getSimpleName() + " is unable to process value of type " + value.getClass());
   }
 
-  private DoubleValueFormatter getFormatter(final ValueSpecification valueSpec) {
+  private static DoubleValueFormatter getFormatter(final ValueSpecification valueSpec) {
     DoubleValueFormatter conversion = null;
     if (valueSpec != null) {
       conversion = VALUE_CONVERSION_MAP.get(valueSpec.getValueName());

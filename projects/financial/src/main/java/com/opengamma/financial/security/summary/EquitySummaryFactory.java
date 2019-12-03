@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -18,7 +18,7 @@ public class EquitySummaryFactory implements SummaryFactory<EquitySecurity> {
   }
 
   @Override
-  public Summary getSummary(EquitySecurity security) {
+  public Summary getSummary(final EquitySecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.DESCRIPTION, security.getShortName()).build();
   }

@@ -22,18 +22,20 @@ import com.opengamma.util.ArgumentChecker;
  * Class describing a generic swap with two legs. One should be payer and the other receiver.
  *
  */
-//TODO get rid when checkstyle can actually handle this class declaration
-//CSOFF
+// TODO get rid when checkstyle can actually handle this class declaration
+// CSOFF
 public class SwapDefinition implements InstrumentDefinitionWithData<Swap<? extends Payment, ? extends Payment>, ZonedDateTimeDoubleTimeSeries[]> {
-  //CSON
+  // CSON
   /** The first swap leg */
   private final AnnuityDefinition<? extends PaymentDefinition> _firstLeg;
   /** The second swap leg */
   private final AnnuityDefinition<? extends PaymentDefinition> _secondLeg;
 
   /**
-   * @param firstLeg The first swap leg, not null
-   * @param secondLeg The second swap leg, not null
+   * @param firstLeg
+   *          The first swap leg, not null
+   * @param secondLeg
+   *          The second swap leg, not null
    */
   public SwapDefinition(final AnnuityDefinition<? extends PaymentDefinition> firstLeg, final AnnuityDefinition<? extends PaymentDefinition> secondLeg) {
     ArgumentChecker.notNull(firstLeg, "first leg");
@@ -44,6 +46,7 @@ public class SwapDefinition implements InstrumentDefinitionWithData<Swap<? exten
 
   /**
    * Gets the first leg.
+   *
    * @return The first leg.
    */
   public AnnuityDefinition<? extends PaymentDefinition> getFirstLeg() {
@@ -52,6 +55,7 @@ public class SwapDefinition implements InstrumentDefinitionWithData<Swap<? exten
 
   /**
    * Gets the second leg.
+   *
    * @return The second leg.
    */
   public AnnuityDefinition<? extends PaymentDefinition> getSecondLeg() {
@@ -110,10 +114,11 @@ public class SwapDefinition implements InstrumentDefinitionWithData<Swap<? exten
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
-  @SuppressWarnings({"unchecked", "rawtypes" })
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   public Swap<? extends Payment, ? extends Payment> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     final Annuity<? extends Payment> firstLeg = getFirstLeg().toDerivative(date, yieldCurveNames);
@@ -123,11 +128,13 @@ public class SwapDefinition implements InstrumentDefinitionWithData<Swap<? exten
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
-  public Swap<? extends Payment, ? extends Payment> toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] data, final String... yieldCurveNames) {
+  public Swap<? extends Payment, ? extends Payment> toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] data,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(data, "index data time series array");
     ArgumentChecker.isTrue(data.length >= 2, "Generic swaps require two time series");
     final Annuity<? extends Payment> firstLeg = getFirstLeg().toDerivative(date, data[0], yieldCurveNames);

@@ -20,17 +20,17 @@ import org.fudgemsg.FudgeMsgEnvelope;
  * @author kirk
  */
 public class CollectingFudgeMessageReceiver implements FudgeMessageReceiver {
-  private final BlockingQueue<FudgeMsgEnvelope> _messages = new LinkedBlockingQueue<FudgeMsgEnvelope>();
+  private final BlockingQueue<FudgeMsgEnvelope> _messages = new LinkedBlockingQueue<>();
 
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     _messages.add(msgEnvelope);
   }
-  
+
   public List<FudgeMsgEnvelope> getMessages() {
-    return new LinkedList<FudgeMsgEnvelope>(_messages);
+    return new LinkedList<>(_messages);
   }
-  
+
   public void clear() {
     _messages.clear();
   }
@@ -38,7 +38,7 @@ public class CollectingFudgeMessageReceiver implements FudgeMessageReceiver {
   public FudgeMsgEnvelope waitForMessage(final long timeoutMillis) {
     try {
       return _messages.poll(timeoutMillis, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       return null;
     }
   }

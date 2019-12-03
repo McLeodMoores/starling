@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -17,35 +17,10 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 
 /**
- * The Bates generalized jump-diffusion model prices options with an underlying process:
- * $$
- * \begin{align*}
- * dS = (b - \lambda \overline{k})S dt + \sigma S dz + k dq
- * \end{align*}
- * $$
- * with $S$ the spot, $b$ the cost-of-carry, $\sigma$ the volatility of the
- * (relative) price change based on no jumps, $dz$ a Brownian motion, $k$ a
- * random percentage jump conditional on a Poisson-distributed event occurring,
- * with ($1+k$) lognormally distributed, $\overline{k}$ the expected jump size,
- * $\lambda$ the frequency of events (the average number of events per year)
- * and $q$ a Poisson counter with intensity $\lambda$.
- * <p>
- * The price of an option can be calculated using:
- * $$
- * \begin{align*}
- * c &= \sum_{i=0}^{\infty} \frac{e^{-\lambda T}(\lambda T)^i}{i!}c_i(S, K, T, r, b_i, \sigma_i)\\
- * p &= \sum_{i=0}^{\infty} \frac{e^{-\lambda T}(\lambda T)^i}{i!}p_i(S, K, T, r, b_i, \sigma_i)
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * b_i &= b - \lambda \overline{k} + \frac{i\overline{\gamma}}{T}\\
- * \sigma_i &= \sqrt{\sigma^2 + \delta^2\frac{i}{T}}\\
- * \overline{\gamma} &= \ln(1 + \overline{k}) 
- * \end{align*}
- * $$
- * and $\delta$ is the standard deviation of log asset price jumps.
+ * The Bates generalized jump-diffusion model prices options with an underlying process: $$ \begin{align*} dS = (b - \lambda \overline{k})S dt + \sigma S dz + k
+ * dq \end{align*} $$ with $S$ the spot, $b$ the cost-of-carry, $\sigma$ the volatility of the (relative) price change based on no jumps, $dz$ a Brownian
+ * motion, $k$ a random percentage jump conditional on a Poisson-distributed event occurring, with ($1+k$) lognormally distributed, $\overline{k}$ the expected
+ * jump size, $\lambda$ the frequency of events (the average number of events per year) and $q$ a Poisson counter with intensity $\lambda$.
  */
 public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<OptionDefinition, BatesGeneralizedJumpDiffusionModelDataBundle> {
   private static final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> BSM = new BlackScholesMertonModel();
@@ -57,7 +32,8 @@ public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<Opti
   @Override
   public Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> getPricingFunction(final OptionDefinition definition) {
     Validate.notNull(definition);
-    final Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> pricingFunction = new Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double>() {
+    final Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> pricingFunction =
+        new Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override

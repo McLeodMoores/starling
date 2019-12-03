@@ -32,33 +32,33 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * {@link StructureManipulator} that shifts all points on a curve up or down by the same amount.
- * Uses {@link YieldCurveUtils#withParallelShift} to perform the transformation.
+ * {@link StructureManipulator} that shifts all points on a curve up or down by the same amount. Uses {@link YieldCurveUtils#withParallelShift} to perform the
+ * transformation.
  */
 @BeanDefinition
 public final class YieldCurveParallelShift implements StructureManipulator<YieldCurve>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveParallelShift.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveParallelShift.class);
 
-  /** How the shift should be applied */
+  /** How the shift should be applied. */
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
 
-  /** The shift to apply  */
+  /** The shift to apply. */
   @PropertyDefinition
   private final double _shift;
 
   @ImmutableConstructor
-  /* package */ YieldCurveParallelShift(ScenarioShiftType shiftType, double shift) {
+  /* package */ YieldCurveParallelShift(final ScenarioShiftType shiftType, final double shift) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shift = shift;
   }
 
   @Override
-  public YieldCurve execute(YieldCurve structure,
-                            ValueSpecification valueSpecification,
-                            FunctionExecutionContext executionContext) {
-    s_logger.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
+  public YieldCurve execute(final YieldCurve structure,
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
+    LOGGER.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
     return YieldCurveUtils.withParallelShift(structure, _shift, _shiftType.toAnalyticsType());
   }
 
@@ -106,7 +106,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
   //-----------------------------------------------------------------------
   /**
-   * Gets how the shift should be applied
+   * Gets how the shift should be applied.
    * @return the value of the property, not null
    */
   public ScenarioShiftType getShiftType() {
@@ -115,7 +115,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the shift to apply
+   * Gets the shift to apply.
    * @return the value of the property
    */
   public double getShift() {
@@ -138,8 +138,8 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       YieldCurveParallelShift other = (YieldCurveParallelShift) obj;
-      return JodaBeanUtils.equal(getShiftType(), other.getShiftType()) &&
-          JodaBeanUtils.equal(getShift(), other.getShift());
+      return JodaBeanUtils.equal(_shiftType, other._shiftType) &&
+          JodaBeanUtils.equal(_shift, other._shift);
     }
     return false;
   }
@@ -147,8 +147,8 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shift);
     return hash;
   }
 
@@ -156,8 +156,8 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("YieldCurveParallelShift{");
-    buf.append("shiftType").append('=').append(getShiftType()).append(',').append(' ');
-    buf.append("shift").append('=').append(JodaBeanUtils.toString(getShift()));
+    buf.append("shiftType").append('=').append(_shiftType).append(',').append(' ');
+    buf.append("shift").append('=').append(JodaBeanUtils.toString(_shift));
     buf.append('}');
     return buf.toString();
   }
@@ -320,19 +320,31 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
@@ -347,7 +359,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
     //-----------------------------------------------------------------------
     /**
-     * Sets how the shift should be applied
+     * Sets how the shift should be applied.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -358,7 +370,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
     }
 
     /**
-     * Sets the shift to apply
+     * Sets the shift to apply.
      * @param shift  the new value
      * @return this, for chaining, not null
      */

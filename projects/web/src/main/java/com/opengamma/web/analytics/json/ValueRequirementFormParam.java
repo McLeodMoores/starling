@@ -19,7 +19,7 @@ public class ValueRequirementFormParam {
   /**
    * @param json A {@link ValueRequirement} encoded as Fudge JSON (see {@link ValueRequirementJSONBuilder}).
    */
-  public ValueRequirementFormParam(String json) {
+  public ValueRequirementFormParam(final String json) {
     ArgumentChecker.notEmpty(json, "json");
     _valueRequirement = new ValueRequirementJSONBuilder().fromJSON(json);
   }

@@ -84,23 +84,28 @@ public class DepGraphTestHelper {
     _spec1 = new ValueSpecification(REQUIREMENT_1, targetSpec, _req1.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value1 = new ComputedValue(_spec1, 14.2);
     _req1Foo = new ValueRequirement(REQUIREMENT_1, targetSpec, ValueProperties.with(TEST_PROPERTY, "Foo").get());
-    _spec1Foo = new ValueSpecification(REQUIREMENT_1, targetSpec, _req1Foo.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
+    _spec1Foo = new ValueSpecification(REQUIREMENT_1, targetSpec,
+        _req1Foo.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value1Foo = new ComputedValue(_spec1Foo, 14.3);
     _req1Bar = new ValueRequirement(REQUIREMENT_1, targetSpec, ValueProperties.with(TEST_PROPERTY, "Bar").get());
-    _spec1Bar = new ValueSpecification(REQUIREMENT_1, targetSpec, _req1Bar.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
+    _spec1Bar = new ValueSpecification(REQUIREMENT_1, targetSpec,
+        _req1Bar.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value1Bar = new ComputedValue(_spec1Bar, 9.0);
     _req1Any = new ValueRequirement(REQUIREMENT_1, targetSpec, ValueProperties.withAny(TEST_PROPERTY).get());
     _req2 = new ValueRequirement(REQUIREMENT_2, targetSpec);
     _spec2 = new ValueSpecification(REQUIREMENT_2, targetSpec, _req2.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value2 = new ComputedValue(_spec2, 15.5);
     _req2Beta = new ValueRequirement(REQUIREMENT_2, targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_PRODUCING_2_BETA).get());
-    _spec2Beta = new ValueSpecification(REQUIREMENT_2, targetSpec, _req2Beta.getConstraints().copy().with(ValuePropertyNames.FUNCTION, FUNCTION_PRODUCING_2_BETA).get());
+    _spec2Beta = new ValueSpecification(REQUIREMENT_2, targetSpec,
+        _req2Beta.getConstraints().copy().with(ValuePropertyNames.FUNCTION, FUNCTION_PRODUCING_2_BETA).get());
     _value2Beta = new ComputedValue(_spec2Beta, 31.0);
     _req2Foo = new ValueRequirement(REQUIREMENT_2, targetSpec, ValueProperties.with(TEST_PROPERTY, "Foo").get());
-    _spec2Foo = new ValueSpecification(REQUIREMENT_2, targetSpec, _req2Foo.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
+    _spec2Foo = new ValueSpecification(REQUIREMENT_2, targetSpec,
+        _req2Foo.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value2Foo = new ComputedValue(_spec2Foo, 15.6);
     _req2Bar = new ValueRequirement(REQUIREMENT_2, targetSpec, ValueProperties.with(TEST_PROPERTY, "Bar").get());
-    _spec2Bar = new ValueSpecification(REQUIREMENT_2, targetSpec, _req2Bar.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
+    _spec2Bar = new ValueSpecification(REQUIREMENT_2, targetSpec,
+        _req2Bar.getConstraints().copy().with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get());
     _value2Bar = new ComputedValue(_spec2Bar, 7.8);
     _req2Any = new ValueRequirement(REQUIREMENT_2, targetSpec, ValueProperties.withAny(TEST_PROPERTY).get());
     _liveDataAvailabilityProvider = new FixedMarketDataAvailabilityProvider();
@@ -155,8 +160,8 @@ public class DepGraphTestHelper {
   }
 
   public void make2AvailableFromLiveData() {
-    _liveDataAvailabilityProvider.addAvailableData(new ValueSpecification(_req2.getValueName(), _req2.getTargetReference().getSpecification(), ValueProperties.with(
-        ValuePropertyNames.FUNCTION, "LiveData").get()));
+    _liveDataAvailabilityProvider.addAvailableData(new ValueSpecification(_req2.getValueName(), _req2.getTargetReference().getSpecification(),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "LiveData").get()));
   }
 
   public DependencyGraphBuilder createBuilder(final FunctionPriority prioritizer) {

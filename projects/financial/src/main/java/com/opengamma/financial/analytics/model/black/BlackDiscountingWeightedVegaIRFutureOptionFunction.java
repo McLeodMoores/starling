@@ -29,7 +29,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.time.Expiry;
@@ -39,13 +38,13 @@ import com.opengamma.util.time.ExpiryAccuracy;
  * Calculates the weighted position vega of interest rate future options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
-  /** Property name for the number of base days */
+  /** Property name for the number of base days. */
   public static final String PROPERTY_BASE_DAYS = "BaseDays";
   /** Default number of base days to use */
   private static final double DEFAULT_BASE_DAYS = 90;
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#POSITION_WEIGHTED_VEGA}.
    */
   public BlackDiscountingWeightedVegaIRFutureOptionFunction() {
     super(POSITION_WEIGHTED_VEGA);
@@ -85,7 +84,8 @@ public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDis
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         if (super.getRequirements(compilationContext, target, desiredValue) == null) {
           return null;
         }
@@ -96,7 +96,7 @@ public class BlackDiscountingWeightedVegaIRFutureOptionFunction extends BlackDis
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(PROPERTY_BASE_DAYS);
         }
         return properties;

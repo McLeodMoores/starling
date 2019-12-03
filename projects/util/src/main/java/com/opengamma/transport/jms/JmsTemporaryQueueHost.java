@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.jms;
@@ -38,7 +38,7 @@ public class JmsTemporaryQueueHost {
    */
   private final TemporaryQueue _queue;
 
-  public JmsTemporaryQueueHost(JmsConnector jmsConnector, MessageListener listener) throws JMSException {
+  public JmsTemporaryQueueHost(final JmsConnector jmsConnector, final MessageListener listener) throws JMSException {
     _connection = jmsConnector.getConnectionFactory().createConnection();
     _session = _connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
     _queue = _session.createTemporaryQueue();

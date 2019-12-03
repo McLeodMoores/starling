@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -29,18 +29,18 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */final class ResolveTask extends DirectResolvedValueProducer implements ContextRunnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolveTask.class);
-  private static final AtomicInteger s_nextObjectId = new AtomicInteger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolveTask.class);
+  private static final AtomicInteger NEXT_OBJECT_ID = new AtomicInteger();
 
   /**
    * State within a task. As the task executes, the execution is delegated to the current state object.
    */
   protected abstract static class State implements ResolvedValueProducer.Chain {
 
-    private final int _objectId = s_nextObjectId.getAndIncrement();
+    private final int _objectId = NEXT_OBJECT_ID.getAndIncrement();
     private final ResolveTask _task;
 
-    //private final InstanceCount _instanceCount = new InstanceCount(this);
+    // private final InstanceCount _instanceCount = new InstanceCount(this);
 
     protected State(final ResolveTask task) {
       assert task != null;
@@ -68,9 +68,8 @@ import com.opengamma.engine.value.ValueSpecification;
       if (task.setState(this, nextState)) {
         context.run(task);
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
 
     protected boolean pushResult(final GraphBuildingContext context, final ResolvedValue resolvedValue, final boolean lastResult) {
@@ -81,14 +80,19 @@ import com.opengamma.engine.value.ValueSpecification;
      * Creates a result instance.
      * <p>
      * The {@code valueSpecification} specification must be a normalized/canonical form.
-     * 
-     * @param valueSpecification the resolved value specification, as it will appear in the dependency graph, not null
-     * @param parameterizedFunction the function identifier and parameters, not null
-     * @param functionInputs the resolved input specifications, as they will appear in the dependency graph, not null
-     * @param functionOutputs the resolved output specifications, as they will appear in the dependency graph, not null
+     *
+     * @param valueSpecification
+     *          the resolved value specification, as it will appear in the dependency graph, not null
+     * @param parameterizedFunction
+     *          the function identifier and parameters, not null
+     * @param functionInputs
+     *          the resolved input specifications, as they will appear in the dependency graph, not null
+     * @param functionOutputs
+     *          the resolved output specifications, as they will appear in the dependency graph, not null
+     * @return the resolved value
      */
-    protected ResolvedValue createResult(final ValueSpecification valueSpecification, final ParameterizedFunction parameterizedFunction, final Set<ValueSpecification> functionInputs,
-        final Set<ValueSpecification> functionOutputs) {
+    protected ResolvedValue createResult(final ValueSpecification valueSpecification, final ParameterizedFunction parameterizedFunction,
+        final Set<ValueSpecification> functionInputs, final Set<ValueSpecification> functionOutputs) {
       return new ResolvedValue(valueSpecification, parameterizedFunction, functionInputs, functionOutputs);
     }
 
@@ -100,7 +104,8 @@ import com.opengamma.engine.value.ValueSpecification;
       return getTask().getValueRequirement();
     }
 
-    // TODO: Profile how much time is spent calling getTargetSpecification. If it is a costly op, would holding the resolved specification in the task object be justified?
+    // TODO: Profile how much time is spent calling getTargetSpecification. If it is a costly op, would holding the resolved
+    // specification in the task object be justified?
 
     protected ComputationTargetSpecification getTargetSpecification(final GraphBuildingContext context) {
       return context.resolveTargetReference(getValueRequirement().getTargetReference());
@@ -113,7 +118,7 @@ import com.opengamma.engine.value.ValueSpecification;
       }
       final ComputationTarget target = LazyComputationTargetResolver.resolve(context.getCompilationContext().getComputationTargetResolver(), specification);
       if (target == null) {
-        s_logger.warn("Computation target {} not found", specification);
+        LOGGER.warn("Computation target {} not found", specification);
       }
       return target;
     }
@@ -122,7 +127,7 @@ import com.opengamma.engine.value.ValueSpecification;
       throw new UnsupportedOperationException("Not runnable state (" + toString() + ")");
     }
 
-    protected abstract void pump(final GraphBuildingContext context);
+    protected abstract void pump(GraphBuildingContext context);
 
     @Override
     public int cancelLoopMembers(final GraphBuildingContext context, final Map<Chain, Chain.LoopState> visited) {
@@ -135,8 +140,9 @@ import com.opengamma.engine.value.ValueSpecification;
 
     /**
      * Called when the parent task is discarded.
-     * 
-     * @param context the graph building context, not null
+     *
+     * @param context
+     *          the graph building context, not null
      */
     protected void discard(final GraphBuildingContext context) {
       // No-op; only implement if there is data to discard (e.g. cancel things to free resources) for the state
@@ -164,12 +170,12 @@ import com.opengamma.engine.value.ValueSpecification;
    */
   private final Collection<FunctionExclusionGroup> _functionExclusion;
 
-  public ResolveTask(final ValueRequirement valueRequirement, final ResolveTask parent, final Collection<FunctionExclusionGroup> functionExclusion) {
+  ResolveTask(final ValueRequirement valueRequirement, final ResolveTask parent, final Collection<FunctionExclusionGroup> functionExclusion) {
     super(valueRequirement);
     final int hc;
     if (parent != null) {
       if (parent.getParentValueRequirements() != null) {
-        _parentRequirements = new HashSet<ValueRequirement>(parent.getParentValueRequirements());
+        _parentRequirements = new HashSet<>(parent.getParentValueRequirements());
         _parentRequirements.add(parent.getValueRequirement());
       } else {
         _parentRequirements = Collections.singleton(parent.getValueRequirement());
@@ -196,13 +202,12 @@ import com.opengamma.engine.value.ValueSpecification;
   private synchronized boolean setState(final State previousState, final State nextState) {
     assert nextState != null;
     if (_state == previousState) {
-      s_logger.debug("State transition {} to {}", previousState, nextState);
+      LOGGER.debug("State transition {} to {}", previousState, nextState);
       _state = nextState;
       return true;
-    } else {
-      System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
-      return false;
     }
+    System.err.println("Invalid state transition - was " + _state + ", not " + previousState + " - not advancing to " + nextState);
+    return false;
   }
 
   @Override
@@ -225,9 +230,8 @@ import com.opengamma.engine.value.ValueSpecification;
       // Release the lock that the context added before we got queued (or run in-line)
       release(context);
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   private Set<ValueRequirement> getParentValueRequirements() {
@@ -237,9 +241,8 @@ import com.opengamma.engine.value.ValueSpecification;
   public boolean hasParent(final ResolveTask task) {
     if (task == this) {
       return true;
-    } else {
-      return hasParent(task.getValueRequirement());
     }
+    return hasParent(task.getValueRequirement());
   }
 
   public boolean hasParent(final ValueRequirement valueRequirement) {
@@ -256,8 +259,9 @@ import com.opengamma.engine.value.ValueSpecification;
    * Tests if the parent value requirements of this task are the same as a task would have if it used the given task as its parent.
    * <p>
    * This is part of a cheaper test for an existing task than creating a new instance and using the {@link #equals} method.
-   * 
-   * @param parent the candidate parent to test, not null
+   *
+   * @param parent
+   *          the candidate parent to test, not null
    * @return true if the parent value requirements would match
    */
   public boolean hasParentValueRequirements(final ResolveTask parent) {
@@ -265,23 +269,19 @@ import com.opengamma.engine.value.ValueSpecification;
       if (parent != null) {
         if (parent.getParentValueRequirements() != null) {
           if (getParentValueRequirements().size() == parent.getParentValueRequirements().size() + 1) {
-            return getParentValueRequirements().contains(parent.getValueRequirement()) && getParentValueRequirements().containsAll(parent.getParentValueRequirements());
-          } else {
-            return false;
+            return getParentValueRequirements().contains(parent.getValueRequirement())
+                && getParentValueRequirements().containsAll(parent.getParentValueRequirements());
           }
-        } else {
-          if (getParentValueRequirements().size() == 1) {
-            return getParentValueRequirements().contains(parent.getValueRequirement());
-          } else {
-            return false;
-          }
+          return false;
         }
-      } else {
+        if (getParentValueRequirements().size() == 1) {
+          return getParentValueRequirements().contains(parent.getValueRequirement());
+        }
         return false;
       }
-    } else {
-      return parent == null;
+      return false;
     }
+    return parent == null;
   }
 
   public Collection<FunctionExclusionGroup> getFunctionExclusion() {
@@ -312,12 +312,13 @@ import com.opengamma.engine.value.ValueSpecification;
     if (!getValueRequirement().equals(other.getValueRequirement())) {
       return false;
     }
-    return ObjectUtils.equals(getParentValueRequirements(), other.getParentValueRequirements()) && ObjectUtils.equals(getFunctionExclusion(), other.getFunctionExclusion());
+    return ObjectUtils.equals(getParentValueRequirements(), other.getParentValueRequirements())
+        && ObjectUtils.equals(getFunctionExclusion(), other.getFunctionExclusion());
   }
 
   @Override
   protected void pumpImpl(final GraphBuildingContext context) {
-    s_logger.debug("Pump called on {}", this);
+    LOGGER.debug("Pump called on {}", this);
     final State state = getState();
     if (state != null) {
       state.pump(context);
@@ -331,7 +332,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public int release(final GraphBuildingContext context) {
-    int count = super.release(context);
+    final int count = super.release(context);
     if (count == 1) {
       // It's possible that only the _requirements collection from the graph builder now holds a reference to us that we care about
       if (!isFinished()) {

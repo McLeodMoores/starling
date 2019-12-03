@@ -20,7 +20,8 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Computes the price for different types of futures. Calculator using a multi-curve and issuer provider.
  */
-public final class FuturesPriceBlackSensitivityBlackSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, PresentValueBlackSTIRFuturesCubeSensitivity> {
+public final class FuturesPriceBlackSensitivityBlackSTIRFuturesCalculator
+extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, PresentValueBlackSTIRFuturesCubeSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -29,6 +30,7 @@ public final class FuturesPriceBlackSensitivityBlackSTIRFuturesCalculator extend
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static FuturesPriceBlackSensitivityBlackSTIRFuturesCalculator getInstance() {
@@ -46,7 +48,7 @@ public final class FuturesPriceBlackSensitivityBlackSTIRFuturesCalculator extend
   /** The method used to compute the future price. It is a method without convexity adjustment. */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_FUTURE = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures options    -----
+  // ----- Futures options -----
 
   @Override
   public PresentValueBlackSTIRFuturesCubeSensitivity visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security,

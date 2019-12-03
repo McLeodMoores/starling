@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.viewer.status;
@@ -19,47 +19,46 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Description of how the view columns should be displayed
- * 
+ *
  * <p>
- * Create a type from any combination of valid chars.
- * ValidChars are 'T', 'S', 'V', 'C'
- * 
+ * Create a type from any combination of valid chars. ValidChars are 'T', 'S', 'V', 'C'
+ *
  * <pre>
  * e.g AggregateType [TSVC]  will be interpreted as
- * 
+ *
  *  1st column = Target Type
  *  2nd column = Security Type
  *  3rd column = ValueRequirement
  *  4th column = Currency
- *  </pre>
+ * </pre>
  */
 public final class AggregateType {
-  
+
   private static final List<Character> VALID_AGGRAGATION_CHARS = ImmutableList.of('T', 'S', 'V', 'C');
-  
+
   /**
-   * Represents NO_AGGREGATION
+   * Represents NO_AGGREGATION.
    */
-  public static final AggregateType NO_AGGREGATION = new AggregateType(Collections.<ViewColumnType>emptyList());
-  
+  public static final AggregateType NO_AGGREGATION = new AggregateType(Collections.<ViewColumnType> emptyList());
+
   private final List<ViewColumnType> _columnTypes;
-  
-  private AggregateType(List<ViewColumnType> aggregationTypes) {
+
+  private AggregateType(final List<ViewColumnType> aggregationTypes) {
     ArgumentChecker.notNull(aggregationTypes, "aggregationTypes");
-    
+
     _columnTypes = ImmutableList.copyOf(aggregationTypes);
   }
-  
-  public static AggregateType of(String aggregateStrType) {
+
+  public static AggregateType of(final String aggregateStrType) {
     ArgumentChecker.notNull(aggregateStrType, "aggregateStrType");
-    
+
     validateAggregateType(aggregateStrType.toUpperCase());
-    
-    List<ViewColumnType> types = Lists.newArrayListWithCapacity(VALID_AGGRAGATION_CHARS.size());
-    char[] chars = aggregateStrType.toCharArray();
-    for (char character : chars) {
-      String shortName = String.valueOf(character);
-      ViewColumnType type = ViewColumnType.of(shortName);
+
+    final List<ViewColumnType> types = Lists.newArrayListWithCapacity(VALID_AGGRAGATION_CHARS.size());
+    final char[] chars = aggregateStrType.toCharArray();
+    for (final char character : chars) {
+      final String shortName = String.valueOf(character);
+      final ViewColumnType type = ViewColumnType.of(shortName);
       if (type == null) {
         throw new IllegalArgumentException("Unsupported aggregate type: " + shortName);
       }
@@ -68,15 +67,15 @@ public final class AggregateType {
     return new AggregateType(types);
   }
 
-  private static void validateAggregateType(String aggregateStrType) {
+  private static void validateAggregateType(final String aggregateStrType) {
     if (aggregateStrType.length() != VALID_AGGRAGATION_CHARS.size() || hasDepulicateChar(aggregateStrType) || hasInvalidCharacter(aggregateStrType)) {
       throw new IllegalArgumentException("Invalid aggregate type: " + aggregateStrType);
     }
   }
 
-  private static boolean hasInvalidCharacter(String aggregationOptionType) {
-    char[] aggregateTypeChars = aggregationOptionType.toCharArray();
-    for (char character : aggregateTypeChars) {
+  private static boolean hasInvalidCharacter(final String aggregationOptionType) {
+    final char[] aggregateTypeChars = aggregationOptionType.toCharArray();
+    for (final char character : aggregateTypeChars) {
       if (!VALID_AGGRAGATION_CHARS.contains(character)) {
         return true;
       }
@@ -84,18 +83,18 @@ public final class AggregateType {
     return false;
   }
 
-  private static boolean hasDepulicateChar(String aggregateStrType) {
-    char[] aggregateTypeChars = aggregateStrType.toCharArray();
-    Set<Character> uniqueChars = Sets.newHashSet();
-    for (Character character : aggregateTypeChars) {
+  private static boolean hasDepulicateChar(final String aggregateStrType) {
+    final char[] aggregateTypeChars = aggregateStrType.toCharArray();
+    final Set<Character> uniqueChars = Sets.newHashSet();
+    for (final Character character : aggregateTypeChars) {
       uniqueChars.add(character);
     }
     return uniqueChars.size() != VALID_AGGRAGATION_CHARS.size();
   }
 
   /**
-   * Gets the list of view column types
-   * 
+   * Gets the list of view column types.
+   *
    * @return the aggregationTypeList
    */
   public List<ViewColumnType> getColumnTypes() {
@@ -108,17 +107,17 @@ public final class AggregateType {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder();
-    for (ViewColumnType columnType : _columnTypes) {
+    final StringBuilder buf = new StringBuilder();
+    for (final ViewColumnType columnType : _columnTypes) {
       buf.append(columnType.getShortName());
     }
     return "AggregateType [" + buf + "]";
   }
-  
+
 }

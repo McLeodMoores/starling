@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -107,8 +107,8 @@ public class PortfolioStructureTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getParentNode_position_badChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
-    resolver.getParentNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Invalid", "0")).containing(ComputationTargetType.POSITION,
-        _badPosition.getUniqueId()), _badPosition));
+    resolver.getParentNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+        UniqueId.of("Invalid", "0")).containing(ComputationTargetType.POSITION, _badPosition.getUniqueId()), _badPosition));
   }
 
   //-------------------------------------------------------------------------
@@ -131,12 +131,12 @@ public class PortfolioStructureTest {
     final PortfolioStructure resolver = getPortfolioStructure();
     assertNotNull(resolver);
     assertEquals(_root,
-        resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, _child2.getUniqueId()).containing(ComputationTargetType.POSITION,
-            _position1.getUniqueId()), _position1)));
+        resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            _child2.getUniqueId()).containing(ComputationTargetType.POSITION, _position1.getUniqueId()), _position1)));
     assertEquals(
         _root,
-        resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, _root.getUniqueId()).containing(
-            ComputationTargetType.PORTFOLIO_NODE, _child2.getUniqueId()).containing(
+        resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            _root.getUniqueId()).containing(ComputationTargetType.PORTFOLIO_NODE, _child2.getUniqueId()).containing(
             ComputationTargetType.POSITION, _position2.getUniqueId()), _position2)));
   }
 
@@ -149,7 +149,8 @@ public class PortfolioStructureTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getRootPortfolioNode_position_badChild() {
     final PortfolioStructure resolver = getPortfolioStructure();
-    resolver.getRootPortfolioNode(new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Invalid", "0")).containing(
+    resolver.getRootPortfolioNode(new ComputationTarget(
+          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Invalid", "0")).containing(
         ComputationTargetType.POSITION, _badPosition.getUniqueId()), _badPosition));
   }
 

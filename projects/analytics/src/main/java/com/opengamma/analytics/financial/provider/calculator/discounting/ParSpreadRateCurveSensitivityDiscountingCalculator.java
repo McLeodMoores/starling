@@ -14,11 +14,11 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 
 /**
- * Compute the spread to be added to the rate-like quote of the instrument for which the present value of the instrument is zero.
- * The notion of "rate" will depend of each instrument. The "market quote" will be used for most instruments. 
- * The exceptions are: STIR futures, Fed Funds futres,
+ * Compute the spread to be added to the rate-like quote of the instrument for which the present value of the instrument is zero. The notion of "rate" will
+ * depend of each instrument. The "market quote" will be used for most instruments. The exceptions are: STIR futures, Fed Funds futres,
  */
-public final class ParSpreadRateCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<MulticurveProviderInterface, MulticurveSensitivity> {
+public final class ParSpreadRateCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorDelegate<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -27,6 +27,7 @@ public final class ParSpreadRateCurveSensitivityDiscountingCalculator extends In
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadRateCurveSensitivityDiscountingCalculator getInstance() {
@@ -46,7 +47,7 @@ public final class ParSpreadRateCurveSensitivityDiscountingCalculator extends In
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_STIR_FUT = InterestRateFutureSecurityDiscountingMethod.getInstance();
   private static final FederalFundsFutureSecurityDiscountingMethod METHOD_FED_FUNDS = FederalFundsFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final MulticurveProviderInterface multicurves) {

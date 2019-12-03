@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.bondcurves;
 
@@ -24,7 +24,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -34,14 +33,15 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Calculates the PV01 of a bond or bond future for all curves to which the instruments are sensitive.
  */
-public class BondAndBondFutureAllPv01Function extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
+public class BondAndBondFutureAllPv01Function
+extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
   /** The PV01 calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#ALL_PV01S} and
-   * sets the calculator to {@link PV01CurveParametersCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#ALL_PV01S} and sets the calculator to
+   * {@link PV01CurveParametersCalculator}.
    */
   public BondAndBondFutureAllPv01Function() {
     super(ALL_PV01S, CALCULATOR);

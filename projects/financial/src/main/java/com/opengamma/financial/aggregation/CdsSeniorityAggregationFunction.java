@@ -6,7 +6,6 @@
 package com.opengamma.financial.aggregation;
 
 import com.opengamma.analytics.financial.credit.DebtSeniority;
-import com.opengamma.core.position.Position;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.cds.AbstractCreditDefaultSwapSecurity;
 import com.opengamma.financial.security.cds.CreditDefaultSwapSecurity;
@@ -25,20 +24,19 @@ public class CdsSeniorityAggregationFunction extends AbstractCdsAggregationFunct
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    */
-  public CdsSeniorityAggregationFunction(SecuritySource securitySource) {
+  public CdsSeniorityAggregationFunction(final SecuritySource securitySource) {
     super(NAME, securitySource, new CdsValueExtractor<DebtSeniority>() {
       @Override
-      public DebtSeniority extract(AbstractCreditDefaultSwapSecurity cds) {
+      public DebtSeniority extract(final AbstractCreditDefaultSwapSecurity cds) {
         if (cds instanceof CreditDefaultSwapSecurity) {
           return ((CreditDefaultSwapSecurity) cds).getDebtSeniority();
-        } else {
-          // CreditDefaultSwapOptionSecurity
-          // null communicates N/A
-          return null;
         }
+        // CreditDefaultSwapOptionSecurity
+        // null communicates N/A
+        return null;
 
       }
     });
@@ -46,7 +44,7 @@ public class CdsSeniorityAggregationFunction extends AbstractCdsAggregationFunct
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(DebtSeniority extracted) {
+  protected String handleExtractedData(final DebtSeniority extracted) {
     return extracted.toString();
   }
 

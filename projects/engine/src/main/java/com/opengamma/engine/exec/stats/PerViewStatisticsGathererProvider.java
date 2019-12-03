@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -18,14 +18,14 @@ import org.threeten.bp.Instant;
 import com.opengamma.id.UniqueId;
 
 /**
- * Partial implementation of a {@link GraphExecutorStatisticsGathererProvider} that delivers a per-view
- * {@link GraphExecutorStatisticsGatherer} instance.
- * 
+ * Partial implementation of a {@link GraphExecutorStatisticsGathererProvider} that delivers a per-view {@link GraphExecutorStatisticsGatherer} instance.
+ *
  * @param <T>
+ *          The type of the statistics gatherer
  */
 public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorStatisticsGatherer> implements GraphExecutorStatisticsGathererProvider {
 
-  private final ConcurrentMap<UniqueId, T> _statisticsGatherers = new ConcurrentHashMap<UniqueId, T>();
+  private final ConcurrentMap<UniqueId, T> _statisticsGatherers = new ConcurrentHashMap<>();
 
   @Override
   public T getStatisticsGatherer(final UniqueId viewId) {
@@ -43,7 +43,7 @@ public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorS
   protected abstract T createStatisticsGatherer(UniqueId viewId);
 
   public List<T> getViewStatistics() {
-    return new ArrayList<T>(_statisticsGatherers.values());
+    return new ArrayList<>(_statisticsGatherers.values());
   }
 
   public void dropStatisticsBefore(final Instant dropBefore) {
@@ -56,6 +56,6 @@ public abstract class PerViewStatisticsGathererProvider<T extends GraphExecutorS
     }
   }
 
-  protected abstract boolean dropStatisticsBefore(final T gatherer, final Instant dropBefore);
+  protected abstract boolean dropStatisticsBefore(T gatherer, Instant dropBefore);
 
 }

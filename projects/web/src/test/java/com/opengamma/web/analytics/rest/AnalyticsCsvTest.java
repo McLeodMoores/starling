@@ -5,10 +5,6 @@
  */
 package com.opengamma.web.analytics.rest;
 
-import java.io.IOException;
-
-import org.json.JSONException;
-
 import com.opengamma.web.analytics.push.WebPushTestUtils;
 
 /**
@@ -16,10 +12,10 @@ import com.opengamma.web.analytics.push.WebPushTestUtils;
  */
 public class AnalyticsCsvTest {
 
-  public static void main(String[] args) throws IOException, JSONException, InterruptedException {
-    WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
-    String clientId = _webPushTestUtils.handshake();
-    String viewDefJson = "{" +
+  public static void main(final String[] args) throws Exception {
+    final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
+    final String clientId = webPushTestUtils.handshake();
+    final String viewDefJson = "{" +
         "\"viewDefinitionName\": \"Single Swap Test View\", " +
         //"\"snapshotId\": \"Tst~123\", " + // use live data
         "\"portfolioViewport\": {" +
@@ -33,10 +29,10 @@ public class AnalyticsCsvTest {
         "\"dependencyGraphCells\": [[0, 0]]" +
         "}" +
         "}";
-    String viewportUrl = _webPushTestUtils.createViewport(clientId, viewDefJson);
+    final String viewportUrl = webPushTestUtils.createViewport(clientId, viewDefJson);
     //noinspection InfiniteLoopStatement
     while (true) {
-      String csv = _webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
+      final String csv = webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
       System.out.println(csv);
 
       Thread.sleep(2000);

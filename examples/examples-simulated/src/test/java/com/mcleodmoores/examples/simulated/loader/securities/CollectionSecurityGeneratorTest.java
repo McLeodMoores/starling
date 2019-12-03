@@ -36,7 +36,7 @@ public class CollectionSecurityGeneratorTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCollection() {
-    new CollectionSecurityGenerator((List<ManageableSecurity>) null);
+    new CollectionSecurityGenerator<>((List<ManageableSecurity>) null);
   }
 
   /**

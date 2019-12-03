@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.convention.impl;
@@ -32,8 +32,8 @@ import com.opengamma.util.rest.UniformInterfaceException404NotFound;
  * Provides remote access to an {@link ConventionSource}.
  */
 public class RemoteConventionSource
-    extends AbstractRemoteSource<Convention>
-    implements ConventionSource {
+extends AbstractRemoteSource<Convention>
+implements ConventionSource {
 
   /**
    * The change manager.
@@ -42,7 +42,7 @@ public class RemoteConventionSource
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteConventionSource(final URI baseUri) {
@@ -51,7 +51,7 @@ public class RemoteConventionSource
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    * @param changeManager the change manager, not null
    */
@@ -66,15 +66,15 @@ public class RemoteConventionSource
   public Convention get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
-    URI uri = DataConventionSourceUris.uriGet(getBaseUri(), uniqueId);
+    final URI uri = DataConventionSourceUris.uriGet(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Convention.class);
   }
 
   @Override
-  public <T extends Convention> T get(UniqueId uniqueId, Class<T> type) {
+  public <T extends Convention> T get(final UniqueId uniqueId, final Class<T> type) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(type, "type");
-    Convention convention = get(uniqueId);
+    final Convention convention = get(uniqueId);
     return type.cast(convention);
   }
 
@@ -84,49 +84,46 @@ public class RemoteConventionSource
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataConventionSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
+    final URI uri = DataConventionSourceUris.uriGet(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Convention.class);
   }
 
   @Override
-  public <T extends Convention> T get(ObjectId objectId, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T get(final ObjectId objectId, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
-    Convention convention = get(objectId, versionCorrection);
+    final Convention convention = get(objectId, versionCorrection);
     return type.cast(convention);
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Convention> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
 
-    URI uri = DataConventionSourceUris.uriSearchList(getBaseUri(), bundle);
+    final URI uri = DataConventionSourceUris.uriSearchList(getBaseUri(), bundle);
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
 
-    URI uri = DataConventionSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
+    final URI uri = DataConventionSourceUris.uriSearch(getBaseUri(), versionCorrection, bundle);
     return accessRemote(uri).get(FudgeListWrapper.class).getList();
   }
 
   //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
   @Override
   public Map<UniqueId, Convention> get(final Collection<UniqueId> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "uniqueIds");
 
-    URI uri = DataConventionSourceUris.uriBulk(getBaseUri(), uniqueIds);
-    List<Convention> list = accessRemote(uri).get(FudgeListWrapper.class).getList();
-    Map<UniqueId, Convention> result = Maps.newHashMap();
-    for (Convention convention : list) {
+    final URI uri = DataConventionSourceUris.uriBulk(getBaseUri(), uniqueIds);
+    final List<Convention> list = accessRemote(uri).get(FudgeListWrapper.class).getList();
+    final Map<UniqueId, Convention> result = Maps.newHashMap();
+    for (final Convention convention : list) {
       result.put(convention.getUniqueId(), convention);
     }
     return result;
@@ -146,7 +143,7 @@ public class RemoteConventionSource
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalId externalId, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalId externalId, final Class<T> type) {
     ArgumentChecker.notNull(externalId, "externalId");
     return doGetSingle(externalId.toBundle(), null, type);
   }
@@ -158,7 +155,7 @@ public class RemoteConventionSource
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     return doGetSingle(bundle, null, type);
   }
@@ -171,26 +168,38 @@ public class RemoteConventionSource
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
     return doGetSingle(bundle, versionCorrection, type);
   }
 
+  /**
+   * Gets a single convention.
+   *
+   * @param bundle
+   *          the external identifiers
+   * @param versionCorrection
+   *          the version, null for LATEST
+   * @param type
+   *          the convention type
+   * @return the convention or null if not found
+   * @param <T>
+   *          the type of the convention
+   */
   @SuppressWarnings("unchecked")
-  protected <T extends Convention> T doGetSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection, Class<T> type) {
+  protected <T extends Convention> T doGetSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     try {
-      URI uri = DataConventionSourceUris.uriSearchSingle(getBaseUri(), bundle, versionCorrection, type);
-      Convention convention = accessRemote(uri).get(Convention.class);
+      final URI uri = DataConventionSourceUris.uriSearchSingle(getBaseUri(), bundle, versionCorrection, type);
+      final Convention convention = accessRemote(uri).get(Convention.class);
       if (type != null) {
         return type.cast(convention);
-      } else {
-        return (T) convention;
       }
-    } catch (DataNotFoundException ex) {
+      return (T) convention;
+    } catch (final DataNotFoundException ex) {
       return null;
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }

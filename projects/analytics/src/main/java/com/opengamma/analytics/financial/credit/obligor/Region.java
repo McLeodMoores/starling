@@ -7,8 +7,9 @@ package com.opengamma.analytics.financial.credit.obligor;
 
 /**
  * Enumerate the geographical region of the reference entity (doesn't have to be the same as the legal domicile).
- * @deprecated Regions have been promoted to objects. See (@link com.opengamma.analytics.financial.obligor.Region}.
- * These objects are creates with a name only and no currency or country information.
+ * 
+ * @deprecated Regions have been promoted to objects. See (@link com.opengamma.analytics.financial.obligor.Region}. These objects are
+ *             creates with a name only and no currency or country information.
  */
 @Deprecated
 public enum Region {
@@ -73,15 +74,17 @@ public enum Region {
   private final String _name;
 
   /**
-   * @param name The region name
+   * @param name
+   *          The region name
    */
-  private Region(final String name) {
+  Region(final String name) {
     _name = name;
   }
 
   /**
-   * Delegates to {@link com.opengamma.analytics.financial.legalentity.Sector}, with
-   * the name set to the name of the enum value and no classifications set.
+   * Delegates to {@link com.opengamma.analytics.financial.legalentity.Sector}, with the name set to the name of the enum value and no
+   * classifications set.
+   * 
    * @return A sector object
    */
   public com.opengamma.analytics.financial.legalentity.Region toRegion() {

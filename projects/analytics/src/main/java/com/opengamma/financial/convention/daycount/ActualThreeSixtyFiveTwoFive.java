@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.daycount;
@@ -25,10 +25,11 @@ public class ActualThreeSixtyFiveTwoFive extends ActualTypeDayCount {
   }
 
   @Override
-  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear) {
+  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon,
+      final double paymentsPerYear) {
     return getDayCountFraction(previousCouponDate, date) * coupon;
   }
-  
+
   @Override
   public String getName() {
     return "Actual/365.25";

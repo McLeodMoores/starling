@@ -37,7 +37,7 @@ import com.opengamma.util.OpenGammaClock;
 public class Scenario {
 
   /** For parsing valuation time. */
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   /** Manipulators keyed by the selectors for the items they apply to. */
   private final ListMultimap<DistinctMarketDataSelector, StructureManipulator<?>> _manipulations = ArrayListMultimap.create();
@@ -55,17 +55,19 @@ public class Scenario {
   private VersionCorrection _resolverVersionCorrection;
 
   /**
-   * Creates a new scenario with a calcuation configuration name of "Default", valuation time of {@code Instant.now()}
-   * and resolver version correction of {@link VersionCorrection#LATEST}.
-   * @param name The scenario name, not null
+   * Creates a new scenario with a calcuation configuration name of "Default", valuation time of {@code Instant.now()} and resolver version correction of
+   * {@link VersionCorrection#LATEST}.
+   *
+   * @param name
+   *          The scenario name, not null
    */
-  public Scenario(String name) {
+  public Scenario(final String name) {
     ArgumentChecker.notEmpty(name, "name");
     _name = name;
     _simulation = null;
   }
 
-  /* package */ Scenario(Simulation simulation, String name) {
+  /* package */ Scenario(final Simulation simulation, final String name) {
     ArgumentChecker.notEmpty(name, "name");
     ArgumentChecker.notNull(simulation, "simulation");
     _simulation = simulation;
@@ -77,10 +79,6 @@ public class Scenario {
    */
   public YieldCurveSelector.Builder curve() {
     return new YieldCurveSelector.Builder(this);
-  }
-
-  public YieldCurveDataSelectorBuilder curveData() {
-    return new YieldCurveDataSelectorBuilder(this);
   }
 
   /**
@@ -103,10 +101,12 @@ public class Scenario {
 
   /**
    * Updates this scenario to apply to the specified calculation configuration.
-   * @param configNames The calculation configuration name
+   *
+   * @param configNames
+   *          The calculation configuration name
    * @return The modified scenario
    */
-  public Scenario calculationConfigurations(String... configNames) {
+  public Scenario calculationConfigurations(final String... configNames) {
     ArgumentChecker.notEmpty(configNames, "configName");
     _calcConfigNames = ImmutableSet.copyOf(configNames);
     return this;
@@ -114,10 +114,12 @@ public class Scenario {
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
-  public Scenario valuationTime(Instant valuationTime) {
+  public Scenario valuationTime(final Instant valuationTime) {
     ArgumentChecker.notNull(valuationTime, "valuationTime");
     _valuationTime = valuationTime;
     return this;
@@ -125,36 +127,41 @@ public class Scenario {
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
-  public Scenario valuationTime(String valuationTime) {
+  public Scenario valuationTime(final String valuationTime) {
     try {
-      LocalDateTime localTime = LocalDateTime.parse(valuationTime, s_dateFormatter);
+      final LocalDateTime localTime = LocalDateTime.parse(valuationTime, DATE_FORMATTER);
       _valuationTime = ZonedDateTime.of(localTime, OpenGammaClock.getZone()).toInstant();
-    } catch (DateTimeParseException e) {
-      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format " +
-                                             "'yyyy-MM-dd HH:mm', value: " + valuationTime);
+    } catch (final DateTimeParseException e) {
+      throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format " + "'yyyy-MM-dd HH:mm', value: " + valuationTime);
     }
     return this;
   }
 
   /**
    * Updates this scenario to use the specified valuation time.
-   * @param valuationTime The valuation time
+   *
+   * @param valuationTime
+   *          The valuation time
    * @return The modified scenario
    */
-  public Scenario valuationTime(ZonedDateTime valuationTime) {
+  public Scenario valuationTime(final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(valuationTime, "valuationTime");
     return valuationTime(valuationTime.toInstant());
   }
 
   /**
    * Updates this scenario to use the specified version correction in the resolver.
-   * @param resolverVersionCorrection The resolver version correction
+   *
+   * @param resolverVersionCorrection
+   *          The resolver version correction
    * @return The modified scenario
    */
-  public Scenario resolverVersionCorrection(VersionCorrection resolverVersionCorrection) {
+  public Scenario resolverVersionCorrection(final VersionCorrection resolverVersionCorrection) {
     ArgumentChecker.notNull(resolverVersionCorrection, "resolverVersionCorrection");
     _resolverVersionCorrection = resolverVersionCorrection;
     return this;
@@ -165,20 +172,20 @@ public class Scenario {
    */
   @SuppressWarnings("unchecked")
   public ScenarioDefinition createDefinition() {
-    Map<DistinctMarketDataSelector, FunctionParameters> params = Maps.newHashMapWithExpectedSize(_manipulations.size());
-    for (Map.Entry<DistinctMarketDataSelector, Collection<StructureManipulator<?>>> entry : _manipulations.asMap().entrySet()) {
-      DistinctMarketDataSelector selector = entry.getKey();
+    final Map<DistinctMarketDataSelector, FunctionParameters> params = Maps.newHashMapWithExpectedSize(_manipulations.size());
+    for (final Map.Entry<DistinctMarketDataSelector, Collection<StructureManipulator<?>>> entry : _manipulations.asMap().entrySet()) {
+      final DistinctMarketDataSelector selector = entry.getKey();
       // ListMultimap always has Lists as entries even if the signature doesn't say so
-      List<StructureManipulator<?>> manipulators = (List<StructureManipulator<?>>) entry.getValue();
-      CompositeStructureManipulator compositeManipulator = new CompositeStructureManipulator(manipulators);
-      SimpleFunctionParameters functionParameters = new SimpleFunctionParameters();
+      final List<StructureManipulator<?>> manipulators = (List<StructureManipulator<?>>) entry.getValue();
+      final CompositeStructureManipulator compositeManipulator = new CompositeStructureManipulator(manipulators);
+      final SimpleFunctionParameters functionParameters = new SimpleFunctionParameters();
       functionParameters.setValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME, compositeManipulator);
       params.put(selector, functionParameters);
     }
     return new ScenarioDefinition(_name, params);
   }
 
-  /* package */ void add(DistinctMarketDataSelector selector, StructureManipulator<?> manipulator) {
+  /* package */ void add(final DistinctMarketDataSelector selector, final StructureManipulator<?> manipulator) {
     _manipulations.put(selector, manipulator);
   }
 
@@ -226,7 +233,7 @@ public class Scenario {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -234,21 +241,14 @@ public class Scenario {
       return false;
     }
     final Scenario other = (Scenario) obj;
-    return Objects.equals(this._manipulations, other._manipulations) &&
-        Objects.equals(this._name, other._name) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames) &&
-        Objects.equals(this._valuationTime, other._valuationTime) &&
-        Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection);
+    return Objects.equals(this._manipulations, other._manipulations) && Objects.equals(this._name, other._name)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames) && Objects.equals(this._valuationTime, other._valuationTime)
+        && Objects.equals(this._resolverVersionCorrection, other._resolverVersionCorrection);
   }
 
   @Override
   public String toString() {
-    return "Scenario [" +
-        "_name='" + _name + "'" +
-        ", _calcConfigNames=" + _calcConfigNames +
-        ", _valuationTime=" + _valuationTime +
-        ", _resolverVersionCorrection=" + _resolverVersionCorrection +
-        ", _manipulations=" + _manipulations +
-        "]";
+    return "Scenario [" + "_name='" + _name + "'" + ", _calcConfigNames=" + _calcConfigNames + ", _valuationTime=" + _valuationTime
+        + ", _resolverVersionCorrection=" + _resolverVersionCorrection + ", _manipulations=" + _manipulations + "]";
   }
 }

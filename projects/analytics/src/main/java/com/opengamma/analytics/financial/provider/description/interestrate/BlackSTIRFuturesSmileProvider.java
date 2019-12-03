@@ -17,8 +17,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Implementation of a provider of Black smile for options on STIR futures. The volatility is time to expiration/strike/delay dependent.
- * The "delay" is the time between expiration of the option and last trading date of the underlying futures.
+ * Implementation of a provider of Black smile for options on STIR futures. The volatility is time to expiration/strike/delay dependent. The "delay" is the time
+ * between expiration of the option and last trading date of the underlying futures.
  */
 public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderInterface {
 
@@ -27,8 +27,7 @@ public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderIn
    */
   private final MulticurveProviderInterface _multicurveProvider;
   /**
-   * The Black volatility cube. Not null.
-   * TODO: Change to a cube (with the delay dimension).
+   * The Black volatility cube. Not null. TODO: Change to a cube (with the delay dimension).
    */
   private final Surface<Double, Double, Double> _parameters;
   /**
@@ -37,11 +36,15 @@ public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderIn
   private final IborIndex _index;
 
   /**
-   * @param multicurveProvider The multicurve provider, not null
-   * @param parameters The Black parameters, not null
-   * @param index The cap/floor index, not null
+   * @param multicurveProvider
+   *          The multicurve provider, not null
+   * @param parameters
+   *          The Black parameters, not null
+   * @param index
+   *          The cap/floor index, not null
    */
-  public BlackSTIRFuturesSmileProvider(final MulticurveProviderInterface multicurveProvider, final Surface<Double, Double, Double> parameters, final IborIndex index) {
+  public BlackSTIRFuturesSmileProvider(final MulticurveProviderInterface multicurveProvider, final Surface<Double, Double, Double> parameters,
+      final IborIndex index) {
     ArgumentChecker.notNull(multicurveProvider, "multicurveProvider");
     ArgumentChecker.notNull(parameters, "parameters");
     ArgumentChecker.notNull(index, "index");
@@ -57,7 +60,7 @@ public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderIn
   }
 
   @Override
-  public double getVolatility(final double expiry, final double delay, final double strike, double futuresPrice) {
+  public double getVolatility(final double expiry, final double delay, final double strike, final double futuresPrice) {
     return _parameters.getZValue(expiry, strike);
   }
 
@@ -73,6 +76,7 @@ public class BlackSTIRFuturesSmileProvider implements BlackSTIRFuturesProviderIn
 
   /**
    * Returns the Black parameters.
+   *
    * @return The parameters.
    */
   public Surface<Double, Double, Double> getBlackParameters() {

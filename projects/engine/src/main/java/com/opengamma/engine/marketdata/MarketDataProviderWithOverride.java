@@ -25,29 +25,29 @@ public class MarketDataProviderWithOverride implements MarketDataProvider {
 
   private final MarketDataProvider _underlying;
   private final MarketDataInjectorImpl _override;
-  private final Set<MarketDataListener> _listeners = new CopyOnWriteArraySet<MarketDataListener>();
-  private final Set<ValueSpecification> _pendingSubscriptions = new HashSet<ValueSpecification>();
+  private final Set<MarketDataListener> _listeners = new CopyOnWriteArraySet<>();
+  private final Set<ValueSpecification> _pendingSubscriptions = new HashSet<>();
 
   private boolean _listenerAttached;
   private final MarketDataListener _listener = new MarketDataListener() {
 
     @Override
-    public void subscriptionsSucceeded(Collection<ValueSpecification> specifications) {
+    public void subscriptionsSucceeded(final Collection<ValueSpecification> specifications) {
       MarketDataProviderWithOverride.this.subscriptionsSucceeded(specifications);
     }
 
     @Override
-    public void subscriptionFailed(ValueSpecification specification, String msg) {
+    public void subscriptionFailed(final ValueSpecification specification, final String msg) {
       MarketDataProviderWithOverride.this.subscriptionFailed(specification, msg);
     }
 
     @Override
-    public void subscriptionStopped(ValueSpecification specification) {
+    public void subscriptionStopped(final ValueSpecification specification) {
       MarketDataProviderWithOverride.this.subscriptionStopped(specification);
     }
 
     @Override
-    public void valuesChanged(Collection<ValueSpecification> specifications) {
+    public void valuesChanged(final Collection<ValueSpecification> specifications) {
       MarketDataProviderWithOverride.this.valuesChanged(specifications);
     }
 
@@ -55,7 +55,7 @@ public class MarketDataProviderWithOverride implements MarketDataProvider {
 
   /**
    * Constructs an instance using the specified providers.
-   * 
+   *
    * @param underlying the underlying, or default, provider, not null
    * @param override the override provider, not null
    */

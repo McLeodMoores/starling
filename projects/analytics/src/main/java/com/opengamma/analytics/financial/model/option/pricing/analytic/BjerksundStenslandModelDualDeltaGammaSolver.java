@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -11,10 +11,9 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Class computing dual-Delta and dual-Gamma of American option based on an analytical approximation by Bjerksund and Stensland (2002).  
- * 
- * Delta and Gamma of puts are computed using the Bjerksund-Stensland put-call transformation
- * $p(S, K, T, r, b, \sigma) = c(K, S, T, r - b, -b, \sigma)$.
+ * Class computing dual-Delta and dual-Gamma of American option based on an analytical approximation by Bjerksund and Stensland (2002).
+ *
+ * Delta and Gamma of puts are computed using the Bjerksund-Stensland put-call transformation $p(S, K, T, r, b, \sigma) = c(K, S, T, r - b, -b, \sigma)$.
  *
  */
 
@@ -28,18 +27,25 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
 
   /**
    * Get the price of an American call option by the Bjerksund and Stensland (2002) approximation.
-   * @param s0 The spot
-   * @param k The strike
-   * @param r The risk-free rate
-   * @param b The cost-of-carry
-   * @param t The time-to-expiry
-   * @param sigma The volatility
-   * @return American call option price, dual-Delta, dual-Gamma 
+   *
+   * @param s0
+   *          The spot
+   * @param k
+   *          The strike
+   * @param r
+   *          The risk-free rate
+   * @param b
+   *          The cost-of-carry
+   * @param t
+   *          The time-to-expiry
+   * @param sigma
+   *          The volatility
+   * @return American call option price, dual-Delta, dual-Gamma
    */
   static double[] getCallDualDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
 
     final double[] res = new double[3];
-    //    European option case
+    // European option case
     if (b >= r) {
       final double expbt = Math.exp(b * t);
       final double fwd = s0 * expbt;
@@ -47,7 +53,7 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
       res[0] = df * BlackFormulaRepository.price(fwd, k, t, sigma, true);
       res[1] = df * BlackFormulaRepository.dualDelta(fwd, k, t, sigma, true);
       res[2] = df * BlackFormulaRepository.dualGamma(fwd, k, t, sigma);
-      //      }
+      // }
       return res;
     }
 
@@ -68,15 +74,15 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double[] h2 = getHDualDeltaGamma(b, t, sigma, k, b0, bInfinity);
     final double[] x2 = getXDualDeltaGamma(b0, bInfinity, h2);
 
-    //    early exercise
-    //    if (s0 >= x2[0]) {
-    //      res[0] = s0 - k;
-    //      res[1] = -1.0;
-    //      res[2] = 0.0;
-    //      return res;
-    //    }
+    // early exercise
+    // if (s0 >= x2[0]) {
+    // res[0] = s0 - k;
+    // res[1] = -1.0;
+    // res[2] = 0.0;
+    // return res;
+    // }
 
-    final double[] kDual = {k, 1., 0. };
+    final double[] kDual = { k, 1., 0. };
 
     final double t1 = RHO2 * t;
     final double[] h1 = getHDualDeltaGamma(b, t1, sigma, k, b0, bInfinity);
@@ -153,7 +159,7 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double sigmaSq = sigma * sigma;
     final double sigmaRootT = sigma * Math.sqrt(t1);
 
-    final double lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sigmaSq; //lambda
+    final double lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sigmaSq; // lambda
     final double kappa = 2 * b / sigmaSq + 2 * gamma - 1;
 
     final double second = (b + (gamma - 0.5) * sigma * sigma) * t1;
@@ -174,8 +180,8 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w3d = 2. * w2 * w2d;
     final double w4d = -1. * w1d / w1 / sigmaRootT;
     final double w5d = (w3d / w3 - w1d / w1) / sigmaRootT;
-    final double w6d = NORMAL.getPDF(-w4) * (-w4d);
-    final double w7d = NORMAL.getPDF(-w5) * (-w5d);
+    final double w6d = NORMAL.getPDF(-w4) * -w4d;
+    final double w7d = NORMAL.getPDF(-w5) * -w5d;
     final double w8d = kappa * Math.pow(w2 / s, kappa - 1.) / s * w2d;
     final double w9d = w7d * w8 + w7 * w8d;
     final double w10d = Math.exp(lambda * t1) * Math.pow(s, gamma) * (w6d - w9d);
@@ -185,8 +191,8 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w3dd = 2. * w2d * w2d + 2. * w2 * w2dd;
     final double w4dd = -1. * w1dd / w1 / sigmaRootT + 1. * w1d * w1d / w1 / w1 / sigmaRootT;
     final double w5dd = (w3dd / w3 - w1dd / w1) / sigmaRootT - (w3d * w3d / w3 / w3 - w1d * w1d / w1 / w1) / sigmaRootT;
-    final double w6dd = NORMAL.getPDF(-w4) * (-w4dd) + NORMAL.getPDF(-w4) * (w4) * (-w4d) * (-w4d);
-    final double w7dd = NORMAL.getPDF(-w5) * (-w5dd) + NORMAL.getPDF(-w5) * (w5) * (-w5d) * (-w5d);
+    final double w6dd = NORMAL.getPDF(-w4) * -w4dd + NORMAL.getPDF(-w4) * w4 * -w4d * -w4d;
+    final double w7dd = NORMAL.getPDF(-w5) * -w5dd + NORMAL.getPDF(-w5) * w5 * -w5d * -w5d;
     final double w8dd = kappa * Math.pow(w2 / s, kappa - 1.) / s * w2dd + kappa * (kappa - 1) * Math.pow(w2 / s, kappa - 2.) / s / s * w2d * w2d;
     final double w9dd = w7dd * w8 + w7 * w8dd + 2. * w7d * w8d;
     final double w10dd = Math.exp(lambda * t1) * Math.pow(s, gamma) * (w6dd - w9dd);
@@ -209,7 +215,7 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double sigmarootT1 = sigma * rootT1;
     final double sigmaSq = sigma * sigma;
 
-    final double lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sigmaSq; //lambda
+    final double lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sigmaSq; // lambda
     final double kappa = 2 * b / sigmaSq + 2 * gamma - 1;
 
     final double second = (b + (gamma - 0.5) * sigma * sigma) * t;
@@ -218,18 +224,18 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w1 = x1[0];
     final double w2 = x2[0];
     final double w3 = h[0];
-    final double w4 = (Math.log(s / w1) + second1) / sigmarootT1;  //e1
-    final double w5 = (Math.log(w2 * w2 / s / w1) + second1) / sigmarootT1;  //e2
-    final double w6 = (Math.log(s / w1) - second1) / sigmarootT1;  //e3
-    final double w7 = (Math.log(w2 * w2 / s / w1) - second1) / sigmarootT1;  //e4
-    final double w8 = (Math.log(s / w3) + second) / sigmarootT;  //f1
-    final double w9 = (Math.log(w2 * w2 / s / w3) + second) / sigmarootT;  //f2
-    final double w10 = (Math.log(w1 * w1 / s / w3) + second) / sigmarootT;  //f3
-    final double w11 = (Math.log(w1 * w1 * s / w3 / w2 / w2) + second) / sigmarootT;  //f4
-    final double w12 = BIVARIATE_NORMAL.getCDF(new double[] {-w4, -w8, RHO });
-    final double w13 = BIVARIATE_NORMAL.getCDF(new double[] {-w5, -w9, RHO });
-    final double w14 = BIVARIATE_NORMAL.getCDF(new double[] {-w6, -w10, -RHO });
-    final double w15 = BIVARIATE_NORMAL.getCDF(new double[] {-w7, -w11, -RHO });
+    final double w4 = (Math.log(s / w1) + second1) / sigmarootT1; // e1
+    final double w5 = (Math.log(w2 * w2 / s / w1) + second1) / sigmarootT1; // e2
+    final double w6 = (Math.log(s / w1) - second1) / sigmarootT1; // e3
+    final double w7 = (Math.log(w2 * w2 / s / w1) - second1) / sigmarootT1; // e4
+    final double w8 = (Math.log(s / w3) + second) / sigmarootT; // f1
+    final double w9 = (Math.log(w2 * w2 / s / w3) + second) / sigmarootT; // f2
+    final double w10 = (Math.log(w1 * w1 / s / w3) + second) / sigmarootT; // f3
+    final double w11 = (Math.log(w1 * w1 * s / w3 / w2 / w2) + second) / sigmarootT; // f4
+    final double w12 = BIVARIATE_NORMAL.getCDF(new double[] { -w4, -w8, RHO });
+    final double w13 = BIVARIATE_NORMAL.getCDF(new double[] { -w5, -w9, RHO });
+    final double w14 = BIVARIATE_NORMAL.getCDF(new double[] { -w6, -w10, -RHO });
+    final double w15 = BIVARIATE_NORMAL.getCDF(new double[] { -w7, -w11, -RHO });
     final double w16 = Math.pow(w1 / s, kappa);
     final double w17 = Math.pow(w2 / s, kappa);
     final double w18 = Math.pow(w1 / w2, kappa);
@@ -238,18 +244,22 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w1d = x1[1];
     final double w2d = x2[1];
     final double w3d = h[1];
-    final double w4d = -w1d / w1 / sigmarootT1;  //e1
-    final double w5d = (2. * w2d / w2 - w1d / w1) / sigmarootT1;  //e2
-    final double w6d = (-w1d / w1) / sigmarootT1;  //e3
-    final double w7d = (2. * w2d / w2 - w1d / w1) / sigmarootT1;  //e4
-    final double w8d = (-w3d / w3) / sigmarootT;  //f1
-    final double w9d = (2. * w2d / w2 - w3d / w3) / sigmarootT;  //f2
-    final double w10d = (2. * w1d / w1 - w3d / w3) / sigmarootT;  //f3
-    final double w11d = (2. * w1d / w1 - w3d / w3 - 2. * w2d / w2) / sigmarootT;  //f4
-    final double w12d = -NORMAL.getPDF(-w4) * NORMAL.getCDF(-(w8 - RHO * w4) / RHO_STAR) * w4d - NORMAL.getPDF(-w8) * NORMAL.getCDF(-(w4 - RHO * w8) / RHO_STAR) * w8d;
-    final double w13d = -NORMAL.getPDF(-w5) * NORMAL.getCDF(-(w9 - RHO * w5) / RHO_STAR) * w5d - NORMAL.getPDF(-w9) * NORMAL.getCDF(-(w5 - RHO * w9) / RHO_STAR) * w9d;
-    final double w14d = -NORMAL.getPDF(-w6) * NORMAL.getCDF(-(w10 + RHO * w6) / RHO_STAR) * w6d - NORMAL.getPDF(-w10) * NORMAL.getCDF(-(w6 + RHO * w10) / RHO_STAR) * w10d;
-    final double w15d = -NORMAL.getPDF(-w7) * NORMAL.getCDF(-(w11 + RHO * w7) / RHO_STAR) * w7d - NORMAL.getPDF(-w11) * NORMAL.getCDF(-(w7 + RHO * w11) / RHO_STAR) * w11d;
+    final double w4d = -w1d / w1 / sigmarootT1; // e1
+    final double w5d = (2. * w2d / w2 - w1d / w1) / sigmarootT1; // e2
+    final double w6d = -w1d / w1 / sigmarootT1; // e3
+    final double w7d = (2. * w2d / w2 - w1d / w1) / sigmarootT1; // e4
+    final double w8d = -w3d / w3 / sigmarootT; // f1
+    final double w9d = (2. * w2d / w2 - w3d / w3) / sigmarootT; // f2
+    final double w10d = (2. * w1d / w1 - w3d / w3) / sigmarootT; // f3
+    final double w11d = (2. * w1d / w1 - w3d / w3 - 2. * w2d / w2) / sigmarootT; // f4
+    final double w12d = -NORMAL.getPDF(-w4) * NORMAL.getCDF(-(w8 - RHO * w4) / RHO_STAR) * w4d
+        - NORMAL.getPDF(-w8) * NORMAL.getCDF(-(w4 - RHO * w8) / RHO_STAR) * w8d;
+    final double w13d = -NORMAL.getPDF(-w5) * NORMAL.getCDF(-(w9 - RHO * w5) / RHO_STAR) * w5d
+        - NORMAL.getPDF(-w9) * NORMAL.getCDF(-(w5 - RHO * w9) / RHO_STAR) * w9d;
+    final double w14d = -NORMAL.getPDF(-w6) * NORMAL.getCDF(-(w10 + RHO * w6) / RHO_STAR) * w6d
+        - NORMAL.getPDF(-w10) * NORMAL.getCDF(-(w6 + RHO * w10) / RHO_STAR) * w10d;
+    final double w15d = -NORMAL.getPDF(-w7) * NORMAL.getCDF(-(w11 + RHO * w7) / RHO_STAR) * w7d
+        - NORMAL.getPDF(-w11) * NORMAL.getCDF(-(w7 + RHO * w11) / RHO_STAR) * w11d;
     final double w16d = Math.pow(w1 / s, kappa - 1.) * kappa * w1d / s;
     final double w17d = Math.pow(w2 / s, kappa - 1.) * kappa * w2d / s;
     final double w18d = Math.pow(w1 / w2, kappa - 1.) * kappa * (w1d / w2 - w1 * w2d / w2 / w2);
@@ -258,25 +268,27 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
     final double w1dd = x1[2];
     final double w2dd = x2[2];
     final double w3dd = h[2];
-    final double w4dd = -w1dd / w1 / sigmarootT1 + w1d * w1d / w1 / w1 / sigmarootT1;  //e1
-    final double w5dd = (2. * w2dd / w2 - w1dd / w1 - 2. * w2d * w2d / w2 / w2 + w1d * w1d / w1 / w1) / sigmarootT1;  //e2
-    final double w6dd = (-w1dd / w1 + w1d * w1d / w1 / w1) / sigmarootT1;  //e3
-    final double w7dd = (2. * w2dd / w2 - w1dd / w1 - 2. * w2d * w2d / w2 / w2 + w1d * w1d / w1 / w1) / sigmarootT1;  //e4
-    final double w8dd = (-w3dd / w3 + w3d * w3d / w3 / w3) / sigmarootT;  //f1
-    final double w9dd = (2. * w2dd / w2 - w3dd / w3 - 2. * w2d * w2d / w2 / w2 + w3d * w3d / w3 / w3) / sigmarootT;  //f2
-    final double w10dd = (2. * w1dd / w1 - w3dd / w3 - 2. * w1d * w1d / w1 / w1 + w3d * w3d / w3 / w3) / sigmarootT;  //f3
-    final double w11dd = (2. * w1dd / w1 - w3dd / w3 - 2. * w2dd / w2 - 2. * w1d * w1d / w1 / w1 + w3d * w3d / w3 / w3 + 2. * w2d * w2d / w2 / w2) / sigmarootT;  //f4
+    final double w4dd = -w1dd / w1 / sigmarootT1 + w1d * w1d / w1 / w1 / sigmarootT1; // e1
+    final double w5dd = (2. * w2dd / w2 - w1dd / w1 - 2. * w2d * w2d / w2 / w2 + w1d * w1d / w1 / w1) / sigmarootT1; // e2
+    final double w6dd = (-w1dd / w1 + w1d * w1d / w1 / w1) / sigmarootT1; // e3
+    final double w7dd = (2. * w2dd / w2 - w1dd / w1 - 2. * w2d * w2d / w2 / w2 + w1d * w1d / w1 / w1) / sigmarootT1; // e4
+    final double w8dd = (-w3dd / w3 + w3d * w3d / w3 / w3) / sigmarootT; // f1
+    final double w9dd = (2. * w2dd / w2 - w3dd / w3 - 2. * w2d * w2d / w2 / w2 + w3d * w3d / w3 / w3) / sigmarootT; // f2
+    final double w10dd = (2. * w1dd / w1 - w3dd / w3 - 2. * w1d * w1d / w1 / w1 + w3d * w3d / w3 / w3) / sigmarootT; // f3
+    final double w11dd = (2. * w1dd / w1 - w3dd / w3 - 2. * w2dd / w2 - 2. * w1d * w1d / w1 / w1 + w3d * w3d / w3 / w3 + 2.
+        * w2d * w2d / w2 / w2) / sigmarootT; // f4
     final double w12dd = getMdd(w4, w4d, w4dd, w8, w8d, w8dd, RHO);
     final double w13dd = getMdd(w5, w5d, w5dd, w9, w9d, w9dd, RHO);
     final double w14dd = getMdd(w6, w6d, w6dd, w10, w10d, w10dd, -RHO);
     final double w15dd = getMdd(w7, w7d, w7dd, w11, w11d, w11dd, -RHO);
     final double w16dd = Math.pow(w1 / s, kappa - 1.) * kappa * w1dd / s + Math.pow(w1 / s, kappa - 2.) * kappa * (kappa - 1.) * w1d / s * w1d / s;
     final double w17dd = Math.pow(w2 / s, kappa - 1.) * kappa * w2dd / s + Math.pow(w2 / s, kappa - 2.) * kappa * (kappa - 1.) * w2d / s * w2d / s;
-    final double w18dd = Math.pow(w1 / w2, kappa - 1.) * kappa * (w1dd / w2 - w1 * w2dd / w2 / w2 - w1d * w2d / w2 / w2 - w1d * w2d / w2 / w2 + 2. * w1 * w2d * w2d / w2 / w2 / w2) +
-        Math.pow(w1 / w2, kappa - 2.) * kappa * (kappa - 1.) *
-        (w1d / w2 - w1 * w2d / w2 / w2) * (w1d / w2 - w1 * w2d / w2 / w2);
-    final double w19dd = Math.exp(lambda * t) * Math.pow(s, gamma) *
-        (w12dd - w17dd * w13 - w17 * w13dd - 2. * w17d * w13d - w16dd * w14 - w16 * w14dd - 2. * w16d * w14d + w18dd * w15 + w18 * w15dd + 2. * w18d * w15d);
+    final double w18dd = Math.pow(w1 / w2, kappa - 1.) * kappa
+        * (w1dd / w2 - w1 * w2dd / w2 / w2 - w1d * w2d / w2 / w2 - w1d * w2d / w2 / w2 + 2. * w1 * w2d * w2d / w2 / w2 / w2)
+        + Math.pow(w1 / w2, kappa - 2.) * kappa * (kappa - 1.)
+            * (w1d / w2 - w1 * w2d / w2 / w2) * (w1d / w2 - w1 * w2d / w2 / w2);
+    final double w19dd = Math.exp(lambda * t) * Math.pow(s, gamma)
+        * (w12dd - w17dd * w13 - w17 * w13dd - 2. * w17d * w13d - w16dd * w14 - w16 * w14dd - 2. * w16d * w14d + w18dd * w15 + w18 * w15dd + 2. * w18d * w15d);
 
     final double[] res = new double[3];
     res[0] = w19;
@@ -289,10 +301,11 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
   static double getMdd(final double eF, final double eFd, final double eFdd, final double fF, final double fFd, final double fFdd, final double rho) {
 
     return -NORMAL.getPDF(-eF) * NORMAL.getCDF(-(fF - rho * eF) / RHO_STAR) * eFdd - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR) * fFdd
-        - NORMAL.getPDF(-eF) * NORMAL.getPDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-(fFd - rho * eFd) / RHO_STAR) - NORMAL.getPDF(-fF) *
-        NORMAL.getPDF(-(eF - rho * fF) / RHO_STAR) * fFd * (-(eFd - rho * fFd) / RHO_STAR)
-        - NORMAL.getPDF(-eF) * NORMAL.getCDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-eF * eFd) - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR) *
-        fFd * (-fF * fFd);
+        - NORMAL.getPDF(-eF) * NORMAL.getPDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-(fFd - rho * eFd) / RHO_STAR) - NORMAL.getPDF(-fF)
+            * NORMAL.getPDF(-(eF - rho * fF) / RHO_STAR) * fFd * (-(eFd - rho * fFd) / RHO_STAR)
+        - NORMAL.getPDF(-eF) * NORMAL.getCDF(-(fF - rho * eF) / RHO_STAR) * eFd * (-eF * eFd)
+        - NORMAL.getPDF(-fF) * NORMAL.getCDF(-(eF - rho * fF) / RHO_STAR)
+            * fFd * (-fF * fFd);
   }
 
   static double[] getHDualDeltaGamma(final double b, final double t, final double sigma, final double k, final double[] b0, final double[] bInfinity) {
@@ -374,7 +387,7 @@ public class BjerksundStenslandModelDualDeltaGammaSolver {
 
     final double w2dd = x[2];
     final double w3dd = w2dd;
-    final double w4dd = (-beta) * (-beta - 1) * Math.pow(w2, -beta - 2) * w2d * w2d + (-beta) * Math.pow(w2, -beta - 1) * w2dd;
+    final double w4dd = -beta * (-beta - 1) * Math.pow(w2, -beta - 2) * w2d * w2d + -beta * Math.pow(w2, -beta - 1) * w2dd;
     final double w5dd = w3dd * w4 + w3 * w4dd + 2. * w3d * w4d;
 
     final double[] res = new double[3];

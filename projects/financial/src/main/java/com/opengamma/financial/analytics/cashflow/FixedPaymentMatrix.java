@@ -5,6 +5,7 @@
  */
 package com.opengamma.financial.analytics.cashflow;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -25,13 +26,13 @@ public class FixedPaymentMatrix {
   private final int _maxCurrencyAmounts;
 
   public FixedPaymentMatrix() {
-    _values = new TreeMap<LocalDate, MultipleCurrencyAmount>();
+    _values = new TreeMap<>();
     _maxCurrencyAmounts = 0;
   }
 
   public FixedPaymentMatrix(final Map<LocalDate, MultipleCurrencyAmount> values) {
     ArgumentChecker.notNull(values, "values");
-    _values = new TreeMap<LocalDate, MultipleCurrencyAmount>(values);
+    _values = new TreeMap<>(values);
     int count = 0;
     for (final MultipleCurrencyAmount mca : values.values()) {
       if (mca.size() > count) {
@@ -44,13 +45,13 @@ public class FixedPaymentMatrix {
   public FixedPaymentMatrix(final Map<LocalDate, MultipleCurrencyAmount> values, final int maxCurrencyAmounts) {
     ArgumentChecker.notNull(values, "values");
     ArgumentChecker.notNegative(maxCurrencyAmounts, "max currency amounts");
-    _values = new TreeMap<LocalDate, MultipleCurrencyAmount>(values);
+    _values = new TreeMap<>(values);
     _maxCurrencyAmounts = maxCurrencyAmounts;
   }
 
   public FixedPaymentMatrix add(final Map<LocalDate, MultipleCurrencyAmount> payments) {
     ArgumentChecker.notNull(payments, "payments");
-    final Map<LocalDate, MultipleCurrencyAmount> values = new TreeMap<LocalDate, MultipleCurrencyAmount>(_values);
+    final Map<LocalDate, MultipleCurrencyAmount> values = new TreeMap<>(_values);
     int count = getMaxCurrencyAmounts();
     for (final Map.Entry<LocalDate, MultipleCurrencyAmount> entry : payments.entrySet()) {
       final LocalDate date = entry.getKey();
@@ -91,7 +92,7 @@ public class FixedPaymentMatrix {
       final CurrencyAmount[] ca = mca.getCurrencyAmounts();
       for (int j = 0; j < getMaxCurrencyAmounts(); j++) {
         if (j < mca.size()) {
-          matrix[i][j] = ca.toString();
+          matrix[i][j] = Arrays.toString(ca);
         } else {
           matrix[i][j] = StringUtils.EMPTY;
         }

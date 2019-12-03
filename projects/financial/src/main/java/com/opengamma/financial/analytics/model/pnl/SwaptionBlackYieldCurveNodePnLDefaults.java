@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class SwaptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodePnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodePnLDefaults.class);
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
@@ -50,7 +50,7 @@ public class SwaptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunct
     _samplingFunction = samplingFunction;
     final int nPairs = currencyCurveConfigAndSurfaceNames.length;
     ArgumentChecker.isTrue(nPairs % 3 == 0, "Must have one curve config name per currency");
-    _currencyCurveConfigAndSurfaceNames = new HashMap<String, Pair<String, String>>();
+    _currencyCurveConfigAndSurfaceNames = new HashMap<>();
     for (int i = 0; i < currencyCurveConfigAndSurfaceNames.length; i += 3) {
       final Pair<String, String> pair = Pairs.of(currencyCurveConfigAndSurfaceNames[i + 1], currencyCurveConfigAndSurfaceNames[i + 2]);
       _currencyCurveConfigAndSurfaceNames.put(currencyCurveConfigAndSurfaceNames[i], pair);
@@ -90,7 +90,7 @@ public class SwaptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunct
     }
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);

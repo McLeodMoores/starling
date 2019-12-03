@@ -72,7 +72,8 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
     return result;
   }
 
-  protected void encodeTerminalOutputSpecifications(final FudgeSerializer serializer, final MutableFudgeMsg msg, final Map<ValueSpecification, Set<ValueRequirement>> outputs) {
+  protected void encodeTerminalOutputSpecifications(final FudgeSerializer serializer, final MutableFudgeMsg msg,
+      final Map<ValueSpecification, Set<ValueRequirement>> outputs) {
     final MutableFudgeMsg submsg = msg.addSubMessage(TERMINAL_OUTPUT_SPECIFICATIONS_FIELD, null);
     for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> output : outputs.entrySet()) {
       serializer.addToMessage(submsg, null, MAP_KEY, output.getKey());
@@ -109,7 +110,7 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
           }
         } else {
           if (overflow == null) {
-            overflow = new LinkedList<Object>();
+            overflow = new LinkedList<>();
           }
           overflow.add(fieldValue);
         }
@@ -132,7 +133,7 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
           }
         } else {
           if (overflow == null) {
-            overflow = new LinkedList<Object>();
+            overflow = new LinkedList<>();
           }
           overflow.add(fieldValue);
         }
@@ -141,7 +142,8 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
     return result;
   }
 
-  protected void encodeMarketDataAliases(final FudgeSerializer serializer, final MutableFudgeMsg msg, final Map<ValueSpecification, Collection<ValueSpecification>> marketDataEntries) {
+  protected void encodeMarketDataAliases(final FudgeSerializer serializer, final MutableFudgeMsg msg,
+      final Map<ValueSpecification, Collection<ValueSpecification>> marketDataEntries) {
     final MutableFudgeMsg msgRequirements = msg.addSubMessage(MARKET_DATA_REQUIREMENTS_FIELD, null);
     final MutableFudgeMsg msgAliases = msg.addSubMessage(MARKET_DATA_ALIASES_FIELD, null);
     for (final Map.Entry<ValueSpecification, Collection<ValueSpecification>> requirement : marketDataEntries.entrySet()) {
@@ -157,7 +159,7 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
       } else {
         final MutableFudgeMsg aliases = msgAliases.addSubMessage(null, null);
         aliases.add(null, 0, "list");
-        for (ValueSpecification alias : requirement.getValue()) {
+        for (final ValueSpecification alias : requirement.getValue()) {
           if (alias.equals(marketData)) {
             msgAliases.add(null, null, IndicatorType.INSTANCE);
           } else {
@@ -171,7 +173,7 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
   protected Map<ValueSpecification, Collection<ValueSpecification>> decodeMarketDataAliases(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final FudgeMsg msgRequirements = msg.getMessage(MARKET_DATA_REQUIREMENTS_FIELD);
     final FudgeMsg msgAliases = msg.getMessage(MARKET_DATA_ALIASES_FIELD);
-    if ((msgRequirements == null) || (msgAliases == null) || msgRequirements.isEmpty()) {
+    if (msgRequirements == null || msgAliases == null || msgRequirements.isEmpty()) {
       return Collections.emptyMap();
     }
     final Map<ValueSpecification, Collection<ValueSpecification>> result = Maps.newHashMapWithExpectedSize(msgRequirements.getNumFields());
@@ -187,8 +189,8 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
         final FudgeMsg msgAlias = (FudgeMsg) alias.getValue();
         final String clazz = msgAlias.getString(0);
         if ("list".equals(clazz)) {
-          final Collection<ValueSpecification> aliases = new ArrayList<ValueSpecification>(msgAlias.getNumFields() - 1);
-          for (FudgeField aliasField : msgAlias) {
+          final Collection<ValueSpecification> aliases = new ArrayList<>(msgAlias.getNumFields() - 1);
+          for (final FudgeField aliasField : msgAlias) {
             if (aliasField.getValue() == IndicatorType.INSTANCE) {
               aliases.add(spec);
             } else if (aliasField.getValue() instanceof FudgeMsg) {
@@ -205,30 +207,30 @@ public class CompiledViewCalculationConfigurationFudgeBuilder implements FudgeBu
   }
 
   // TODO - implement
-  private void encodeMarketDataSelections(FudgeSerializer serializer,
-                                          MutableFudgeMsg msg,
-                                          Map<DistinctMarketDataSelector, Set<ValueSpecification>> marketDataSelections) {
+  private void encodeMarketDataSelections(final FudgeSerializer serializer,
+                                          final MutableFudgeMsg msg,
+                                          final Map<DistinctMarketDataSelector, Set<ValueSpecification>> marketDataSelections) {
 
 
   }
 
   // TODO - implement
-  private Map<DistinctMarketDataSelector, Set<ValueSpecification>> decodeMarketDataSelections(FudgeDeserializer deserializer,
-                                                                                              FudgeMsg msg) {
+  private Map<DistinctMarketDataSelector, Set<ValueSpecification>> decodeMarketDataSelections(final FudgeDeserializer deserializer,
+                                                                                              final FudgeMsg msg) {
     return ImmutableMap.of();
   }
 
   // TODO - implement
-  private void encodeMarketDataFunctionParams(FudgeSerializer serializer,
-                                              MutableFudgeMsg msg,
-                                              Map<DistinctMarketDataSelector, FunctionParameters> marketDataSelectionFunctionParameters) {
+  private void encodeMarketDataFunctionParams(final FudgeSerializer serializer,
+                                              final MutableFudgeMsg msg,
+                                              final Map<DistinctMarketDataSelector, FunctionParameters> marketDataSelectionFunctionParameters) {
 
 
   }
 
   // TODO - implement
-  private Map<DistinctMarketDataSelector, FunctionParameters> decodeMarketDataFunctionParams(FudgeDeserializer deserializer,
-                                                                                             FudgeMsg msg) {
+  private Map<DistinctMarketDataSelector, FunctionParameters> decodeMarketDataFunctionParams(final FudgeDeserializer deserializer,
+                                                                                             final FudgeMsg msg) {
     return ImmutableMap.of();
   }
 

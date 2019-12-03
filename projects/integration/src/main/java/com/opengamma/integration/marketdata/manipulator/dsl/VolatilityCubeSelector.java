@@ -18,25 +18,25 @@ import com.opengamma.util.money.Currency;
  */
 public class VolatilityCubeSelector extends Selector {
 
-  /* package */ VolatilityCubeSelector(Set<String> calcConfigNames,
-                                       Set<String> names,
-                                       Set<Currency> currencies,
-                                       Pattern nameMatchPattern,
-                                       Pattern nameLikePattern) {
+  /* package */ VolatilityCubeSelector(final Set<String> calcConfigNames,
+      final Set<String> names,
+      final Set<Currency> currencies,
+      final Pattern nameMatchPattern,
+      final Pattern nameLikePattern) {
     super(calcConfigNames,
-          names,
-          currencies,
-          nameMatchPattern,
-          nameLikePattern);
+        names,
+        currencies,
+        nameMatchPattern,
+        nameLikePattern);
   }
 
   @Override
-  boolean matches(ValueSpecification valueSpecification) {
+  boolean matches(final ValueSpecification valueSpecification) {
     if (!ValueRequirementNames.VOLATILITY_CUBE.equals(valueSpecification.getValueName())) {
       return false;
     }
-    Currency currency = Currency.parse(valueSpecification.getTargetSpecification().getUniqueId().getValue());
-    String cube = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CUBE);
+    final Currency currency = Currency.parse(valueSpecification.getTargetSpecification().getUniqueId().getValue());
+    final String cube = valueSpecification.getProperties().getStrictValue(ValuePropertyNames.CUBE);
     if (cube == null) {
       return false;
     }
@@ -48,7 +48,7 @@ public class VolatilityCubeSelector extends Selector {
    */
   public static class Builder extends Selector.Builder {
 
-    /* package */ Builder(Scenario scenario) {
+    /* package */ Builder(final Scenario scenario) {
       super(scenario);
     }
 
@@ -57,33 +57,34 @@ public class VolatilityCubeSelector extends Selector {
     }
 
     @Override
-    public Builder named(String... names) {
+    public Builder named(final String... names) {
       super.named(names);
       return this;
     }
 
     @Override
-    public Builder currencies(String... codes) {
+    public Builder currencies(final String... codes) {
       super.currencies(codes);
       return this;
     }
 
     @Override
-    public Builder nameMatches(String regex) {
+    public Builder nameMatches(final String regex) {
       super.nameMatches(regex);
       return this;
     }
 
     /**
-     * This is package scoped for testing
+     * This is package scoped for testing.
+     * 
      * @return A selector built from this builder's data
      */
     /* package */ VolatilityCubeSelector selector() {
       return new VolatilityCubeSelector(getScenario().getCalcConfigNames(),
-                                        getNames(),
-                                        getCurrencies(),
-                                        getNameMatchPattern(),
-                                        getNameLikePattern());
+          getNames(),
+          getCurrencies(),
+          getNameMatchPattern(),
+          getNameLikePattern());
     }
   }
 }

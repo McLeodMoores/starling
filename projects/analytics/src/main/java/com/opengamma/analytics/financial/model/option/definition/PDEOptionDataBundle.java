@@ -12,8 +12,8 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- *  Describes a partial differential for a option price V in the form
- *  $\frac{\partial V}{\partial t} + a(S,t) \frac{\partial^2 V}{\partial S^2}$ + b(S,t) \frac{\partial V}{\partial S} + (S,t)V = 0$
+ * Describes a partial differential for a option price V in the form $\frac{\partial V}{\partial t} + a(S,t) \frac{\partial^2 V}{\partial S^2}$ + b(S,t)
+ * \frac{\partial V}{\partial S} + (S,t)V = 0$.
  */
 public class PDEOptionDataBundle extends StandardOptionDataBundle {
 
@@ -21,7 +21,8 @@ public class PDEOptionDataBundle extends StandardOptionDataBundle {
   private final Surface<Double, Double, Double> _b;
   private final Surface<Double, Double, Double> _c;
 
-  public PDEOptionDataBundle(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b, final Surface<Double, Double, Double> c, final double spot, final ZonedDateTime date) {
+  public PDEOptionDataBundle(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b, final Surface<Double, Double, Double> c,
+      final double spot, final ZonedDateTime date) {
     super(null, 0.0, null, spot, date);
     Validate.notNull(a, "null a");
     Validate.notNull(b, "null b");

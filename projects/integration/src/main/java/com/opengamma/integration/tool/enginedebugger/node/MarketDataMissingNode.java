@@ -8,16 +8,16 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing missing market data during graph building
+ * Node representing missing market data during graph building.
  */
 public class MarketDataMissingNode extends ValueRequirementNode {
 
-  public MarketDataMissingNode(Object parent, ValueRequirement valueRequirement) {
+  public MarketDataMissingNode(final Object parent, final ValueRequirement valueRequirement) {
     super(parent, valueRequirement);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -27,7 +27,7 @@ public class MarketDataMissingNode extends ValueRequirementNode {
     if (!(obj instanceof MarketDataMissingNode)) {
       return false;
     }
-    MarketDataMissingNode other = (MarketDataMissingNode) obj;
+    final MarketDataMissingNode other = (MarketDataMissingNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;
@@ -37,6 +37,6 @@ public class MarketDataMissingNode extends ValueRequirementNode {
     }
     return true;
   }
-  
+
   // hashCode from super-class
 }

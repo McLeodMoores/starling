@@ -13,6 +13,7 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.engine.ComputationTarget;
@@ -28,12 +29,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.LocalDateLabelledMatrix1D;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.bond.BondSecurity;
 
 /**
- * 
+ *
  */
 public class BondCouponPaymentDiaryFunction extends NonCompiledInvoker {
   private BondSecurityConverter _visitor;
@@ -41,14 +41,15 @@ public class BondCouponPaymentDiaryFunction extends NonCompiledInvoker {
   @Override
   public void init(final FunctionCompilationContext context) {
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     _visitor = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(ValueRequirementNames.BOND_COUPON_PAYMENT_TIMES, target.toSpecification(), createValueProperties().get()));
+    return Collections
+        .singleton(new ValueSpecification(ValueRequirementNames.BOND_COUPON_PAYMENT_TIMES, target.toSpecification(), createValueProperties().get()));
   }
 
   @Override
@@ -62,7 +63,8 @@ public class BondCouponPaymentDiaryFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final BondSecurity security = (BondSecurity) target.getSecurity();
     final BondFixedSecurityDefinition bond = (BondFixedSecurityDefinition) security.accept(_visitor);
     final AnnuityCouponFixedDefinition coupons = bond.getCoupons();
@@ -76,7 +78,8 @@ public class BondCouponPaymentDiaryFunction extends NonCompiledInvoker {
     }
     payments[n - 1] += coupons.getNthPayment(n - 1).getNotional();
     final LocalDateLabelledMatrix1D matrix = new LocalDateLabelledMatrix1D(dates, payments);
-    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.BOND_COUPON_PAYMENT_TIMES, target.toSpecification(), createValueProperties().get()), matrix));
+    return Collections.singleton(new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.BOND_COUPON_PAYMENT_TIMES, target.toSpecification(), createValueProperties().get()), matrix));
   }
 
 }

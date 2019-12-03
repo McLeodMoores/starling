@@ -78,7 +78,7 @@ public class InMemorySecuritySource extends AbstractSecuritySource {
   @Override
   public Collection<Security> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    final List<Security> result = new ArrayList<Security>();
+    final List<Security> result = new ArrayList<>();
     for (final Security sec : _securities.values()) {
       if (sec.getExternalIdBundle().containsAny(bundle)) {
         result.add(sec);

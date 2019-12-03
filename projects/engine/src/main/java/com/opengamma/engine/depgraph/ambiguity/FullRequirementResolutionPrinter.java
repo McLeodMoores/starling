@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -45,14 +45,14 @@ public class FullRequirementResolutionPrinter {
     }
     out().println(indent + resolution.getRequirement() + state);
     indent = indent + "\t";
-    for (Collection<RequirementResolution> resolutions : resolution.getResolutions()) {
+    for (final Collection<RequirementResolution> resolutions : resolution.getResolutions()) {
       if (resolutions.size() != 1) {
         out().println(indent + resolutions.size() + " ambiguous resolutions");
         state = "* ";
       } else {
         state = "  ";
       }
-      for (RequirementResolution nested : resolutions) {
+      for (final RequirementResolution nested : resolutions) {
         print(indent + state, nested);
       }
     }
@@ -61,7 +61,7 @@ public class FullRequirementResolutionPrinter {
   protected void print(String indent, final RequirementResolution resolution) {
     out().println(indent + resolution.getFunction() + " producing " + resolution.getSpecification());
     indent = indent + "\t";
-    for (FullRequirementResolution input : resolution.getInputs()) {
+    for (final FullRequirementResolution input : resolution.getInputs()) {
       print(indent, input);
     }
   }

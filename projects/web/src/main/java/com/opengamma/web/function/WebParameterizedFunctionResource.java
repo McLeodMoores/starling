@@ -35,25 +35,27 @@ public class WebParameterizedFunctionResource extends AbstractWebFunctionResourc
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "parameterizedfunction.ftl", out);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    
-    WebFunctionQueryDelegate queryDelegate = new WebFunctionQueryDelegate(data().getFunctionSource());
-    SortedMap<String, WebFunctionTypeDetails> allFunctions = queryDelegate.queryAll();
-    String functionName = data().getUriFunctionName();
-    WebFunctionTypeDetails typeDetails = allFunctions.get(data().getUriFunctionName());
-    
+
+    final WebFunctionQueryDelegate queryDelegate = new WebFunctionQueryDelegate(data().getFunctionSource());
+    final SortedMap<String, WebFunctionTypeDetails> allFunctions = queryDelegate.queryAll();
+    final String functionName = data().getUriFunctionName();
+    final WebFunctionTypeDetails typeDetails = allFunctions.get(data().getUriFunctionName());
+
     Preconditions.checkNotNull(typeDetails, "Couldn't find %s", functionName);
-    
-    FlexiBean out = super.createRootData();
+
+    final FlexiBean out = super.createRootData();
     out.put("searchResult", typeDetails);
     return out;
   }

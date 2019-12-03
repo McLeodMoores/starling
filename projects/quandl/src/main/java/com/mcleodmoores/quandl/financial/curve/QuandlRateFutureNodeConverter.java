@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -41,8 +41,8 @@ import com.opengamma.util.result.Function2;
 import com.opengamma.util.time.Expiry;
 
 /**
- * Converts {@link RateFutureNode}s to {@link InterestRateFutureTransactionDefinition}. This class extends the functionality of the parent
- * class by handling nodes that refer to {@link QuandlStirFutureConvention} and {@link QuandlFedFundsFutureConvention}.
+ * Converts {@link RateFutureNode}s to {@link InterestRateFutureTransactionDefinition}. This class extends the functionality of the parent class by handling
+ * nodes that refer to {@link QuandlStirFutureConvention} and {@link QuandlFedFundsFutureConvention}.
  */
 public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
   /** The logger */
@@ -65,13 +65,20 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
   private final QuandlFinancialConventionVisitor<Function2<Character, Integer, Expiry>> _expiryCalculator;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
   public QuandlRateFutureNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
       final RegionSource regionSource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
@@ -90,7 +97,7 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
     _marketData = marketData;
     _dataId = dataId;
     _valuationTime = valuationTime;
-    _expiryCalculator = new FutureExpiryCalculator(holidaySource, regionSource); //TODO replace with convention from source
+    _expiryCalculator = new FutureExpiryCalculator(holidaySource, regionSource); // TODO replace with convention from source
   }
 
   @Override
@@ -105,8 +112,8 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
     }
     if (futureConvention instanceof QuandlStirFutureConvention) {
       final QuandlStirFutureConvention stirConvention = (QuandlStirFutureConvention) futureConvention;
-      final com.opengamma.financial.security.index.IborIndex indexSecurity =
-          (com.opengamma.financial.security.index.IborIndex) _securitySource.getSingle(stirConvention.getUnderlyingConventionId().toBundle());
+      final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) _securitySource
+          .getSingle(stirConvention.getUnderlyingConventionId().toBundle());
       final IborIndexConvention indexConvention = _conventionSource.getSingle(stirConvention.getUnderlyingConventionId(), IborIndexConvention.class);
       if (indexConvention == null) {
         throw new Quandl4OpenGammaRuntimeException("Ibor index convention with id " + stirConvention.getUnderlyingConventionId()
@@ -126,17 +133,17 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
         index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
       }
       final Period indexTenor = rateFuture.getUnderlyingTenor().getPeriod();
-      final double paymentAccrualFactor = indexTenor.toTotalMonths() / 12.; //TODO don't use this method
+      final double paymentAccrualFactor = indexTenor.toTotalMonths() / 12.; // TODO don't use this method
       final Calendar fixingCalendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getFixingCalendar());
       final ZonedDateTime startDate = _valuationTime.plus(rateFuture.getStartTenor().getPeriod());
       final LocalDate localStartDate = startDate.toLocalDate();
       final Character monthCode = QuandlFutureUtils.getMonthCode(rateFuture.getFutureTenor(), rateFuture.getFutureNumber(), localStartDate);
       final int expiryYear = QuandlFutureUtils.getExpiryYear(rateFuture.getFutureTenor(), rateFuture.getFutureNumber(), localStartDate);
       final ZonedDateTime expiryDate = stirConvention.accept(_expiryCalculator).apply(monthCode, expiryYear).getExpiry();
-      final InterestRateFutureSecurityDefinition securityDefinition =
-          new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "", fixingCalendar);
-      final InterestRateFutureTransactionDefinition transactionDefinition =
-          new InterestRateFutureTransactionDefinition(securityDefinition, 1, _valuationTime, price);
+      final InterestRateFutureSecurityDefinition securityDefinition = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "",
+          fixingCalendar);
+      final InterestRateFutureTransactionDefinition transactionDefinition = new InterestRateFutureTransactionDefinition(securityDefinition, 1, _valuationTime,
+          price);
       return transactionDefinition;
     }
     if (futureConvention instanceof QuandlFedFundsFutureConvention) {
@@ -159,8 +166,8 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
       final ZonedDateTime expiryDate = fedFundsConvention.accept(_expiryCalculator).apply(monthCode, expiryYear).getExpiry();
       final FederalFundsFutureSecurityDefinition securityDefinition = FederalFundsFutureSecurityDefinition.from(expiryDate,
           index, 1, paymentAccrualFactor, "", calendar);
-      final FederalFundsFutureTransactionDefinition transactionDefinition =
-          new FederalFundsFutureTransactionDefinition(securityDefinition, 1, _valuationTime, price);
+      final FederalFundsFutureTransactionDefinition transactionDefinition = new FederalFundsFutureTransactionDefinition(securityDefinition, 1, _valuationTime,
+          price);
       return transactionDefinition;
     }
     return super.visitRateFutureNode(rateFuture);

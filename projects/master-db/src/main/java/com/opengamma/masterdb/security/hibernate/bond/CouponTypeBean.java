@@ -15,7 +15,7 @@ public class CouponTypeBean extends EnumBean {
   protected CouponTypeBean() {
   }
 
-  public CouponTypeBean(String couponType) {
+  public CouponTypeBean(final String couponType) {
     super(couponType);
   }
 

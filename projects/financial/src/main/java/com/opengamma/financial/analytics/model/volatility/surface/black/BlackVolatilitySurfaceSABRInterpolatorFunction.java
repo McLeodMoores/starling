@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface.black;
@@ -23,7 +23,7 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * 
+ *
  */
 public class BlackVolatilitySurfaceSABRInterpolatorFunction extends BlackVolatilitySurfaceInterpolatorFunction {
 
@@ -36,6 +36,7 @@ public class BlackVolatilitySurfaceSABRInterpolatorFunction extends BlackVolatil
   protected GeneralSmileInterpolator getSmileInterpolator(final ValueRequirement desiredValue) {
     final String modelName = desiredValue.getConstraint(PROPERTY_SABR_MODEL);
     final String weightingFunctionName = desiredValue.getConstraint(PROPERTY_SABR_WEIGHTING_FUNCTION);
+    @SuppressWarnings("unchecked")
     final VolatilityFunctionProvider<SABRFormulaData> model = (VolatilityFunctionProvider<SABRFormulaData>) VolatilityFunctionFactory.getCalculator(modelName);
     final WeightingFunction weightingFunction = WeightingFunctionFactory.getWeightingFunction(weightingFunctionName);
     final boolean useExternalBeta = Boolean.parseBoolean(desiredValue.getConstraint(PROPERTY_SABR_USE_EXTERNAL_BETA));

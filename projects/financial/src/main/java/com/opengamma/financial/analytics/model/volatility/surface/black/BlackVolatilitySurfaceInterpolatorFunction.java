@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface.black;
@@ -17,8 +17,8 @@ import java.util.Set;
 
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.GeneralSmileInterpolator;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurfaceInterpolator;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
 import com.opengamma.engine.function.FunctionCompilationContext;
@@ -32,12 +32,13 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public abstract class BlackVolatilitySurfaceInterpolatorFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String timeAxis = desiredValue.getConstraint(PROPERTY_TIME_AXIS);
     final boolean useLogTime = BlackVolatilitySurfacePropertyUtils.useLogTime(timeAxis);
@@ -49,8 +50,9 @@ public abstract class BlackVolatilitySurfaceInterpolatorFunction extends Abstrac
     final String interpolator = desiredValue.getConstraint(PROPERTY_TIME_INTERPOLATOR);
     final String leftExtrapolator = desiredValue.getConstraint(PROPERTY_TIME_LEFT_EXTRAPOLATOR);
     final String rightExtrapolator = desiredValue.getConstraint(PROPERTY_TIME_RIGHT_EXTRAPOLATOR);
-    final Interpolator1D timeInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolator, leftExtrapolator, rightExtrapolator);
-    final VolatilitySurfaceInterpolator surfaceInterpolator = new VolatilitySurfaceInterpolator(smileInterpolator, timeInterpolator, useLogTime, useIntegratedVariance, useLogValue);
+    final Interpolator1D timeInterpolator = NamedInterpolator1dFactory.of(interpolator, leftExtrapolator, rightExtrapolator);
+    final VolatilitySurfaceInterpolator surfaceInterpolator = new VolatilitySurfaceInterpolator(smileInterpolator, timeInterpolator, useLogTime,
+        useIntegratedVariance, useLogValue);
     final ValueProperties properties = getResultProperties(desiredValue);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR, target.toSpecification(), properties);
     return Collections.singleton(new ComputedValue(spec, surfaceInterpolator));
@@ -77,12 +79,12 @@ public abstract class BlackVolatilitySurfaceInterpolatorFunction extends Abstrac
     return getSpecificRequirements(constraints);
   }
 
-  protected abstract Set<ValueRequirement> getSpecificRequirements(final ValueProperties constraints);
+  protected abstract Set<ValueRequirement> getSpecificRequirements(ValueProperties constraints);
 
-  protected abstract GeneralSmileInterpolator getSmileInterpolator(final ValueRequirement desiredValue);
+  protected abstract GeneralSmileInterpolator getSmileInterpolator(ValueRequirement desiredValue);
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final ValueRequirement desiredValue);
+  protected abstract ValueProperties getResultProperties(ValueRequirement desiredValue);
 
 }

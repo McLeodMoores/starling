@@ -23,12 +23,12 @@ import com.opengamma.util.test.TestGroup;
 public class QueryPortfolioDbPortfolioMasterWorkerGetNodeTest extends AbstractDbPortfolioMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryPortfolioDbPortfolioMasterWorkerGetNodeTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryPortfolioDbPortfolioMasterWorkerGetNodeTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryPortfolioDbPortfolioMasterWorkerGetNodeTest(String databaseType, String databaseVersion) {
+  public QueryPortfolioDbPortfolioMasterWorkerGetNodeTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -39,63 +39,63 @@ public class QueryPortfolioDbPortfolioMasterWorkerGetNodeTest extends AbstractDb
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getNode_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "0", "0");
     _prtMaster.getNode(uniqueId);
   }
 
   @Test
   public void test_getNode_versioned() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "111", "0");
-    ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "111", "0");
+    final ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
     assertNode111(test, 999, UniqueId.of("DbPrt", "101", "0"));
   }
 
   @Test
   public void test_getNode_versioned_112() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "112", "0");
-    ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "112", "0");
+    final ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
     assertNode112(test, 999, UniqueId.of("DbPrt", "101", "0"));
   }
 
   @Test
   public void test_getNode_versioned_113() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "113", "0");
-    ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "113", "0");
+    final ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
     assertNode113(test, UniqueId.of("DbPrt", "101", "0"));
   }
 
   @Test
   public void test_getNode_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "211", "0");
-    ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "211", "0");
+    final ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
     assertNode211(test, UniqueId.of("DbPrt", "201", "0"));
   }
 
   @Test
   public void test_getNode_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "211", "1");
-    ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "211", "1");
+    final ManageablePortfolioNode test = _prtMaster.getNode(uniqueId);
     assertNode212(test, UniqueId.of("DbPrt", "201", "1"));
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getNode_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbPrt", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPrt", "0");
     _prtMaster.getNode(uniqueId);
   }
 
   @Test
   public void test_getNode_unversioned_latest() {
-    UniqueId oid = UniqueId.of("DbPrt", "211");
-    ManageablePortfolioNode test = _prtMaster.getNode(oid);
+    final UniqueId oid = UniqueId.of("DbPrt", "211");
+    final ManageablePortfolioNode test = _prtMaster.getNode(oid);
     assertNode212(test, UniqueId.of("DbPrt", "201", "1"));
   }
 
   @Test
   public void test_getNode_unversioned_nodesLoaded() {
-    UniqueId oid = UniqueId.of("DbPrt", "111");
-    ManageablePortfolioNode test = _prtMaster.getNode(oid);
+    final UniqueId oid = UniqueId.of("DbPrt", "111");
+    final ManageablePortfolioNode test = _prtMaster.getNode(oid);
     assertNode111(test, 999, UniqueId.of("DbPrt", "101", "0"));
   }
 

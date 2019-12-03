@@ -44,11 +44,11 @@ public class IndexLoader extends SecurityLoader {
 
   private static final String BLOOMBERG_INDEX_TYPE = "Index";
   /**
-   * Valid Security type values for this index
+   * Valid Security type values for this index.
    */
   public static final Set<String> VALID_SECURITY_TYPES = Collections.unmodifiableSet(Sets.newHashSet(BLOOMBERG_INDEX_TYPE));
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(IndexLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IndexLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -60,62 +60,64 @@ public class IndexLoader extends SecurityLoader {
       FIELD_ID_CUSIP,
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1));
-  
-  private static final Pattern s_tenorFromDes = Pattern.compile("(.*?)(Overnight.*?|O\\/N.*?|OVERNIGHT.*?|Tomorrow[\\s\\/]Next.*?|T[\\s\\/]N.*?|TOM[\\s\\/]NEXT.*?|\\d+\\s*.*?)");
-  private static final Pattern s_overnight = Pattern.compile(".*?(Overnight|O\\/N|OVERNIGHT).*?");
-  private static final Pattern s_tomNext = Pattern.compile(".*?(Tomorrow[\\s\\/]Next|T[\\s\\/]N|TOM[\\s\\/]NEXT).*?");
-  private static final Pattern s_numberFromTimeUnit = Pattern.compile("(\\d+)\\s*(.*?)");
+
+  private static final Pattern TENOR_FROM_DES = Pattern
+      .compile("(.*?)(Overnight.*?|O\\/N.*?|OVERNIGHT.*?|Tomorrow[\\s\\/]Next.*?|T[\\s\\/]N.*?|TOM[\\s\\/]NEXT.*?|\\d+\\s*.*?)");
+  private static final Pattern OVERNIGHT = Pattern.compile(".*?(Overnight|O\\/N|OVERNIGHT).*?");
+  private static final Pattern TOM_NEXT = Pattern.compile(".*?(Tomorrow[\\s\\/]Next|T[\\s\\/]N|TOM[\\s\\/]NEXT).*?");
+  private static final Pattern NUMBER_FROM_TIME_UNIT = Pattern.compile("(\\d+)\\s*(.*?)");
   private static final String BLOOMBERG_CONVENTION_NAME = "BLOOMBERG_CONVENTION_NAME";
   private static final String BLOOMBERG_INDEX_FAMILY = "BLOOMBERG_INDEX_FAMILY";
-  
+
   private static final String FED_FUNDS_SECURITY_DES = "Federal Funds Effective Rate U";
   private static final Set<String> BLOOMBERG_SECURITY_DES_OVERNIGHT_EXCEPTIONS = Collections.unmodifiableSet(Sets.newHashSet(
-      FED_FUNDS_SECURITY_DES
-  ));
+      FED_FUNDS_SECURITY_DES));
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public IndexLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.INDEX);
+  public IndexLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.INDEX);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String securityDes = fieldData.getString(FIELD_SECURITY_DES);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_SECURITY_DES), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String indexSource = fieldData.getString(FIELD_INDX_SOURCE);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String securityDes = fieldData.getString(FIELD_SECURITY_DES);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_SECURITY_DES), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String indexSource = fieldData.getString(FIELD_INDX_SOURCE);
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct index");
+      LOGGER.warn("bbgUnique is null, cannot construct index");
       return null;
     }
     if (!isValidField(securityDes)) {
-      s_logger.warn("security description is null, cannot construct index");
+      LOGGER.warn("security description is null, cannot construct index");
       return null;
     }
     if (!isValidField(indexSource)) {
-      s_logger.warn("index source is null, cannot construct index");
+      LOGGER.warn("index source is null, cannot construct index");
       return null;
     }
- 
+
     Index index;
-    Tenor tenor = decodeTenor(securityDes);
-    ExternalId conventionId = createConventionId(securityDes);
-    ExternalId familyId = ExternalId.of(ExternalScheme.of(BLOOMBERG_INDEX_FAMILY), conventionId.getValue());
-    
+    final Tenor tenor = decodeTenor(securityDes);
+    final ExternalId conventionId = createConventionId(securityDes);
+    final ExternalId familyId = ExternalId.of(ExternalScheme.of(BLOOMBERG_INDEX_FAMILY), conventionId.getValue());
+
     if (indexSource.toUpperCase().contains("STAT")) {
-      // guess it's a price index as source is STATistics agency.  Crude, but hopefully effective.
+      // guess it's a price index as source is STATistics agency. Crude, but hopefully effective.
       index = new PriceIndex(name, conventionId);
       index.setIndexFamilyId(null);
     } else if (securityDes.toUpperCase().contains("ISDAFIX") && tenor != null) {
       // guess it's a swap index
       index = new SwapIndex(name, tenor, conventionId);
       index.setIndexFamilyId(familyId);
-    } else if (tenor != null) { 
+    } else if (tenor != null) {
       // Ibor or overnight
       if (tenor.equals(Tenor.ON)) {
         index = new OvernightIndex(name, conventionId);
@@ -126,7 +128,7 @@ public class IndexLoader extends SecurityLoader {
       }
       index.setName(name);
     } else {
-      s_logger.error("Could not load index {}, source={}, tenor={}, securityDes={}", name, indexSource, tenor, securityDes);
+      LOGGER.error("Could not load index {}, source={}, tenor={}, securityDes={}", name, indexSource, tenor, securityDes);
       return null;
     }
 
@@ -134,36 +136,35 @@ public class IndexLoader extends SecurityLoader {
     parseIdentifiers(fieldData, index);
     return index;
   }
-  
+
   // public visible for tests
-  public static ExternalId createConventionId(String securityDes) {
-    Matcher matcher = s_tenorFromDes.matcher(securityDes);
+  public static ExternalId createConventionId(final String securityDes) {
+    final Matcher matcher = TENOR_FROM_DES.matcher(securityDes);
     if (matcher.matches()) {
-      String descriptionPart = matcher.group(1); // remember, groups are 1 indexed!
+      final String descriptionPart = matcher.group(1); // remember, groups are 1 indexed!
       return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), descriptionPart.trim());
-    } else {
-      return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
     }
+    return ExternalId.of(ExternalScheme.of(BLOOMBERG_CONVENTION_NAME), securityDes.trim());
   }
 
   // public visible for tests
-  public static Tenor decodeTenor(String securityDes) {
+  public static Tenor decodeTenor(final String securityDes) {
     if (BLOOMBERG_SECURITY_DES_OVERNIGHT_EXCEPTIONS.contains(securityDes)) {
       return Tenor.ON;
     }
-    Matcher matcher = s_tenorFromDes.matcher(securityDes);
+    final Matcher matcher = TENOR_FROM_DES.matcher(securityDes);
     if (matcher.matches()) {
-      String tenorPart = matcher.group(2); // remember, groups are 1 indexed!
-      if (s_overnight.matcher(tenorPart).matches()) {
+      final String tenorPart = matcher.group(2); // remember, groups are 1 indexed!
+      if (OVERNIGHT.matcher(tenorPart).matches()) {
         return Tenor.ON;
-      } else if (s_tomNext.matcher(tenorPart).matches()) {
+      } else if (TOM_NEXT.matcher(tenorPart).matches()) {
         return Tenor.TN;
       } else {
-        Matcher numberFromTimeMatcher = s_numberFromTimeUnit.matcher(tenorPart);
+        final Matcher numberFromTimeMatcher = NUMBER_FROM_TIME_UNIT.matcher(tenorPart);
         if (numberFromTimeMatcher.matches()) {
-          String numberStr = numberFromTimeMatcher.group(1).trim();
-          int number = Integer.parseInt(numberStr);
-          String timeUnit = numberFromTimeMatcher.group(2).trim().toUpperCase();
+          final String numberStr = numberFromTimeMatcher.group(1).trim();
+          final int number = Integer.parseInt(numberStr);
+          final String timeUnit = numberFromTimeMatcher.group(2).trim().toUpperCase();
           if (timeUnit.length() == 0) {
             throw new OpenGammaRuntimeException("Could not decode tenor from description " + securityDes);
           }

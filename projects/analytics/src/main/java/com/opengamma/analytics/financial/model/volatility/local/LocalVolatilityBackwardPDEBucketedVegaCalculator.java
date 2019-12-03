@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class LocalVolatilityBackwardPDEBucketedVegaCalculator {
   private static final double SHIFT = 1e-4;
@@ -58,7 +58,8 @@ public class LocalVolatilityBackwardPDEBucketedVegaCalculator {
     final double[] fwds = new double[4];
     System.arraycopy(xNodes, index, fwds, 0, 4);
     for (int i = 0; i < 4; i++) {
-      vols[i] = BlackFormulaRepository.impliedVolatility(pdeGrid.getFunctionValue(index + i), fwds[i], option.getStrike(), option.getTimeToExpiry(), option.isCall());
+      vols[i] = BlackFormulaRepository.impliedVolatility(pdeGrid.getFunctionValue(index + i), fwds[i], option.getStrike(), option.getTimeToExpiry(),
+          option.isCall());
     }
     Interpolator1DDataBundle db = _interpolator.getDataBundle(fwds, vols);
     final double exampleVol = _interpolator.interpolate(db, x);
@@ -105,7 +106,8 @@ public class LocalVolatilityBackwardPDEBucketedVegaCalculator {
     final double[] fwds = new double[4];
     System.arraycopy(xNodes, index, fwds, 0, 4);
     for (int i = 0; i < 4; i++) {
-      vols[i] = BlackFormulaRepository.impliedVolatility(pdeGrid.getFunctionValue(index + i), fwds[i], option.getStrike(), option.getTimeToExpiry(), option.isCall());
+      vols[i] = BlackFormulaRepository.impliedVolatility(pdeGrid.getFunctionValue(index + i), fwds[i], option.getStrike(), option.getTimeToExpiry(),
+          option.isCall());
     }
     Interpolator1DDataBundle db = _interpolator.getDataBundle(fwds, vols);
     final double exampleVol = _interpolator.interpolate(db, x);

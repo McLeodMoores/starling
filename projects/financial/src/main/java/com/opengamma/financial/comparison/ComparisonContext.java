@@ -8,8 +8,7 @@ package com.opengamma.financial.comparison;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * State required for the current comparison operation.
- * This may not be shared among multiple comparisons, or by multiple threads.
+ * State required for the current comparison operation. This may not be shared among multiple comparisons, or by multiple threads.
  */
 /* package */final class ComparisonContext {
 
@@ -17,7 +16,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 
   private final FudgeSerializer _fudgeSerializer;
 
-  public ComparisonContext(final AbstractComparator comparator) {
+  ComparisonContext(final AbstractComparator comparator) {
     _comparator = comparator;
     _fudgeSerializer = new FudgeSerializer(comparator.getFudgeContext());
   }

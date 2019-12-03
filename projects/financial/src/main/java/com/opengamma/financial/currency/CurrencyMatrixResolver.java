@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -11,7 +11,7 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * An engine resolver for {@link CurrencyMatrix} objects
+ * An engine resolver for {@link CurrencyMatrix} objects.
  */
 public class CurrencyMatrixResolver extends AbstractSourceResolver<CurrencyMatrix, CurrencyMatrixSource> {
 

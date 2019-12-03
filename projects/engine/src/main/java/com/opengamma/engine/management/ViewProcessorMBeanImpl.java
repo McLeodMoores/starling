@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * An MBean implementation for those attributes and operations we wish to expose on ViewProcessor.
- * 
+ *
  */
 public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
 
@@ -27,45 +27,52 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
    * A ViewProcessor backing instance
    */
   private final ViewProcessorInternal _viewProcessor;
-  
+
   private final ObjectName _objectName;
-  
+
   /**
-   * Create a management ViewProcessor
+   * Create a management ViewProcessor.
    *
-   * @param viewProcessor the underlying ViewProcessor
+   * @param viewProcessor
+   *          the underlying ViewProcessor
    * @param splitByViewProcessor
+   *          true to split by view processor
    */
-  public ViewProcessorMBeanImpl(ViewProcessorInternal viewProcessor, boolean splitByViewProcessor) {
+  public ViewProcessorMBeanImpl(final ViewProcessorInternal viewProcessor, final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewProcessor, "View Processor");
     _viewProcessor = viewProcessor;
     _objectName = createObjectName(viewProcessor, splitByViewProcessor);
   }
-  
+
   /**
-   * Creates an object name using the scheme "com.opengamma:type=ViewProcessor,name=<viewProcessorName>"
+   * Creates an object name using the scheme "com.opengamma:type=ViewProcessor,name=<viewProcessorName>".
+   *
+   * @param viewProcessor
+   *          the view processor
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
-  static ObjectName createObjectName(ViewProcessor viewProcessor,
-                                     boolean splitByViewProcessor) {
+  static ObjectName createObjectName(final ViewProcessor viewProcessor,
+      final boolean splitByViewProcessor) {
     try {
-      return new ObjectName(splitByViewProcessor ?
-        "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessor.getName() + ",name=ViewProcessor " + viewProcessor.getName() :
-        "com.opengamma:type=ViewProcessor,name=ViewProcessor " + viewProcessor.getName());
-    } catch (MalformedObjectNameException e) {
+      return new ObjectName(splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessor.getName() + ",name=ViewProcessor " + viewProcessor.getName()
+          : "com.opengamma:type=ViewProcessor,name=ViewProcessor " + viewProcessor.getName());
+    } catch (final MalformedObjectNameException e) {
       throw new OpenGammaRuntimeException("", e);
     }
   }
 
   @Override
   public Set<UniqueId> getViewProcesses() {
-    Set<UniqueId> result = new HashSet<UniqueId>();
-    for (com.opengamma.engine.view.ViewProcess viewProcess : _viewProcessor.getViewProcesses()) {
+    final Set<UniqueId> result = new HashSet<>();
+    for (final com.opengamma.engine.view.ViewProcess viewProcess : _viewProcessor.getViewProcesses()) {
       result.add(viewProcess.getUniqueId());
     }
     return result;
   }
 
-  
   @Override
   public int getNumberOfViewProcesses() {
     return _viewProcessor.getViewProcesses().size(); // == getViewProcesses().size();
@@ -73,7 +80,7 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
 
   /**
    * Gets the objectName field.
-   * 
+   *
    * @return the object name for this MBean
    */
   public ObjectName getObjectName() {
@@ -94,5 +101,5 @@ public final class ViewProcessorMBeanImpl implements ViewProcessorMBean {
   public boolean isRunning() {
     return _viewProcessor.isRunning();
   }
-  
+
 }

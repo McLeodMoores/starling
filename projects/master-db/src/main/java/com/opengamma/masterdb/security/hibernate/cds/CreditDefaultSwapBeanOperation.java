@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -13,14 +13,15 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 
 /**
- * 
+ *
  */
 public final class CreditDefaultSwapBeanOperation {
 
   private CreditDefaultSwapBeanOperation() {
   }
 
-  public static CreditDefaultSwapSecurityBean createBean(final HibernateSecurityMasterDao secMasterSession, final CreditDefaultSwapSecurityBean bean, final CreditDefaultSwapSecurity security) {
+  public static CreditDefaultSwapSecurityBean createBean(final HibernateSecurityMasterDao secMasterSession, final CreditDefaultSwapSecurityBean bean,
+      final CreditDefaultSwapSecurity security) {
 
     bean.setAdjustEffectiveDate(security.isAdjustEffectiveDate());
     bean.setAdjustMaturityDate(security.isAdjustMaturityDate());
@@ -47,7 +48,7 @@ public final class CreditDefaultSwapBeanOperation {
     bean.setStubType(secMasterSession.getOrCreateStubTypeBean(security.getStubType().name()));
     return bean;
   }
-  
+
   public static CreditDefaultSwapSecurity createSecurity(final CreditDefaultSwapSecurity security, final CreditDefaultSwapSecurityBean bean) {
     return security;
   }

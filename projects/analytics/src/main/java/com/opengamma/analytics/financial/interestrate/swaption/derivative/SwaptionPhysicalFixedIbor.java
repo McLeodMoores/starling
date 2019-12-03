@@ -36,14 +36,22 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
 
   /**
    * Constructor from the expiry date, the underlying swap and the long/short flqg.
-   * @param expiryTime The expiry time.
-   * @param strike The strike
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isCall Call.
-   * @param isLong The long (true) / short (false) flag.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param strike
+   *          The strike
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isCall
+   *          Call.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    */
-  private SwaptionPhysicalFixedIbor(final double expiryTime, final double strike, final SwapFixedCoupon<? extends Payment> underlyingSwap, final double settlementTime, final boolean isCall,
+  private SwaptionPhysicalFixedIbor(final double expiryTime, final double strike, final SwapFixedCoupon<? extends Payment> underlyingSwap,
+      final double settlementTime, final boolean isCall,
       final boolean isLong) {
     super(strike, expiryTime, isCall);
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
@@ -53,43 +61,58 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
   }
 
   /**
-   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as the
-   * strike can be different for each coupon and need to be computed at the pricing method level.
-   * @param expiryTime The expiry time.
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isCall The call / put flag
-   * @param isLong The long (true) / short (false) flag.
+   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as
+   * the strike can be different for each coupon and need to be computed at the pricing method level.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isCall
+   *          The call / put flag
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    */
   public static SwaptionPhysicalFixedIbor from(final double expiryTime, final SwapFixedCoupon<? extends Payment> underlyingSwap, final double settlementTime,
       final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     final double strike = underlyingSwap.getFixedLeg().getNthPayment(0).getFixedRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
+    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in
+    // the pricing methods.
     return new SwaptionPhysicalFixedIbor(expiryTime, strike, underlyingSwap, settlementTime, isCall, isLong);
   }
 
   /**
-   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as the
-   * strike can be different for each coupon and need to be computed at the pricing method level.
-   * @param expiryTime The expiry time.
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isLong The long (true) / short (false) flag.
+   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as
+   * the strike can be different for each coupon and need to be computed at the pricing method level.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    * @deprecated This relies on the {@link AnnuityCouponFixed#isPayer()} method to determine if the swaption is a call or a put, which is deprecated
    */
   @Deprecated
-  public static SwaptionPhysicalFixedIbor from(final double expiryTime, final SwapFixedCoupon<? extends Payment> underlyingSwap, final double settlementTime, final boolean isLong) {
+  public static SwaptionPhysicalFixedIbor from(final double expiryTime, final SwapFixedCoupon<? extends Payment> underlyingSwap, final double settlementTime,
+      final boolean isLong) {
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     final double strike = underlyingSwap.getFixedLeg().getNthPayment(0).getFixedRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
+    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in
+    // the pricing methods.
     return new SwaptionPhysicalFixedIbor(expiryTime, strike, underlyingSwap, settlementTime, underlyingSwap.getFixedLeg().isPayer(), isLong);
   }
 
   /**
    * Gets the underlying swap.
+   * 
    * @return The underlying swap.
    */
   public SwapFixedCoupon<? extends Payment> getUnderlyingSwap() {
@@ -98,6 +121,7 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
 
   /**
    * Gets the _isLong flag.
+   * 
    * @return The Long (true)/Short (false) flag.
    */
   public boolean isLong() {
@@ -106,6 +130,7 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
 
   /**
    * Gets the settlement time.
+   * 
    * @return The settlement time
    */
   public double getSettlementTime() {
@@ -114,6 +139,7 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
 
   /**
    * Gets the time difference between the last fixed leg payment and the settlement.
+   * 
    * @return The maturity time.
    */
   public double getMaturityTime() {
@@ -122,6 +148,7 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
 
   /**
    * Gets the swaption currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -152,7 +179,7 @@ public final class SwaptionPhysicalFixedIbor extends EuropeanVanillaOption imple
     result = prime * result + (_isLong ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_settlementTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSwap.hashCode();
     return result;
   }

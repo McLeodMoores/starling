@@ -82,12 +82,33 @@ public class FXOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExerciseType _exerciseType;
 
-  FXOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FXOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public FXOptionSecurity(Currency putCurrency, Currency callCurrency, double putAmount, double callAmount, Expiry expiry,
-      ZonedDateTime settlementDate, boolean isLong, ExerciseType exerciseType) {
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   * @param exerciseType
+   *          the exercise type, not null
+   */
+  public FXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount, final Expiry expiry,
+      final ZonedDateTime settlementDate, final boolean isLong, final ExerciseType exerciseType) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);
@@ -101,14 +122,14 @@ public class FXOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXOptionSecurity(this);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -117,7 +138,7 @@ public class FXOptionSecurity extends FinancialSecurity {
 
   /**
    * Checks if the long/short type is short.
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

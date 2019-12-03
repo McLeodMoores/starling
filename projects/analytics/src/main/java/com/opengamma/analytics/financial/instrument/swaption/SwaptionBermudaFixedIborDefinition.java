@@ -24,8 +24,8 @@ import com.opengamma.util.ArgumentChecker;
 public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<SwaptionBermudaFixedIbor> {
 
   /**
-   * The swaps underlying the swaption. There is one swap for each expiration date.
-   * The swap do not need to be identical; this allow to incorporate fees or changing margins in the description.
+   * The swaps underlying the swaption. There is one swap for each expiration date. The swap do not need to be identical; this allow to incorporate fees or
+   * changing margins in the description.
    */
   private final SwapFixedIborDefinition[] _underlyingSwap;
   /**
@@ -39,9 +39,13 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
 
   /**
    * Constructor for the Bermuda swaption.
-   * @param underlyingSwap The swaps underlying the swaption. There is one swap for each expiration date.
-   * @param isLong Flag indicating if the option is long (true) or short (false).
-   * @param expiryDate The swaption expiration dates.
+   * 
+   * @param underlyingSwap
+   *          The swaps underlying the swaption. There is one swap for each expiration date.
+   * @param isLong
+   *          Flag indicating if the option is long (true) or short (false).
+   * @param expiryDate
+   *          The swaption expiration dates.
    */
   public SwaptionBermudaFixedIborDefinition(final SwapFixedIborDefinition[] underlyingSwap, final boolean isLong, final ZonedDateTime[] expiryDate) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
@@ -53,18 +57,24 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
   }
 
   /**
-   * Creates a Bermudan swaption from a unique swap and the expiry dates. For each expiry dates, a exercise swap with the coupon that start on or
-   * after the exercise date is created.
-   * @param underlyingTotalSwap The underlying swap.
-   * @param isLong Flag indicating if the option is long (true) or short (false).
-   * @param expiryDate The swaption expiration dates.
+   * Creates a Bermudan swaption from a unique swap and the expiry dates. For each expiry dates, a exercise swap with the coupon that start on or after the
+   * exercise date is created.
+   * 
+   * @param underlyingTotalSwap
+   *          The underlying swap.
+   * @param isLong
+   *          Flag indicating if the option is long (true) or short (false).
+   * @param expiryDate
+   *          The swaption expiration dates.
    * @return The Bermuda swaption.
    */
-  public static SwaptionBermudaFixedIborDefinition from(final SwapFixedIborDefinition underlyingTotalSwap, final boolean isLong, final ZonedDateTime[] expiryDate) {
+  public static SwaptionBermudaFixedIborDefinition from(final SwapFixedIborDefinition underlyingTotalSwap, final boolean isLong,
+      final ZonedDateTime[] expiryDate) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingTotalSwap, "underlying swap");
     final int nbExpiry = underlyingTotalSwap.getFixedLeg().getNumberOfPayments();
-    ArgumentChecker.isTrue(expiryDate.length == nbExpiry, "Number of expiries provided {} did not match the number of fixed payments of underlying swap {}", expiryDate.length, nbExpiry);
+    ArgumentChecker.isTrue(expiryDate.length == nbExpiry, "Number of expiries provided {} did not match the number of fixed payments of underlying swap {}",
+        expiryDate.length, nbExpiry);
     final SwapFixedIborDefinition[] underlyingSwaps = new SwapFixedIborDefinition[nbExpiry];
     for (int loopexp = 0; loopexp < nbExpiry; loopexp++) {
       underlyingSwaps[loopexp] = underlyingTotalSwap.trimStart(expiryDate[loopexp]);
@@ -75,6 +85,7 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
 
   /**
    * Gets the swaps underlying the swaption. There is one swap for each expiration date.
+   * 
    * @return The underlying swaps.
    */
   public SwapFixedIborDefinition[] getUnderlyingSwap() {
@@ -83,6 +94,7 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
 
   /**
    * Gets the flag indicating if the option is long (true) or short (false).
+   * 
    * @return The flag.
    */
   public boolean isLong() {
@@ -91,6 +103,7 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
 
   /**
    * Gets the swaption expiration dates.
+   * 
    * @return The swaption expiration dates.
    */
   public ZonedDateTime[] getExpiryDate() {
@@ -99,6 +112,7 @@ public class SwaptionBermudaFixedIborDefinition implements InstrumentDefinition<
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated

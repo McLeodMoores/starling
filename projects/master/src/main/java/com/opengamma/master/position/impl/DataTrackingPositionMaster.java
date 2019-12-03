@@ -19,32 +19,32 @@ import com.opengamma.master.position.PositionSearchResult;
  * Position master which tracks accesses using UniqueIds.
  */
 public class DataTrackingPositionMaster extends AbstractDataTrackingMaster<PositionDocument, PositionMaster> implements PositionMaster {
-  
-  public DataTrackingPositionMaster(PositionMaster delegate) {
+
+  public DataTrackingPositionMaster(final PositionMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
-    PositionSearchResult searchResult = delegate().search(request);
+  public PositionSearchResult search(final PositionSearchRequest request) {
+    final PositionSearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
-    PositionHistoryResult historyResult = delegate().history(request);
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
+    final PositionHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     //trades are wrapped by positions so don't need to
     //be tracked
     return delegate().getTrade(tradeId);
   }
 
-  
-  
+
+
 }

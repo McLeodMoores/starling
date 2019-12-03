@@ -11,15 +11,15 @@ package com.opengamma.analytics.financial.interestrate;
 public abstract class InterestRate {
 
   /**
-   * Enum describing the types of an interest rate
+   * Enum describing the types of an interest rate.
    */
   public enum Type {
 
-    /** Simple interest rate */
+    /** Simple interest rate. */
     SIMPLE,
-    /** Periodic interest rate */
+    /** Periodic interest rate. */
     PERIODIC,
-    /** Continuously-compounded interest rate */
+    /** Continuously-compounded interest rate. */
     CONTINUOUS
   }
 
@@ -37,14 +37,18 @@ public abstract class InterestRate {
 
   /**
    * Create an InterestRate object with the correct composition type from a continuously compounded InterestRate object.
-   * @param continuous The continuously compounded InterestRate.
+   *
+   * @param continuous
+   *          The continuously compounded InterestRate.
    * @return The new object.
    */
   public abstract InterestRate fromContinuous(ContinuousInterestRate continuous);
 
   /**
    * Computes the derivative of the rate in the correct composition type from a continuously compounded InterestRate object.
-   * @param continuous The continuously compounded InterestRate.
+   *
+   * @param continuous
+   *          The continuously compounded InterestRate.
    * @return The derivative.
    */
   public abstract double fromContinuousDerivative(ContinuousInterestRate continuous);
@@ -61,7 +65,7 @@ public abstract class InterestRate {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

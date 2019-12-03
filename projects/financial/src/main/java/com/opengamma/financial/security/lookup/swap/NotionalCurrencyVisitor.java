@@ -18,22 +18,22 @@ import com.opengamma.util.money.Currency;
 /* package */ class NotionalCurrencyVisitor implements NotionalVisitor<Currency> {
 
   @Override
-  public Currency visitCommodityNotional(CommodityNotional notional) {
+  public Currency visitCommodityNotional(final CommodityNotional notional) {
     return null;
   }
 
   @Override
-  public Currency visitInterestRateNotional(InterestRateNotional notional) {
+  public Currency visitInterestRateNotional(final InterestRateNotional notional) {
     return notional.getCurrency();
   }
 
   @Override
-  public Currency visitSecurityNotional(SecurityNotional notional) {
+  public Currency visitSecurityNotional(final SecurityNotional notional) {
     return null;
   }
 
   @Override
-  public Currency visitVarianceSwapNotional(VarianceSwapNotional notional) {
+  public Currency visitVarianceSwapNotional(final VarianceSwapNotional notional) {
     return null;
   }
 

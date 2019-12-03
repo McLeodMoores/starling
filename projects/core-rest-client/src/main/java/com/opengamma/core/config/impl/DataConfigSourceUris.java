@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.config.impl;
@@ -21,11 +21,15 @@ import com.opengamma.util.ArgumentChecker;
 public class DataConfigSourceUris {
   /**
    * Builds a URI.
-   * 
-   * @param baseUri the base URI, not null
-   * @param name the name, may be null
-   * @param versionCorrection the version to fetch, null means latest
-   * @param type the config type, may be null
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @param name
+   *          the name, not null
+   * @param versionCorrection
+   *          the version to fetch, null means latest
+   * @param type
+   *          the config type, not null
    * @return the URI, not null
    */
   public static URI uriGet(final URI baseUri, final String name, final VersionCorrection versionCorrection, final Class<?> type) {
@@ -60,26 +64,33 @@ public class DataConfigSourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param objectId  the object identifier, may be null
-   * @param versionCorrection  the version-correction, null means latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param objectId
+   *          the object identifier, not null
+   * @param versionCorrection
+   *          the version-correction, null means latest
    * @return the URI, not null
    */
-  public static URI uriGet(final URI baseUri, final ObjectId objectId, VersionCorrection versionCorrection) {
+  public static URI uriGet(final URI baseUri, final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(baseUri, "baseUri");
     ArgumentChecker.notNull(objectId, "objectId");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("configs/{oid}/{versionCorrection}");
-    versionCorrection = versionCorrection != null ? versionCorrection : VersionCorrection.LATEST;
-    return bld.build(objectId, versionCorrection);
+    final VersionCorrection vc = versionCorrection != null ? versionCorrection : VersionCorrection.LATEST;
+    return bld.build(objectId, vc);
   }
 
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param name  the name, may be null
-   * @param versionCorrection  the version to fetch, null means latest
-   * @param type  the config type, may be null
+   * @param baseUri
+   *          the base URI, not null
+   * @param name
+   *          the name, not null
+   * @param versionCorrection
+   *          the version to fetch, null means latest
+   * @param type
+   *          the config type, not null
    * @return the URI, not null
    */
   public static URI uriSearchSingle(final URI baseUri, final String name, final VersionCorrection versionCorrection, final Class<?> type) {
@@ -100,9 +111,12 @@ public class DataConfigSourceUris {
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
-   * @param type  the config type, may be null
-   * @param versionCorrection  the version to fetch, null means latest
+   * @param baseUri
+   *          the base URI, not null
+   * @param type
+   *          the config type, not null
+   * @param versionCorrection
+   *          the version to fetch, null means latest
    *
    * @return the URI, not null
    */
@@ -119,7 +133,14 @@ public class DataConfigSourceUris {
     return bld.build();
   }
 
-  public static <T> URI uriPut(final URI baseUri) {
+  /**
+   * Builds a URI.
+   *
+   * @param baseUri
+   *          the base URI, not null
+   * @return the URI, not null
+   */
+  public static URI uriPut(final URI baseUri) {
     ArgumentChecker.notNull(baseUri, "baseUri");
     final UriBuilder bld = UriBuilder.fromUri(baseUri).path("put");
     return bld.build();

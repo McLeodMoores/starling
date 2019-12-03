@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -52,7 +52,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
   private final double[] _displacementInit;
 
   /**
-   * Constructor of the objective function with the LMM parameters. The parameters range and accuracy are set at some default value 
+   * Constructor of the objective function with the LMM parameters. The parameters range and accuracy are set at some default value
    * (minimum: 1.0E-1; maximum: 1.0E+1, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
    * @param parameters The Hull-White parameters.
    * @param ccy The currency for which the LMM parameters are valid (LMM on the discounting curve).
@@ -74,7 +74,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
   }
 
   @Override
-  public void setMulticurves(MulticurveProviderInterface multicurves) {
+  public void setMulticurves(final MulticurveProviderInterface multicurves) {
     _lmmProvider = new LiborMarketModelDisplacedDiffusionProvider(multicurves, _lmmParameters, _ccyLMM);
   }
 
@@ -106,7 +106,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
    * Sets the start index.
    * @param startIndex The start index.
    */
-  public void setStartIndex(int startIndex) {
+  public void setStartIndex(final int startIndex) {
     _startIndex = startIndex;
   }
 
@@ -122,7 +122,7 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
    * Sets the end index.
    * @param endIndex The end index.
    */
-  public void setEndIndex(int endIndex) {
+  public void setEndIndex(final int endIndex) {
     _endIndex = endIndex;
   }
 
@@ -138,23 +138,23 @@ public class SuccessiveLeastSquareLMMDDCalibrationObjective extends SuccessiveLe
   /**
    * The inputs are the multiplicative factor on the volatilities and the additive term on the displacement.
    */
-  public DoubleMatrix1D evaluate(DoubleMatrix1D x) {
-    int nbVol = _endIndex - _startIndex + 1;
-    double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
+  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
+    final int nbVol = _endIndex - _startIndex + 1;
+    final double[][] volChanged = new double[nbVol][_lmmParameters.getNbFactor()];
     for (int loopperiod = 0; loopperiod < nbVol; loopperiod++) {
       for (int loopfact = 0; loopfact < _lmmParameters.getNbFactor(); loopfact++) {
         volChanged[loopperiod][loopfact] = _volatilityInit[loopperiod + _startIndex][loopfact] * x.getEntry(0);
       }
     }
     _lmmParameters.setVolatility(volChanged, _startIndex);
-    double[] disChanged = new double[nbVol];
+    final double[] disChanged = new double[nbVol];
     for (int loopperiod = 0; loopperiod < nbVol; loopperiod++) {
       disChanged[loopperiod] = _displacementInit[loopperiod + _startIndex] + x.getEntry(1);
     }
     _lmmParameters.setDisplacement(disChanged, _startIndex);
-    int nbInstruments = getInstruments().length;
-    Double[] result = new Double[nbInstruments];
-    // Implementation note: The pv error for each instrument 
+    final int nbInstruments = getInstruments().length;
+    final Double[] result = new Double[nbInstruments];
+    // Implementation note: The pv error for each instrument
     for (int loopins = 0; loopins < nbInstruments; loopins++) {
       result[loopins] = getInstruments()[loopins].accept(PVLMC, _lmmProvider).getAmount(_ccyLMM) - getPrices()[loopins];
     }

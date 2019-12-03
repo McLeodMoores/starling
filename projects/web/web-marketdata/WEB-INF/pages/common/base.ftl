@@ -1,14 +1,14 @@
 <#-- Macro to produce a standard page with html/head/body -->
-<#macro page title="OpenGamma">
+<#macro page title="Starling">
 <html>
   <head>
-    <title>${title} - OpenGamma</title>
+    <title>${title} - Starling</title>
     <link type="text/css" rel="stylesheet" href="/css/og-base.css"/>
   </head>
   <body>
     <div id="header">
       <p id="logo">
-        <a href="/"><img src="/images/opengamma.png" width="289" height="51" alt="OpenGamma - Financial Analytics and Risk Management" /></a>
+        <a href="/"><img src="/images/starling-inline.png" width="289" height="51" alt="Starling - Financial Analytics and Risk Management" /></a>
       </p>
     </div>
     <div id="body">

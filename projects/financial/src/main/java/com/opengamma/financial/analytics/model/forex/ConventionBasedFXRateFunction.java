@@ -36,8 +36,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
- * Function to source FX rates (live, historical, latest historical) based on a quoting convention. It is up to the consumer of the value to recognize the convention and interpret the value
- * accordingly.
+ * Function to source FX rates (live, historical, latest historical) based on a quoting convention. It is up to the consumer of the value to recognize the
+ * convention and interpret the value accordingly.
  * <p>
  * This function is implemented by querying a value on an ordered currency pair, which will typically be handled by the CurrencyMatrix based functions.
  */
@@ -103,13 +103,17 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
       return new ValueSpecification(ValueRequirementNames.SPOT_RATE, targetSpec, properties);
     }
 
-    private ValueSpecification createHistoricalTimeSeriesResult(final ComputationTargetSpecification targetSpec, ValueProperties properties) {
-      properties = properties.copy()
+    private ValueSpecification createHistoricalTimeSeriesResult(final ComputationTargetSpecification targetSpec,
+        final ValueProperties properties) {
+      final ValueProperties tsProperties = properties.copy()
           .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE, HistoricalTimeSeriesFunctionUtils.YES_VALUE)
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE,
+              HistoricalTimeSeriesFunctionUtils.YES_VALUE)
           .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE, HistoricalTimeSeriesFunctionUtils.YES_VALUE).get();
-      return new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, properties);
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.NO_VALUE,
+              HistoricalTimeSeriesFunctionUtils.YES_VALUE)
+          .get();
+      return new ValueSpecification(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, targetSpec, tsProperties);
     }
 
     private ValueSpecification createTimeSeriesLatestResult(final ComputationTargetSpecification targetSpec, final ValueProperties properties) {
@@ -131,16 +135,20 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
       }
       final ValueProperties properties = propertiesBuilder.get();
       final ComputationTargetSpecification targetSpec = target.toSpecification();
-      return ImmutableSet.of(createSpotRateResult(targetSpec, properties), createHistoricalTimeSeriesResult(targetSpec, properties), createTimeSeriesLatestResult(targetSpec, properties));
+      return ImmutableSet.of(createSpotRateResult(targetSpec, properties), createHistoricalTimeSeriesResult(targetSpec, properties),
+          createTimeSeriesLatestResult(targetSpec, properties));
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints;
       if (desiredValue.getConstraints().getProperties() != null) {
         final ValueProperties.Builder constraintsBuilder = ValueProperties.builder();
         for (final String constraintName : desiredValue.getConstraints().getProperties()) {
-          if (ValuePropertyNames.FUNCTION.equals(constraintName) || constraintName.startsWith(ValuePropertyNames.OUTPUT_RESERVED_PREFIX) || QUOTING_CONVENTION_PROPERTY.equals(constraintName)) {
+          if (ValuePropertyNames.FUNCTION.equals(constraintName)
+              || constraintName.startsWith(ValuePropertyNames.OUTPUT_RESERVED_PREFIX)
+              || QUOTING_CONVENTION_PROPERTY.equals(constraintName)) {
             continue;
           }
           final Set<String> values = desiredValue.getConstraints().getValues(constraintName);
@@ -163,7 +171,8 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(inputs.size());
       final ComputationTargetSpecification targetSpec = target.toSpecification();
       for (final ValueSpecification input : inputs.keySet()) {
@@ -187,7 +196,8 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
       for (final ValueRequirement desiredValue : desiredValues) {
         final Object input = inputs.getValue(desiredValue.getValueName());
@@ -214,13 +224,16 @@ public class ConventionBasedFXRateFunction extends AbstractFunction {
     return getHistoricalTimeSeriesRequirement(UnorderedCurrencyPair.of(currency1, currency2));
   }
 
-  public static ValueRequirement getHistoricalTimeSeriesRequirement(final UnorderedCurrencyPair currencies, final DateConstraint startDate, final boolean includeStart, final DateConstraint endDate,
+  public static ValueRequirement getHistoricalTimeSeriesRequirement(final UnorderedCurrencyPair currencies, final DateConstraint startDate,
+      final boolean includeStart, final DateConstraint endDate,
       final boolean includeEnd) {
-    return new ValueRequirement(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencies), HistoricalTimeSeriesFunctionUtils
-        .htsConstraints(ValueProperties.builder(), startDate, includeStart, endDate, includeEnd).get());
+    return new ValueRequirement(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencies),
+        HistoricalTimeSeriesFunctionUtils
+            .htsConstraints(ValueProperties.builder(), startDate, includeStart, endDate, includeEnd).get());
   }
 
-  public static ValueRequirement getHistoricalTimeSeriesRequirement(final Currency currency1, final Currency currency2, final DateConstraint startDate, final boolean includeStart,
+  public static ValueRequirement getHistoricalTimeSeriesRequirement(final Currency currency1, final Currency currency2, final DateConstraint startDate,
+      final boolean includeStart,
       final DateConstraint endDate, final boolean includeEnd) {
     return getHistoricalTimeSeriesRequirement(UnorderedCurrencyPair.of(currency1, currency2), startDate, includeStart, endDate, includeEnd);
   }

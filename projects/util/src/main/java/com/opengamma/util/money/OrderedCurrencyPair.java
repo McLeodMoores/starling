@@ -18,10 +18,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.joda.convert.FromString;
 
 import com.opengamma.id.ObjectId;
@@ -54,10 +54,24 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
   private final Currency _secondCurrency;
   private final String _idValue;
 
+  /**
+   * Obtains an {@code OrderedCurrencyPair} from two currencies.
+   *
+   * @param ccy1  the first currency, not null
+   * @param ccy2  the second currency, not null
+   * @return  the pair, not null
+   */
   public static OrderedCurrencyPair of(final Currency ccy1, final Currency ccy2) {
     return new OrderedCurrencyPair(ccy1, ccy2);
   }
 
+  /**
+   * Extracts an {@code OrderedCurrencyPair} from a unique identifier.
+   *
+   * @param uniqueId  the unique identifier, not null
+   * @return  the pair, not null
+   * @throws IllegalArgumentException if the input is invalid
+   */
   public static OrderedCurrencyPair of(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     if (uniqueId.getScheme().equals(OBJECT_SCHEME)) {
@@ -73,6 +87,15 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
         + "UniqueId; " + uniqueId.getScheme());
   }
 
+  /**
+   * Parses the string to produce a {@code OrderedCurrencyPair}.
+   * <p>
+   * This parses the {@code toString} format of '${currency1}${currency2}'
+   *
+   * @param string  the amount string, not null
+   * @return the currency amount
+   * @throws IllegalArgumentException if the amount cannot be parsed
+   */
   @FromString
   public static OrderedCurrencyPair parse(final String string) {
     ArgumentChecker.notNull(string, "string");
@@ -103,11 +126,23 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
     return UniqueId.of(OBJECT_SCHEME, _idValue);
   }
 
+  /**
+   * True if the input is the inverse pair of this ordered pair i.e. the numerator and denominator
+   * are switched.
+   *
+   * @param other  the other pair, not null
+   * @return  true if the input is the inverse of this pair
+   */
   public boolean isInverse(final OrderedCurrencyPair other) {
     ArgumentChecker.notNull(other, "other");
     return other._firstCurrency.equals(_secondCurrency) && other._secondCurrency.equals(_firstCurrency);
   }
 
+  /**
+   * Gets the inverse of this pair.
+   *
+   * @return  the inverse pair
+   */
   public OrderedCurrencyPair getInverse() {
     return new OrderedCurrencyPair(_secondCurrency, _firstCurrency);
   }
@@ -167,8 +202,8 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       OrderedCurrencyPair other = (OrderedCurrencyPair) obj;
-      return JodaBeanUtils.equal(getFirstCurrency(), other.getFirstCurrency()) &&
-          JodaBeanUtils.equal(getSecondCurrency(), other.getSecondCurrency());
+      return JodaBeanUtils.equal(_firstCurrency, other._firstCurrency) &&
+          JodaBeanUtils.equal(_secondCurrency, other._secondCurrency);
     }
     return false;
   }
@@ -176,8 +211,8 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstCurrency());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSecondCurrency());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstCurrency);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_secondCurrency);
     return hash;
   }
 
@@ -185,8 +220,8 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("OrderedCurrencyPair{");
-    buf.append("firstCurrency").append('=').append(getFirstCurrency()).append(',').append(' ');
-    buf.append("secondCurrency").append('=').append(JodaBeanUtils.toString(getSecondCurrency()));
+    buf.append("firstCurrency").append('=').append(_firstCurrency).append(',').append(' ');
+    buf.append("secondCurrency").append('=').append(JodaBeanUtils.toString(_secondCurrency));
     buf.append('}');
     return buf.toString();
   }
@@ -295,7 +330,7 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
   /**
    * The bean-builder for {@code OrderedCurrencyPair}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<OrderedCurrencyPair> {
+  private static final class Builder extends DirectPrivateBeanBuilder<OrderedCurrencyPair> {
 
     private Currency _firstCurrency;
     private Currency _secondCurrency;
@@ -304,6 +339,7 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -331,30 +367,6 @@ public final class OrderedCurrencyPair implements ImmutableBean, UniqueIdentifia
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

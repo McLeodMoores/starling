@@ -21,7 +21,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   OBJECT_ID_ASC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj1.getObjectId().compareTo(obj2.getObjectId());
     }
   },
@@ -30,7 +30,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   OBJECT_ID_DESC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj2.getObjectId().compareTo(obj1.getObjectId());
     }
   },
@@ -39,7 +39,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   VERSION_FROM_INSTANT_ASC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj1.getVersionFromInstant().compareTo(obj2.getVersionFromInstant());
     }
   },
@@ -48,7 +48,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   VERSION_FROM_INSTANT_DESC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj2.getVersionFromInstant().compareTo(obj1.getVersionFromInstant());
     }
   },
@@ -57,7 +57,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   NAME_ASC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj1.getName().compareTo(obj2.getName());
     }
   },
@@ -66,7 +66,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   NAME_DESC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj2.getName().compareTo(obj1.getName());
     }
   },
@@ -75,7 +75,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   CONVENTION_TYPE_ASC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj1.getConvention().getConventionType().getName().compareTo(obj2.getConvention().getConventionType().getName());
     }
   },
@@ -84,7 +84,7 @@ public enum ConventionSearchSortOrder implements Comparator<ConventionDocument> 
    */
   CONVENTION_TYPE_DESC {
     @Override
-    public int compare(ConventionDocument obj1, ConventionDocument obj2) {
+    public int compare(final ConventionDocument obj1, final ConventionDocument obj2) {
       return obj2.getConvention().getConventionType().getName().compareTo(obj1.getConvention().getConventionType().getName());
     }
   };

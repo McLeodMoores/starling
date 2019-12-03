@@ -6,11 +6,13 @@
 package com.opengamma.analytics.financial.var;
 
 /**
- * @param <S> The type of the parameters
- * @param <T> The type of the data
+ * @param <S>
+ *          The type of the parameters
+ * @param <T>
+ *          The type of the data
  */
 public interface VaRCalculator<S, T> {
 
   @SuppressWarnings("unchecked")
-  VaRCalculationResult evaluate(final S parameters, final T... data);
+  VaRCalculationResult evaluate(S parameters, T... data);
 }

@@ -32,7 +32,7 @@ public class DataUserSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param userSource  the underlying user source, not null
    */
   public DataUserSourceResource(final UserSource userSource) {
@@ -43,7 +43,7 @@ public class DataUserSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the user source.
-   * 
+   *
    * @return the user source, not null
    */
   public UserSource getUserSource() {
@@ -52,7 +52,7 @@ public class DataUserSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -60,8 +60,8 @@ public class DataUserSourceResource extends AbstractDataResource {
   @GET
   @Path("users/name/{userName}")
   public Response getAccountByName(
-      @PathParam("userName") String userName) {
-    UserAccount result = getUserSource().getAccount(userName);
+      @PathParam("userName") final String userName) {
+    final UserAccount result = getUserSource().getAccount(userName);
     return responseOkObject(result);
   }
 

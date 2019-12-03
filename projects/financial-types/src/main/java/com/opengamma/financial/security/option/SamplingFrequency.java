@@ -23,11 +23,11 @@ public enum SamplingFrequency {
    */
   WEEKLY_CLOSE,
   /**
-   * Continuous (for continuous monitoring)
+   * Continuous (for continuous monitoring).
    */
   CONTINUOUS,
   /**
-   * One Look (for barriers that only apply at expiry)
+   * One Look (for barriers that only apply at expiry).
    */
   ONE_LOOK
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.resolver;
@@ -24,7 +24,6 @@ import com.opengamma.engine.target.ComputationTargetReference;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.target.ComputationTargetTypeVisitor;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
@@ -37,7 +36,7 @@ import com.opengamma.util.PublicAPI;
 @PublicAPI
 public class ResolutionRule {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolutionRule.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionRule.class);
 
   /**
    * The parameterized function.
@@ -54,12 +53,12 @@ public class ResolutionRule {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param function the function, not null
    * @param computationTargetFilter the filter, not null
    * @param priority the priority
    */
-  public ResolutionRule(ParameterizedFunction function, ComputationTargetFilter computationTargetFilter, int priority) {
+  public ResolutionRule(final ParameterizedFunction function, final ComputationTargetFilter computationTargetFilter, final int priority) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(computationTargetFilter, "computationTargetFilter");
     _parameterizedFunction = function;
@@ -69,7 +68,7 @@ public class ResolutionRule {
 
   /**
    * Gets the parameterized function.
-   * 
+   *
    * @return the function and behavioral parameters this rule is advertising, not null
    */
   public ParameterizedFunction getParameterizedFunction() {
@@ -78,7 +77,7 @@ public class ResolutionRule {
 
   /**
    * Gets the filter that the rule uses.
-   * 
+   *
    * @return the filter in use, not null
    */
   public ComputationTargetFilter getComputationTargetFilter() {
@@ -87,7 +86,7 @@ public class ResolutionRule {
 
   /**
    * Gets the priority of the rule. If multiple rules can produce a given output, the one with the highest priority is chosen.
-   * 
+   *
    * @return the priority
    */
   public int getPriority() {
@@ -102,16 +101,18 @@ public class ResolutionRule {
    * <li>This resolution rule applies to the given computation target
    * </ol>
    * <p>
-   * The implementation has been split into two accessible components to allow a resolver to cache the intermediate results. This is more efficient than repeated calls to this method.
-   * 
+   * The implementation has been split into two accessible components to allow a resolver to cache the intermediate results. This is more efficient than
+   * repeated calls to this method.
+   *
    * @param valueName The output value to be produced
    * @param target Computation target
    * @param constraints The constraints that must be satisfied on the produced value
    * @param context Function compilation context
-   * @return Null if this the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by the function. The specification is not composed
-   *         against the requirement constraints.
+   * @return Null if this the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by the
+   * function. The specification is not composed against the requirement constraints.
    */
-  public ValueSpecification getResult(String valueName, ComputationTarget target, ValueProperties constraints, FunctionCompilationContext context) {
+  public ValueSpecification getResult(final String valueName, final ComputationTarget target, final ValueProperties constraints,
+      final FunctionCompilationContext context) {
     final Set<ValueSpecification> resultSpecs = getResults(target, context);
     if (resultSpecs == null) {
       return null;
@@ -120,11 +121,13 @@ public class ResolutionRule {
   }
 
   /**
-   * The first half of the full {@link #getResult(ValueRequirement,ComputationTarget,FunctionCompilationContext)} implementation returning the set of all function outputs for use by
-   * {@link #getResult(ValueRequirement,ComputationTarget,FunctionCompilationContext,Set)}.
-   * 
-   * @param target the computation target
-   * @param context Function compilation context
+   * The first half of the full {@link #getResult(String, ComputationTarget, ValueProperties, FunctionCompilationContext)} implementation returning the set of
+   * all function outputs for use by {@link #getResult(String, ComputationTarget, ValueProperties, Collection)}.
+   *
+   * @param target
+   *          the computation target
+   * @param context
+   *          Function compilation context
    * @return the set of all value specifications produced by the function, null if none can be produced
    */
   public Set<ValueSpecification> getResults(final ComputationTarget target, final FunctionCompilationContext context) {
@@ -145,9 +148,9 @@ public class ResolutionRule {
   }
 
   /**
-   * Tests whether two unique identifiers are sufficiently equal. The object identifiers of each must match. Either may omit the version, but if both specify versions then the versions must also
-   * match.
-   * 
+   * Tests whether two unique identifiers are sufficiently equal. The object identifiers of each must match. Either may omit the version,
+   * but if both specify versions then the versions must also match.
+   *
    * @param a the first identifier to compare, not null
    * @param b the second identifier to compare, not null
    */
@@ -156,7 +159,7 @@ public class ResolutionRule {
       // Object identifiers don't match
       return false;
     }
-    if ((a.getVersion() == null) || (b.getVersion() == null)) {
+    if (a.getVersion() == null || b.getVersion() == null) {
       // Loose versioning is okay
       return true;
     }
@@ -170,31 +173,31 @@ public class ResolutionRule {
     }
     final UniqueId uid = target.getUniqueId();
     if (uid != null) {
-      ComputationTargetSpecification targetSpec = target.toSpecification();
-      for (ValueSpecification result : results) {
+      final ComputationTargetSpecification targetSpec = target.toSpecification();
+      for (final ValueSpecification result : results) {
         if (!isUidMatch(uid, result.getTargetSpecification().getUniqueId())) {
-          s_logger.warn("Invalid UID for result {} on target {}", result, target);
+          LOGGER.warn("Invalid UID for result {} on target {}", result, target);
           return false;
         }
         ComputationTargetReference a = result.getTargetSpecification().getParent();
         ComputationTargetReference b = targetSpec.getParent();
-        while ((a != null) && (b != null)) {
+        while (a != null && b != null) {
           if (!isUidMatch(a.getSpecification().getUniqueId(), b.getSpecification().getUniqueId())) {
-            s_logger.warn("Parent context mismatch of result {} on target {}", result, target);
+            LOGGER.warn("Parent context mismatch of result {} on target {}", result, target);
             return false;
           }
           a = a.getParent();
           b = b.getParent();
         }
-        if ((a != null) || (b != null)) {
-          s_logger.warn("Invalid parent context of result {} on target {}", result, target);
+        if (a != null || b != null) {
+          LOGGER.warn("Invalid parent context of result {} on target {}", result, target);
           return false;
         }
       }
     } else {
-      for (ValueSpecification result : results) {
+      for (final ValueSpecification result : results) {
         if (result.getTargetSpecification().getUniqueId() != null) {
-          s_logger.warn("Invalid result {} on null target {}", result, target);
+          LOGGER.warn("Invalid result {} on null target {}", result, target);
           return false;
         }
       }
@@ -203,34 +206,39 @@ public class ResolutionRule {
   }
 
   /**
-   * The second half of the full {@link #getResult(ValueRequirement, ComputationTarget, FunctionCompilationContext)}) implementation taking the set of all function outputs produced by
-   * {@link #getResults}.
-   * 
-   * @param valueName output value name to be produced, not null and interned
-   * @param target Computation target, not null
-   * @param constraints the constraints that must be satisfied, not null
-   * @param resultSpecs The results from {@code getResults()}, not null
-   * @return Null if the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by the function. The specification is not composed
-   *         against the requirement constraints.
+   * The second half of the full {@link #getResult(String, ComputationTarget, ValueProperties, FunctionCompilationContext)}) implementation taking the set of
+   * all function outputs produced by {@link #getResults}.
+   *
+   * @param valueName
+   *          output value name to be produced, not null and interned
+   * @param target
+   *          Computation target, not null
+   * @param constraints
+   *          the constraints that must be satisfied, not null
+   * @param resultSpecs
+   *          The results from {@code getResults()}, not null
+   * @return Null if the function advertised by this rule cannot produce the desired output, a valid ValueSpecification otherwise - as returned by the function.
+   *         The specification is not composed against the requirement constraints.
    */
-  public ValueSpecification getResult(final String valueName, final ComputationTarget target, final ValueProperties constraints, final Collection<ValueSpecification> resultSpecs) {
+  public ValueSpecification getResult(final String valueName, final ComputationTarget target, final ValueProperties constraints,
+      final Collection<ValueSpecification> resultSpecs) {
     // Of the maximal outputs, is one valid for the requirement
     ValueSpecification validSpec = null;
     final UniqueId targetId = target.getUniqueId();
     if (targetId != null) {
-      for (ValueSpecification resultSpec : resultSpecs) {
-        //s_logger.debug("Considering {} for {}", resultSpec, output);
-        if ((valueName == resultSpec.getValueName())
-            && isUidMatch(targetId, resultSpec.getTargetSpecification().getUniqueId()) // This is not necessary if functions are well behaved or the "isValidResultsOnTarget" check was used 
+      for (final ValueSpecification resultSpec : resultSpecs) {
+        //LOGGER.debug("Considering {} for {}", resultSpec, output);
+        if (valueName == resultSpec.getValueName()
+            && isUidMatch(targetId, resultSpec.getTargetSpecification().getUniqueId()) // not if functions are well behaved or the "isValidResultsOnTarget" used
             && constraints.isSatisfiedBy(resultSpec.getProperties())) {
           validSpec = resultSpec;
           break;
         }
       }
     } else {
-      for (ValueSpecification resultSpec : resultSpecs) {
-        if ((valueName == resultSpec.getValueName())
-            && (resultSpec.getTargetSpecification().getUniqueId() == null) // This is not necessary if functions are well behaved or the "isValidResultsOnTarget" check was used
+      for (final ValueSpecification resultSpec : resultSpecs) {
+        if (valueName == resultSpec.getValueName()
+            && resultSpec.getTargetSpecification().getUniqueId() == null // not needed if well behaved or the "isValidResultsOnTarget" check was used
             && constraints.isSatisfiedBy(resultSpec.getProperties())) {
           validSpec = resultSpec;
           break;
@@ -252,7 +260,8 @@ public class ResolutionRule {
     return "ResolutionRule[" + getParameterizedFunction() + " at priority " + getPriority() + "]";
   }
 
-  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedTargetTypes = new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
+  private static ComputationTargetTypeVisitor<Void, List<ComputationTargetType>> s_getNestedTargetTypes =
+      new ComputationTargetTypeVisitor<Void, List<ComputationTargetType>>() {
 
     @Override
     public List<ComputationTargetType> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void unused) {
@@ -279,7 +288,8 @@ public class ResolutionRule {
 
   };
 
-  private static ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> s_getLeafClass = new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
+  private static ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> s_getLeafClass =
+      new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
 
     @Override
     public Class<? extends UniqueIdentifiable> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -319,9 +329,8 @@ public class ResolutionRule {
       final ComputationTargetType leaf = type.accept(this, data);
       if (leaf == null) {
         return type;
-      } else {
-        return leaf;
       }
+      return leaf;
     }
 
     @Override
@@ -337,11 +346,12 @@ public class ResolutionRule {
 
   };
 
-  private static ComputationTargetTypeVisitor<ComputationTargetType, ComputationTargetType> s_getAdjustedTargetType = new ComputationTargetTypeVisitor<ComputationTargetType, ComputationTargetType>() {
+  private static ComputationTargetTypeVisitor<ComputationTargetType, ComputationTargetType> s_getAdjustedTargetType =
+      new ComputationTargetTypeVisitor<ComputationTargetType, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTargetType target) {
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         final ComputationTargetType adjusted = type.accept(this, target);
         if (adjusted == ComputationTargetType.NULL) {
           return type;
@@ -400,9 +410,8 @@ public class ResolutionRule {
         final ComputationTargetType leaf = target.accept(s_getLeafType, null);
         if (leaf == null) {
           return target;
-        } else {
-          return leaf;
         }
+        return leaf;
       } else {
         // Target is not compatible with the function type
         return null;
@@ -411,18 +420,18 @@ public class ResolutionRule {
 
   };
 
-  private static final ConcurrentMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>> s_adjustCache =
-      new ConcurrentHashMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>>();
+  private static final ConcurrentMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>> ADJUST_CACHE =
+      new ConcurrentHashMap<>();
 
   private static ComputationTargetType adjustTargetType(final ComputationTargetType type, final ComputationTargetType target) {
-    if ((type == ComputationTargetType.NULL) || (type == target)) {
+    if (type == ComputationTargetType.NULL || type == target) {
       // We use NULL to mark failure in the cache, and NULL will never need adjusting
       return target;
     }
-    ConcurrentMap<ComputationTargetType, ComputationTargetType> functionCache = s_adjustCache.get(type);
+    ConcurrentMap<ComputationTargetType, ComputationTargetType> functionCache = ADJUST_CACHE.get(type);
     if (functionCache == null) {
-      functionCache = new ConcurrentHashMap<ComputationTargetType, ComputationTargetType>();
-      final ConcurrentMap<ComputationTargetType, ComputationTargetType> existing = s_adjustCache.putIfAbsent(type, functionCache);
+      functionCache = new ConcurrentHashMap<>();
+      final ConcurrentMap<ComputationTargetType, ComputationTargetType> existing = ADJUST_CACHE.putIfAbsent(type, functionCache);
       if (existing != null) {
         functionCache = existing;
       }
@@ -457,9 +466,10 @@ public class ResolutionRule {
    * Examples:
    * <ul>
    * <li>The function declares SECURITY as its type and a target is of sub-class FinancialSecurity then the target type remains FinancialSecurity
-   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition (the matching leaf, not the full union type)
+   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition
+   * (the matching leaf, not the full union type)
    * </ul>
-   * 
+   *
    * @param type the declared type to reduce the target to, not null
    * @param target the target to reduce, not null
    * @return the reduced target, or null if the reduction is not possible
@@ -481,9 +491,10 @@ public class ResolutionRule {
    * Examples:
    * <ul>
    * <li>The function declares SECURITY as its type and a target is of sub-class FinancialSecurity then the target type remains FinancialSecurity
-   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition (the matching leaf, not the full union type)
+   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition
+   * (the matching leaf, not the full union type)
    * </ul>
-   * 
+   *
    * @param target the target to reduce, not null
    * @return the reduced target, or null if the target is not compatible with the rule
    */
@@ -497,9 +508,10 @@ public class ResolutionRule {
    * Examples:
    * <ul>
    * <li>The function declares SECURITY as its type and a target is of sub-class FinancialSecurity then the target type remains FinancialSecurity
-   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition (the matching leaf, not the full union type)
+   * <li>The function declares POSITION|TRADE as its type and a target is of PORTFOLIO_NODE/SimplePosition then it is rewritten to SimplePosition
+   * (the matching leaf, not the full union type)
    * </ul>
-   * 
+   *
    * @param adjustmentCache a cache of targets already adjusted to certain types, not null
    * @param target the target to reduce, not null
    * @return the reduced target, or null if the target is not compatible with the rule

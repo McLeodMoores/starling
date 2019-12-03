@@ -21,7 +21,7 @@ public class ValueSpecificationFormParam {
   /**
    * @param json A {@link ValueRequirement} encoded as Fudge JSON (see {@link ValueRequirementJSONBuilder}).
    */
-  public ValueSpecificationFormParam(String json) {
+  public ValueSpecificationFormParam(final String json) {
     ArgumentChecker.notEmpty(json, "json");
     _valueSpecification = new ValueSpecificationJSONBuilder().fromJSON(json);
   }

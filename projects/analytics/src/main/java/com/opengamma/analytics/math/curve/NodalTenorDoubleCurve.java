@@ -49,35 +49,35 @@ public class NodalTenorDoubleCurve
   protected NodalTenorDoubleCurve() {
   }
 
-  public NodalTenorDoubleCurve(List<Tenor> xData, List<Double> yData, boolean isSorted, String name) {
+  public NodalTenorDoubleCurve(final List<Tenor> xData, final List<Double> yData, final boolean isSorted, final String name) {
     super(xData, yData, isSorted, name);
   }
 
-  public NodalTenorDoubleCurve(List<Tenor> xData, List<Double> yData, boolean isSorted) {
+  public NodalTenorDoubleCurve(final List<Tenor> xData, final List<Double> yData, final boolean isSorted) {
     super(xData, yData, isSorted);
   }
 
-  public NodalTenorDoubleCurve(Map<Tenor, Double> data, boolean isSorted, String name) {
+  public NodalTenorDoubleCurve(final Map<Tenor, Double> data, final boolean isSorted, final String name) {
     super(data, isSorted, name);
   }
 
-  public NodalTenorDoubleCurve(Map<Tenor, Double> data, boolean isSorted) {
+  public NodalTenorDoubleCurve(final Map<Tenor, Double> data, final boolean isSorted) {
     super(data, isSorted);
   }
 
-  public NodalTenorDoubleCurve(Set<Pair<Tenor, Double>> data, boolean isSorted, String name) {
+  public NodalTenorDoubleCurve(final Set<Pair<Tenor, Double>> data, final boolean isSorted, final String name) {
     super(data, isSorted, name);
   }
 
-  public NodalTenorDoubleCurve(Set<Pair<Tenor, Double>> data, boolean isSorted) {
+  public NodalTenorDoubleCurve(final Set<Pair<Tenor, Double>> data, final boolean isSorted) {
     super(data, isSorted);
   }
 
-  public NodalTenorDoubleCurve(Tenor[] xData, Double[] yData, boolean isSorted, String name) {
+  public NodalTenorDoubleCurve(final Tenor[] xData, final Double[] yData, final boolean isSorted, final String name) {
     super(xData, yData, isSorted, name);
   }
 
-  public NodalTenorDoubleCurve(Tenor[] xData, Double[] yData, boolean isSorted) {
+  public NodalTenorDoubleCurve(final Tenor[] xData, final Double[] yData, final boolean isSorted) {
     super(xData, yData, isSorted);
   }
 

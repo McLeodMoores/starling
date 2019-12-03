@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
@@ -41,7 +41,8 @@ public class HistoricalTimeSeriesLatestPositionProviderIdValueFunction extends A
       final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final ComputedValue latestHtsValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST);
     final ValueRequirement desiredValue = desiredValues.iterator().next();
-    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), latestHtsValue.getValue()));
+    return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()),
+        latestHtsValue.getValue()));
   }
 
   @Override
@@ -62,7 +63,7 @@ public class HistoricalTimeSeriesLatestPositionProviderIdValueFunction extends A
     final HistoricalTimeSeriesResolver htsResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final Set<String> dataFieldConstraints = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.DATA_FIELD_PROPERTY);
     final String dataField;
-    if ((dataFieldConstraints == null) || dataFieldConstraints.isEmpty()) {
+    if (dataFieldConstraints == null || dataFieldConstraints.isEmpty()) {
       dataField = null;
     } else if (dataFieldConstraints.size() == 1) {
       dataField = Iterables.getOnlyElement(dataFieldConstraints);
@@ -79,14 +80,17 @@ public class HistoricalTimeSeriesLatestPositionProviderIdValueFunction extends A
       return null;
     }
     final UniqueId htsId = resolutionResult.getHistoricalTimeSeriesInfo().getUniqueId();
-    final ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, ComputationTargetType.PRIMITIVE, htsId, desiredValue.getConstraints());
+    final ValueRequirement valueRequirement = new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, ComputationTargetType.PRIMITIVE, htsId,
+        desiredValue.getConstraints());
     return Collections.singleton(valueRequirement);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification inputSpec = Iterables.getOnlyElement(inputs.keySet());
-    final ValueProperties properties = inputSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
+    final ValueProperties properties = inputSpec.getProperties().copy().withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
+        .get();
     final ValueSpecification outputSpec = new ValueSpecification(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST, target.toSpecification(), properties);
     return ImmutableSet.of(outputSpec);
   }

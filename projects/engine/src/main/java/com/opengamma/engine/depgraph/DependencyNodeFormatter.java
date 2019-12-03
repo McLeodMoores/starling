@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -13,7 +13,7 @@ import java.io.Writer;
 import com.opengamma.engine.depgraph.impl.DependencyNodeImpl;
 
 /**
- * 
+ *
  */
 public class DependencyNodeFormatter {
   /**
@@ -27,7 +27,7 @@ public class DependencyNodeFormatter {
     this(DEFAULT_INDENT_SIZE);
   }
 
-  public DependencyNodeFormatter(int indentSize) {
+  public DependencyNodeFormatter(final int indentSize) {
     if (indentSize < 0) {
       throw new IllegalArgumentException("Indent size must not be negative.");
     }
@@ -35,8 +35,8 @@ public class DependencyNodeFormatter {
     _indentText = constructIndentText(indentSize);
   }
 
-  private static String constructIndentText(int indentSize) {
-    StringBuilder sb = new StringBuilder();
+  private static String constructIndentText(final int indentSize) {
+    final StringBuilder sb = new StringBuilder();
     for (int i = 0; i < indentSize; i++) {
       sb.append(' ');
     }
@@ -57,21 +57,21 @@ public class DependencyNodeFormatter {
     return _indentText;
   }
 
-  public void format(PrintStream ps, DependencyNode node) {
-    PrintWriter pw = new PrintWriter(ps);
+  public void format(final PrintStream ps, final DependencyNode node) {
+    final PrintWriter pw = new PrintWriter(ps);
     format(pw, node);
   }
 
-  public void format(Writer w, DependencyNode node) {
-    PrintWriter pw = new PrintWriter(w);
+  public void format(final Writer w, final DependencyNode node) {
+    final PrintWriter pw = new PrintWriter(w);
     format(pw, node);
   }
 
-  public void format(PrintWriter pw, DependencyNode node) {
+  public void format(final PrintWriter pw, final DependencyNode node) {
     format(pw, node, 0);
   }
 
-  protected void format(PrintWriter pw, DependencyNode node, int indentLevel) {
+  protected void format(final PrintWriter pw, final DependencyNode node, final int indentLevel) {
     if (node == null) {
       return;
     }
@@ -90,10 +90,10 @@ public class DependencyNodeFormatter {
     }
   }
 
-  public static String toString(DependencyNode node) {
-    DependencyNodeFormatter formatter = new DependencyNodeFormatter();
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
+  public static String toString(final DependencyNode node) {
+    final DependencyNodeFormatter formatter = new DependencyNodeFormatter();
+    final StringWriter sw = new StringWriter();
+    final PrintWriter pw = new PrintWriter(sw);
     formatter.format(pw, node);
     return sw.toString();
   }

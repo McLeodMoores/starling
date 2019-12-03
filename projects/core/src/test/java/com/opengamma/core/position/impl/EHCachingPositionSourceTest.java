@@ -11,8 +11,6 @@ import static org.testng.Assert.assertSame;
 
 import java.math.BigDecimal;
 
-import net.sf.ehcache.CacheManager;
-
 import org.mockito.Mockito;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -28,30 +26,38 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Tests the {@link EHCachingPositionSource} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingPositionSourceTest {
 
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingPositionSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
-  //-------------------------------------------------------------------------
-  private Position createPosition(final int id) {
+  // -------------------------------------------------------------------------
+  private static Position createPosition(final int id) {
     return new SimplePosition(UniqueId.of("Test", Integer.toString(id)), BigDecimal.ONE, ExternalId.of("Foo", Integer.toString(id)));
   }
 
-  private PortfolioNode createPortfolioA1() {
+  private static PortfolioNode createPortfolioA1() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");
@@ -69,7 +75,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioB() {
+  private static PortfolioNode createPortfolioB() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Foo");
     root.setUniqueId(UniqueId.of("Node", "Foo"));
     final SimplePortfolioNode a = new SimplePortfolioNode("A");
@@ -82,7 +88,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioA2() {
+  private static PortfolioNode createPortfolioA2() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");
@@ -100,7 +106,7 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  private PortfolioNode createPortfolioA3() {
+  private static PortfolioNode createPortfolioA3() {
     final SimplePortfolioNode root = new SimplePortfolioNode("Root");
     root.setUniqueId(UniqueId.of("Node", "Root"));
     final SimplePortfolioNode a = new SimplePortfolioNode("Left");
@@ -118,7 +124,10 @@ public class EHCachingPositionSourceTest {
     return root;
   }
 
-  public void addToFrontCache_missing() {
+  /**
+   *
+   */
+  public void addToFrontCacheMissing() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
       // Add two unrelated portfolios; both to be added and returned
@@ -132,7 +141,10 @@ public class EHCachingPositionSourceTest {
     }
   }
 
-  public void addToFrontCache_allSame() {
+  /**
+   *
+   */
+  public void addToFrontCacheAllSame() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
       // Add the same portfolio at the same v/c - original to be returned
@@ -147,7 +159,10 @@ public class EHCachingPositionSourceTest {
     }
   }
 
-  public void addToFrontCache_allNew() {
+  /**
+   *
+   */
+  public void addToFrontCacheAllNew() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
       // Add two similar portfolios with different position resolutions; both to be added and returned
@@ -161,7 +176,10 @@ public class EHCachingPositionSourceTest {
     }
   }
 
-  public void addToFrontCache_someNew() {
+  /**
+   *
+   */
+  public void addToFrontCacheSomeNew() {
     final EHCachingPositionSource cache = new EHCachingPositionSource(Mockito.mock(PositionSource.class), _cacheManager);
     try {
       // Add two similar portfolios with some positions (and hence nodes) shared; shared nodes and positions to be reused in returned node

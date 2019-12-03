@@ -29,6 +29,7 @@ public final class FuturesPriceHullWhiteCalculator extends InstrumentDerivativeV
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static FuturesPriceHullWhiteCalculator getInstance() {
@@ -50,13 +51,14 @@ public final class FuturesPriceHullWhiteCalculator extends InstrumentDerivativeV
    */
   private static final CashFlowEquivalentCalculator CFEC = CashFlowEquivalentCalculator.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final HullWhiteOneFactorProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "Future");
     ArgumentChecker.notNull(multicurve, "Multi-curve with Hull-White");
-    final double forward = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(futures.getIborIndex(), futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime(),
+    final double forward = multicurve.getMulticurveProvider().getSimplyCompoundForwardRate(futures.getIborIndex(), futures.getFixingPeriodStartTime(),
+        futures.getFixingPeriodEndTime(),
         futures.getFixingPeriodAccrualFactor());
     final double futureConvexityFactor = MODEL.futuresConvexityFactor(multicurve.getHullWhiteParameters(), futures.getTradingLastTime(),
         futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime());
@@ -65,7 +67,8 @@ public final class FuturesPriceHullWhiteCalculator extends InstrumentDerivativeV
   }
 
   @Override
-  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorProviderInterface multicurve) {
+  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures,
+      final HullWhiteOneFactorProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "Future");
     ArgumentChecker.notNull(multicurve, "Multi-curves with Hull-White");
     final Currency ccy = futures.getCurrency();
@@ -77,12 +80,13 @@ public final class FuturesPriceHullWhiteCalculator extends InstrumentDerivativeV
     final double[] adjustments = new double[nbCf];
     final double[] df = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      adjustments[loopcf] = MODEL.futuresConvexityFactor(parameters, futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
+      adjustments[loopcf] = MODEL.futuresConvexityFactor(parameters, futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(),
+          futures.getDeliveryTime());
       df[loopcf] = multicurves.getDiscountFactor(ccy, cfe.getNthPayment(loopcf).getPaymentTime());
     }
     double price = 1.0;
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      price += (cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf]) / df[0];
+      price += cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf] / df[0];
     }
     return price;
   }

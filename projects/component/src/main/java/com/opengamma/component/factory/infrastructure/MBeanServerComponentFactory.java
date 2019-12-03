@@ -27,7 +27,7 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 
 /**
- * Component Factory for the JMX {@code MBeanServer).
+ * Component Factory for the JMX {@code MBeanServer}.
  * <p>
  * This class is designed to allow protected methods to be overridden.
  */
@@ -42,20 +42,20 @@ public class MBeanServerComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    ComponentInfo info = new ComponentInfo(MBeanServer.class, getClassifier());
-    MBeanServer mBeanServer = createMBeanServer(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final ComponentInfo info = new ComponentInfo(MBeanServer.class, getClassifier());
+    final MBeanServer mBeanServer = createMBeanServer(repo);
     repo.registerComponent(info, mBeanServer);
   }
 
   /**
    * Creates the MBean server without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the MBean server, not null
    */
-  protected MBeanServer createMBeanServer(ComponentRepository repo) {
-    MBeanServerFactoryBean factoryBean = new MBeanServerFactoryBean();
+  protected MBeanServer createMBeanServer(final ComponentRepository repo) {
+    final MBeanServerFactoryBean factoryBean = new MBeanServerFactoryBean();
     factoryBean.setLocateExistingServerIfPossible(true);
     factoryBean.afterPropertiesSet();
     return factoryBean.getObject();

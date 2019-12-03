@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -30,11 +30,11 @@ public class NonLinearTransformFunctionTest {
 
   private static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
     @Override
-    public DoubleMatrix1D evaluate(DoubleMatrix1D x) {
+    public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
       Validate.isTrue(x.getNumberOfElements() == 2);
-      double x1 = x.getEntry(0);
-      double x2 = x.getEntry(1);
-      double[] y = new double[3];
+      final double x1 = x.getEntry(0);
+      final double x2 = x.getEntry(1);
+      final double[] y = new double[3];
       y[0] = Math.sin(x1) * Math.cos(x2);
       y[1] = Math.sin(x1) * Math.sin(x2);
       y[2] = Math.cos(x1);
@@ -44,11 +44,11 @@ public class NonLinearTransformFunctionTest {
 
   private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
     @Override
-    public DoubleMatrix2D evaluate(DoubleMatrix1D x) {
+    public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
       Validate.isTrue(x.getNumberOfElements() == 2);
-      double x1 = x.getEntry(0);
-      double x2 = x.getEntry(1);
-      double[][] y = new double[3][2];
+      final double x1 = x.getEntry(0);
+      final double x2 = x.getEntry(1);
+      final double[][] y = new double[3][2];
       y[0][0] = Math.cos(x1) * Math.cos(x2);
       y[0][1] = -Math.sin(x1) * Math.sin(x2);
       y[1][0] = Math.cos(x1) * Math.sin(x2);
@@ -71,23 +71,23 @@ public class NonLinearTransformFunctionTest {
 
   @Test
   public void testNullTransform() {
-    BitSet fixed = new BitSet();
+    final BitSet fixed = new BitSet();
     fixed.set(0);
-    DoubleMatrix1D start = new DoubleMatrix1D(new double[] {Math.PI / 4, 1 });
-    UncoupledParameterTransforms transforms = new UncoupledParameterTransforms(start, NULL_TRANSFORMS, fixed);
-    NonLinearTransformFunction transFunc = new NonLinearTransformFunction(FUNCTION, JACOBIAN, transforms);
-    Function1D<DoubleMatrix1D, DoubleMatrix1D> func = transFunc.getFittingFunction();
-    Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = transFunc.getFittingJacobian();
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {Math.PI / 4, 1 });
+    final UncoupledParameterTransforms transforms = new UncoupledParameterTransforms(start, NULL_TRANSFORMS, fixed);
+    final NonLinearTransformFunction transFunc = new NonLinearTransformFunction(FUNCTION, JACOBIAN, transforms);
+    final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = transFunc.getFittingFunction();
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = transFunc.getFittingJacobian();
 
-    DoubleMatrix1D x = new DoubleMatrix1D(new double[] {0.5 });
+    final DoubleMatrix1D x = new DoubleMatrix1D(new double[] {0.5 });
     final double rootHalf = Math.sqrt(0.5);
-    DoubleMatrix1D y = func.evaluate(x);
+    final DoubleMatrix1D y = func.evaluate(x);
     assertEquals(3, y.getNumberOfElements());
     assertEquals(rootHalf * Math.cos(0.5), y.getEntry(0), 1e-9);
     assertEquals(rootHalf * Math.sin(0.5), y.getEntry(1), 1e-9);
     assertEquals(rootHalf, y.getEntry(2), 1e-9);
 
-    DoubleMatrix2D jac = jacFunc.evaluate(x);
+    final DoubleMatrix2D jac = jacFunc.evaluate(x);
     assertEquals(3, jac.getNumberOfRows());
     assertEquals(1, jac.getNumberOfColumns());
     assertEquals(-rootHalf * Math.sin(0.5), jac.getEntry(0, 0), 1e-9);
@@ -97,19 +97,19 @@ public class NonLinearTransformFunctionTest {
 
   @Test
   public void testNonLinearTransform() {
-    BitSet fixed = new BitSet();
-    DoubleMatrix1D start = new DoubleMatrix1D(new double[2]);
-    UncoupledParameterTransforms transforms = new UncoupledParameterTransforms(start, TRANSFORMS, fixed);
-    NonLinearTransformFunction transFunc = new NonLinearTransformFunction(FUNCTION, JACOBIAN, transforms);
-    Function1D<DoubleMatrix1D, DoubleMatrix1D> func = transFunc.getFittingFunction();
-    Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = transFunc.getFittingJacobian();
+    final BitSet fixed = new BitSet();
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[2]);
+    final UncoupledParameterTransforms transforms = new UncoupledParameterTransforms(start, TRANSFORMS, fixed);
+    final NonLinearTransformFunction transFunc = new NonLinearTransformFunction(FUNCTION, JACOBIAN, transforms);
+    final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = transFunc.getFittingFunction();
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFunc = transFunc.getFittingJacobian();
 
-    VectorFieldFirstOrderDifferentiator diff = new VectorFieldFirstOrderDifferentiator();
-    Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFuncFD = diff.differentiate(func);
+    final VectorFieldFirstOrderDifferentiator diff = new VectorFieldFirstOrderDifferentiator();
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacFuncFD = diff.differentiate(func);
 
-    DoubleMatrix1D testPoint = new DoubleMatrix1D(new double[] {4.5, -2.1 });
-    DoubleMatrix2D jac = jacFunc.evaluate(testPoint);
-    DoubleMatrix2D jacFD = jacFuncFD.evaluate(testPoint);
+    final DoubleMatrix1D testPoint = new DoubleMatrix1D(new double[] {4.5, -2.1 });
+    final DoubleMatrix2D jac = jacFunc.evaluate(testPoint);
+    final DoubleMatrix2D jacFD = jacFuncFD.evaluate(testPoint);
     assertEquals(3, jac.getNumberOfRows());
     assertEquals(2, jac.getNumberOfColumns());
 

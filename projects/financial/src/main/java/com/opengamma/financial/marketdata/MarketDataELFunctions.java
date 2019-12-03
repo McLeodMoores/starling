@@ -37,18 +37,16 @@ public final class MarketDataELFunctions {
     if (curve instanceof YieldCurve) {
       final DoublesCurve shifted = CurveShiftFunctionFactory.getShiftedCurve(((YieldCurve) curve).getCurve(), x, shift);
       return YieldCurve.from(shifted);
-    } else {
-      throw new UnsupportedOperationException("Invalid curve - " + curve);
     }
+    throw new UnsupportedOperationException("Invalid curve - " + curve);
   }
 
   public static Object parallelShiftCurve(final Object curve, final double shift) {
     if (curve instanceof YieldCurve) {
       final DoublesCurve shifted = CurveShiftFunctionFactory.getShiftedCurve(((YieldCurve) curve).getCurve(), shift);
       return YieldCurve.from(shifted);
-    } else {
-      throw new UnsupportedOperationException("Invalid curve - " + curve);
     }
+    throw new UnsupportedOperationException("Invalid curve - " + curve);
   }
 
   public static double getFXMultiplier(final Object id, final double multiplier) {
@@ -72,9 +70,8 @@ public final class MarketDataELFunctions {
     final Pair<Currency, Currency> pair = getFXPairFromBloombergTicker(id);
     if (StandardCurrencyPairs.isStandardPair(pair.getFirst(), pair.getSecond())) {
       return multiplier;
-    } else {
-      return 1 / multiplier;
     }
+    return 1 / multiplier;
   }
 
   private static Pair<Currency, Currency> getFXPairFromBloombergTicker(final ExternalId id) {
@@ -89,17 +86,14 @@ public final class MarketDataELFunctions {
       }
       final String ccyPart = split[0];
       switch (ccyPart.length()) {
-        case 3:
-        {
+        case 3: {
           final Currency ccy = Currency.of(ccyPart);
           if (StandardCurrencyPairs.isSingleCurrencyNumerator(ccy)) {
             return Pairs.of(ccy, Currency.USD);
-          } else {
-            return Pairs.of(Currency.USD, ccy);
           }
+          return Pairs.of(Currency.USD, ccy);
         }
-        case 6:
-        {
+        case 6: {
           final Currency numerator = Currency.of(ccyPart.substring(0, 3));
           final Currency denominator = Currency.of(ccyPart.substring(3));
           return Pairs.of(numerator, denominator);
@@ -107,9 +101,8 @@ public final class MarketDataELFunctions {
         default:
           throw new OpenGammaRuntimeException("currency part of ticker did not have 3 or 6 characters" + ticker);
       }
-    } else {
-      throw new OpenGammaRuntimeException("id was not bloomberg ticker or bloomberg weak ticker" + id);
     }
+    throw new OpenGammaRuntimeException("id was not bloomberg ticker or bloomberg weak ticker" + id);
   }
 
   public static boolean isFXRate(final Object id) {
@@ -148,9 +141,8 @@ public final class MarketDataELFunctions {
         default:
           return false;
       }
-    } else {
-      return false;
     }
+    return false;
   }
 
 }

@@ -28,7 +28,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * An ultra-simple historical data simulator, we load the initial values from a CSV file (with a header row) and the format:
  *
  * <pre>
- *   <identification-scheme>, <identifier-value>, <datafield>, <value>
+ *   <identification-scheme>, <identifier-value>, <datafield>, <value>.
  * </pre>
  */
 public class SimulatedHistoricalData {
@@ -36,20 +36,23 @@ public class SimulatedHistoricalData {
   private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedHistoricalData.class);
 
   /**
-   * OG Simulated data provider name
+   * OG Simulated data provider name.
    */
   public static final String OG_DATA_PROVIDER = "OG_DATA_PROVIDER";
 
   /**
-   * OG Simulated data source name
+   * OG Simulated data source name.
    */
   public static final String OG_DATA_SOURCE = "OG_DATA_SOURCE";
 
   private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<>();
 
   private static final int NUM_FIELDS = 4;
-  private static final double SCALING_FACTOR = 0.0005; // i.e. 0.5% * 1SD
+  private static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
 
+  /**
+   * Default constructor.
+   */
   public SimulatedHistoricalData() {
     readFinishValues(_finishValues);
   }
@@ -93,12 +96,13 @@ public class SimulatedHistoricalData {
     }
   }
 
+  /**
+   * Gets the last values.
+   *
+   * @return the values
+   */
   public Map<Pair<ExternalId, String>, Double> getFinishValues() {
     return _finishValues;
-  }
-
-  public static double wiggleValue(final Random random, final double value, final double centre) {
-    return Math.round(100 * (9 * value + centre) / 10 + random.nextGaussian() * (value * SCALING_FACTOR)) / 100.;
   }
 
 }

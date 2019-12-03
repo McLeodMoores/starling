@@ -22,6 +22,7 @@ public class CashFlowFunctionHelper {
 
   /**
    * Gets a static instance of a visitor that returns a reference index string.
+   * 
    * @return The visitor.
    */
   public static ReferenceIndexVisitor getReferenceIndexVisitor() {
@@ -29,8 +30,7 @@ public class CashFlowFunctionHelper {
   }
 
   /**
-   * Constructs reference index strings for {@link SwapSecurity}, {@link FRASecurity}
-   * and {@link FloatingRateNoteSecurity}
+   * Constructs reference index strings for {@link SwapSecurity}, {@link FRASecurity} and {@link FloatingRateNoteSecurity}
    */
   private static final class ReferenceIndexVisitor extends FinancialSecurityVisitorAdapter<String> {
     /** Sign for spreads */
@@ -41,7 +41,7 @@ public class CashFlowFunctionHelper {
     /**
      * Default constructor
      */
-    public ReferenceIndexVisitor() {
+    ReferenceIndexVisitor() {
     }
 
     @Override

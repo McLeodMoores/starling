@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
 package com.opengamma.integration.tool.enginedebugger;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -16,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -24,8 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.jdesktop.swingx.JXDatePicker;
@@ -49,28 +44,30 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 
+import net.miginfocom.swing.MigLayout;
+
 /**
- * Component representing a market data specification
+ * Component representing a market data specification.
  */
 public class MarketDataSpecificationComponent extends JPanel {
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSpecificationComponent.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSpecificationComponent.class);
   private static final String SNAPSHOT = "Snapshot";
   private static final String HISTORICAL = "Historical";
   private static final String LIVE = "Live";
   private static final String DATA_SOURCE_TYPE_PROMPT = "select type...";
-  private static final String[] VALID_ITEMS = new String[] {DATA_SOURCE_TYPE_PROMPT, LIVE, HISTORICAL, SNAPSHOT};
+  private static final String[] VALID_ITEMS = new String[] { DATA_SOURCE_TYPE_PROMPT, LIVE, HISTORICAL, SNAPSHOT };
   private static final String DATA_SOURCE_PROMPT = "select data source...";
   private static final String SNAPSHOT_VERSION_PROMPT = "select snapshot version...";
   private static final String LATEST = "Latest";
   private static final String FIXED = "Fixed";
 
   private static final int HEIGHT = 24;
-  
+
   private static final Dimension DATA_SOURCE_TYPE_PREFERRED_SIZE = new Dimension(150, HEIGHT);
 
   private static final Dimension SNAPSHOT_VERSION_PREFERRED_SIZE = new Dimension(250, HEIGHT);
@@ -78,32 +75,33 @@ public class MarketDataSpecificationComponent extends JPanel {
   private static final Dimension DATA_SOURCE_PREFERRED_SIZE = new Dimension(350, HEIGHT);
 
   private static final Dimension COMPONENT_PREFERRED_SIZE = new Dimension(960, HEIGHT);
-  
+
   // main controls
-  private JComboBox<String> _dataSourceTypeCombo;
-  private JComboBox<String> _dataSourceCombo;
-  private JComboBox<String> _snapshotVersionCombo;
-  private JXDatePicker _datePicker;
-  
+  private final JComboBox<String> _dataSourceTypeCombo;
+  private final JComboBox<String> _dataSourceCombo;
+  private final JComboBox<String> _snapshotVersionCombo;
+  private final JXDatePicker _datePicker;
+
   // incidental controls
   private JRadioButton _latestRadio;
   private JRadioButton _fixedRadio;
-  
+
   // models
   private LiveMarketDataSpecificationListModel _liveModel;
   private HistoricalMarketDataSpecificationListModel _historicalModel;
   private SnapshotMarketDataSpecificationListModel _snapshotModel;
-    
+
   // externally injected sources/data
-  private List<LiveDataMetaDataProvider> _metaDataProviders;
-  private ConfigMaster _configMaster;
-  private MarketDataSnapshotMaster _snapshotMaster;
+  private final List<LiveDataMetaDataProvider> _metaDataProviders;
+  private final ConfigMaster _configMaster;
+  private final MarketDataSnapshotMaster _snapshotMaster;
 
   // state
   private MarketDataSpecification _currentState;
-  private Set<ChangeListener> _listeners = new LinkedHashSet<ChangeListener>();
-    
-  public MarketDataSpecificationComponent(List<LiveDataMetaDataProvider> metaDataProviders, ConfigMaster configMaster, MarketDataSnapshotMaster snapshotMaster) {
+  private final Set<ChangeListener> _listeners = new LinkedHashSet<>();
+
+  public MarketDataSpecificationComponent(final List<LiveDataMetaDataProvider> metaDataProviders, final ConfigMaster configMaster,
+      final MarketDataSnapshotMaster snapshotMaster) {
     super();
     _configMaster = configMaster;
     _snapshotMaster = snapshotMaster;
@@ -119,13 +117,13 @@ public class MarketDataSpecificationComponent extends JPanel {
     addComponents();
     setPreferredSize(COMPONENT_PREFERRED_SIZE);
   }
-  
+
   private void createModels() {
     _liveModel = new LiveMarketDataSpecificationListModel(_metaDataProviders);
     _historicalModel = new HistoricalMarketDataSpecificationListModel(_configMaster);
     _snapshotModel = new SnapshotMarketDataSpecificationListModel(_snapshotMaster);
   }
-  
+
   public void addComponents() {
     setLayout(new MigLayout("insets 0"));
     _dataSourceTypeCombo.setVisible(true);
@@ -141,7 +139,7 @@ public class MarketDataSpecificationComponent extends JPanel {
     _fixedRadio.setVisible(false);
     _fixedRadio.setActionCommand(FIXED);
     _fixedRadio.addActionListener(_radioActionListener);
-    ButtonGroup group = new ButtonGroup();
+    final ButtonGroup group = new ButtonGroup();
     group.add(_latestRadio);
     group.add(_fixedRadio);
     add(_latestRadio, "align right");
@@ -149,9 +147,9 @@ public class MarketDataSpecificationComponent extends JPanel {
     _datePicker.setEnabled(false);
     _datePicker.addActionListener(_historicalActionListener);
   }
-  
+
   @SuppressWarnings("unused")
-  private void showSnapshotVersionPicker(ObjectId id) {
+  private void showSnapshotVersionPicker(final ObjectId id) {
     _latestRadio.setVisible(true);
     _fixedRadio.setVisible(true);
     _snapshotVersionCombo.setModel(new SnapshotMarketDataSpecificationVersionListModel(_snapshotMaster, id));
@@ -160,7 +158,7 @@ public class MarketDataSpecificationComponent extends JPanel {
     add(_snapshotVersionCombo, "align right");
     validate();
   }
-  
+
   @SuppressWarnings("unused")
   private void showSnapshotNamePicker() {
     _latestRadio.setVisible(false);
@@ -174,11 +172,11 @@ public class MarketDataSpecificationComponent extends JPanel {
     remove(_datePicker);
     validate();
   }
-  
+
   @SuppressWarnings("unused")
   private void showHistoricalDatePicker() {
     _snapshotVersionCombo.setVisible(false);
-    _snapshotVersionCombo.setModel(new DefaultComboBoxModel<String>(new String[] {SNAPSHOT_VERSION_PROMPT }));
+    _snapshotVersionCombo.setModel(new DefaultComboBoxModel<>(new String[] { SNAPSHOT_VERSION_PROMPT }));
     _dataSourceCombo.setModel(_historicalModel);
     _dataSourceCombo.removeActionListener(_liveActionListener);
     _dataSourceCombo.removeActionListener(_snapshotActionListener);
@@ -190,7 +188,7 @@ public class MarketDataSpecificationComponent extends JPanel {
     add(_datePicker, "align right");
     validate();
   }
-  
+
   @SuppressWarnings("unused")
   private void showLive() {
     _latestRadio.setVisible(false);
@@ -198,30 +196,30 @@ public class MarketDataSpecificationComponent extends JPanel {
     _dataSourceCombo.setModel(_liveModel);
     _dataSourceCombo.addActionListener(_liveActionListener);
     _dataSourceCombo.setVisible(true);
-    _snapshotVersionCombo.setModel(new DefaultComboBoxModel<String>(new String[] {SNAPSHOT_VERSION_PROMPT }));
+    _snapshotVersionCombo.setModel(new DefaultComboBoxModel<>(new String[] { SNAPSHOT_VERSION_PROMPT }));
     remove(_datePicker);
     remove(_snapshotVersionCombo);
     validate();
   }
-  
-  private void validSpecification(MarketDataSpecification marketDataSpec) {
-    s_logger.warn("valid specification {}", marketDataSpec);
+
+  private void validSpecification(final MarketDataSpecification marketDataSpec) {
+    LOGGER.warn("valid specification {}", marketDataSpec);
     if (!ObjectUtils.equals(_currentState, marketDataSpec)) {
       _currentState = marketDataSpec;
       fireStateChanged();
     }
   }
-  
+
   private void invalidSpecification() {
-    s_logger.warn("invalid specification");
+    LOGGER.warn("invalid specification");
     _currentState = null;
-    fireStateChanged();    
+    fireStateChanged();
   }
-    
-  private ActionListener _radioActionListener = new ActionListener() {
+
+  private final ActionListener _radioActionListener = new ActionListener() {
     @Override
-    public void actionPerformed(ActionEvent e) {
-      s_logger.warn("radio action triggered");
+    public void actionPerformed(final ActionEvent e) {
+      LOGGER.warn("radio action triggered");
       switch (e.getActionCommand()) {
         case LATEST:
           _datePicker.setEnabled(false);
@@ -229,7 +227,8 @@ public class MarketDataSpecificationComponent extends JPanel {
           break;
         case FIXED:
           _datePicker.setEnabled(true);
-          _snapshotVersionCombo.setEnabled(true);;
+          _snapshotVersionCombo.setEnabled(true);
+          ;
           break;
       }
       switch ((String) _dataSourceTypeCombo.getSelectedItem()) {
@@ -252,103 +251,70 @@ public class MarketDataSpecificationComponent extends JPanel {
       }
     }
   };
-  
-  private ActionListener _liveActionListener = new ActionListener() {
+
+  private final ActionListener _liveActionListener = new ActionListener() {
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
       liveSelected();
     }
   };
-  
+
   private void liveSelected() {
-    s_logger.warn("live selected");
-    JComboBox<String> source = _dataSourceCombo;
-    String item = (String) source.getSelectedItem();
-    MarketDataSpecification marketDataSpec = MarketDataSpecificationComponent.this._liveModel.getMarketDataSpec(item);
-    validSpecification(marketDataSpec);    
+    LOGGER.warn("live selected");
+    final JComboBox<String> source = _dataSourceCombo;
+    final String item = (String) source.getSelectedItem();
+    final MarketDataSpecification marketDataSpec = MarketDataSpecificationComponent.this._liveModel.getMarketDataSpec(item);
+    validSpecification(marketDataSpec);
   }
-  
-  private ActionListener _historicalActionListener = new ActionListener() {
+
+  private final ActionListener _historicalActionListener = new ActionListener() {
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
       historySelected();
     }
   };
-  
+
   private void historySelected() {
-    s_logger.warn("history selected");
-    MarketDataSpecificationComponent outer = MarketDataSpecificationComponent.this;
+    LOGGER.warn("history selected");
+    final MarketDataSpecificationComponent outer = MarketDataSpecificationComponent.this;
     @SuppressWarnings("unchecked")
-    JComboBox<String> source = _dataSourceCombo;
-    String item = (String) source.getSelectedItem();
+    final JComboBox<String> source = _dataSourceCombo;
+    final String item = (String) source.getSelectedItem();
     if (item != null) {
       MarketDataSpecification marketDataSpec;
       if (_latestRadio.isSelected()) {
         marketDataSpec = new LatestHistoricalMarketDataSpecification(item);
         validSpecification(marketDataSpec);
         return;
-      } else {
-        Date datePickerDate = outer._datePicker.getDate();
-        if (item != null && item.length() > 0 && datePickerDate != null) {
-          LocalDate localDate = Instant.ofEpochMilli(datePickerDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-          marketDataSpec = new FixedHistoricalMarketDataSpecification(item, localDate);
-          validSpecification(marketDataSpec); 
-          return;
-        }
+      }
+      final Date datePickerDate = outer._datePicker.getDate();
+      if (item.length() > 0 && datePickerDate != null) {
+        final LocalDate localDate = Instant.ofEpochMilli(datePickerDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        marketDataSpec = new FixedHistoricalMarketDataSpecification(item, localDate);
+        validSpecification(marketDataSpec);
+        return;
       }
     }
     invalidSpecification();
   }
-  
-  private ActionListener _snapshotActionListener = new ActionListener() {
+
+  private final ActionListener _snapshotActionListener = new ActionListener() {
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
       snapshotSelected();
     }
   };
-  
+
   private void snapshotSelected() {
-    s_logger.warn("snapshot selected");
-    JComboBox<String> source = _dataSourceCombo;
-    int index = source.getSelectedIndex();
+    LOGGER.warn("snapshot selected");
+    final JComboBox<String> source = _dataSourceCombo;
+    final int index = source.getSelectedIndex();
     if (index >= 0) {
-      ObjectId oid = MarketDataSpecificationComponent.this._snapshotModel.getObjectIdAt(index);
+      final ObjectId oid = MarketDataSpecificationComponent.this._snapshotModel.getObjectIdAt(index);
       if (oid != null) {
-        MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(oid.atLatestVersion());
+        final MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(oid.atLatestVersion());
         showSnapshotVersionPicker(oid);
         if (_latestRadio.isSelected()) {
-          validSpecification(marketDataSpec);    
-          return;
-        }
-      }
-    }
-    invalidSpecification();
-  }
-    
-  
-  private ActionListener _snapshotVersionActionListener = new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      snapshotVersionSelected();
-    }
-  };
-  
-  private void snapshotVersionSelected() {
-    s_logger.warn("snapshot version selected");
-    int index = _snapshotVersionCombo.getSelectedIndex();
-    if (index >= 0) {
-      ObjectId oid = MarketDataSpecificationComponent.this._snapshotModel.getObjectIdAt(index);
-      if (_latestRadio.isSelected()) {
-        MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(oid.atLatestVersion());
-        MarketDataSpecificationComponent.this._currentState = marketDataSpec;
-        validSpecification(marketDataSpec);
-        return;
-      } else {
-        int selectedIndex = _snapshotVersionCombo.getSelectedIndex();
-        if (selectedIndex >= 0 && _snapshotVersionCombo.getModel() instanceof SnapshotMarketDataSpecificationVersionListModel) {
-          SnapshotMarketDataSpecificationVersionListModel model = (SnapshotMarketDataSpecificationVersionListModel) _snapshotVersionCombo.getModel();
-          UniqueId uid = model.getUniqueIdAt(selectedIndex);
-          MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(uid);
           validSpecification(marketDataSpec);
           return;
         }
@@ -356,35 +322,65 @@ public class MarketDataSpecificationComponent extends JPanel {
     }
     invalidSpecification();
   }
-  
+
+  private final ActionListener _snapshotVersionActionListener = new ActionListener() {
+    @Override
+    public void actionPerformed(final ActionEvent e) {
+      snapshotVersionSelected();
+    }
+  };
+
+  private void snapshotVersionSelected() {
+    LOGGER.warn("snapshot version selected");
+    final int index = _snapshotVersionCombo.getSelectedIndex();
+    if (index >= 0) {
+      final ObjectId oid = MarketDataSpecificationComponent.this._snapshotModel.getObjectIdAt(index);
+      if (_latestRadio.isSelected()) {
+        final MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(oid.atLatestVersion());
+        MarketDataSpecificationComponent.this._currentState = marketDataSpec;
+        validSpecification(marketDataSpec);
+        return;
+      }
+      final int selectedIndex = _snapshotVersionCombo.getSelectedIndex();
+      if (selectedIndex >= 0 && _snapshotVersionCombo.getModel() instanceof SnapshotMarketDataSpecificationVersionListModel) {
+        final SnapshotMarketDataSpecificationVersionListModel model = (SnapshotMarketDataSpecificationVersionListModel) _snapshotVersionCombo.getModel();
+        final UniqueId uid = model.getUniqueIdAt(selectedIndex);
+        final MarketDataSpecification marketDataSpec = UserMarketDataSpecification.of(uid);
+        validSpecification(marketDataSpec);
+        return;
+      }
+    }
+    invalidSpecification();
+  }
+
   public JComboBox<String> createDataSourceCombo() {
-    JComboBox<String> comboBox = new JComboBox<String>();
-    comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {DATA_SOURCE_PROMPT }));
+    final JComboBox<String> comboBox = new JComboBox<>();
+    comboBox.setModel(new DefaultComboBoxModel<>(new String[] { DATA_SOURCE_PROMPT }));
     comboBox.setPreferredSize(DATA_SOURCE_PREFERRED_SIZE);
     comboBox.setMaximumSize(DATA_SOURCE_PREFERRED_SIZE);
     comboBox.setMinimumSize(DATA_SOURCE_PREFERRED_SIZE);
     return comboBox;
   }
-  
+
   public JComboBox<String> createSnapshotVersionCombo() {
-    JComboBox<String> comboBox = new JComboBox<String>();
-    comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {SNAPSHOT_VERSION_PROMPT }));
+    final JComboBox<String> comboBox = new JComboBox<>();
+    comboBox.setModel(new DefaultComboBoxModel<>(new String[] { SNAPSHOT_VERSION_PROMPT }));
     comboBox.addActionListener(_snapshotVersionActionListener);
     comboBox.setPreferredSize(SNAPSHOT_VERSION_PREFERRED_SIZE);
     comboBox.setMaximumSize(SNAPSHOT_VERSION_PREFERRED_SIZE);
     comboBox.setMinimumSize(SNAPSHOT_VERSION_PREFERRED_SIZE);
     return comboBox;
   }
-  
+
   public JComboBox<String> createDataSourceTypeCombo() {
-    final JComboBox<String> comboBox = new JComboBox<String>();
-    comboBox.setModel(new DefaultComboBoxModel<String>(VALID_ITEMS));
+    final JComboBox<String> comboBox = new JComboBox<>();
+    comboBox.setModel(new DefaultComboBoxModel<>(VALID_ITEMS));
     comboBox.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         @SuppressWarnings("unchecked")
-        JComboBox<String> source = (JComboBox<String>) e.getSource();
-        String item = (String) source.getSelectedItem();
+        final JComboBox<String> source = (JComboBox<String>) e.getSource();
+        final String item = (String) source.getSelectedItem();
         switch (item) {
           case LIVE:
             showLive();
@@ -399,32 +395,31 @@ public class MarketDataSpecificationComponent extends JPanel {
             snapshotSelected();
             break;
         }
-      } 
+      }
     });
     comboBox.setPreferredSize(DATA_SOURCE_TYPE_PREFERRED_SIZE);
     comboBox.setMinimumSize(DATA_SOURCE_TYPE_PREFERRED_SIZE);
     comboBox.setMaximumSize(DATA_SOURCE_TYPE_PREFERRED_SIZE);
     return comboBox;
   }
-  
-  public void addChangeListener(ChangeListener listener) {
+
+  public void addChangeListener(final ChangeListener listener) {
     _listeners.add(listener);
   }
-  
-  public void removeChangeListener(ChangeListener listener) {
+
+  public void removeChangeListener(final ChangeListener listener) {
     _listeners.remove(listener);
   }
-  
+
   protected void fireStateChanged() {
-    s_logger.warn("state changed");
-    for (ChangeListener listener : _listeners) {
+    LOGGER.warn("state changed");
+    for (final ChangeListener listener : _listeners) {
       listener.stateChanged(new ChangeEvent(this));
     }
   }
-  
+
   public MarketDataSpecification getCurrentState() {
     return _currentState;
   }
-  
-}
 
+}

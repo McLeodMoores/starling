@@ -23,11 +23,13 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Method for the pricing of interest rate future options with daily margining.
- * The model is the Hull-White one factor model {@link HullWhiteOneFactorPiecewiseConstantInterestRateModel}.
- * <p>Reference: Interest Rate Futures and their options: Some Pricing Approaches. OpenGamma Documentation n.6. Version 1.5 - December 2012.
+ * Method for the pricing of interest rate future options with daily margining. The model is the Hull-White one factor model
+ * {@link HullWhiteOneFactorPiecewiseConstantInterestRateModel}.
+ * <p>
+ * Reference: Interest Rate Futures and their options: Some Pricing Approaches. OpenGamma Documentation n.6. Version 1.5 - December 2012.
  */
-public final class InterestRateFutureOptionMarginSecurityHullWhiteMethod extends InterestRateFutureOptionMarginSecurityGenericMethod<HullWhiteOneFactorProviderInterface> {
+public final class InterestRateFutureOptionMarginSecurityHullWhiteMethod
+    extends InterestRateFutureOptionMarginSecurityGenericMethod<HullWhiteOneFactorProviderInterface> {
 
   /**
    * The unique instance of the calculator.
@@ -42,6 +44,7 @@ public final class InterestRateFutureOptionMarginSecurityHullWhiteMethod extends
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static InterestRateFutureOptionMarginSecurityHullWhiteMethod getInstance() {
@@ -59,8 +62,11 @@ public final class InterestRateFutureOptionMarginSecurityHullWhiteMethod extends
 
   /**
    * Computes the price in the Hull-White one factor model.
-   * @param security The option security.
-   * @param hwMulticurves The multi-curves provider with Hull-White one factor parameters.
+   * 
+   * @param security
+   *          The option security.
+   * @param hwMulticurves
+   *          The multi-curves provider with Hull-White one factor parameters.
    * @return The price.
    */
   @Override
@@ -93,12 +99,16 @@ public final class InterestRateFutureOptionMarginSecurityHullWhiteMethod extends
 
   /**
    * Computes the price curve sensitivity in the Hull-White one factor model.
-   * @param security The option security.
-   * @param hwMulticurves The multi-curves provider with Hull-White one factor parameters.
+   * 
+   * @param security
+   *          The option security.
+   * @param hwMulticurves
+   *          The multi-curves provider with Hull-White one factor parameters.
    * @return The curve sensitivity.
    */
   @Override
-  public MulticurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security, final HullWhiteOneFactorProviderInterface hwMulticurves) {
+  public MulticurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security,
+      final HullWhiteOneFactorProviderInterface hwMulticurves) {
     ArgumentChecker.notNull(security, "Option security");
     ArgumentChecker.notNull(hwMulticurves, "Hull-White and multi-curves data");
     ArgumentChecker.isTrue(security.getCurrency().equals(hwMulticurves.getHullWhiteCurrency()), "Model currency incompatible with security currency");

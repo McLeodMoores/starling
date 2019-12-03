@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -25,7 +25,7 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class GeneralizedLeastSquare {
 
@@ -39,12 +39,17 @@ public class GeneralizedLeastSquare {
   }
 
   /**
-   * 
-   * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
-   * @param x independent variables
-   * @param y dependent (scalar) variables
-   * @param sigma (Gaussian) measurement error on dependent variables
-   * @param basisFunctions set of basis functions - the fitting function is formed by these basis functions times a set of weights
+   *
+   * @param <T>
+   *          The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
+   * @param x
+   *          independent variables
+   * @param y
+   *          dependent (scalar) variables
+   * @param sigma
+   *          (Gaussian) measurement error on dependent variables
+   * @param basisFunctions
+   *          set of basis functions - the fitting function is formed by these basis functions times a set of weights
    * @return the results of the least square
    */
   public <T> GeneralizedLeastSquareResults<T> solve(final T[] x, final double[] y, final double[] sigma, final List<Function1D<T, Double>> basisFunctions) {
@@ -52,17 +57,26 @@ public class GeneralizedLeastSquare {
   }
 
   /**
-   * Generalised least square with penalty on (higher-order) finite differences of weights
-   * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
-   * @param x independent variables
-   * @param y dependent (scalar) variables
-   * @param sigma (Gaussian) measurement error on dependent variables
-   * @param basisFunctions set of basis functions - the fitting function is formed by these basis functions times a set of weights
-   * @param lambda strength of penalty function
-   * @param differenceOrder difference order between weights used in penalty function
+   * Generalised least square with penalty on (higher-order) finite differences of weights.
+   *
+   * @param <T>
+   *          The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
+   * @param x
+   *          independent variables
+   * @param y
+   *          dependent (scalar) variables
+   * @param sigma
+   *          (Gaussian) measurement error on dependent variables
+   * @param basisFunctions
+   *          set of basis functions - the fitting function is formed by these basis functions times a set of weights
+   * @param lambda
+   *          strength of penalty function
+   * @param differenceOrder
+   *          difference order between weights used in penalty function
    * @return the results of the least square
    */
-  public <T> GeneralizedLeastSquareResults<T> solve(final T[] x, final double[] y, final double[] sigma, final List<Function1D<T, Double>> basisFunctions, final double lambda,
+  public <T> GeneralizedLeastSquareResults<T> solve(final T[] x, final double[] y, final double[] sigma, final List<Function1D<T, Double>> basisFunctions,
+      final double lambda,
       final int differenceOrder) {
     ArgumentChecker.notNull(x, "x null");
     ArgumentChecker.notNull(y, "y null");
@@ -83,36 +97,52 @@ public class GeneralizedLeastSquare {
     return solveImp(lx, ly, lsigma, basisFunctions, lambda, differenceOrder);
   }
 
-  GeneralizedLeastSquareResults<Double> solve(final double[] x, final double[] y, final double[] sigma, final List<Function1D<Double, Double>> basisFunctions, final double lambda,
+  GeneralizedLeastSquareResults<Double> solve(final double[] x, final double[] y, final double[] sigma, final List<Function1D<Double, Double>> basisFunctions,
+      final double lambda,
       final int differenceOrder) {
     return solve(ArrayUtils.toObject(x), y, sigma, basisFunctions, lambda, differenceOrder);
   }
 
   /**
-   * 
-   * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
-   * @param x independent variables
-   * @param y dependent (scalar) variables
-   * @param sigma (Gaussian) measurement error on dependent variables
-   * @param basisFunctions set of basis functions - the fitting function is formed by these basis functions times a set of weights
+   *
+   * @param <T>
+   *          The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
+   * @param x
+   *          independent variables
+   * @param y
+   *          dependent (scalar) variables
+   * @param sigma
+   *          (Gaussian) measurement error on dependent variables
+   * @param basisFunctions
+   *          set of basis functions - the fitting function is formed by these basis functions times a set of weights
    * @return the results of the least square
    */
-  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions) {
+  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions) {
     return solve(x, y, sigma, basisFunctions, 0.0, 0);
   }
 
   /**
-   * Generalised least square with penalty on (higher-order) finite differences of weights
-   * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
-   * @param x independent variables
-   * @param y dependent (scalar) variables
-   * @param sigma (Gaussian) measurement error on dependent variables
-   * @param basisFunctions set of basis functions - the fitting function is formed by these basis functions times a set of weights
-   * @param lambda strength of penalty function
-   * @param differenceOrder difference order between weights used in penalty function
+   * Generalised least square with penalty on (higher-order) finite differences of weights.
+   *
+   * @param <T>
+   *          The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
+   * @param x
+   *          independent variables
+   * @param y
+   *          dependent (scalar) variables
+   * @param sigma
+   *          (Gaussian) measurement error on dependent variables
+   * @param basisFunctions
+   *          set of basis functions - the fitting function is formed by these basis functions times a set of weights
+   * @param lambda
+   *          strength of penalty function
+   * @param differenceOrder
+   *          difference order between weights used in penalty function
    * @return the results of the least square
    */
-  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions, final double lambda,
+  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions, final double lambda,
       final int differenceOrder) {
     ArgumentChecker.notEmpty(x, "empty measurement points");
     ArgumentChecker.notEmpty(y, "empty measurement values");
@@ -130,19 +160,30 @@ public class GeneralizedLeastSquare {
   }
 
   /**
-   * Specialist method used mainly for solving multidimensional P-spline problems where the basis functions (B-splines) span a N-dimension space, and the weights sit on an N-dimension
-   *  grid and are treated as a N-order tensor rather than a vector, so k-order differencing is done for each tensor index while varying the other indices.
-   * @param <T> The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
-   * @param x independent variables
-   * @param y dependent (scalar) variables
-   * @param sigma (Gaussian) measurement error on dependent variables
-   * @param basisFunctions set of basis functions - the fitting function is formed by these basis functions times a set of weights
-   * @param sizes The size the weights tensor in each dimension (the product of this must equal the number of basis functions)
-   * @param lambda strength of penalty function in each dimension
-   * @param differenceOrder difference order between weights used in penalty function for each dimension
+   * Specialist method used mainly for solving multidimensional P-spline problems where the basis functions (B-splines) span a N-dimension space, and the
+   * weights sit on an N-dimension grid and are treated as a N-order tensor rather than a vector, so k-order differencing is done for each tensor index while
+   * varying the other indices.
+   *
+   * @param <T>
+   *          The type of the independent variables (e.g. Double, double[], DoubleMatrix1D etc)
+   * @param x
+   *          independent variables
+   * @param y
+   *          dependent (scalar) variables
+   * @param sigma
+   *          (Gaussian) measurement error on dependent variables
+   * @param basisFunctions
+   *          set of basis functions - the fitting function is formed by these basis functions times a set of weights
+   * @param sizes
+   *          The size the weights tensor in each dimension (the product of this must equal the number of basis functions)
+   * @param lambda
+   *          strength of penalty function in each dimension
+   * @param differenceOrder
+   *          difference order between weights used in penalty function for each dimension
    * @return the results of the least square
    */
-  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions, final int[] sizes,
+  public <T> GeneralizedLeastSquareResults<T> solve(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions, final int[] sizes,
       final double[] lambda, final int[] differenceOrder) {
     ArgumentChecker.notEmpty(x, "empty measurement points");
     ArgumentChecker.notEmpty(y, "empty measurement values");
@@ -155,7 +196,8 @@ public class GeneralizedLeastSquare {
 
     final int dim = sizes.length;
     ArgumentChecker.isTrue(dim == lambda.length, "number of penalty functions {} must be equal to number of directions {}", lambda.length, dim);
-    ArgumentChecker.isTrue(dim == differenceOrder.length, "number of difference order {} must be equal to number of directions {}", differenceOrder.length, dim);
+    ArgumentChecker.isTrue(dim == differenceOrder.length,
+        "number of difference order {} must be equal to number of directions {}", differenceOrder.length, dim);
 
     for (int i = 0; i < dim; i++) {
       ArgumentChecker.isTrue(sizes[i] > 0, "sizes must be >= 1");
@@ -165,8 +207,8 @@ public class GeneralizedLeastSquare {
     return solveImp(x, y, sigma, basisFunctions, sizes, lambda, differenceOrder);
   }
 
-  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions, final double lambda,
-      final int differenceOrder) {
+  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions, final double lambda, final int differenceOrder) {
 
     final int n = x.size();
 
@@ -224,7 +266,8 @@ public class GeneralizedLeastSquare {
     return new GeneralizedLeastSquareResults<>(basisFunctions, chiSq, w, covar);
   }
 
-  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma, final List<Function1D<T, Double>> basisFunctions, final int[] sizes,
+  private <T> GeneralizedLeastSquareResults<T> solveImp(final List<T> x, final List<Double> y, final List<Double> sigma,
+      final List<Function1D<T, Double>> basisFunctions, final int[] sizes,
       final double[] lambda, final int[] differenceOrder) {
 
     final int dim = sizes.length;

@@ -17,7 +17,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Tool to aggregate portfolios
+ * Tool to aggregate portfolios.
  */
 @Scriptable
 public class PortfolioCopyMoveTool extends AbstractTool<ToolContext> {
@@ -26,17 +26,18 @@ public class PortfolioCopyMoveTool extends AbstractTool<ToolContext> {
   private static final String NEW_PORTFOLIO_NAME = "m";
   private static final String COPY_OPT = "d";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioCopyMoveTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     final PortfolioSearchRequest portfolioSearchRequest = new PortfolioSearchRequest();

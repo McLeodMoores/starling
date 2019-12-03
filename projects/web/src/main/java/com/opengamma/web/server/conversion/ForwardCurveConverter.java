@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -16,38 +16,38 @@ import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * 
+ *
  */
 public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
 
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, ForwardCurve value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final ForwardCurve value, final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
     if (value.getForwardCurve() instanceof InterpolatedDoublesCurve) {
-      InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
-      List<Double[]> data = new ArrayList<Double[]>();
-      double[] xData = interpolatedCurve.getXDataAsPrimitive();
-      double[] yData = interpolatedCurve.getYDataAsPrimitive();
+      final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
+      final List<Double[]> data = new ArrayList<>();
+      final double[] xData = interpolatedCurve.getXDataAsPrimitive();
+      final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       for (int i = 0; i < interpolatedCurve.size(); i++) {
         data.add(new Double[] {xData[i], yData[i]});
       }
       result.put("summary", data);
       if (mode == ConversionMode.FULL) {
-        List<Double[]> detailedData = getData(interpolatedCurve);
+        final List<Double[]> detailedData = getData(interpolatedCurve);
         result.put("detailed", detailedData);
       }
       return result;
     }
     if (value.getForwardCurve() instanceof FunctionalDoublesCurve) {
-      FunctionalDoublesCurve functionalCurve = (FunctionalDoublesCurve) value.getForwardCurve();
-      List<Double[]> data = new ArrayList<Double[]>();
+      final FunctionalDoublesCurve functionalCurve = (FunctionalDoublesCurve) value.getForwardCurve();
+      final List<Double[]> data = new ArrayList<>();
       for (int i = 0; i < 30; i++) {
-        double x = i;
+        final double x = i;
         data.add(new Double[] {x, functionalCurve.getYValue(x)});
       }
       result.put("summary", data);
       if (mode == ConversionMode.FULL) {
-        List<Double[]> detailedData = getData(functionalCurve);
+        final List<Double[]> detailedData = getData(functionalCurve);
         result.put("detailed", detailedData);
       }
       return result;
@@ -57,17 +57,17 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, ForwardCurve value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final ForwardCurve value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, ForwardCurve value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final ForwardCurve value) {
     if (value.getForwardCurve() instanceof InterpolatedDoublesCurve) {
-      StringBuilder sb = new StringBuilder();
-      InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
-      double[] xData = interpolatedCurve.getXDataAsPrimitive();
-      double[] yData = interpolatedCurve.getYDataAsPrimitive();
+      final StringBuilder sb = new StringBuilder();
+      final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
+      final double[] xData = interpolatedCurve.getXDataAsPrimitive();
+      final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       boolean isFirst = true;
       for (int i = 0; i < interpolatedCurve.size(); i++) {
         if (isFirst) {
@@ -78,10 +78,8 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
         sb.append(xData[i]).append("=").append(yData[i]);
       }
       return sb.length() > 0 ? sb.toString() : null;
-    } else {
-      return value.getClass().getSimpleName();
     }
-
+    return value.getClass().getSimpleName();
   }
 
   @Override
@@ -89,24 +87,24 @@ public class ForwardCurveConverter implements ResultConverter<ForwardCurve> {
     return "CURVE";
   }
 
-  private List<Double[]> getData(InterpolatedDoublesCurve detailedCurve) {
-    List<Double[]> detailedData = new ArrayList<Double[]>();
-    
-    Double[] xs = detailedCurve.getXData();
-    double eps = (xs[xs.length - 1] - xs[0]) / 100;
+  private static List<Double[]> getData(final InterpolatedDoublesCurve detailedCurve) {
+    final List<Double[]> detailedData = new ArrayList<>();
+
+    final Double[] xs = detailedCurve.getXData();
+    final double eps = (xs[xs.length - 1] - xs[0]) / 100;
     double x = 0;
-    for (int i = 0; i < 100; i++) {      
+    for (int i = 0; i < 100; i++) {
       detailedData.add(new Double[]{x, detailedCurve.getYValue(x)});
       x += eps;
     }
     return detailedData;
   }
-  
-  private List<Double[]> getData(FunctionalDoublesCurve detailedCurve) {
-    List<Double[]> detailedData = new ArrayList<Double[]>();
-        
+
+  private static List<Double[]> getData(final FunctionalDoublesCurve detailedCurve) {
+    final List<Double[]> detailedData = new ArrayList<>();
+
     for (int i = 0; i < 100; i++) {
-      double x = 3 * i / 10.;
+      final double x = 3 * i / 10.;
       detailedData.add(new Double[]{x, detailedCurve.getYValue(x)});
     }
     return detailedData;

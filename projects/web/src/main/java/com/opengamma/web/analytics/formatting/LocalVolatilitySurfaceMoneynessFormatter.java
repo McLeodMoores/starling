@@ -10,7 +10,6 @@
 package com.opengamma.web.analytics.formatting;
 
 import com.opengamma.analytics.financial.model.volatility.local.LocalVolatilitySurfaceMoneyness;
-import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.option;
@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * OG-Analytics derivative of the exchange traded Equity Index Option
+ * OG-Analytics derivative of the exchange traded Equity Index Option.
  */
 public class EquityIndexOption implements InstrumentDerivative {
   /** The time to expiry in years*/
@@ -36,7 +36,7 @@ public class EquityIndexOption implements InstrumentDerivative {
   private final SettlementType _settlementType;
 
   /**
-   * 
+   *
    * @param timeToExpiry time (in years as a double) until the date-time at which the reference index is fixed, not negative.
    * @param timeToSettlement time (in years as a double) until the date-time at which the contract is settled, not negative. Must be at or after the
    * expiry.
@@ -67,7 +67,7 @@ public class EquityIndexOption implements InstrumentDerivative {
     _settlementType = settlementType;
   }
 
-  /** 
+  /**
    * @return the expiry time (in years as a double)
    */
   public double getTimeToExpiry() {
@@ -75,7 +75,7 @@ public class EquityIndexOption implements InstrumentDerivative {
   }
 
   /**
-   * Gets the time when payments are made 
+   * Gets the time when payments are made.
    * @return the delivery time (in years as a double)
    */
   public double getTimeToSettlement() {
@@ -150,13 +150,13 @@ public class EquityIndexOption implements InstrumentDerivative {
     result = prime * result + _settlementType.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToExpiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_timeToSettlement);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

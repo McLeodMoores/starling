@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.cashflow;
@@ -12,7 +12,7 @@ import com.opengamma.core.position.Position;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * 
+ *
  */
 public class PositionPayment {
 
@@ -21,8 +21,9 @@ public class PositionPayment {
   private final PaymentDirection _direction;
   private final String _index;
   private final CurrencyAmount _amount;
-  
-  public PositionPayment(Position position, PaymentType paymentType, PaymentDirection direction, String index, CurrencyAmount amount) {
+
+  public PositionPayment(final Position position, final PaymentType paymentType, final PaymentDirection direction, final String index,
+      final CurrencyAmount amount) {
     _position = position;
     _paymentType = paymentType;
     _direction = direction;
@@ -37,11 +38,11 @@ public class PositionPayment {
   public PaymentType getPaymentType() {
     return _paymentType;
   }
-  
+
   public PaymentDirection getDirection() {
     return _direction;
   }
-  
+
   public String getIndex() {
     return _index;
   }
@@ -55,16 +56,16 @@ public class PositionPayment {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_amount == null) ? 0 : _amount.hashCode());
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
-    result = prime * result + ((_paymentType == null) ? 0 : _paymentType.hashCode());
-    result = prime * result + ((_direction == null) ? 0 : _direction.hashCode());
-    result = prime * result + ((_position == null) ? 0 : _position.hashCode());
+    result = prime * result + (_amount == null ? 0 : _amount.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
+    result = prime * result + (_paymentType == null ? 0 : _paymentType.hashCode());
+    result = prime * result + (_direction == null ? 0 : _direction.hashCode());
+    result = prime * result + (_position == null ? 0 : _position.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -74,7 +75,7 @@ public class PositionPayment {
     if (!(obj instanceof PositionPayment)) {
       return false;
     }
-    PositionPayment other = (PositionPayment) obj;
+    final PositionPayment other = (PositionPayment) obj;
     return ObjectUtils.equals(_amount, other._amount)
         && ObjectUtils.equals(_index, other._index)
         && ObjectUtils.equals(_paymentType, other._paymentType)
@@ -84,8 +85,8 @@ public class PositionPayment {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    ToStringStyle style = ToStringStyle.SHORT_PREFIX_STYLE;
+    final StringBuffer sb = new StringBuffer();
+    final ToStringStyle style = ToStringStyle.SHORT_PREFIX_STYLE;
     style.appendStart(sb, this);
     style.append(sb, "position", getPosition(), null);
     style.append(sb, "type", getPaymentType(), null);
@@ -95,5 +96,5 @@ public class PositionPayment {
     style.appendEnd(sb, this);
     return sb.toString();
   }
-  
+
 }

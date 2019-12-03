@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.holiday.impl;
@@ -25,8 +25,8 @@ public class DataHolidayMasterUris {
    * @param request  the request, may be null
    * @return the URI, not null
    */
-  public static URI uriMetaData(URI baseUri, HolidayMetaDataRequest request) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("metaData");
+  public static URI uriMetaData(final URI baseUri, final HolidayMetaDataRequest request) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("metaData");
     if (request != null) {
       RestUtils.encodeQueryParams(bld, request);
     }
@@ -39,8 +39,8 @@ public class DataHolidayMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidaySearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidaySearches");
     return bld.build();
   }
 
@@ -50,8 +50,8 @@ public class DataHolidayMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidays");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("holidays");
     return bld.build();
   }
 

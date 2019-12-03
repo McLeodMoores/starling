@@ -19,7 +19,7 @@ public interface YieldConvention extends NamedInstance {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    * @deprecated use getName()
    */
@@ -28,9 +28,10 @@ public interface YieldConvention extends NamedInstance {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    */
+  @Override
   @ToString
   String getName();
 

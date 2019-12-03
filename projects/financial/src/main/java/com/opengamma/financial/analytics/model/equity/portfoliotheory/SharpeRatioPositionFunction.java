@@ -5,6 +5,8 @@
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
 
+import com.opengamma.engine.ComputationTarget;
+import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.target.ComputationTargetType;
 
 /**
@@ -21,4 +23,8 @@ public class SharpeRatioPositionFunction extends SharpeRatioFunction {
     return ComputationTargetType.POSITION;
   }
 
+  @Override
+  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+    return true;
+  }
 }

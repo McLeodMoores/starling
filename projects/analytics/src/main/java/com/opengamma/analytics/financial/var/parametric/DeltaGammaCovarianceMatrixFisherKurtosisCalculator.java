@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.var.parametric;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.matrix.Matrix;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 
 /**
- * 
+ *
  */
 public class DeltaGammaCovarianceMatrixFisherKurtosisCalculator extends Function1D<Map<Integer, ParametricVaRDataBundle>, Double> {
   private final MatrixAlgebra _algebra;
@@ -52,7 +52,8 @@ public class DeltaGammaCovarianceMatrixFisherKurtosisCalculator extends Function
     final double std = _std.evaluate(data);
     final double numerator = _algebra.getTrace(_algebra.getPower(product, 4)) + 12
         * _algebra.getInnerProduct(delta, _algebra.multiply(_algebra.multiply(deltaCovariance, _algebra.getPower(product, 2)), delta)) + 3 * std * std;
-    final double denominator = Math.pow(0.5 * _algebra.getTrace(_algebra.getPower(product, 2)) + _algebra.getInnerProduct(delta, _algebra.multiply(deltaCovariance, delta)), 2);
+    final double denominator = Math
+        .pow(0.5 * _algebra.getTrace(_algebra.getPower(product, 2)) + _algebra.getInnerProduct(delta, _algebra.multiply(deltaCovariance, delta)), 2);
     return numerator / denominator - 3;
   }
 

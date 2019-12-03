@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -18,16 +18,19 @@ import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.financial.property.StaticDefaultPropertyFunction;
 
 /**
- * If no currency is explicitly requested, inject the view's default currency. This function should never be added to a dependency graph as the input will always match the output.
+ * If no currency is explicitly requested, inject the view's default currency. This function should never be added to a dependency graph as the input will
+ * always match the output.
  */
 public class DefaultCurrencyFunction extends StaticDefaultPropertyFunction {
 
   public DefaultCurrencyFunction(final boolean permitWithout, final String valueName) {
-    super(ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY), ValuePropertyNames.CURRENCY, permitWithout, valueName);
+    super(ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY), ValuePropertyNames.CURRENCY,
+        permitWithout, valueName);
   }
 
   public DefaultCurrencyFunction(final boolean permitWithout, final String... valueNames) {
-    super(ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY), ValuePropertyNames.CURRENCY, permitWithout, valueNames);
+    super(ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY), ValuePropertyNames.CURRENCY,
+        permitWithout, valueNames);
   }
 
   @Override
@@ -35,9 +38,8 @@ public class DefaultCurrencyFunction extends StaticDefaultPropertyFunction {
     final String currency = getViewDefaultCurrencyISO(context);
     if (currency == null) {
       return null;
-    } else {
-      return Collections.singleton(currency);
     }
+    return Collections.singleton(currency);
   }
 
   @Override
@@ -48,16 +50,17 @@ public class DefaultCurrencyFunction extends StaticDefaultPropertyFunction {
 
   /**
    * Returns the default currency as defined in a view.
-   * 
-   * @param context the function compilation context - this must have a view calculation configuration bound to it
+   *
+   * @param context
+   *          the function compilation context - this must have a view calculation configuration bound to it
    * @return the default currency or null if there is none
    */
   protected static String getViewDefaultCurrencyISO(final FunctionCompilationContext context) {
-    ViewCalculationConfiguration viewCalculationConfiguration = context.getViewCalculationConfiguration();
+    final ViewCalculationConfiguration viewCalculationConfiguration = context.getViewCalculationConfiguration();
     if (viewCalculationConfiguration == null) {
       return null;
     }
-    ValueProperties defaultProperties = viewCalculationConfiguration.getDefaultProperties();
+    final ValueProperties defaultProperties = viewCalculationConfiguration.getDefaultProperties();
     if (defaultProperties == null) {
       return null;
     }

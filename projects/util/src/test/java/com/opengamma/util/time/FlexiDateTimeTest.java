@@ -5,6 +5,8 @@
  */
 package com.opengamma.util.time;
 
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNull;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.fail;
 
@@ -13,6 +15,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.OffsetTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
@@ -20,11 +23,10 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for {@link FlexiDateTime}.
  */
 @Test(groups = TestGroup.UNIT)
 public class FlexiDateTimeTest {
-
   private static final LocalDate DATE = LocalDate.of(2010, 7, 1);
   private static final LocalTime TIME = LocalTime.of(12, 30);
   private static final LocalTime TIME2 = LocalTime.of(13, 40);
@@ -36,107 +38,231 @@ public class FlexiDateTimeTest {
   private static final OffsetDateTime OFFSET_DATE_TIME = OffsetDateTime.of(DATE, TIME, OFFSET);
   private static final ZonedDateTime ZONED_DATE_TIME = ZonedDateTime.of(DATE.atTime(TIME), ZONE);
 
-  public void test_LD() {
-    FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE);
+  /**
+   * Tests construction from a LocalDate.
+   */
+  @Test
+  public void testLd() {
+    final FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE);
     assertState(test, DATE, null, null);
   }
 
-  public void test_LD_LT() {
-    FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE, TIME);
+  /**
+   * Tests construction from a LocalDate and LocalTime.
+   */
+  @Test
+  public void testLdLt() {
+    final FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE, TIME);
     assertState(test, DATE, TIME, null);
   }
 
-  public void test_LDT() {
-    FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE_TIME);
+  /**
+   * Tests construction from a LocalDateTime.
+   */
+  @Test
+  public void testLdt() {
+    final FlexiDateTime test = FlexiDateTime.of(LOCAL_DATE_TIME);
     assertState(test, DATE, TIME, null);
   }
 
-  public void test_ODT() {
-    FlexiDateTime test = FlexiDateTime.of(OFFSET_DATE_TIME);
+  /**
+   * Tests construction from an {@link OffsetDateTime}.
+   */
+  @Test
+  public void testOdt() {
+    final FlexiDateTime test = FlexiDateTime.of(OFFSET_DATE_TIME);
     assertState(test, DATE, TIME, OFFSET);
   }
 
-  public void test_ZDT() {
-    FlexiDateTime test = FlexiDateTime.of(ZONED_DATE_TIME);
+  /**
+   * Tests construction from a {@link ZonedDateTime}.
+   */
+  @Test
+  public void testZdt() {
+    final FlexiDateTime test = FlexiDateTime.of(ZONED_DATE_TIME);
     assertState(test, DATE, TIME, ZONE);
   }
 
-  private void assertState(FlexiDateTime test, LocalDate expectedDate, LocalTime expectedTime, ZoneId expectedZone) {
-    assertEquals(expectedDate, test.getDate());
-    assertEquals(expectedTime, test.getTime());
-    assertEquals(expectedZone, test.getZone());
-    
+  /**
+   * Tests construction from a LocalDate.
+   */
+  @Test
+  public void testTemporalLd() {
+    assertState(FlexiDateTime.from(LOCAL_DATE), LOCAL_DATE, null, null);
+  }
+
+  /**
+   * Tests construction from a LocalDateTime.
+   */
+  @Test
+  public void testTemporalLdt() {
+    assertState(FlexiDateTime.from(LOCAL_DATE_TIME), DATE, TIME, null);
+  }
+
+  /**
+   * Tests construction from an OffsetDateTime.
+   */
+  @Test
+  public void testTemporalOdt() {
+    assertState(FlexiDateTime.from(OFFSET_DATE_TIME), DATE, TIME, OFFSET);
+  }
+
+  /**
+   * Tests construction from a ZonedDateTime.
+   */
+  @Test
+  public void testTemporalZdt() {
+    assertState(FlexiDateTime.from(ZONED_DATE_TIME), DATE, TIME, ZONE);
+  }
+
+  /**
+   * Tests lenient construction using a LocalDate.
+   */
+  @Test
+  public void testOfLenientLd() {
+    assertState(FlexiDateTime.ofLenient(DATE, null), DATE, null, null);
+  }
+
+  /**
+   * Tests lenient construction using a LocalDate and LocalTime.
+   */
+  @Test
+  public void testOfLenientLdLt() {
+    assertState(FlexiDateTime.ofLenient(DATE, OffsetTime.of(TIME, OFFSET)), DATE, TIME, OFFSET);
+  }
+
+  /**
+   * Tests lenient construction using a LocalDate and LocalTime.
+   */
+  @Test
+  public void testOfLenientLdLtZid() {
+    assertState(FlexiDateTime.ofLenient(DATE, TIME, ZONE), DATE, TIME, ZONE);
+  }
+
+  /**
+   * Tests the create() method.
+   */
+  @Test
+  public void testCreate() {
+    assertNull(FlexiDateTime.create(null, null));
+    assertNull(FlexiDateTime.create(null, OffsetTime.of(TIME, OFFSET)));
+    assertState(FlexiDateTime.create(DATE, null), DATE, null, null);
+    assertState(FlexiDateTime.create(DATE, OffsetTime.of(TIME, OFFSET)), DATE, TIME, OFFSET);
+
+    assertNull(FlexiDateTime.create(null, null, null));
+    assertNull(FlexiDateTime.create(null, TIME, null));
+    assertState(FlexiDateTime.create(DATE, TIME, null), DATE, TIME, null);
+    assertState(FlexiDateTime.create(DATE, TIME, ZONE), DATE, TIME, ZONE);
+  }
+
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    assertEquals(FlexiDateTime.of(DATE).hashCode(), FlexiDateTime.of(DATE).hashCode());
+    assertEquals(FlexiDateTime.of(LOCAL_DATE_TIME).hashCode(), FlexiDateTime.of(LOCAL_DATE_TIME).hashCode());
+    assertEquals(FlexiDateTime.of(OFFSET_DATE_TIME).hashCode(), FlexiDateTime.of(OFFSET_DATE_TIME).hashCode());
+    assertEquals(FlexiDateTime.of(ZONED_DATE_TIME).hashCode(), FlexiDateTime.of(ZONED_DATE_TIME).hashCode());
+  }
+
+  /**
+   * Tests the equals() method.
+   */
+  @Test
+  public void testEquals() {
+    assertEquals(FlexiDateTime.of(DATE), FlexiDateTime.ofLenient(DATE, null));
+    assertEquals(FlexiDateTime.of(DATE), FlexiDateTime.ofLenient(DATE, null));
+    assertEquals(FlexiDateTime.of(LOCAL_DATE_TIME), FlexiDateTime.of(LOCAL_DATE_TIME));
+    assertEquals(FlexiDateTime.of(ZONED_DATE_TIME), FlexiDateTime.of(ZONED_DATE_TIME));
+    assertNotEquals(null, FlexiDateTime.of(DATE));
+    assertNotEquals(DATE, FlexiDateTime.of(DATE));
+    assertNotEquals(DATE, FlexiDateTime.of(DATE.plusDays(1)));
+    assertNotEquals(DATE, FlexiDateTime.of(LOCAL_DATE_TIME));
+    assertNotEquals(LOCAL_DATE_TIME, FlexiDateTime.of(LOCAL_DATE_TIME.plusDays(1)));
+    assertNotEquals(LOCAL_DATE_TIME, FlexiDateTime.of(LOCAL_DATE_TIME.plusHours(1)));
+    assertNotEquals(DATE, FlexiDateTime.of(ZONED_DATE_TIME));
+    assertNotEquals(ZONED_DATE_TIME, FlexiDateTime.of(ZONED_DATE_TIME.plusDays(1)));
+    assertNotEquals(DATE, FlexiDateTime.of(OFFSET_DATE_TIME));
+    assertNotEquals(OFFSET_DATE_TIME, FlexiDateTime.of(OFFSET_DATE_TIME.atZoneSameInstant(ZONE2)));
+  }
+
+  private static void assertState(final FlexiDateTime actual, final LocalDate expectedDate, final LocalTime expectedTime, final ZoneId expectedZone) {
+    assertEquals(expectedDate, actual.getDate());
+    assertEquals(expectedTime, actual.getTime());
+    assertEquals(expectedZone, actual.getZone());
+
     // toLocalDateTime() and toLocalDateTime(LocalTime)
     if (expectedTime != null) {
-      assertEquals(expectedDate.atTime(expectedTime), test.toLocalDateTime());
-      assertEquals(expectedDate.atTime(expectedTime), test.toLocalDateTime(TIME2));
+      assertEquals(expectedDate.atTime(expectedTime), actual.toLocalDateTime());
+      assertEquals(expectedDate.atTime(expectedTime), actual.toLocalDateTime(TIME2));
     } else {
       try {
-        test.toLocalDateTime();
+        actual.toLocalDateTime();
         fail();
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // expected
       }
-      assertEquals(expectedDate.atTime(TIME2), test.toLocalDateTime(TIME2));
+      assertEquals(expectedDate.atTime(TIME2), actual.toLocalDateTime(TIME2));
     }
-    
+
     // toZonedDateTime() and toZonedDateTime(LocalTime,TimeZone)
     if (expectedZone != null) {
-      assertEquals(true, test.isComplete());
-      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone).toOffsetDateTime(), test.toOffsetDateTime());
-      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone).toOffsetDateTime().toOffsetTime(), test.toOffsetTime());
-      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), test.toZonedDateTime());
-      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), test.toZonedDateTime(TIME2, ZONE2));
+      assertEquals(true, actual.isComplete());
+      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone).toOffsetDateTime(), actual.toOffsetDateTime());
+      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone).toOffsetDateTime().toOffsetTime(), actual.toOffsetTime());
+      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), actual.toZonedDateTime());
+      assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), actual.toZonedDateTime(TIME2, ZONE2));
     } else {
-      assertEquals(false, test.isComplete());
+      assertEquals(false, actual.isComplete());
       try {
-        test.toOffsetDateTime();
+        actual.toOffsetDateTime();
         fail();
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // expected
       }
       try {
-        test.toOffsetTime();
+        actual.toOffsetTime();
         fail();
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // expected
       }
       try {
-        test.toZonedDateTime();
+        actual.toZonedDateTime();
         fail();
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // expected
       }
       if (expectedTime != null) {
-        assertEquals(expectedDate.atTime(expectedTime).atZone(ZONE2), test.toZonedDateTime(TIME2, ZONE2));
+        assertEquals(expectedDate.atTime(expectedTime).atZone(ZONE2), actual.toZonedDateTime(TIME2, ZONE2));
       } else {
-        assertEquals(expectedDate.atTime(TIME2).atZone(ZONE2), test.toZonedDateTime(TIME2, ZONE2));
+        assertEquals(expectedDate.atTime(TIME2).atZone(ZONE2), actual.toZonedDateTime(TIME2, ZONE2));
       }
     }
-    
+
     // toBest()
     if (expectedTime != null) {
       if (expectedZone != null) {
         if (expectedZone instanceof ZoneOffset) {
-          assertEquals(expectedDate.atTime(expectedTime).atOffset((ZoneOffset) expectedZone), test.toBest());
+          assertEquals(expectedDate.atTime(expectedTime).atOffset((ZoneOffset) expectedZone), actual.toBest());
         } else {
-          assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), test.toBest());
+          assertEquals(expectedDate.atTime(expectedTime).atZone(expectedZone), actual.toBest());
         }
       } else {
-        assertEquals(LocalDateTime.of(expectedDate, expectedTime), test.toBest());
+        assertEquals(LocalDateTime.of(expectedDate, expectedTime), actual.toBest());
       }
     } else {
-      assertEquals(expectedDate, test.toBest());
+      assertEquals(expectedDate, actual.toBest());
     }
-    
+
     // equals
-    assertEquals(true, test.equals(test));
-    assertEquals(true, test.equals(FlexiDateTime.ofLenient(test.getDate(), test.getTime(), test.getZone())));
-    assertEquals(false, test.equals(""));
-    assertEquals(false, test.equals(null));
-    assertEquals(false, test.equals(FlexiDateTime.of(DATE.minusDays(1))));
-    assertEquals(false, test.equals(FlexiDateTime.of(DATE.minusDays(1), TIME)));
-    assertEquals(false, test.equals(FlexiDateTime.ofLenient(DATE.minusDays(1), TIME, ZONE)));
+    assertEquals(true, actual.equals(actual));
+    assertEquals(true, actual.equals(FlexiDateTime.ofLenient(actual.getDate(), actual.getTime(), actual.getZone())));
+    assertNotEquals(actual, "");
+    assertEquals(false, actual.equals(null));
+    assertEquals(false, actual.equals(FlexiDateTime.of(DATE.minusDays(1))));
+    assertEquals(false, actual.equals(FlexiDateTime.of(DATE.minusDays(1), TIME)));
+    assertEquals(false, actual.equals(FlexiDateTime.ofLenient(DATE.minusDays(1), TIME, ZONE)));
   }
 
 }

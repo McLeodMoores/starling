@@ -5,7 +5,6 @@
  */
 package com.opengamma.master.user;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -68,7 +67,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   //-------------------------------------------------------------------------
   /**
    * Creates a history event.
-   * 
+   *
    * @param type  the type, not null
    * @param uniqueId  the unique identifier, not null
    * @param userName  the user name, not null
@@ -76,21 +75,22 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
    * @param changes  the changes that occurred, not null
    * @return the event, not null
    */
-  public static HistoryEvent of(HistoryEventType type, UniqueId uniqueId, String userName, Instant instant, List<String> changes) {
+  public static HistoryEvent of(final HistoryEventType type, final UniqueId uniqueId, final String userName,
+      final Instant instant, final List<String> changes) {
     return new HistoryEvent(type, uniqueId, userName, instant, changes);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type, not null
    * @param uniqueId  the unique identifier, not null
    * @param userName  the user name, not null
    * @param instant  the instant, not null
    * @param changes  the changes that occurred, not null
    */
-  private HistoryEvent(HistoryEventType type, UniqueId uniqueId, String userName, Instant instant, List<String> changes) {
+  private HistoryEvent(final HistoryEventType type, final UniqueId uniqueId, final String userName, final Instant instant, final List<String> changes) {
     JodaBeanUtils.notNull(type, "type");
     JodaBeanUtils.notNull(uniqueId, "uniqueId");
     JodaBeanUtils.notNull(userName, "userName");
@@ -106,12 +106,12 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   //-------------------------------------------------------------------------
   /**
    * Compares this event to another sorting in instant order.
-   * 
+   *
    * @param other  the other event, not null
    * @return the comparison result
    */
   @Override
-  public int compareTo(HistoryEvent other) {
+  public int compareTo(final HistoryEvent other) {
     return ComparisonChain.start()
         .compare(getInstant(), other.getInstant())
         .compare(getUniqueId(), other.getUniqueId())
@@ -236,11 +236,11 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       HistoryEvent other = (HistoryEvent) obj;
-      return JodaBeanUtils.equal(getType(), other.getType()) &&
-          JodaBeanUtils.equal(getUniqueId(), other.getUniqueId()) &&
-          JodaBeanUtils.equal(getUserName(), other.getUserName()) &&
-          JodaBeanUtils.equal(getInstant(), other.getInstant()) &&
-          JodaBeanUtils.equal(getChanges(), other.getChanges());
+      return JodaBeanUtils.equal(_type, other._type) &&
+          JodaBeanUtils.equal(_uniqueId, other._uniqueId) &&
+          JodaBeanUtils.equal(_userName, other._userName) &&
+          JodaBeanUtils.equal(_instant, other._instant) &&
+          JodaBeanUtils.equal(_changes, other._changes);
     }
     return false;
   }
@@ -248,11 +248,11 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUserName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getInstant());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getChanges());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_uniqueId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_userName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_instant);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_changes);
     return hash;
   }
 
@@ -270,11 +270,11 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("type").append('=').append(JodaBeanUtils.toString(getType())).append(',').append(' ');
-    buf.append("uniqueId").append('=').append(JodaBeanUtils.toString(getUniqueId())).append(',').append(' ');
-    buf.append("userName").append('=').append(JodaBeanUtils.toString(getUserName())).append(',').append(' ');
-    buf.append("instant").append('=').append(JodaBeanUtils.toString(getInstant())).append(',').append(' ');
-    buf.append("changes").append('=').append(JodaBeanUtils.toString(getChanges())).append(',').append(' ');
+    buf.append("type").append('=').append(JodaBeanUtils.toString(_type)).append(',').append(' ');
+    buf.append("uniqueId").append('=').append(JodaBeanUtils.toString(_uniqueId)).append(',').append(' ');
+    buf.append("userName").append('=').append(JodaBeanUtils.toString(_userName)).append(',').append(' ');
+    buf.append("instant").append('=').append(JodaBeanUtils.toString(_instant)).append(',').append(' ');
+    buf.append("changes").append('=').append(JodaBeanUtils.toString(_changes)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -512,19 +512,31 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

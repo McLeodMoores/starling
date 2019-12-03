@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -48,29 +48,29 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), ValueProperties.all()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties outputConstraints = desiredValue.getConstraints();
-    Set<String> startDates = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final Set<String> startDates = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     if (startDates == null || startDates.size() != 1) {
       return null;
     }
-    Set<String> endDates = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
+    final Set<String> endDates = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
     if (endDates == null || endDates.size() != 1) {
       return null;
     }
     Set<String> desiredCurrencies = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (desiredCurrencies == null || desiredCurrencies.isEmpty()) {
-      Collection<Currency> targetCurrencies = FinancialSecurityUtils.getCurrencies(target.getPosition().getSecurity(), context.getSecuritySource());
+      final Collection<Currency> targetCurrencies = FinancialSecurityUtils.getCurrencies(target.getPosition().getSecurity(), context.getSecuritySource());
       // REVIEW jonathan 2013-03-12 -- should we pass through all the currencies and see what it wants to produce?
       desiredCurrencies = ImmutableSet.of(Iterables.get(targetCurrencies, 0).getCode());
     }
-    String pnlSeriesStartDateProperty = ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY;
-    ValueProperties.Builder requirementConstraints = desiredValue.getConstraints().copy()
+    final String pnlSeriesStartDateProperty = ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY;
+    final ValueProperties.Builder requirementConstraints = desiredValue.getConstraints().copy()
         .withoutAny(ValuePropertyNames.CURRENCY)
         .with(HistoricalValuationFunction.PASSTHROUGH_PREFIX + ValuePropertyNames.CURRENCY, desiredCurrencies)
         .withoutAny(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS)
@@ -79,8 +79,8 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
         .withoutAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
         .with(pnlSeriesStartDateProperty, outputConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY))
         .withOptional(pnlSeriesStartDateProperty);
-    
-    String startDate = getPriceSeriesStart(outputConstraints);
+
+    final String startDate = getPriceSeriesStart(outputConstraints);
     if (startDate == null) {
       return null;
     }
@@ -90,68 +90,73 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-    Entry<ValueSpecification, ValueRequirement> tsInput = Iterables.getOnlyElement(inputs.entrySet());
-    ValueSpecification tsSpec = tsInput.getKey();
-    String pnlStartDate = tsInput.getValue().getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    ValueSpecification valueSpec = getResultSpec(target, tsSpec.getProperties(), pnlStartDate, null);
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final Entry<ValueSpecification, ValueRequirement> tsInput = Iterables.getOnlyElement(inputs.entrySet());
+    final ValueSpecification tsSpec = tsInput.getKey();
+    final String pnlStartDate = tsInput.getValue()
+        .getConstraint(ValueRequirementNames.PNL_SERIES + "_" + HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final ValueSpecification valueSpec = getResultSpec(target, tsSpec.getProperties(), pnlStartDate, null);
     return ImmutableSet.of(valueSpec);
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
-    ComputedValue priceTsComputedValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
-    LocalDateDoubleTimeSeries priceTs = (LocalDateDoubleTimeSeries) priceTsComputedValue.getValue();
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
+    final ComputedValue priceTsComputedValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
+    final LocalDateDoubleTimeSeries priceTs = (LocalDateDoubleTimeSeries) priceTsComputedValue.getValue();
     if (priceTs.isEmpty()) {
       return null;
     }
-    DateDoubleTimeSeries<?> pnlTs = calculatePnlSeries(priceTs, executionContext, desiredValue);
-    String pnlStartDate = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    ValueSpecification valueSpec = getResultSpec(target, priceTsComputedValue.getSpecification().getProperties(), pnlStartDate, desiredValue);
+    final DateDoubleTimeSeries<?> pnlTs = calculatePnlSeries(priceTs, executionContext, desiredValue);
+    final String pnlStartDate = desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final ValueSpecification valueSpec = getResultSpec(target, priceTsComputedValue.getSpecification().getProperties(), pnlStartDate, desiredValue);
     return ImmutableSet.of(new ComputedValue(valueSpec, pnlTs));
   }
 
-  //-------------------------------------------------------------------------
-  protected String getPriceSeriesStart(ValueProperties outputConstraints) {
-    Set<String> samplingPeriodValues = outputConstraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
+  // -------------------------------------------------------------------------
+  protected String getPriceSeriesStart(final ValueProperties outputConstraints) {
+    final Set<String> samplingPeriodValues = outputConstraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
     if (samplingPeriodValues != null && !samplingPeriodValues.isEmpty()) {
       return DateConstraint.VALUATION_TIME.minus(samplingPeriodValues.iterator().next()).toString();
     }
-    Set<String> startDates = outputConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
+    final Set<String> startDates = outputConstraints.getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
     if (startDates != null && !startDates.isEmpty()) {
       return Iterables.getOnlyElement(startDates);
     }
     return null;
   }
-  
-  protected void removeTransformationProperties(ValueProperties.Builder builder) {
+
+  protected void removeTransformationProperties(final ValueProperties.Builder builder) {
     builder.withoutAny(ValuePropertyNames.TRANSFORMATION_METHOD);
   }
-  
-  protected void addTransformationProperties(ValueProperties.Builder builder, ValueRequirement desiredValue) {
+
+  protected void addTransformationProperties(final ValueProperties.Builder builder, final ValueRequirement desiredValue) {
     builder.with(ValuePropertyNames.TRANSFORMATION_METHOD, "None");
   }
-  
-  protected DateDoubleTimeSeries<?> calculatePnlSeries(LocalDateDoubleTimeSeries priceSeries, FunctionExecutionContext executionContext, ValueRequirement desiredValue) {
-    int pnlVectorSize = priceSeries.size() - 1;
-    double[] pnlValues = new double[pnlVectorSize];
+
+  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext,
+      final ValueRequirement desiredValue) {
+    final int pnlVectorSize = priceSeries.size() - 1;
+    final double[] pnlValues = new double[pnlVectorSize];
     for (int i = 0; i < pnlVectorSize; i++) {
       pnlValues[i] = priceSeries.getValueAtIndex(i + 1) - priceSeries.getValueAtIndex(i);
     }
-    int[] pnlDates = new int[priceSeries.size() - 1];
+    final int[] pnlDates = new int[priceSeries.size() - 1];
     System.arraycopy(priceSeries.timesArrayFast(), 1, pnlDates, 0, pnlDates.length);
-    LocalDateDoubleTimeSeries pnlTs = ImmutableLocalDateDoubleTimeSeries.of(pnlDates, pnlValues);
+    final LocalDateDoubleTimeSeries pnlTs = ImmutableLocalDateDoubleTimeSeries.of(pnlDates, pnlValues);
     return pnlTs;
   }
 
-  //-------------------------------------------------------------------------
-  private ValueSpecification getResultSpec(ComputationTarget target, ValueProperties priceTsProperties, String pnlStartDate, ValueRequirement desiredValue) {
-    Set<String> currencies = priceTsProperties.getValues(HistoricalValuationFunction.PASSTHROUGH_PREFIX + ValuePropertyNames.CURRENCY);
+  // -------------------------------------------------------------------------
+  private ValueSpecification getResultSpec(final ComputationTarget target, final ValueProperties priceTsProperties, final String pnlStartDate,
+      final ValueRequirement desiredValue) {
+    final Set<String> currencies = priceTsProperties.getValues(HistoricalValuationFunction.PASSTHROUGH_PREFIX + ValuePropertyNames.CURRENCY);
     if (currencies == null || currencies.size() != 1) {
       throw new OpenGammaRuntimeException("Expected a single currency for historical valuation series but got " + currencies);
     }
-    ValueProperties.Builder builder = priceTsProperties.copy()
+    final ValueProperties.Builder builder = priceTsProperties.copy()
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId())
         .with(ValuePropertyNames.CURRENCY, currencies)
@@ -160,7 +165,7 @@ public class HistoricalValuationPnLFunction extends AbstractFunction.NonCompiled
         .with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, pnlStartDate)
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, ScheduleCalculatorFactory.DAILY)
         .with(ValuePropertyNames.SAMPLING_FUNCTION, TimeSeriesSamplingFunctionFactory.NO_PADDING);
-    
+
     addTransformationProperties(builder, desiredValue);
     return new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), builder.get());
   }

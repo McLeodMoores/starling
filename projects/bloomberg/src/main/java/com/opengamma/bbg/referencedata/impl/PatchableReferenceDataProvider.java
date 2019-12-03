@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.referencedata.impl;
@@ -30,46 +30,46 @@ import com.opengamma.util.tuple.Pairs;
 public class PatchableReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PatchableReferenceDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PatchableReferenceDataProvider.class);
 
-  private Map<Pair<String, String>, Object> _patches = new HashMap<Pair<String, String>, Object>();
-  private Set<String> _securities = new HashSet<String>();
-  private ReferenceDataProvider _underlying;
+  private final Map<Pair<String, String>, Object> _patches = new HashMap<>();
+  private final Set<String> _securities = new HashSet<>();
+  private final ReferenceDataProvider _underlying;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying source of reference data
    */
-  public PatchableReferenceDataProvider(ReferenceDataProvider underlying) {
+  public PatchableReferenceDataProvider(final ReferenceDataProvider underlying) {
     _underlying = underlying;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Sets an override or replacement value.
-   * 
+   *
    * @param security  the Bloomberg security identifier
    * @param field  the Bloomberg field name
    * @param result  the object to return as a result (must be possible to Fudge encode with standard OG dictionary)
    */
-  public void setPatch(String security, String field, Object result) {
+  public void setPatch(final String security, final String field, final Object result) {
     _patches.put(Pairs.of(security, field), result);
     _securities.add(security);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
-    ReferenceDataProviderGetResult rawResult = _underlying.getReferenceData(request);
-    ReferenceDataProviderGetResult newResult = new ReferenceDataProviderGetResult();
-    
-    for (ReferenceData refData : rawResult.getReferenceData()) {
-      String identifier = refData.getIdentifier();
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
+    final ReferenceDataProviderGetResult rawResult = _underlying.getReferenceData(request);
+    final ReferenceDataProviderGetResult newResult = new ReferenceDataProviderGetResult();
+
+    for (final ReferenceData refData : rawResult.getReferenceData()) {
+      final String identifier = refData.getIdentifier();
       if (_securities.contains(identifier)) {
-        FudgeMsg fieldData = refData.getFieldValues();
-        MutableFudgeMsg alteredFieldData = OpenGammaFudgeContext.getInstance().newMessage(fieldData);
-        for (String field : request.getFields()) {
+        final FudgeMsg fieldData = refData.getFieldValues();
+        final MutableFudgeMsg alteredFieldData = OpenGammaFudgeContext.getInstance().newMessage(fieldData);
+        for (final String field : request.getFields()) {
           if (_patches.containsKey(Pairs.of(identifier, field))) {
             if (alteredFieldData.hasField(field)) {
               alteredFieldData.remove(field);
@@ -78,7 +78,7 @@ public class PatchableReferenceDataProvider extends AbstractReferenceDataProvide
             refData.removeErrors(field);
           }
         }
-        s_logger.debug("Patching {} with {}", new Object[] {fieldData, alteredFieldData });
+        LOGGER.debug("Patching {} with {}", new Object[] {fieldData, alteredFieldData });
         refData.setFieldValues(alteredFieldData);
       }
       newResult.addReferenceData(refData);

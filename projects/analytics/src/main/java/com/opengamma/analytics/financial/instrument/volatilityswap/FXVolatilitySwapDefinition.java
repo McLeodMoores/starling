@@ -8,8 +8,8 @@ package com.opengamma.analytics.financial.instrument.volatilityswap;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.volatilityswap.FXVolatilitySwap;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -34,23 +34,36 @@ public class FXVolatilitySwapDefinition extends VolatilitySwapDefinition {
   private final Currency _counterCurrency;
 
   /**
-   * @param currency The currency, not null
-   * @param baseCurrency The base currency, not null
-   * @param counterCurrency The counter currency, not null
-   * @param volStrike The volatility strike, not negative
-   * @param volNotional The volatility notional
-   * @param observationStartDate The observation start date, not null
-   * @param observationEndDate The observation end date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param observationFrequency The observation frequency, not null
-   * @param annualizationFactor The annualization factor, greater than zero
-   * @param calendar The holiday calendar, not null
+   * @param currency
+   *          The currency, not null
+   * @param baseCurrency
+   *          The base currency, not null
+   * @param counterCurrency
+   *          The counter currency, not null
+   * @param volStrike
+   *          The volatility strike, not negative
+   * @param volNotional
+   *          The volatility notional
+   * @param observationStartDate
+   *          The observation start date, not null
+   * @param observationEndDate
+   *          The observation end date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param annualizationFactor
+   *          The annualization factor, greater than zero
+   * @param calendar
+   *          The holiday calendar, not null
    */
   public FXVolatilitySwapDefinition(final Currency currency, final Currency baseCurrency, final Currency counterCurrency, final double volStrike,
       final double volNotional, final ZonedDateTime observationStartDate, final ZonedDateTime observationEndDate, final ZonedDateTime effectiveDate,
       final ZonedDateTime maturityDate, final PeriodFrequency observationFrequency, final double annualizationFactor, final Calendar calendar) {
-    super(currency, volStrike, volNotional, observationStartDate, observationEndDate, effectiveDate, maturityDate, observationFrequency, annualizationFactor, calendar);
+    super(currency, volStrike, volNotional, observationStartDate, observationEndDate, effectiveDate, maturityDate, observationFrequency, annualizationFactor,
+        calendar);
     ArgumentChecker.notNull(baseCurrency, "baseCurrency");
     ArgumentChecker.notNull(counterCurrency, "counterCurrency");
     ArgumentChecker.isFalse(baseCurrency.equals(counterCurrency), "base currency and counter currency cannot be equal");
@@ -60,6 +73,7 @@ public class FXVolatilitySwapDefinition extends VolatilitySwapDefinition {
 
   /**
    * Gets the base currency.
+   *
    * @return the base currency
    */
   public Currency getBaseCurrency() {
@@ -68,6 +82,7 @@ public class FXVolatilitySwapDefinition extends VolatilitySwapDefinition {
 
   /**
    * Gets the counter currency.
+   *
    * @return the counter currency
    */
   public Currency getCounterCurrency() {
@@ -82,7 +97,8 @@ public class FXVolatilitySwapDefinition extends VolatilitySwapDefinition {
 
   /**
    * {@inheritDoc}
-   * @deprecated Yield curve names are no longer stored in {@link InstrumentDerivative}
+   *
+   * @deprecated Yield curve names are no longer stored in {@link InstrumentDefinition}
    */
   @Deprecated
   @Override

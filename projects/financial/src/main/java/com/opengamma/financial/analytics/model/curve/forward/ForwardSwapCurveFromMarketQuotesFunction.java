@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.curve.forward;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_INTERPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR;
 import static com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Collections;
 import java.util.Map;
@@ -28,8 +27,9 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -51,21 +51,22 @@ import com.opengamma.financial.analytics.forwardcurve.ConfigDBForwardSwapCurveSp
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveDefinition;
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveInstrumentProvider;
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveSpecification;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
 public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardSwapCurveFromMarketQuotesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapCurveFromMarketQuotesFunction.class);
 
   private ConfigDBForwardSwapCurveDefinitionSource _forwardSwapCurveDefinitionSource;
   private ConfigDBForwardSwapCurveSpecificationSource _forwardSwapCurveSpecificationSource;
@@ -89,23 +90,25 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
         final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.CURVE).withAny(PROPERTY_FORWARD_CURVE_INTERPOLATOR)
-            .withAny(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR).withAny(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR).withAny(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR)
+            .withAny(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR).withAny(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR)
+            .withAny(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR)
             .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, ForwardSwapCurveMarketDataFunction.FORWARD_SWAP_QUOTES).get();
         final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.FORWARD_CURVE, target.toSpecification(), properties);
         return Collections.singleton(spec);
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
-          s_logger.error("Did not supply a single curve name; asked for {}", curveNames);
+          LOGGER.error("Did not supply a single curve name; asked for {}", curveNames);
           return null;
         }
         final Set<String> forwardTenors = constraints.getValues(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR);
         if (forwardTenors == null || forwardTenors.size() != 1) {
-          s_logger.error("Did not supply a single forward tenor; asked for {}", forwardTenors);
+          LOGGER.error("Did not supply a single forward tenor; asked for {}", forwardTenors);
           return null;
         }
         final Set<String> forwardCurveInterpolatorNames = constraints.getValues(PROPERTY_FORWARD_CURVE_INTERPOLATOR);
@@ -122,7 +125,8 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         }
         final String curveName = curveNames.iterator().next();
         final String forwardTenor = forwardTenors.iterator().next();
-        final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName).with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
+        final ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, curveName)
+            .with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
             .get();
         return Collections.singleton(new ValueRequirement(ValueRequirementNames.FORWARD_SWAP_CURVE_MARKET_DATA, target.toSpecification(), properties));
       }
@@ -130,7 +134,7 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) {
-        final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
+        final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
         final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
         final Clock snapshotClock = executionContext.getValuationClock();
         final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -158,24 +162,16 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         final String leftExtrapolatorName = desiredValue.getConstraint(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR);
         final String rightExtrapolatorName = desiredValue.getConstraint(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR);
         final String forwardTenorName = desiredValue.getConstraint(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR);
-        final String conventionName = currency.getCode() + "_SWAP";
-        final ConventionBundle convention = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
-        if (convention == null) {
-          throw new OpenGammaRuntimeException("Could not get convention named " + conventionName);
-        }
-        final DayCount dayCount = convention.getSwapFloatingLegDayCount();
-        if (dayCount == null) {
-          throw new OpenGammaRuntimeException("Could not get daycount");
-        }
-        final Integer settlementDays = convention.getSwapFloatingLegSettlementDays();
-        if (settlementDays == null) {
-          throw new OpenGammaRuntimeException("Could not get number of settlement days");
-        }
+        final VanillaIborLegConvention convention = conventionSource.getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()),
+            VanillaIborLegConvention.class);
+        final IborIndexConvention underlyingConvention = conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
+        final DayCount dayCount = underlyingConvention.getDayCount();
+        final Integer settlementDays = convention.getSettlementDays();
         final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, currency);
         final LocalDate localNow = now.toLocalDate();
         final Period forwardPeriod = Period.parse(forwardTenorName);
         final Tenor forwardTenor = Tenor.of(forwardPeriod);
-        final LocalDate forwardStart = ScheduleCalculator.getAdjustedDate(localNow.plus(forwardPeriod), settlementDays, calendar); //TODO check adjustments
+        final LocalDate forwardStart = ScheduleCalculator.getAdjustedDate(localNow.plus(forwardPeriod), settlementDays, calendar); // TODO check adjustments
         for (final Tenor tenor : definition.getTenors()) {
           final ExternalId identifier = provider.getInstrument(localNow, tenor, forwardTenor);
           if (data.containsKey(identifier)) {
@@ -187,14 +183,17 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         if (expiries.size() == 0) {
           throw new OpenGammaRuntimeException("Could not get any values for forward swaps");
         }
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         final ForwardCurve curve = new ForwardCurve(InterpolatedDoublesCurve.from(expiries, forwards, interpolator));
-        return Collections.singleton(new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, forwardTenorName), curve));
+        return Collections.singleton(
+            new ComputedValue(getResultSpec(target, curveName, interpolatorName, leftExtrapolatorName, rightExtrapolatorName, forwardTenorName), curve));
       }
 
-      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName, final String leftExtrapolatorName,
+      private ValueSpecification getResultSpec(final ComputationTarget target, final String curveName, final String interpolatorName,
+          final String leftExtrapolatorName,
           final String rightExtrapolatorName, final String forwardTenor) {
-        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName).with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
+        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName)
+            .with(PROPERTY_FORWARD_CURVE_INTERPOLATOR, interpolatorName)
             .with(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR, leftExtrapolatorName).with(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR, rightExtrapolatorName)
             .with(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR, forwardTenor)
             .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, ForwardSwapCurveMarketDataFunction.FORWARD_SWAP_QUOTES).get();

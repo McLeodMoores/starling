@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.script;
@@ -31,15 +31,15 @@ public final class DbScriptUtils {
   private static final String METADATA_FILE = "ogdb-metadata.properties";
   private static final String METADATA_RESOURCE_PATH = "db/" + METADATA_FILE;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbScriptUtils.class);
-  
-  private static final Map<String, DbSchemaGroupMetadata> s_dbSchemaGroupMetadata;
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbScriptUtils.class);
+
+  private static final Map<String, DbSchemaGroupMetadata> DB_SCHEMA_GROUP_META_DATA;
+
   static {
-    Map<String, DbSchemaGroupMetadata> schemaGroupMetadata = Maps.newTreeMap(new Comparator<String>() {
+    final Map<String, DbSchemaGroupMetadata> schemaGroupMetadata = Maps.newTreeMap(new Comparator<String>() {
 
       @Override
-      public int compare(String schemaName1, String schemaName2) {
+      public int compare(final String schemaName1, final String schemaName2) {
         if (schemaName1.contains("-") && schemaName2.contains("-")) {
           return schemaName1.compareTo(schemaName2);
         }
@@ -52,71 +52,71 @@ public final class DbScriptUtils {
         return schemaName1.compareTo(schemaName2);
       }
     });
-    ClassLoader classLoader = DbScriptUtils.class.getClassLoader();
+    final ClassLoader classLoader = DbScriptUtils.class.getClassLoader();
     try {
-      Enumeration<URL> metadataResourceUrls = classLoader.getResources(METADATA_RESOURCE_PATH);
+      final Enumeration<URL> metadataResourceUrls = classLoader.getResources(METADATA_RESOURCE_PATH);
       while (metadataResourceUrls.hasMoreElements()) {
-        URL metadataResourceUrl = metadataResourceUrls.nextElement();
-        String metadataResourceUrlString = metadataResourceUrl.toExternalForm();
-        String baseResourceUrlString = metadataResourceUrlString.substring(0, metadataResourceUrlString.length() - METADATA_FILE.length() - 1);
+        final URL metadataResourceUrl = metadataResourceUrls.nextElement();
+        final String metadataResourceUrlString = metadataResourceUrl.toExternalForm();
+        final String baseResourceUrlString = metadataResourceUrlString.substring(0, metadataResourceUrlString.length() - METADATA_FILE.length() - 1);
         try {
-          InputStream in = metadataResourceUrl.openStream();
+          final InputStream in = metadataResourceUrl.openStream();
           try {
-            Properties properties = new Properties();
+            final Properties properties = new Properties();
             properties.load(in);
-            for (Map.Entry<Object, Object> metadata : properties.entrySet()) {
-              String schemaGroupName = (String) metadata.getKey();
+            for (final Map.Entry<Object, Object> metadata : properties.entrySet()) {
+              final String schemaGroupName = (String) metadata.getKey();
               if (schemaGroupMetadata.containsKey(schemaGroupName)) {
                 continue;
               }
-              int currentVersion = Integer.parseInt((String) metadata.getValue());
+              final int currentVersion = Integer.parseInt((String) metadata.getValue());
               schemaGroupMetadata.put(schemaGroupName, new DbSchemaGroupMetadata(schemaGroupName, baseResourceUrlString, currentVersion));
             }
-          } catch (Exception e) {
-            s_logger.error("Error reading database metadata resource at " + metadataResourceUrl, e);
+          } catch (final Exception e) {
+            LOGGER.error("Error reading database metadata resource at " + metadataResourceUrl, e);
           } finally {
             in.close();
           }
-        } catch (IOException e) {
-          s_logger.error("Error opening database metadata resource at " + metadataResourceUrl, e);
+        } catch (final IOException e) {
+          LOGGER.error("Error opening database metadata resource at " + metadataResourceUrl, e);
         }
       }
-    } catch (IOException e) {
-      s_logger.error("Error looking for database metadata resources", e);
+    } catch (final IOException e) {
+      LOGGER.error("Error looking for database metadata resources", e);
     }
 
-    s_dbSchemaGroupMetadata = ImmutableMap.copyOf(schemaGroupMetadata);
+    DB_SCHEMA_GROUP_META_DATA = ImmutableMap.copyOf(schemaGroupMetadata);
   }
-  
+
   private DbScriptUtils() {
   }
-  
-  public static Integer getCurrentVersion(String schemaGroupName) {
-    DbSchemaGroupMetadata metadata = getDbSchemaGroupMetadata(schemaGroupName);
+
+  public static Integer getCurrentVersion(final String schemaGroupName) {
+    final DbSchemaGroupMetadata metadata = getDbSchemaGroupMetadata(schemaGroupName);
     if (metadata == null) {
       return null;
     }
     return metadata.getCurrentVersion();
   }
-  
+
   public static Set<String> getAllSchemaNames() {
-    return s_dbSchemaGroupMetadata.keySet();
+    return DB_SCHEMA_GROUP_META_DATA.keySet();
   }
-  
+
   public static List<DbSchemaGroupMetadata> getAllSchemaGroupMetadata() {
-    List<DbSchemaGroupMetadata> allSchemaGroupMetadata = Lists.newArrayListWithCapacity(s_dbSchemaGroupMetadata.size());
-    for (Entry<String, DbSchemaGroupMetadata> entry : s_dbSchemaGroupMetadata.entrySet()) {
+    final List<DbSchemaGroupMetadata> allSchemaGroupMetadata = Lists.newArrayListWithCapacity(DB_SCHEMA_GROUP_META_DATA.size());
+    for (final Entry<String, DbSchemaGroupMetadata> entry : DB_SCHEMA_GROUP_META_DATA.entrySet()) {
       allSchemaGroupMetadata.add(entry.getValue());
     }
     return allSchemaGroupMetadata;
   }
-  
-  public static DbSchemaGroupMetadata getDbSchemaGroupMetadata(String schemaGroupName) {
+
+  public static DbSchemaGroupMetadata getDbSchemaGroupMetadata(final String schemaGroupName) {
     return getDbSchemaGroupMetadata().get(schemaGroupName);
   }
-  
+
   private static Map<String, DbSchemaGroupMetadata> getDbSchemaGroupMetadata() {
-    return s_dbSchemaGroupMetadata;
+    return DB_SCHEMA_GROUP_META_DATA;
   }
 
 }

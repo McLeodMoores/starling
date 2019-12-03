@@ -36,11 +36,11 @@ public class FudgeBooleanWrapper extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value, not null
    * @return the list, not null
    */
-  public static FudgeBooleanWrapper of(boolean value) {
+  public static FudgeBooleanWrapper of(final boolean value) {
     return new FudgeBooleanWrapper(value);
   }
 
@@ -53,10 +53,10 @@ public class FudgeBooleanWrapper extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value, not null
    */
-  public FudgeBooleanWrapper(boolean value) {
+  public FudgeBooleanWrapper(final boolean value) {
     setValue(value);
   }
 

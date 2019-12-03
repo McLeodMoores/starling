@@ -8,12 +8,13 @@ package com.opengamma.financial.generator;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.DataNotFoundException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.DepositConvention;
+import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.security.cash.CashSecurity;
 import com.opengamma.id.ExternalId;
@@ -33,11 +34,7 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
   }
 
   private ExternalId getCashRate(final Currency ccy, final LocalDate tradeDate, final Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    return curveSpecConfig.getCashSecurity(tradeDate, tenor);
+    return null;
   }
 
   @Override
@@ -47,18 +44,31 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
     final ZonedDateTime start = previousWorkingDay(ZonedDateTime.now().minusDays(getRandom(60) + 7), currency);
     final int length = getRandom(6) + 3;
     final ZonedDateTime maturity = nextWorkingDay(start.plusMonths(length), currency);
-    final ConventionBundle convention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_GENERIC_CASH"));
-    if (convention == null) {
-      return null;
+    DayCount dayCount;
+    try {
+      final DepositConvention depositConvention = getConventionSource().getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()),
+          DepositConvention.class);
+      dayCount = depositConvention.getDayCount();
+    } catch (final DataNotFoundException e1) {
+      // try ibor
+      try {
+        final IborIndexConvention iborIndexConvention = getConventionSource().getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()),
+            IborIndexConvention.class);
+        dayCount = iborIndexConvention.getDayCount();
+      } catch (final DataNotFoundException e2) {
+        final OvernightIndexConvention overnightIndexConvention = getConventionSource().getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()),
+            OvernightIndexConvention.class);
+        dayCount = overnightIndexConvention.getDayCount();
+      }
     }
-    final DayCount dayCount = convention.getDayCount();
+
     final ExternalId cashRate = getCashRate(currency, start.toLocalDate(), Tenor.ofMonths(length));
     if (cashRate == null) {
       return null;
     }
-    final HistoricalTimeSeries timeSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, cashRate.toBundle(), null, start.toLocalDate(), true,
-        start.toLocalDate(), true);
-    if ((timeSeries == null) || timeSeries.getTimeSeries().isEmpty()) {
+    final HistoricalTimeSeries timeSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, cashRate.toBundle(), null,
+        start.toLocalDate(), true, start.toLocalDate(), true);
+    if (timeSeries == null || timeSeries.getTimeSeries().isEmpty()) {
       return null;
     }
     final double rate = timeSeries.getTimeSeries().getEarliestValue() * getRandom(0.8, 1.2);

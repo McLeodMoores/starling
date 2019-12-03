@@ -37,15 +37,14 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 /**
  * Extended context that is used to provide components to tools.
  * <p>
- * This is populated and passed to tools that need component services.
- * Each component is optional, although typically all are provided.
+ * This is populated and passed to tools that need component services. Each component is optional, although typically all are provided.
  */
 @BeanDefinition
 public class IntegrationToolContext extends ToolContext implements BloombergToolContext {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(IntegrationToolContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationToolContext.class);
   /**
-   * Link back to the component server providing the implementations.  Useful if you need a specific classifier/instance.
+   * Link back to the component server providing the implementations. Useful if you need a specific classifier/instance.
    */
   @PropertyDefinition
   private volatile ComponentServer _componentServer;
@@ -53,7 +52,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
   /**
    * The Bloomberg reference data provider.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private volatile ReferenceDataProvider _bloombergReferenceDataProvider;
 
   @PropertyDefinition
@@ -74,8 +73,9 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
         final Class<?> clazz = Class.forName(clazzName);
         final LiveDataMetaDataProvider ldMetaDataProvider = (LiveDataMetaDataProvider) clazz.getConstructor(URI.class).newInstance(info.getUri());
         results.add(ldMetaDataProvider);
-      } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException ex) {
-        s_logger.error("Couldn't create instance of {}", info.getAttribute(null));
+      } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+          | SecurityException | ClassNotFoundException ex) {
+        LOGGER.error("Couldn't create instance of {}", info.getAttribute(null));
       }
     }
     return results;
@@ -102,7 +102,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
 
   //-----------------------------------------------------------------------
   /**
-   * Gets link back to the component server providing the implementations.  Useful if you need a specific classifier/instance.
+   * Gets link back to the component server providing the implementations. Useful if you need a specific classifier/instance.
    * @return the value of the property
    */
   public ComponentServer getComponentServer() {
@@ -110,7 +110,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
   }
 
   /**
-   * Sets link back to the component server providing the implementations.  Useful if you need a specific classifier/instance.
+   * Sets link back to the component server providing the implementations. Useful if you need a specific classifier/instance.
    * @param componentServer  the new value of the property
    */
   public void setComponentServer(ComponentServer componentServer) {
@@ -130,6 +130,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
    * Gets the Bloomberg reference data provider.
    * @return the value of the property
    */
+  @Override
   public ReferenceDataProvider getBloombergReferenceDataProvider() {
     return _bloombergReferenceDataProvider;
   }

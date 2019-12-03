@@ -41,7 +41,7 @@ public class FinancialUserSnapshotMaster extends AbstractFinancialUserMaster<Mar
    * @param client  the client, not null
    * @param underlying  the underlying master, not null
    */
-  public FinancialUserSnapshotMaster(FinancialClient client, MarketDataSnapshotMaster underlying) {
+  public FinancialUserSnapshotMaster(final FinancialClient client, final MarketDataSnapshotMaster underlying) {
     super(client, FinancialUserDataType.MARKET_DATA_SNAPSHOT);
     _underlying = underlying;
     _changeProvidingMaster = ChangeProvidingDecorator.wrap(underlying);
@@ -49,67 +49,67 @@ public class FinancialUserSnapshotMaster extends AbstractFinancialUserMaster<Mar
 
 
   @Override
-  public MarketDataSnapshotDocument add(MarketDataSnapshotDocument document) {
+  public MarketDataSnapshotDocument add(final MarketDataSnapshotDocument document) {
     return _changeProvidingMaster.add(document);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, MarketDataSnapshotDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final MarketDataSnapshotDocument documentToAdd) {
     return _changeProvidingMaster.addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public MarketDataSnapshotDocument correct(MarketDataSnapshotDocument document) {
+  public MarketDataSnapshotDocument correct(final MarketDataSnapshotDocument document) {
     return _changeProvidingMaster.correct(document);
   }
 
   @Override
-  public MarketDataSnapshotDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public MarketDataSnapshotDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return _changeProvidingMaster.get(objectId, versionCorrection);
   }
 
   @Override
-  public MarketDataSnapshotDocument get(UniqueId uniqueId) {
+  public MarketDataSnapshotDocument get(final UniqueId uniqueId) {
     return _changeProvidingMaster.get(uniqueId);
   }
 
   @Override
-  public Map<UniqueId, MarketDataSnapshotDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, MarketDataSnapshotDocument> get(final Collection<UniqueId> uniqueIds) {
     return _changeProvidingMaster.get(uniqueIds);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     _changeProvidingMaster.remove(oid);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     _changeProvidingMaster.removeVersion(uniqueId);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<MarketDataSnapshotDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<MarketDataSnapshotDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(MarketDataSnapshotDocument replacementDocument) {
+  public UniqueId replaceVersion(final MarketDataSnapshotDocument replacementDocument) {
     return _changeProvidingMaster.replaceVersion(replacementDocument);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<MarketDataSnapshotDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<MarketDataSnapshotDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<MarketDataSnapshotDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<MarketDataSnapshotDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public MarketDataSnapshotDocument update(MarketDataSnapshotDocument document) {
+  public MarketDataSnapshotDocument update(final MarketDataSnapshotDocument document) {
     return _changeProvidingMaster.update(document);
   }
 
@@ -119,12 +119,12 @@ public class FinancialUserSnapshotMaster extends AbstractFinancialUserMaster<Mar
   }
 
   @Override
-  public MarketDataSnapshotHistoryResult history(MarketDataSnapshotHistoryRequest request) {
+  public MarketDataSnapshotHistoryResult history(final MarketDataSnapshotHistoryRequest request) {
     return _underlying.history(request);
   }
 
   @Override
-  public MarketDataSnapshotSearchResult search(MarketDataSnapshotSearchRequest request) {
+  public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest request) {
     return _underlying.search(request);
   }
 }

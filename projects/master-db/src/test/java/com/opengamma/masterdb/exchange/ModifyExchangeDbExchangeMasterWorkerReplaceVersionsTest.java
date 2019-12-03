@@ -40,47 +40,47 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends AbstractDbExchangeMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest(String databaseType, String databaseVersion) {
+  public ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
-  //-------------------------------------------------------------------------  
+  //-------------------------------------------------------------------------
 
   @Test
   public void test_ReplaceVersion_of_some_middle_version() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(latestFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
 
       _exgMaster.replaceVersion(latestDoc.getUniqueId(), replacement);
 
-      ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
+      final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
       searchRequest.addExternalIds(bundle.getExternalIds());
       searchRequest.setVersionCorrection(VersionCorrection.LATEST);
-      ExchangeSearchResult result = _exgMaster.search(searchRequest);
-      List<ManageableExchange> exchanges = result.getExchanges();
+      final ExchangeSearchResult result = _exgMaster.search(searchRequest);
+      final List<ManageableExchange> exchanges = result.getExchanges();
 
       assertEquals(1, exchanges.size());
-      ManageableExchange ex = exchanges.get(0);
+      final ManageableExchange ex = exchanges.get(0);
       assertEquals("test10", ex.getName());
 
     } finally {
@@ -90,35 +90,35 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_of_some_middle_version_timeBoundsNotExact() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(latestFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
 
       _exgMaster.replaceVersion(latestDoc.getUniqueId(), replacement);
 
-      ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
+      final ExchangeSearchRequest searchRequest = new ExchangeSearchRequest();
       searchRequest.addExternalIds(bundle.getExternalIds());
       searchRequest.setVersionCorrection(VersionCorrection.LATEST);
-      ExchangeSearchResult result = _exgMaster.search(searchRequest);
-      List<ManageableExchange> exchanges = result.getExchanges();
+      final ExchangeSearchResult result = _exgMaster.search(searchRequest);
+      final List<ManageableExchange> exchanges = result.getExchanges();
 
       assertEquals(1, exchanges.size());
-      ManageableExchange ex = exchanges.get(0);
+      final ManageableExchange ex = exchanges.get(0);
       assertEquals("test10", ex.getName());
 
     } finally {
@@ -128,29 +128,29 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_which_is_not_current() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
 
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsToInstant(null);
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
-      ExchangeDocument lastButOneDoc = exchanges.get(exchanges.size() - 1);
-      Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
+      final ExchangeDocument lastButOneDoc = exchanges.get(exchanges.size() - 1);
+      final Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(lastButOneDocVersionFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
@@ -164,29 +164,29 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_ReplaceVersion_which_is_not_in_the_time_bounds_of_the_replaced_doc() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
 
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsToInstant(null);
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
-      ExchangeDocument lastButOneDoc = exchanges.get(exchanges.size() - 3);
-      Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
+      final ExchangeDocument lastButOneDoc = exchanges.get(exchanges.size() - 3);
+      final Instant lastButOneDocVersionFrom = lastButOneDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(lastButOneDocVersionFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
@@ -200,32 +200,32 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
   @Test
   public void test_ReplaceVersions() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(latestFrom.plus(i, SECONDS));
         replacement.add(doc);
       }
 
       _exgMaster.replaceVersions(latestDoc, replacement);
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
       assertEquals(15, exchanges.size());
 
@@ -236,32 +236,32 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
   @Test
   public void test_ReplaceVersions2() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      Instant latestFrom = latestDoc.getVersionFromInstant();
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+      final Instant latestFrom = latestDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "test" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(latestFrom.plus(i - 3, MINUTES));
         replacement.add(doc);
       }
 
       _exgMaster.replaceVersions(latestDoc, replacement);
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
       assertEquals(12, exchanges.size());
 
@@ -275,73 +275,73 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
    *
    *       |                        |             |
    *       |                        |             |
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |                        |             |                           
-   *       |     setup_4            |             |                           
-   *       |                        |             |                           
-   *   +5m |------------------------|             |                           
-   *       |                        |             |                           
-   *       |     setup_3            |             |                           
-   *       |                        |             |                           
-   *   +4m |------------------------|             |                           
-   *       |                        |             |      replace_4            
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>   
-   *       |                        |             |      replace_3            
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>   
-   *       |                        |             |      replace_2            
-   *       |                        |  <-- +2m40s |----------------------------------->>>   
-   *       |     setup_1            |             |      replace_1            
-   *       |                        |  <-- +2m20s |----------------------------------->>>   
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |                        |             |
+   *       |     setup_4            |             |
+   *       |                        |             |
+   *   +5m |------------------------|             |
+   *       |                        |             |
+   *       |     setup_3            |             |
+   *       |                        |             |
+   *   +4m |------------------------|             |
+   *       |                        |             |      replace_4
+   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
+   *       |                        |             |      replace_3
+   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
+   *       |                        |             |      replace_2
+   *       |                        |  <-- +2m40s |----------------------------------->>>
+   *       |     setup_1            |             |      replace_1
+   *       |                        |  <-- +2m20s |----------------------------------->>>
    *       |                        |
    *       |                        |                       setup_1 (copy)
-   *   +2m |------------------------ ... --------------------------------------------->>>                                                                              
-   *       |                                                               
+   *   +2m |------------------------ ... --------------------------------------------->>>
+   *       |
    *       |     setup_0                                   setup_0 (continuation)
-   *       |                         
-   *   +1m |------------------------ ... --------------------------------------------->>>                                       
+   *       |
+   *   +1m |------------------------ ... --------------------------------------------->>>
    *
    *
    *   NOW =================================================================================
    *
    */
   public void test_ReplaceVersions3() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
       ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
       Instant latestFrom = latestDoc.getVersionFromInstant();
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
 
       _exgMaster.replaceVersions(latestDoc, replacement);
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
       assertEquals(6, exchanges.size());
 
@@ -374,66 +374,66 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
   @Test
   /**
    *
-   *       |                                      
-   *       |                                      
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                 
-   *       |     setup_4                                                     
-   *       |                                                                 
-   *   +5m |------------------------ ... --------------------------------------------->>>                                        
-   *       |                                                                 
-   *       |     setup_3                                                     
-   *       |                                                                 
-   *   +4m |------------------------ ... --------------------------------------------->>>        
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |     setup_4
+   *       |
+   *   +5m |------------------------ ... --------------------------------------------->>>
+   *       |
+   *       |     setup_3
+   *       |
+   *   +4m |------------------------ ... --------------------------------------------->>>
    *       |                        |                      setup_2 (copy)
    *       |                        |
    *       |                        |  <-- +3m40s |----------------------------------->>>
-   *       |                        |             |      replace_4            
-   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>   
-   *       |                        |             |      replace_3            
-   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>   
-   *       |                        |             |      replace_2            
-   *       |                        |  <-- +2m40s |----------------------------------->>>   
-   *       |     setup_1            |             |      replace_1            
-   *       |                        |  <-- +2m20s |----------------------------------->>>   
+   *       |                        |             |      replace_4
+   *       |     setup_2            |  <-- +3m20s |----------------------------------->>>
+   *       |                        |             |      replace_3
+   *   +3m |------------------------|  <-- +3m00s |----------------------------------->>>
+   *       |                        |             |      replace_2
+   *       |                        |  <-- +2m40s |----------------------------------->>>
+   *       |     setup_1            |             |      replace_1
+   *       |                        |  <-- +2m20s |----------------------------------->>>
    *       |                        |
    *       |                        |                      setup_1 (copy)
-   *   +2m |------------------------ ... --------------------------------------------->>>                                                                              
-   *       |                                                               
+   *   +2m |------------------------ ... --------------------------------------------->>>
+   *       |
    *       |     setup_0                                   setup_0 (continuation)
-   *       |                         
-   *   +1m |------------------------ ... --------------------------------------------->>>                                       
+   *       |
+   *   +1m |------------------------ ... --------------------------------------------->>>
    *
    *
    *   NOW =================================================================================
    *
    */
   public void test_ReplaceVersions4() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
@@ -441,11 +441,11 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
       _exgMaster.replaceVersions(latestDoc, replacement);
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
       assertEquals(9, exchanges.size());
 
@@ -485,53 +485,53 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
   @Test
   /**
    *
-   *       |                                                                 
-   *       |                                                                 
-   *       |                                                                                                         
-   *       |                          
-   *       |     setup_4              
-   *       |                          
-   *   +4m |------------------------ ... ------------------------------------------------>>>        
-   *       |                          
-   *       |     setup_3                  
-   *       |                            
-   *   +3m |------------------------ ... ------------------------------------------------>>>      
-   *       |                                             
-   *       |     setup_2               
-   *       |                          
-   *       |                           
-   *       |                           
-   *   +2m |------------------------ ... ------------------------------------------------>>>                                                                   
+   *       |
+   *       |
+   *       |
+   *       |
+   *       |     setup_4
+   *       |
+   *   +4m |------------------------ ... ------------------------------------------------>>>
+   *       |
+   *       |     setup_3
+   *       |
+   *   +3m |------------------------ ... ------------------------------------------------>>>
+   *       |
+   *       |     setup_2
+   *       |
+   *       |
+   *       |
+   *   +2m |------------------------ ... ------------------------------------------------>>>
    *       |                        |             setup_1 (copy)
-   *       |     setup_1            |    
-   *       |                        |     <-- +2m30s |----------------------------------->>> 
-   *   +1m |------------------------|                |      replace_4                                                
-   *       |                        |     <-- +2m00s |----------------------------------->>> 
-   *       |                        |                |      replace_3                        
-   *       |     setup_0            |     <-- +1m30s |----------------------------------->>>       
-   *       |                        |                |      replace_2                        
-   *   NOW |========================|     <-- +1m00s |----------------------------------->>> 
-   *                                                 |      replace_1                        
-   *                                      <-- +0m30s |----------------------------------->>> 
+   *       |     setup_1            |
+   *       |                        |     <-- +2m30s |----------------------------------->>>
+   *   +1m |------------------------|                |      replace_4
+   *       |                        |     <-- +2m00s |----------------------------------->>>
+   *       |                        |                |      replace_3
+   *       |     setup_0            |     <-- +1m30s |----------------------------------->>>
+   *       |                        |                |      replace_2
+   *   NOW |========================|     <-- +1m00s |----------------------------------->>>
+   *                                                 |      replace_1
+   *                                      <-- +0m30s |----------------------------------->>>
    *
    *
    *
    */
   public void test_ReplaceVersions5() {
-    Clock origClock = _exgMaster.getClock();
+    final Clock origClock = _exgMaster.getClock();
     try {
-      Instant now = Instant.now();
+      final Instant now = Instant.now();
 
-      ObjectId baseOid = setupTestData(now);
+      final ObjectId baseOid = setupTestData(now);
       _exgMaster.setClock(Clock.fixed(now.plus(2, HOURS), ZoneOffset.UTC));
-      ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
-      
+      final ExchangeDocument latestDoc = _exgMaster.get(baseOid, VersionCorrection.LATEST);
+
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      List<ExchangeDocument> replacement = newArrayList();
+      final List<ExchangeDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "replace_" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(now.minus(60, SECONDS).plus(i * 30, SECONDS));
         replacement.add(doc);
       }
@@ -539,11 +539,11 @@ public class ModifyExchangeDbExchangeMasterWorkerReplaceVersionsTest extends Abs
 
       _exgMaster.replaceVersions(latestDoc, replacement);
 
-      ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
+      final ExchangeHistoryRequest historyRequest = new ExchangeHistoryRequest();
       historyRequest.setObjectId(baseOid);
       historyRequest.setCorrectionsFromInstant(now.plus(2, HOURS));
-      ExchangeHistoryResult result = _exgMaster.history(historyRequest);
-      List<ExchangeDocument> exchanges = result.getDocuments();
+      final ExchangeHistoryResult result = _exgMaster.history(historyRequest);
+      final List<ExchangeDocument> exchanges = result.getDocuments();
 
       assertEquals(8, exchanges.size());
 

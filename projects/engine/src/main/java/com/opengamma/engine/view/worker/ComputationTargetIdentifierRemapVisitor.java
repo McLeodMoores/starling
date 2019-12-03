@@ -23,7 +23,8 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 /* package */final class ComputationTargetIdentifierRemapVisitor implements ComputationTargetReferenceVisitor<ComputationTargetReference> {
 
-  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> s_getLeafType = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_LEAF_TYPE =
+      new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -49,32 +50,31 @@ import com.opengamma.id.UniqueIdentifiable;
 
   private final Map<UniqueId, UniqueId> _map;
 
-  public ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
+  ComputationTargetIdentifierRemapVisitor(final Map<UniqueId, UniqueId> map) {
     _map = map;
   }
 
   public ComputationTargetRequirement remap(final ComputationTargetRequirement requirement) {
-    ComputationTargetReference parent = requirement.getParent();
+    final ComputationTargetReference parent = requirement.getParent();
     if (parent != null) {
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
-        return rewriteParent.containing(requirement.getType().accept(s_getLeafType, null), requirement.getIdentifiers());
+        return rewriteParent.containing(requirement.getType().accept(GET_LEAF_TYPE, null), requirement.getIdentifiers());
       }
     }
     return null;
   }
 
   public ComputationTargetSpecification remap(final ComputationTargetSpecification specification) {
-    UniqueId rewriteSelf = _map.get(specification.getUniqueId());
-    ComputationTargetReference parent = specification.getParent();
+    final UniqueId rewriteSelf = _map.get(specification.getUniqueId());
+    final ComputationTargetReference parent = specification.getParent();
     if (parent != null) {
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
         if (rewriteSelf != null) {
-          return rewriteParent.containing(specification.getType().accept(s_getLeafType, null), rewriteSelf);
-        } else {
-          return rewriteParent.containing(specification.getType().accept(s_getLeafType, null), specification.getUniqueId());
+          return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), rewriteSelf);
         }
+        return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), specification.getUniqueId());
       }
     }
     if (rewriteSelf != null) {
@@ -86,12 +86,12 @@ import com.opengamma.id.UniqueIdentifiable;
   // ComputationTargetReferenceVisitor
 
   @Override
-  public ComputationTargetReference visitComputationTargetRequirement(ComputationTargetRequirement requirement) {
+  public ComputationTargetReference visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
     return remap(requirement);
   }
 
   @Override
-  public ComputationTargetReference visitComputationTargetSpecification(ComputationTargetSpecification specification) {
+  public ComputationTargetReference visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
     return remap(specification);
   }
 

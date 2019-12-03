@@ -17,11 +17,11 @@ import com.opengamma.engine.view.cycle.ViewCycle;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link ViewCycle}
+ * RESTful resource for a {@link ViewCycle}.
  */
 public class DataViewCycleResource extends AbstractDataResource {
 
-  //CSOFF: just constants
+  // CSOFF: just constants
   public static final String PATH_NAME = "name";
   public static final String PATH_UNIQUE_ID = "id";
   public static final String PATH_VIEW_PROCESS_ID = "viewProcessId";
@@ -32,11 +32,11 @@ public class DataViewCycleResource extends AbstractDataResource {
   public static final String PATH_RESULT = "result";
   public static final String PATH_QUERY_CACHES = "queryCaches";
   public static final String PATH_QUERY_RESULTS = "queryResults";
-  //CSON: just constants
+  // CSON: just constants
 
   private final ViewCycle _cycle;
 
-  public DataViewCycleResource(ViewCycle cycle) {
+  public DataViewCycleResource(final ViewCycle cycle) {
     _cycle = cycle;
   }
 
@@ -45,7 +45,7 @@ public class DataViewCycleResource extends AbstractDataResource {
   public Response getName() {
     return responseOkObject(_cycle.getName());
   }
-  
+
   @GET
   @Path(PATH_UNIQUE_ID)
   public Response getUniqueId() {
@@ -69,7 +69,7 @@ public class DataViewCycleResource extends AbstractDataResource {
   public Response getDuration() {
     return responseOkObject(_cycle.getDuration());
   }
-  
+
   @GET
   @Path(PATH_EXECUTION_OPTIONS)
   public Response getExecutionOptions() {
@@ -89,15 +89,15 @@ public class DataViewCycleResource extends AbstractDataResource {
 
   @POST
   @Path(PATH_QUERY_CACHES)
-  public Response queryComputationCaches(ComputationCycleQuery query) {
-    ComputationCacheResponse response = _cycle.queryComputationCaches(query);
+  public Response queryComputationCaches(final ComputationCycleQuery query) {
+    final ComputationCacheResponse response = _cycle.queryComputationCaches(query);
     return responseOkObject(response);
   }
 
   @POST
   @Path(PATH_QUERY_RESULTS)
-  public Response queryResults(ComputationCycleQuery query) {
-    ComputationResultsResponse response = _cycle.queryResults(query);
+  public Response queryResults(final ComputationCycleQuery query) {
+    final ComputationResultsResponse response = _cycle.queryResults(query);
     return responseOkObject(response);
   }
 

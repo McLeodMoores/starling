@@ -33,12 +33,10 @@ import com.opengamma.id.UniqueId;
  * <p>
  * This is the simplest possible implementation of the {@link Exchange} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code Exchange} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code Exchange} interface.
  */
 @BeanDefinition
-public class SimpleExchange extends DirectBean
-    implements Exchange, MutableUniqueIdentifiable, Serializable {
+public class SimpleExchange extends DirectBean implements Exchange, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -46,27 +44,27 @@ public class SimpleExchange extends DirectBean
   /**
    * The unique identifier of the exchange.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the exchange.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The region external identifier bundle that defines where the exchange is located.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _regionIdBundle;
   /**
    * The time-zone of the exchange.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ZoneId _timeZone;
   /**
    * The name of the exchange intended for display purposes.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
 
   /**
@@ -75,11 +73,12 @@ public class SimpleExchange extends DirectBean
   public SimpleExchange() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
-   * @param externalId  the external identifier, not null
+   *
+   * @param externalId
+   *          the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
@@ -109,6 +108,7 @@ public class SimpleExchange extends DirectBean
    * Gets the unique identifier of the exchange.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -117,6 +117,7 @@ public class SimpleExchange extends DirectBean
    * Sets the unique identifier of the exchange.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -134,6 +135,7 @@ public class SimpleExchange extends DirectBean
    * Gets the bundle of external identifiers that define the exchange.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -160,6 +162,7 @@ public class SimpleExchange extends DirectBean
    * Gets the region external identifier bundle that defines where the exchange is located.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundle getRegionIdBundle() {
     return _regionIdBundle;
   }
@@ -185,6 +188,7 @@ public class SimpleExchange extends DirectBean
    * Gets the time-zone of the exchange.
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
     return _timeZone;
   }
@@ -210,6 +214,7 @@ public class SimpleExchange extends DirectBean
    * Gets the name of the exchange intended for display purposes.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }

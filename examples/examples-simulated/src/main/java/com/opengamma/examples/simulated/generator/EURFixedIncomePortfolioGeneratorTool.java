@@ -140,7 +140,8 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
         euribor = EURIBOR_6M;
         frequencyLabel = "6m Euribor";
       }
-      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, euribor, FloatingRateType.IBOR);
+      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, euribor,
+          FloatingRateType.IBOR);
       final SwapSecurity swap;
       final String name;
       if (RANDOM.nextBoolean()) {
@@ -172,7 +173,8 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
       } else {
         frequency = SEMI_ANNUAL;
       }
-      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, EONIA, FloatingRateType.OIS);
+      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, EONIA,
+          FloatingRateType.OIS);
       final SwapSecurity swap;
       final String name;
       if (RANDOM.nextBoolean()) {
@@ -215,7 +217,8 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
         payRate = EURIBOR_6M;
         receiveRate = EURIBOR_3M;
         payLeg = new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
-        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
+        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR,
+            spread);
         frequencyLabel = "receive 3M Euribor + " + FORMATTER.format((int) (spread * 1000)) + "bp, pay 6M Euribor";
       }
       final SwapSecurity swap = new SwapSecurity(tradeDate, effectiveDate, maturityDate, COUNTERPARTY, payLeg, receiveLeg);
@@ -226,7 +229,7 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
     return new MySecurityGenerator<>(securities, tradeDate, "Basis swaps");
   }
 
-  private FutureSecurityGenerator<ManageableSecurity> getIRFutureSecurityGenerator() {    
+  private FutureSecurityGenerator<ManageableSecurity> getIRFutureSecurityGenerator() {
     final ZonedDateTime tradeDate = DateUtils.getUTCDate(2014, 9, 1);
     final FutureSecurity[] securities = new FutureSecurity[N_FUTURES];
     final int[] amounts = new int[N_FUTURES];
@@ -249,7 +252,9 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
 
   /**
    * Generates trades and adds them to a portfolio.
-   * @param <T> The type of the security
+   * 
+   * @param <T>
+   *          The type of the security
    */
   private class MySecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> implements PortfolioNodeGenerator {
     /** The securities */
@@ -259,7 +264,7 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
     /** The name */
     private final String _name;
 
-    public MySecurityGenerator(final ManageableSecurity[] securities, final ZonedDateTime tradeDate, final String name) {
+    MySecurityGenerator(final ManageableSecurity[] securities, final ZonedDateTime tradeDate, final String name) {
       _securities = securities;
       _tradeDate = tradeDate;
       _name = name;
@@ -288,7 +293,9 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
 
   /**
    * Generates future trades and adds them to a portfolio.
-   * @param <T> The type of the security
+   * 
+   * @param <T>
+   *          The type of the security
    */
   private class FutureSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> implements PortfolioNodeGenerator {
     /** The securities */
@@ -302,7 +309,8 @@ public class EURFixedIncomePortfolioGeneratorTool extends AbstractPortfolioGener
     /** The name */
     private final String _name;
 
-    public FutureSecurityGenerator(final ManageableSecurity[] securities, final int[] amounts, final double[] prices, final ZonedDateTime tradeDate, final String name) {
+    FutureSecurityGenerator(final ManageableSecurity[] securities, final int[] amounts, final double[] prices, final ZonedDateTime tradeDate,
+        final String name) {
       _securities = securities;
       _amounts = amounts;
       _prices = prices;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class LocalVolatilityBackwardPDEPriceCalculator implements PDELocalVolatilityCalculator<Double> {
   private final LocalVolatilityBackwardPDEPriceGridCalculator _priceCalculator;
@@ -24,7 +24,8 @@ public class LocalVolatilityBackwardPDEPriceCalculator implements PDELocalVolati
   }
 
   @Override
-  public Double getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option, final YieldAndDiscountCurve discountingCurve) {
+  public Double getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+      final YieldAndDiscountCurve discountingCurve) {
     final double expiry = option.getTimeToExpiry();
     final double forward = forwardCurve.getForward(expiry);
     final Interpolator1DDataBundle data = _priceCalculator.getResult(localVolatility, forwardCurve, option, discountingCurve);
@@ -32,7 +33,8 @@ public class LocalVolatilityBackwardPDEPriceCalculator implements PDELocalVolati
   }
 
   @Override
-  public Double getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option, final YieldAndDiscountCurve discountingCurve) {
+  public Double getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+      final YieldAndDiscountCurve discountingCurve) {
     final double expiry = option.getTimeToExpiry();
     final double forward = forwardCurve.getForward(expiry);
     final Interpolator1DDataBundle data = _priceCalculator.getResult(localVolatility, forwardCurve, option, discountingCurve);

@@ -22,23 +22,23 @@ public class UnderlyingSecurityVisitor extends FinancialSecurityVisitorSameValue
   private final SecurityMaster _securityMaster;
   private final VersionCorrection _versionCorrection;
 
-  public UnderlyingSecurityVisitor(VersionCorrection versionCorrection, SecurityMaster securityMaster) {
+  public UnderlyingSecurityVisitor(final VersionCorrection versionCorrection, final SecurityMaster securityMaster) {
     super(null);
     _versionCorrection = versionCorrection;
     _securityMaster = securityMaster;
   }
 
   @Override
-  public ManageableSecurity visitSwaptionSecurity(SwaptionSecurity security) {
-    SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(security.getUnderlyingId()));
-    ManageableSecurity underlying = result.getSingleSecurity();
+  public ManageableSecurity visitSwaptionSecurity(final SwaptionSecurity security) {
+    final SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(security.getUnderlyingId()));
+    final ManageableSecurity underlying = result.getSingleSecurity();
     return _securityMaster.get(underlying.getUniqueId().getObjectId(), _versionCorrection).getSecurity();
   }
 
   @Override
-  public ManageableSecurity visitCreditDefaultSwapOptionSecurity(CreditDefaultSwapOptionSecurity security) {
-    SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(security.getUnderlyingId()));
-    ManageableSecurity underlying = result.getSingleSecurity();
+  public ManageableSecurity visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
+    final SecuritySearchResult result = _securityMaster.search(new SecuritySearchRequest(security.getUnderlyingId()));
+    final ManageableSecurity underlying = result.getSingleSecurity();
     return _securityMaster.get(underlying.getUniqueId().getObjectId(), _versionCorrection).getSecurity();
   }
 

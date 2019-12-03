@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -93,38 +93,38 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initReferenceData(repo);
     initHistoricalTimeSeries(repo);
     initConfiguration(repo);
   }
 
-  private void initReferenceData(ComponentRepository repo) {
-    ReferenceDataProviderRequestReceiver receiver = new ReferenceDataProviderRequestReceiver(getReferenceDataProvider());
-    FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(receiver);
-    JmsByteArrayRequestDispatcher jmsDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
-    JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsReferenceDataTopic(), jmsDispatcher);
+  private void initReferenceData(final ComponentRepository repo) {
+    final ReferenceDataProviderRequestReceiver receiver = new ReferenceDataProviderRequestReceiver(getReferenceDataProvider());
+    final FudgeRequestDispatcher dispatcher = new FudgeRequestDispatcher(receiver);
+    final JmsByteArrayRequestDispatcher jmsDispatcher = new JmsByteArrayRequestDispatcher(dispatcher);
+    final JmsTopicContainer jmsContainer = getJmsConnector().getTopicContainerFactory().create(getJmsReferenceDataTopic(), jmsDispatcher);
     repo.registerLifecycle(jmsContainer);
   }
 
-  private void initHistoricalTimeSeries(ComponentRepository repo) {
-    HistoricalTimeSeriesSource source = new BloombergHistoricalTimeSeriesSource(getHistoricalTimeSeriesProvider());
-    DataHistoricalTimeSeriesSourceResource resource = new DataHistoricalTimeSeriesSourceResource(source);
+  private void initHistoricalTimeSeries(final ComponentRepository repo) {
+    final HistoricalTimeSeriesSource source = new BloombergHistoricalTimeSeriesSource(getHistoricalTimeSeriesProvider());
+    final DataHistoricalTimeSeriesSourceResource resource = new DataHistoricalTimeSeriesSourceResource(source);
     repo.getRestComponents().publishResource(resource);
   }
 
-  private void initConfiguration(ComponentRepository repo) {
-    Map<String, Object> map = new LinkedHashMap<String, Object>();
-    
-    UriEndPointDescriptionProviderFactoryBean factory = new UriEndPointDescriptionProviderFactoryBean();
+  private void initConfiguration(final ComponentRepository repo) {
+    final Map<String, Object> map = new LinkedHashMap<>();
+
+    final UriEndPointDescriptionProviderFactoryBean factory = new UriEndPointDescriptionProviderFactoryBean();
     factory.setLocal("/jax/htsSource/");
     factory.setPort(getJettyPort());
     map.put("historicalTimeSeriesSource", factory.getObjectCreating());
-    
-    Map<String, Object> outer = new LinkedHashMap<String, Object>();
+
+    final Map<String, Object> outer = new LinkedHashMap<>();
     outer.put("0", map);
-    
-    DataConfigurationResource resource = new DataConfigurationResource(getFudgeContext(), outer);
+
+    final DataConfigurationResource resource = new DataConfigurationResource(getFudgeContext(), outer);
     repo.getRestComponents().publishResource(resource);
   }
 
@@ -134,8 +134,8 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
   */
   static class ReferenceDataProviderRequestReceiver implements FudgeRequestReceiver {
     private final ReferenceDataProvider _underlying;
-    
-    ReferenceDataProviderRequestReceiver(ReferenceDataProvider underlying) {
+
+    ReferenceDataProviderRequestReceiver(final ReferenceDataProvider underlying) {
       ArgumentChecker.notNull(underlying, "Reference Data Provider");
       _underlying = underlying;
     }
@@ -144,20 +144,20 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
     public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
       ArgumentChecker.notNull(deserializer, "FudgeContext");
       ArgumentChecker.notNull(requestEnvelope, "FudgeMessageEnvelope");
-      FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
+      final FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
       if (requestFudgeMsg == null) {
         throw new OpenGammaRuntimeException("Request fudgeMsg cannot be null");
       }
-      ReferenceDataRequestMessage refDataRequest = ReferenceDataRequestMessage.fromFudgeMsg(deserializer, requestFudgeMsg);
+      final ReferenceDataRequestMessage refDataRequest = ReferenceDataRequestMessage.fromFudgeMsg(deserializer, requestFudgeMsg);
       if (refDataRequest == null) {
         throw new OpenGammaRuntimeException("reference data request message from fudgeMsg cannot be null");
       }
-      Set<String> securities = refDataRequest.getSecurities();
-      Set<String> fields = refDataRequest.getFields();
-      ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(securities, fields, true);
-      ReferenceDataProviderGetResult underlyingResult = _underlying.getReferenceData(underlyingRequest);
-      ReferenceDataResult refDataResult = new ReferenceDataResult();
-      for (ReferenceData refData : underlyingResult.getReferenceData()) {
+      final Set<String> securities = refDataRequest.getSecurities();
+      final Set<String> fields = refDataRequest.getFields();
+      final ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(securities, fields, true);
+      final ReferenceDataProviderGetResult underlyingResult = _underlying.getReferenceData(underlyingRequest);
+      final ReferenceDataResult refDataResult = new ReferenceDataResult();
+      for (final ReferenceData refData : underlyingResult.getReferenceData()) {
         refDataResult.addResult(new PerSecurityReferenceDataResult(refData));
       }
       return refDataResult.toFudgeMsg(deserializer.getFudgeContext());
@@ -177,28 +177,28 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
     ReferenceDataResult() {
     }
 
-    public void addResult(PerSecurityReferenceDataResult result) {
+    public void addResult(final PerSecurityReferenceDataResult result) {
       ArgumentChecker.notNull(result, "Per Security Reference Data Result");
       _resultsBySecurity.put(result.getSecurity(), result);
     }
 
-    public FudgeMsg toFudgeMsg(FudgeContext fudgeContext) {
+    public FudgeMsg toFudgeMsg(final FudgeContext fudgeContext) {
       ArgumentChecker.notNull(fudgeContext, "FudgeContext");
-      FudgeSerializer serializer = new FudgeSerializer(fudgeContext);
-      MutableFudgeMsg msg = serializer.newMessage();
-      for (String sec : _resultsBySecurity.keySet()) {
-        PerSecurityReferenceDataResult result = _resultsBySecurity.get(sec);
+      final FudgeSerializer serializer = new FudgeSerializer(fudgeContext);
+      final MutableFudgeMsg msg = serializer.newMessage();
+      for (final String sec : _resultsBySecurity.keySet()) {
+        final PerSecurityReferenceDataResult result = _resultsBySecurity.get(sec);
         if (result != null) {
-          MutableFudgeMsg subMsg = serializer.newMessage();
-          String security = result.getSecurity();
+          final MutableFudgeMsg subMsg = serializer.newMessage();
+          final String security = result.getSecurity();
           subMsg.add(SECURITY_FIELD_NAME, security);
-          FudgeMsg fieldData = result.getFieldData();
+          final FudgeMsg fieldData = result.getFieldData();
           subMsg.add(FIELD_DATA_FIELD_NAME, fieldData);
-          List<String> exceptions = result.getExceptions();
-          for (String exception : exceptions) {
+          final List<String> exceptions = result.getExceptions();
+          for (final String exception : exceptions) {
             subMsg.add(EXCEPTIONS_FIELD_NAME, exception);
           }
-          FudgeMsg exceptionMsg = buildExceptions(serializer, result.getFieldExceptions());
+          final FudgeMsg exceptionMsg = buildExceptions(serializer, result.getFieldExceptions());
           subMsg.add(FIELD_EXCEPTIONS_FIELD_NAME, exceptionMsg);
           msg.add(PER_SECURITY_FIELD_NAME, subMsg);
         }
@@ -206,18 +206,18 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
       return msg;
     }
 
-    private FudgeMsg buildExceptions(FudgeSerializer serializer, Map<String, ReferenceDataError> map) {
+    private FudgeMsg buildExceptions(final FudgeSerializer serializer, final Map<String, ReferenceDataError> map) {
       final MutableFudgeMsg msg = serializer.newMessage();
       msg.add(null, BuilderUtil.KEY_TYPE_HINT_ORDINAL, FudgeWireType.STRING, "java.lang.String");
       msg.add(null, BuilderUtil.VALUE_TYPE_HINT_ORDINAL, FudgeWireType.STRING, "com.opengamma.bbg.ErrorInfo");
-      for (Map.Entry<?, ?> entry : map.entrySet()) {
+      for (final Map.Entry<?, ?> entry : map.entrySet()) {
         serializer.addToMessage(msg, null, BuilderUtil.KEY_ORDINAL, entry.getKey());
         serializer.addToMessage(msg, null, BuilderUtil.VALUE_ORDINAL, entry.getValue());
       }
       return msg;
     }
 
-    public static ReferenceDataResult fromFudgeMsg(FudgeMsg msg, FudgeContext fudgeContext) {
+    public static ReferenceDataResult fromFudgeMsg(final FudgeMsg msg, final FudgeContext fudgeContext) {
       throw new UnsupportedOperationException();
     }
   }
@@ -225,21 +225,21 @@ public class OldBloombergRemoteAccessComponentFactory extends AbstractComponentF
   //-------------------------------------------------------------------------
   static class PerSecurityReferenceDataResult {
     private final String _security;
-    private FudgeMsg _fieldData;
-    private Set<Integer> _eidData;
+    private final FudgeMsg _fieldData;
+    private final Set<Integer> _eidData;
     private final List<String> _exceptions = Lists.newArrayList();
     private final Map<String, ReferenceDataError> _fieldExceptions = Maps.newLinkedHashMap();
 
-    PerSecurityReferenceDataResult(ReferenceData refData) {
+    PerSecurityReferenceDataResult(final ReferenceData refData) {
       _security = refData.getIdentifier();
       _fieldData = refData.getFieldValues();
       _eidData = refData.getEidValues();
-      for (ReferenceDataError error : refData.getErrors()) {
+      for (final ReferenceDataError error : refData.getErrors()) {
         if (error.isFieldBased()) {
           _fieldExceptions.put(error.getField(), error);
           error.setField(null);
         } else {
-          String errorMessage = MessageFormat.format("{0}:{1}/{2} - {3}", error.getCode(),
+          final String errorMessage = MessageFormat.format("{0}:{1}/{2} - {3}", error.getCode(),
               error.getCategory(), error.getSubcategory(), error.getMessage());
           _exceptions.add(errorMessage);
         }

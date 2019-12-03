@@ -20,21 +20,27 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class SnapshotDataBundleFudgeBuilderTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests an empty bundle.
+   */
   public void testEmpty() {
     final SnapshotDataBundle in = new SnapshotDataBundle();
     final SnapshotDataBundle out = cycleObject(SnapshotDataBundle.class, in);
     assertEquals(out.size(), 0);
   }
 
+  /**
+   * Tests a cycle.
+   */
   public void testBasic() {
     final SnapshotDataBundle in = new SnapshotDataBundle();
     in.setDataPoint(ExternalId.of("Foo", "1"), 1d);
     in.setDataPoint(ExternalIdBundle.of(ExternalId.of("Foo", "2"), ExternalId.of("Bar", "Cow")), 2d);
     final SnapshotDataBundle out = cycleObject(SnapshotDataBundle.class, in);
     assertEquals(out.size(), 2);
-    assertEquals(out.getDataPoint(ExternalId.of("Foo", "1")), 1d);
-    assertEquals(out.getDataPoint(ExternalId.of("Foo", "2")), 2d);
-    assertEquals(out.getDataPoint(ExternalId.of("Bar", "Cow")), 2d);
+    assertEquals(out.getDataPoint(ExternalId.of("Foo", "1")), 1d, 1e-15);
+    assertEquals(out.getDataPoint(ExternalId.of("Foo", "2")), 2d, 1e-15);
+    assertEquals(out.getDataPoint(ExternalId.of("Bar", "Cow")), 2d, 1e-15);
   }
 
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.SamplingFrequency;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the SamplingFrequency enum
+ * Custom Hibernate usertype for the SamplingFrequency enum.
  */
 public class SamplingFrequencyUserType extends EnumUserType<SamplingFrequency> {
 
@@ -19,7 +19,7 @@ public class SamplingFrequencyUserType extends EnumUserType<SamplingFrequency> {
   }
 
   @Override
-  protected String enumToStringNoCache(SamplingFrequency value) {
+  protected String enumToStringNoCache(final SamplingFrequency value) {
     switch (value) {
       case DAILY_CLOSE:
         return "daily_close";

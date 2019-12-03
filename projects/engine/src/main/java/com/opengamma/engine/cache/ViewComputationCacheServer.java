@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -21,12 +21,12 @@ import com.opengamma.transport.FudgeConnectionStateListener;
 import com.opengamma.transport.FudgeMessageReceiver;
 
 /**
- * Composite server class for dispatching calls to a {@link IdentifierMapServer} and 
+ * Composite server class for dispatching calls to a {@link IdentifierMapServer} and
  * {@link FudgeMessageStoreServer} within the same JVM.
  */
 public class ViewComputationCacheServer implements FudgeConnectionReceiver, FudgeConnectionStateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewComputationCacheServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewComputationCacheServer.class);
 
   private final IdentifierMapServer _identifierMap;
   private final FudgeMessageStoreServer _binaryDataStore;
@@ -53,7 +53,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
     private final FudgeConnection _connection;
     private final CacheMessageVisitor _binaryDataStore;
 
-    public MessageHandler(final FudgeConnection connection) {
+    MessageHandler(final FudgeConnection connection) {
       _connection = connection;
       _binaryDataStore = ViewComputationCacheServer.this.getBinaryDataStore().onNewConnection(connection);
     }
@@ -68,7 +68,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
 
     @Override
     protected <T extends CacheMessage> T visitUnexpectedMessage(final CacheMessage message) {
-      s_logger.warn("Unexpected message - {}", message);
+      LOGGER.warn("Unexpected message - {}", message);
       return null;
     }
 
@@ -115,7 +115,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
   }
 
   @Override
-  public void connectionFailed(final FudgeConnection connection, Exception cause) {
+  public void connectionFailed(final FudgeConnection connection, final Exception cause) {
     getBinaryDataStore().onDroppedConnection(connection);
   }
 

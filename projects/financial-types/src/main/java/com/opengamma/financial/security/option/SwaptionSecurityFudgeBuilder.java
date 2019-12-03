@@ -44,16 +44,16 @@ public class SwaptionSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   public static final String NOTIONAL_FIELD_NAME = "notional";
   /** Field name. */
   public static final String SETTLEMENT_DATE_FIELD_NAME = "settlementDate";
-  
+
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SwaptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SwaptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     SwaptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, SwaptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final SwaptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, IS_PAYER_FIELD_NAME, object.isPayer());
     addToMessage(msg, UNDERLYING_IDENTIFIER_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getUnderlyingId()));
@@ -73,13 +73,13 @@ public class SwaptionSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   @Override
-  public SwaptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    SwaptionSecurity object = new SwaptionSecurity();
+  public SwaptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final SwaptionSecurity object = new SwaptionSecurity();
     SwaptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, SwaptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final SwaptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setPayer(msg.getBoolean(IS_PAYER_FIELD_NAME));
     object.setUnderlyingId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNDERLYING_IDENTIFIER_FIELD_NAME)));

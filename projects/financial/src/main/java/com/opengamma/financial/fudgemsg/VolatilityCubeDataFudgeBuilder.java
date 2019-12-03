@@ -62,6 +62,7 @@ public class VolatilityCubeDataFudgeBuilder implements FudgeBuilder<VolatilityCu
   /** The z labels field */
   private static final String Z_LABEL_FIELD = "zLabel";
 
+  @SuppressWarnings("unchecked")
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final VolatilityCubeData<?, ?, ?> object) {
     final MutableFudgeMsg message = serializer.newMessage();

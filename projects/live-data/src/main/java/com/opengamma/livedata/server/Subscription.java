@@ -21,12 +21,12 @@ import com.opengamma.livedata.server.distribution.MarketDataSenderFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A record of a market data subscription currently active on a server. 
+ * A record of a market data subscription currently active on a server.
  */
 public class Subscription {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(Subscription.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Subscription.class);
 
   /**
    * The unique ID that was subscribed to, specific to the market data provider, such as Bloomberg/Reuters.
@@ -40,19 +40,19 @@ public class Subscription {
    * A lock to enforce that live data is handled in a serialized and thus safe & ordered fashion.
    */
   private final ReentrantLock _liveDataSerializationLock = new ReentrantLock();
-  /** 
+  /**
    * The data from this subscription can be distributed to clients in multiple formats,
    * therefore we need multiple market data distributors.
    * NOTE: this is a concurrent map for speedy reads
-   * <p> 
+   * <p>
    */
-  private final ConcurrentHashMap<DistributionSpecification, MarketDataDistributor> _distributors = new ConcurrentHashMap<DistributionSpecification, MarketDataDistributor>();
-  /** 
+  private final ConcurrentHashMap<DistributionSpecification, MarketDataDistributor> _distributors = new ConcurrentHashMap<>();
+  /**
    * The handle to the underlying subscription, specific to the market data provider, such as Bloomberg/Reuters.
    * May be null if the subscription is not currently active.
    */
   private volatile Object _handle;
-  /** 
+  /**
    * History of ticks received from the underlying market data API, in its native format.
    */
   private final FieldHistoryStore _history = new FieldHistoryStore();
@@ -67,12 +67,13 @@ public class Subscription {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityUniqueId  the security unique ID, specific to the market data provider, not null
    * @param marketDataSenderFactory  the factory that will create market data distributors for this subscription, not null
    * @param lkvStoreProvider  the factory for last known value stores, not null
    */
-  public Subscription(String securityUniqueId, MarketDataSenderFactory marketDataSenderFactory, LastKnownValueStoreProvider lkvStoreProvider) {
+  public Subscription(final String securityUniqueId, final MarketDataSenderFactory marketDataSenderFactory,
+      final LastKnownValueStoreProvider lkvStoreProvider) {
     ArgumentChecker.notNull(securityUniqueId, "securityUniqueId");
     ArgumentChecker.notNull(marketDataSenderFactory, "marketDataSenderFactory");
     ArgumentChecker.notNull(lkvStoreProvider, "lkvStoreProvider");
@@ -85,7 +86,7 @@ public class Subscription {
   //-------------------------------------------------------------------------
   /**
    * Gets the opaque handle to the underlying subscription, specific to the market data provider.
-   * 
+   *
    * @return the opaque handle, null if the subscription is not currently active
    */
   public Object getHandle() {
@@ -94,16 +95,16 @@ public class Subscription {
 
   /**
    * Sets the opaque handle to the underlying subscription, specific to the market data provider.
-   * 
+   *
    * @param handle  the opaque handle, null if the subscription is not currently active
    */
-  public void setHandle(Object handle) {
+  public void setHandle(final Object handle) {
     _handle = handle;
   }
 
   /**
    * Gets the creation instant.
-   * 
+   *
    * @return the creation instant, not null
    */
   public Date getCreationTime() {
@@ -112,7 +113,7 @@ public class Subscription {
 
   /**
    * Gets the unique ID that was subscribed to, specific to the market data provider.
-   * 
+   *
    * @return the market data provider unique ID, not null
    */
   public String getSecurityUniqueId() {
@@ -121,7 +122,7 @@ public class Subscription {
 
   /**
    * Gets the factory used to create distributors.
-   * 
+   *
    * @return the factory, not null
    */
   public MarketDataSenderFactory getMarketDataSenderFactory() {
@@ -131,7 +132,7 @@ public class Subscription {
   //-------------------------------------------------------------------------
   /**
    * Gets the set of distribution specifications.
-   * 
+   *
    * @return a modifiable copy of the specifications, not null
    */
   public Set<DistributionSpecification> getDistributionSpecifications() {
@@ -140,7 +141,7 @@ public class Subscription {
 
   /**
    * Gets the set of distributors.
-   * 
+   *
    * @return a modifiable copy of the distributors, not null
    */
   public Collection<MarketDataDistributor> getDistributors() {
@@ -149,22 +150,22 @@ public class Subscription {
 
   /**
    * Gets a specific distributor by distribution specification.
-   * 
+   *
    * @param distributionSpec  the specification to find
    * @return the distributor, null if not found
    */
-  public MarketDataDistributor getMarketDataDistributor(DistributionSpecification distributionSpec) {
+  public MarketDataDistributor getMarketDataDistributor(final DistributionSpecification distributionSpec) {
     return _distributors.get(distributionSpec);
   }
 
   /**
    * Gets a specific distributor by specification.
-   * 
+   *
    * @param fullyQualifiedSpec  the specification to find
    * @return the distributor, null if not found
    */
-  public MarketDataDistributor getMarketDataDistributor(LiveDataSpecification fullyQualifiedSpec) {
-    for (MarketDataDistributor distributor : getDistributors()) {
+  public MarketDataDistributor getMarketDataDistributor(final LiveDataSpecification fullyQualifiedSpec) {
+    for (final MarketDataDistributor distributor : getDistributors()) {
       if (distributor.getDistributionSpec().getFullyQualifiedLiveDataSpecification().equals(fullyQualifiedSpec)) {
         return distributor;
       }
@@ -174,7 +175,7 @@ public class Subscription {
 
   /**
    * Gets the provider of last known value stores.
-   * 
+   *
    * @return the provider of last known value stores, not null
    */
   public LastKnownValueStoreProvider getLkvStoreProvider() {
@@ -185,20 +186,20 @@ public class Subscription {
   /**
    * Tells this subscription to start distributing market data in the given format.
    * Only creates a new distribution if it doesn't already exist.
-   * 
+   *
    * @param spec  the format to use
    * @param persistent  whether the distributor should be persistent (survive a server restart)
    * @return the created/modified {@code MarketDataDistributor}
    */
-  /*package*/ MarketDataDistributor createDistributor(DistributionSpecification spec, boolean persistent) {
+  /*package*/ MarketDataDistributor createDistributor(final DistributionSpecification spec, final boolean persistent) {
     MarketDataDistributor distributor = getMarketDataDistributor(spec);
     if (distributor == null) {
       distributor = new MarketDataDistributor(spec, this, getMarketDataSenderFactory(), persistent, getLkvStoreProvider());
-      MarketDataDistributor previous = _distributors.putIfAbsent(spec, distributor);
+      final MarketDataDistributor previous = _distributors.putIfAbsent(spec, distributor);
       if (previous == null) {
-        s_logger.info("Added {} to {}", distributor, this);
+        LOGGER.info("Added {} to {}", distributor, this);
       } else {
-        s_logger.debug("Lost race to create distributor {} to {}", previous, this);
+        LOGGER.debug("Lost race to create distributor {} to {}", previous, this);
         distributor = previous;
       }
     }
@@ -206,35 +207,35 @@ public class Subscription {
     // never turn it back from persistent to non-persistent, however.
     if (!distributor.isPersistent() && persistent) {
       distributor.setPersistent(persistent);
-      s_logger.info("Made {} persistent", distributor);
+      LOGGER.info("Made {} persistent", distributor);
     }
     return distributor;
   }
 
-  /*package*/ void removeDistributor(MarketDataDistributor distributor) {
+  /*package*/ void removeDistributor(final MarketDataDistributor distributor) {
     removeDistributor(distributor.getDistributionSpec());
   }
 
-  /*package*/ void removeDistributor(DistributionSpecification spec) {
-    MarketDataDistributor removed = _distributors.remove(spec);
+  /*package*/ void removeDistributor(final DistributionSpecification spec) {
+    final MarketDataDistributor removed = _distributors.remove(spec);
     if (removed != null) {
-      s_logger.info("Removed {} from {}", removed, this);      
+      LOGGER.info("Removed {} from {}", removed, this);
     } else {
-      s_logger.info("Removed distribution spec {} from {} (no-op)", spec, this);
+      LOGGER.info("Removed distribution spec {} from {} (no-op)", spec, this);
     }
   }
 
   /*package*/ void removeAllDistributors() {
-    s_logger.info("Removed {} from {}", _distributors, this);
+    LOGGER.info("Removed {} from {}", _distributors, this);
     _distributors.clear();
   }
 
-  /*package*/ void initialSnapshotReceived(FudgeMsg liveDataFields) {
+  /*package*/ void initialSnapshotReceived(final FudgeMsg liveDataFields) {
     _liveDataSerializationLock.lock();
     try {
       _history.liveDataReceived(liveDataFields);
 
-      for (MarketDataDistributor distributor : getDistributors()) {
+      for (final MarketDataDistributor distributor : getDistributors()) {
         distributor.updateFieldHistory(liveDataFields);
       }
     } finally {
@@ -242,12 +243,12 @@ public class Subscription {
     }
   }
 
-  /*package*/ void liveDataReceived(FudgeMsg liveDataFields) {
+  /*package*/ void liveDataReceived(final FudgeMsg liveDataFields) {
     _liveDataSerializationLock.lock();
     try {
       _history.liveDataReceived(liveDataFields);
 
-      for (MarketDataDistributor distributor : getDistributors()) {
+      for (final MarketDataDistributor distributor : getDistributors()) {
         distributor.distributeLiveData(liveDataFields);
       }
     } finally {
@@ -258,7 +259,7 @@ public class Subscription {
   //-------------------------------------------------------------------------
   /**
    * Gets the history.
-   * 
+   *
    * @return a modifiable copy of the history, not null
    */
   public FieldHistoryStore getLiveDataHistory() {
@@ -272,7 +273,7 @@ public class Subscription {
 
   /**
    * Checks if the subscription is active.
-   * 
+   *
    * @return true if active
    */
   public boolean isActive() {

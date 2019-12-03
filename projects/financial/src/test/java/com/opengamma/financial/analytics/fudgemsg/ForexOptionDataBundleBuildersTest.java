@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -14,13 +14,16 @@ import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTerm
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LogLinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class ForexOptionDataBundleBuildersTest extends AnalyticsTestBase {
@@ -34,10 +37,10 @@ public class ForexOptionDataBundleBuildersTest extends AnalyticsTestBase {
     final double[][] strangle = new double[][] { {0.0300, 0.0100}, {0.0310, 0.0110}, {0.0320, 0.0120}, {0.0330, 0.0130}, {0.0340, 0.0140}};
     SmileDeltaTermStructureParametersStrikeInterpolation smiles = new SmileDeltaTermStructureParametersStrikeInterpolation(t, delta, atm, rr, strangle);
     assertEquals(smiles, cycleObject(SmileDeltaTermStructureParametersStrikeInterpolation.class, smiles));
-    final Interpolator1D strikeInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
-    final Interpolator1D timeInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D strikeInterpolator = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
+    final Interpolator1D timeInterpolator = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
     smiles = new SmileDeltaTermStructureParametersStrikeInterpolation(t, delta, atm, rr, strangle, strikeInterpolator, timeInterpolator);
     assertEquals(smiles, cycleObject(SmileDeltaTermStructureParametersStrikeInterpolation.class, smiles));
   }
@@ -49,15 +52,16 @@ public class ForexOptionDataBundleBuildersTest extends AnalyticsTestBase {
     final double[][] volatility = new double[][] {new double[] {0.45, 0.35, 0.3, 0.27, 0.22}, new double[] {0.25, 0.15, 0.12, 0.11, 0.1}};
     SmileDeltaTermStructureParameters smiles = new SmileDeltaTermStructureParameters(t, deltas, volatility);
     assertEquals(smiles, cycleObject(SmileDeltaTermStructureParameters.class, smiles));
-    final Interpolator1D timeInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LOG_LINEAR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR,
-        Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+    final Interpolator1D timeInterpolator = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME,
+        FlatExtrapolator1dAdapter.NAME);
     smiles = new SmileDeltaTermStructureParameters(smiles.getVolatilityTerm(), timeInterpolator);
     assertEquals(smiles, cycleObject(SmileDeltaTermStructureParameters.class, smiles));
   }
 
   @Test
   public void test3() {
-    final DoublesCurve volatility = InterpolatedDoublesCurve.fromSorted(new double[] {1, 2, 3, 4, 5}, new double[] {0.3, 0.4, 0.5, 0.6, 0.7}, Interpolator1DFactory.LINEAR_INSTANCE);
+    final DoublesCurve volatility = InterpolatedDoublesCurve.fromSorted(new double[] { 1, 2, 3, 4, 5 }, new double[] { 0.3, 0.4, 0.5, 0.6, 0.7 },
+        new LinearInterpolator1dAdapter());
     final BlackForexTermStructureParameters termStructure = new BlackForexTermStructureParameters(volatility);
     assertEquals(termStructure, cycleObject(BlackForexTermStructureParameters.class, termStructure));
   }

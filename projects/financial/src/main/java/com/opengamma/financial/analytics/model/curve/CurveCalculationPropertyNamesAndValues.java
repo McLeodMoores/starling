@@ -31,8 +31,7 @@ public final class CurveCalculationPropertyNamesAndValues {
   public static final String DIRECT = "Direct";
 
   /**
-   * Property value indicating that any yield curves are discounting curves and that forward rates
-   * are computed as ratios of discount factors.
+   * Property value indicating that any yield curves are discounting curves and that forward rates are computed as ratios of discount factors.
    */
   public static final String DISCOUNTING = "Discounting";
 
@@ -52,9 +51,8 @@ public final class CurveCalculationPropertyNamesAndValues {
   public static final String CONSTANT_FROM_RATE = "ConstantFromRate";
 
   /**
-   * Property value indicating that any yield curves are discounting curves and that forward
-   * rates are computed as ratios of discount factors, with a convexity adjustment applied
-   * using the Hull-White one factor method.
+   * Property value indicating that any yield curves are discounting curves and that forward rates are computed as ratios of discount factors, with a convexity
+   * adjustment applied using the Hull-White one factor method.
    */
   public static final String HULL_WHITE_DISCOUNTING = "Hull-White Discounting";
 
@@ -87,7 +85,6 @@ public final class CurveCalculationPropertyNamesAndValues {
    * The volatility times property.
    */
   public static final String PROPERTY_HW_TIMES = "HullWhiteOneFactorTimes";
-
 
   /**
    * A Nelson-Siegel curve.

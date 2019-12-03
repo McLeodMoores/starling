@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 
 /**
- * 
+ *
  */
 public class LineSearch {
   private final ScalarMinimizer _minimizer;
@@ -45,7 +45,7 @@ public class LineSearch {
     private final DoubleMatrix1D _p;
     private final DoubleMatrix1D _x0;
 
-    public LineSearchFunction(final Function1D<DoubleMatrix1D, Double> function, final DoubleMatrix1D direction, final DoubleMatrix1D x) {
+    LineSearchFunction(final Function1D<DoubleMatrix1D, Double> function, final DoubleMatrix1D direction, final DoubleMatrix1D x) {
       _f = function;
       _p = direction;
       _x0 = x;

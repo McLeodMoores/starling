@@ -5,12 +5,10 @@
  */
 package com.opengamma.analytics.math.interpolation.data;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1D;
-
 /**
- * A pre-constructed version of the data which should be used
- * for interpolation on an {@link Interpolator1D}.
- * 
+ * A pre-constructed version of the data which should be used for interpolation
+ * on an {@link com.opengamma.analytics.math.interpolation.Interpolator1D}.
+ *
  */
 public interface Interpolator1DDataBundle {
 

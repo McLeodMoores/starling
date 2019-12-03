@@ -82,7 +82,7 @@ public class RandomTimeSeriesLoader extends AbstractHistoricalTimeSeriesLoader {
 
   private Map<ExternalId, UniqueId> addToMaster(
       final Set<ExternalId> missingIdentifiers, final String dataProvider, final String dataField, final LocalDate startDate, final LocalDate endDate) {
-    final Map<ExternalId, UniqueId> result = new HashMap<ExternalId, UniqueId>();
+    final Map<ExternalId, UniqueId> result = new HashMap<>();
     for (final ExternalId identifier : missingIdentifiers) {
       // add the info
       final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();

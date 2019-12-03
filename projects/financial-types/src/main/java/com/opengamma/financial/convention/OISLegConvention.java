@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.id.ExternalId;
@@ -28,6 +30,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Conventions for overnight swap legs.
  */
+@ConventionMetaData(description = "Overnight indexed swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class OISLegConvention extends FinancialConvention {
 
@@ -89,22 +92,31 @@ public class OISLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param overnightIndexConvention  the id of the overnight index, not null
-   * @param paymentTenor  the payment tenor, not null
-   * @param businessDayConvention  the business-day convention, not null
-   * @param settlementDays  the number of settlement days
-   * @param isEOM  true if dates follow the end-of-month rule
-   * @param stubType  the stub type, not null
-   * @param isExchangeNotional  true if notional is to be exchanged
-   * @param paymentLag  the payment lag
+   *
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param overnightIndexConvention
+   *          the id of the overnight index, not null
+   * @param paymentTenor
+   *          the payment tenor, not null
+   * @param businessDayConvention
+   *          the business-day convention, not null
+   * @param settlementDays
+   *          the number of settlement days
+   * @param isEOM
+   *          true if dates follow the end-of-month rule
+   * @param stubType
+   *          the stub type, not null
+   * @param isExchangeNotional
+   *          true if notional is to be exchanged
+   * @param paymentLag
+   *          the payment lag
    */
-  public OISLegConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId overnightIndexConvention,
-      final Tenor paymentTenor, final BusinessDayConvention businessDayConvention, final int settlementDays,
-      final boolean isEOM, final StubType stubType, final boolean isExchangeNotional, final int paymentLag) {
+  public OISLegConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId overnightIndexConvention, final Tenor paymentTenor,
+      final BusinessDayConvention businessDayConvention, final int settlementDays, final boolean isEOM, final StubType stubType,
+      final boolean isExchangeNotional, final int paymentLag) {
     super(name, externalIdBundle);
     setOvernightIndexConvention(overnightIndexConvention);
     setPaymentTenor(paymentTenor);
@@ -116,10 +128,10 @@ public class OISLegConvention extends FinancialConvention {
     setPaymentLag(paymentLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -130,8 +142,10 @@ public class OISLegConvention extends FinancialConvention {
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

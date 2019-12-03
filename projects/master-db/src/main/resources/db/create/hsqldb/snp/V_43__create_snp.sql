@@ -13,7 +13,7 @@ CREATE TABLE snp_schema_version (
 );
 INSERT INTO snp_schema_version (version_key, version_value) VALUES ('schema_patch', '43');
 
-CREATE SEQUENCE snp_snapshot_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS snp_snapshot_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 

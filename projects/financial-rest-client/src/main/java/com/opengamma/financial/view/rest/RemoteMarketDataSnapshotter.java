@@ -23,29 +23,29 @@ import com.opengamma.util.rest.FudgeRestClient;
  */
 public class RemoteMarketDataSnapshotter extends AbstractRemoteClient implements MarketDataSnapshotter {
 
-  public RemoteMarketDataSnapshotter(URI baseUri) {
+  public RemoteMarketDataSnapshotter(final URI baseUri) {
     super(baseUri);
   }
 
-  public RemoteMarketDataSnapshotter(URI baseUri, FudgeRestClient client) {
+  public RemoteMarketDataSnapshotter(final URI baseUri, final FudgeRestClient client) {
     super(baseUri, client);
   }
 
   @Override
-  public StructuredMarketDataSnapshot createSnapshot(ViewClient client, ViewCycle cycle) {
+  public StructuredMarketDataSnapshot createSnapshot(final ViewClient client, final ViewCycle cycle) {
     ArgumentChecker.notNull(client, "client");
     ArgumentChecker.notNull(cycle, "cycle");
 
-    URI uri = DataMarketDataSnapshotterUris.uriCreateSnapshot(getBaseUri(), client.getUniqueId(), cycle.getUniqueId());
+    final URI uri = DataMarketDataSnapshotterUris.uriCreateSnapshot(getBaseUri(), client.getUniqueId(), cycle.getUniqueId());
     return accessRemote(uri).get(StructuredMarketDataSnapshot.class);
   }
 
   @Override
-  public Map<YieldCurveKey, Map<String, ValueRequirement>> getYieldCurveSpecifications(ViewClient client, ViewCycle cycle) {
+  public Map<YieldCurveKey, Map<String, ValueRequirement>> getYieldCurveSpecifications(final ViewClient client, final ViewCycle cycle) {
     ArgumentChecker.notNull(client, "client");
     ArgumentChecker.notNull(cycle, "cycle");
 
-    URI uri = DataMarketDataSnapshotterUris.uriGetYieldCurveSpecs(getBaseUri(), client.getUniqueId(), cycle.getUniqueId());
+    final URI uri = DataMarketDataSnapshotterUris.uriGetYieldCurveSpecs(getBaseUri(), client.getUniqueId(), cycle.getUniqueId());
     return accessRemote(uri).get(Map.class);
   }
 }

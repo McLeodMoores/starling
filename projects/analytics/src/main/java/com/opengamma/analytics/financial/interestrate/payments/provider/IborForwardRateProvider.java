@@ -14,12 +14,12 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
  * fraction.
  */
 public final class IborForwardRateProvider implements ForwardRateProvider<IborIndex> {
-  
+
   private static final IborForwardRateProvider INSTANCE = new IborForwardRateProvider();
-  
+
   private IborForwardRateProvider() {
   }
-  
+
   public static IborForwardRateProvider getInstance() {
     return INSTANCE;
   }
@@ -29,8 +29,8 @@ public final class IborForwardRateProvider implements ForwardRateProvider<IborIn
       final MulticurveProviderInterface multicurves,
       final T coupon,
       final double fixingPeriodStartTime,
-      double fixingPeriodEndTime,
-      double fixingPeriodYearFraction) {
+      final double fixingPeriodEndTime,
+      final double fixingPeriodYearFraction) {
     return multicurves.getSimplyCompoundForwardRate(
         coupon.getIndex(), fixingPeriodStartTime, fixingPeriodEndTime, fixingPeriodYearFraction);
   }

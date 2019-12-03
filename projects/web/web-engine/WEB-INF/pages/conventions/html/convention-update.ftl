@@ -8,14 +8,14 @@
   <p>
     <#if err_nameMissing??><div class="err">The name must be entered</div></#if>
     <@rowin label="Name"><input type="text" size="30" maxlength="80" name="name" value="${conventionDoc.name}" /></@rowin>
-    <#if err_conventionXmlMsg?has_content><div class="err">${err_conventionXmlMsg}</div></#if>
+    <#if err_conventionXMLMsg?has_content><div class="err">${err_conventionXMLMsg}</div></#if>
     <@rowin>
       <div id="ace-xml-editor"></div>
     </@rowin>
-    <input type="hidden" name="conventionxml" id="convention-xml"/>
+    <input type="hidden" name="conventionXML" id="convention-xml"/>
     <@rowin><input type="submit" value="Update" /></@rowin>
     
-    <#noescape><@xmlEditorScript formId="updateForm" inputId="convention-xml" xmlValue="${conventionXml}"></@xmlEditorScript></#noescape>
+    <#noescape><@xmlEditorScript formId="updateForm" inputId="convention-xml" xmlValue="${conventionXML}"></@xmlEditorScript></#noescape>
   </p>
   </@form>
 </@section>

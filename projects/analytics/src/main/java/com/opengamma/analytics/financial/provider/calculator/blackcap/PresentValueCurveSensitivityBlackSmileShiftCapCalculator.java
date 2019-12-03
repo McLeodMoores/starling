@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 /**
  * Calculator of the present value as a multiple currency amount for Black smile cap/floor provider.
  */
-public final class PresentValueCurveSensitivityBlackSmileShiftCapCalculator extends InstrumentDerivativeVisitorAdapter<BlackSmileShiftCapProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityBlackSmileShiftCapCalculator
+extends InstrumentDerivativeVisitorAdapter<BlackSmileShiftCapProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueCurveSensitivityBlackSmileShiftCapCalculator exte
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSmileShiftCapCalculator getInstance() {
@@ -40,7 +42,7 @@ public final class PresentValueCurveSensitivityBlackSmileShiftCapCalculator exte
    */
   private static final CapFloorIborBlackSmileShiftMethod METHOD_CAP = CapFloorIborBlackSmileShiftMethod.getInstance();
 
-  // -----     Payments     ------
+  // ----- Payments ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitCapFloorIbor(final CapFloorIbor cap, final BlackSmileShiftCapProviderInterface black) {

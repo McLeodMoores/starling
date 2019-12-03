@@ -27,7 +27,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security for cash.
+ * A security for a cash deposit containing information about the accrual period, rate and notional.
  */
 @BeanDefinition
 @SecurityDescription(type = CashSecurity.SECURITY_TYPE, description = "Cash")
@@ -62,7 +62,7 @@ public class CashSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _maturity;
   /**
-   * The day count convention
+   * The day count convention.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
@@ -77,11 +77,31 @@ public class CashSecurity extends FinancialSecurity {
   @PropertyDefinition
   private double _amount;
 
-  CashSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  CashSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CashSecurity(Currency currency, ExternalId region, ZonedDateTime start, ZonedDateTime maturity, DayCount dayCount, double rate, double amount) {
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param region
+   *          the region, not null
+   * @param start
+   *          the start date, not null
+   * @param maturity
+   *          the maturity date, not null
+   * @param dayCount
+   *          the day count convention, not null
+   * @param rate
+   *          the interest rate, not null
+   * @param amount
+   *          the notional, not null
+   */
+  public CashSecurity(final Currency currency, final ExternalId region, final ZonedDateTime start, final ZonedDateTime maturity, final DayCount dayCount,
+      final double rate, final double amount) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setRegionId(region);
@@ -92,9 +112,9 @@ public class CashSecurity extends FinancialSecurity {
     setAmount(amount);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCashSecurity(this);
   }
 
@@ -223,7 +243,7 @@ public class CashSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the day count convention
+   * Gets the day count convention.
    * @return the value of the property, not null
    */
   public DayCount getDayCount() {
@@ -231,7 +251,7 @@ public class CashSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the day count convention
+   * Sets the day count convention.
    * @param dayCount  the new value of the property, not null
    */
   public void setDayCount(DayCount dayCount) {

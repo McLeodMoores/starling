@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.daycount;
@@ -9,13 +9,14 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.JulianFields;
 
 /**
- * 
+ *
  */
 public class ActualNL extends ActualTypeDayCount {
   private static final long serialVersionUID = 1L;
 
   @Override
-  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear) {
+  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon,
+      final double paymentsPerYear) {
     return getDayCountFraction(previousCouponDate, date) * coupon;
   }
 

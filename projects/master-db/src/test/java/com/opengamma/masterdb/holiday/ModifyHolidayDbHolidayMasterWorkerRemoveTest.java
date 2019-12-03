@@ -32,35 +32,35 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyHolidayDbHolidayMasterWorkerRemoveTest extends AbstractDbHolidayMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyHolidayDbHolidayMasterWorkerRemoveTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyHolidayDbHolidayMasterWorkerRemoveTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyHolidayDbHolidayMasterWorkerRemoveTest(String databaseType, String databaseVersion) {
+  public ModifyHolidayDbHolidayMasterWorkerRemoveTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeHoliday_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
     _holMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_holMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
+    final Instant now = Instant.now(_holMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
     _holMaster.remove(uniqueId);
-    HolidayDocument test = _holMaster.get(uniqueId);
-    
+    final HolidayDocument test = _holMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableHoliday holiday = test.getHoliday();
+    final ManageableHoliday holiday = test.getHoliday();
     assertNotNull(holiday);
     assertEquals(uniqueId, holiday.getUniqueId());
     assertEquals("TestHoliday101", test.getName());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.conversion;
@@ -11,12 +11,12 @@ import com.google.common.collect.ImmutableMap;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * 
+ *
  */
 public class CurrencyAmountConverter implements ResultConverter<CurrencyAmount> {
 
   @Override
-  public Map<String, Double> convert(String valueName, CurrencyAmount value) {
+  public Map<String, Double> convert(final String valueName, final CurrencyAmount value) {
     return ImmutableMap.of(valueName, value.getAmount());
   }
 

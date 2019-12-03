@@ -18,7 +18,7 @@ import com.opengamma.util.tuple.Pair;
  * Static utility class for formatting axis labels reasonably.
  */
 public class LabelFormatter {
-  public static String format(Object o) {
+  public static String format(final Object o) {
     if (o instanceof Tenor) {
       return formatTenor((Tenor) o);
     } else if (o instanceof LocalDate) {
@@ -34,24 +34,24 @@ public class LabelFormatter {
     }
   }
 
-  private static String formatInteger(Integer o) {
+  private static String formatInteger(final Integer o) {
     return Integer.toString(o);
   }
 
   //private static DoubleValueSizeBasedDecimalPlaceFormatter s_formatter = new DoubleValueSizeBasedDecimalPlaceFormatter(3, 0, 100, false);
   private static DoubleValueSignificantFiguresFormatter s_formatter = DoubleValueSignificantFiguresFormatter.NON_CCY_5SF;
-  
-  private static String formatDouble(Double o) {
+
+  private static String formatDouble(final Double o) {
     return s_formatter.format(BigDecimal.valueOf(o));
   }
 
-  private static String formatPair(Pair<?, ?> o) {
-    Object firstObj = o.getFirst();
-    Object secondObj = o.getSecond();
-    if ((firstObj instanceof Integer) && (secondObj instanceof FXVolQuoteType)) {
-      Integer first = (Integer) firstObj;
-      FXVolQuoteType second = (FXVolQuoteType) secondObj;
-      StringBuilder sb = new StringBuilder();
+  private static String formatPair(final Pair<?, ?> o) {
+    final Object firstObj = o.getFirst();
+    final Object secondObj = o.getSecond();
+    if (firstObj instanceof Integer && secondObj instanceof FXVolQuoteType) {
+      final Integer first = (Integer) firstObj;
+      final FXVolQuoteType second = (FXVolQuoteType) secondObj;
+      final StringBuilder sb = new StringBuilder();
       sb.append(Integer.toString(first));
       sb.append("/");
       sb.append(second.name());
@@ -59,14 +59,14 @@ public class LabelFormatter {
     }
     return o.toString();
   }
-  
-  private static final DateTimeFormatter s_isoLocalDate = DateTimeFormatter.ISO_LOCAL_DATE;
-  
-  private static String formatDate(LocalDate o) {
-    return s_isoLocalDate.format(o);
+
+  private static final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
+
+  private static String formatDate(final LocalDate o) {
+    return ISO_LOCAL_DATE.format(o);
   }
 
-  private static String formatTenor(Tenor o) {
+  private static String formatTenor(final Tenor o) {
     return o.getPeriod().toString().replaceFirst("P", "");
   }
 }

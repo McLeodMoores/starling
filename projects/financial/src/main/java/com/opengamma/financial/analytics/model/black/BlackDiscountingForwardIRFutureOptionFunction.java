@@ -26,22 +26,19 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.analytics.model.irfutureoption.InterestRateFutureOptionMarketUnderlyingPriceFunction;
 
 /**
- * Calculates the forward used in constructing the surfaces. No convexity adjustment is applied, so
- * this may be used to compare to {@link ValueRequirementNames#UNDERLYING_MARKET_PRICE}
- * computed in {@link InterestRateFutureOptionMarketUnderlyingPriceFunction}
+ * Calculates the forward used in constructing the surfaces. No convexity adjustment is applied, so this may be used to compare to
+ * {@link com.opengamma.engine.value.ValueRequirementNames#UNDERLYING_MARKET_PRICE} computed in {@link UnderlyingMarketPriceSTIRFutureOptionCalculator}
  */
 public class BlackDiscountingForwardIRFutureOptionFunction extends BlackDiscountingIRFutureOptionFunction {
   /** The underlying market price calculator */
-  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR =
-      UnderlyingMarketPriceSTIRFutureOptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<BlackSTIRFuturesProviderInterface, Double> CALCULATOR = UnderlyingMarketPriceSTIRFutureOptionCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FORWARD}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FORWARD}.
    */
   public BlackDiscountingForwardIRFutureOptionFunction() {
     super(FORWARD);

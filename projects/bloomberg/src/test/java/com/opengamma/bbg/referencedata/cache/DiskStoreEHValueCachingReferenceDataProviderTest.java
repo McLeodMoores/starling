@@ -7,8 +7,6 @@ package com.opengamma.bbg.referencedata.cache;
 
 import java.io.InputStream;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -18,6 +16,8 @@ import com.opengamma.bbg.referencedata.MockReferenceDataProvider;
 import com.opengamma.bbg.referencedata.ReferenceDataProvider;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test.
@@ -32,7 +32,7 @@ public class DiskStoreEHValueCachingReferenceDataProviderTest extends AbstractVa
 
   @BeforeClass
   public void setUpClass() {
-    InputStream inputStream = DiskStoreEHValueCachingReferenceDataProviderTest.class.getResourceAsStream("diskstore-ehcache.xml");
+    final InputStream inputStream = DiskStoreEHValueCachingReferenceDataProviderTest.class.getResourceAsStream("diskstore-ehcache.xml");
     _cacheManager = CacheManager.create(inputStream);
     _cacheManager.clearAll();
   }
@@ -67,27 +67,32 @@ public class DiskStoreEHValueCachingReferenceDataProviderTest extends AbstractVa
   }
 
   //-------------------------------------------------------------------------
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void numberOfReturnedFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void singleSecurityEscalatingFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void fieldNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void securityNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void multipleSecuritiesSameEscalatingFields() {
     super.numberOfReturnedFields();
   }

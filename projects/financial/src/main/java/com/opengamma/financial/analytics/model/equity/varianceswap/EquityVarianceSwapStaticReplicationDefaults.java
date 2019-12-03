@@ -33,12 +33,12 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class EquityVarianceSwapStaticReplicationDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardPerEquityDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardPerEquityDefaults.class);
   /** The value requirements for which these defaults are valid */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX
+      ValueRequirementNames.PRESENT_VALUE,
+      ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+      ValueRequirementNames.VEGA_QUOTE_MATRIX
   };
   private final PriorityClass _priority;
   private final Map<String, Pair<String, String>> _curvesPerEquity;
@@ -51,8 +51,8 @@ public class EquityVarianceSwapStaticReplicationDefaults extends DefaultProperty
     final int n = perEquityConfig.length;
     ArgumentChecker.isTrue(n % 4 == 0, "Must have one curve config, discounting curve name and surface name per equity");
     _priority = PriorityClass.valueOf(priority);
-    _curvesPerEquity = new LinkedHashMap<String, Pair<String, String>>();
-    _surfacesPerEquity = new LinkedHashMap<String, String>();
+    _curvesPerEquity = new LinkedHashMap<>();
+    _surfacesPerEquity = new LinkedHashMap<>();
     for (int i = 0; i < perEquityConfig.length; i += 4) {
       final String currency = perEquityConfig[i];
       final Pair<String, String> pair = Pairs.of(perEquityConfig[i + 1], perEquityConfig[i + 2]);
@@ -85,7 +85,7 @@ public class EquityVarianceSwapStaticReplicationDefaults extends DefaultProperty
     final EquityVarianceSwapSecurity varianceSwap = (EquityVarianceSwapSecurity) target.getSecurity();
     final String underlyingEquity = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(varianceSwap);
     if (!_surfacesPerEquity.containsKey(underlyingEquity)) {
-      s_logger.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
+      LOGGER.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
       return null;
     }
     if (ValuePropertyNames.SURFACE.equals(propertyName)) {

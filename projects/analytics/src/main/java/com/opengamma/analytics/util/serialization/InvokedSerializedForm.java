@@ -17,9 +17,10 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Substitution representation of an inner class that is created as an invocation on the containing class. Call with an object instance if a specific instance is needed for the invocation. If the
- * method is static or the containing object has no state pass the containing class. If an instance is passed, care must be taken in its serialized form such that it does not include the contained
- * form (e.g. as an attribute) - doing so will create a loop in the graph which may prevent {@link #readReplace} from executing correctly.
+ * Substitution representation of an inner class that is created as an invocation on the containing class. Call with an object instance if a specific instance
+ * is needed for the invocation. If the method is static or the containing object has no state pass the containing class. If an instance is passed, care must be
+ * taken in its serialized form such that it does not include the contained form (e.g. as an attribute) - doing so will create a loop in the graph which may
+ * prevent {@link #readReplace} from executing correctly.
  */
 public final class InvokedSerializedForm implements Serializable {
 
@@ -30,9 +31,9 @@ public final class InvokedSerializedForm implements Serializable {
 
   private static final Object[] EMPTY_ARRAY = new Object[0];
 
-  private static final String[] s_methodPrefixes = new String[] {"as", "get", "to", "from", "with" };
+  private static final String[] METHOD_PREFIXES = new String[] { "as", "get", "to", "from", "with" };
 
-  private static final Map<Class<?>, Class<?>> s_primitives = createPrimitiveMap();
+  private static final Map<Class<?>, Class<?>> PRIMITIVES = createPrimitiveMap();
 
   private static Map<Class<?>, Class<?>> createPrimitiveMap() {
     final Map<Class<?>, Class<?>> map = new HashMap<>();
@@ -69,7 +70,7 @@ public final class InvokedSerializedForm implements Serializable {
       _replacementInstance = outer;
     }
     String preferredMethod = method;
-    for (final String prefix : s_methodPrefixes) {
+    for (final String prefix : METHOD_PREFIXES) {
       if (Character.isUpperCase(method.charAt(prefix.length())) && method.startsWith(prefix)) {
         preferredMethod = method.substring(prefix.length());
         break;
@@ -101,7 +102,7 @@ public final class InvokedSerializedForm implements Serializable {
     if (args.length == params.length) {
       for (int i = 0; i < params.length; i++) {
         if (args[i].isPrimitive()) {
-          if (!s_primitives.get(args[i]).isAssignableFrom(params[i].getClass())) {
+          if (!PRIMITIVES.get(args[i]).isAssignableFrom(params[i].getClass())) {
             return null;
           }
         } else {
@@ -111,7 +112,7 @@ public final class InvokedSerializedForm implements Serializable {
         }
       }
       try {
-        if ((_replacementInstance == null) && !Modifier.isStatic(method.getModifiers())) {
+        if (_replacementInstance == null && !Modifier.isStatic(method.getModifiers())) {
           _replacementInstance = getOuterClass().newInstance();
         }
         if (!Modifier.isPublic(method.getModifiers())) {
@@ -135,11 +136,11 @@ public final class InvokedSerializedForm implements Serializable {
   }
 
   public Object readReplace() {
-    Class<?> clazz = (getOuterInstance() != null) ? getOuterInstance().getClass() : getOuterClass();
+    Class<?> clazz = getOuterInstance() != null ? getOuterInstance().getClass() : getOuterClass();
     do {
       final Method[] methods = clazz.getDeclaredMethods();
       if (Character.isUpperCase(getMethod().charAt(0))) {
-        for (final String prefix : s_methodPrefixes) {
+        for (final String prefix : METHOD_PREFIXES) {
           final String methodName = prefix + getMethod();
           for (final Method method : methods) {
             if (methodName.equals(method.getName())) {

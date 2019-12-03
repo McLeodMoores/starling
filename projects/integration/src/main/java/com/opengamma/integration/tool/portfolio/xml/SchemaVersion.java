@@ -11,21 +11,17 @@ import java.util.regex.Pattern;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Immutable representation of the version of a schema file used for
- * the xml portfolio import/export. A version number must be of the
- * form N.m where N represents the major version and n the minor.
- * Changes in minor version number are expected to be backwards compatible
- * whereas changes in major version are not expected to be.
+ * Immutable representation of the version of a schema file used for the xml portfolio import/export. A version number must be of the form N.m where N
+ * represents the major version and n the minor. Changes in minor version number are expected to be backwards compatible whereas changes in major version are
+ * not expected to be.
  */
 public class SchemaVersion implements Comparable<SchemaVersion> {
 
   /**
-   * Regex with groups specifying:
-   * - one or more digits (captured into group 1), followed by
-   * - a period, followed by
-   * - one or more digits (captured into group 2)
+   * Regex with groups specifying: - one or more digits (captured into group 1), followed by - a period, followed by - one or more digits (captured into group
+   * 2)
    */
-  private static final Pattern s_pattern = Pattern.compile("(\\d+)\\.(\\d+)");
+  private static final Pattern PATTERN = Pattern.compile("(\\d+)\\.(\\d+)");
 
   /**
    * The major part of the version number.
@@ -37,11 +33,11 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
    */
   private final int _minorVersion;
 
-  public SchemaVersion(String version) {
+  public SchemaVersion(final String version) {
 
     ArgumentChecker.notNull(version, "version");
 
-    Matcher matcher = s_pattern.matcher(version);
+    final Matcher matcher = PATTERN.matcher(version);
     ArgumentChecker.isTrue(matcher.matches(), "Version number must be of the form M.n");
 
     _majorVersion = Integer.parseInt(matcher.group(1));
@@ -49,10 +45,10 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
   }
 
   @Override
-  public int compareTo(SchemaVersion other) {
-    return _majorVersion == other._majorVersion ?
-        _minorVersion - other._minorVersion :
-        _majorVersion - other._majorVersion;
+  public int compareTo(final SchemaVersion other) {
+    return _majorVersion == other._majorVersion
+        ? _minorVersion - other._minorVersion
+        : _majorVersion - other._majorVersion;
   }
 
   @Override
@@ -61,7 +57,7 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
 
     if (this == o) {
       return true;
@@ -70,7 +66,7 @@ public class SchemaVersion implements Comparable<SchemaVersion> {
       return false;
     }
 
-    SchemaVersion that = (SchemaVersion) o;
+    final SchemaVersion that = (SchemaVersion) o;
 
     // Minor version is more likely to differ than major so compare it first
     return _minorVersion == that._minorVersion && _majorVersion == that._majorVersion;

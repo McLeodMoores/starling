@@ -480,32 +480,39 @@
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.default.js</fragment> <!-- keep this first! -->
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.currencymatrix.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.currencypairs.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.curvespecificationbuilderconfiguration.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.futurepricecurvedefinition.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.futurepricecurvespecification.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.fxforwardcurvedefinition.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.fxforwardcurvespecification.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.forwardswapcurvedefinition.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.forwardswapcurvespecification.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.multicurvecalculationconfig.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.scenariodslscript.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.scenariodslparameters.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.swaptionvolatilitycubespecification.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.historicaltimeseriesrating.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.viewdefinition.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.volatilitycubedefinition.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.volatilitysurfacedefinition.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.volatilitysurfacespecification.js</fragment>
-    <fragment>/scripts/og/views/config_forms/og.views.config_forms.yieldcurvedefinition.js</fragment>
     <!-- /config forms -->
     <!--  convention_forms  -->
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.default.js</fragment> <!-- keep this first! -->
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.bondconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.cmslegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.compoundingiborlegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.deliverablepricequotedswapfutureconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.depositconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.federalfundsfutureconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.fixedlegrolldateconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.fxforwardandswapconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.fxspotconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.iborindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.inflationlegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.interestratefutureconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.oislegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.onarithmeticaveragelegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.oncompoundedlegrolldateconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.overnightindexconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.priceindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.rolldatefraconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.swapconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.swapindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.swapfixedlegconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.vanillaiborlegconvention.js</fragment>
+	<fragment>/scripts/og/views/convention_forms/og.views.convention_forms.vanillaiborlegrolldateconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.attributes.js</fragment> 
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.externalidbundle.js</fragment> 
     <!-- /convention forms -->

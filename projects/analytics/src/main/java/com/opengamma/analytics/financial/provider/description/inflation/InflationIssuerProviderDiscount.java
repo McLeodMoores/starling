@@ -34,11 +34,11 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Class describing a "market" with discounting, forward, price index and credit curves.
- * The forward rate are computed as the ratio of discount factors stored in YieldAndDiscountCurve.
+ * Class describing a "market" with discounting, forward, price index and credit curves. The forward rate are computed as the ratio of discount factors stored
+ * in YieldAndDiscountCurve.
  */
 public class InflationIssuerProviderDiscount implements InflationIssuerProviderInterface {
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationIssuerProviderDiscount.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationIssuerProviderDiscount.class);
   /**
    * The multicurve provider.
    */
@@ -59,7 +59,7 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
   /**
    * The map between the curves names and the curves themselves.
    */
-  //TODO these aren't the best names
+  // TODO these aren't the best names
   private final Map<String, YieldAndDiscountCurve> _issuerCurvesNames = new LinkedHashMap<>();
 
   /**
@@ -73,7 +73,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Constructor with empty maps for discounting, forward and price index.
-   * @param fxMatrix The FXMatrix.
+   * 
+   * @param fxMatrix
+   *          The FXMatrix.
    */
   public InflationIssuerProviderDiscount(final FXMatrix fxMatrix) {
     _inflationProvider = new InflationProviderDiscount(fxMatrix);
@@ -83,14 +85,22 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Constructor from an existing market. The given market maps are used for the new market (the same maps are used, not copied).
-   * @param discountingCurves A map with one (discounting) curve by currency.
-   * @param forwardIborCurves A map with one (forward) curve by Ibor index.
-   * @param forwardONCurves A map with one (forward) curve by ON index.
-   * @param priceIndexCurves A map with one price curve by price index.
-   * @param issuerCurves A map with issuer discounting curves.
-   * @param fxMatrix The FXMatrix.
+   * 
+   * @param discountingCurves
+   *          A map with one (discounting) curve by currency.
+   * @param forwardIborCurves
+   *          A map with one (forward) curve by Ibor index.
+   * @param forwardONCurves
+   *          A map with one (forward) curve by ON index.
+   * @param priceIndexCurves
+   *          A map with one price curve by price index.
+   * @param issuerCurves
+   *          A map with issuer discounting curves.
+   * @param fxMatrix
+   *          The FXMatrix.
    */
-  public InflationIssuerProviderDiscount(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
+  public InflationIssuerProviderDiscount(final Map<Currency, YieldAndDiscountCurve> discountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
       final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<IndexPrice, PriceIndexCurve> priceIndexCurves,
       final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves, final FXMatrix fxMatrix) {
     _inflationProvider = new InflationProviderDiscount(discountingCurves, forwardIborCurves, forwardONCurves, priceIndexCurves, fxMatrix);
@@ -99,20 +109,29 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
   }
 
   /**
-   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not copied).
-   * @param inflation The inflation provider.
-   * @param issuerCurves A map with issuer discounting curves.
+   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not
+   * copied).
+   * 
+   * @param inflation
+   *          The inflation provider.
+   * @param issuerCurves
+   *          A map with issuer discounting curves.
    */
-  public InflationIssuerProviderDiscount(final InflationProviderDiscount inflation, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
+  public InflationIssuerProviderDiscount(final InflationProviderDiscount inflation,
+      final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
     _inflationProvider = inflation;
     _issuerCurves = issuerCurves;
     setAllCurves();
   }
 
   /**
-   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not copied).
-   * @param inflation The inflation provider.
-   * @param issuerProvider A map with issuer discounting curves.
+   * Constructor from exiting multicurveProvider and inflation map. The given provider and map are used for the new provider (the same maps are used, not
+   * copied).
+   * 
+   * @param inflation
+   *          The inflation provider.
+   * @param issuerProvider
+   *          A map with issuer discounting curves.
    */
   public InflationIssuerProviderDiscount(final InflationProviderDiscount inflation, final IssuerProviderDiscount issuerProvider) {
     _inflationProvider = inflation;
@@ -122,7 +141,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Constructor from exiting issuerProvider. The given provider and map are used for the new provider (the same maps are used, not copied).
-   * @param issuerProvider A map with issuer discounting curves.
+   * 
+   * @param issuerProvider
+   *          A map with issuer discounting curves.
    */
   public InflationIssuerProviderDiscount(final IssuerProviderDiscount issuerProvider) {
     _inflationProvider = new InflationProviderDiscount();
@@ -156,8 +177,11 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Sets the price index curve for a price index.
-   * @param issuerCcy The issuer/currency pair.
-   * @param curve The curve.
+   * 
+   * @param issuerCcy
+   *          The issuer/currency pair.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> issuerCcy, final YieldAndDiscountCurve curve) {
     ArgumentChecker.notNull(issuerCcy, "Name-currency");
@@ -181,9 +205,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
         return entry.getValue().getDiscountFactor(time);
       }
     }
-    s_logger.error("Could not find issuer discounting curve for {}. There are {} curve available", issuer, _issuerCurves.size());
+    LOGGER.error("Could not find issuer discounting curve for {}. There are {} curve available", issuer, _issuerCurves.size());
     for (final Map.Entry<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> entry : _issuerCurves.entrySet()) {
-      s_logger.error("matching key = {}, filter {} matches = {}", entry.getKey().getFirst(), issuer, entry.getKey().getSecond().getFilteredData(issuer));
+      LOGGER.error("matching key = {}, filter {} matches = {}", entry.getKey().getFirst(), issuer, entry.getKey().getSecond().getFilteredData(issuer));
     }
     throw new IllegalArgumentException("Issuer discounting curve not found for " + issuer);
   }
@@ -205,7 +229,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the curve for an identifier / filter pair.
-   * @param issuer The issuer
+   * 
+   * @param issuer
+   *          The issuer
    * @return The curve, null if not found
    */
   public YieldAndDiscountCurve getCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> issuer) {
@@ -214,7 +240,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the curve for an issuer.
-   * @param issuer The issuer
+   * 
+   * @param issuer
+   *          The issuer
    * @return The curve, null if not found
    */
   public YieldAndDiscountCurve getCurve(final LegalEntity issuer) {
@@ -228,7 +256,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the curve(with a name) for an issuer .
-   * @param name The name
+   * 
+   * @param name
+   *          The name
    * @return The curve, null if not found
    */
   public YieldAndDiscountCurve getCurve(final String name) {
@@ -270,7 +300,7 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
     throw new UnsupportedOperationException("Cannot return the number of parameter for a null curve");
   }
 
-  //     =====     Methods related to InflationProvider     =====
+  // ===== Methods related to InflationProvider =====
 
   @Override
   public double getPriceIndex(final IndexPrice index, final Double time) {
@@ -284,7 +314,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the price index curve associated to a given price index in the market.
-   * @param index The Price index.
+   * 
+   * @param index
+   *          The Price index.
    * @return The curve.
    */
   public PriceIndexCurve getCurve(final IndexPrice index) {
@@ -298,8 +330,11 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Sets the price index curve for a price index.
-   * @param index The price index.
-   * @param curve The curve.
+   * 
+   * @param index
+   *          The price index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final IndexPrice index, final PriceIndexCurve curve) {
     _inflationProvider.setCurve(index, curve);
@@ -308,15 +343,19 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Replaces the discounting curve for a price index.
-   * @param index The price index.
-   * @param curve The price curve for the index.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param index
+   *          The price index.
+   * @param curve
+   *          The price curve for the index.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final IndexPrice index, final PriceIndexCurve curve) {
     _inflationProvider.replaceCurve(index, curve);
   }
 
-  //     =====     Methods related to MulticurveProvider     =====
+  // ===== Methods related to MulticurveProvider =====
 
   @Override
   public double getDiscountFactor(final Currency ccy, final Double time) {
@@ -365,7 +404,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the discounting curve associated in a given currency in the market.
-   * @param ccy The currency.
+   * 
+   * @param ccy
+   *          The currency.
    * @return The curve.
    */
   public YieldAndDiscountCurve getCurve(final Currency ccy) {
@@ -374,7 +415,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the forward curve associated to a given Ibor index in the market.
-   * @param index The Ibor index.
+   * 
+   * @param index
+   *          The Ibor index.
    * @return The curve.
    */
   public YieldAndDiscountCurve getCurve(final IborIndex index) {
@@ -383,7 +426,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the forward curve associated to a given ON index in the market.
-   * @param index The ON index.
+   * 
+   * @param index
+   *          The ON index.
    * @return The curve.
    */
   public YieldAndDiscountCurve getCurve(final IndexON index) {
@@ -392,8 +437,11 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Sets the discounting curve for a given currency.
-   * @param ccy The currency.
-   * @param curve The yield curve used for discounting.
+   * 
+   * @param ccy
+   *          The currency.
+   * @param curve
+   *          The yield curve used for discounting.
    */
   public void setCurve(final Currency ccy, final YieldAndDiscountCurve curve) {
     _inflationProvider.setCurve(ccy, curve);
@@ -402,8 +450,11 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Sets the curve associated to an Ibor index.
-   * @param index The index.
-   * @param curve The curve.
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final IborIndex index, final YieldAndDiscountCurve curve) {
     _inflationProvider.setCurve(index, curve);
@@ -412,8 +463,11 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Sets the curve associated to an ON index.
-   * @param index The index.
-   * @param curve The curve.
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The curve.
    */
   public void setCurve(final IndexON index, final YieldAndDiscountCurve curve) {
     _inflationProvider.setCurve(index, curve);
@@ -422,9 +476,13 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Replaces the discounting curve for a given currency.
-   * @param ccy The currency.
-   * @param curve The yield curve used for discounting.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param ccy
+   *          The currency.
+   * @param curve
+   *          The yield curve used for discounting.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final Currency ccy, final YieldAndDiscountCurve curve) {
     _inflationProvider.replaceCurve(ccy, curve);
@@ -432,9 +490,13 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Replaces the forward curve for a given index.
-   * @param index The index.
-   * @param curve The yield curve used for forward.
-   *  @throws IllegalArgumentException if curve name NOT already present
+   * 
+   * @param index
+   *          The index.
+   * @param curve
+   *          The yield curve used for forward.
+   * @throws IllegalArgumentException
+   *           if curve name NOT already present
    */
   public void replaceCurve(final IborIndex index, final YieldAndDiscountCurve curve) {
     _inflationProvider.replaceCurve(index, curve);
@@ -447,6 +509,7 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Gets the underlying FXMatrix containing the exchange rates.
+   * 
    * @return The matrix.
    */
   @Override
@@ -454,7 +517,7 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
     return _inflationProvider.getFxRates();
   }
 
-  //     =====     Methods related to All     =====
+  // ===== Methods related to All =====
 
   @Override
   public Set<String> getAllNames() {
@@ -474,21 +537,26 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
 
   /**
    * Set all the curves contains in another bundle. If a currency or index is already present in the map, the associated curve is changed.
-   * @param other The other bundle.
+   * 
+   * @param other
+   *          The other bundle.
    */
-  //  * TODO: REVIEW: Should we check that the curve are already present?
+  // * TODO: REVIEW: Should we check that the curve are already present?
   public void setAll(final InflationIssuerProviderDiscount other) {
     ArgumentChecker.notNull(other, "Inflation provider");
     _inflationProvider.setAll(other.getInflationProvider());
     _issuerCurves.putAll(other._issuerCurves);
   }
 
-  //     =====     Convenience methods     =====
+  // ===== Convenience methods =====
 
   /**
    * Replaces an issuer curve.
-   * @param ic The key of the curve to replace
-   * @param replacement The replacement curve
+   * 
+   * @param ic
+   *          The key of the curve to replace
+   * @param replacement
+   *          The replacement curve
    * @return A new provider with the curve replaced.
    */
   public InflationIssuerProviderDiscount withIssuerCurve(final Pair<Object, LegalEntityFilter<LegalEntity>> ic, final YieldAndDiscountCurve replacement) {

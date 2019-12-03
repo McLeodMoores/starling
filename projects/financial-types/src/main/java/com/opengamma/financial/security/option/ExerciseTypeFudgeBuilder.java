@@ -23,7 +23,7 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class ExerciseTypeFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<ExerciseType> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExerciseType object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExerciseType object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     ExerciseTypeFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
@@ -43,15 +43,15 @@ public class ExerciseTypeFudgeBuilder extends AbstractFudgeBuilder implements Fu
   }
 
   @Override
-  public ExerciseType buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public ExerciseType buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return fromFudgeMsg(deserializer, msg);
   }
 
-  public static ExerciseType fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public static ExerciseType fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final String className = msg.getString(0);
     try {
       return (ExerciseType) ClassUtils.loadClass(className).newInstance();
-    } catch (Exception th) {
+    } catch (final Exception th) {
       throw new OpenGammaRuntimeException("Unable to create ExerciseType: " + className, th);
     }
   }

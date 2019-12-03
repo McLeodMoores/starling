@@ -20,7 +20,7 @@ public class PositionRef {
   public PositionRef() {
   }
 
-  public PositionRef(Position position) {
+  public PositionRef(final Position position) {
     _position = position;
   }
 
@@ -28,7 +28,7 @@ public class PositionRef {
     return _position;
   }
 
-  public void setPosition(Position position) {
+  public void setPosition(final Position position) {
     _position = position;
   }
 }

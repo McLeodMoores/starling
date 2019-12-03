@@ -37,28 +37,28 @@ public class BloombergRefDataCollectorTest {
 
   private static final String WATCH_LIST_FILE = "watchListTest.txt";
   private static final String FIELD_LIST_FILE = "fieldListTest.txt";
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private BloombergRefDataCollector _refDataCollector;
   private File _outputFile;
 
   @BeforeMethod
-  public void setUp(Method m) throws Exception {
-    MockReferenceDataProvider refDataProvider = new MockReferenceDataProvider();
+  public void setUp(final Method m) throws Exception {
+    final MockReferenceDataProvider refDataProvider = new MockReferenceDataProvider();
     refDataProvider.addExpectedField("SECURITY_TYP");
     refDataProvider.addResult("QQQQ US Equity", "SECURITY_TYP", "ETP");
     refDataProvider.addResult("/buid/EQ0082335400001000", "SECURITY_TYP", "ETP");
-    
-    File watchListFile = new File(BloombergRefDataCollectorTest.class.getResource(WATCH_LIST_FILE).toURI());
-    File fieldListFile = new File(BloombergRefDataCollectorTest.class.getResource(FIELD_LIST_FILE).toURI());
-    
-    String outfileName = getClass().getSimpleName() + "-" + Thread.currentThread().getName() +
+
+    final File watchListFile = new File(BloombergRefDataCollectorTest.class.getResource(WATCH_LIST_FILE).toURI());
+    final File fieldListFile = new File(BloombergRefDataCollectorTest.class.getResource(FIELD_LIST_FILE).toURI());
+
+    final String outfileName = getClass().getSimpleName() + "-" + Thread.currentThread().getName() +
         "-" + OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
-    
+
     _outputFile = File.createTempFile(outfileName, null);
     _outputFile.deleteOnExit();
-    
-    _refDataCollector = new BloombergRefDataCollector(s_fudgeContext, watchListFile, refDataProvider, fieldListFile, _outputFile);
+
+    _refDataCollector = new BloombergRefDataCollector(FUDGE_CONTEXT, watchListFile, refDataProvider, fieldListFile, _outputFile);
     _refDataCollector.start();
   }
 
@@ -71,20 +71,20 @@ public class BloombergRefDataCollectorTest {
   //-------------------------------------------------------------------------
   @Test
   public void test() {
-    LoggedReferenceDataProvider loggedRefDataProvider = new LoggedReferenceDataProvider(s_fudgeContext, _outputFile);
-    
-    Set<String> securities = Sets.newHashSet("QQQQ US Equity", "/buid/EQ0082335400001000");
-    Set<String> fields = Collections.singleton("SECURITY_TYP");
-    Map<String, FudgeMsg> refDataMap = loggedRefDataProvider.getReferenceData(securities, fields);
-    
-    Set<String> testSecurities = refDataMap.keySet();
+    final LoggedReferenceDataProvider loggedRefDataProvider = new LoggedReferenceDataProvider(FUDGE_CONTEXT, _outputFile);
+
+    final Set<String> securities = Sets.newHashSet("QQQQ US Equity", "/buid/EQ0082335400001000");
+    final Set<String> fields = Collections.singleton("SECURITY_TYP");
+    final Map<String, FudgeMsg> refDataMap = loggedRefDataProvider.getReferenceData(securities, fields);
+
+    final Set<String> testSecurities = refDataMap.keySet();
     assertEquals(2, testSecurities.size());
-    
+
     assertTrue(testSecurities.containsAll(securities));
-    
-    for (String security : testSecurities) {
-      FudgeMsg fieldData = refDataMap.get(security);
-      String securityType = fieldData.getString("SECURITY_TYP");
+
+    for (final String security : testSecurities) {
+      final FudgeMsg fieldData = refDataMap.get(security);
+      final String securityType = fieldData.getString("SECURITY_TYP");
       assertEquals("ETP", securityType);
     }
   }

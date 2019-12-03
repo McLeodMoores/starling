@@ -23,20 +23,22 @@ public class SpringComponentUtils {
   public SpringComponentUtils() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Publish the component repository to Spring.
-   * 
-   * @param repo  the repository, not null
-   * @param beanFactory  the bean factory, not null
+   *
+   * @param repo
+   *          the repository, not null
+   * @param beanFactory
+   *          the bean factory, not null
    */
-  public static void publishComponentRepository(ComponentRepository repo, ConfigurableListableBeanFactory beanFactory) {
-    for (Entry<ComponentKey, Object> entry : repo.getInstanceMap().entrySet()) {
-      ComponentKey key = entry.getKey();
+  public static void publishComponentRepository(final ComponentRepository repo, final ConfigurableListableBeanFactory beanFactory) {
+    for (final Entry<ComponentKey, Object> entry : repo.getInstanceMap().entrySet()) {
+      final ComponentKey key = entry.getKey();
       beanFactory.registerSingleton(toSpringName(key), entry.getValue());
-      
+
       // handle names that came from Spring and don't match standard pattern
-      if (beanFactory.containsBean(key.getClassifier()) == false) {
+      if (!beanFactory.containsBean(key.getClassifier())) {
         beanFactory.registerSingleton(key.getClassifier(), entry.getValue());
       }
     }
@@ -44,11 +46,12 @@ public class SpringComponentUtils {
 
   /**
    * Gets the equivalent name in Spring.
-   * 
-   * @param key  the component key, not null
+   *
+   * @param key
+   *          the component key, not null
    * @return the name in Spring, not null
    */
-  public static String toSpringName(ComponentKey key) {
+  public static String toSpringName(final ComponentKey key) {
     return key.getClassifier() + key.getType().getSimpleName();
   }
 

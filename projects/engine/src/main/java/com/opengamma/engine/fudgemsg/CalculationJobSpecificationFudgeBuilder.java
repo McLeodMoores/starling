@@ -18,7 +18,7 @@ import com.opengamma.id.UniqueId;
 
 /**
  * Fudge message builder for {@code CalculationJobSpecification}.
- * 
+ *
  * <pre>
  * message CalculationJobSpecification {
  *   required UniqueId viewCycleId;     // the view cycle identifier
@@ -44,22 +44,22 @@ public class CalculationJobSpecificationFudgeBuilder implements FudgeBuilder<Cal
   }
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CalculationJobSpecification object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CalculationJobSpecification object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     buildMessageImpl(msg, object);
     return msg;
   }
 
   public static CalculationJobSpecification buildObjectImpl(final FudgeMsg msg) {
-    UniqueId viewCycleId = msg.getValue(UniqueId.class, VIEW_CYCLE_ID_FIELD_NAME);
-    String calcConfigName = msg.getString(CALCULATION_CONFIGURATION_FIELD_NAME);
-    Instant valuationTime = msg.getValue(Instant.class, VALUATION_TIME_FIELD_NAME);
-    long jobId = msg.getLong(JOB_ID_FIELD_NAME);
+    final UniqueId viewCycleId = msg.getValue(UniqueId.class, VIEW_CYCLE_ID_FIELD_NAME);
+    final String calcConfigName = msg.getString(CALCULATION_CONFIGURATION_FIELD_NAME);
+    final Instant valuationTime = msg.getValue(Instant.class, VALUATION_TIME_FIELD_NAME);
+    final long jobId = msg.getLong(JOB_ID_FIELD_NAME);
     return new CalculationJobSpecification(viewCycleId, calcConfigName, valuationTime, jobId);
   }
 
   @Override
-  public CalculationJobSpecification buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public CalculationJobSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return buildObjectImpl(msg);
   }
 

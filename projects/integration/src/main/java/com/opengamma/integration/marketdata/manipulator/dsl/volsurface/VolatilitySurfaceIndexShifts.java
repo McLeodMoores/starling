@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl.volsurface;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +48,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class VolatilitySurfaceIndexShifts implements StructureManipulator<VolatilitySurface>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceIndexShifts.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceIndexShifts.class);
 
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
@@ -68,27 +67,27 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
    * @param shifts the shift to apply at each expiry in the surface
    */
   @ImmutableConstructor
-  public VolatilitySurfaceIndexShifts(ScenarioShiftType shiftType, List<Double> shifts) {
+  public VolatilitySurfaceIndexShifts(final ScenarioShiftType shiftType, final List<Double> shifts) {
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
     _shifts = ImmutableList.copyOf(ArgumentChecker.notEmpty(shifts, "shifts"));
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface volSurface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
-    Surface<Double, Double, Double> surface = volSurface.getSurface();
+  public VolatilitySurface execute(final VolatilitySurface volSurface,
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
+    final Surface<Double, Double, Double> surface = volSurface.getSurface();
 
     if (volSurface instanceof BlackVolatilitySurfaceMoneynessFcnBackedByGrid) {
-      BlackVolatilitySurfaceMoneynessFcnBackedByGrid blackSurface = (BlackVolatilitySurfaceMoneynessFcnBackedByGrid) volSurface;
-      SmileSurfaceDataBundle shiftedSurfaceData = shiftSurfaceData(blackSurface.getGridData());
+      final BlackVolatilitySurfaceMoneynessFcnBackedByGrid blackSurface = (BlackVolatilitySurfaceMoneynessFcnBackedByGrid) volSurface;
+      final SmileSurfaceDataBundle shiftedSurfaceData = shiftSurfaceData(blackSurface.getGridData());
       return blackSurface.getInterpolator().getVolatilitySurface(shiftedSurfaceData);
     } else if (!(surface instanceof FunctionalDoublesSurface)) {
       return shiftNonFunctionalSurface(volSurface);
     } else {
-      s_logger.warn("Unable to shift surface of type {}/{}",
-                    volSurface.getClass().getName(),
-                    surface.getClass().getName());
+      LOGGER.warn("Unable to shift surface of type {}/{}",
+          volSurface.getClass().getName(),
+          surface.getClass().getName());
       return volSurface;
     }
   }
@@ -99,12 +98,12 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
    * @param surfaceData surface data
    * @return a copy of the surface data with shifts applied
    */
-  public SmileSurfaceDataBundle shiftSurfaceData(SmileSurfaceDataBundle surfaceData) {
+  public SmileSurfaceDataBundle shiftSurfaceData(final SmileSurfaceDataBundle surfaceData) {
     SmileSurfaceDataBundle shiftedData = surfaceData;
-    int nShifts = Math.min(_shifts.size(), shiftedData.getNumExpiries());
+    final int nShifts = Math.min(_shifts.size(), shiftedData.getNumExpiries());
 
     for (int i = 0; i < nShifts; i++) {
-      double[] strikes = shiftedData.getStrikes()[i];
+      final double[] strikes = shiftedData.getStrikes()[i];
 
       for (int j = 0; j < strikes.length; j++) {
         Double shiftAmount;
@@ -112,7 +111,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
         if (_shiftType == ScenarioShiftType.ABSOLUTE) {
           shiftAmount = _shifts.get(i);
         } else {
-          double vol = shiftedData.getVolatilities()[i][j];
+          final double vol = shiftedData.getVolatilities()[i][j];
           shiftAmount = vol * _shifts.get(i);
         }
         shiftedData = shiftedData.withBumpedPoint(i, j, shiftAmount);
@@ -129,22 +128,22 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
    * @param volSurface the base surface
    * @return the surface with a shift applied
    */
-  private VolatilitySurface shiftNonFunctionalSurface(VolatilitySurface volSurface) {
-    Surface<Double, Double, Double> surface = volSurface.getSurface();
-    Double[] xData = surface.getXData();
-    Set<Double> xValues = Sets.newTreeSet(Arrays.asList(xData));
+  private VolatilitySurface shiftNonFunctionalSurface(final VolatilitySurface volSurface) {
+    final Surface<Double, Double, Double> surface = volSurface.getSurface();
+    final Double[] xData = surface.getXData();
+    final Set<Double> xValues = Sets.newTreeSet(Arrays.asList(xData));
     // map the values to indices so we can find the shift at each point
-    Map<Double, Integer> valuesToIndices = new HashMap<>(xValues.size());
-    boolean absolute = _shiftType == ScenarioShiftType.ABSOLUTE;
+    final Map<Double, Integer> valuesToIndices = new HashMap<>(xValues.size());
+    final boolean absolute = _shiftType == ScenarioShiftType.ABSOLUTE;
     int index = 0;
 
-    for (Double xValue : xValues) {
+    for (final Double xValue : xValues) {
       valuesToIndices.put(xValue, index++);
     }
-    double[] shifts = new double[xData.length];
+    final double[] shifts = new double[xData.length];
 
     for (int i = 0; i < xData.length; i++) {
-      Integer shiftIndex = valuesToIndices.get(xData[i]);
+      final Integer shiftIndex = valuesToIndices.get(xData[i]);
       Double shift;
       if (shiftIndex > _shifts.size() - 1) {
         shift = absolute ? 0d : 1d;
@@ -153,14 +152,13 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
       }
       shifts[i] = shift;
     }
-    double[] xArray = ArrayUtils.toPrimitive(xData);
-    double[] yArray = ArrayUtils.toPrimitive(surface.getYData());
+    final double[] xArray = ArrayUtils.toPrimitive(xData);
+    final double[] yArray = ArrayUtils.toPrimitive(surface.getYData());
 
     if (absolute) {
       return volSurface.withMultipleAdditiveShifts(xArray, yArray, shifts);
-    } else {
-      return volSurface.withMultipleMultiplicativeShifts(xArray, yArray, shifts);
     }
+    return volSurface.withMultipleMultiplicativeShifts(xArray, yArray, shifts);
   }
 
   @Override
@@ -239,8 +237,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       VolatilitySurfaceIndexShifts other = (VolatilitySurfaceIndexShifts) obj;
-      return JodaBeanUtils.equal(getShiftType(), other.getShiftType()) &&
-          JodaBeanUtils.equal(getShifts(), other.getShifts());
+      return JodaBeanUtils.equal(_shiftType, other._shiftType) &&
+          JodaBeanUtils.equal(_shifts, other._shifts);
     }
     return false;
   }
@@ -248,8 +246,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getShifts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shiftType);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_shifts);
     return hash;
   }
 
@@ -257,8 +255,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("VolatilitySurfaceIndexShifts{");
-    buf.append("shiftType").append('=').append(getShiftType()).append(',').append(' ');
-    buf.append("shifts").append('=').append(JodaBeanUtils.toString(getShifts()));
+    buf.append("shiftType").append('=').append(_shiftType).append(',').append(' ');
+    buf.append("shifts").append('=').append(JodaBeanUtils.toString(_shifts));
     buf.append('}');
     return buf.toString();
   }
@@ -423,19 +421,31 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

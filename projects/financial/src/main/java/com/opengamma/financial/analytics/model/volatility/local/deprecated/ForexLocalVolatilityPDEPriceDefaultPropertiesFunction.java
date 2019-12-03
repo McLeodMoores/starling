@@ -18,15 +18,16 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
+// CSOFF
 /**
  *
  * @deprecated Deprecated
  */
 @Deprecated
 public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends DefaultPropertyFunction {
-  private static final String[] s_valueRequirements = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.FX_PRESENT_VALUE
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE
   };
   private final String _forwardCurveCalculationMethod;
   private final String _forwardCurveName;
@@ -46,9 +47,12 @@ public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends Defau
   private final String _strikeInterpolatorName;
   private final String _timeInterpolatorName;
 
-  public ForexLocalVolatilityPDEPriceDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName, final String surfaceType, final String xAxis,
-      final String yAxis, final String yAxisType, final String surfaceName, final String h, final String pdeDirection, final String theta, final String timeSteps, final String spaceSteps,
-      final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness, final String strikeInterpolatorName, final String timeInterpolatorName) {
+  public ForexLocalVolatilityPDEPriceDefaultPropertiesFunction(final String forwardCurveCalculationMethod, final String forwardCurveName,
+      final String surfaceType, final String xAxis,
+      final String yAxis, final String yAxisType, final String surfaceName, final String h, final String pdeDirection, final String theta,
+      final String timeSteps, final String spaceSteps,
+      final String timeGridBunching, final String spaceGridBunching, final String maxMoneyness, final String strikeInterpolatorName,
+      final String timeInterpolatorName) {
     super(FinancialSecurityTypes.FX_OPTION_SECURITY, true);
     ArgumentChecker.notNull(forwardCurveCalculationMethod, "forward curve calculation method");
     ArgumentChecker.notNull(forwardCurveName, "forward curve name");
@@ -88,7 +92,7 @@ public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends Defau
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_METHOD);
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE);
       defaults.addValuePropertyName(valueRequirement, LocalVolatilityPDEValuePropertyNames.PROPERTY_H);
@@ -110,7 +114,8 @@ public class ForexLocalVolatilityPDEPriceDefaultPropertiesFunction extends Defau
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethod);
     }

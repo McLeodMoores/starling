@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -13,16 +13,16 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 @ManagedResource(
     description = "CogdaDataDistributor attributes and operations that can be managed via JMX"
     )
 public class CogdaDataDistributorMBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaDataDistributorMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaDataDistributorMBean.class);
   private final CogdaDataDistributor _distributor;
-  
-  public CogdaDataDistributorMBean(CogdaDataDistributor distributor) {
+
+  public CogdaDataDistributorMBean(final CogdaDataDistributor distributor) {
     ArgumentChecker.notNull(distributor, "distributor");
     _distributor = distributor;
   }
@@ -39,8 +39,8 @@ public class CogdaDataDistributorMBean {
   public String getExternalIdScheme() {
     try {
       return getDistributor().getExternalIdScheme();
-    } catch (RuntimeException e) {
-      s_logger.error("getExternalIdScheme() failed", e);
+    } catch (final RuntimeException e) {
+      LOGGER.error("getExternalIdScheme() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

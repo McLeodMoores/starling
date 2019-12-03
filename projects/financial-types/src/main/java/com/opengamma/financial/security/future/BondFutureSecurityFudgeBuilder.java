@@ -35,35 +35,35 @@ public class BondFutureSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   public static final String LAST_DELIVERY_DATE_FIELD_NAME = "lastDeliveryDate";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, BondFutureSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BondFutureSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     BondFutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, BondFutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final BondFutureSecurity object, final MutableFudgeMsg msg) {
     FutureSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     if (object.getBasket() != null) {
-      for (BondFutureDeliverable bfd : object.getBasket()) {
+      for (final BondFutureDeliverable bfd : object.getBasket()) {
         addToMessage(serializer, msg, BASKET_FIELD_NAME, bfd, BondFutureDeliverable.class);
       }
-    }    
+    }
     addToMessage(msg, FIRST_DELIVERY_DATE_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getFirstDeliveryDate()));
     addToMessage(msg, LAST_DELIVERY_DATE_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getLastDeliveryDate()));
   }
 
   @Override
-  public BondFutureSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    BondFutureSecurity object = new BondFutureSecurity();
+  public BondFutureSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final BondFutureSecurity object = new BondFutureSecurity();
     BondFutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, BondFutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final BondFutureSecurity object) {
     FutureSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
-    List<FudgeField> basketFields = msg.getAllByName(BASKET_FIELD_NAME);
-    List<BondFutureDeliverable> basket = new ArrayList<BondFutureDeliverable>(basketFields.size());
-    for (FudgeField field : basketFields) {
+    final List<FudgeField> basketFields = msg.getAllByName(BASKET_FIELD_NAME);
+    final List<BondFutureDeliverable> basket = new ArrayList<>(basketFields.size());
+    for (final FudgeField field : basketFields) {
       basket.add(deserializer.fieldValueToObject(BondFutureDeliverable.class, field));
     }
     object.setBasket(basket);

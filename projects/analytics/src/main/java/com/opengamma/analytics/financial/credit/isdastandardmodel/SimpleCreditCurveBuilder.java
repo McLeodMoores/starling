@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -16,9 +16,9 @@ import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * /**
- * This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from
- * the same inputs (up to numerical round-off) 
+ * This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up to numerical
+ * round-off).
+ *
  * @deprecated Use the faster ISDACompliantCreditCurveBuild
  */
 @Deprecated
@@ -43,23 +43,26 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic cds, final double premium, final ISDACompliantYieldCurve yieldCurve, final double pointsUpfront) {
-    return calibrateCreditCurve(new CDSAnalytic[] {cds }, new double[] {premium }, yieldCurve, new double[] {pointsUpfront });
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic cds, final double premium,
+      final ISDACompliantYieldCurve yieldCurve, final double pointsUpfront) {
+    return calibrateCreditCurve(new CDSAnalytic[] { cds }, new double[] { premium }, yieldCurve, new double[] { pointsUpfront });
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic cds, final double marketFractionalSpread, final ISDACompliantYieldCurve yieldCurve) {
-    return calibrateCreditCurve(new CDSAnalytic[] {cds }, new double[] {marketFractionalSpread }, yieldCurve, new double[1]);
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic cds, final double marketFractionalSpread,
+      final ISDACompliantYieldCurve yieldCurve) {
+    return calibrateCreditCurve(new CDSAnalytic[] { cds }, new double[] { marketFractionalSpread }, yieldCurve, new double[1]);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] fractionalSpreads, final ISDACompliantYieldCurve yieldCurve) {
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] fractionalSpreads,
+      final ISDACompliantYieldCurve yieldCurve) {
     ArgumentChecker.notNull(cds, "cds");
     final int n = cds.length;
     return calibrateCreditCurve(cds, fractionalSpreads, yieldCurve, new double[n]);
@@ -69,7 +72,8 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums, final ISDACompliantYieldCurve yieldCurve, final double[] pointsUpfront) {
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums,
+      final ISDACompliantYieldCurve yieldCurve, final double[] pointsUpfront) {
     ArgumentChecker.noNulls(cds, "cds");
     ArgumentChecker.notEmpty(premiums, "empty fractionalSpreads");
     ArgumentChecker.notNull(yieldCurve, "null yieldCurve");
@@ -104,10 +108,13 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final LocalDate today, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate startDate, final LocalDate endDate,
-      final double fractionalParSpread, final boolean payAccOnDefault, final Period tenor, final StubType stubType, final boolean protectStart, final ISDACompliantYieldCurve yieldCurve,
+  public ISDACompliantCreditCurve calibrateCreditCurve(final LocalDate today, final LocalDate stepinDate, final LocalDate valueDate,
+      final LocalDate startDate, final LocalDate endDate,
+      final double fractionalParSpread, final boolean payAccOnDefault, final Period tenor, final StubType stubType,
+      final boolean protectStart, final ISDACompliantYieldCurve yieldCurve,
       final double recoveryRate) {
-    return calibrateCreditCurve(today, stepinDate, valueDate, startDate, new LocalDate[] {endDate }, new double[] {fractionalParSpread }, payAccOnDefault, tenor, stubType, protectStart, yieldCurve,
+    return calibrateCreditCurve(today, stepinDate, valueDate, startDate, new LocalDate[] { endDate }, new double[] { fractionalParSpread },
+        payAccOnDefault, tenor, stubType, protectStart, yieldCurve,
         recoveryRate);
   }
 
@@ -115,8 +122,10 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final LocalDate today, final LocalDate stepinDate, final LocalDate valueDate, final LocalDate startDate, final LocalDate[] endDates,
-      final double[] couponRates, final boolean payAccOnDefault, final Period tenor, final StubType stubType, final boolean protectStart, final ISDACompliantYieldCurve yieldCurve,
+  public ISDACompliantCreditCurve calibrateCreditCurve(final LocalDate today, final LocalDate stepinDate, final LocalDate valueDate,
+      final LocalDate startDate, final LocalDate[] endDates,
+      final double[] couponRates, final boolean payAccOnDefault, final Period tenor, final StubType stubType, final boolean protectStart,
+      final ISDACompliantYieldCurve yieldCurve,
       final double recoveryRate) {
 
     ArgumentChecker.notNull(today, "null today");
@@ -137,7 +146,8 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
     final CDSAnalytic[] cds = new CDSAnalytic[n];
     for (int i = 0; i < n; i++) {
-      cds[i] = new CDSAnalytic(today, stepinDate, valueDate, startDate, endDates[i], payAccOnDefault, tenor, stubType, protectStart, recoveryRate);
+      cds[i] = new CDSAnalytic(today, stepinDate, valueDate, startDate, endDates[i], payAccOnDefault, tenor, stubType, protectStart,
+          recoveryRate);
     }
 
     return calibrateCreditCurve(cds, couponRates, yieldCurve);
@@ -152,7 +162,8 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     private final double _spread;
     private final double _pointsUpfront;
 
-    public CDSPricer(final int index, final CDSAnalytic cds, final double fracSpread, final ISDACompliantCreditCurve creditCurve, final ISDACompliantYieldCurve yieldCurve, final double pointsUpfront) {
+    CDSPricer(final int index, final CDSAnalytic cds, final double fracSpread, final ISDACompliantCreditCurve creditCurve,
+        final ISDACompliantYieldCurve yieldCurve, final double pointsUpfront) {
 
       _index = index;
       _cds = cds;
@@ -169,9 +180,10 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     }
   }
 
-  //TODO
+  // TODO
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic calibrationCDS, final CDSQuoteConvention marketQuote, final ISDACompliantYieldCurve yieldCurve) {
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic calibrationCDS, final CDSQuoteConvention marketQuote,
+      final ISDACompliantYieldCurve yieldCurve) {
     double puf;
     double coupon;
     if (marketQuote instanceof ParSpread) {
@@ -188,11 +200,12 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       throw new IllegalArgumentException("Unknown CDSQuoteConvention type " + marketQuote.getClass());
     }
 
-    return calibrateCreditCurve(new CDSAnalytic[] {calibrationCDS }, new double[] {coupon }, yieldCurve, new double[] {puf });
+    return calibrateCreditCurve(new CDSAnalytic[] { calibrationCDS }, new double[] { coupon }, yieldCurve, new double[] { puf });
   }
 
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] calibrationCDSs, final CDSQuoteConvention[] marketQuotes, final ISDACompliantYieldCurve yieldCurve) {
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] calibrationCDSs, final CDSQuoteConvention[] marketQuotes,
+      final ISDACompliantYieldCurve yieldCurve) {
     throw new NotImplementedException();
   }
 

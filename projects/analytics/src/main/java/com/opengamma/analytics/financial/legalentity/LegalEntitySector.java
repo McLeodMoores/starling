@@ -121,13 +121,13 @@ public class LegalEntitySector implements LegalEntityFilter<LegalEntity>, Bean {
       setMember = VariantType.either(setMember, String.class);
     }
     if (_useClassificationName) {
-      Set<? extends Type> types = getClassificationValueTypes();
-      if ((types == null) || types.isEmpty()) {
+      final Set<? extends Type> types = getClassificationValueTypes();
+      if (types == null || types.isEmpty()) {
         // Arbitrary objects. Not good.
         setMember = VariantType.either(setMember, Object.class);
       } else {
         // Union of possible types.
-        for (Type type : types) {
+        for (final Type type : types) {
           setMember = VariantType.either(setMember, type);
         }
       }
@@ -136,8 +136,8 @@ public class LegalEntitySector implements LegalEntityFilter<LegalEntity>, Bean {
   }
 
   /**
-   * Sets the agencies with which to filter ratings. This also sets the {@link LegalEntitySector#_useClassificationName} field to true.
-   * 
+   * Sets the agencies with which to filter ratings. This also sets the _useClassificationName field to true.
+   *
    * @param classifications The new value of the property, not null
    */
   public void setClassifications(final Set<String> classifications) {

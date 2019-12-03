@@ -18,16 +18,16 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class AmqpByteArrayMessageDispatcher implements MessageListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AmqpByteArrayMessageDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AmqpByteArrayMessageDispatcher.class);
 
   private final ByteArrayMessageReceiver _underlying;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying receiver, not null
    */
-  public AmqpByteArrayMessageDispatcher(ByteArrayMessageReceiver underlying) {
+  public AmqpByteArrayMessageDispatcher(final ByteArrayMessageReceiver underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     _underlying = underlying;
   }
@@ -35,7 +35,7 @@ public class AmqpByteArrayMessageDispatcher implements MessageListener {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying receiver.
-   * 
+   *
    * @return the underlying receiver, not null
    */
   public ByteArrayMessageReceiver getUnderlying() {
@@ -44,9 +44,9 @@ public class AmqpByteArrayMessageDispatcher implements MessageListener {
 
   //-------------------------------------------------------------------------
   @Override
-  public void onMessage(Message message) {
-    byte[] bytes = message.getBody();
-    s_logger.debug("Dispatching byte array of length {}", bytes.length);
+  public void onMessage(final Message message) {
+    final byte[] bytes = message.getBody();
+    LOGGER.debug("Dispatching byte array of length {}", bytes.length);
     getUnderlying().messageReceived(bytes);
   }
 

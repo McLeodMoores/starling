@@ -70,7 +70,7 @@ public class DbConventionBeanMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbConventionBeanMaster(final DbConnector dbConnector) {
@@ -79,11 +79,11 @@ public class DbConventionBeanMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    * @param callback  the callback used to configure the master, not null
    */
-  public DbConventionBeanMaster(final DbConnector dbConnector, DbConventionBeanMasterCallback callback) {
+  public DbConventionBeanMaster(final DbConnector dbConnector, final DbConventionBeanMasterCallback callback) {
     super(new DbBeanMaster<>(dbConnector, IDENTIFIER_SCHEME_DEFAULT, callback));
     _callback = callback;
   }
@@ -91,7 +91,7 @@ public class DbConventionBeanMaster
   //-------------------------------------------------------------------------
   /**
    * Gets the callback object.
-   * 
+   *
    * @return the callback object, not null
    */
   protected DbConventionBeanMasterCallback getCallback() {
@@ -100,10 +100,10 @@ public class DbConventionBeanMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public ConventionMetaDataResult metaData(ConventionMetaDataRequest request) {
-    ConventionMetaDataResult result = new ConventionMetaDataResult();
+  public ConventionMetaDataResult metaData(final ConventionMetaDataRequest request) {
+    final ConventionMetaDataResult result = new ConventionMetaDataResult();
     if (request.isConventionTypes()) {
-      for (String type : getDelegate().getAllSubTypes()) {
+      for (final String type : getDelegate().getAllSubTypes()) {
         result.getConventionTypes().add(ConventionType.of(type));
       }
     }
@@ -114,8 +114,8 @@ public class DbConventionBeanMaster
   }
 
   @Override
-  public ConventionSearchResult search(ConventionSearchRequest request) {
-    BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
+  public ConventionSearchResult search(final ConventionSearchRequest request) {
+    final BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
     delegatedRequest.setPagingRequest(request.getPagingRequest());
     delegatedRequest.setVersionCorrection(request.getVersionCorrection());
     delegatedRequest.setObjectIds(request.getObjectIds());
@@ -131,7 +131,7 @@ public class DbConventionBeanMaster
   }
 
   @Override
-  public ConventionHistoryResult history(ConventionHistoryRequest request) {
+  public ConventionHistoryResult history(final ConventionHistoryRequest request) {
     return getDelegate().history(request, new ConventionHistoryResult());
   }
 

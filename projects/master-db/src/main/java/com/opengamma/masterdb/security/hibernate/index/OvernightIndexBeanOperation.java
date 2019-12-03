@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -30,7 +30,7 @@ public final class OvernightIndexBeanOperation extends AbstractSecurityBeanOpera
   }
 
   @Override
-  public OvernightIndexBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, OvernightIndex index) {
+  public OvernightIndexBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final OvernightIndex index) {
     final OvernightIndexBean bean = new OvernightIndexBean();
     bean.setDescription(index.getDescription());
     bean.setConventionId(externalIdToExternalIdBean(index.getConventionId()));
@@ -41,10 +41,10 @@ public final class OvernightIndexBeanOperation extends AbstractSecurityBeanOpera
   }
 
   @Override
-  public OvernightIndex createSecurity(final OperationContext context, OvernightIndexBean bean) {
-    String description = bean.getDescription();
-    ExternalId conventionId = externalIdBeanToExternalId(bean.getConventionId());
-    OvernightIndex overnightIndex = new OvernightIndex("", description, conventionId);
+  public OvernightIndex createSecurity(final OperationContext context, final OvernightIndexBean bean) {
+    final String description = bean.getDescription();
+    final ExternalId conventionId = externalIdBeanToExternalId(bean.getConventionId());
+    final OvernightIndex overnightIndex = new OvernightIndex("", description, conventionId);
     if (bean.getIndexFamilyId() != null) {
       overnightIndex.setIndexFamilyId(externalIdBeanToExternalId(bean.getIndexFamilyId()));
     }

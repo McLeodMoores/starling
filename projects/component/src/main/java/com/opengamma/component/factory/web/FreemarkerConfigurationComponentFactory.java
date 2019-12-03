@@ -60,41 +60,41 @@ public class FreemarkerConfigurationComponentFactory extends AbstractComponentFa
   private String _templateLocations;
 
   @Override
-  public void init(ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
-    String[] locations = _templateLocations.split(",");
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final String[] locations = _templateLocations.split(",");
     repo.registerServletContextAware(new FreemarkerInitializer(locations));
   }
 
   //-------------------------------------------------------------------------
   static final class FreemarkerInitializer implements ServletContextAware {
     private final String[] _locations;
-    FreemarkerInitializer(String[] locations) {
+    FreemarkerInitializer(final String[] locations) {
       _locations = locations;
     }
 
     @Override
-    public void setServletContext(ServletContext servletContext) {
-      Configuration cfg = FreemarkerOutputter.createConfiguration();
+    public void setServletContext(final ServletContext servletContext) {
+      final Configuration cfg = FreemarkerOutputter.createConfiguration();
       cfg.setTemplateLoader(new MultiTemplateLoader(createLoaders(_locations, servletContext)));
       FreemarkerOutputter.init(servletContext, cfg);
     }
   }
 
-  static TemplateLoader[] createLoaders(String[] locations, ServletContext servletContext) {
-    Collection<TemplateLoader> templateLoaders = new ArrayList<TemplateLoader>();
-    for (String location : locations) {
-      String[] prefixAndBase = StringUtils.split(location, ":", 2);
+  static TemplateLoader[] createLoaders(final String[] locations, final ServletContext servletContext) {
+    final Collection<TemplateLoader> templateLoaders = new ArrayList<>();
+    for (final String location : locations) {
+      final String[] prefixAndBase = StringUtils.split(location, ":", 2);
       if (prefixAndBase.length != 2) {
         throw new OpenGammaRuntimeException("Invalid Freemarker template location: " + location);
       }
-      String prefix = prefixAndBase[0].trim();
-      String base = prefixAndBase[1].trim();
+      final String prefix = prefixAndBase[0].trim();
+      final String base = prefixAndBase[1].trim();
       if (SERVLET_CONTEXT.equals(prefix)) {
         templateLoaders.add(new WebappTemplateLoader(servletContext, base));
       } else if (FILE.equals(prefix)) {
         try {
           templateLoaders.add(new FileTemplateLoader(new File(base)));
-        } catch (IOException e) {
+        } catch (final IOException e) {
           throw new OpenGammaRuntimeException("Unable to load Freemarker templates from " + base, e);
         }
       } else {

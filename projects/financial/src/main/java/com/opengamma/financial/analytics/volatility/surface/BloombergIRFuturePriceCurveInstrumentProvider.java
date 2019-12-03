@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -17,13 +17,14 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
 
 /**
- *  Provider of Interest Rate Future Instrument ID's.
- *  Tied closely to BloombergIRFutureInstrumentProviderUtils.
+ * Provider of Interest Rate Future Instrument ID's. Tied closely to BloombergIRFutureInstrumentProviderUtils.
  */
 public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePriceCurveInstrumentProvider<Number> {
-  
+
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.###");
-  static { FORMATTER.setMinimumFractionDigits(3); }
+  static {
+    FORMATTER.setMinimumFractionDigits(3);
+  }
 
   private final String _futurePrefix;
   private final String _postfix;
@@ -31,12 +32,16 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
   private final String _tickerScheme;
 
   /**
-   * @param futurePrefix Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
-   * @param postfix Generally, "Comdty" 
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
-   * @param tickerScheme Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
+   * @param futurePrefix
+   *          Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
+   * @param postfix
+   *          Generally, "Comdty"
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param tickerScheme
+   *          Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
    */
-  public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, String tickerScheme) {
+  public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");
@@ -47,10 +52,15 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
     _tickerScheme = tickerScheme;
   }
 
-  /** If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme 
-   * @param futurePrefix Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
-   * @param postfix Generally, "Comdty" 
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_PRICE 
+  /**
+   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme.
+   *
+   * @param futurePrefix
+   *          Two character string representing future type. e.g ED, ER, IR (See WIR in BBG)
+   * @param postfix
+   *          Generally, "Comdty"
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_PRICE
    */
   public BloombergIRFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName) {
     Validate.notNull(futurePrefix, "future option prefix");
@@ -69,20 +79,22 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
 
   @Override
   /**
-   * Provides ExternalID for Bloomberg ticker, eg EDZ3 Comdty,
-   * given a reference date and an integer offset, the n'th subsequent future
-   * The format is _futurePrefix + month + year + _postfix
+   * Provides ExternalID for Bloomberg ticker, eg EDZ3 Comdty, given a reference date and an integer offset, the n'th subsequent future The format is
+   * _futurePrefix + month + year + _postfix
    * <p>
-   * Note that midcurve options are written on underlying futures that expire some number of quarters after the option's expiry.
-   * The logic of this is based on the _futurePrefix.
+   * Note that midcurve options are written on underlying futures that expire some number of quarters after the option's expiry. The logic of this is based on
+   * the _futurePrefix.
    * <p>
-   * @param futureNumber n'th future following curve date
-   * @param curveDate date of curve validity; valuation date
+   *
+   * @param futureNumber
+   *          n'th future following curve date
+   * @param curveDate
+   *          date of curve validity; valuation date
    */
   public ExternalId getInstrument(final Number futureNumber, final LocalDate curveDate) {
     final StringBuffer ticker = new StringBuffer();
     ticker.append(_futurePrefix);
-    
+
     // nQuartersDelay is used to handle mid-curve options
     int nQuartersDelay = 0;
     if ("0R".equals(_futurePrefix)) {
@@ -106,7 +118,7 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
   public String getTickerScheme() {
     return _tickerScheme;
   }
-  
+
   @Override
   public String getDataFieldName() {
     return _dataFieldName;
@@ -126,9 +138,9 @@ public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePric
       return false;
     }
     final BloombergIRFuturePriceCurveInstrumentProvider other = (BloombergIRFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-           getPostfix().equals(other.getPostfix()) &&
-           getDataFieldName().equals(other.getDataFieldName());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

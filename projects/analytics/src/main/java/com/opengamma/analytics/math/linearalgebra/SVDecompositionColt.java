@@ -7,14 +7,14 @@ package com.opengamma.analytics.math.linearalgebra;
 
 import org.apache.commons.lang.Validate;
 
-import cern.colt.matrix.linalg.SingularValueDecomposition;
-
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.ColtMathWrapper;
 
+import cern.colt.matrix.linalg.SingularValueDecomposition;
+
 /**
- * This class is a wrapper for the <a href="http://acs.lbl.gov/software/colt/api/cern/colt/matrix/linalg/SingularValueDecomposition.html">Colt Math library implementation</a>
- * of singular value decomposition.
+ * This class is a wrapper for the <a href="http://acs.lbl.gov/software/colt/api/cern/colt/matrix/linalg/SingularValueDecomposition.html">Colt Math library
+ * implementation</a> of singular value decomposition.
  */
 public class SVDecompositionColt extends Decomposition<SVDecompositionResult> {
 

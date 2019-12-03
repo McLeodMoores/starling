@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 import com.opengamma.master.marketdatasnapshot.impl.DataMarketDataSnapshotMasterResource;
 import com.opengamma.master.marketdatasnapshot.impl.EHCachingMarketDataSnapshotMaster;
 import com.opengamma.master.marketdatasnapshot.impl.RemoteMarketDataSnapshotMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined snapshot master.
@@ -62,14 +62,14 @@ public class EHCachingMarketDataSnapshotMasterComponentFactory extends AbstractC
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> marketdatasnapshoturation) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> marketdatasnapshoturation) {
 
-    MarketDataSnapshotMaster master = new EHCachingMarketDataSnapshotMaster(getClassifier(),
+    final MarketDataSnapshotMaster master = new EHCachingMarketDataSnapshotMaster(getClassifier(),
                                                       getUnderlying(),
                                                       getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(MarketDataSnapshotMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(MarketDataSnapshotMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteMarketDataSnapshotMaster.class);

@@ -18,7 +18,8 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * The greeks returned are delta, dual-delta, rho, carry rho, theta and vega.
  */
-public final class ComFutOptBjerksundStenslandGreekCalculator extends CommodityFutureOptionSameMethodVisitorAdapter<StaticReplicationDataBundle, GreekResultCollection> {
+public final class ComFutOptBjerksundStenslandGreekCalculator
+extends CommodityFutureOptionSameMethodVisitorAdapter<StaticReplicationDataBundle, GreekResultCollection> {
   /** A static instance of this calculator */
   private static final ComFutOptBjerksundStenslandGreekCalculator INSTANCE = new ComFutOptBjerksundStenslandGreekCalculator();
   /** The pricing model */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -33,12 +33,13 @@ import com.opengamma.transport.jms.JmsByteArrayMessageSender;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.rest.AbstractDataResource;
+
 /**
- * Publishes a {@link FunctionBlacklist} to remote clients
+ * Publishes a {@link FunctionBlacklist} to remote clients.
  */
 public class DataFunctionBlacklistResource extends AbstractDataResource implements FunctionBlacklistRuleListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DataFunctionBlacklistResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataFunctionBlacklistResource.class);
 
   private final FunctionBlacklist _underlying;
   private final FudgeContext _fudgeContext;
@@ -50,13 +51,13 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _underlying = underlying;
     _fudgeContext = fudgeContext;
-    String name = jmsConnector.getTopicName();
+    final String name = jmsConnector.getTopicName();
     if (name == null) {
       _jmsTopic = underlying.getName() + "_BLACKLIST";
     } else {
       _jmsTopic = name + "_" + underlying.getName() + "_BLACKLIST";
     }
-    JmsByteArrayMessageSender jmsSender = new JmsByteArrayMessageSender(_jmsTopic, jmsConnector.getJmsTemplateTopic());
+    final JmsByteArrayMessageSender jmsSender = new JmsByteArrayMessageSender(_jmsTopic, jmsConnector.getJmsTemplateTopic());
     _publish = new ByteArrayFudgeMessageSender(jmsSender, fudgeContext);
     underlying.addRuleListener(this);
   }
@@ -76,7 +77,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     info.add(NAME_FIELD, getUnderlying().getName());
     info.add(MODIFICATION_COUNT_FIELD, getUnderlying().getModificationCount());
     final MutableFudgeMsg rules = info.addSubMessage(RULES_FIELD, null);
-    for (FunctionBlacklistRule rule : getUnderlying().getRules()) {
+    for (final FunctionBlacklistRule rule : getUnderlying().getRules()) {
       fsc.addToMessage(rules, null, null, rule);
     }
     info.add(JMS_TOPIC_FIELD, _jmsTopic);
@@ -92,7 +93,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     if (modificationCount != mod) {
       info.add(MODIFICATION_COUNT_FIELD, modificationCount);
       final MutableFudgeMsg rules = info.addSubMessage(RULES_FIELD, null);
-      for (FunctionBlacklistRule rule : getUnderlying().getRules()) {
+      for (final FunctionBlacklistRule rule : getUnderlying().getRules()) {
         fsc.addToMessage(rules, null, null, rule);
       }
     }
@@ -103,7 +104,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
 
     private final FudgeMsg _msg;
 
-    public Publish(final FudgeMsg msg) {
+    Publish(final FudgeMsg msg) {
       _msg = msg;
     }
 
@@ -111,8 +112,8 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     public void run() {
       try {
         _publish.send(_msg);
-      } catch (RuntimeException e) {
-        s_logger.warn("Error publishing JMS message", e);
+      } catch (final RuntimeException e) {
+        LOGGER.warn("Error publishing JMS message", e);
       }
     }
 
@@ -134,7 +135,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     final MutableFudgeMsg msg = fsc.newMessage();
     msg.add(MODIFICATION_COUNT_FIELD, modificationCount);
     final MutableFudgeMsg rulesMessage = msg.addSubMessage(RULES_ADDED_FIELD, null);
-    for (FunctionBlacklistRule rule : rules) {
+    for (final FunctionBlacklistRule rule : rules) {
       fsc.addToMessage(rulesMessage, null, null, rule);
     }
     defer.submit(new Publish(msg));
@@ -156,7 +157,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
     final MutableFudgeMsg msg = fsc.newMessage();
     msg.add(MODIFICATION_COUNT_FIELD, modificationCount);
     final MutableFudgeMsg rulesMessage = msg.addSubMessage(RULES_REMOVED_FIELD, null);
-    for (FunctionBlacklistRule rule : rules) {
+    for (final FunctionBlacklistRule rule : rules) {
       fsc.addToMessage(rulesMessage, null, null, rule);
     }
     defer.submit(new Publish(msg));

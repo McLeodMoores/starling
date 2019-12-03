@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.impl.DataPositionMasterResource;
 import com.opengamma.master.position.impl.EHCachingPositionMaster;
 import com.opengamma.master.position.impl.RemotePositionMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined position master.
@@ -62,14 +62,14 @@ public class EHCachingPositionMasterComponentFactory extends AbstractComponentFa
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
 
-    PositionMaster master = new EHCachingPositionMaster(getClassifier(),
+    final PositionMaster master = new EHCachingPositionMaster(getClassifier(),
                                                         getUnderlying(),
                                                         getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(PositionMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(PositionMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePositionMaster.class);

@@ -10,8 +10,8 @@ import com.opengamma.core.security.Security;
 /**
  * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate
  * for pricing using an interpolated Black lognormal volatility surface.<p>
- * In this class, the inputs are keyed by SecurityType, a string available on all Security's. 
- * So, for example, for 'ForwardCurveCalculationMethod', EQUITY_OPTION's might use 'YieldCurveImplied' 
+ * In this class, the inputs are keyed by SecurityType, a string available on all Security's.
+ * So, for example, for 'ForwardCurveCalculationMethod', EQUITY_OPTION's might use 'YieldCurveImplied'
  * while EQUITY_INDEX_OPTION's might use 'FuturePriceMethod'
  */
 public class EquityOptionInterpolatedBlackLognormalPerSecurityTypeDefaults extends EquityOptionInterpolatedBlackLognormalDefaults {
@@ -21,7 +21,7 @@ public class EquityOptionInterpolatedBlackLognormalPerSecurityTypeDefaults exten
   }
 
   @Override
-  protected String getId(Security security) {
+  protected String getId(final Security security) {
     return security.getSecurityType();
   }
 

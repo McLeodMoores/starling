@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.ehcache.CacheManager;
 
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
@@ -41,6 +39,8 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.Timeout;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.CacheManager;
 
 @Test(groups = {TestGroup.INTEGRATION, "ehcache"})
 public class PrivateToSharedTransferTest {
@@ -91,7 +91,7 @@ public class PrivateToSharedTransferTest {
     assertEquals("One", value);
     value = cache.getValue(specs[2]);
     assertNull(value);
-    Collection<Pair<ValueSpecification, Object>> values = cache.getValues(Arrays.asList(specs[2], specs[3]));
+    final Collection<Pair<ValueSpecification, Object>> values = cache.getValues(Arrays.asList(specs[2], specs[3]));
     assertNotNull(values);
     assertTrue(values.isEmpty());
   }
@@ -99,7 +99,7 @@ public class PrivateToSharedTransferTest {
   @Test
   public void testMissingValueLoader_withCallback() {
     final IdentifierMap identifiers = new InMemoryIdentifierMap();
-    final Set<Integer> missing = new HashSet<Integer>();
+    final Set<Integer> missing = new HashSet<>();
     final DefaultViewComputationCacheSource source = new DefaultViewComputationCacheSource(identifiers,
         FudgeContext.GLOBAL_DEFAULT, createInMemoryFudgeMessageStoreFactory(FudgeContext.GLOBAL_DEFAULT));
     final UniqueId viewCycleId = UniqueId.of("Test", "ViewCycle");
@@ -110,7 +110,7 @@ public class PrivateToSharedTransferTest {
         assertEquals(viewCycleId, cache.getViewCycleId());
         assertEquals("Default", cache.getCalculationConfigurationName());
         final ValueSpecification spec = identifiers.getValueSpecification(identifier);
-        int i = Integer.parseInt(spec.getValueName());
+        final int i = Integer.parseInt(spec.getValueName());
         missing.add(i);
         switch (i) {
           case 0:
@@ -128,8 +128,8 @@ public class PrivateToSharedTransferTest {
       @Override
       public Map<Long, FudgeMsg> findMissingValues(final ViewComputationCacheKey cache,
           final Collection<Long> identifiers) {
-        final Map<Long, FudgeMsg> map = new HashMap<Long, FudgeMsg>();
-        for (Long identifier : identifiers) {
+        final Map<Long, FudgeMsg> map = new HashMap<>();
+        for (final Long identifier : identifiers) {
           map.put(identifier, findMissingValue(cache, identifier));
         }
         return map;
@@ -151,17 +151,17 @@ public class PrivateToSharedTransferTest {
     missing.clear();
     Collection<Pair<ValueSpecification, Object>> values = cache.getValues(Arrays.asList(specs[2], specs[3]));
     assertEquals(2, values.size());
-    assertTrue(values.contains(Pairs.of(specs[2], "Two")));
-    assertTrue(values.contains(Pairs.of(specs[3], "Three")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[2], "Two")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[3], "Three")));
     assertEquals(2, missing.size());
     assertTrue(missing.contains(2));
     assertTrue(missing.contains(3));
     missing.clear();
     values = cache.getValues(Arrays.asList(specs[0], specs[1], specs[2]));
     assertEquals(3, values.size());
-    assertTrue(values.contains(Pairs.of(specs[0], "Zero")));
-    assertTrue(values.contains(Pairs.of(specs[1], "One")));
-    assertTrue(values.contains(Pairs.of(specs[2], "Two")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[0], "Zero")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[1], "One")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[2], "Two")));
     assertEquals(1, missing.size());
     assertTrue(missing.contains(2));
   }
@@ -188,7 +188,7 @@ public class PrivateToSharedTransferTest {
         new RemoteCacheClient(conduit3.getEnd2()), createInMemoryFudgeMessageStoreFactory(fudgeContext), _cacheManager);
     // Populate the test caches
     final ValueSpecification[] specs = createValueSpecifications(10);
-    UniqueId viewCycleId = UniqueId.of("Test", "ViewCycle");
+    final UniqueId viewCycleId = UniqueId.of("Test", "ViewCycle");
     final ViewComputationCache serverCache = serverCacheSource.getCache(viewCycleId, "Default");
     final ViewComputationCache remoteCache1 = remoteCacheSource1.getCache(viewCycleId, "Default");
     final ViewComputationCache remoteCache2 = remoteCacheSource2.getCache(viewCycleId, "Default");
@@ -241,10 +241,10 @@ public class PrivateToSharedTransferTest {
     Collection<Pair<ValueSpecification, Object>> values = serverCache.getValues(Arrays.asList(specs[4], specs[5],
         specs[6]));
     assertEquals(3, values.size());
-    assertTrue(values.contains(Pairs.of(specs[4], "Four")));
-    assertTrue(values.contains(Pairs.of(specs[5], "Five")));
-    assertTrue(values.contains(Pairs.of(specs[6], "Six")));
-    // One message sent to each, 1 response (and ack) from client1 and 2
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[4], "Four")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[5], "Five")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[6], "Six")));
+    // One message sent to each, 1 response (and back) from client1 and 2
     Thread.sleep(Timeout.standardTimeoutMillis());
     assertEquals(2, conduit1.getAndResetMessages1To2());
     assertEquals(1, conduit1.getAndResetMessages2To1());
@@ -260,7 +260,7 @@ public class PrivateToSharedTransferTest {
     // Query for one existing and one non-existent value
     values = serverCache.getValues(Arrays.asList(specs[7], specs[8]));
     assertEquals(1, values.size());
-    assertTrue(values.contains(Pairs.of(specs[7], "Seven")));
+    assertTrue(values.contains(Pairs.<ValueSpecification, Object> of(specs[7], "Seven")));
     assertEquals(2, conduit3.getAndResetMessages1To2());
     assertEquals(1, conduit3.getAndResetMessages2To1());
     // Query for two non-existing values

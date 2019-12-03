@@ -11,16 +11,16 @@ import com.opengamma.provider.historicaltimeseries.impl.MarketDataProviderHistor
 
 /**
  * Loads time-series from Bloomberg.
- * This class is now implemented on top of HistoricalTimeSeriesProvider and is effectively deprecated. 
+ * This class is now implemented on top of HistoricalTimeSeriesProvider and is effectively deprecated.
  */
 public class BloombergHistoricalTimeSeriesSource extends MarketDataProviderHistoricalTimeSeriesSource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param provider  the time-series provider, not null
    */
-  public BloombergHistoricalTimeSeriesSource(HistoricalTimeSeriesProvider provider) {
+  public BloombergHistoricalTimeSeriesSource(final HistoricalTimeSeriesProvider provider) {
     super("Bloomberg", new UniqueIdSupplier("BbgHTS"), provider);
   }
 

@@ -76,7 +76,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
 
   protected DiscountingMethodBondCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
       final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+      final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
@@ -104,8 +105,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
 
   @Override
   public DiscountingMethodBondCurveSetUp copy() {
-    return new DiscountingMethodBondCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _issuerCurves, _nodes, _newNodes, _fixingTs, _curveTypes,
-        _knownData, _knownBundle);
+    return new DiscountingMethodBondCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _issuerCurves, _nodes,
+        _newNodes, _fixingTs, _curveTypes, _knownData, _knownBundle);
   }
 
   @Override
@@ -147,7 +148,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
 
 
   @Override
-  public DiscountingMethodBondCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData) {
+  public DiscountingMethodBondCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator,
+      final GeneratorAttribute attributeGenerator, final double marketData) {
     Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new LinkedHashMap<>();

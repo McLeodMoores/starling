@@ -20,11 +20,13 @@ public class FuturePriceCurveSpecification {
   private final FuturePriceCurveInstrumentProvider<?> _curveInstrumentProvider;
   private final boolean _useUnderlyingForExpiry;
 
-  public FuturePriceCurveSpecification(final String name, final UniqueIdentifiable target, final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider) {
+  public FuturePriceCurveSpecification(final String name, final UniqueIdentifiable target,
+      final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider) {
     this(name, target, curveInstrumentProvider, false);
   }
 
-  public FuturePriceCurveSpecification(final String name, final UniqueIdentifiable target, final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider,
+  public FuturePriceCurveSpecification(final String name, final UniqueIdentifiable target,
+      final FuturePriceCurveInstrumentProvider<?> curveInstrumentProvider,
       final boolean useUnderlyingForExpiry) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(target, "target");
@@ -68,9 +70,9 @@ public class FuturePriceCurveSpecification {
       return false;
     }
     final FuturePriceCurveSpecification other = (FuturePriceCurveSpecification) o;
-    return other.getName().equals(getName()) &&
-           other.getCurveInstrumentProvider().equals(getCurveInstrumentProvider()) &&
-           other.getTarget().equals(getTarget()) &&
-           other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
+    return other.getName().equals(getName())
+        && other.getCurveInstrumentProvider().equals(getCurveInstrumentProvider())
+        && other.getTarget().equals(getTarget())
+        && other.isUseUnderlyingSecurityForExpiry() == isUseUnderlyingSecurityForExpiry();
   }
 }

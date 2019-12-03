@@ -20,7 +20,7 @@ import com.opengamma.id.ExternalIdBundle;
 public class BloombergFixedRateHistoricalTimeSeriesNormalizer implements HistoricalTimeSeriesAdjuster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergFixedRateHistoricalTimeSeriesNormalizer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergFixedRateHistoricalTimeSeriesNormalizer.class);
 
   private final HistoricalTimeSeriesAdjustment _normalization;
 
@@ -29,7 +29,7 @@ public class BloombergFixedRateHistoricalTimeSeriesNormalizer implements Histori
   }
 
   @Override
-  public HistoricalTimeSeries adjust(ExternalIdBundle securityIdBundle, HistoricalTimeSeries timeSeries) {
+  public HistoricalTimeSeries adjust(final ExternalIdBundle securityIdBundle, final HistoricalTimeSeries timeSeries) {
     return _normalization.adjust(timeSeries);
   }
 

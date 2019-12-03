@@ -35,7 +35,7 @@ public class ExtId {
     return _scheme;
   }
 
-  public void setScheme(String scheme) {
+  public void setScheme(final String scheme) {
     this._scheme = scheme;
   }
 
@@ -43,7 +43,7 @@ public class ExtId {
     return _id;
   }
 
-  public void setId(String id) {
+  public void setId(final String id) {
     _id = id;
   }
 

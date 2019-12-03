@@ -44,51 +44,53 @@ import com.opengamma.web.WebPaging;
 public class WebFunctionsResource extends AbstractWebFunctionResource {
 
   private static String s_parameterizedFunctionUri = "parameterziedfunction";
-  
+
   /**
    * Creates the resource.
-   * @param functionConfigurationSource  the function master, not null
+   * 
+   * @param functionConfigurationSource
+   *          the function master, not null
    */
   public WebFunctionsResource(final FunctionConfigurationSource functionConfigurationSource) {
     super(functionConfigurationSource);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("parameterized") String parameterized,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    //TODO sort: FunctionSearchSortOrder so = buildSortOrder(sort, FunctionSearchSortOrder.NAME_ASC);
-    FlexiBean out = createSearchResultData(pr, name, parameterized, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("parameterized") final String parameterized,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    // TODO sort: FunctionSearchSortOrder so = buildSortOrder(sort, FunctionSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, name, parameterized, uriInfo);
     return getFreemarker().build(HTML_DIR + "functions.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(PagingRequest pr, String name, String parameterized, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    WebFunctionSearchRequest searchRequest = new WebFunctionSearchRequest();
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String name, final String parameterized, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final WebFunctionSearchRequest searchRequest = new WebFunctionSearchRequest();
     searchRequest.setName(name);
     searchRequest.setParameterized(parameterized);
-    
-    Predicate<WebFunctionTypeDetails> predicate = buildPredicate(name, parameterized);
-    
-    out.put("searchRequest", searchRequest); 
-    
+
+    final Predicate<WebFunctionTypeDetails> predicate = buildPredicate(name, parameterized);
+
+    out.put("searchRequest", searchRequest);
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      WebFunctionQueryDelegate queryDelegate = new WebFunctionQueryDelegate(data().getFunctionSource());
-      SortedMap<String, WebFunctionTypeDetails> allFunctions = queryDelegate.query(predicate);
-      
-      int total = allFunctions.size();
-      int limit = Ints.min(pr.getLastItem(), total);
-      List<WebFunctionTypeDetails> functions = Lists.newArrayList(allFunctions.values()).subList(pr.getFirstItem(), limit);
-      WebFunctionSearchResult result = new WebFunctionSearchResult();
+      final WebFunctionQueryDelegate queryDelegate = new WebFunctionQueryDelegate(data().getFunctionSource());
+      final SortedMap<String, WebFunctionTypeDetails> allFunctions = queryDelegate.query(predicate);
+
+      final int total = allFunctions.size();
+      final int limit = Ints.min(pr.getLastItem(), total);
+      final List<WebFunctionTypeDetails> functions = Lists.newArrayList(allFunctions.values()).subList(pr.getFirstItem(), limit);
+      final WebFunctionSearchResult result = new WebFunctionSearchResult();
       result.setFunctions(functions);
       out.put("searchResult", result);
       out.put("paging", new WebPaging(Paging.of(pr, total), uriInfo));
@@ -96,8 +98,8 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
     return out;
   }
 
-  private Predicate<WebFunctionTypeDetails> buildPredicate(String name, String parameterized) {
-    List<Predicate<WebFunctionTypeDetails>> predicates = Lists.newLinkedList();
+  private static Predicate<WebFunctionTypeDetails> buildPredicate(final String name, final String parameterized) {
+    final List<Predicate<WebFunctionTypeDetails>> predicates = Lists.newLinkedList();
     if (!isEmpty(parameterized)) {
       if ("Y".equals(parameterized)) {
         predicates.add(new IsParameterized());
@@ -105,74 +107,73 @@ public class WebFunctionsResource extends AbstractWebFunctionResource {
         predicates.add(not(new IsParameterized()));
       }
     }
-    
+
     if (!isEmpty(name)) {
       predicates.add(new NameContains(name));
     }
-    
-    Predicate<WebFunctionTypeDetails> predicate = Predicates.and(predicates);
+
+    final Predicate<WebFunctionTypeDetails> predicate = Predicates.and(predicates);
     return predicate;
   }
 
   @Path("parameterziedfunction/{functionName}")
-  public WebParameterizedFunctionResource getParameterizedFunction(@PathParam("functionName") String functionName) {
+  public WebParameterizedFunctionResource getParameterizedFunction(@PathParam("functionName") final String functionName) {
     data().setUriFunctionName(functionName);
     return new WebParameterizedFunctionResource(this);
   }
-  
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for functions.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebFunctionData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebFunctionsResource.class);
+  public static URI uri(final WebFunctionData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebFunctionsResource.class);
     return builder.build();
   }
-  
-  
+
   /**
    * Builds a URI for parameterized functions.
-   * @param data context data
-   * @param functionId the function name
+   * 
+   * @param data
+   *          context data
+   * @param functionId
+   *          the function name
    * @return the uri
    */
-  public static URI parameterziedFunctionUri(WebFunctionData data, String functionId) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebFunctionsResource.class);
+  public static URI parameterziedFunctionUri(final WebFunctionData data, final String functionId) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebFunctionsResource.class);
     builder.path(s_parameterizedFunctionUri).path(functionId).build();
     return builder.build();
   }
-  
-  
 
-  
   private static class IsParameterized implements Predicate<WebFunctionTypeDetails> {
 
     @Override
-    public boolean apply(WebFunctionTypeDetails input) {
+    public boolean apply(final WebFunctionTypeDetails input) {
       return input.isParameterized();
     }
-    
+
   }
-  
+
   private static class NameContains implements Predicate<WebFunctionTypeDetails> {
 
     private final Pattern _pattern;
-    
-    public NameContains(String pattern) {
+
+    NameContains(final String pattern) {
       super();
       _pattern = Pattern.compile(pattern);
     }
 
     @Override
-    public boolean apply(WebFunctionTypeDetails input) {
-      Matcher matcher = _pattern.matcher(input.getSimpleName());
+    public boolean apply(final WebFunctionTypeDetails input) {
+      final Matcher matcher = _pattern.matcher(input.getSimpleName());
       return matcher.find();
     }
-    
-  }
 
+  }
 
 }

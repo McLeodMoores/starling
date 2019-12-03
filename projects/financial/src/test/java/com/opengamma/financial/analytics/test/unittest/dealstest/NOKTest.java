@@ -19,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class NOKTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(NOKTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NOKTest.class);
   private static final String CURRENCY = "NOK";
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -36,6 +36,6 @@ public class NOKTest {
       }
 
     }
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 }

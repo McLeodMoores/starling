@@ -49,17 +49,18 @@ import com.opengamma.id.VersionCorrection;
       final Instant valuationTime, final VersionCorrection resolverVersionCorrection, final ConcurrentMap<ComputationTargetReference, UniqueId> resolutions) {
     _viewDefinition = viewDefinition;
     _services = compilationServices;
-    _builders = new LinkedList<DependencyGraphBuilder>();
+    _builders = new LinkedList<>();
     _expiredResolutions = Sets.newSetFromMap(new ConcurrentHashMap<UniqueId, Boolean>());
     _functions = compilationServices.getFunctionResolver().compile(valuationTime);
     _rules = _functions.getAllResolutionRules();
-    _targetResolver = TargetResolutionLogger.of(compilationServices.getFunctionCompilationContext().getRawComputationTargetResolver().atVersionCorrection(resolverVersionCorrection), resolutions,
-        _expiredResolutions);
+    _targetResolver = TargetResolutionLogger.of(compilationServices.getFunctionCompilationContext()
+          .getRawComputationTargetResolver().atVersionCorrection(resolverVersionCorrection), resolutions,
+            _expiredResolutions);
     for (final ViewCalculationConfiguration calcConfig : viewDefinition.getAllCalculationConfigurations()) {
       _builders.add(createBuilder(calcConfig));
     }
     _resolverVersionCorrection = resolverVersionCorrection;
-    _graphs = new ArrayList<DependencyGraph>(_builders.size());
+    _graphs = new ArrayList<>(_builders.size());
     _activeResolutions = resolutions;
   }
 

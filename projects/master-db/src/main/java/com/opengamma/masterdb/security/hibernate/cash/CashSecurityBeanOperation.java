@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -37,12 +37,12 @@ public final class CashSecurityBeanOperation extends AbstractSecurityBeanOperati
   }
 
   @Override
-  public CashSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, CashSecurity security) {
-    CurrencyBean currencyBean = secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode());
-    ExternalIdBean regionIdentifier = externalIdToExternalIdBean(security.getRegionId());
-    ZonedDateTimeBean startBean = dateTimeWithZoneToZonedDateTimeBean(security.getStart());
-    ZonedDateTimeBean maturityBean = dateTimeWithZoneToZonedDateTimeBean(security.getMaturity());
-    DayCountBean dayCountBean = secMasterSession.getOrCreateDayCountBean(security.getDayCount().getName());
+  public CashSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CashSecurity security) {
+    final CurrencyBean currencyBean = secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode());
+    final ExternalIdBean regionIdentifier = externalIdToExternalIdBean(security.getRegionId());
+    final ZonedDateTimeBean startBean = dateTimeWithZoneToZonedDateTimeBean(security.getStart());
+    final ZonedDateTimeBean maturityBean = dateTimeWithZoneToZonedDateTimeBean(security.getMaturity());
+    final DayCountBean dayCountBean = secMasterSession.getOrCreateDayCountBean(security.getDayCount().getName());
     final CashSecurityBean bean = new CashSecurityBean();
     bean.setCurrency(currencyBean);
     bean.setRegion(regionIdentifier);
@@ -55,9 +55,10 @@ public final class CashSecurityBeanOperation extends AbstractSecurityBeanOperati
   }
 
   @Override
-  public CashSecurity createSecurity(final OperationContext context, CashSecurityBean bean) {
-    final CashSecurity security = new CashSecurity(currencyBeanToCurrency(bean.getCurrency()), externalIdBeanToExternalId(bean.getRegion()), 
-                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getStart()), zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
+  public CashSecurity createSecurity(final OperationContext context, final CashSecurityBean bean) {
+    final CashSecurity security = new CashSecurity(currencyBeanToCurrency(bean.getCurrency()), externalIdBeanToExternalId(bean.getRegion()),
+                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getStart()),
+                                                   zonedDateTimeBeanToDateTimeWithZone(bean.getMaturity()),
                                                    dayCountBeanToDayCount(bean.getDayCount()), bean.getRate(), bean.getAmount());
     return security;
   }

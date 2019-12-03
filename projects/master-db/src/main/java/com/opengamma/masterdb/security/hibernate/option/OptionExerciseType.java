@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -18,35 +18,35 @@ import com.opengamma.financial.security.option.ExerciseTypeVisitor;
  */
 public enum OptionExerciseType {
 
-  /** American */
+  /** American. */
   AMERICAN,
-  /** Asian */
+  /** Asian. */
   ASIAN,
-  /** Bermudan */
+  /** Bermudan. */
   BERMUDAN,
-  /** European */
+  /** European. */
   EUROPEAN;
 
-  public static OptionExerciseType identify(ExerciseType exerciseType) {
+  public static OptionExerciseType identify(final ExerciseType exerciseType) {
     return exerciseType.accept(new ExerciseTypeVisitor<OptionExerciseType>() {
 
       @Override
-      public OptionExerciseType visitAmericanExerciseType(AmericanExerciseType exerciseType) {
+      public OptionExerciseType visitAmericanExerciseType(final AmericanExerciseType exerciseType) {
         return AMERICAN;
       }
 
       @Override
-      public OptionExerciseType visitAsianExerciseType(AsianExerciseType exerciseType) {
+      public OptionExerciseType visitAsianExerciseType(final AsianExerciseType exerciseType) {
         return ASIAN;
       }
 
       @Override
-      public OptionExerciseType visitBermudanExerciseType(BermudanExerciseType exerciseType) {
+      public OptionExerciseType visitBermudanExerciseType(final BermudanExerciseType exerciseType) {
         return BERMUDAN;
       }
 
       @Override
-      public OptionExerciseType visitEuropeanExerciseType(EuropeanExerciseType exerciseType) {
+      public OptionExerciseType visitEuropeanExerciseType(final EuropeanExerciseType exerciseType) {
         return EUROPEAN;
       }
 
@@ -55,13 +55,13 @@ public enum OptionExerciseType {
 
   public <T> T accept(final ExerciseTypeVisitor<T> visitor) {
     switch (this) {
-      case AMERICAN :
+      case AMERICAN:
         return visitor.visitAmericanExerciseType(null);
-      case ASIAN :
+      case ASIAN:
         return visitor.visitAsianExerciseType(null);
-      case BERMUDAN :
+      case BERMUDAN:
         return visitor.visitBermudanExerciseType(null);
-      case EUROPEAN :
+      case EUROPEAN:
         return visitor.visitEuropeanExerciseType(null);
       default:
         throw new OpenGammaRuntimeException("unexpected enum value " + this);

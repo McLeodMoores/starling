@@ -42,7 +42,8 @@ public class OptimisticMarketDataAvailabilityFilterTest {
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Security", "Foo"));
     final ValueRequirement desiredValue = new ValueRequirement("Market_Value", targetSpec);
     assertTrue(availability.isAvailable(targetSpec, new Primitive(UniqueId.of("Security", "Foo")), desiredValue));
-    assertTrue(availability.isAvailable(targetSpec, new ExternalIdentifiablePrimitive(UniqueId.of("Security", "Foo"), ExternalId.of("Foo", "Bar")), desiredValue));
+    assertTrue(availability.isAvailable(targetSpec, new ExternalIdentifiablePrimitive(UniqueId.of("Security", "Foo"),
+        ExternalId.of("Foo", "Bar")), desiredValue));
   }
 
 }

@@ -66,14 +66,14 @@ public class ReferenceDataError extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param field  the field, null if linked to the identifier rather than a field
    * @param code  the error code
    * @param category  the error category, may be null
    * @param subcategory  the error sub-category, may be null
    * @param message  the error message, may be null
    */
-  public ReferenceDataError(String field, int code, String category, String subcategory, String message) {
+  public ReferenceDataError(final String field, final int code, final String category, final String subcategory, final String message) {
     super();
     _field = field;
     _code = code;
@@ -85,7 +85,7 @@ public class ReferenceDataError extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Checks if the error is field-based or not.
-   * 
+   *
    * @return true if field-based, false if identifier-based
    */
   public boolean isFieldBased() {
@@ -94,7 +94,7 @@ public class ReferenceDataError extends DirectBean {
 
   /**
    * Checks if the error is due to not being entitled.
-   * 
+   *
    * @return true if error due to not being entitled
    */
   public boolean isEntitlementError() {

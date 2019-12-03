@@ -10,7 +10,7 @@ import com.opengamma.financial.security.option.OptionType;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the OptionType enum
+ * Custom Hibernate usertype for the OptionType enum.
  */
 public class OptionTypeUserType extends EnumUserType<OptionType> {
 
@@ -19,7 +19,7 @@ public class OptionTypeUserType extends EnumUserType<OptionType> {
   }
 
   @Override
-  protected String enumToStringNoCache(OptionType value) {
+  protected String enumToStringNoCache(final OptionType value) {
     switch (value) {
       case CALL:
         return "call";

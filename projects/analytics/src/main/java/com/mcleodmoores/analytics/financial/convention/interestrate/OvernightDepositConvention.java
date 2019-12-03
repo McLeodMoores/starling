@@ -88,7 +88,7 @@ public class OvernightDepositConvention extends CashConvention {
     ArgumentChecker.notNull(date, "valuationDate");
     final ZonedDateTime startDate = TenorUtils.adjustDateByTenor(date, Tenor.of(Period.ZERO), getCalendar(), 0);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, getCalendar());
-    final double accrualFactor = getDayCount().getDayCountFraction(startDate, endDate, new CalendarAdapter(getCalendar()));
+    final double accrualFactor = getDayCount().getDayCountFraction(startDate, endDate, CalendarAdapter.of(getCalendar()));
     return new CashDefinition(getCurrency(), startDate, endDate, notional, fixedRate, accrualFactor);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -42,7 +42,7 @@ public class SuccessiveRootFinderG2ppCalibrationObjective extends SuccessiveRoot
   private G2ppProviderInterface _g2Provider;
 
   /**
-   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value 
+   * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value
    * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
    * @param parameters The Hull-White parameters.
    * @param ccy The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve).
@@ -64,7 +64,7 @@ public class SuccessiveRootFinderG2ppCalibrationObjective extends SuccessiveRoot
    * @param multicurves The multi-curves provider.
    */
   @Override
-  public void setMulticurves(MulticurveProviderInterface multicurves) {
+  public void setMulticurves(final MulticurveProviderInterface multicurves) {
     _g2Provider = new G2ppProvider(multicurves, _g2Parameters, _ccyG2);
   }
 
@@ -88,17 +88,17 @@ public class SuccessiveRootFinderG2ppCalibrationObjective extends SuccessiveRoot
    * Sets the calibration time for the next calibration.
    * @param calibrationTime The calibration time.
    */
-  public void setNextCalibrationTime(double calibrationTime) {
+  public void setNextCalibrationTime(final double calibrationTime) {
     _g2Parameters.addVolatility(_g2Parameters.getLastVolatilities(), calibrationTime);
   }
 
   @Override
-  public void setInstrument(InstrumentDerivative instrument) {
+  public void setInstrument(final InstrumentDerivative instrument) {
     super.setInstrument(instrument);
   }
 
   @Override
-  public Double evaluate(Double x) {
+  public Double evaluate(final Double x) {
     _g2Provider.getG2ppParameters().setLastVolatilities(new double[] {x, x / _ratio });
     return _g2Provider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVG2C, _g2Provider), _ccyG2).getAmount() - getPrice();
   }

@@ -22,7 +22,7 @@ import com.opengamma.id.UniqueId;
  */
 public class InMemoryLKVMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InMemoryLKVMarketDataSnapshot.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryLKVMarketDataSnapshot.class);
 
   private final InMemoryLKVMarketDataProvider _provider;
   private Instant _snapshotTime;
@@ -52,7 +52,7 @@ public class InMemoryLKVMarketDataSnapshot extends AbstractMarketDataSnapshot {
   public void init(final Set<ValueSpecification> valuesRequired, final long timeout, final TimeUnit unit) {
     _snapshot = getProvider().doSnapshot();
     _snapshotTime = Instant.now();
-    s_logger.debug("Snapshotted at {}", _snapshotTime);
+    LOGGER.debug("Snapshotted at {}", _snapshotTime);
   }
   
   @Override

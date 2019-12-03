@@ -44,10 +44,10 @@ public class Compressor {
   @POST
   @Path("compress")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public Response compress(@FormParam("content") String content) throws IOException {
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  public Response compress(@FormParam("content") final String content) throws IOException {
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     compressStream(new ByteArrayInputStream(content.getBytes()), outputStream);
-    ImmutableMap<String, String> data = ImmutableMap.of("data", outputStream.toString());
+    final ImmutableMap<String, String> data = ImmutableMap.of("data", outputStream.toString());
     return Response.status(Response.Status.OK).entity(new JSONObject(data).toString()).build();
   }
 
@@ -61,18 +61,18 @@ public class Compressor {
   @POST
   @Path("decompress")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public Response decompress(@FormParam("content") String content) throws IOException {
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  public Response decompress(@FormParam("content") final String content) throws IOException {
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     decompressStream(new ByteArrayInputStream(content.getBytes()), outputStream);
-    String data = "{\"data\":" + outputStream.toString() + "}";
+    final String data = "{\"data\":" + outputStream.toString() + "}";
     return Response.status(Response.Status.OK).entity(data).build();
   }
 
-  /* package */ static void compressStream(InputStream inputStream, OutputStream outputStream) throws IOException {
-    InputStream iStream = new BufferedInputStream(inputStream);
-    GZIPOutputStream oStream =
+  /* package */ static void compressStream(final InputStream inputStream, final OutputStream outputStream) throws IOException {
+    final InputStream iStream = new BufferedInputStream(inputStream);
+    final GZIPOutputStream oStream =
         new GZIPOutputStream(new Base64OutputStream(new BufferedOutputStream(outputStream), true, -1, null), 2048);
-    byte[] buffer = new byte[2048];
+    final byte[] buffer = new byte[2048];
     int bytesRead;
     while ((bytesRead = iStream.read(buffer)) != -1) {
       oStream.write(buffer, 0, bytesRead);
@@ -80,11 +80,12 @@ public class Compressor {
     oStream.close(); // this is necessary for the gzip and base64 streams
   }
 
-  /* package */ static void decompressStream(InputStream inputStream, OutputStream outputStream) throws IOException {
+  /* package */ static void decompressStream(final InputStream inputStream, final OutputStream outputStream) throws IOException {
     @SuppressWarnings("resource")
+    final
     InputStream iStream = new GZIPInputStream(new Base64InputStream(new BufferedInputStream(inputStream), false, -1, null));
-    OutputStream oStream = new BufferedOutputStream(outputStream);
-    byte[] buffer = new byte[2048];
+    final OutputStream oStream = new BufferedOutputStream(outputStream);
+    final byte[] buffer = new byte[2048];
     int bytesRead;
     while ((bytesRead = iStream.read(buffer)) != -1) {
       oStream.write(buffer, 0, bytesRead);

@@ -7,26 +7,26 @@ package com.opengamma.integration.tool.enginedebugger.node;
 
 import com.opengamma.engine.value.ValueRequirement;
 
-/** 
- * Node representing a ValueRequirement
+/**
+ * Node representing a ValueRequirement.
  */
 public class ValueRequirementNode implements TreeTableNode {
 
   private static final String NAME = "ValueRequirement";
   /**
-   * Value requirement itself
+   * Value requirement itself.
    */
   protected ValueRequirement _valueRequirement;
   @SuppressWarnings("unused")
-  private Object _parent;
+  private final Object _parent;
 
-  public ValueRequirementNode(Object parent, ValueRequirement valueRequirement) {
+  public ValueRequirementNode(final Object parent, final ValueRequirement valueRequirement) {
     _parent = parent;
     _valueRequirement = valueRequirement;
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     if (_valueRequirement != null) {
       switch (index) {
         case 0:
@@ -42,13 +42,12 @@ public class ValueRequirementNode implements TreeTableNode {
   public int getChildCount() {
     if (_valueRequirement != null) {
       return 2;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (_valueRequirement != null) {
       if (_valueRequirement.getTargetReference() != null) {
         if (child instanceof ComputationTargetReferenceNode) {
@@ -67,7 +66,7 @@ public class ValueRequirementNode implements TreeTableNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     } else if (column == 1) {
@@ -80,12 +79,12 @@ public class ValueRequirementNode implements TreeTableNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_valueRequirement == null) ? 0 : _valueRequirement.hashCode());
+    result = prime * result + (_valueRequirement == null ? 0 : _valueRequirement.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -95,7 +94,7 @@ public class ValueRequirementNode implements TreeTableNode {
     if (!(obj instanceof ValueRequirementNode)) {
       return false;
     }
-    ValueRequirementNode other = (ValueRequirementNode) obj;
+    final ValueRequirementNode other = (ValueRequirementNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;

@@ -20,7 +20,7 @@ public class LocalDateAdapter extends AbstractDateAdapter<LocalDate> {
   }
 
   @Override
-  public LocalDate unmarshal(String v) throws Exception {
+  public LocalDate unmarshal(final String v) throws Exception {
     return getFormatter().parse(v, LocalDate.FROM);
   }
 

@@ -54,12 +54,19 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Constructor from all details.
-   * @param currency The deposit currency.
-   * @param startDate The deposit start date.
-   * @param endDate The deposit end date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param accrualFactor The deposit accrual factor.
+   * 
+   * @param currency
+   *          The deposit currency.
+   * @param startDate
+   *          The deposit start date.
+   * @param endDate
+   *          The deposit end date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param accrualFactor
+   *          The deposit accrual factor.
    */
   public CashDefinition(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime endDate, final double notional, final double rate,
       final double accrualFactor) {
@@ -78,14 +85,21 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Build a deposit from the financial description and the start (or settlement) date.
-   * @param startDate The deposit start date.
-   * @param tenor The deposit tenor.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
+   * 
+   * @param startDate
+   *          The deposit start date.
+   * @param tenor
+   *          The deposit tenor.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
    * @return The deposit.
    */
-  public static CashDefinition fromStart(final ZonedDateTime startDate, final Period tenor, final double notional, final double rate, final GeneratorDeposit generator) {
+  public static CashDefinition fromStart(final ZonedDateTime startDate, final Period tenor, final double notional, final double rate,
+      final GeneratorDeposit generator) {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(tenor, "Tenor");
     ArgumentChecker.notNull(generator, "Generator");
@@ -96,10 +110,15 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Build a overnight deposit from the financial description and the start (or settlement) date.
-   * @param startDate The deposit start date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
+   * 
+   * @param startDate
+   *          The deposit start date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
    * @return The deposit.
    */
   public static CashDefinition fromStart(final ZonedDateTime startDate, final double notional, final double rate, final GeneratorDeposit generator) {
@@ -112,14 +131,21 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Build a deposit from the financial description and the trade date.
-   * @param tradeDate The deposit trade date. The start date is the trade date plus the generator spot lag.
-   * @param tenor The deposit tenor.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
+   * 
+   * @param tradeDate
+   *          The deposit trade date. The start date is the trade date plus the generator spot lag.
+   * @param tenor
+   *          The deposit tenor.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
    * @return The deposit.
    */
-  public static CashDefinition fromTrade(final ZonedDateTime tradeDate, final Period tenor, final double notional, final double rate, final GeneratorDeposit generator) {
+  public static CashDefinition fromTrade(final ZonedDateTime tradeDate, final Period tenor, final double notional, final double rate,
+      final GeneratorDeposit generator) {
     ArgumentChecker.notNull(tradeDate, "Trade date");
     ArgumentChecker.notNull(tenor, "Tenor");
     ArgumentChecker.notNull(generator, "Generator");
@@ -131,14 +157,21 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Build an over-night deposit from the financial description and the trade date.
-   * @param tradeDate The deposit trade date. The start date is the trade date plus the generator spot lag.
-   * @param start The number of business days to start date.
-   * @param notional The deposit notional.
-   * @param rate The deposit rate.
-   * @param generator The deposit generator.
+   * 
+   * @param tradeDate
+   *          The deposit trade date. The start date is the trade date plus the generator spot lag.
+   * @param start
+   *          The number of business days to start date.
+   * @param notional
+   *          The deposit notional.
+   * @param rate
+   *          The deposit rate.
+   * @param generator
+   *          The deposit generator.
    * @return The deposit.
    */
-  public static CashDefinition fromTrade(final ZonedDateTime tradeDate, final int start, final double notional, final double rate, final GeneratorDeposit generator) {
+  public static CashDefinition fromTrade(final ZonedDateTime tradeDate, final int start, final double notional, final double rate,
+      final GeneratorDeposit generator) {
     ArgumentChecker.notNull(tradeDate, "Trade date");
     ArgumentChecker.notNull(generator, "Generator");
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(tradeDate, start, generator.getCalendar());
@@ -149,6 +182,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit start date.
+   * 
    * @return The date.
    */
   public ZonedDateTime getStartDate() {
@@ -157,6 +191,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit end date.
+   * 
    * @return The date.
    */
   public ZonedDateTime getEndDate() {
@@ -165,6 +200,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -173,6 +209,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit accrual factor.
+   * 
    * @return The accrual factor.
    */
   public double getAccrualFactor() {
@@ -181,6 +218,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit rate.
+   * 
    * @return The rate.
    */
   public double getRate() {
@@ -189,6 +227,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the interest amount.
+   * 
    * @return The amount.
    */
   public double getInterestAmount() {
@@ -197,6 +236,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * Gets the deposit currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -210,6 +250,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -225,7 +266,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
 
   @Override
   public Cash toDerivative(final ZonedDateTime date) {
-//    return toDerivative(date, new String[] {""});
+    // return toDerivative(date, new String[] {""});
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "date {} is after end date {}", date, _endDate);
     final double startTime = TimeCalculator.getTimeBetween(date, _startDate);
     if (startTime < 0) {

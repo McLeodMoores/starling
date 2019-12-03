@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.server;
@@ -9,13 +9,13 @@ import org.fudgemsg.FudgeMsg;
 
 /**
  * Default implementation of {@link LastKnownValueStore} that backs onto a
- * {@link FudgeHistoryStore}, which is backed by a {@code Map}. 
+ * {@link FieldHistoryStore}, which is backed by a {@code Map}.
  */
 public class MapLastKnownValueStore implements LastKnownValueStore {
   private final FieldHistoryStore _historyStore = new FieldHistoryStore();
 
   @Override
-  public void updateFields(FudgeMsg fieldValues) {
+  public void updateFields(final FudgeMsg fieldValues) {
     _historyStore.liveDataReceived(fieldValues);
   }
 

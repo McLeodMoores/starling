@@ -6,7 +6,6 @@
 package com.opengamma.integration.masterdb;
 
 import static org.testng.AssertJUnit.assertNotNull;
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -25,6 +24,8 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDetailPr
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Test DbSecurityMaster.
@@ -61,13 +62,13 @@ public abstract class AbstractIntegrationDbSecurityMasterTest extends AbstractLo
     return _secMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
+  public void testQueryAll() throws Exception {
     final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getSecurityMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking security master, page " + request.getPagingRequest());
@@ -98,8 +99,8 @@ public abstract class AbstractIntegrationDbSecurityMasterTest extends AbstractLo
       try {
         getSecurityMaster().get(uniqueId);
       } catch (final RuntimeException ex2) {
-        throw new RuntimeException("Unable to load security " + uniqueId + "(" + doc.getName() + ") in " +
-            request.getPagingRequest() + " total " + total, ex);
+        throw new RuntimeException("Unable to load security " + uniqueId + "(" + doc.getName() + ") in "
+            + request.getPagingRequest() + " total " + total, ex);
       }
     }
     throw new RuntimeException("Unable to load securities matching " + request.getPagingRequest(), ex);

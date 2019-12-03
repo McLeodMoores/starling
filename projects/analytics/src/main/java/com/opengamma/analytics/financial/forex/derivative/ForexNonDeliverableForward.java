@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.forex.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
@@ -15,7 +14,8 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing a foreign exchange non-deliverable forward transaction.
- * The transaction is XXX/YYY where YYY is the currency for the cash-settlement. A NDF KRW/USD with USD cash settlement is stored with KRW as currency1 and USD as currency2.
+ * The transaction is XXX/YYY where YYY is the currency for the cash-settlement.
+ * A NDF KRW/USD with USD cash settlement is stored with KRW as currency1 and USD as currency2.
  */
 public class ForexNonDeliverableForward implements InstrumentDerivative {
 
@@ -64,8 +64,9 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
    * @param dsc2 The discounting curve name used for currency2.
    * @deprecated Use the constructor that does not take yield curve names
    */
-  @Deprecated 
-  public ForexNonDeliverableForward(final Currency currency1, final Currency currency2, final double notional, final double exchangeRate, final double fixingTime, final double paymentTime,
+  @Deprecated
+  public ForexNonDeliverableForward(final Currency currency1, final Currency currency2, final double notional, final double exchangeRate,
+      final double fixingTime, final double paymentTime,
       final String dsc1, final String dsc2) {
     ArgumentChecker.notNull(currency1, "First currency");
     ArgumentChecker.notNull(currency2, "Second currency");
@@ -82,7 +83,7 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
     _discountingCurve1Name = dsc1;
     _discountingCurve2Name = dsc2;
   }
-  
+
   /**
    * Constructor for non-deliverable forward Forex transaction.
    * @param currency1 First currency of the transaction.
@@ -92,7 +93,8 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
    * @param fixingTime The exchange rate fixing time.
    * @param paymentTime The transaction payment or settlement time.
    */
-  public ForexNonDeliverableForward(final Currency currency1, final Currency currency2, final double notional, final double exchangeRate, final double fixingTime, final double paymentTime) {
+  public ForexNonDeliverableForward(final Currency currency1, final Currency currency2, final double notional, final double exchangeRate,
+      final double fixingTime, final double paymentTime) {
     ArgumentChecker.notNull(currency1, "First currency");
     ArgumentChecker.notNull(currency2, "Second currency");
     ArgumentChecker.isTrue(currency1 != currency2, "Currencies should be different");
@@ -165,26 +167,28 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
 
   /**
    * Gets the discounting curve name used for currency1.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve1Name() {
     if (_discountingCurve1Name == null) {
-      throw new IllegalArgumentException("Discounting curve name 1 was not set"); 
+      throw new IllegalArgumentException("Discounting curve name 1 was not set");
     }
     return _discountingCurve1Name;
   }
 
   /**
    * Gets the discounting curve name used for currency2.
+   * 
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurve2Name() {
     if (_discountingCurve2Name == null) {
-      throw new IllegalArgumentException("Discounting curve name 2 was not set"); 
+      throw new IllegalArgumentException("Discounting curve name 2 was not set");
     }
     return _discountingCurve2Name;
   }
@@ -209,13 +213,13 @@ public class ForexNonDeliverableForward implements InstrumentDerivative {
     result = prime * result + _currency2.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_exchangeRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

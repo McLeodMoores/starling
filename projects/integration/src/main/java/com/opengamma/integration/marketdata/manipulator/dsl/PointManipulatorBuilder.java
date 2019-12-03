@@ -18,7 +18,7 @@ public class PointManipulatorBuilder {
   /** The scenario to which the manipulators are added */
   private final Scenario _scenario;
 
-  /* package */ PointManipulatorBuilder(Scenario scenario, PointSelector selector) {
+  /* package */ PointManipulatorBuilder(final Scenario scenario, final PointSelector selector) {
     ArgumentChecker.notNull(selector, "selector");
     ArgumentChecker.notNull(scenario, "scenario");
     _selector = selector;
@@ -30,7 +30,7 @@ public class PointManipulatorBuilder {
    * @param scalingFactor The scaling factor
    * @return This builder
    */
-  public PointManipulatorBuilder scaling(Number scalingFactor) {
+  public PointManipulatorBuilder scaling(final Number scalingFactor) {
     _scenario.add(_selector, new MarketDataScaling(scalingFactor.doubleValue()));
     return this;
   }
@@ -42,7 +42,7 @@ public class PointManipulatorBuilder {
    * @deprecated Use {@link #shift(ScenarioShiftType, Number)}
    */
   @Deprecated
-  public PointManipulatorBuilder shift(Number shift) {
+  public PointManipulatorBuilder shift(final Number shift) {
     _scenario.add(_selector, new MarketDataShift(ScenarioShiftType.ABSOLUTE, shift.doubleValue()));
     return this;
   }
@@ -54,7 +54,7 @@ public class PointManipulatorBuilder {
    * @param shift The amount of the shift
    * @return This builder
    */
-  public PointManipulatorBuilder shift(ScenarioShiftType shiftType, Number shift) {
+  public PointManipulatorBuilder shift(final ScenarioShiftType shiftType, final Number shift) {
     _scenario.add(_selector, new MarketDataShift(shiftType, shift.doubleValue()));
     return this;
   }
@@ -64,7 +64,7 @@ public class PointManipulatorBuilder {
    * @param value The replacement value
    * @return This builder
    */
-  public PointManipulatorBuilder replace(Number value) {
+  public PointManipulatorBuilder replace(final Number value) {
     _scenario.add(_selector, new MarketDataReplace(value.doubleValue()));
     return this;
   }

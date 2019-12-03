@@ -13,7 +13,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Pad with previous value, pad with first value in series if there is insufficient data
+ * Pad with previous value, pad with first value in series if there is insufficient data.
  */
 public class PreviousAndFirstValuePaddingTimeSeriesSamplingFunction implements TimeSeriesSamplingFunction {
 
@@ -28,7 +28,7 @@ public class PreviousAndFirstValuePaddingTimeSeriesSamplingFunction implements T
     int dateIndex = 0;
     for (int i = 0; i < schedule.length; i++) {
       final LocalDate localDate = schedule[i];
-      if (dateIndex < tsDates.length) { //TODO break out
+      if (dateIndex < tsDates.length) { // TODO break out
         if (tsDates[dateIndex].equals(localDate)) {
           scheduledData[i] = values[dateIndex];
           dateIndex++;
@@ -44,7 +44,7 @@ public class PreviousAndFirstValuePaddingTimeSeriesSamplingFunction implements T
         }
       }
       if (dateIndex > 0) {
-        scheduledData[i] = values[dateIndex - 1]; //Should never go too high
+        scheduledData[i] = values[dateIndex - 1]; // Should never go too high
       } else {
         scheduledData[i] = values[0];
       }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.server;
@@ -32,16 +32,16 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecycle, InitializingBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
 
-  private final Queue<Pair<Integer, Integer>> _minimumItems = new LinkedList<Pair<Integer, Integer>>();
-  private final Queue<Pair<Long, Long>> _minimumCost = new LinkedList<Pair<Long, Long>>();
+  private final Queue<Pair<Integer, Integer>> _minimumItems = new LinkedList<>();
+  private final Queue<Pair<Long, Long>> _minimumCost = new LinkedList<>();
 
   private MultipleNodeExecutorFactory _executorFactory;
   private TotallingGraphStatisticsGathererProvider _graphStatistics;
   private TotallingNodeStatisticsGatherer _nodeStatistics;
   private int _warmupGraphExecutions = 5;
-  private int _sampleTime = 10;
+  private final int _sampleTime = 10;
   @SuppressWarnings("unused")
   private int _minimumMaximumConcurrency = 1;
   @SuppressWarnings("unused")
@@ -112,17 +112,17 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
   @Override
   public synchronized void start() {
     if (!isRunning() && !isTerminated()) {
-      s_logger.info("Starting tuner");
+      LOGGER.info("Starting tuner");
       _running = true;
       new Thread(this).start();
     } else {
-      s_logger.warn("Tuner already started (or already terminated)");
+      LOGGER.warn("Tuner already started (or already terminated)");
     }
   }
 
   @Override
   public synchronized void stop() {
-    s_logger.info("Stopping tuner");
+    LOGGER.info("Stopping tuner");
     terminate();
     _running = false;
   }
@@ -137,8 +137,8 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
     if (_sampleCount > 0) {
       return true;
     }
-    for (GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
-      for (GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
+    for (final GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
+      for (final GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
         if (stats.getExecutedGraphs() > _warmupGraphExecutions) {
           return true;
         }
@@ -148,18 +148,18 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
   }
 
   private void tickAndReset() {
-    for (GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
-      for (GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
+    for (final GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
+      for (final GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
         while (stats.getExecutedGraphs() < _warmupGraphExecutions) {
           try {
             Thread.sleep(100);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
           }
         }
         stats.reset();
       }
     }
-    for (CalculationNodeStatistics stats : _nodeStatistics.getNodeStatistics()) {
+    for (final CalculationNodeStatistics stats : _nodeStatistics.getNodeStatistics()) {
       stats.reset();
     }
   }
@@ -171,8 +171,8 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
       pw.println(data);
       pw.close();
       writer.close();
-    } catch (IOException e) {
-      s_logger.warn("Error writing tuning data", e);
+    } catch (final IOException e) {
+      LOGGER.warn("Error writing tuning data", e);
     }
   }
 
@@ -183,8 +183,8 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
     sb.append(_executorFactory.getMinimumJobCost()).append(',');
     sb.append(_executorFactory.getMaximumJobCost()).append(',');
     sb.append(_executorFactory.getMaximumConcurrency()).append(',');
-    for (GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
-      for (GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
+    for (final GraphExecutorStatisticsGatherer gatherers : _graphStatistics.getViewStatistics()) {
+      for (final GraphExecutionStatistics stats : ((TotallingGraphStatisticsGathererProvider.Statistics) gatherers).getExecutionStatistics()) {
         sb.append(stats.getViewProcessId()).append(',').append(stats.getCalcConfigName()).append(',');
         sb.append(stats.getActualTime()).append(',');
         sb.append(stats.getAverageActualTime()).append(',');
@@ -212,7 +212,7 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
     double nonExecutionTime = 0;
     double successfulJobs = 0;
     double unsuccessfulJobs = 0;
-    for (CalculationNodeStatistics stats : _nodeStatistics.getNodeStatistics()) {
+    for (final CalculationNodeStatistics stats : _nodeStatistics.getNodeStatistics()) {
       averageExecutionTime += stats.getAverageExecutionTime();
       averageJobItems += stats.getAverageJobItems();
       averageNonExecutionTime += stats.getAverageNonExecutionTime();
@@ -224,14 +224,14 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
       count++;
     }
     if (count > 0) {
-      sb.append(averageExecutionTime / (double) count).append(',');
-      sb.append(averageJobItems / (double) count).append(',');
-      sb.append(averageNonExecutionTime / (double) count).append(',');
-      sb.append(executionTime / (double) count).append(',');
-      sb.append(jobItems / (double) count).append(',');
-      sb.append(nonExecutionTime / (double) count).append(',');
-      sb.append(successfulJobs / (double) count).append(',');
-      sb.append(unsuccessfulJobs / (double) count);
+      sb.append(averageExecutionTime / count).append(',');
+      sb.append(averageJobItems / count).append(',');
+      sb.append(averageNonExecutionTime / count).append(',');
+      sb.append(executionTime / count).append(',');
+      sb.append(jobItems / count).append(',');
+      sb.append(nonExecutionTime / count).append(',');
+      sb.append(successfulJobs / count).append(',');
+      sb.append(unsuccessfulJobs / count);
     }
     report(sb.toString());
   }
@@ -239,11 +239,11 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
   @Override
   protected void runOneCycle() {
     if (warmedUp()) {
-      final boolean reset = (_sampleCount++ % _sampleTime) == 0;
-      s_logger.debug("Sample {}", _sampleCount);
+      final boolean reset = _sampleCount++ % _sampleTime == 0;
+      LOGGER.debug("Sample {}", _sampleCount);
       writeRow(reset);
       if (reset) {
-        s_logger.debug("Reseting statistics");
+        LOGGER.debug("Reseting statistics");
         /*
          * final int maxConcurrency = _executorFactory.getMaximumConcurrency();
          * if (maxConcurrency >= _maximumMaximumConcurrency) {
@@ -252,7 +252,7 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
          * if (minimum != null) {
          * final Integer midpoint = (minimum.getFirst() + minimum.getSecond()) >> 1;
          * _executorFactory.setMinimumJobItems(midpoint);
-         * s_logger.info("Setting minimum job items to {}", midpoint);
+         * LOGGER.info("Setting minimum job items to {}", midpoint);
          * if (midpoint > minimum.getFirst()) {
          * _minimumItems.add(Pair.of(minimum.getFirst(), midpoint));
          * }
@@ -270,9 +270,9 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
          */
         final Pair<Long, Long> minimum = _minimumCost.poll();
         if (minimum != null) {
-          final Long midpoint = (minimum.getFirst() + minimum.getSecond()) >> 1;
+          final Long midpoint = minimum.getFirst() + minimum.getSecond() >> 1;
           _executorFactory.setMinimumJobCost(midpoint);
-          s_logger.info("Setting minimum job cost to {}", midpoint);
+          LOGGER.info("Setting minimum job cost to {}", midpoint);
           if (midpoint > minimum.getFirst()) {
             _minimumCost.add(Pairs.of(minimum.getFirst(), midpoint));
           }
@@ -281,14 +281,14 @@ public class MultipleNodeExecutorTuner extends TerminatableJob implements Lifecy
           }
         }
         tickAndReset();
-        s_logger.debug("Statistics reset");
+        LOGGER.debug("Statistics reset");
       }
     } else {
-      s_logger.info("Waiting for system to warm up");
+      LOGGER.info("Waiting for system to warm up");
     }
     try {
       Thread.sleep(1000);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
   }
 }

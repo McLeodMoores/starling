@@ -25,6 +25,7 @@ import com.opengamma.financial.analytics.volatility.surface.BloombergFXOptionVol
 @FudgeBuilderFor(BloombergFXOptionVolatilitySurfaceInstrumentProvider.class)
 public class BloombergFXOptionVolatilitySurfaceInstrumentProviderFudgeBuilder implements FudgeBuilder<BloombergFXOptionVolatilitySurfaceInstrumentProvider> {
   private static final String SCHEME_NAME_FIELD = "SCHEME_NAME";
+
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BloombergFXOptionVolatilitySurfaceInstrumentProvider object) {
     final MutableFudgeMsg message = serializer.newMessage();
@@ -39,7 +40,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProviderFudgeBuilder im
   @Override
   public BloombergFXOptionVolatilitySurfaceInstrumentProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     String prefix = message.getString(PREFIX_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (prefix == null) {
       prefix = message.getString("FX_PREFIX");
     }
@@ -47,7 +48,8 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProviderFudgeBuilder im
     if (schemeName == null) {
       schemeName = ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName();
     }
-    return new BloombergFXOptionVolatilitySurfaceInstrumentProvider(prefix, message.getString(POSTFIX_FIELD_NAME), message.getString(DATA_FIELD_NAME), schemeName);
+    return new BloombergFXOptionVolatilitySurfaceInstrumentProvider(prefix, message.getString(POSTFIX_FIELD_NAME), message.getString(DATA_FIELD_NAME),
+        schemeName);
   }
 
 }

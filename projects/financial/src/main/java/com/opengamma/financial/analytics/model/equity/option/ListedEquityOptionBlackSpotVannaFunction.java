@@ -21,15 +21,15 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Vanna w.r.t. the spot underlying, i.e. the 2nd order cross-sensitivity of the present value to the spot underlying and implied vol,
- * $\frac{\partial^2 (PV)}{\partial spot \partial \sigma}$
+ * Vanna w.r.t. the spot underlying, i.e. the 2nd order cross-sensitivity of the present value to the spot underlying and implied vol, $\frac{\partial^2
+ * (PV)}{\partial spot \partial \sigma}$
  */
 public class ListedEquityOptionBlackSpotVannaFunction extends ListedEquityOptionBlackFunction {
   /** Spot vanna calculator */
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackSpotVannaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public ListedEquityOptionBlackSpotVannaFunction() {
     super(ValueRequirementNames.VANNA);
@@ -44,4 +44,3 @@ public class ListedEquityOptionBlackSpotVannaFunction extends ListedEquityOption
   }
 
 }
-

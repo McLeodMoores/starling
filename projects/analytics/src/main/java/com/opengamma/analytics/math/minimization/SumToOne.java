@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For a set of N-1 "fit" parameters, produces N "model" parameters that sum to one
+ * For a set of N-1 "fit" parameters, produces N "model" parameters that sum to one.
  */
 public class SumToOne {
   private static final double TOL = 1e-9;
@@ -23,8 +23,10 @@ public class SumToOne {
   private final int _n;
 
   /**
-   *For a set of N-1 "fit" parameters, produces N "model" parameters that sum to one
-   * @param n The number of "model" parameters, N
+   * For a set of N-1 "fit" parameters, produces N "model" parameters that sum to one.
+   * 
+   * @param n
+   *          The number of "model" parameters, N
    */
   public SumToOne(final int n) {
     _set = getSet(n);
@@ -32,8 +34,10 @@ public class SumToOne {
   }
 
   /**
-   * Transform from the N-1 "fit" parameters to the N "model" parameters
-   * @param fitParms The N-1 "fit" parameters
+   * Transform from the N-1 "fit" parameters to the N "model" parameters.
+   * 
+   * @param fitParms
+   *          The N-1 "fit" parameters
    * @return The N "model" parameters
    */
   public double[] transform(final double[] fitParms) {
@@ -63,8 +67,10 @@ public class SumToOne {
   }
 
   /**
-   * Transform from the N-1 "fit" parameters to the N "model" parameters
-   * @param fitParms The N-1 "fit" parameters
+   * Transform from the N-1 "fit" parameters to the N "model" parameters.
+   * 
+   * @param fitParms
+   *          The N-1 "fit" parameters
    * @return The N "model" parameters
    */
   public DoubleMatrix1D transform(final DoubleMatrix1D fitParms) {
@@ -73,7 +79,9 @@ public class SumToOne {
 
   /**
    * Inverse transform from the N "model" parameters to the N-1 "fit" parameters. Used mainly to find the start position of a optimisation routine
-   * @param modelParms The N "model" parameters. <b>These must sum to one</b>
+   * 
+   * @param modelParms
+   *          The N "model" parameters. <b>These must sum to one</b>
    * @return The N-1 "fit" parameters
    */
   public double[] inverseTransform(final double[] modelParms) {
@@ -99,7 +107,9 @@ public class SumToOne {
 
   /**
    * Inverse transform from the N "model" parameters to the N-1 "fit" parameters. Used mainly to find the start position of a optimisation routine
-   * @param modelParms The N "model" parameters. <b>These must sum to one</b>
+   * 
+   * @param modelParms
+   *          The N "model" parameters. <b>These must sum to one</b>
    * @return The N-1 "fit" parameters
    */
   public DoubleMatrix1D inverseTransform(final DoubleMatrix1D modelParms) {
@@ -107,8 +117,10 @@ public class SumToOne {
   }
 
   /**
-   * The N by N-1 Jacobian matrix between the N "model" parameters (that sum to one) and the N-1 "fit" parameters
-   * @param fitParms  The N-1 "fit" parameters
+   * The N by N-1 Jacobian matrix between the N "model" parameters (that sum to one) and the N-1 "fit" parameters.
+   * 
+   * @param fitParms
+   *          The N-1 "fit" parameters
    * @return The N by N-1 Jacobian matrix
    */
   public double[][] jacobian(final double[] fitParms) {
@@ -147,8 +159,10 @@ public class SumToOne {
   }
 
   /**
-   * The N by N-1 Jacobian matrix between the N "model" parameters (that sum to one) and the N-1 "fit" parameters
-   * @param fitParms  The N-1 "fit" parameters
+   * The N by N-1 Jacobian matrix between the N "model" parameters (that sum to one) and the N-1 "fit" parameters.
+   * 
+   * @param fitParms
+   *          The N-1 "fit" parameters
    * @return The N by N-1 Jacobian matrix
    */
   public DoubleMatrix2D jacobian(final DoubleMatrix1D fitParms) {
@@ -176,25 +190,25 @@ public class SumToOne {
     int[][] res = new int[n][];
     switch (n) {
       case 2:
-        res[0] = new int[] {1 };
-        res[1] = new int[] {-1 };
+        res[0] = new int[] { 1 };
+        res[1] = new int[] { -1 };
         break;
       case 3:
-        res[0] = new int[] {1, 0 };
-        res[1] = new int[] {-1, 1 };
-        res[2] = new int[] {-1, -1 };
+        res[0] = new int[] { 1, 0 };
+        res[1] = new int[] { -1, 1 };
+        res[2] = new int[] { -1, -1 };
         break;
       case 4:
-        res[0] = new int[] {1, 1, 0 };
-        res[1] = new int[] {1, -1, 0 };
-        res[2] = new int[] {-1, 0, 1 };
-        res[3] = new int[] {-1, 0, -1 };
+        res[0] = new int[] { 1, 1, 0 };
+        res[1] = new int[] { 1, -1, 0 };
+        res[2] = new int[] { -1, 0, 1 };
+        res[3] = new int[] { -1, 0, -1 };
         break;
       default:
         final int n1 = n / 2;
         final int n2 = n - n1;
         final int[][] set1 = getSet(n1);
-        final int[][] set2 = (n1 == n2 ? set1 : getSet(n2));
+        final int[][] set2 = n1 == n2 ? set1 : getSet(n2);
         res = new int[n][n - 1];
 
         for (int i = 0; i < n1; i++) {

@@ -25,10 +25,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Param
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 
 /**
- * Calculates the sensitivity of the present value of issuer-specific instruments to curves
- * used in pricing by discounting.
+ * Calculates the sensitivity of the present value of issuer-specific instruments to curves used in pricing by discounting.
  */
-public final class PresentValueCurveSensitivityIssuerCalculator extends InstrumentDerivativeVisitorDelegate<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public final class PresentValueCurveSensitivityIssuerCalculator
+extends InstrumentDerivativeVisitorDelegate<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -37,6 +37,7 @@ public final class PresentValueCurveSensitivityIssuerCalculator extends Instrume
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityIssuerCalculator getInstance() {
@@ -65,14 +66,14 @@ public final class PresentValueCurveSensitivityIssuerCalculator extends Instrume
   /** Method for bond Total Return Swap */
   private static final BondTotalReturnSwapDiscountingMethod METHOD_TRS = BondTotalReturnSwapDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitDepositCounterpart(final DepositCounterpart deposit, final ParameterIssuerProviderInterface issuercurves) {
     return METHOD_DEPO_CTPY.presentValueCurveSensitivity(deposit, issuercurves.getIssuerProvider());
   }
 
-  //     -----     Bond/Bill     -----
+  // ----- Bond/Bill -----
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitBillSecurity(final BillSecurity bill, final ParameterIssuerProviderInterface issuercurves) {
@@ -94,14 +95,15 @@ public final class PresentValueCurveSensitivityIssuerCalculator extends Instrume
     return METHOD_BOND_TR.presentValueCurveSensitivity(bond, issuercurves.getIssuerProvider());
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitBondFuturesTransaction(final BondFuturesTransaction futures, final ParameterIssuerProviderInterface issuercurves) {
+  public MultipleCurrencyMulticurveSensitivity visitBondFuturesTransaction(final BondFuturesTransaction futures,
+      final ParameterIssuerProviderInterface issuercurves) {
     return METHOD_BNDFUT_TRA.presentValueCurveSensitivity(futures, issuercurves.getIssuerProvider());
   }
 
-  //     -----     Other     -----
+  // ----- Other -----
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitBondTotalReturnSwap(final BondTotalReturnSwap trs, final ParameterIssuerProviderInterface issuercurves) {

@@ -29,11 +29,10 @@ import com.opengamma.util.async.AsynchronousExecution;
 
 /**
  * Build an ISDA-style discount curve for use with the ISDA CDS price functions.
- * 
- * Currently this is a simple map function that translates the existing OpenGamma curves
- * in to ISDA format. A more correct implementation would pull data from Markit and build
- * the curve replicating ISDA functionality.
- * 
+ *
+ * Currently this is a simple map function that translates the existing OpenGamma curves in to ISDA format. A more correct implementation would pull data from
+ * Markit and build the curve replicating ISDA functionality.
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see ISDAApproxCDSPriceFunction
  * @see ISDAApproxCDSPriceFlatSpreadFunction
@@ -46,8 +45,8 @@ public class ISDAApproxDiscountCurveFunction extends AbstractFunction.NonCompile
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {    
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    final Set<ValueRequirement> requirements = new HashSet<>();
 
     requirements.add(new ValueRequirement(
         ValueRequirementNames.YIELD_CURVE, target.toSpecification(),
@@ -57,33 +56,36 @@ public class ISDAApproxDiscountCurveFunction extends AbstractFunction.NonCompile
             .with("ForwardCurve", "SECONDARY")
             .with("CurveCalculationMethod", "ParRate")
             .get()));
-    
+
     return requirements;
   }
 
+  @Override
   protected ValueProperties.Builder createValueProperties() {
     return super.createValueProperties().with(ValuePropertyNames.CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), createValueProperties().get()));
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     final YieldCurve sourceCurve = (YieldCurve) inputs.getValue(ValueRequirementNames.YIELD_CURVE);
-    
+
     if (sourceCurve == null) {
       throw new OpenGammaRuntimeException("Could not get source discount curve to translate for ISDA");
     }
-    
+
     final Curve<Double, Double> curveData = sourceCurve.getCurve();
     final ISDACurve isdaCurve = ISDACurve.fromBoxed(sourceCurve.getName(), curveData.getXData(), curveData.getYData(), 0.0);
-    
-    ComputedValue result = new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), createValueProperties().get()), isdaCurve);
-    
+
+    final ComputedValue result = new ComputedValue(
+        new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), createValueProperties().get()), isdaCurve);
+
     return Collections.singleton(result);
   }
 

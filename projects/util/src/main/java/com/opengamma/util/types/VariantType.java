@@ -18,21 +18,25 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * Represents a type expression that can be one of a number of known alternatives. This is a specialized form of {@link WildcardType} that does not have an explicit lower bound from syntax (as defined
- * by the Java language specification) but has logical types defined from the application logic. For example, a type defined in code as {@code Set&lt;? extends Number&gt;} could be refined at the
- * application level, based on the known behavior of code, to indicate that the type can only be either {@code Integer} or {@code Double} (type logical types) rather than any arbitrary sub-class of
- * {@code Number}.
+ * Represents a type expression that can be one of a number of known alternatives. This is a specialized form of {@link WildcardType} that does
+ * not have an explicit lower bound from syntax (as defined by the Java language specification) but has logical types defined from the application
+ * logic. For example, a type defined in code as {@code Set&lt;? extends Number&gt;} could be refined at the application level, based on the
+ * known behavior of code, to indicate that the type can only be either {@code Integer} or {@code Double} (type logical types) rather than any
+ * arbitrary sub-class of {@code Number}.
  * <p>
- * Note that only two or more logical types are permitted - if there is only one logical type then there is no choice and that type should be used directly rather than as a bound.
+ * Note that only two or more logical types are permitted - if there is only one logical type then there is no choice and that type should be
+ * used directly rather than as a bound.
  * <p>
- * This type is typically used as part of object meta-data, delivered explicitly from the application API/SPI rather than by Java reflection, to assist in user interface code that requires more
- * sophisticated type information than would otherwise be permitted. For example, a class might need to declare a property of type Set&lt;Object&gt; but the exact content type (required to deliver
- * meaningful user interactions when populating it) may be determined by a service object held in another property. That service object could have a method returning {@link Type} which indicates the
- * valid classes to put into the set. Depending on the complexity of the application logic, that type might then need to be, or need to reference, one of these variant types.
+ * This type is typically used as part of object meta-data, delivered explicitly from the application API/SPI rather than by Java reflection,
+ * to assist in user interface code that requires more sophisticated type information than would otherwise be permitted. For example, a class
+ * might need to declare a property of type Set&lt;Object&gt; but the exact content type (required to deliver meaningful user interactions when
+ * populating it) may be determined by a service object held in another property. That service object could have a method returning {@link Type}
+ * which indicates the valid classes to put into the set. Depending on the complexity of the application logic, that type might then need to be,
+ * or need to reference, one of these variant types.
  */
 public final class VariantType implements WildcardType {
 
-  private static final Type[] s_lower = new Type[0];
+  private static final Type[] LOWER = new Type[0];
 
   private final Type _upper;
   private final Type[] _logicalTypes;
@@ -87,14 +91,14 @@ public final class VariantType implements WildcardType {
   }
 
   private VariantType with(final Type logicalType) {
-    final Set<Type> types = new HashSet<Type>();
-    for (Type type : _logicalTypes) {
+    final Set<Type> types = new HashSet<>();
+    for (final Type type : _logicalTypes) {
       types.add(type);
     }
     final Type upper;
     if (logicalType instanceof VariantType) {
       final VariantType variant = (VariantType) logicalType;
-      for (Type type : variant._logicalTypes) {
+      for (final Type type : variant._logicalTypes) {
         types.add(type);
       }
       upper = guessUpperBound(_upper, variant._upper);
@@ -113,7 +117,7 @@ public final class VariantType implements WildcardType {
    * If either parameter is null then the other is returned.
    * <p>
    * If either parameter is itself a variant type then the resulting type is the union of all logical types.
-   * 
+   *
    * @param type1 the first logical type, possibly null
    * @param type2 the second logical type, possibly null
    * @return the resulting type.
@@ -144,16 +148,22 @@ public final class VariantType implements WildcardType {
 
   @Override
   public Type[] getLowerBounds() {
-    return s_lower;
+    return LOWER;
   }
 
+  /**
+   * Gets the logical types.
+   *
+   * @return  the types
+   */
   public Type[] getLogicalTypes() {
     return _logicalTypes.clone();
   }
 
   /**
-   * Tests for equality with another object. For compatibility with the standard Java type system, an instance is considered equal to any other {@link WildcardType} that has the same upper bound.
-   * 
+   * Tests for equality with another object. For compatibility with the standard Java type system, an instance is considered equal to
+   * any other {@link WildcardType} that has the same upper bound.
+   *
    * @param o the object to compare to
    * @return true if the other object is a {@code WildcardType} with the same upper bound and no lower bound, false otherwise
    */
@@ -177,15 +187,14 @@ public final class VariantType implements WildcardType {
   }
 
   /**
-   * Returns the hash code of this object. For compatability with the standard Java type system, the hashcode will be the same as any other {@link WildcardType} that has the same upper bound and no
-   * lower bounds.
-   * 
+   * Returns the hash code of this object. For compatability with the standard Java type system, the hashcode will be the same as any
+   * other {@link WildcardType} that has the same upper bound and no lower bounds.
+   *
    * @return the hash code
    */
   @Override
   public int hashCode() {
-    // Arrays.hashCode(getUpperBounds()) ^ Arrays.hashCode(getLowerBounds())
-    return (31 + _upper.hashCode()) ^ 1;
+    return 31 + _upper.hashCode() ^ 1;
   }
 
   @Override

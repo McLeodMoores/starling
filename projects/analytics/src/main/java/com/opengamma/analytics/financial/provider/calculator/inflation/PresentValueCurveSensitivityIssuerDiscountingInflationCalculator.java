@@ -48,16 +48,19 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
-public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalculator extends InstrumentDerivativeVisitorAdapter<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
+public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalculator
+extends InstrumentDerivativeVisitorAdapter<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityIssuerDiscountingInflationCalculator INSTANCE = new PresentValueCurveSensitivityIssuerDiscountingInflationCalculator();
+  private static final PresentValueCurveSensitivityIssuerDiscountingInflationCalculator INSTANCE =
+      new PresentValueCurveSensitivityIssuerDiscountingInflationCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityIssuerDiscountingInflationCalculator getInstance() {
@@ -77,15 +80,18 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
   /**
    * Pricing method for zero-coupon with interpolated reference index.
    */
-  private static final CouponInflationZeroCouponInterpolationDiscountingMethod METHOD_ZC_INTERPOLATION = new CouponInflationZeroCouponInterpolationDiscountingMethod();
+  private static final CouponInflationZeroCouponInterpolationDiscountingMethod METHOD_ZC_INTERPOLATION =
+      new CouponInflationZeroCouponInterpolationDiscountingMethod();
   /**
    * Pricing method for zero-coupon with monthly reference index.
    */
-  private static final CouponInflationZeroCouponMonthlyGearingDiscountingMethod METHOD_ZC_MONTHLY_GEARING = new CouponInflationZeroCouponMonthlyGearingDiscountingMethod();
+  private static final CouponInflationZeroCouponMonthlyGearingDiscountingMethod METHOD_ZC_MONTHLY_GEARING =
+      new CouponInflationZeroCouponMonthlyGearingDiscountingMethod();
   /**
    * Pricing method for zero-coupon with interpolated reference index.
    */
-  private static final CouponInflationZeroCouponInterpolationGearingDiscountingMethod METHOD_ZC_INTERPOLATION_GEARING = new CouponInflationZeroCouponInterpolationGearingDiscountingMethod();
+  private static final CouponInflationZeroCouponInterpolationGearingDiscountingMethod METHOD_ZC_INTERPOLATION_GEARING =
+      new CouponInflationZeroCouponInterpolationGearingDiscountingMethod();
   /**
    * Pricing method for year on year coupon with monthly reference index.
    */
@@ -93,11 +99,13 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
   /**
    * Pricing method for year on year coupon with interpolated reference index.
    */
-  private static final CouponInflationYearOnYearInterpolationDiscountingMethod METHOD_YEAR_ON_YEAR_INTERPOLATION = new CouponInflationYearOnYearInterpolationDiscountingMethod();
+  private static final CouponInflationYearOnYearInterpolationDiscountingMethod METHOD_YEAR_ON_YEAR_INTERPOLATION =
+      new CouponInflationYearOnYearInterpolationDiscountingMethod();
   /**
    * Pricing method for year on year coupon with monthly and with margin reference index.
    */
-  private static final CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod METHOD_YEAR_ON_YEAR_MONTHLY_WITH_MARGIN = new CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod();
+  private static final CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod METHOD_YEAR_ON_YEAR_MONTHLY_WITH_MARGIN =
+      new CouponInflationYearOnYearMonthlyWithMarginDiscountingMethod();
   /**
    * Pricing method for year on year coupon with interpolated and with margin reference index.
    */
@@ -118,20 +126,23 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
   /** Method for bond transactions */
   private static final BondCapitalIndexedTransactionDiscountingMethod METHOD_BOND_TR = BondCapitalIndexedTransactionDiscountingMethod.getInstance();
 
-  // -----     Inflation Coupon     ------
+  // ----- Inflation Coupon ------
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponMonthly(final CouponInflationZeroCouponMonthly coupon, final InflationIssuerProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponMonthly(final CouponInflationZeroCouponMonthly coupon,
+      final InflationIssuerProviderInterface inflation) {
     return METHOD_ZC_MONTHLY.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponInterpolation(final CouponInflationZeroCouponInterpolation coupon, final InflationIssuerProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponInterpolation(final CouponInflationZeroCouponInterpolation coupon,
+      final InflationIssuerProviderInterface inflation) {
     return METHOD_ZC_INTERPOLATION.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponMonthlyGearing(final CouponInflationZeroCouponMonthlyGearing coupon, final InflationIssuerProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity visitCouponInflationZeroCouponMonthlyGearing(final CouponInflationZeroCouponMonthlyGearing coupon,
+      final InflationIssuerProviderInterface inflation) {
     return METHOD_ZC_MONTHLY_GEARING.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
@@ -142,12 +153,14 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearMonthly(final CouponInflationYearOnYearMonthly coupon, final InflationIssuerProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearMonthly(final CouponInflationYearOnYearMonthly coupon,
+      final InflationIssuerProviderInterface inflation) {
     return METHOD_YEAR_ON_YEAR_MONTHLY.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearInterpolation(final CouponInflationYearOnYearInterpolation coupon, final InflationIssuerProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearInterpolation(final CouponInflationYearOnYearInterpolation coupon,
+      final InflationIssuerProviderInterface inflation) {
     return METHOD_YEAR_ON_YEAR_INTERPOLATION.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
@@ -158,36 +171,42 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMargin coupon,
+  public MultipleCurrencyInflationSensitivity visitCouponInflationYearOnYearInterpolationWithMargin(
+      final CouponInflationYearOnYearInterpolationWithMargin coupon,
       final InflationIssuerProviderInterface inflation) {
     return METHOD_YEAR_ON_YEAR_INTERPOLATION_WITH_MARGIN.presentValueCurveSensitivity(coupon, inflation.getInflationProvider());
   }
 
-  //-----     Coupon fix    ------
+  // ----- Coupon fix ------
 
   @Override
   public MultipleCurrencyInflationSensitivity visitCouponFixed(final CouponFixed coupon, final InflationIssuerProviderInterface inflation) {
-    final MultipleCurrencyMulticurveSensitivity multipleCurrencyMulticurveSensitivity = METHOD_CPN_FIXED.presentValueCurveSensitivity(coupon, inflation.getMulticurveProvider());
+    final MultipleCurrencyMulticurveSensitivity multipleCurrencyMulticurveSensitivity = METHOD_CPN_FIXED.presentValueCurveSensitivity(coupon,
+        inflation.getMulticurveProvider());
     final MultipleCurrencyInflationSensitivity multipleCurrencyInflationSensitivity = new MultipleCurrencyInflationSensitivity();
     for (final Currency loopccy : multipleCurrencyMulticurveSensitivity.getCurrencies()) {
       final Map<String, List<DoublesPair>> sensitivityPriceCurve = new HashMap<>();
-      multipleCurrencyInflationSensitivity.plus(loopccy, InflationSensitivity.of(multipleCurrencyMulticurveSensitivity.getSensitivity(loopccy), sensitivityPriceCurve));
+      multipleCurrencyInflationSensitivity.plus(loopccy,
+          InflationSensitivity.of(multipleCurrencyMulticurveSensitivity.getSensitivity(loopccy), sensitivityPriceCurve));
     }
     return multipleCurrencyInflationSensitivity;
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCouponFixedCompounding(final CouponFixedCompounding coupon, final InflationIssuerProviderInterface inflation) {
-    final MultipleCurrencyMulticurveSensitivity multipleCurrencyMulticurveSensitivity = METHOD_CPN_FIXED_COMPOUNDING.presentValueCurveSensitivity(coupon, inflation.getMulticurveProvider());
+  public MultipleCurrencyInflationSensitivity visitCouponFixedCompounding(final CouponFixedCompounding coupon,
+      final InflationIssuerProviderInterface inflation) {
+    final MultipleCurrencyMulticurveSensitivity multipleCurrencyMulticurveSensitivity = METHOD_CPN_FIXED_COMPOUNDING.presentValueCurveSensitivity(coupon,
+        inflation.getMulticurveProvider());
     final MultipleCurrencyInflationSensitivity multipleCurrencyInflationSensitivity = new MultipleCurrencyInflationSensitivity();
     for (final Currency loopccy : multipleCurrencyMulticurveSensitivity.getCurrencies()) {
       final Map<String, List<DoublesPair>> sensitivityPriceCurve = new HashMap<>();
-      multipleCurrencyInflationSensitivity.plus(loopccy, InflationSensitivity.of(multipleCurrencyMulticurveSensitivity.getSensitivity(loopccy), sensitivityPriceCurve));
+      multipleCurrencyInflationSensitivity.plus(loopccy,
+          InflationSensitivity.of(multipleCurrencyMulticurveSensitivity.getSensitivity(loopccy), sensitivityPriceCurve));
     }
     return multipleCurrencyInflationSensitivity;
   }
 
-  //-----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyInflationSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final InflationIssuerProviderInterface inflation) {
@@ -205,7 +224,7 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
     return visitGenericAnnuity(annuity, inflation);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public MultipleCurrencyInflationSensitivity visitSwap(final Swap<?, ?> swap, final InflationIssuerProviderInterface inflation) {
@@ -219,15 +238,17 @@ public final class PresentValueCurveSensitivityIssuerDiscountingInflationCalcula
     return visitSwap(swap, multicurve);
   }
 
-  //     -----     Bond    -----
+  // ----- Bond -----
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final InflationIssuerProviderInterface curves) {
+  public MultipleCurrencyInflationSensitivity visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond,
+      final InflationIssuerProviderInterface curves) {
     return METHOD_BOND_SEC.presentValueCurveSensitivity(bond, curves);
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final InflationIssuerProviderInterface curves) {
+  public MultipleCurrencyInflationSensitivity visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond,
+      final InflationIssuerProviderInterface curves) {
     return METHOD_BOND_TR.presentValueCurveSensitivity(bond, curves);
   }
 

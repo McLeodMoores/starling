@@ -128,7 +128,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final double relativeDelta = theoreticalRelativeDelta(option, marketData, directQuote);
-    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), relativeDelta * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
+    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(),
+        relativeDelta * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
   }
 
   /**
@@ -196,7 +197,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
    * to the inverse spot is required
    * @return  the relative delta spot
    */
-  public static double theoreticalRelativeDeltaSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
+  public static double theoreticalRelativeDeltaSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData,
+      final boolean directQuote) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final MulticurveProviderInterface curves = marketData.getMulticurveProvider();
@@ -223,7 +225,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final double relativeGamma = theoreticalRelativeGamma(option, marketData, directQuote);
-    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), relativeGamma * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
+    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(),
+        relativeGamma * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
   }
 
   /**
@@ -293,7 +296,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
    * to the inverse spot is required
    * @return  the relative gamma spot
    */
-  public static double theoreticalRelativeGammaSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
+  public static double theoreticalRelativeGammaSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData,
+      final boolean directQuote) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final MulticurveProviderInterface curves = marketData.getMulticurveProvider();
@@ -334,7 +338,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
     ArgumentChecker.notNull(marketData, "marketData");
     final Currency foreignCurrency = option.getUnderlyingForex().getCurrency1();
     final Currency domesticCurrency = option.getUnderlyingForex().getCurrency2();
-    final double vegaValue = theoreticalVega(option, marketData) * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
+    final double vegaValue = theoreticalVega(option, marketData)
+        * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
     final DoublesPair point = DoublesPair.of(option.getTimeToExpiry(),
         option.getCurrency1().equals(marketData.getCurrencyPair().getFirst()) ? option.getStrike() : 1.0 / option.getStrike());
     final SurfaceValue result = SurfaceValue.from(point, vegaValue);
@@ -361,7 +366,8 @@ public final class BjerksundStenslandVanillaFxOptionCalculator {
    * @param marketData  the market data, not null
    * @return  sensitivities to the curve
    */
-  public static MultipleCurrencyMulticurveSensitivity bucketedCurveSensitivities(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+  public static MultipleCurrencyMulticurveSensitivity bucketedCurveSensitivities(final ForexOptionVanilla option,
+      final BlackForexSmileProviderInterface marketData) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final MulticurveProviderInterface curves = marketData.getMulticurveProvider();

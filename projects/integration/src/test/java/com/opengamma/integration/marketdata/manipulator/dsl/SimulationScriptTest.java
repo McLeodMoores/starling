@@ -37,7 +37,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class SimulationScriptTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulationScriptTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulationScriptTest.class);
 
   @Test
   public void createSimulationFromDsl() {
@@ -73,7 +73,7 @@ public class SimulationScriptTest {
     Scenario scenario = SimulationUtils.createScenarioFromDsl("src/test/groovy/ScenarioDslTest.groovy", null);
     assertNotNull(scenario);
     // TODO check the simulation
-    s_logger.debug(scenario.toString());
+    LOGGER.debug(scenario.toString());
   }
 
   @Test

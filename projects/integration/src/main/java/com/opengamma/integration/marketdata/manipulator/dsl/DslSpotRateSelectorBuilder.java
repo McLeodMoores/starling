@@ -12,12 +12,12 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslSpotRateSelectorBuilder extends SpotRateSelectorBuilder {
 
-  /* package */ DslSpotRateSelectorBuilder(Scenario scenario) {
+  /* package */ DslSpotRateSelectorBuilder(final Scenario scenario) {
     super(scenario);
   }
 
-  public void apply(Closure<?> body) {
-    SpotRateManipulatorBuilder builder = new SpotRateManipulatorBuilder(getScenario(), getSelector());
+  public void apply(final Closure<?> body) {
+    final SpotRateManipulatorBuilder builder = new SpotRateManipulatorBuilder(getScenario(), getSelector());
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();

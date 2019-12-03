@@ -31,7 +31,7 @@ public class EquityOptionBjerksundStenslandValueGammaFunction extends EquityOpti
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBjerksundStenslandValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

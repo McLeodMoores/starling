@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,19 +9,24 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Gap call option pays 0 if S <= K1 and S-K2 if S > K1, whereas gap put option pays K2-S if S < K1 and 0 if S >= K1, 
- * where S is asset price at expiry.
+ * Gap call option pays 0 if S &lt;= K1 and S-K2 if S &gt; K1, whereas gap put option pays K2-S if S &lt; K1 and 0 if S &gt;= K1, where S is asset price at
+ * expiry.
  */
 public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _payoffStrike;
+  private final double _payoffStrike;
 
   /**
-   * @param strike Strike price, K1
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param payoffStrike Payoff-strike, K2
+   * @param strike
+   *          Strike price, K1
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param payoffStrike
+   *          Payoff-strike, K2
    */
   public GapOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double payoffStrike) {
     super(strike, timeToExpiry, steps, isCall);
@@ -63,7 +68,8 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access payoff-strike
+   * Access payoff-strike.
+   * 
    * @return _payoffStrike
    */
   public double getStrikePayoff() {
@@ -76,12 +82,12 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_payoffStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -91,7 +97,7 @@ public class GapOptionFunctionProvider extends OptionFunctionProvider1D {
     if (!(obj instanceof GapOptionFunctionProvider)) {
       return false;
     }
-    GapOptionFunctionProvider other = (GapOptionFunctionProvider) obj;
+    final GapOptionFunctionProvider other = (GapOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_payoffStrike) != Double.doubleToLongBits(other._payoffStrike)) {
       return false;
     }

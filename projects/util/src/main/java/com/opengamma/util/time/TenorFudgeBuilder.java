@@ -23,15 +23,15 @@ public class TenorFudgeBuilder implements FudgeBuilder<Tenor> {
   public static final String TENOR_FIELD_NAME = "tenor";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Tenor object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Tenor object) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    
+
     msg.add(TENOR_FIELD_NAME, object.toFormattedString());
     return msg;
   }
 
   @Override
-  public Tenor buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public Tenor buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final String tenorStr = msg.getString(TENOR_FIELD_NAME);
     if (tenorStr == null) {
       throw new IllegalArgumentException("Fudge message is not a Tenor - field 'tenor' is not present");

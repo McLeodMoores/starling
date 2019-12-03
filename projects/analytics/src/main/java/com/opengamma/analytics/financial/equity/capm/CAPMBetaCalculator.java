@@ -20,7 +20,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
  * 
  */
 public class CAPMBetaCalculator implements Function<DoubleTimeSeries<?>, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(CAPMBetaCalculator.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(CAPMBetaCalculator.class);
   private final DoubleTimeSeriesStatisticsCalculator _covarianceCalculator;
   private final DoubleTimeSeriesStatisticsCalculator _varianceCalculator;
 
@@ -38,7 +38,7 @@ public class CAPMBetaCalculator implements Function<DoubleTimeSeries<?>, Double>
     final int n = ts.length;
     Validate.isTrue(n > 1);
     if (n > 3) {
-      s_logger.warn("Found more than two time series; will only use the first two");
+      INSTANCE.warn("Found more than two time series; will only use the first two");
     }
     final DoubleTimeSeries<?> assetReturn = ts[0];
     final DoubleTimeSeries<?> marketReturn = ts[1];

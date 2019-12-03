@@ -37,27 +37,27 @@ import com.opengamma.util.ArgumentChecker;
 public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProvider<SwapDefinition, MulticurveProviderInterface> {
 
   /**
-   * The MulticurveProviderInterface bundle
+   * The MulticurveProviderInterface bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final MulticurveProviderInterface _curves;
   /**
-   * The valuation time
+   * The valuation time.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ZonedDateTime _valuationTime;
   /**
-   * Boolean, whether the leg is fixed or floating
+   * Boolean, whether the leg is fixed or floating.
    */
   @PropertyDefinition(validate = "notNull")
   private final boolean _fixed;
   /**
-   * The swap definition
+   * The swap definition.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final SwapDefinition _definition;
   /**
-   * The PayReceiveType, whether the leg is pay or receive
+   * The PayReceiveType, whether the leg is pay or receive.
    */
   @PropertyDefinition(validate = "notNull")
   private final PayReceiveType _type;
@@ -65,15 +65,20 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   /**
    * Creates an instance.
    *
-   * @param curves  the curves, not null
-   * @param valuationTime  the valuation time, not null
-   * @param definition  the swap containing the payment definitions, not null
-   * @param security  the security, not null
-   * @param type  whether the pay or receive leg is to be used, not null
+   * @param curves
+   *          the curves, not null
+   * @param valuationTime
+   *          the valuation time, not null
+   * @param definition
+   *          the swap containing the payment definitions, not null
+   * @param security
+   *          the security, not null
+   * @param type
+   *          whether the pay or receive leg is to be used, not null
    */
   @ImmutableConstructor
   public SwapDetailsProvider(final MulticurveProviderInterface curves, final ZonedDateTime valuationTime,
-                             final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
+      final SwapDefinition definition, final SwapSecurity security, final PayReceiveType type) {
     _curves = ArgumentChecker.notNull(curves, "curves");
     _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
     _definition = ArgumentChecker.notNull(definition, "definition");
@@ -133,25 +138,27 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the MulticurveProviderInterface bundle
+   * Gets the MulticurveProviderInterface bundle.
    * @return the value of the property, not null
    */
+  @Override
   public MulticurveProviderInterface getCurves() {
     return _curves;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the valuation time
+   * Gets the valuation time.
    * @return the value of the property, not null
    */
+  @Override
   public ZonedDateTime getValuationTime() {
     return _valuationTime;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets boolean, whether the leg is fixed or floating
+   * Gets boolean, whether the leg is fixed or floating.
    * @return the value of the property, not null
    */
   public boolean isFixed() {
@@ -160,16 +167,17 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the swap definition
+   * Gets the swap definition.
    * @return the value of the property, not null
    */
+  @Override
   public SwapDefinition getDefinition() {
     return _definition;
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the PayReceiveType, whether the leg is pay or receive
+   * Gets the PayReceiveType, whether the leg is pay or receive.
    * @return the value of the property, not null
    */
   public PayReceiveType getType() {
@@ -192,11 +200,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SwapDetailsProvider other = (SwapDetailsProvider) obj;
-      return JodaBeanUtils.equal(getCurves(), other.getCurves()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          (isFixed() == other.isFixed()) &&
-          JodaBeanUtils.equal(getDefinition(), other.getDefinition()) &&
-          JodaBeanUtils.equal(getType(), other.getType());
+      return JodaBeanUtils.equal(_curves, other._curves) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          (_fixed == other._fixed) &&
+          JodaBeanUtils.equal(_definition, other._definition) &&
+          JodaBeanUtils.equal(_type, other._type);
     }
     return false;
   }
@@ -204,11 +212,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isFixed());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinition());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_curves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixed);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_definition);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
     return hash;
   }
 
@@ -226,11 +234,11 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("curves").append('=').append(JodaBeanUtils.toString(getCurves())).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(getValuationTime())).append(',').append(' ');
-    buf.append("fixed").append('=').append(JodaBeanUtils.toString(isFixed())).append(',').append(' ');
-    buf.append("definition").append('=').append(JodaBeanUtils.toString(getDefinition())).append(',').append(' ');
-    buf.append("type").append('=').append(JodaBeanUtils.toString(getType())).append(',').append(' ');
+    buf.append("curves").append('=').append(JodaBeanUtils.toString(_curves)).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(JodaBeanUtils.toString(_valuationTime)).append(',').append(' ');
+    buf.append("fixed").append('=').append(JodaBeanUtils.toString(_fixed)).append(',').append(' ');
+    buf.append("definition").append('=').append(JodaBeanUtils.toString(_definition)).append(',').append(' ');
+    buf.append("type").append('=').append(JodaBeanUtils.toString(_type)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -466,19 +474,31 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
@@ -496,7 +516,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the MulticurveProviderInterface bundle
+     * Sets the MulticurveProviderInterface bundle.
      * @param curves  the new value, not null
      * @return this, for chaining, not null
      */
@@ -507,7 +527,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the valuation time
+     * Sets the valuation time.
      * @param valuationTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -518,7 +538,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets boolean, whether the leg is fixed or floating
+     * Sets boolean, whether the leg is fixed or floating.
      * @param fixed  the new value, not null
      * @return this, for chaining, not null
      */
@@ -529,7 +549,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the swap definition
+     * Sets the swap definition.
      * @param definition  the new value, not null
      * @return this, for chaining, not null
      */
@@ -540,7 +560,7 @@ public class SwapDetailsProvider implements ImmutableBean, InstrumentDetailsProv
     }
 
     /**
-     * Sets the PayReceiveType, whether the leg is pay or receive
+     * Sets the PayReceiveType, whether the leg is pay or receive.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */

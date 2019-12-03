@@ -37,30 +37,27 @@ public class MockConvention implements Bean, Convention {
   /**
    * The type.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ConventionType _conventionType;
   /**
-   * The unique identifier of the convention.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the convention. This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the convention.
-   * This field must not be null for the object to be valid.
+   * The bundle of external identifiers that define the convention. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The map of attributes, which can be used for attaching additional application-level information.
    */
-  @PropertyDefinition
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  @PropertyDefinition(overrideSet = true, overrideGet = true)
+  private final Map<String, String> _attributes = new HashMap<>();
   /**
-   * The name of the convention intended for display purposes.
-   * This field must not be null for the object to be valid.
+   * The name of the convention intended for display purposes. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
 
   /**
@@ -71,40 +68,46 @@ public class MockConvention implements Bean, Convention {
 
   /**
    * Creates an instance.
-   * 
-   * @param type  the type, not null
+   *
+   * @param type
+   *          the type, not null
    */
-  public MockConvention(String type) {
+  public MockConvention(final String type) {
     setConventionType(ConventionType.of(type));
   }
 
   /**
    * Creates an instance.
-   * 
-   * @param type  the type, not null
-   * @param uniqueId  the unique identifier
-   * @param name  the name, not null
-   * @param bundle  the bundle, not null
+   *
+   * @param type
+   *          the type, not null
+   * @param uniqueId
+   *          the unique identifier
+   * @param name
+   *          the name, not null
+   * @param bundle
+   *          the bundle, not null
    */
-  public MockConvention(String type, UniqueId uniqueId, String name, ExternalIdBundle bundle) {
+  public MockConvention(final String type, final UniqueId uniqueId, final String name, final ExternalIdBundle bundle) {
     setConventionType(ConventionType.of(type));
     setUniqueId(uniqueId);
     setName(name);
     setExternalIdBundle(bundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this convention.
-   * 
-   * @param conventionId  the identifier to add, not null
+   *
+   * @param conventionId
+   *          the identifier to add, not null
    */
-  public void addExternalId(ExternalId conventionId) {
+  public void addExternalId(final ExternalId conventionId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(conventionId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -144,6 +147,7 @@ public class MockConvention implements Bean, Convention {
    * Gets the type.
    * @return the value of the property, not null
    */
+  @Override
   public ConventionType getConventionType() {
     return _conventionType;
   }
@@ -167,17 +171,16 @@ public class MockConvention implements Bean, Convention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the convention.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the convention. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
 
   /**
-   * Sets the unique identifier of the convention.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the convention. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
   public void setUniqueId(UniqueId uniqueId) {
@@ -186,7 +189,6 @@ public class MockConvention implements Bean, Convention {
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -195,17 +197,16 @@ public class MockConvention implements Bean, Convention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the convention.
-   * This field must not be null for the object to be valid.
+   * Gets the bundle of external identifiers that define the convention. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of external identifiers that define the convention.
-   * This field must not be null for the object to be valid.
+   * Sets the bundle of external identifiers that define the convention. This field must not be null for the object to be valid.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -215,7 +216,6 @@ public class MockConvention implements Bean, Convention {
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -227,6 +227,7 @@ public class MockConvention implements Bean, Convention {
    * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -235,6 +236,7 @@ public class MockConvention implements Bean, Convention {
    * Sets the map of attributes, which can be used for attaching additional application-level information.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -251,17 +253,16 @@ public class MockConvention implements Bean, Convention {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the convention intended for display purposes.
-   * This field must not be null for the object to be valid.
+   * Gets the name of the convention intended for display purposes. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
 
   /**
-   * Sets the name of the convention intended for display purposes.
-   * This field must not be null for the object to be valid.
+   * Sets the name of the convention intended for display purposes. This field must not be null for the object to be valid.
    * @param name  the new value of the property, not null
    */
   public void setName(String name) {
@@ -271,7 +272,6 @@ public class MockConvention implements Bean, Convention {
 
   /**
    * Gets the the {@code name} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<String> name() {

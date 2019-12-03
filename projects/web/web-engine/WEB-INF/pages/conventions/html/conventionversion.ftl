@@ -22,7 +22,7 @@
     </@rowin>
 </@subsection>
 
-<#noescape><@xmlEditorScript  xmlValue="${conventionXml}" readOnly=true></@xmlEditorScript></#noescape>
+<#noescape><@xmlEditorScript  xmlValue="${conventionXML}" readOnly=true></@xmlEditorScript></#noescape>
 </@section>
 
 

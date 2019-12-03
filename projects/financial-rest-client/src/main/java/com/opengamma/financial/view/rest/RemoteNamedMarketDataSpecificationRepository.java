@@ -14,30 +14,29 @@ import com.opengamma.util.rest.FudgeRestClient;
 
 /**
  * Remote implementation of {@link NamedMarketDataSpecificationRepository}.
- * 
+ *
  * @deprecated  This is only required for the legacy analytics UI.
  */
 @Deprecated
 public class RemoteNamedMarketDataSpecificationRepository implements NamedMarketDataSpecificationRepository {
 
   private final URI _baseUri;
-  private FudgeRestClient _client;
+  private final FudgeRestClient _client;
 
-  public RemoteNamedMarketDataSpecificationRepository(URI baseUri) {
+  public RemoteNamedMarketDataSpecificationRepository(final URI baseUri) {
     _baseUri = baseUri;
     _client = FudgeRestClient.create();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<String> getNames() {
-    URI uri = DataNamedMarketDataSpecificationRepositoryUris.uriNames(_baseUri);
+    final URI uri = DataNamedMarketDataSpecificationRepositoryUris.uriNames(_baseUri);
     return _client.accessFudge(uri).get(List.class);
   }
 
   @Override
-  public MarketDataSpecification getSpecification(String name) {
-    URI uri = DataNamedMarketDataSpecificationRepositoryUris.uriSpecification(_baseUri, name);
+  public MarketDataSpecification getSpecification(final String name) {
+    final URI uri = DataNamedMarketDataSpecificationRepositoryUris.uriSpecification(_baseUri, name);
     return _client.accessFudge(uri).get(MarketDataSpecification.class);
   }
 

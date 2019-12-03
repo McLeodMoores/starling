@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -11,21 +11,23 @@ import com.opengamma.analytics.financial.provider.description.volatilityswap.Car
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute theta of forward volatility based on finite difference method
+ * Compute theta of forward volatility based on finite difference method.
  */
 public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivativeVisitorAdapter<CarrLeeFXData, Double> {
   private final CarrLeeFXVolatilitySwapCalculator _cal;
 
   /**
-   * Constructor using default calculator
+   * Constructor using default calculator.
    */
   public CarrLeeFXVolatilitySwapThetaCalculator() {
     _cal = new CarrLeeFXVolatilitySwapCalculator();
   }
 
   /**
-   * Constructor specifying base calculator
-   * @param cal Base calculator
+   * Constructor specifying base calculator.
+   *
+   * @param cal
+   *          Base calculator
    */
   public CarrLeeFXVolatilitySwapThetaCalculator(final CarrLeeFXVolatilitySwapCalculator cal) {
     ArgumentChecker.notNull(cal, "cal");
@@ -33,11 +35,15 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
   }
 
   /**
-   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, 
-   * i.e., assuming the fair value has been already calculated. For theta the bump amount is 1 working day.
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
-   * @param data The FX data for Carr-Lee
+   * Theta calculator for FX volatility swap based on "bump and reprice" using {@link VolatilitySwapCalculatorResultWithStrikes}, i.e., assuming the fair value
+   * has been already calculated. For theta the bump amount is 1 working day.
+   *
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return theta
    */
   public Double getFXVolatilitySwapTheta(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -63,8 +69,10 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
 
     final double bumpedTimeToObservationStart = swap.getTimeToObservationStart() == 0. ? 0. : swap.getTimeToObservationStart() - timeBumpAmount;
 
-    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount, swap.getObservationFrequency(),
-        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(), swap.getCounterCurrency(), aFac);
+    final FXVolatilitySwap timeBumpedSwap = new FXVolatilitySwap(bumpedTimeToObservationStart, swap.getTimeToObservationEnd() - timeBumpAmount,
+        swap.getObservationFrequency(),
+        swap.getTimeToMaturity() - timeBumpAmount, swap.getVolatilityStrike(), swap.getVolatilityNotional(), swap.getCurrency(), swap.getBaseCurrency(),
+        swap.getCounterCurrency(), aFac);
     final VolatilitySwapCalculatorResult timeBumpedRes = _cal.visitFXVolatilitySwap(timeBumpedSwap, data);
     final double timeBumpedFV = timeBumpedRes.getFairValue();
 
@@ -84,12 +92,12 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_cal == null) ? 0 : _cal.hashCode());
+    result = prime * result + (_cal == null ? 0 : _cal.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -99,7 +107,7 @@ public class CarrLeeFXVolatilitySwapThetaCalculator extends InstrumentDerivative
     if (!(obj instanceof CarrLeeFXVolatilitySwapThetaCalculator)) {
       return false;
     }
-    CarrLeeFXVolatilitySwapThetaCalculator other = (CarrLeeFXVolatilitySwapThetaCalculator) obj;
+    final CarrLeeFXVolatilitySwapThetaCalculator other = (CarrLeeFXVolatilitySwapThetaCalculator) obj;
     if (_cal == null) {
       if (other._cal != null) {
         return false;

@@ -33,12 +33,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPortfolioMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyPortfolioDbPortfolioMasterWorkerAddTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyPortfolioDbPortfolioMasterWorkerAddTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyPortfolioDbPortfolioMasterWorkerAddTest(String databaseType, String databaseVersion) {
+  public ModifyPortfolioDbPortfolioMasterWorkerAddTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -49,34 +49,34 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noPortfolio() {
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     _prtMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noRootNode() {
-    ManageablePortfolio mockPortfolio = mock(ManageablePortfolio.class);
+    final ManageablePortfolio mockPortfolio = mock(ManageablePortfolio.class);
     when(mockPortfolio.getName()).thenReturn("Test");
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(mockPortfolio);
     _prtMaster.add(doc);
   }
 
   @Test
   public void test_add_add() {
-    Instant now = Instant.now(_prtMaster.getClock());
-    
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
-    ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
+    final Instant now = Instant.now(_prtMaster.getClock());
+
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
+    final ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
     childNode.addPosition(UniqueId.of("TestPos", "1234"));
     rootNode.addChildNode(childNode);
-    ManageablePortfolio portfolio = new ManageablePortfolio("Test");
+    final ManageablePortfolio portfolio = new ManageablePortfolio("Test");
     portfolio.setRootNode(rootNode);
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
-    PortfolioDocument test = _prtMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final PortfolioDocument test = _prtMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPrt", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -87,19 +87,19 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
     assertEquals(DocumentVisibility.VISIBLE, test.getVisibility());
-    
-    ManageablePortfolio testPortfolio = test.getPortfolio();
+
+    final ManageablePortfolio testPortfolio = test.getPortfolio();
     assertEquals(uniqueId, testPortfolio.getUniqueId());
     assertEquals("Test", testPortfolio.getName());
     assertNotNull(testPortfolio.getAttributes());
-    
-    ManageablePortfolioNode testRootNode = testPortfolio.getRootNode();
+
+    final ManageablePortfolioNode testRootNode = testPortfolio.getRootNode();
     assertEquals("Root", testRootNode.getName());
     assertEquals(null, testRootNode.getParentNodeId());
     assertEquals(uniqueId, testRootNode.getPortfolioId());
     assertEquals(1, testRootNode.getChildNodes().size());
-    
-    ManageablePortfolioNode testChildNode = testRootNode.getChildNodes().get(0);
+
+    final ManageablePortfolioNode testChildNode = testRootNode.getChildNodes().get(0);
     assertEquals("Child", testChildNode.getName());
     assertEquals(testRootNode.getUniqueId(), testChildNode.getParentNodeId());
     assertEquals(uniqueId, testChildNode.getPortfolioId());
@@ -107,24 +107,24 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
     assertEquals(1, testChildNode.getPositionIds().size());
     assertEquals(ObjectId.of("TestPos", "1234"), testChildNode.getPositionIds().get(0));
   }
-  
+
   @Test
   public void test_addWithAttributes_add() {
-    Instant now = Instant.now(_prtMaster.getClock());
-    
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
-    ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
+    final Instant now = Instant.now(_prtMaster.getClock());
+
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
+    final ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
     childNode.addPosition(UniqueId.of("TestPos", "1234"));
     rootNode.addChildNode(childNode);
-    ManageablePortfolio portfolio = new ManageablePortfolio("Test");
+    final ManageablePortfolio portfolio = new ManageablePortfolio("Test");
     portfolio.setRootNode(rootNode);
     portfolio.addAttribute("A1", "V1");
     portfolio.addAttribute("A2", "V2");
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
-    PortfolioDocument test = _prtMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final PortfolioDocument test = _prtMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPrt", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -134,22 +134,22 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    
-    ManageablePortfolio testPortfolio = test.getPortfolio();
+
+    final ManageablePortfolio testPortfolio = test.getPortfolio();
     assertEquals(uniqueId, testPortfolio.getUniqueId());
     assertEquals("Test", testPortfolio.getName());
     assertNotNull(testPortfolio.getAttributes());
     assertEquals(2, testPortfolio.getAttributes().size());
     assertEquals("V1", testPortfolio.getAttributes().get("A1"));
     assertEquals("V2", testPortfolio.getAttributes().get("A2"));
-    
-    ManageablePortfolioNode testRootNode = testPortfolio.getRootNode();
+
+    final ManageablePortfolioNode testRootNode = testPortfolio.getRootNode();
     assertEquals("Root", testRootNode.getName());
     assertEquals(null, testRootNode.getParentNodeId());
     assertEquals(uniqueId, testRootNode.getPortfolioId());
     assertEquals(1, testRootNode.getChildNodes().size());
-    
-    ManageablePortfolioNode testChildNode = testRootNode.getChildNodes().get(0);
+
+    final ManageablePortfolioNode testChildNode = testRootNode.getChildNodes().get(0);
     assertEquals("Child", testChildNode.getName());
     assertEquals(testRootNode.getUniqueId(), testChildNode.getParentNodeId());
     assertEquals(uniqueId, testChildNode.getPortfolioId());
@@ -160,23 +160,23 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
 
   @Test
   public void test_add_addThenGet() {
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
-    ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
+    final ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
     rootNode.addChildNode(childNode);
-    ManageablePortfolio portfolio = new ManageablePortfolio("Test");
+    final ManageablePortfolio portfolio = new ManageablePortfolio("Test");
     portfolio.setRootNode(rootNode);
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
-    PortfolioDocument added = _prtMaster.add(doc);
-    
-    PortfolioDocument test = _prtMaster.get(added.getUniqueId());
+    final PortfolioDocument added = _prtMaster.add(doc);
+
+    final PortfolioDocument test = _prtMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
-  
+
   @Test
   public void test_addWithAttributes_addThenGet() {
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
-    ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
+    final ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
     rootNode.addChildNode(childNode);
     ManageablePortfolio portfolio = new ManageablePortfolio("Test");
     portfolio.setRootNode(rootNode);
@@ -185,10 +185,10 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
     PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
     PortfolioDocument added = _prtMaster.add(doc);
-    
+
     PortfolioDocument test = _prtMaster.get(added.getUniqueId());
     assertEquals(added, test);
-    
+
     //add another
     portfolio = new ManageablePortfolio("Test2");
     portfolio.setRootNode(rootNode);
@@ -197,24 +197,24 @@ public class ModifyPortfolioDbPortfolioMasterWorkerAddTest extends AbstractDbPor
     doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
     added = _prtMaster.add(doc);
-    
+
     test = _prtMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
-  
+
   @Test
   public void test_addCustomVisibility_addThenGet() {
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
-    ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode("Root");
+    final ManageablePortfolioNode childNode = new ManageablePortfolioNode("Child");
     rootNode.addChildNode(childNode);
-    ManageablePortfolio portfolio = new ManageablePortfolio("Test");
+    final ManageablePortfolio portfolio = new ManageablePortfolio("Test");
     portfolio.setRootNode(rootNode);
-    PortfolioDocument doc = new PortfolioDocument();
+    final PortfolioDocument doc = new PortfolioDocument();
     doc.setPortfolio(portfolio);
     doc.setVisibility(DocumentVisibility.HIDDEN);
-    PortfolioDocument added = _prtMaster.add(doc);
-    
-    PortfolioDocument test = _prtMaster.get(added.getUniqueId());
+    final PortfolioDocument added = _prtMaster.add(doc);
+
+    final PortfolioDocument test = _prtMaster.get(added.getUniqueId());
     assertEquals(DocumentVisibility.HIDDEN, test.getVisibility());
     assertEquals(added, test);
   }

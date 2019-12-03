@@ -25,8 +25,8 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class MarketDataDistributorTest {
-  public static MarketDataDistributor getTestDistributor(MarketDataSenderFactory factory) {
-    MapLastKnownValueStoreProvider lkvStoreProvider = new MapLastKnownValueStoreProvider();
+  public static MarketDataDistributor getTestDistributor(final MarketDataSenderFactory factory) {
+    final MapLastKnownValueStoreProvider lkvStoreProvider = new MapLastKnownValueStoreProvider();
     return new MarketDataDistributor(new DistributionSpecification(
         ExternalId.of("RIC", "AAPL.O"),
         StandardRules.getNoNormalization(),
@@ -43,15 +43,15 @@ public class MarketDataDistributorTest {
 
   //-------------------------------------------------------------------------
   public void testSequenceNumber() {
-    MarketDataDistributor mdd = getTestDistributor();
+    final MarketDataDistributor mdd = getTestDistributor();
     assertEquals(LiveDataValueUpdate.SEQUENCE_START, mdd.getNumMessagesSent());
     mdd.updateFieldHistory(FudgeContext.EMPTY_MESSAGE);
     assertEquals(0, mdd.getNumMessagesSent());
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("foo", "bar");
     mdd.distributeLiveData(msg);
     assertEquals(1, mdd.getNumMessagesSent());
-    
+
     mdd.distributeLiveData(FudgeContext.EMPTY_MESSAGE); // empty msg not sent
     assertEquals(1, mdd.getNumMessagesSent());
   }

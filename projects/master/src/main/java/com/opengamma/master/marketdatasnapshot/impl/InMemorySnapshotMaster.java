@@ -38,8 +38,8 @@ import com.opengamma.util.paging.Paging;
  * This snapshot master does not support versioning of snapshots.
  */
 public class InMemorySnapshotMaster
-    extends SimpleAbstractInMemoryMaster<MarketDataSnapshotDocument>
-    implements MarketDataSnapshotMaster {
+extends SimpleAbstractInMemoryMaster<MarketDataSnapshotDocument>
+implements MarketDataSnapshotMaster {
   //TODO: This is not hardened for production, as the data in the master can
   // be altered from outside as it is the same object
 
@@ -98,13 +98,13 @@ public class InMemorySnapshotMaster
   @Override
   public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<MarketDataSnapshotDocument> list = new ArrayList<MarketDataSnapshotDocument>();
-    for (MarketDataSnapshotDocument doc : _store.values()) {
+    final List<MarketDataSnapshotDocument> list = new ArrayList<>();
+    for (final MarketDataSnapshotDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
-    MarketDataSnapshotSearchResult result = new MarketDataSnapshotSearchResult();
+    final MarketDataSnapshotSearchResult result = new MarketDataSnapshotSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -171,7 +171,7 @@ public class InMemorySnapshotMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), document.getVersionFromInstant(), document.getVersionToInstant(), now);
@@ -180,7 +180,7 @@ public class InMemorySnapshotMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     validateObjectId(objectIdentifiable.getObjectId());
     if (_store.remove(objectIdentifiable.getObjectId()) == null) {
@@ -202,7 +202,7 @@ public class InMemorySnapshotMaster
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
     validateObjectId(request.getObjectId());
     final MarketDataSnapshotDocument doc = _store.get(request.getObjectId());
-    final List<MarketDataSnapshotDocument> list = (doc != null) ? Collections.singletonList(doc) : Collections.<MarketDataSnapshotDocument>emptyList();
+    final List<MarketDataSnapshotDocument> list = doc != null ? Collections.singletonList(doc) : Collections.<MarketDataSnapshotDocument>emptyList();
     final MarketDataSnapshotHistoryResult result = new MarketDataSnapshotHistoryResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(list);
@@ -210,7 +210,7 @@ public class InMemorySnapshotMaster
   }
 
   @Override
-  protected void validateDocument(MarketDataSnapshotDocument document) {
+  protected void validateDocument(final MarketDataSnapshotDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getSnapshot(), "document.snapshot");
   }

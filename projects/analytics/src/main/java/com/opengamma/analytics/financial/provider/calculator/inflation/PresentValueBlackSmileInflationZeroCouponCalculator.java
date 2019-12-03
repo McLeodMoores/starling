@@ -18,7 +18,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount for inflation zero coupon cap floor without convexity adjustment.
  */
-public final class PresentValueBlackSmileInflationZeroCouponCalculator extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueBlackSmileInflationZeroCouponCalculator
+extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -34,6 +35,7 @@ public final class PresentValueBlackSmileInflationZeroCouponCalculator extends I
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackSmileInflationZeroCouponCalculator getInstance() {
@@ -44,18 +46,22 @@ public final class PresentValueBlackSmileInflationZeroCouponCalculator extends I
    * Pricing methods.
    */
 
-  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
-  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY =
+      CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
 
-  //-----     Cap/Floor Zero Coupon     -----
+  // ----- Cap/Floor Zero Coupon -----
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_INTERPOLATION.presentValue(cap, black);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY.presentValue(cap, black);
   }
 

@@ -10,10 +10,10 @@ import org.threeten.bp.Period;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class TenorLabelledMatrix1D extends LabelledMatrix1D<Tenor, Period> {
-  
+
   public TenorLabelledMatrix1D(final Tenor[] keys, final double[] values) {
     super(keys, values, LabelledMatrixUtils.TENOR_TOLERANCE);
   }
@@ -32,7 +32,8 @@ public class TenorLabelledMatrix1D extends LabelledMatrix1D<Tenor, Period> {
   }
 
   @Override
-  public LabelledMatrix1D<Tenor, Period> getMatrix(final Tenor[] keys, final Object[] labels, final String labelsTitle, final double[] values, final String valuesTitle) {
+  public LabelledMatrix1D<Tenor, Period> getMatrix(final Tenor[] keys, final Object[] labels, final String labelsTitle, final double[] values,
+      final String valuesTitle) {
     return new TenorLabelledMatrix1D(keys, labels, labelsTitle, values, valuesTitle);
   }
 

@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link NonDeliverableFXForwardSecurity} to {@link ForexNonDeliverableForwardDefinition}
+ * Converts {@link NonDeliverableFXForwardSecurity} to {@link ForexNonDeliverableForwardDefinition}.
  */
 public class NonDeliverableFXForwardSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
 
@@ -28,8 +28,8 @@ public class NonDeliverableFXForwardSecurityConverter extends FinancialSecurityV
     final double receiveAmount = fxForwardSecurity.getReceiveAmount();
     final double exchangeRate = receiveAmount / payAmount;
     final ZonedDateTime fixingDate = fxForwardSecurity.getForwardDate();
-    //TODO need to use the deliverInReceiveCurrency field
-    final ZonedDateTime paymentDate = fixingDate; //TODO get this right
+    // TODO need to use the deliverInReceiveCurrency field
+    final ZonedDateTime paymentDate = fixingDate; // TODO get this right
     return new ForexNonDeliverableForwardDefinition(payCurrency, receiveCurrency, receiveAmount, exchangeRate, fixingDate, paymentDate);
   }
 }

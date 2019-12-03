@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -16,8 +16,9 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * An implementation of {@link FunctionParameters} that is a trivial map of strings to values. The values must be Fudge serializable. The Fudge encoding of simple parameters is a message with one
- * field per parameter, with the field name equal to the parameter name and the value equal to the value. There is thus a limit of 255 characters on a parameter name.
+ * An implementation of {@link FunctionParameters} that is a trivial map of strings to values. The values must be Fudge serializable. The Fudge encoding of
+ * simple parameters is a message with one field per parameter, with the field name equal to the parameter name and the value equal to the value. There is thus
+ * a limit of 255 characters on a parameter name.
  */
 public class SimpleFunctionParameters implements FunctionParameters {
 
@@ -26,11 +27,11 @@ public class SimpleFunctionParameters implements FunctionParameters {
   private final ConcurrentMap<String, Object> _parameters;
 
   public SimpleFunctionParameters(final Map<String, ?> parameters) {
-    _parameters = new ConcurrentHashMap<String, Object>(parameters);
+    _parameters = new ConcurrentHashMap<>(parameters);
   }
 
   public SimpleFunctionParameters() {
-    _parameters = new ConcurrentHashMap<String, Object>();
+    _parameters = new ConcurrentHashMap<>();
   }
 
   public <T> void setValue(final String parameter, final T value) {
@@ -80,8 +81,8 @@ public class SimpleFunctionParameters implements FunctionParameters {
 
   @Override
   public String toString() {
-    return "SimpleFunctionParameters [" +
-        "_parameters=" + _parameters +
-        "]";
+    return "SimpleFunctionParameters ["
+        + "_parameters=" + _parameters
+        + "]";
   }
 }

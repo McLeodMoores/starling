@@ -25,7 +25,7 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 public class YUIBundleCompressor implements BundleCompressor {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(YUIBundleCompressor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YUIBundleCompressor.class);
 
   /**
    * The compressor options.
@@ -34,7 +34,7 @@ public class YUIBundleCompressor implements BundleCompressor {
 
   /**
    * Create a compressor.
-   * 
+   *
    * @param compressorOptions  the YUICompressor options, not null
    */
   public YUIBundleCompressor(final YUICompressorOptions compressorOptions) {
@@ -44,13 +44,13 @@ public class YUIBundleCompressor implements BundleCompressor {
 
   //-------------------------------------------------------------------------
   @Override
-  public String compressBundle(Bundle bundle) {
-    String source = BundleUtils.readBundleSource(bundle);
+  public String compressBundle(final Bundle bundle) {
+    final String source = BundleUtils.readBundleSource(bundle);
     return compress(source, bundle.getId());
   }
 
-  private String compress(String content, String bundleId) {
-    BundleType type = BundleType.getType(bundleId);
+  private String compress(final String content, final String bundleId) {
+    final BundleType type = BundleType.getType(bundleId);
     switch (type) {
       case CSS:
         return compressCss(content);
@@ -61,56 +61,56 @@ public class YUIBundleCompressor implements BundleCompressor {
     }
   }
 
-  private String compressJs(String content) {
-    StringWriter writer = new StringWriter(1024);
-    StringReader reader = new StringReader(content);
+  private String compressJs(final String content) {
+    final StringWriter writer = new StringWriter(1024);
+    final StringReader reader = new StringReader(content);
     try {
-      JavaScriptCompressor jsCompressor = createJavaScriptCompressor(reader);
-      jsCompressor.compress(writer, _compressorOptions.getLineBreakPosition(), _compressorOptions.isMunge(), _compressorOptions.isWarn(), 
+      final JavaScriptCompressor jsCompressor = createJavaScriptCompressor(reader);
+      jsCompressor.compress(writer, _compressorOptions.getLineBreakPosition(), _compressorOptions.isMunge(), _compressorOptions.isWarn(),
           _compressorOptions.isPreserveAllSemiColons(), !_compressorOptions.isOptimize());
-    } catch (IOException ex) {
-      s_logger.error("Unexpected IOException", ex);
+    } catch (final IOException ex) {
+      LOGGER.error("Unexpected IOException", ex);
     }
     return writer.toString();
   }
 
-  private JavaScriptCompressor createJavaScriptCompressor(Reader in) throws IOException {
+  private static JavaScriptCompressor createJavaScriptCompressor(final Reader in) throws IOException {
     return new JavaScriptCompressor(in, new ErrorReporter() {
-      private String getMessage(String source, String message, int line, int lineOffset) {
+      private String getMessage(final String source, final String message, final int line, final int lineOffset) {
         String logMessage;
         if (line < 0) {
-          logMessage = (source != null) ? source + ":" : "" + message;
+          logMessage = source != null ? source + ":" : "" + message;
         } else {
-          logMessage = (source != null) ? source + ":" : "" + line + ":" + lineOffset + ":" + message;
+          logMessage = source != null ? source + ":" : "" + line + ":" + lineOffset + ":" + message;
         }
         return logMessage;
       }
-      
+
       @Override
-      public void warning(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.warn(getMessage(sourceName, message, line, lineOffset));
+      public void warning(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
+        LOGGER.warn(getMessage(sourceName, message, line, lineOffset));
       }
-      
+
       @Override
-      public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.error(getMessage(sourceName, message, line, lineOffset));
+      public EvaluatorException runtimeError(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
+        LOGGER.error(getMessage(sourceName, message, line, lineOffset));
         return new EvaluatorException(message);
       }
-      
+
       @Override
-      public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.error(getMessage(sourceName, message, line, lineOffset));
+      public void error(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
+        LOGGER.error(getMessage(sourceName, message, line, lineOffset));
       }
     });
   }
 
-  private String compressCss(String content) {
-    StringWriter stringWriter = new StringWriter(1024);
+  private String compressCss(final String content) {
+    final StringWriter stringWriter = new StringWriter(1024);
     try {
-      CssCompressor compressor = new CssCompressor(new StringReader(content));
+      final CssCompressor compressor = new CssCompressor(new StringReader(content));
       compressor.compress(stringWriter, _compressorOptions.getLineBreakPosition());
-    } catch (IOException ex) {
-      s_logger.error("Unexpected IOException", ex);
+    } catch (final IOException ex) {
+      LOGGER.error("Unexpected IOException", ex);
     }
     return stringWriter.toString();
   }

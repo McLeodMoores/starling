@@ -16,7 +16,10 @@ import com.opengamma.util.money.CurrencyAmount;
 
 /**
  * Gets the forward rates for an annuity given a bundle of yield curves.
+ *
+ * @deprecated Moved to {@link com.opengamma.analytics.financial.interestrate.swap.provider.AnnuityPaymentAmountsVisitor}
  */
+@Deprecated
 public final class AnnuityPaymentAmountsVisitor extends InstrumentDerivativeVisitorAdapter<Void, CurrencyAmount[]> {
   /** Gets the fixed rates for coupons */
   private static final InstrumentDerivativeVisitor<Void, CurrencyAmount> COUPON_VISITOR = new CouponPaymentVisitor();
@@ -25,6 +28,7 @@ public final class AnnuityPaymentAmountsVisitor extends InstrumentDerivativeVisi
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static InstrumentDerivativeVisitor<Void, CurrencyAmount[]> getInstance() {

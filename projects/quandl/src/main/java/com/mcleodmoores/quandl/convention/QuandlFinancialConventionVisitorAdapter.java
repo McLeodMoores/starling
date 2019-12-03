@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -9,10 +9,11 @@ import com.opengamma.financial.convention.FinancialConventionVisitorAdapter;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An adapter for {@link QuandlFinancialConventionVisitor} that extends {@link FinancialConventionVisitorAdapter}
- * and provides default implementations that throw {@link Quandl4OpenGammaRuntimeException} for Quandl financial conventions.
+ * An adapter for {@link QuandlFinancialConventionVisitor} that extends {@link FinancialConventionVisitorAdapter} and provides default implementations that
+ * throw {@link Quandl4OpenGammaRuntimeException} for Quandl financial conventions.
  *
- * @param <T> The type of the result.
+ * @param <T>
+ *          The type of the result.
  */
 public class QuandlFinancialConventionVisitorAdapter<T> extends FinancialConventionVisitorAdapter<T> implements QuandlFinancialConventionVisitor<T> {
 
@@ -28,8 +29,10 @@ public class QuandlFinancialConventionVisitorAdapter<T> extends FinancialConvent
 
   /**
    * Creates an error message for a convention.
-   * @param convention  the convention
-   * @return  an error message
+   * 
+   * @param convention
+   *          the convention
+   * @return an error message
    */
   private T getErrorMessage(final FinancialConvention convention) {
     ArgumentChecker.notNull(convention, "convention");

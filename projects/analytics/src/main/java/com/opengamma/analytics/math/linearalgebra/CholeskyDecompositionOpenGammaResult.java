@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -50,13 +50,13 @@ public class CholeskyDecompositionOpenGammaResult implements CholeskyDecompositi
   }
 
   @Override
-  public DoubleMatrix1D solve(DoubleMatrix1D b) {
+  public DoubleMatrix1D solve(final DoubleMatrix1D b) {
     return new DoubleMatrix1D(b.getData());
   }
 
   @Override
-  public double[] solve(double[] b) {
-    int dim = b.length;
+  public double[] solve(final double[] b) {
+    final int dim = b.length;
     Validate.isTrue(dim == _lArray.length, "b array of incorrect size");
     final double[] x = new double[dim];
     System.arraycopy(b, 0, x, 0, dim);
@@ -78,11 +78,11 @@ public class CholeskyDecompositionOpenGammaResult implements CholeskyDecompositi
   }
 
   @Override
-  public DoubleMatrix2D solve(DoubleMatrix2D b) {
-    int nbRow = b.getNumberOfRows();
-    int nbCol = b.getNumberOfColumns();
+  public DoubleMatrix2D solve(final DoubleMatrix2D b) {
+    final int nbRow = b.getNumberOfRows();
+    final int nbCol = b.getNumberOfColumns();
     Validate.isTrue(nbRow == _lArray.length, "b array of incorrect size");
-    double[][] bArray = b.getData();
+    final double[][] bArray = b.getData();
     final double[][] x = new double[nbRow][nbCol];
     for (int looprow = 0; looprow < nbRow; looprow++) {
       System.arraycopy(bArray[looprow], 0, x[looprow], 0, nbCol);

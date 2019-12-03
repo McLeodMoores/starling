@@ -17,8 +17,8 @@ import com.opengamma.analytics.math.cube.Cube;
 import com.opengamma.analytics.math.cube.FunctionalDoublesCube;
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.test.TestGroup;
 
@@ -207,7 +207,7 @@ public class HestonPDETestCase {
       price[i] = strikeNprice[i][1];
     }
 
-    final Interpolator1D interpolator = Interpolator1DFactory.getInterpolator("DoubleQuadratic");
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of("DoubleQuadratic");
     final Interpolator1DDataBundle dataBundle = interpolator.getDataBundleFromSortedArrays(k, price);
 
     final double fftPrice = interpolator.interpolate(dataBundle, STRIKE);

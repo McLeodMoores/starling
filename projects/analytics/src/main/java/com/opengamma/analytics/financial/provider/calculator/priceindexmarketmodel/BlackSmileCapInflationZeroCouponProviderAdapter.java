@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.priceindexmarketmodel;
@@ -12,9 +12,11 @@ import com.opengamma.analytics.financial.provider.description.inflation.BlackSmi
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 
 /**
- *  @param <RESULT_TYPE> The result-type for the provider.
+ * @param <RESULT_TYPE>
+ *          The result-type for the provider.
  */
-public class BlackSmileCapInflationZeroCouponProviderAdapter<RESULT_TYPE> extends InstrumentDerivativeVisitorSameMethodAdapter<BlackSmileCapInflationZeroCouponProviderInterface, RESULT_TYPE> {
+public class BlackSmileCapInflationZeroCouponProviderAdapter<RESULT_TYPE>
+extends InstrumentDerivativeVisitorSameMethodAdapter<BlackSmileCapInflationZeroCouponProviderInterface, RESULT_TYPE> {
 
   private final InstrumentDerivativeVisitor<MulticurveProviderInterface, RESULT_TYPE> _visitor;
 

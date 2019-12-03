@@ -38,13 +38,13 @@ public class DefaultBloombergReferenceDataStatisticsComponentFactory extends Abs
   private String _classifier;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    BloombergReferenceDataStatistics refDataStat = initReferenceDataStatistics(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final BloombergReferenceDataStatistics refDataStat = initReferenceDataStatistics(repo);
     final ComponentInfo info = new ComponentInfo(BloombergReferenceDataStatistics.class, getClassifier());
     repo.registerComponent(info, refDataStat);
   }
 
-  protected BloombergReferenceDataStatistics initReferenceDataStatistics(ComponentRepository repo) {
+  protected BloombergReferenceDataStatistics initReferenceDataStatistics(final ComponentRepository repo) {
     final DailyBloombergReferenceDataStatistics stats = new DailyBloombergReferenceDataStatistics();
     repo.registerMBean(new DailyBloombergReferenceDataStatisticsMBean(stats));
     return stats;

@@ -14,23 +14,12 @@ import com.opengamma.analytics.financial.model.option.definition.OptionPayoffFun
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  * Defines a European-style product option.
  * <p>
- * The payoff of a product call option is:
- * $$
- * \begin{eqnarray*}
- * max\left(S_1S_2 - K, 0\right)
- * \end{eqnarray*}
- * $$
- * and that of a put is:
- * $$
- * \begin{eqnarray*}
- * max\left(K - S_1S_2, 0\right)
- * \end{eqnarray*}
- * $$
- * where $K$ is the strike, $S_1$ is the spot price of the first underlying and
- * $S_2$ is the spot price of the second underlying.
+ * The payoff of a product call option is: $$ \begin{eqnarray*} max\left(S_1S_2 - K, 0\right) \end{eqnarray*} $$ and that of a put is: $$ \begin{eqnarray*}
+ * max\left(K - S_1S_2, 0\right) \end{eqnarray*} $$ where $K$ is the strike, $S_1$ is the spot price of the first underlying and $S_2$ is the spot price of the
+ * second underlying.
  */
 public class ProductOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardTwoAssetOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -46,17 +35,21 @@ public class ProductOptionDefinition extends OptionDefinition {
   };
 
   /**
-   * 
-   * @param strike The strike
-   * @param expiry The expiry
-   * @param isCall Is the option a call
+   *
+   * @param strike
+   *          The strike
+   * @param expiry
+   *          The expiry
+   * @param isCall
+   *          Is the option a call
    */
   public ProductOptionDefinition(final double strike, final Expiry expiry, final boolean isCall) {
     super(strike, expiry, isCall);
   }
 
   /**
-   * The exercise function of this option is European (see {@link EuropeanExerciseFunction})
+   * The exercise function of this option is European (see {@link EuropeanExerciseFunction}).
+   * 
    * @return The exercise function
    */
   @SuppressWarnings("unchecked")

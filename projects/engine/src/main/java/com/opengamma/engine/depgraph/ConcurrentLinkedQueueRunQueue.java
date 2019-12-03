@@ -9,11 +9,12 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Run queue implementation based on a {@link ConcurrentLinkedQueue}. This is a FIFO queue which may not give good caching performance for some function repositories and portfolios.
+ * Run queue implementation based on a {@link ConcurrentLinkedQueue}. This is a FIFO queue which may not give
+ * good caching performance for some function repositories and portfolios.
  */
 /* package */final class ConcurrentLinkedQueueRunQueue implements RunQueue {
 
-  private final ConcurrentLinkedQueue<ContextRunnable> _list = new ConcurrentLinkedQueue<ContextRunnable>();
+  private final ConcurrentLinkedQueue<ContextRunnable> _list = new ConcurrentLinkedQueue<>();
 
   @Override
   public boolean isEmpty() {

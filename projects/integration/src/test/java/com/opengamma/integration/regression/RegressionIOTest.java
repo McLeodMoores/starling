@@ -30,22 +30,22 @@ public class RegressionIOTest {
 
   private static class TestInstance extends RegressionIO {
 
-    public TestInstance(File baseFile, Format format) {
+    public TestInstance(final File baseFile, final Format format) {
       super(baseFile, format);
     }
 
     @Override
-    public void write(String type, Object o, String identifier) throws IOException {
+    public void write(final String type, final Object o, final String identifier) throws IOException {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object read(String type, String identifier) throws IOException {
+    public Object read(final String type, final String identifier) throws IOException {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<String> enumObjects(String type) throws IOException {
+    public List<String> enumObjects(final String type) throws IOException {
       throw new UnsupportedOperationException();
     }
 

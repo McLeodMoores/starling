@@ -80,7 +80,8 @@ public class FXForwardCurveFromYieldCurvesFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> fxForwardCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
       if (fxForwardCurveNames == null || fxForwardCurveNames.size() != 1) {
@@ -102,7 +103,7 @@ public class FXForwardCurveFromYieldCurvesFunction extends AbstractFunction {
       if (receiveCurveCalculationConfigs == null || receiveCurveCalculationConfigs.size() != 1) {
         return null;
       }
-      final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+      final Set<ValueRequirement> result = new HashSet<>();
       final ValueProperties payCurveProperties = ValueProperties.builder()
           .with(ValuePropertyNames.CURVE, Iterables.getOnlyElement(payCurveNames))
           .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, Iterables.getOnlyElement(payCurveCalculationConfigs))
@@ -128,15 +129,18 @@ public class FXForwardCurveFromYieldCurvesFunction extends AbstractFunction {
         receiveCurrency = baseQuotePair.getBase();
       }
       result.add(ConventionBasedFXRateFunction.getSpotRateRequirement(ccyPair));
-      result.add(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(payCurrency), payCurveProperties));
-      result.add(new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(receiveCurrency), receiveCurveProperties));
+      result.add(
+          new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(payCurrency), payCurveProperties));
+      result.add(
+          new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetType.CURRENCY.specification(receiveCurrency), receiveCurveProperties));
       return result;
     }
 
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       Object payCurveObject = null;
       Object receiveCurveObject = null;
       Set<String> payCurveNames = null;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.ircurve;
@@ -25,7 +25,10 @@ import com.opengamma.financial.property.StaticDefaultPropertyFunction;
  * <li>YIELD_CURVE_SHIFT
  * </ul>
  * This should allow either specific curves to be adjusted or more global changes.
+ * 
+ * @deprecated {@link YieldCurveDefinition}s are deprecated.
  */
+@Deprecated
 public class DefaultYieldCurveShiftFunction extends StaticDefaultPropertyFunction {
 
   /**

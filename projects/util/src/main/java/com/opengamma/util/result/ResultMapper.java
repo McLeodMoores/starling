@@ -5,8 +5,6 @@
  */
 package com.opengamma.util.result;
 
-import com.google.common.base.Function;
-
 /**
  * Functional interface that can transform a result.
  *

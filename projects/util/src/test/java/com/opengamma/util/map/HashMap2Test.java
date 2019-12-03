@@ -19,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class HashMap2Test {
 
-  private void testBasicOperations(final Map2<String, String, String> map) {
+  private static void testBasicOperations(final Map2<String, String, String> map) {
     assertTrue(map.isEmpty());
     assertEquals(map.size(), 0);
     assertEquals(map.put("B", "A", "Bar"), null);
@@ -37,15 +37,21 @@ public class HashMap2Test {
     assertFalse(map.containsKey("A", "B"));
   }
 
-  public void testBasicOperations_strongKeys() {
+  /**
+   *
+   */
+  public void testBasicOperationsStrongKeys() {
     testBasicOperations(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
-  public void testBasicOperations_weakKeys() {
+  /**
+   *
+   */
+  public void testBasicOperationsWeakKeys() {
     testBasicOperations(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
 
-  private void testRemove(final Map2<String, String, String> map) {
+  private static void testRemove(final Map2<String, String, String> map) {
     map.put("A", "B", "Foo");
     assertEquals(map.size(), 1);
     assertEquals(map.remove("A", "B"), "Foo");
@@ -53,15 +59,21 @@ public class HashMap2Test {
     assertEquals(map.remove("A", "B"), null);
   }
 
-  public void testRemove_strongKeys() {
+  /**
+   *
+   */
+  public void testRemoveStrongKeys() {
     testRemove(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
-  public void testRemove_weakKeys() {
+  /**
+   *
+   */
+  public void testRemoveWeakKeys() {
     testRemove(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
 
-  private void testPutIfAbsent(final Map2<String, String, String> map) {
+  private static void testPutIfAbsent(final Map2<String, String, String> map) {
     assertEquals(map.put("A", "B", "Foo"), null);
     assertEquals(map.put("B", "A", "Bar"), null);
     assertEquals(map.put("A", "B", "Cow"), "Foo");
@@ -72,11 +84,17 @@ public class HashMap2Test {
     assertEquals(map.get("B", "A"), "Dog");
   }
 
-  public void testPutIfAbsent_strongKeys() {
+  /**
+   *
+   */
+  public void testPutIfAbsentStrongKeys() {
     testPutIfAbsent(new HashMap2<String, String, String>(HashMap2.STRONG_KEYS));
   }
 
-  public void testPutIfAbsent_weakKeys() {
+  /**
+   *
+   */
+  public void testPutIfAbsentWeakKeys() {
     testPutIfAbsent(new HashMap2<String, String, String>(HashMap2.WEAK_KEYS));
   }
 

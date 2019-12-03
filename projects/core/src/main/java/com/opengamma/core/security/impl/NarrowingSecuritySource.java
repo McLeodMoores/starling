@@ -33,26 +33,26 @@ public class NarrowingSecuritySource implements SecuritySource {
    *
    * @param delegate the source to delegate to, not null
    */
-  public NarrowingSecuritySource(SecuritySource delegate) {
+  public NarrowingSecuritySource(final SecuritySource delegate) {
     _delegate = ArgumentChecker.notNull(delegate, "delegate");
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return _delegate.get(bundle, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Security>> getAll(Collection<ExternalIdBundle> bundles,
-                                                            VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles,
+                                                            final VersionCorrection versionCorrection) {
 
-    ImmutableMap.Builder<ExternalIdBundle, Collection<Security>> builder = ImmutableMap.builder();
+    final ImmutableMap.Builder<ExternalIdBundle, Collection<Security>> builder = ImmutableMap.builder();
 
     // Iterating and requesting singly is horrible but is
     // all the underlying source will do anyway so there
     // is no performance downside to doing it
-    for (ExternalIdBundle bundle : bundles) {
-      Collection<Security> securities = get(bundle, versionCorrection);
+    for (final ExternalIdBundle bundle : bundles) {
+      final Collection<Security> securities = get(bundle, versionCorrection);
       if (!securities.isEmpty()) {
         builder.put(bundle, securities);
       }
@@ -61,32 +61,32 @@ public class NarrowingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     return _delegate.get(bundle);
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     return getSingle(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    Collection<Security> securities = get(bundle, versionCorrection);
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final Collection<Security> securities = get(bundle, versionCorrection);
     return securities.isEmpty() ? null : securities.iterator().next();
   }
 
   @Override
-  public Map<ExternalIdBundle, Security> getSingle(Collection<ExternalIdBundle> bundles,
-                                                   VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles,
+                                                   final VersionCorrection versionCorrection) {
 
-    ImmutableMap.Builder<ExternalIdBundle, Security> builder = ImmutableMap.builder();
+    final ImmutableMap.Builder<ExternalIdBundle, Security> builder = ImmutableMap.builder();
 
     // Iterating and requesting singly is horrible but is
     // all the underlying source will do anyway so there
     // is no performance downside to doing it
-    for (ExternalIdBundle bundle : bundles) {
-      Security security = getSingle(bundle, versionCorrection);
+    for (final ExternalIdBundle bundle : bundles) {
+      final Security security = getSingle(bundle, versionCorrection);
       if (security != null) {
         builder.put(bundle, security);
       }
@@ -100,22 +100,22 @@ public class NarrowingSecuritySource implements SecuritySource {
   }
 
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     return _delegate.get(uniqueId);
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return _delegate.get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
     return _delegate.get(uniqueIds);
   }
 
   @Override
-  public Map<ObjectId, Security> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+  public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     return _delegate.get(objectIds, versionCorrection);
   }
 }

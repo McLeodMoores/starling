@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -18,12 +18,12 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
 
   private final FunctionInvocationStatisticsGatherer _gatherer;
   private final String _configuration;
-  private String _functionIdentifier;
+  private final String _functionIdentifier;
   private double _dataInputBytes;
   private int _dataOutputBytes;
   private int _dataOutputSamples;
   private int _expectedDataOutputSamples;
-  private Timer _timer;
+  private final Timer _timer;
   private Timer.Context _context;
   //TODO: Look at replacing (or simply exposing) IO metrics
 
@@ -62,7 +62,8 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
     }
     _expectedDataOutputSamples--;
     if (_expectedDataOutputSamples == 0) {
-      _gatherer.functionInvoked(_configuration, _functionIdentifier, 1, _timer.getSnapshot().getMean(), _dataInputBytes, (_dataOutputSamples > 0) ? _dataOutputBytes / _dataOutputSamples : Double.NaN);
+      _gatherer.functionInvoked(_configuration, _functionIdentifier, 1, _timer.getSnapshot().getMean(), _dataInputBytes,
+          _dataOutputSamples > 0 ? _dataOutputBytes / _dataOutputSamples : Double.NaN);
     }
   }
 

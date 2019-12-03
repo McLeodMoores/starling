@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -48,32 +48,32 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * The display name, such as the user's real name.
    * This is typically used in a GUI and is not guaranteed to be unique.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _displayName = "";
   /**
    * The locale that the user prefers.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private Locale _locale = Locale.ENGLISH;
   /**
    * The time-zone used to display local times.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ZoneId _zone = OpenGammaClock.getZone();
   /**
    * The date format style that the user prefers.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private DateStyle _dateStyle = DateStyle.TEXTUAL_MONTH;
   /**
    * The time formatter that the user prefers.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private TimeStyle _timeStyle = TimeStyle.ISO;
   /**
    * The extended map of profile data.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Map<String, String> _extensions = new TreeMap<>();
 
   //-------------------------------------------------------------------------
@@ -81,13 +81,13 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Creates a {@code SimpleUserProfile} from another account.
    * <p>
    * Roles and permissions are not copied.
-   * 
+   *
    * @param profileToCopy  the profile to copy, not null
    * @return the new profile, not null
    */
-  public static SimpleUserProfile from(UserProfile profileToCopy) {
+  public static SimpleUserProfile from(final UserProfile profileToCopy) {
     ArgumentChecker.notNull(profileToCopy, "profileToCopy");
-    SimpleUserProfile copy = new SimpleUserProfile();
+    final SimpleUserProfile copy = new SimpleUserProfile();
     copy.setDisplayName(profileToCopy.getDisplayName());
     copy.setLocale(profileToCopy.getLocale());
     copy.setZone(profileToCopy.getZone());
@@ -139,6 +139,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * This is typically used in a GUI and is not guaranteed to be unique.
    * @return the value of the property, not null
    */
+  @Override
   public String getDisplayName() {
     return _displayName;
   }
@@ -167,6 +168,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Gets the locale that the user prefers.
    * @return the value of the property, not null
    */
+  @Override
   public Locale getLocale() {
     return _locale;
   }
@@ -193,6 +195,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Gets the time-zone used to display local times.
    * @return the value of the property, not null
    */
+  @Override
   public ZoneId getZone() {
     return _zone;
   }
@@ -219,6 +222,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Gets the date format style that the user prefers.
    * @return the value of the property, not null
    */
+  @Override
   public DateStyle getDateStyle() {
     return _dateStyle;
   }
@@ -245,6 +249,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Gets the time formatter that the user prefers.
    * @return the value of the property, not null
    */
+  @Override
   public TimeStyle getTimeStyle() {
     return _timeStyle;
   }
@@ -271,6 +276,7 @@ public class SimpleUserProfile implements Bean, UserProfile, Serializable {
    * Gets the extended map of profile data.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getExtensions() {
     return _extensions;
   }

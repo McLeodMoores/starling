@@ -23,55 +23,69 @@ public interface IssuerProviderInterface extends ParameterIssuerProviderInterfac
 
   /**
    * Gets the discount factor for one issuer in one currency.
-   * @param issuer The issuer.
-   * @param time The time.
+   * 
+   * @param issuer
+   *          The issuer.
+   * @param time
+   *          The time.
    * @return The discount factor.
    */
   double getDiscountFactor(LegalEntity issuer, Double time);
 
   /**
-  * Return the name associated to the discounting for an issuer.
-  * @param issuer The issuer.
-  * @return The name.
-  */
+   * Return the name associated to the discounting for an issuer.
+   * 
+   * @param issuer
+   *          The issuer.
+   * @return The name.
+   */
   String getName(Pair<Object, LegalEntityFilter<LegalEntity>> issuer);
 
   /**
-  * Return the name associated to the discounting for an issuer.
-  * @param issuer The issuer.
-  * @return The name.
-  */
+   * Return the name associated to the discounting for an issuer.
+   * 
+   * @param issuer
+   *          The issuer.
+   * @return The name.
+   */
   String getName(LegalEntity issuer);
 
   /**
    * Gets the names of all curves (discounting, forward, and issuers).
+   * 
    * @return The names.
    */
   Set<String> getAllNames();
 
   /**
    * Returns the MulticurveProvider from which the IssuerProvider is composed.
+   * 
    * @return The multi-curves provider.
    */
   @Override
   MulticurveProviderInterface getMulticurveProvider();
 
   /**
-   * Gets the number of parameters for the named curve
-   * @param name The name
+   * Gets the number of parameters for the named curve.
+   * 
+   * @param name
+   *          The name
    * @return The number of parameters
    */
   Integer getNumberOfParameters(String name);
 
   /**
    * Gets the underlying curve names for a curve.
-   * @param name The name
+   * 
+   * @param name
+   *          The name
    * @return The underlying curve names
    */
   List<String> getUnderlyingCurvesNames(String name);
 
   /**
    * Gets all issuers represented in this bundle.
+   * 
    * @return The issuers
    */
   Set<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers();

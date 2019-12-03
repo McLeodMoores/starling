@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -8,19 +8,24 @@ package com.opengamma.analytics.financial.model.finitedifference;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * 
+ *
  */
 public class ConvectionDiffusionPDE1DCoupledCoefficients extends ConvectionDiffusionPDE1DStandardCoefficients {
 
   private final double _lambda;
 
   /**
-   * @param a a
-   * @param b b
-   * @param c c
-   * @param lambda the coupling to other system
+   * @param a
+   *          a
+   * @param b
+   *          b
+   * @param c
+   *          c
+   * @param lambda
+   *          the coupling to other system
    */
-  public ConvectionDiffusionPDE1DCoupledCoefficients(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b, final Surface<Double, Double, Double> c,
+  public ConvectionDiffusionPDE1DCoupledCoefficients(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b,
+      final Surface<Double, Double, Double> c,
       final double lambda) {
     super(a, b, c);
     _lambda = lambda;
@@ -36,7 +41,7 @@ public class ConvectionDiffusionPDE1DCoupledCoefficients extends ConvectionDiffu
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_lambda);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -57,6 +62,5 @@ public class ConvectionDiffusionPDE1DCoupledCoefficients extends ConvectionDiffu
     }
     return true;
   }
-
 
 }

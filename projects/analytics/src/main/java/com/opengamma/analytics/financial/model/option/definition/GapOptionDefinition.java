@@ -11,29 +11,6 @@ import com.opengamma.util.time.Expiry;
 
 /**
  * Class defining a gap option.
- * <p>
- * Gap options have European-style exercise with payoff
- * $$
- * \begin{align*}
- * \mathrm{payoff} =
- * \begin{cases}
- * 0 \quad & \mathrm{if} \quad S \leq K_1\\
- * S - K_2 \quad & \mathrm{otherwise}
- * \end{cases}
- * \end{align*}
- * $$
- * for a call and
- * $$
- * \begin{align*}
- * \mathrm{payoff} =
- * \begin{cases}
- * 0 \quad & \mathrm{if} \quad S \geq K_1\\
- * K_2 - S \quad & \mathrm{otherwise}
- * \end{cases}
- * \end{align*}
- * $$
- * for a put, where $K_1$ is the strike, $K_2$ is the payoff strike and $S$ is
- * the spot.
  */
 public class GapOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -88,7 +65,7 @@ public class GapOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_payoffStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

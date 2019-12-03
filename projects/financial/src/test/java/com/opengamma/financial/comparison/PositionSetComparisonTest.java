@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.comparison;
@@ -34,10 +34,10 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PositionSetComparisonTest extends AbstractTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionSetComparisonTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionSetComparisonTest.class);
 
   private Set<Position> createPositionSetA() {
-    final Set<Position> set = new HashSet<Position>();
+    final Set<Position> set = new HashSet<>();
     Security security;
     set.add(createPosition("A1", 10, createRawSecurity("1", 42), "P1", "P2", null, null));
     security = createSwaptionSecurity("3", true, Currency.USD, ExternalId.of("Underlying", "3"));
@@ -51,7 +51,7 @@ public class PositionSetComparisonTest extends AbstractTest {
   }
 
   private Set<Position> createPositionSetB() {
-    final Set<Position> set = new HashSet<Position>();
+    final Set<Position> set = new HashSet<>();
     Security security;
     set.add(createPosition("B2", 20, createEquityOptionSecurity("2", OptionType.CALL, 42d, ExternalId.of("Underlying", "2")), null, null, null, null));
     security = createSwaptionSecurity("3", true, Currency.USD, ExternalId.of("Underlying", "3"));
@@ -64,8 +64,8 @@ public class PositionSetComparisonTest extends AbstractTest {
   }
 
   private static void expect(final Collection<Position> positions, final Collection<String> positionIdentifiers) {
-    final HashSet<String> found = new HashSet<String>(positionIdentifiers);
-    for (Position position : positions) {
+    final HashSet<String> found = new HashSet<>(positionIdentifiers);
+    for (final Position position : positions) {
       if (!found.remove(position.getUniqueId().getValue())) {
         throw new AssertionError("Found " + position + ", not listed in " + positionIdentifiers);
       }
@@ -76,7 +76,7 @@ public class PositionSetComparisonTest extends AbstractTest {
   }
 
   private static void assertACompareB(final PositionSetComparison result) {
-    s_logger.debug("A.B = {}", result);
+    LOGGER.debug("A.B = {}", result);
     // Check the identical positions
     expect(result.getIdentical(), Arrays.asList("A3", "A6"));
     // Check those present in A but not B
@@ -101,10 +101,10 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a, Collections.<Position>emptySet());
-    s_logger.debug("A.e = {}", result);
+    LOGGER.debug("A.e = {}", result);
     assertFalse(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
-    assertEquals(new HashSet<Position>(result.getOnlyInFirst()), a);
+    assertEquals(new HashSet<>(result.getOnlyInFirst()), a);
     assertTrue(result.getOnlyInSecond().isEmpty());
     assertTrue(result.getIdentical().isEmpty());
   }
@@ -113,13 +113,13 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a, a);
-    s_logger.debug("A.A = {}", result);
+    LOGGER.debug("A.A = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
     assertTrue(result.getOnlyInFirst().isEmpty());
     assertTrue(result.getOnlyInSecond().isEmpty());
-    assertEquals(new HashSet<Position>(result.getIdentical()), a);
+    assertEquals(new HashSet<>(result.getIdentical()), a);
   }
 
   public void testEqualObject() {
@@ -127,7 +127,7 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a2 = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a1, a2);
-    s_logger.debug("A.A' = {}", result);
+    LOGGER.debug("A.A' = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
@@ -139,7 +139,7 @@ public class PositionSetComparisonTest extends AbstractTest {
   public void testEqualsEmpty() {
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(Collections.<Position>emptySet(), Collections.<Position>emptySet());
-    s_logger.debug("e.e = {}", result);
+    LOGGER.debug("e.e = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
@@ -149,12 +149,12 @@ public class PositionSetComparisonTest extends AbstractTest {
   }
 
   public void testCompareIgnoreAttributes() {
-    final Set<Position> setA = new HashSet<Position>();
+    final Set<Position> setA = new HashSet<>();
     final Security security = createRawSecurity("1", 42);
     setA.add(createPosition("A1", 10, security, "P1", "P2", null, null));
     setA.add(createPosition("A2", 20, security, "P1", "P2", createTrade(10, security, "T1", "T2"), createTrade(10, security, "T3", "T4")));
     setA.add(createPosition("A3", 20, security, null, null, createTrade(10, security, "T1", "T2"), createTrade(10, security, "T3", "T4")));
-    final Set<Position> setB = new HashSet<Position>();
+    final Set<Position> setB = new HashSet<>();
     setB.add(createPosition("B1", 10, security, null, null, null, null));
     setB.add(createPosition("B2", 20, security, "P5", "P6", createTrade(10, security, "T3", "T1"), createTrade(10, security, null, null)));
     setB.add(createPosition("B3", 20, security, null, null, createTrade(10, security, "T1", "T2"), createTrade(10, security, "T3", "T4")));

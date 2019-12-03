@@ -16,8 +16,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing a provider with discounting, forward, credit curves and Hull-White parameters on one issuer curve.
- * The forward rate are computed as the ratio of discount factors stored in YieldAndDiscountCurve.
+ * Class describing a provider with discounting, forward, credit curves and Hull-White parameters on one issuer curve. The forward rate are computed as the
+ * ratio of discount factors stored in YieldAndDiscountCurve.
  */
 public class HullWhiteIssuerProvider implements HullWhiteIssuerProviderInterface {
 
@@ -31,9 +31,13 @@ public class HullWhiteIssuerProvider implements HullWhiteIssuerProviderInterface
   private final HullWhiteOneFactorPiecewiseConstantParameters _parameters;
 
   /**
-   * Constructor from exiting multicurveProvider and Hull-White parameters. The given provider and parameters are used for the new provider (the same maps are used, not copied).
-   * @param issuer The issuer provider, not null
-   * @param parameters The Hull-White one factor parameters, not null
+   * Constructor from exiting multicurveProvider and Hull-White parameters. The given provider and parameters are used for the new provider (the same maps are
+   * used, not copied).
+   *
+   * @param issuer
+   *          The issuer provider, not null
+   * @param parameters
+   *          The Hull-White one factor parameters, not null
    */
   public HullWhiteIssuerProvider(final IssuerProviderInterface issuer, final HullWhiteOneFactorPiecewiseConstantParameters parameters) {
     ArgumentChecker.notNull(issuer, "issuer");

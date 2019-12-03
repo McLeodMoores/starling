@@ -16,8 +16,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * An implementation of {@link MarketDataAvailabilityFilter} based on a {@link MarketDataAvailabilityProvider}
  * <p>
- * A filter would normally be created from a provider if necessary by calling its {@link MarketDataAvailabilityProvider#getAvailabilityFilter()} method which may offer a more efficient conversion than
- * constructing an instance of this class. This is provided to assist in the implementation of that method.
+ * A filter would normally be created from a provider if necessary by calling its {@link MarketDataAvailabilityProvider#getAvailabilityFilter()}
+ * method which may offer a more efficient conversion than constructing an instance of this class. This is provided to assist in the implementation
+ * of that method.
  */
 public class ProviderMarketDataAvailabilityFilter implements MarketDataAvailabilityFilter {
 
@@ -41,33 +42,32 @@ public class ProviderMarketDataAvailabilityFilter implements MarketDataAvailabil
   public MarketDataAvailabilityProvider withProvider(final MarketDataAvailabilityProvider provider) {
     if (getProvider() == provider) {
       return provider;
-    } else {
-      return new MarketDataAvailabilityProvider() {
-
-        @Override
-        public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
-          if (isAvailable(targetSpec, target, desiredValue)) {
-            return provider.getAvailability(targetSpec, target, desiredValue);
-          } else {
-            return null;
-          }
-        }
-
-        @Override
-        public MarketDataAvailabilityFilter getAvailabilityFilter() {
-          return ProviderMarketDataAvailabilityFilter.this;
-        }
-
-        @Override
-        public Serializable getAvailabilityHintKey() {
-          final ArrayList<Serializable> key = new ArrayList<Serializable>(2);
-          key.add(getProvider().getAvailabilityHintKey());
-          key.add(provider.getAvailabilityHintKey());
-          return key;
-        }
-
-      };
     }
+    return new MarketDataAvailabilityProvider() {
+
+      @Override
+      public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final Object target,
+          final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+        if (isAvailable(targetSpec, target, desiredValue)) {
+          return provider.getAvailability(targetSpec, target, desiredValue);
+        }
+        return null;
+      }
+
+      @Override
+      public MarketDataAvailabilityFilter getAvailabilityFilter() {
+        return ProviderMarketDataAvailabilityFilter.this;
+      }
+
+      @Override
+      public Serializable getAvailabilityHintKey() {
+        final ArrayList<Serializable> key = new ArrayList<>(2);
+        key.add(getProvider().getAvailabilityHintKey());
+        key.add(provider.getAvailabilityHintKey());
+        return key;
+      }
+
+    };
   }
 
 }

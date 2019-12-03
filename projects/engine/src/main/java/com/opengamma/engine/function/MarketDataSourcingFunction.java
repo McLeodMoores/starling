@@ -7,8 +7,8 @@ package com.opengamma.engine.function;
 
 
 /**
- * Special case of function implementation that is never executed by the graph executor but is used to source market data. It will not be considered directly during graph construction; the singleton
- * instance is associated with DependencyNode objects to act as a marker on the node.
+ * Special case of function implementation that is never executed by the graph executor but is used to source market data. It will not be
+ * considered directly during graph construction; the singleton instance is associated with DependencyNode objects to act as a marker on the node.
  * <p>
  * This should never be present in a function repository as it should never be selected for execution.
  */

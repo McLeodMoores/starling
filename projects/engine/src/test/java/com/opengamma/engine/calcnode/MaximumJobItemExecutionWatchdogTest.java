@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -20,8 +20,6 @@ import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.engine.ComputationTargetSpecification;
-import com.opengamma.engine.calcnode.CalculationJobItem;
-import com.opengamma.engine.calcnode.MaximumJobItemExecutionWatchdog;
 import com.opengamma.engine.function.EmptyFunctionParameters;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ExecutionLogMode;
@@ -34,7 +32,7 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.INTEGRATION)
 public class MaximumJobItemExecutionWatchdogTest {
 
-  private final CalculationJobItem JOB = new CalculationJobItem("", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
+  private static final CalculationJobItem JOB = new CalculationJobItem("", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
       Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS);
 
   public void testNoAlert() throws Exception {
@@ -44,7 +42,7 @@ public class MaximumJobItemExecutionWatchdogTest {
       watchdog.setMaxJobItemExecutionTime(Timeout.standardTimeoutMillis() / 2);
       watchdog.setScheduler(scheduler);
       final CyclicBarrier barrier = new CyclicBarrier(2);
-      (new Thread() {
+      new Thread() {
         @Override
         public void run() {
           try {
@@ -59,7 +57,7 @@ public class MaximumJobItemExecutionWatchdogTest {
             throw new OpenGammaRuntimeException("exception", e);
           }
         }
-      }).start();
+      }.start();
       barrier.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       Thread.sleep(Timeout.standardTimeoutMillis());
       // Watchdog should have run while the thread is alive, but not executing anything
@@ -79,9 +77,9 @@ public class MaximumJobItemExecutionWatchdogTest {
       final MaximumJobItemExecutionWatchdog watchdog = new MaximumJobItemExecutionWatchdog();
       watchdog.setMaxJobItemExecutionTime(Timeout.standardTimeoutMillis() / 2);
       watchdog.setScheduler(scheduler);
-      final AtomicReference<InterruptedException> caught = new AtomicReference<InterruptedException>();
+      final AtomicReference<InterruptedException> caught = new AtomicReference<>();
       final CyclicBarrier barrier = new CyclicBarrier(2);
-      (new Thread() {
+      new Thread() {
         @Override
         public void run() {
           try {
@@ -94,7 +92,7 @@ public class MaximumJobItemExecutionWatchdogTest {
             throw new OpenGammaRuntimeException("exception", e);
           }
         }
-      }).start();
+      }.start();
       barrier.await(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
       assertTrue(watchdog.areThreadsAlive());
       Thread.sleep(Timeout.standardTimeoutMillis());

@@ -9,27 +9,27 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.calculator.discounting.InterpolatedStubCouponVisitor;
 
 /**
- * 
+ *
  */
 public final class OvernightInterpolatedStubCoupon extends InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> implements DepositIndexCoupon<IndexON> {
 
   public OvernightInterpolatedStubCoupon(
-      DepositIndexCoupon<IndexON> fullCoupon,
-      double firstInterpolatedTime,
-      double firstInterpolatedYearFraction,
-      double secondInterpolatedTime,
-      double secondInterpolatedYearFraction) {
+      final DepositIndexCoupon<IndexON> fullCoupon,
+      final double firstInterpolatedTime,
+      final double firstInterpolatedYearFraction,
+      final double secondInterpolatedTime,
+      final double secondInterpolatedYearFraction) {
     super(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   @Override
-  public <S> S accept(InterpolatedStubCouponVisitor<S> visitor) {
+  public <S> S accept(final InterpolatedStubCouponVisitor<S> visitor) {
     return null;
   }
 }

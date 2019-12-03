@@ -51,7 +51,8 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class DiscountingFunction extends MultiCurvePricingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public DiscountingFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -65,9 +66,12 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
     private final boolean _withCurrency;
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
      */
     protected DiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
         final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
@@ -92,8 +96,8 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
           .withAny(CURVE_EXPOSURES);
       if (_withCurrency) {
         final Security security = target.getTrade().getSecurity();
-        if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security) &&
-            InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
+        if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)
+            && InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
             final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();
@@ -127,8 +131,10 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
     /**
      * Merges the multi-curve providers.
      *
-     * @param inputs The function inputs, not null
-     * @param matrix The FX matrix, not null
+     * @param inputs
+     *          The function inputs, not null
+     * @param matrix
+     *          The FX matrix, not null
      * @return The merged providers
      */
     protected MulticurveProviderDiscount getMergedProviders(final FunctionInputs inputs, final FXMatrix matrix) {
@@ -149,7 +155,8 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
     /**
      * Merges the multi-curve blocks.
      *
-     * @param inputs The function inputs, not null
+     * @param inputs
+     *          The function inputs, not null
      * @return The merged blocks
      */
     protected CurveBuildingBlockBundle getMergedCurveBuildingBlocks(final FunctionInputs inputs) {

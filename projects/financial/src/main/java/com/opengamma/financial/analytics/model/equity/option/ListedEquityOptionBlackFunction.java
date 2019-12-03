@@ -8,10 +8,10 @@ package com.opengamma.financial.analytics.model.equity.option;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 
 /**
-* In this form, we do not take as input an entire volatility surface {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE}.
-* Instead, the implied volatility is implied by the market_value of the security, along with it's contract parameters of expiry and strike,
-* along with the requirement of a forward curve (ValueRequirementNames.FORWARD_CURVE). 
-*/
+ * In this form, we do not take as input an entire volatility surface {@link com.opengamma.engine.value.ValueRequirementNames#BLACK_VOLATILITY_SURFACE}.
+ * Instead, the implied volatility is implied by the market_value of the security, along with it's contract parameters of expiry and strike, along with the
+ * requirement of a forward curve {@link com.opengamma.engine.value.ValueRequirementNames#FORWARD_CURVE}.
+ */
 public abstract class ListedEquityOptionBlackFunction extends ListedEquityOptionFunction {
 
   /** @param valueRequirementName The value requirement names, not null */
@@ -28,6 +28,6 @@ public abstract class ListedEquityOptionBlackFunction extends ListedEquityOption
   protected String getModelType() {
     return CalculationPropertyNamesAndValues.ANALYTIC;
   }
-  
-  
+
+
 }

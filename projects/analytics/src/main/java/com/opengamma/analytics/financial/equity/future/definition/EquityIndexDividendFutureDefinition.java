@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.future.definition;
@@ -14,24 +14,42 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Each time a view is recalculated, the security definition
- * creates an analytic derivative for the current time.
+ * Each time a view is recalculated, the security definition creates an analytic derivative for the current time.
  */
 public class EquityIndexDividendFutureDefinition extends EquityFutureDefinition {
 
   /**
-   * @param expiryDate The expiry date
-   * @param settlementDate The settlement date
-   * @param strikePrice The strike price
-   * @param currency The currency
-   * @param unitValue The unit value
+   * @param expiryDate
+   *          The expiry date
+   * @param settlementDate
+   *          The settlement date
+   * @param strikePrice
+   *          The strike price
+   * @param currency
+   *          The currency
+   * @param unitValue
+   *          The unit value
    */
-  public EquityIndexDividendFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency, final double unitValue) {
+  public EquityIndexDividendFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice,
+      final Currency currency, final double unitValue) {
     super(expiryDate, settlementDate, strikePrice, currency, unitValue);
   }
 
   @Override
   public EquityIndexDividendFuture toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(getExpiryDate()), "Valuation date is after expiry date");
+    final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
+    final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());
+
+    final EquityIndexDividendFuture newDeriv = new EquityIndexDividendFuture(timeToFixing, timeToDelivery, getStrikePrice(), getCurrency(), getUnitAmount());
+    return newDeriv;
+  }
+
+  @Override
+  public EquityIndexDividendFuture toDerivative(final ZonedDateTime date) {
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(getExpiryDate()), "Valuation date is after expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());
 

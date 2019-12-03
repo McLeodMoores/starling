@@ -60,7 +60,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * The snapshot document unique identifier.
    * This field is managed by the master but must be set for updates.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   /**
@@ -81,7 +81,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @deprecated use {@link #setNamedSnapshot(NamedSnapshot)} instead
    */
   @Deprecated
-  public void setSnapshot(ManageableMarketDataSnapshot snapshot) {
+  public void setSnapshot(final ManageableMarketDataSnapshot snapshot) {
     setNamedSnapshot(snapshot);
   }
 
@@ -89,7 +89,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * Sets the snapshot object held by the document.
    * @param namedSnapshot  the new value of the property, not null
    */
-  public void setNamedSnapshot(NamedSnapshot namedSnapshot) {
+  public void setNamedSnapshot(final NamedSnapshot namedSnapshot) {
     _namedSnapshot = ArgumentChecker.notNull(namedSnapshot, "namedSnapshot");
     _snapshotType = namedSnapshot.getClass();
   }
@@ -101,13 +101,12 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @param type  the required type for the snapshot
    * @return the value of the property, not null
    */
-  public <T extends NamedSnapshot> T getNamedSnapshot(Class<T> type) {
+  public <T extends NamedSnapshot> T getNamedSnapshot(final Class<T> type) {
 
     if (type.isAssignableFrom(_namedSnapshot.getClass())) {
       return type.cast(_namedSnapshot);
-    } else {
-      throw new IllegalStateException("Snapshot is of type: " + _namedSnapshot.getClass() + " but expected type: " + type);
     }
+    throw new IllegalStateException("Snapshot is of type: " + _namedSnapshot.getClass() + " but expected type: " + type);
   }
 
   /**
@@ -146,7 +145,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * @return the name, null if no name has been set yet
    */
   public String getName() {
-    return (getNamedSnapshot() != null ? getNamedSnapshot().getName() : null);
+    return getNamedSnapshot() != null ? getNamedSnapshot().getName() : null;
   }
 
   @Override
@@ -228,6 +227,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -237,6 +237,7 @@ public class MarketDataSnapshotDocument extends AbstractDocument implements Seri
    * This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

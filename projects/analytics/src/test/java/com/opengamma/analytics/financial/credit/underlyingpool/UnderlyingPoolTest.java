@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.underlyingpool;
@@ -9,15 +9,17 @@ import org.testng.annotations.Test;
 
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.credit.underlyingpool.definition.UnderlyingPool;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
+// CSOFF
 /**
- * Tests to verify the correct construction of an underlying pool object 
+ * Tests to verify the correct construction of an underlying pool object
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class UnderlyingPoolTest {
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -37,14 +37,14 @@ public final class DummyFunctionBlacklistQuery extends AbstractFunctionBlacklist
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final ValueSpecification[] inputs,
-      final ValueSpecification[] outputs) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final ValueSpecification[] inputs, final ValueSpecification[] outputs) {
     return false;
   }
 
   @Override
-  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target, final Collection<ValueSpecification> inputs,
-      final Collection<ValueSpecification> outputs) {
+  public boolean isBlacklisted(final String functionIdentifier, final FunctionParameters functionParameters, final ComputationTargetSpecification target,
+      final Collection<ValueSpecification> inputs, final Collection<ValueSpecification> outputs) {
     return false;
   }
 

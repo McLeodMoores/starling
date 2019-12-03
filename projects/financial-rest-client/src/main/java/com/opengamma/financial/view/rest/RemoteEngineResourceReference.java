@@ -22,12 +22,13 @@ import com.opengamma.util.rest.FudgeRestClient;
 
 /**
  * Remote implementation of {@link EngineResourceReference}.
- * 
- * @param <T> the type of resource
+ *
+ * @param <T>
+ *          the type of resource
  */
 public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable> implements EngineResourceReference<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteEngineResourceReference.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteEngineResourceReference.class);
 
   private final URI _baseUri;
   private final FudgeRestClient _client;
@@ -35,11 +36,11 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
 
   private final AtomicBoolean _isReleased = new AtomicBoolean(false);
 
-  public RemoteEngineResourceReference(URI baseUri, ScheduledExecutorService scheduler) {
+  public RemoteEngineResourceReference(final URI baseUri, final ScheduledExecutorService scheduler) {
     this(baseUri, scheduler, FudgeRestClient.create());
   }
 
-  public RemoteEngineResourceReference(URI baseUri, ScheduledExecutorService scheduler, FudgeRestClient client) {
+  public RemoteEngineResourceReference(final URI baseUri, final ScheduledExecutorService scheduler, final FudgeRestClient client) {
     _baseUri = baseUri;
     _client = client;
     _scheduledHeartbeat = scheduler.scheduleAtFixedRate(new HeartbeaterTask(client, _baseUri), DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS / 2,
@@ -51,10 +52,10 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   }
 
   private void releaseImpl() {
-    s_logger.debug("Releasing {}", this);
+    LOGGER.debug("Releasing {}", this);
     try {
       getClient().accessFudge(_baseUri).delete();
-      s_logger.debug("Remote for {}", this);
+      LOGGER.debug("Remote for {}", this);
     } finally {
       stopHeartbeating();
     }
@@ -62,8 +63,8 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
 
   @Override
   protected void finalize() throws Throwable {
-    if (_isReleased.getAndSet(true) == false) {
-      s_logger.warn("{} has open reference at garbage collection time", this);
+    if (!_isReleased.getAndSet(true)) {
+      LOGGER.warn("{} has open reference at garbage collection time", this);
       releaseImpl();
     }
     super.finalize();
@@ -74,7 +75,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     if (_isReleased.get()) {
       throw new IllegalStateException("The view cycle reference has been released");
     }
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataEngineResourceReferenceUris.PATH_RESOURCE).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataEngineResourceReferenceUris.PATH_RESOURCE).build();
     return getRemoteResource(uri);
   }
 
@@ -83,17 +84,17 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   @Override
   public void release() {
     if (_isReleased.getAndSet(true)) {
-      s_logger.warn("{} already released", this);
+      LOGGER.warn("{} already released", this);
       return;
     }
     releaseImpl();
   }
 
   /**
-   * For testing
+   * For testing.
    */
   public void stopHeartbeating() {
-    s_logger.debug("Stopping heartbeating of {}", this);
+    LOGGER.debug("Stopping heartbeating of {}", this);
     _scheduledHeartbeat.cancel(true);
   }
 
@@ -102,7 +103,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     private final FudgeRestClient _client;
     private final URI _baseUri;
 
-    public HeartbeaterTask(final FudgeRestClient client, final URI baseUri) {
+    HeartbeaterTask(final FudgeRestClient client, final URI baseUri) {
       _client = client;
       _baseUri = baseUri;
     }
@@ -111,8 +112,8 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
     public void run() {
       try {
         _client.accessFudge(_baseUri).post();
-      } catch (Exception e) {
-        s_logger.warn("Failed to heartbeat view cycle reference", e);
+      } catch (final Exception e) {
+        LOGGER.warn("Failed to heartbeat view cycle reference", e);
       }
     }
 

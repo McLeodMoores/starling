@@ -25,7 +25,7 @@ import com.opengamma.web.analytics.PositionTarget;
   }
 
   @Override
-  public Map<String, Object> formatCell(PositionTarget target, ValueSpecification valueSpec, Object inlineKey) {
+  public Map<String, Object> formatCell(final PositionTarget target, final ValueSpecification valueSpec, final Object inlineKey) {
     return ImmutableMap.<String, Object>of(NAME, target.getName(),
                                            NODE_ID, target.getNodeId(),
                                            POSITION_ID, target.getPositionId());

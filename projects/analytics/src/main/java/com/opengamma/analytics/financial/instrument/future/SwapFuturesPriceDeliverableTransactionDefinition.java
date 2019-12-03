@@ -23,10 +23,15 @@ public class SwapFuturesPriceDeliverableTransactionDefinition extends FuturesTra
 
   /**
    * Constructor.
-   * @param underlyingFuture The underlying futures security.
-   * @param quantity The quantity of the transaction.
-   * @param tradeDate The transaction date.
-   * @param tradePrice The transaction price (in the convention of the futures).
+   * 
+   * @param underlyingFuture
+   *          The underlying futures security.
+   * @param quantity
+   *          The quantity of the transaction.
+   * @param tradeDate
+   *          The transaction date.
+   * @param tradePrice
+   *          The transaction price (in the convention of the futures).
    */
   public SwapFuturesPriceDeliverableTransactionDefinition(final SwapFuturesPriceDeliverableSecurityDefinition underlyingFuture, final long quantity,
       final ZonedDateTime tradeDate, final double tradePrice) {
@@ -35,7 +40,9 @@ public class SwapFuturesPriceDeliverableTransactionDefinition extends FuturesTra
 
   /**
    * {@inheritDoc}
-   * @param lastMarginPrice The price on which the last margining was done.
+   * 
+   * @param lastMarginPrice
+   *          The price on which the last margining was done.
    * @deprecated Use the method that does not take yield curve names {@link #toDerivative(ZonedDateTime, Double) toDerivative}
    */
   @Deprecated
@@ -62,7 +69,9 @@ public class SwapFuturesPriceDeliverableTransactionDefinition extends FuturesTra
 
   /**
    * {@inheritDoc}
-   * @param lastMarginPrice The price on which the last margining was done.
+   * 
+   * @param lastMarginPrice
+   *          The price on which the last margining was done.
    */
   @Override
   public SwapFuturesPriceDeliverableTransaction toDerivative(final ZonedDateTime dateTime, final Double lastMarginPrice) {
@@ -74,17 +83,20 @@ public class SwapFuturesPriceDeliverableTransactionDefinition extends FuturesTra
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public SwapFuturesPriceDeliverableTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
   }
 
   @Override
   public SwapFuturesPriceDeliverableTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the one argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of " + this.getClass().getSimpleName() + " does not support the one argument method (without margin price data).");
   }
 
   @Override

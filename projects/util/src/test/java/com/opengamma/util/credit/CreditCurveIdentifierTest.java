@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.credit;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 
@@ -28,21 +29,33 @@ public class CreditCurveIdentifierTest {
   private static final String SENIORITY = "SENIOR";
   private static final String RESTRUCTURING_CLAUSE = "NONE";
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIssuer() {
     CreditCurveIdentifier.of((String) null, CURRENCY, TERM, SENIORITY, RESTRUCTURING_CLAUSE);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSeniority() {
     CreditCurveIdentifier.of(RED_CODE, CURRENCY, TERM, null, RESTRUCTURING_CLAUSE);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullRestructuringClause() {
     CreditCurveIdentifier.of(RED_CODE, CURRENCY, TERM, SENIORITY, null);
   }
 
+  /**
+   *
+   */
   @Test
   public void testEqualsHashCode() {
     final CreditCurveIdentifier id = CreditCurveIdentifier.of(RED_CODE, CURRENCY, TERM, SENIORITY, RESTRUCTURING_CLAUSE);
@@ -55,7 +68,7 @@ public class CreditCurveIdentifierTest {
     assertEquals(id, other);
     assertEquals(id.hashCode(), other.hashCode());
     assertFalse(id.equals(null));
-    assertFalse(id.equals(UnorderedCurrencyPair.of(Currency.AUD, Currency.CAD)));
+    assertNotEquals("AUDCAD", UnorderedCurrencyPair.of(Currency.AUD, Currency.CAD));
     other = CreditCurveIdentifier.of(ExternalId.of("Scheme", "DEF"), CURRENCY, TERM, SENIORITY, RESTRUCTURING_CLAUSE);
     assertFalse(other.equals(id));
     other = CreditCurveIdentifier.of(RED_CODE, CURRENCY, TERM, RESTRUCTURING_CLAUSE, RESTRUCTURING_CLAUSE);

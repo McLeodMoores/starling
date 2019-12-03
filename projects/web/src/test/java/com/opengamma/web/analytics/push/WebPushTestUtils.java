@@ -140,9 +140,14 @@ public class WebPushTestUtils {
   }
 
   /**
-   * Creates and starts a Jetty server using {@code web-push/WEB-INF/web.xml} and configured using Spring
+   * Creates and starts a Jetty server using {@code web-push/WEB-INF/web.xml}
+   * and configured using Spring
+   *
    * @return The server and the Spring context
-   * @param springXml The location of the Spring XML config file
+   * @param springXml
+   *          The location of the Spring XML config file
+   * @throws Exception
+   *           if there is a problem starting the server
    */
   public Pair<Server, WebApplicationContext> createJettyServer(final String springXml) throws Exception {
     final WebAppContext context = new WebAppContext();
@@ -174,10 +179,15 @@ public class WebPushTestUtils {
   }
 
   /**
-   * Asserts that {@code json} represents a JSON object with a field called {@code updates} whose value is an array
-   * of the expected values.
-   * @param json {@code {updates: [url1, url2, ...]}}
-   * @param urls URLs that must be present in the JSON
+   * Asserts that {@code json} represents a JSON object with a field called
+   * {@code updates} whose value is an array of the expected values.
+   *
+   * @param json
+   *          {@code {updates: [url1, url2, ...]}}
+   * @param urls
+   *          URLs that must be present in the JSON
+   * @throws JSONException
+   *           if there is a problem forming the JSON object
    */
   static void checkJsonResults(final String json, final String... urls) throws JSONException {
     final List<String> expectedList = Arrays.asList(urls);
@@ -190,7 +200,15 @@ public class WebPushTestUtils {
   }
 
   /**
+   * @param clientId
+   *          the client identifier
+   * @param viewportDefJson
+   *          the viewport definition
    * @return The URL of the viewport relative to the root
+   * @throws IOException
+   *           if there is a problem with the connection
+   * @throws JSONException
+   *           if there is a problem with the JSON that is produced
    */
   public String createViewport(final String clientId, final String viewportDefJson) throws IOException, JSONException {
     String viewportJson;

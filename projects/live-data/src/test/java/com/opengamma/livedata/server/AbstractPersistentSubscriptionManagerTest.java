@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.livedata.server;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -6,8 +11,6 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -22,9 +25,11 @@ import com.opengamma.livedata.server.distribution.MarketDataDistributor;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 @Test(groups = {TestGroup.UNIT, "ehcache"})
 public class AbstractPersistentSubscriptionManagerTest {
-  
+
   //TODO test async logic
   private final ExternalScheme _scheme = ExternalScheme.of("SomeScheme");
   private final String _normalizationRulesetId = StandardRules.getNoNormalization().getId();
@@ -43,9 +48,9 @@ public class AbstractPersistentSubscriptionManagerTest {
   //-------------------------------------------------------------------------
   @Test
   public void testNormalStartup() throws InterruptedException {
-    MockLiveDataServer server = new MockLiveDataServer(_scheme, _cacheManager);
-    TestPersistentSubscriptionManager subManager = new TestPersistentSubscriptionManager(server);
-    String ticker = "X";
+    final MockLiveDataServer server = new MockLiveDataServer(_scheme, _cacheManager);
+    final TestPersistentSubscriptionManager subManager = new TestPersistentSubscriptionManager(server);
+    final String ticker = "X";
     subManager.getPendingReads().add(Sets.newHashSet(getSubscription(ticker)));
     server.start();
     subManager.start();
@@ -57,22 +62,22 @@ public class AbstractPersistentSubscriptionManagerTest {
 
   @Test
   public void testLateRefresh() throws InterruptedException {
-    MockLiveDataServer server = new MockLiveDataServer(_scheme, _cacheManager);
-    TestPersistentSubscriptionManager subManager = new TestPersistentSubscriptionManager(server);
-    String ticker = "X";
+    final MockLiveDataServer server = new MockLiveDataServer(_scheme, _cacheManager);
+    final TestPersistentSubscriptionManager subManager = new TestPersistentSubscriptionManager(server);
+    final String ticker = "X";
     subManager.getPendingReads().add(new HashSet<PersistentSubscription>());
     subManager.getPendingReads().add(Sets.newHashSet(getSubscription(ticker)));
     server.start();
     subManager.start();
     Thread.sleep(1000);
     assertEquals(new HashSet<String>(), server.getActiveSubscriptionIds());
-    
+
     server.subscribe(ticker);
-    
+
     assertEquals(Sets.newHashSet(ticker), server.getActiveSubscriptionIds());
-    MarketDataDistributor marketDataDistributor = server.getMarketDataDistributor(ticker);
+    final MarketDataDistributor marketDataDistributor = server.getMarketDataDistributor(ticker);
     assertEquals(false, marketDataDistributor.isPersistent());
-    
+
     subManager.refresh();
     Thread.sleep(1000);
     assertEquals(true, marketDataDistributor.isPersistent());
@@ -80,34 +85,34 @@ public class AbstractPersistentSubscriptionManagerTest {
     subManager.stop();
     server.stop();
   }
-  
-  private PersistentSubscription getSubscription(String ticker) {
+
+  private PersistentSubscription getSubscription(final String ticker) {
     return new PersistentSubscription(getSpec(ticker));
   }
 
-  private LiveDataSpecification getSpec(String ticker) {
+  private LiveDataSpecification getSpec(final String ticker) {
     return new LiveDataSpecification(_normalizationRulesetId, ExternalId.of(_scheme, ticker));
   }
-  
+
   class TestPersistentSubscriptionManager extends AbstractPersistentSubscriptionManager  {
 
-    public TestPersistentSubscriptionManager(StandardLiveDataServer server) {
+    TestPersistentSubscriptionManager(final StandardLiveDataServer server) {
       super(server);
     }
 
-    private final Queue<Set<PersistentSubscription>> _pendingReads = new LinkedBlockingQueue<Set<PersistentSubscription>>();
-    private final Queue<Set<PersistentSubscription>> _pendingWrites= new LinkedBlockingQueue<Set<PersistentSubscription>>();
-    
+    private final Queue<Set<PersistentSubscription>> _pendingReads = new LinkedBlockingQueue<>();
+    private final Queue<Set<PersistentSubscription>> _pendingWrites = new LinkedBlockingQueue<>();
+
     @Override
     protected void readFromStorage() {
-      Set<PersistentSubscription> remove = _pendingReads.remove();
-      for (PersistentSubscription persistentSubscription : remove) {
+      final Set<PersistentSubscription> remove = _pendingReads.remove();
+      for (final PersistentSubscription persistentSubscription : remove) {
         addPersistentSubscription(persistentSubscription);
       }
     }
 
     @Override
-    public void saveToStorage(Set<PersistentSubscription> newState) {
+    public void saveToStorage(final Set<PersistentSubscription> newState) {
       _pendingWrites.add(newState);
     }
 

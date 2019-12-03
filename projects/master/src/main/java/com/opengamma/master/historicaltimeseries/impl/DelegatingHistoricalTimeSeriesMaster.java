@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -49,117 +49,123 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
    * The change manager.
    */
   private final ChangeManager _changeManager;
-  
+
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultMaster  the master to use when no scheme matches, not null
    */
-  public DelegatingHistoricalTimeSeriesMaster(HistoricalTimeSeriesMaster defaultMaster) {
+  public DelegatingHistoricalTimeSeriesMaster(final HistoricalTimeSeriesMaster defaultMaster) {
     super(defaultMaster);
     _changeManager = defaultMaster.changeManager();
   }
-  
+
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultMaster  the master to use when no scheme matches, not null
    * @param schemePrefixToMasterMap  the map of masters by scheme to switch on, not null
    */
-  public DelegatingHistoricalTimeSeriesMaster(HistoricalTimeSeriesMaster defaultMaster, Map<String, HistoricalTimeSeriesMaster> schemePrefixToMasterMap) {
+  public DelegatingHistoricalTimeSeriesMaster(final HistoricalTimeSeriesMaster defaultMaster,
+      final Map<String, HistoricalTimeSeriesMaster> schemePrefixToMasterMap) {
     super(defaultMaster, schemePrefixToMasterMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
     changeManager.addChangeManager(defaultMaster.changeManager());
-    for (HistoricalTimeSeriesMaster master : schemePrefixToMasterMap.values()) {
+    for (final HistoricalTimeSeriesMaster master : schemePrefixToMasterMap.values()) {
       changeManager.addChangeManager(master.changeManager());
     }
     _changeManager = changeManager;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoDocument get(UniqueId uniqueId) {
+  public HistoricalTimeSeriesInfoDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public HistoricalTimeSeriesInfoDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, HistoricalTimeSeriesInfoDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, HistoricalTimeSeriesInfoDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      HistoricalTimeSeriesInfoDocument doc = get(uniqueId);
+  public Map<UniqueId, HistoricalTimeSeriesInfoDocument> get(final Collection<UniqueId> uniqueIds) {
+    ArgumentChecker.notNull(uniqueIds, "uniqueIds");
+    final Map<UniqueId, HistoricalTimeSeriesInfoDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final HistoricalTimeSeriesInfoDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public HistoricalTimeSeriesInfoDocument add(HistoricalTimeSeriesInfoDocument document) {
+  public HistoricalTimeSeriesInfoDocument add(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
-    return getDefaultDelegate().add(document);
+    final UniqueId uniqueId = document.getUniqueId();
+    if (uniqueId == null) {
+      return getDefaultDelegate().add(document);
+    }
+    return chooseDelegate(uniqueId.getScheme()).add(document);
   }
 
   @Override
-  public HistoricalTimeSeriesInfoDocument update(HistoricalTimeSeriesInfoDocument document) {
+  public HistoricalTimeSeriesInfoDocument update(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getUniqueId().getScheme()).update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     chooseDelegate(objectIdentifiable.getObjectId().getScheme()).remove(objectIdentifiable);
   }
 
   @Override
-  public HistoricalTimeSeriesInfoDocument correct(HistoricalTimeSeriesInfoDocument document) {
+  public HistoricalTimeSeriesInfoDocument correct(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(HistoricalTimeSeriesInfoDocument replacementDocument) {
+  public UniqueId replaceVersion(final HistoricalTimeSeriesInfoDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, HistoricalTimeSeriesInfoDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final HistoricalTimeSeriesInfoDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);
@@ -167,32 +173,32 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
 
   //-------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoMetaDataResult metaData(HistoricalTimeSeriesInfoMetaDataRequest request) {
+  public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    HistoricalTimeSeriesInfoMetaDataResult defaultResult = getDefaultDelegate().metaData(request);
+
+    final HistoricalTimeSeriesInfoMetaDataResult defaultResult = getDefaultDelegate().metaData(request);
     if (getDelegates().isEmpty()) {
       return defaultResult;
     }
-    
-    Set<String> dataFields = new HashSet<String>();
-    Set<String> dataSources = new HashSet<String>();
-    Set<String> dataProviders = new HashSet<String>();
-    Set<String> observationTimes = new HashSet<String>();
+
+    final Set<String> dataFields = new HashSet<>();
+    final Set<String> dataSources = new HashSet<>();
+    final Set<String> dataProviders = new HashSet<>();
+    final Set<String> observationTimes = new HashSet<>();
     dataFields.addAll(defaultResult.getDataFields());
     dataSources.addAll(defaultResult.getDataSources());
     dataProviders.addAll(defaultResult.getDataProviders());
     observationTimes.addAll(defaultResult.getObservationTimes());
-    
-    for (HistoricalTimeSeriesMaster delegate : getDelegates().values()) {
-      HistoricalTimeSeriesInfoMetaDataResult delegateResult = delegate.metaData(request);
+
+    for (final HistoricalTimeSeriesMaster delegate : getDelegates().values()) {
+      final HistoricalTimeSeriesInfoMetaDataResult delegateResult = delegate.metaData(request);
       dataFields.addAll(delegateResult.getDataFields());
       dataSources.addAll(delegateResult.getDataSources());
       dataProviders.addAll(delegateResult.getDataProviders());
       observationTimes.addAll(delegateResult.getObservationTimes());
     }
-    
-    HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
+
+    final HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
     result.getDataFields().addAll(dataFields);
     result.getDataSources().addAll(dataSources);
     result.getDataProviders().addAll(dataProviders);
@@ -201,9 +207,9 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
   }
 
   @Override
-  public HistoricalTimeSeriesInfoSearchResult search(HistoricalTimeSeriesInfoSearchRequest request) {
+  public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    List<ObjectId> ids = request.getObjectIds();
+    final List<ObjectId> ids = request.getObjectIds();
     if (ids == null || ids.isEmpty()) {
       return getDefaultDelegate().search(request);
     }
@@ -211,34 +217,35 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
   }
 
   @Override
-  public HistoricalTimeSeriesInfoHistoryResult history(HistoricalTimeSeriesInfoHistoryRequest request) {
+  public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).getTimeSeries(uniqueId);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId, HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(filter, "filter");
     return chooseDelegate(uniqueId.getScheme()).getTimeSeries(uniqueId, filter);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).getTimeSeries(objectId, versionCorrection);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection, HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(filter, "filter");
@@ -247,25 +254,25 @@ public class DelegatingHistoricalTimeSeriesMaster extends UniqueIdSchemeDelegato
 
   //-------------------------------------------------------------------------
   @Override
-  public UniqueId updateTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series) {
+  public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
     return chooseDelegate(objectId.getObjectId().getScheme()).updateTimeSeriesDataPoints(objectId, series);
   }
 
   @Override
-  public UniqueId correctTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series) {
+  public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
     return chooseDelegate(objectId.getObjectId().getScheme()).correctTimeSeriesDataPoints(objectId, series);
   }
 
   @Override
-  public UniqueId removeTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDate fromDateInclusive, LocalDate toDateInclusive) {
+  public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     ArgumentChecker.notNull(objectId, "objectId");
     return chooseDelegate(objectId.getObjectId().getScheme()).removeTimeSeriesDataPoints(objectId, fromDateInclusive, toDateInclusive);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public ChangeManager changeManager() {

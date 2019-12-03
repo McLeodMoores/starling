@@ -48,7 +48,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
    * The portfolio node unique identifier.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The parent node unique identifier, null if the root node.
@@ -72,13 +72,13 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
    * The root node of the tree, not null.
    */
   @PropertyDefinition
-  private final List<ManageablePortfolioNode> _childNodes = new ArrayList<ManageablePortfolioNode>();
+  private final List<ManageablePortfolioNode> _childNodes = new ArrayList<>();
   /**
    * The object identifiers of positions attached to this node, not null.
    * The identifiers should not have versions.
    */
   @PropertyDefinition
-  private final List<ObjectId> _positionIds = new ArrayList<ObjectId>();
+  private final List<ObjectId> _positionIds = new ArrayList<>();
 
   /**
    * Creates a node.
@@ -88,7 +88,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
 
   /**
    * Creates a node specifying the name.
-   * 
+   *
    * @param name  the name, not null
    */
   public ManageablePortfolioNode(final String name) {
@@ -99,7 +99,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   //-------------------------------------------------------------------------
   /**
    * Adds a position object identifier to this node.
-   * 
+   *
    * @param positionId  the object identifier of the position, not null
    */
   public void addPosition(final ObjectIdentifiable positionId) {
@@ -110,7 +110,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   //-------------------------------------------------------------------------
   /**
    * Adds a child node to this node.
-   * 
+   *
    * @param childNode  the child node, not null
    */
   public void addChildNode(final ManageablePortfolioNode childNode) {
@@ -121,16 +121,16 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   //-------------------------------------------------------------------------
   /**
    * Checks if any node object identifier matches one in the specified list.
-   * 
+   *
    * @param nodeObjectIds  the object identifiers to match against, not null
    * @return true if at least one identifier matches
    */
-  public boolean matchesAnyNode(List<ObjectId> nodeObjectIds) {
+  public boolean matchesAnyNode(final List<ObjectId> nodeObjectIds) {
     ArgumentChecker.notNull(nodeObjectIds, "objectIds");
     if (nodeObjectIds.contains(getUniqueId().getObjectId())) {
       return true;
     }
-    for (ManageablePortfolioNode childNode : getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : getChildNodes()) {
       if (childNode.matchesAnyNode(nodeObjectIds)) {
         return true;
       }
@@ -140,16 +140,16 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
 
   /**
    * Checks if any position object identifier matches one in the specified list.
-   * 
+   *
    * @param positionObjectIds  the position object identifiers to match against, not null
    * @return true if at least one identifier matches
    */
-  public boolean matchesAnyPosition(List<ObjectId> positionObjectIds) {
+  public boolean matchesAnyPosition(final List<ObjectId> positionObjectIds) {
     ArgumentChecker.notNull(positionObjectIds, "positionObjectIds");
     if (CollectionUtils.containsAny(positionObjectIds, getPositionIds())) {
       return true;
     }
-    for (ManageablePortfolioNode childNode : getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : getChildNodes()) {
       if (childNode.matchesAnyPosition(positionObjectIds)) {
         return true;
       }
@@ -161,7 +161,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   /**
    * Finds a node with the specified object identifier, which may be this node.
    * This scans all child nodes depth-first until the node is found.
-   * 
+   *
    * @param nodeObjectId  the node object identifier, not null
    * @return the node with the identifier, null if not found
    */
@@ -173,7 +173,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   /**
    * Finds a node with the specified object identifier, which may be this node.
    * This scans all child nodes depth-first until the node is found.
-   * 
+   *
    * @param nodeObjectId  the node object identifier, not null
    * @return the node with the identifier, null if not found
    */
@@ -181,8 +181,8 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
     if (getUniqueId().equalObjectId(nodeObjectId)) {
       return this;
     }
-    for (ManageablePortfolioNode childNode : getChildNodes()) {
-      ManageablePortfolioNode found = childNode.findNodeByObjectId0(nodeObjectId);
+    for (final ManageablePortfolioNode childNode : getChildNodes()) {
+      final ManageablePortfolioNode found = childNode.findNodeByObjectId0(nodeObjectId);
       if (found != null) {
         return found;
       }
@@ -194,7 +194,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   /**
    * Finds a node with the specified name, which may be this node.
    * This scans all child nodes depth-first until the node is found.
-   * 
+   *
    * @param name  the node name, not null
    * @return the node with the name, null if not found
    */
@@ -203,8 +203,8 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
     if (name.equals(getName())) {
       return this;
     }
-    for (ManageablePortfolioNode child : getChildNodes()) {
-      ManageablePortfolioNode found = child.findNodeByName(name);
+    for (final ManageablePortfolioNode child : getChildNodes()) {
+      final ManageablePortfolioNode found = child.findNodeByName(name);
       if (found != null) {
         return found;
       }
@@ -218,20 +218,20 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
    * This performs a recursive scan of the child nodes returning all the nodes
    * in the hierarchy from the root node to the specified node.
    * The specified node is at the top of the stack.
-   * 
+   *
    * @param nodeObjectId  the node object identifier, not null
    * @return the node stack, empty if not found, not null
    */
   public Stack<ManageablePortfolioNode> findNodeStackByObjectId(final ObjectIdentifiable nodeObjectId) {
     ArgumentChecker.notNull(nodeObjectId, "nodeObjectId");
-    Stack<ManageablePortfolioNode> stack = new Stack<ManageablePortfolioNode>();
-    Stack<ManageablePortfolioNode> result = findNodeStackByObjectId0(stack, nodeObjectId.getObjectId());
+    final Stack<ManageablePortfolioNode> stack = new Stack<>();
+    final Stack<ManageablePortfolioNode> result = findNodeStackByObjectId0(stack, nodeObjectId.getObjectId());
     return result == null ? stack : result;
   }
 
   /**
    * Finds the stack of nodes from the tree below this node by identifier.
-   * 
+   *
    * @param stack  the stack of nodes, not null
    * @param nodeObjectId  the node object identifier, not null
    * @return the node with the identifier, null if not found
@@ -241,8 +241,8 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
     if (getUniqueId().equalObjectId(nodeObjectId)) {
       return stack;
     }
-    for (ManageablePortfolioNode childNode : getChildNodes()) {
-      Stack<ManageablePortfolioNode> found = childNode.findNodeStackByObjectId0(stack, nodeObjectId);
+    for (final ManageablePortfolioNode childNode : getChildNodes()) {
+      final Stack<ManageablePortfolioNode> found = childNode.findNodeStackByObjectId0(stack, nodeObjectId);
       if (found != null) {
         return found;
       }
@@ -255,7 +255,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   /**
    * Removes a node from the tree below this node by identifier.
    * This performs a recursive scan of the child nodes.
-   * 
+   *
    * @param nodeObjectId  the node object identifier, not null
    * @return true if a node was removed
    */
@@ -267,12 +267,12 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
   /**
    * Removes a node from the tree below this node by identifier.
    * This performs a recursive scan of the child nodes.
-   * 
+   *
    * @param nodeObjectId  the node object identifier, not null
    * @return true if a node was removed
    */
   private boolean removeNode0(final ObjectId nodeObjectId) {
-    for (Iterator<ManageablePortfolioNode> it = _childNodes.iterator(); it.hasNext(); ) {
+    for (final Iterator<ManageablePortfolioNode> it = _childNodes.iterator(); it.hasNext();) {
       final ManageablePortfolioNode child = it.next();
       if (child.getUniqueId().equalObjectId(nodeObjectId)) {
         it.remove();
@@ -319,6 +319,7 @@ public class ManageablePortfolioNode extends DirectBean implements MutableUnique
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

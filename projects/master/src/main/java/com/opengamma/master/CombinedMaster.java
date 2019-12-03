@@ -42,12 +42,12 @@ import com.opengamma.util.paging.PagingRequest;
  */
 public abstract class CombinedMaster<D extends AbstractDocument, M extends AbstractMaster<D>> implements AbstractMaster<D> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CombinedMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CombinedMaster.class);
 
   private final List<M> _masterList;
   private final ConcurrentMap<String, M> _schemeToMaster = Maps.newConcurrentMap();
 
-  protected CombinedMaster(List<M> masterList) {
+  protected CombinedMaster(final List<M> masterList) {
     ArgumentChecker.notNull(masterList, "masterList");
     ArgumentChecker.notEmpty(masterList, "masterList");
     _masterList = masterList;
@@ -56,12 +56,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
   protected List<M> getMasterList() {
     return _masterList;
   }
-  
+
   protected M getMasterByScheme(final String scheme) {
     return _schemeToMaster.get(scheme);
   }
 
-  protected void setMasterScheme(String scheme, M master) {
+  protected void setMasterScheme(final String scheme, final M master) {
     _schemeToMaster.putIfAbsent(scheme, master);
   }
 
@@ -77,13 +77,13 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
 
     public T each(final String scheme) {
       T result;
-      for (M master : _masterList) {
+      for (final M master : _masterList) {
         try {
           result = tryMaster(master);
           setMasterScheme(scheme, master);
           return result;
-        } catch (IllegalArgumentException e) {
-          s_logger.debug("Illegal argument exception from master", e);
+        } catch (final IllegalArgumentException e) {
+          LOGGER.debug("Illegal argument exception from master", e);
         }
       }
       throw new IllegalArgumentException("No masters accepted request on scheme " + scheme);
@@ -97,12 +97,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.get(uniqueId);
     }
-    return (new Try<D>() {
+    return new Try<D>() {
       @Override
       public D tryMaster(final M master) {
         return master.get(uniqueId);
       }
-    }).each(uniqueId.getScheme());
+    }.each(uniqueId.getScheme());
   }
 
   @Override
@@ -111,12 +111,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.get(objectId, versionCorrection);
     }
-    return (new Try<D>() {
+    return new Try<D>() {
       @Override
       public D tryMaster(final M master) {
         return master.get(objectId, versionCorrection);
       }
-    }).each(objectId.getObjectId().getScheme());
+    }.each(objectId.getObjectId().getScheme());
   }
 
   @Override
@@ -131,12 +131,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.update(document);
     }
-    return (new Try<D>() {
+    return new Try<D>() {
       @Override
       public D tryMaster(final M master) {
         return master.update(document);
       }
-    }).each(document.getUniqueId().getScheme());
+    }.each(document.getUniqueId().getScheme());
   }
 
   @Override
@@ -146,13 +146,13 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
       master.remove(objectIdentifiable);
       return;
     }
-    (new Try<Void>() {
+    new Try<Void>() {
       @Override
       public Void tryMaster(final M master) {
         master.remove(objectIdentifiable);
         return null;
       }
-    }).each(objectIdentifiable.getObjectId().getScheme());
+    }.each(objectIdentifiable.getObjectId().getScheme());
   }
 
   @Override
@@ -161,36 +161,37 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.correct(document);
     }
-    return (new Try<D>() {
+    return new Try<D>() {
       @Override
       public D tryMaster(final M master) {
         return master.correct(document);
       }
-    }).each(document.getUniqueId().getScheme());
+    }.each(document.getUniqueId().getScheme());
   }
 
-  
+
   /**
    * Implements the logic of querying one master after another. The paging information
    * passed on the searchRequst will be modified so that it is appropriate to each
    * master delegated to. Original paging information will be restored to this instance
    * once the method completes (successfully).
-   * 
-   * Note that any documents returned by the searchStrategy will be added to the 
+   *
+   * Note that any documents returned by the searchStrategy will be added to the
    * documentsResult object by this method. However, no other result fields are
    * managed here. If other fields are need to be salvaged from the DocumentsResult,
    * it should be done within the strategy itself.
-   * 
+   *
    * @param searchStrategy the search strategy to execute
    * @param documentsResult the documents result to append documents to
    * @param searchRequest the search request to execute
    * @param <S> the search request type
    */
-  protected <S extends PagedRequest> void pagedSearch(SearchStrategy<D, M, S> searchStrategy, AbstractDocumentsResult<D> documentsResult, S searchRequest) {
+  protected <S extends PagedRequest> void pagedSearch(
+      final SearchStrategy<D, M, S> searchStrategy, final AbstractDocumentsResult<D> documentsResult, final S searchRequest) {
     //first, hive off the original paging request. this is
-    //because we're about to mutate the searchRequest so 
+    //because we're about to mutate the searchRequest so
     //that it is appropriate for downstream masters.
-    PagingRequest originalPagingRequest = searchRequest.getPagingRequest();
+    final PagingRequest originalPagingRequest = searchRequest.getPagingRequest();
     //first page to request will be identical to passed
     //page request.
     PagingRequest nextPage = originalPagingRequest;
@@ -202,9 +203,9 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     //either run out of masters or the totalResults
     //exceeds the range of records requested.
     for (int i = 0; i < getMasterList().size(); i++) {
-      M master = getMasterList().get(i);
+      final M master = getMasterList().get(i);
       //delegate the query to the master via the strategy
-      AbstractDocumentsResult<D> masterResult = searchStrategy.search(master, searchRequest);
+      final AbstractDocumentsResult<D> masterResult = searchStrategy.search(master, searchRequest);
       //totalItems() reflects the total number of records
       //available from the queried master.
       totalResults += masterResult.getPaging().getTotalItems();
@@ -232,29 +233,29 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     searchRequest.setPagingRequest(originalPagingRequest); //put the original paging back
     documentsResult.setPaging(Paging.of(originalPagingRequest, totalResults));
   }
-  
+
   /**
    * Calculates the next page to ask for in the sequence of queries to masters.
    * @param itemsFound items found in the last query
    * @param lastRequest the last paging request
    * @return the next paging request
    */
-  private PagingRequest getNextPage(int itemsFound, PagingRequest lastRequest) {
+  private static PagingRequest getNextPage(final int itemsFound, final PagingRequest lastRequest) {
     int nextFirstItem = lastRequest.getFirstItem() - itemsFound;
     int nextWindowSize = lastRequest.getPagingSize();
     if (nextFirstItem < 0) {
       //need to adjust window size
       nextWindowSize += nextFirstItem;
       nextFirstItem = 0;
-      
+
       if (nextWindowSize <= 0) {
         throw new IllegalStateException(format("Failed to compute next window size. Last page: %s, items found: %d", lastRequest, itemsFound));
       }
-      
+
     }
     return PagingRequest.ofIndex(nextFirstItem, nextWindowSize);
   }
-  
+
   /**
    * Used in {@link CombinedMaster#pagedSearch(SearchStrategy, AbstractDocumentsResult, PagedRequest)} for indicating
    * how the master should be queried. Lots of nasty generics here, but there's not really much choice since
@@ -264,21 +265,22 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param <S> search request type
    */
   public interface SearchStrategy<D extends AbstractDocument, M extends AbstractMaster<D>, S extends PagedRequest> {
-    
+
     /**
      * @param master the master to query
      * @param searchRequest the search request, with appropriate paging set
      * @return the list of documents returned
      */
     AbstractDocumentsResult<D> search(M master, S searchRequest);
-    
+
   }
-  
-  
+
+
   /**
    * A callback object which describes a document order, a filtering policy,
    * and a callback method for handling the document.
    * @param <D> The document type.
+   * @param <M> The master type.
    */
   public interface SearchCallback<D, M> extends Comparator<D> {
 
@@ -307,7 +309,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
   }
 
   private List<D> next(final ListIterator<D> itr, final SearchCallback<D, M> callback) {
-    List<D> results = Lists.newArrayList();
+    final List<D> results = Lists.newArrayList();
     D lastIncluded = null;
     while (itr.hasNext()) {
       final D element = itr.next();
@@ -329,7 +331,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
   private List<D> getNonUnique(final Set<D> nonUnique, final List<D> documents, final SearchCallback<D, M> callback) {
     Collections.sort(documents, callback);
     D previous = null;
-    for (D document : documents) {
+    for (final D document : documents) {
       if (callback.include(document)) {
         if (previous != null) {
           if (callback.compare(previous, document) == 0) {
@@ -352,96 +354,98 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param results the list of results. The order should correspond with the order of the configured masters.
    * @param callback the object to define ordering, filtering and what to do with each record.
    */
-  protected void search(List<? extends AbstractSearchResult<D>> results, final SearchCallback<D, M> callback) {
-    final Set<D> nonUnique = new HashSet<D>();
-    List<ListIterator<D>> iterators = Lists.newArrayList();
-    Set<Integer> nextIteratorsToUse = Sets.newHashSet();
-    for (AbstractSearchResult<D> searchResult : results) {
-      final List<D> documents = (searchResult != null) ? getNonUnique(nonUnique, searchResult.getDocuments(), callback) : Collections.<D>emptyList();
+  protected void search(final List<? extends AbstractSearchResult<D>> results, final SearchCallback<D, M> callback) {
+    final Set<D> nonUnique = new HashSet<>();
+    final List<ListIterator<D>> iterators = Lists.newArrayList();
+    final Set<Integer> nextIteratorsToUse = Sets.newHashSet();
+    for (final AbstractSearchResult<D> searchResult : results) {
+      final List<D> documents = searchResult != null ? getNonUnique(nonUnique, searchResult.getDocuments(), callback) : Collections.<D>emptyList();
       iterators.add(documents.listIterator());
       nextIteratorsToUse.add(iterators.size() - 1);
     }
     int remainingIterators = iterators.size();
-    
-    List<IndexedElement> elements = Lists.newArrayList();
-    
+
+    final List<IndexedElement> elements = Lists.newArrayList();
+
     do {
       //refill elements
       remainingIterators = refillElements(elements, callback, iterators, nextIteratorsToUse, remainingIterators);
       //check we're not in a silly state here
       assert remainingIterators >= 0;
-      
+
       if (remainingIterators < 0) {
-        s_logger.error("Illegal state - number of remaining iterators is negative.");
+        LOGGER.error("Illegal state - number of remaining iterators is negative.");
         //allow to continue in the interest of providing a result...
       }
       if (remainingIterators <= 0) {
         break;
       }
-      
+
       //sort the elements for iteration.
       //reverse ordering used so we're not popping from the start of the array list.
       Collections.sort(elements, Ordering.natural().reverse());
-      
-      ListIterator<IndexedElement> it = elements.listIterator(elements.size());
-      List<IndexedElement> elementResults = Lists.newLinkedList();
+
+      final ListIterator<IndexedElement> it = elements.listIterator(elements.size());
+      final List<IndexedElement> elementResults = Lists.newLinkedList();
       while (true) {
-        IndexedElement indexedElement = it.previous();
+        final IndexedElement indexedElement = it.previous();
         it.remove();
         elementResults.add(indexedElement);
-        int index = indexedElement._index;
+        final int index = indexedElement._index;
         nextIteratorsToUse.add(index);
         if (!it.hasPrevious()) {
           break;
         }
-        D document = indexedElement._element;
-        IndexedElement peekedElement = elements.get(elements.size() - 1);
+        final D document = indexedElement._element;
+        final IndexedElement peekedElement = elements.get(elements.size() - 1);
         if (callback.compare(document, peekedElement._element) != 0) {
           break;
         }
       };
-      
+
       if (elementResults.size() == 1) {
         //this document was unique
-        IndexedElement indexedElement = elementResults.get(0);
+        final IndexedElement indexedElement = elementResults.get(0);
         //booleans are trivially true since list is a singleton
         callback.accept(indexedElement._element, _masterList.get(indexedElement._index), true, true);
       } else {
         //multiple documents across master, so only unique across masters if records picked from a single iterator
-        boolean uniqueAcrossMasters = nextIteratorsToUse.size() == 1;
-        for (IndexedElement element : elementResults) {
-          boolean uniqueWithinMaster = !nonUnique.contains(element._element);
+        final boolean uniqueAcrossMasters = nextIteratorsToUse.size() == 1;
+        for (final IndexedElement element : elementResults) {
+          final boolean uniqueWithinMaster = !nonUnique.contains(element._element);
           callback.accept(element._element, _masterList.get(element._index), uniqueWithinMaster, uniqueAcrossMasters);
         }
       }
-      
+
     } while (true);
   }
 
-  private int refillElements(List<IndexedElement> elements, SearchCallback<D, M> callback, List<ListIterator<D>> iterators, Set<Integer> nextIteratorsToUse, int remainingIterators) {
-    for (Iterator<Integer> it = nextIteratorsToUse.iterator(); it.hasNext();) {
-      Integer i = it.next();
+  private int refillElements(final List<IndexedElement> elements, final SearchCallback<D, M> callback, final List<ListIterator<D>> iterators,
+      final Set<Integer> nextIteratorsToUse, final int remainingIterators) {
+    int iteratorCount = remainingIterators;
+    for (final Iterator<Integer> it = nextIteratorsToUse.iterator(); it.hasNext();) {
+      final Integer i = it.next();
       it.remove();
-      List<D> next = next(iterators.get(i), callback);
+      final List<D> next = next(iterators.get(i), callback);
       if (!next.isEmpty()) {
-        for (D nextElement : next) {
+        for (final D nextElement : next) {
           elements.add(new IndexedElement(i, nextElement, callback));
         }
       } else {
         //iterator is done. set to null
         iterators.set(i, null);
-        remainingIterators--;
+        iteratorCount--;
       }
-      
+
     }
-    return remainingIterators;
+    return iteratorCount;
   }
-  
-  
+
+
   /**
    * Internal class for the simple purpose of retaining the iterator an
-   * element came from after the list of next elements is sorted. See 
-   * {@link CombinedMaster#search(List, SearchCallback)} method for 
+   * element came from after the list of next elements is sorted. See
+   * {@link CombinedMaster#search(List, SearchCallback)} method for
    * usage.
    */
   private class IndexedElement implements Comparable<IndexedElement> {
@@ -451,18 +455,18 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
      */
     private final int _index;
     private final D _element;
-    
-    public IndexedElement(int index, D element, Comparator<D> comparator) {
+
+    IndexedElement(final int index, final D element, final Comparator<D> comparator) {
       _index = index;
       _element = element;
       this._comparator = comparator;
     }
 
     @Override
-    public int compareTo(IndexedElement o) {
+    public int compareTo(final IndexedElement o) {
       return _comparator.compare(_element, o._element);
     }
-    
+
   }
 
   @Override
@@ -472,12 +476,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.replaceVersion(uniqueId, replacementDocuments);
     }
-    return (new Try<List<UniqueId>>() {
+    return new Try<List<UniqueId>>() {
       @Override
       public List<UniqueId> tryMaster(final M master) {
         return master.replaceVersion(uniqueId, replacementDocuments);
       }
-    }).each(scheme);
+    }.each(scheme);
   }
 
   @Override
@@ -487,12 +491,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.replaceAllVersions(objectId, replacementDocuments);
     }
-    return (new Try<List<UniqueId>>() {
+    return new Try<List<UniqueId>>() {
       @Override
       public List<UniqueId> tryMaster(final M master) {
         return master.replaceAllVersions(objectId, replacementDocuments);
       }
-    }).each(scheme);
+    }.each(scheme);
   }
 
   @Override
@@ -502,12 +506,12 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
     if (master != null) {
       return master.replaceVersions(objectId, replacementDocuments);
     }
-    return (new Try<List<UniqueId>>() {
+    return new Try<List<UniqueId>>() {
       @Override
       public List<UniqueId> tryMaster(final M master) {
         return master.replaceVersions(objectId, replacementDocuments);
       }
-    }).each(scheme);
+    }.each(scheme);
   }
 
   @Override
@@ -516,29 +520,27 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
   }
 
   @Override
-  public final UniqueId replaceVersion(D replacementDocument) {
-    List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
+  public final UniqueId replaceVersion(final D replacementDocument) {
+    final List<UniqueId> result = replaceVersion(replacementDocument.getUniqueId(), Collections.singletonList(replacementDocument));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
 
   @Override
-  public final UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
-    List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
+  public final UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
+    final List<UniqueId> result = replaceVersions(objectId, Collections.singletonList(documentToAdd));
     if (result.isEmpty()) {
       return null;
-    } else {
-      return result.get(0);
     }
+    return result.get(0);
   }
-  
+
   @Override
-  public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, D> map = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
+  public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, D> map = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
       map.put(uniqueId, get(uniqueId));
     }
     return map;
@@ -546,9 +548,9 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
 
   /**
    * Resets the paging on a search request back to ALL and returns
-   * the configured {@link PagingRequest}. This is useful for 
+   * the configured {@link PagingRequest}. This is useful for
    * implementing search methods which require support for paging
-   * and can be used with {@link #applyPaging(AbstractSearchResult, PagingRequest)}
+   * and can be used with {@link #applyPaging(AbstractDocumentsResult, PagingRequest)}
    * to restrict the resultset back to what was originally requested.
    * Obviously, querying everything then filtering out the subset
    * required for the page is not the most efficient approach but
@@ -556,23 +558,23 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param request the search request to broaden
    * @return the {@link PagingRequest}
    */
-  protected PagingRequest clearPaging(AbstractSearchRequest request) {
-    PagingRequest pagingRequest = request.getPagingRequest();
+  protected PagingRequest clearPaging(final AbstractSearchRequest request) {
+    final PagingRequest pagingRequest = request.getPagingRequest();
     request.setPagingRequest(PagingRequest.ALL);
     return pagingRequest;
   }
-  
+
   /**
    * Same as for {@link AbstractSearchRequest}.
    * @param request the search request
    * @return the paging request
    */
-  protected PagingRequest clearPaging(AbstractHistoryRequest request) {
-    PagingRequest pagingRequest = request.getPagingRequest();
+  protected PagingRequest clearPaging(final AbstractHistoryRequest request) {
+    final PagingRequest pagingRequest = request.getPagingRequest();
     request.setPagingRequest(PagingRequest.ALL);
     return pagingRequest;
   }
-  
+
   /**
    * Applies paging to a comprehensive search result. Only the subset of
    * records contained in this page are retained in the result.
@@ -580,14 +582,14 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
    * @param result the search result
    * @param originalRequest the original request
    */
-  protected void applyPaging(AbstractDocumentsResult<D> result, PagingRequest originalRequest) {
+  protected void applyPaging(final AbstractDocumentsResult<D> result, final PagingRequest originalRequest) {
     result.setPaging(Paging.of(originalRequest, result.getDocuments().size()));
-    int docSize = result.getDocuments().size();
-    int firstItem = originalRequest.getFirstItem() > docSize ? docSize : originalRequest.getFirstItem();
-    int lastItem = originalRequest.getLastItem() > docSize ? docSize : originalRequest.getLastItem();
-    ArrayList<D> resultDocuments = Lists.newArrayList(result.getDocuments().subList(firstItem, lastItem));
+    final int docSize = result.getDocuments().size();
+    final int firstItem = originalRequest.getFirstItem() > docSize ? docSize : originalRequest.getFirstItem();
+    final int lastItem = originalRequest.getLastItem() > docSize ? docSize : originalRequest.getLastItem();
+    final ArrayList<D> resultDocuments = Lists.newArrayList(result.getDocuments().subList(firstItem, lastItem));
     result.setDocuments(resultDocuments);
   }
-  
+
 
 }

@@ -41,7 +41,7 @@ public class MonetaryAmount {
    * Sets the amount.
    * @param amount  the new value of the property, not null
    */
-  public void setAmount(BigDecimal amount) {
+  public void setAmount(final BigDecimal amount) {
     JodaBeanUtils.notNull(amount, "amount");
     this._amount = amount;
   }
@@ -58,7 +58,7 @@ public class MonetaryAmount {
    * Sets the currency.
    * @param currency  the new value of the property, not null
    */
-  public void setCurrency(Currency currency) {
+  public void setCurrency(final Currency currency) {
     JodaBeanUtils.notNull(currency, "currency");
     this._currency = currency;
   }

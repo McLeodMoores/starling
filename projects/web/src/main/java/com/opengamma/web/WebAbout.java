@@ -47,10 +47,10 @@ public class WebAbout {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    */
-  public WebAbout(ServletContext servletContext) {
+  public WebAbout(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
     _servletContext = servletContext;
   }
@@ -104,7 +104,7 @@ public class WebAbout {
   public TemplateModel getSystemUtils() {
     try {
       return BeansWrapper.getDefaultInstance().getStaticModels().get(SystemUtils.class.getName());
-    } catch (TemplateModelException ex) {
+    } catch (final TemplateModelException ex) {
       return TemplateModel.NOTHING;
     }
   }
@@ -123,9 +123,9 @@ public class WebAbout {
    * @return the JVM input arguments
    */
   public List<String> getJvmArguments() {
-    List<String> args = new ArrayList<>(ManagementFactory.getRuntimeMXBean().getInputArguments());
-    for (ListIterator<String> it = args.listIterator(); it.hasNext(); ) {
-      String arg = it.next();
+    final List<String> args = new ArrayList<>(ManagementFactory.getRuntimeMXBean().getInputArguments());
+    for (final ListIterator<String> it = args.listIterator(); it.hasNext();) {
+      final String arg = it.next();
       if (arg.contains("secret") || arg.contains("password")) {
         int index = arg.indexOf("secret") + 6;
         if (index < 0) {
@@ -167,7 +167,7 @@ public class WebAbout {
    * @return the version, not null
    */
   public String getOpenGammaVersion() {
-    String version = VersionUtils.deriveVersion();
+    final String version = VersionUtils.deriveVersion();
     return StringUtils.defaultIfEmpty(version, "?");
   }
 
@@ -176,7 +176,7 @@ public class WebAbout {
    * @return the build, not null
    */
   public String getOpenGammaBuild() {
-    String build = VersionUtils.deriveBuild();
+    final String build = VersionUtils.deriveBuild();
     return StringUtils.defaultIfEmpty(build, "?");
   }
 
@@ -185,7 +185,7 @@ public class WebAbout {
    * @return the build ID, not null
    */
   public String getOpenGammaBuildId() {
-    String buildId = VersionUtils.deriveBuildId();
+    final String buildId = VersionUtils.deriveBuildId();
     return StringUtils.defaultIfEmpty(buildId, "?");
   }
 

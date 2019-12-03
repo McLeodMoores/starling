@@ -17,10 +17,9 @@ import com.opengamma.core.marketdatasnapshot.YieldCurveKey;
 import com.opengamma.core.marketdatasnapshot.YieldCurveSnapshot;
 
 /**
- * Abstract snapshot reader with methods that provide getters for the specific elements a snapshot
- * note that VolatilityCubes are not present.
+ * Abstract snapshot reader with methods that provide getters for the specific elements a snapshot note that VolatilityCubes are not present.
  */
-public abstract interface SnapshotReader {
+public interface SnapshotReader {
 
   Map<CurveKey, CurveSnapshot> readCurves();
 

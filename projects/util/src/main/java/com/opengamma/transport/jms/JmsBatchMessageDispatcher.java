@@ -25,7 +25,7 @@ import com.opengamma.transport.AbstractBatchMessageDispatcher;
 public class JmsBatchMessageDispatcher extends AbstractBatchMessageDispatcher {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsBatchMessageDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsBatchMessageDispatcher.class);
 
   /**
    * The byte array source.
@@ -84,7 +84,7 @@ public class JmsBatchMessageDispatcher extends AbstractBatchMessageDispatcher {
       try {
         message.acknowledge();
       } catch (JMSException ex) {
-        s_logger.warn("Unable to acknowledge message", ex);
+        LOGGER.warn("Unable to acknowledge message", ex);
       }
     }
   }

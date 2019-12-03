@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency.rest;
@@ -35,7 +35,7 @@ public class DataCurrencyMatrixSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param source the underlying source, not null
    */
   public DataCurrencyMatrixSourceResource(final CurrencyMatrixSource source) {
@@ -46,7 +46,7 @@ public class DataCurrencyMatrixSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the source.
-   * 
+   *
    * @return the source, not null
    */
   public CurrencyMatrixSource getCurrencyMatrixSource() {
@@ -55,21 +55,21 @@ public class DataCurrencyMatrixSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("currencyMatricesByName/{versionCorrection}/{name}")
-  public Response getMatrixByName(@PathParam("name") String name, @PathParam("versionCorrection") String versionCorrectionStr) {
+  public Response getMatrixByName(@PathParam("name") final String name, @PathParam("versionCorrection") final String versionCorrectionStr) {
     final VersionCorrection versionCorrection = VersionCorrection.parse(versionCorrectionStr);
-    CurrencyMatrix result = getCurrencyMatrixSource().getCurrencyMatrix(name, versionCorrection);
+    final CurrencyMatrix result = getCurrencyMatrixSource().getCurrencyMatrix(name, versionCorrection);
     return responseOkObject(result);
   }
 
   @GET
   @Path("currencyMatrices/{uniqueId}")
-  public Response getMatrixByUniqueId(@PathParam("uniqueId") String uniqueIdStr) {
+  public Response getMatrixByUniqueId(@PathParam("uniqueId") final String uniqueIdStr) {
     final UniqueId uniqueId = UniqueId.parse(uniqueIdStr);
     final CurrencyMatrix result = getCurrencyMatrixSource().get(uniqueId);
     return responseOkObject(result);
@@ -77,7 +77,8 @@ public class DataCurrencyMatrixSourceResource extends AbstractDataResource {
 
   @GET
   @Path("currencyMatrices/{objectId}/{versionCorrection}")
-  public Response getMatrixByObjectIdentifier(@PathParam("objectId") String objectIdStr, @PathParam("versionCorrection") String versionCorrectionStr) {
+  public Response getMatrixByObjectIdentifier(@PathParam("objectId") final String objectIdStr,
+      @PathParam("versionCorrection") final String versionCorrectionStr) {
     final ObjectId objectId = ObjectId.parse(objectIdStr);
     final VersionCorrection versionCorrection = VersionCorrection.parse(versionCorrectionStr);
     final CurrencyMatrix result = getCurrencyMatrixSource().get(objectId, versionCorrection);

@@ -24,13 +24,12 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 
 /**
- * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity,
- * as seen from the selected market data
+ * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity, as seen from the selected market data
  */
 public class EquityOptionForwardValueFunction extends EquityOptionFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionForwardValueFunction() {
     super(ValueRequirementNames.FORWARD);
@@ -40,7 +39,7 @@ public class EquityOptionForwardValueFunction extends EquityOptionFunction {
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
-    //FIXME use the type system
+    // FIXME use the type system
     if (derivative instanceof EquityIndexOption) {
       final EquityIndexOptionBlackMethod model = EquityIndexOptionBlackMethod.getInstance();
       return Collections.singleton(new ComputedValue(resultSpec, model.forwardIndexValue((EquityIndexOption) derivative, market)));
@@ -59,6 +58,6 @@ public class EquityOptionForwardValueFunction extends EquityOptionFunction {
     return CalculationPropertyNamesAndValues.ANALYTIC;
   }
 
-  //TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
+  // TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
   // to construct the market data bundle.
 }

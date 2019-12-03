@@ -19,7 +19,7 @@ import com.opengamma.master.security.ManageableSecurity;
 public class MixedFXPortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
 
   /**
-   * 
+   *
    */
   protected class MixedFXSecurityGenerator<T extends ManageableSecurity> extends AbstractFXSecurityGenerator<T> implements PortfolioNodeGenerator {
 
@@ -55,7 +55,7 @@ public class MixedFXPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
   }
 
   protected <T extends ManageableSecurity> MixedFXSecurityGenerator<T> createMixedFXSecurityGenerator() {
-    return new MixedFXSecurityGenerator<T>();
+    return new MixedFXSecurityGenerator<>();
   }
 
   @Override

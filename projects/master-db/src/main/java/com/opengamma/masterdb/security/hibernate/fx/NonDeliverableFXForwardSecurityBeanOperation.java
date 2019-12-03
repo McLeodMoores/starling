@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -24,7 +24,8 @@ import com.opengamma.util.money.Currency;
 /**
  * Hibernate bean/security conversion operations.
  */
-public final class NonDeliverableFXForwardSecurityBeanOperation extends AbstractSecurityBeanOperation<NonDeliverableFXForwardSecurity, NonDeliverableFXForwardSecurityBean> {
+public final class NonDeliverableFXForwardSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<NonDeliverableFXForwardSecurity, NonDeliverableFXForwardSecurityBean> {
 
   /**
    * Singleton instance.
@@ -36,7 +37,8 @@ public final class NonDeliverableFXForwardSecurityBeanOperation extends Abstract
   }
 
   @Override
-  public NonDeliverableFXForwardSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, NonDeliverableFXForwardSecurity security) {
+  public NonDeliverableFXForwardSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final NonDeliverableFXForwardSecurity security) {
     final NonDeliverableFXForwardSecurityBean bean = new NonDeliverableFXForwardSecurityBean();
     bean.setPayCurrency(secMasterSession.getOrCreateCurrencyBean(security.getPayCurrency().getCode()));
     bean.setPayAmount(security.getPayAmount());
@@ -49,14 +51,14 @@ public final class NonDeliverableFXForwardSecurityBeanOperation extends Abstract
   }
 
   @Override
-  public NonDeliverableFXForwardSecurity createSecurity(final OperationContext context, NonDeliverableFXForwardSecurityBean bean) {
-    ZonedDateTime forwardDate = zonedDateTimeBeanToDateTimeWithZone(bean.getForwardDate());
-    ExternalId region = externalIdBeanToExternalId(bean.getRegion());
-    Currency payCurrency = currencyBeanToCurrency(bean.getPayCurrency());
-    double payAmount = bean.getPayAmount();
-    Currency receiveCurrency = currencyBeanToCurrency(bean.getReceiveCurrency());
-    double receiveAmount = bean.getReceiveAmount();
-    boolean deliverInReceiveCurrency = bean.isDeliverInReceiveCurrency();
+  public NonDeliverableFXForwardSecurity createSecurity(final OperationContext context, final NonDeliverableFXForwardSecurityBean bean) {
+    final ZonedDateTime forwardDate = zonedDateTimeBeanToDateTimeWithZone(bean.getForwardDate());
+    final ExternalId region = externalIdBeanToExternalId(bean.getRegion());
+    final Currency payCurrency = currencyBeanToCurrency(bean.getPayCurrency());
+    final double payAmount = bean.getPayAmount();
+    final Currency receiveCurrency = currencyBeanToCurrency(bean.getReceiveCurrency());
+    final double receiveAmount = bean.getReceiveAmount();
+    final boolean deliverInReceiveCurrency = bean.isDeliverInReceiveCurrency();
     return new NonDeliverableFXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate, region, deliverInReceiveCurrency);
   }
 

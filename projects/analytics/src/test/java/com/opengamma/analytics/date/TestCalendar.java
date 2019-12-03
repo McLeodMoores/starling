@@ -10,7 +10,9 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 
 /**
- * Implementation of a {@link Calendar} for use in tests. The weekend days are Saturday and Sundays.
+ * Implementation of a
+ * {@link com.opengamma.financial.convention.calendar.Calendar} for use in
+ * tests. The weekend days are Saturday and Sundays.
  */
 @SuppressWarnings("deprecation")
 /* package */ class TestCalendar extends MondayToFridayCalendar {

@@ -47,7 +47,7 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
 
     private final String _provider;
 
-    public Listener(final String provider) {
+    Listener(final String provider) {
       _provider = provider;
     }
 
@@ -131,8 +131,8 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
   }
 
   private Collection<ValueSpecification> createValueSpecifications(final Collection<ValueSpecification> underlyings, final String provider) {
-    final Collection<ValueSpecification> result = new ArrayList<ValueSpecification>(underlyings.size());
-    for (ValueSpecification underlying : underlyings) {
+    final Collection<ValueSpecification> result = new ArrayList<>(underlyings.size());
+    for (final ValueSpecification underlying : underlyings) {
       result.add(createValueSpecification(underlying, provider));
     }
     return result;
@@ -146,7 +146,7 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
    * <li>Null if either provider returned null
    * <li>{@link MarketDataNotSatisfiableException} being thrown if both providers do so
    * </ul>
-   * 
+   *
    * @param marketDataSpec the market data specification, not null
    * @return the provider, not null
    */
@@ -179,17 +179,15 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
           if (preferredMissing != null) {
             // both are not available - use preferred
             throw preferredMissing;
-          } else {
-            // fallback is not available
-            throw e;
           }
+          // fallback is not available
+          throw e;
         }
         // preferred is either not available or missing
         if (preferredMissing != null) {
           throw preferredMissing;
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override
@@ -199,7 +197,7 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
 
       @Override
       public Serializable getAvailabilityHintKey() {
-        final ArrayList<Serializable> key = new ArrayList<Serializable>(2);
+        final ArrayList<Serializable> key = new ArrayList<>(2);
         key.add(_preferredProvider.getAvailabilityHintKey());
         key.add(_fallbackProvider.getAvailabilityHintKey());
         return key;
@@ -255,7 +253,7 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
   @Override
   public MarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
     final CombinedMarketDataSpecification combinedSpec = (CombinedMarketDataSpecification) marketDataSpec;
-    final Map<MarketDataProvider, MarketDataSnapshot> snapByProvider = new HashMap<MarketDataProvider, MarketDataSnapshot>();
+    final Map<MarketDataProvider, MarketDataSnapshot> snapByProvider = new HashMap<>();
     snapByProvider.put(_preferred, _preferred.snapshot(combinedSpec.getPreferredSpecification()));
     snapByProvider.put(_fallBack, _fallBack.snapshot(combinedSpec.getFallbackSpecification()));
     final MarketDataSnapshot preferredSnap = snapByProvider.get(_preferred);
@@ -293,13 +291,13 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
   }
 
   public Map<MarketDataProvider, Set<ValueSpecification>> getProviders(final Collection<ValueSpecification> specifications) {
-    final Map<MarketDataProvider, Set<ValueSpecification>> result = new HashMap<MarketDataProvider, Set<ValueSpecification>>();
+    final Map<MarketDataProvider, Set<ValueSpecification>> result = new HashMap<>();
     for (final ValueSpecification specification : specifications) {
       final ValueProperties.Builder underlyingProperties = specification.getProperties().copy();
       final MarketDataProvider provider = getDataProvider(specification, underlyingProperties);
       Set<ValueSpecification> set = result.get(provider);
       if (set == null) {
-        set = new HashSet<ValueSpecification>();
+        set = new HashSet<>();
         result.put(provider, set);
       }
       set.add(new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()));
@@ -309,18 +307,18 @@ public class CombinedMarketDataProvider extends AbstractMarketDataProvider {
 
   /**
    * Returns the specifications per provider.
-   * 
+   *
    * @param specifications the specification to convert
    * @return the map of provider to specification. The specifications returned a
    */
   protected Map<MarketDataProvider, Map<ValueSpecification, ValueSpecification>> getProvidersAsMap(final Collection<ValueSpecification> specifications) {
-    final Map<MarketDataProvider, Map<ValueSpecification, ValueSpecification>> result = new HashMap<MarketDataProvider, Map<ValueSpecification, ValueSpecification>>();
+    final Map<MarketDataProvider, Map<ValueSpecification, ValueSpecification>> result = new HashMap<>();
     for (final ValueSpecification specification : specifications) {
       final ValueProperties.Builder underlyingProperties = specification.getProperties().copy();
       final MarketDataProvider provider = getDataProvider(specification, underlyingProperties);
       Map<ValueSpecification, ValueSpecification> map = result.get(provider);
       if (map == null) {
-        map = new HashMap<ValueSpecification, ValueSpecification>();
+        map = new HashMap<>();
         result.put(provider, map);
       }
       map.put(new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()), specification);

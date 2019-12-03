@@ -38,12 +38,16 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 /**
- * In this form, we do not take as input an entire volatility surface (ValueRequirementNames.BLACK_VOLATILITY_SURFACE). Instead, the implied volatility is implied by the market_value of the security,
- * along with it's contract parameters of expiry and strike, along with the requirement of a forward curve (ValueRequirementNames.FORWARD_CURVE).
+ * In this form, we do not take as input an entire volatility surface (ValueRequirementNames.BLACK_VOLATILITY_SURFACE). Instead, the implied volatility is
+ * implied by the market_value of the security, along with it's contract parameters of expiry and strike, along with the requirement of a forward curve
+ * (ValueRequirementNames.FORWARD_CURVE).
  */
 public abstract class EquityOptionBlackBasicFunction extends EquityOptionFunction {
 
-  /** @param valueRequirementName The value requirement names, not null */
+  /**
+   * @param valueRequirementName
+   *          The value requirement names, not null
+   */
   public EquityOptionBlackBasicFunction(final String... valueRequirementName) {
     super(valueRequirementName);
   }
@@ -72,25 +76,30 @@ public abstract class EquityOptionBlackBasicFunction extends EquityOptionFunctio
     if (MarketDataRequirementNames.MARKET_VALUE.equals(input.getValueName())) {
       // TODO: Add any additional properties for the BlackBasic MarketValue result
       // FIXME: For prototyping, I am adding stubs for what the default functions are going to add anyway...
-      //        ValueProperties surfaceProperties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(ValueProperties.none(), 
-      //            InstrumentTypeProperties.EQUITY_OPTION, BlackVolatilitySurfacePropertyNamesAndValues.SPLINE).get();
-      //        for (final String property : surfaceProperties.getProperties()) {
-      //          properties.with(property, surfaceProperties.getValues(property));
-      //        }
+      // ValueProperties surfaceProperties = BlackVolatilitySurfacePropertyUtils.addAllBlackSurfaceProperties(ValueProperties.none(),
+      // InstrumentTypeProperties.EQUITY_OPTION, BlackVolatilitySurfacePropertyNamesAndValues.SPLINE).get();
+      // for (final String property : surfaceProperties.getProperties()) {
+      // properties.with(property, surfaceProperties.getValues(property));
+      // }
       return;
     }
     super.extractInputProperties(input, properties);
   }
 
   /**
-   * Constructs a market data bundle of type StaticReplicationDataBundle. In the {@link CalculationPropertyNamesAndValues#BLACK_BASIC_METHOD}, the volatility surface is a constant inferred from the
-   * market price and the forward
-   * 
-   * @param underlyingId The underlying id of the index option
-   * @param executionContext The execution context
-   * @param inputs The market data inputs
-   * @param target The target
-   * @param desiredValues The desired values of the function
+   * Constructs a market data bundle of type StaticReplicationDataBundle. In the {@link CalculationPropertyNamesAndValues#BLACK_BASIC_METHOD}, the volatility
+   * surface is a constant inferred from the market price and the forward
+   *
+   * @param underlyingId
+   *          The underlying id of the index option
+   * @param executionContext
+   *          The execution context
+   * @param inputs
+   *          The market data inputs
+   * @param target
+   *          The target
+   * @param desiredValues
+   *          The desired values of the function
    * @return The market data bundle used in pricing
    */
   @Override
@@ -108,7 +117,7 @@ public abstract class EquityOptionBlackBasicFunction extends EquityOptionFunctio
     if (discountingObject == null) {
       throw new OpenGammaRuntimeException("Could not get discounting Curve");
     }
-    if (!(discountingObject instanceof YieldCurve)) { //TODO: make it more generic
+    if (!(discountingObject instanceof YieldCurve)) { // TODO: make it more generic
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }
     return (YieldCurve) discountingObject;
@@ -147,7 +156,7 @@ public abstract class EquityOptionBlackBasicFunction extends EquityOptionFunctio
     final double discountFactor = getDiscountingCurve(inputs).getDiscountFactor(timeToExpiry);
 
     // From the market value, we can then invert the Black formula
-    final Object optionPriceObject = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
+    final Object optionPriceObject = inputs.getValue(MarketDataRequirementNames.MARKET_VALUE);
     if (optionPriceObject == null) {
       throw new OpenGammaRuntimeException("Could not get market value of underlying option");
     }

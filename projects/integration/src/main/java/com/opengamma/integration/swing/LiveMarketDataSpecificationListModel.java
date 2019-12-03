@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.swing;
@@ -24,7 +24,7 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProviderRequest;
 import com.opengamma.provider.livedata.LiveDataMetaDataProviderResult;
 
 /**
- * List/ComboBox model for live market data specifications
+ * List/ComboBox model for live market data specifications.
  */
 public class LiveMarketDataSpecificationListModel extends AbstractListModel<String> implements ComboBoxModel<String> {
   private static final long serialVersionUID = 1L;
@@ -32,58 +32,58 @@ public class LiveMarketDataSpecificationListModel extends AbstractListModel<Stri
   private Map<MarketDataSpecification, String> _namesBySpec = Collections.emptyMap();
   private List<String> _names = Collections.emptyList();
   private Object _selected;
-  
+
   public LiveMarketDataSpecificationListModel(final List<LiveDataMetaDataProvider> liveDataMetaDataProviders) {
-    SwingWorker<Map<String, MarketDataSpecification>, Object> worker = new SwingWorker<Map<String, MarketDataSpecification>, Object>() {
+    final SwingWorker<Map<String, MarketDataSpecification>, Object> worker = new SwingWorker<Map<String, MarketDataSpecification>, Object>() {
 
       @Override
       protected Map<String, MarketDataSpecification> doInBackground() throws Exception {
-        Map<String, MarketDataSpecification> specsByName = new LinkedHashMap<>();
-        for (LiveDataMetaDataProvider liveDataMetaDataProvider : liveDataMetaDataProviders) {
-          LiveDataMetaDataProviderRequest liveDataMetaDataProviderRequest = new LiveDataMetaDataProviderRequest();
-          LiveDataMetaDataProviderResult metaData = liveDataMetaDataProvider.metaData(liveDataMetaDataProviderRequest);
-          MarketDataSpecification marketDataSpec = LiveMarketDataSpecification.of(metaData.getMetaData().getDescription());
+        final Map<String, MarketDataSpecification> specsByName = new LinkedHashMap<>();
+        for (final LiveDataMetaDataProvider liveDataMetaDataProvider : liveDataMetaDataProviders) {
+          final LiveDataMetaDataProviderRequest liveDataMetaDataProviderRequest = new LiveDataMetaDataProviderRequest();
+          final LiveDataMetaDataProviderResult metaData = liveDataMetaDataProvider.metaData(liveDataMetaDataProviderRequest);
+          final MarketDataSpecification marketDataSpec = LiveMarketDataSpecification.of(metaData.getMetaData().getDescription());
           specsByName.put(metaData.getMetaData().getDescription(), marketDataSpec);
         }
         return specsByName;
       }
-      
+
       @Override
       protected void done() {
         try {
           _specsByName = get();
-          _names = new ArrayList<String>(_specsByName.keySet());
-          _namesBySpec = new LinkedHashMap<MarketDataSpecification, String>();
-          for (String name : _names) {
+          _names = new ArrayList<>(_specsByName.keySet());
+          _namesBySpec = new LinkedHashMap<>();
+          for (final String name : _names) {
             _namesBySpec.put(_specsByName.get(name), name);
           }
           fireIntervalAdded(LiveMarketDataSpecificationListModel.this, 0, _specsByName.size() - 1);
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
           throw new OpenGammaRuntimeException("InterruptedException retreiving available market data specifications", ex);
-        } catch (ExecutionException ex) {
+        } catch (final ExecutionException ex) {
           throw new OpenGammaRuntimeException("ExecutionException retreiving available market data specifications", ex);
         }
       }
     };
     worker.execute();
   }
-  
-  public MarketDataSpecification getMarketDataSpec(String selected) {
+
+  public MarketDataSpecification getMarketDataSpec(final String selected) {
     return _specsByName.get(selected);
   }
-  
+
   @Override
   public int getSize() {
     return _specsByName.size();
   }
 
   @Override
-  public String getElementAt(int index) {
+  public String getElementAt(final int index) {
     return _names.get(index);
   }
 
   @Override
-  public void setSelectedItem(Object anItem) {
+  public void setSelectedItem(final Object anItem) {
     _selected = anItem;
   }
 
@@ -91,5 +91,5 @@ public class LiveMarketDataSpecificationListModel extends AbstractListModel<Stri
   public Object getSelectedItem() {
     return _selected;
   }
-  
+
 }

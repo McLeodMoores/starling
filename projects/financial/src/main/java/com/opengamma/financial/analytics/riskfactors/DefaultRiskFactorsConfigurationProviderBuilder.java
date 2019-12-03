@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.riskfactors;
@@ -22,22 +22,22 @@ import com.opengamma.util.money.Currency;
 public class DefaultRiskFactorsConfigurationProviderBuilder implements FudgeBuilder<DefaultRiskFactorsConfigurationProvider> {
 
   private static final String CURRENCY_FIELD = "currency";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, DefaultRiskFactorsConfigurationProvider object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final DefaultRiskFactorsConfigurationProvider object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, CURRENCY_FIELD, null, object.getCurrencyOverride());
     return msg;
   }
 
   @Override
-  public DefaultRiskFactorsConfigurationProvider buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public DefaultRiskFactorsConfigurationProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     return new DefaultRiskFactorsConfigurationProvider(getCurrencyOverride(deserializer, msg));
   }
 
-  protected Currency getCurrencyOverride(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FudgeField currencyField = msg.getByName(CURRENCY_FIELD);
-    Currency currencyOverride = currencyField != null ? deserializer.fieldValueToObject(Currency.class, currencyField) : null;
+  protected Currency getCurrencyOverride(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FudgeField currencyField = msg.getByName(CURRENCY_FIELD);
+    final Currency currencyOverride = currencyField != null ? deserializer.fieldValueToObject(Currency.class, currencyField) : null;
     return currencyOverride;
   }
 

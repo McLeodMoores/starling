@@ -33,7 +33,7 @@ public class FutureSecurityFudgeBuilder extends AbstractFudgeBuilder {
   /** Field name. */
   public static final String CONTRACT_CATEGORY_FIELD_NAME = "contractCategory";
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FutureSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FutureSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, EXPIRY_FIELD_NAME, ExpiryFudgeBuilder.toFudgeMsg(serializer, object.getExpiry()));
     addToMessage(msg, TRADING_EXCHANGE_FIELD_NAME, object.getTradingExchange());
@@ -43,7 +43,7 @@ public class FutureSecurityFudgeBuilder extends AbstractFudgeBuilder {
     addToMessage(msg, CONTRACT_CATEGORY_FIELD_NAME, object.getContractCategory());
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FutureSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FutureSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setExpiry(ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(EXPIRY_FIELD_NAME)));
     object.setTradingExchange(msg.getString(TRADING_EXCHANGE_FIELD_NAME));

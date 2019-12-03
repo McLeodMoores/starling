@@ -1,5 +1,7 @@
 /**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
+ * Please see distribution for license.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -18,18 +20,14 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class CurveBuildingBlockBundleFormatter extends AbstractFormatter<CurveBuildingBlockBundle> {
-  private static final String X_LABELS = "xLabels";
-  private static final String Y_LABELS = "yLabels";
   private static final String MATRIX = "matrix";
 
-  private final DoubleFormatter _doubleFormatter;
-
   /**
-   * @param doubleFormatter  formats the discount factors
+   * @param doubleFormatter
+   *          formats the discount factors
    */
   /* package */ CurveBuildingBlockBundleFormatter(final DoubleFormatter doubleFormatter) {
     super(CurveBuildingBlockBundle.class);
-    _doubleFormatter = doubleFormatter;
     addFormatter(new Formatter<CurveBuildingBlockBundle>(Format.EXPANDED) {
       @Override
       protected Object formatValue(final CurveBuildingBlockBundle value, final ValueSpecification valueSpec, final Object inlineKey) {
@@ -45,16 +43,18 @@ public class CurveBuildingBlockBundleFormatter extends AbstractFormatter<CurveBu
 
   /**
    * Transforms the details object to an amount that can be displayed.
-   * @param value  the FX forward details
-   * @param valueSpec  the value specification
-   * @return  the data
+   * 
+   * @param value
+   *          the FX forward details
+   * @param valueSpec
+   *          the value specification
+   * @return the data
    */
   /* package */ Map<String, Object> formatExpanded(final CurveBuildingBlockBundle value, final ValueSpecification valueSpec) {
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> data = value.getData();
     int rows = 0;
     int columns = 0;
     for (final Map.Entry<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> entry : data.entrySet()) {
-      final LinkedHashMap<String, Pair<Integer, Integer>> temp = entry.getValue().getFirst().getData();
       rows += entry.getValue().getSecond().getNumberOfRows();
       columns += entry.getValue().getSecond().getNumberOfColumns();
     }

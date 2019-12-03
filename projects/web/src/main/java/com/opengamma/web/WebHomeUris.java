@@ -23,10 +23,10 @@ public class WebHomeUris {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param uriInfo  the request URI information, not null
    */
-  public WebHomeUris(UriInfo uriInfo) {
+  public WebHomeUris(final UriInfo uriInfo) {
     _uriInfo = uriInfo;
   }
 
@@ -55,7 +55,7 @@ public class WebHomeUris {
     try {
       ClassUtils.loadClass("com.opengamma.component.rest.DataComponentServerResource");
       return _uriInfo.getBaseUriBuilder().path("components").build();
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       return null;
     }
   }

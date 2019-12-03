@@ -27,7 +27,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class ForwardCurveFormatter extends AbstractFormatter<ForwardCurve> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardCurveFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardCurveFormatter.class);
 
   /* package */ ForwardCurveFormatter() {
     super(ForwardCurve.class);
@@ -41,7 +41,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public List<Double[]> formatCell(final ForwardCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
-    final List<Double[]> data = new ArrayList<Double[]>();
+    final List<Double[]> data = new ArrayList<>();
     if (value.getForwardCurve() instanceof InterpolatedDoublesCurve) {
       final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
       final double[] xData = interpolatedCurve.getXDataAsPrimitive();
@@ -58,12 +58,12 @@ import com.opengamma.engine.value.ValueSpecification;
       }
       return data;
     } else {
-      s_logger.warn("Can't format forward curve of type {}", value.getForwardCurve().getClass());
+      LOGGER.warn("Can't format forward curve of type {}", value.getForwardCurve().getClass());
       return null;
     }
   }
 
-  private List<Double[]> formatExpanded(final ForwardCurve value) {
+  private static List<Double[]> formatExpanded(final ForwardCurve value) {
     final Curve<Double, Double> forwardCurve = value.getForwardCurve();
     if (forwardCurve instanceof FunctionalDoublesCurve) {
       return formatFunctionalDoubleCurve((FunctionalDoublesCurve) forwardCurve);
@@ -73,7 +73,7 @@ import com.opengamma.engine.value.ValueSpecification;
     throw new IllegalArgumentException("Unable to format forward curve of type " + forwardCurve.getClass().getName());
   }
 
-  private List<Double[]> formatInterpolatedDoubleCurve(final InterpolatedDoublesCurve detailedCurve) {
+  private static List<Double[]> formatInterpolatedDoubleCurve(final InterpolatedDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = Lists.newArrayList();
     final Double[] xs = detailedCurve.getXData();
     final double eps = (xs[xs.length - 1] - xs[0]) / 100;
@@ -85,7 +85,7 @@ import com.opengamma.engine.value.ValueSpecification;
     return detailedData;
   }
 
-  private List<Double[]> formatFunctionalDoubleCurve(final FunctionalDoublesCurve detailedCurve) {
+  private static List<Double[]> formatFunctionalDoubleCurve(final FunctionalDoublesCurve detailedCurve) {
     final List<Double[]> detailedData = Lists.newArrayList();
     for (int i = 0; i < 100; i++) {
       final double x = 3 * i / 10.;

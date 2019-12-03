@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -26,24 +26,24 @@ public final class LogUtils {
   //-------------------------------------------------------------------------
   /**
    * Configures logging from a logback resource.
-   * 
+   *
    * @param logbackResource  the logback resource, not null
    * @return true if logging was configured successfully, false otherwise
    */
-  public static boolean configureLogger(String logbackResource) {
+  public static boolean configureLogger(final String logbackResource) {
     try {
       ArgumentChecker.notNull(logbackResource, "logbackResource");
-      LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-      JoranConfigurator configurator = new JoranConfigurator();
+      final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+      final JoranConfigurator configurator = new JoranConfigurator();
       configurator.setContext(lc);
       lc.reset();
-      URL logbackResourceUrl = LogUtils.class.getClassLoader().getResource(logbackResource);
+      final URL logbackResourceUrl = LogUtils.class.getClassLoader().getResource(logbackResource);
       if (logbackResourceUrl == null) {
         throw new IllegalArgumentException("Logback file not found: " + logbackResource);
       }
       configurator.doConfigure(logbackResourceUrl);
       return true;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       ex.printStackTrace();
       return false;
     }

@@ -6,14 +6,14 @@
 package com.opengamma.financial.view.rest;
 
 /**
- * 
+ *
  */
 public class CompilationFailure {
 
   private final String _details;
   private final Exception _exception;
-  
-  public CompilationFailure(String details, Exception exception) {
+
+  public CompilationFailure(final String details, final Exception exception) {
     _details = details;
     _exception = exception;
   }
@@ -25,5 +25,5 @@ public class CompilationFailure {
   public Exception getException() {
     return _exception;
   }
-  
+
 }

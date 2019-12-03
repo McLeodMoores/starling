@@ -17,20 +17,20 @@ public class JmsRuntimeException extends RuntimeException {
 
   /**
    * Creates an instance based on a {@code JMSException}.
-   * 
+   *
    * @param cause  the cause, may be null
    */
-  public JmsRuntimeException(JMSException cause) {
+  public JmsRuntimeException(final JMSException cause) {
     super(cause);
   }
 
   /**
    * Creates an instance based on a {@code JMSException}.
-   * 
+   *
    * @param message  the textual message to use, may be null
    * @param cause  the cause, may be null
    */
-  public JmsRuntimeException(String message, JMSException cause) {
+  public JmsRuntimeException(final String message, final JMSException cause) {
     super(message, cause);
   }
 

@@ -10,17 +10,8 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Class representing the Heaviside step function, defined as:
- * $$
- * \begin{align*}
- * H(x) = 
- * \begin{cases}
- * 0 & \text{ when } x < 0\\
- * 1 & \text{ when } x > 0
- * \end{cases}
- * \end{align*}
- * $$
- * This function is discontinuous and is not defined for $x=0$.
+ * Class representing the Heaviside step function, defined as: $$ \begin{align*} H(x) = \begin{cases} 0 &amp; \text{ when } x &lt; 0\\ 1 &amp; \text{ when } x
+ * &gt; 0 \end{cases} \end{align*} $$ This function is discontinuous and is not defined for $x=0$.
  */
 public class HeavisideFunction extends Function1D<Double, Double> {
 

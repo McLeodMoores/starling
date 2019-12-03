@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -15,28 +15,11 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.time.DateUtils;
 
 /**
- * Pricing model for capped power options (see {@link com.opengamma.analytics.financial.model.option.definition.CappedPowerOptionDefinition}).
- * <p>
- * The price of this option is given by:
- * $$
- * \begin{align*}
- * p = Se^{(b-r)T_2}N(d_1) - Ke^{-rT_2}N(d_1 - \sigma\sqrt{T_2}) - Se^{(b-r)T_2}N(-d_2) + Ke^{-rT_2}N(-d_2 + \sigma\sqrt{T_1})
- * \end{align*}
- * $$
- * where $T_1$ is the time to make the choice and
- * $$
- * \begin{align*}
- * d_1 &= \frac{\ln(\frac{S}{K}) + (b + \frac{\sigma^2}{2})T_2}{\sigma\sqrt{T_1}}\\
- * d_2 &= \frac{\ln(\frac{S}{K}) + bT_2 + \frac{\sigma^2 T_1}{2}}{\sigma\sqrt{T_1}}
- * \end{align*}
- * $$
+ * Pricing model for simple chooser options (see {@link com.opengamma.analytics.financial.model.option.definition.SimpleChooserOptionDefinition}).
  */
 public class SimpleChooserOptionModel extends AnalyticOptionModel<SimpleChooserOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Function1D<StandardOptionDataBundle, Double> getPricingFunction(final SimpleChooserOptionDefinition definition) {
     Validate.notNull(definition);

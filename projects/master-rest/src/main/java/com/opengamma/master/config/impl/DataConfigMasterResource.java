@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.config.impl;
@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.id.ObjectId;
@@ -44,7 +43,7 @@ public class DataConfigMasterResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying master over REST.
-   * 
+   *
    * @param configMaster  the underlying config master, not null
    */
   public DataConfigMasterResource(final ConfigMaster configMaster) {
@@ -55,7 +54,7 @@ public class DataConfigMasterResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the config master.
-   * 
+   *
    * @return the config master, not null
    */
   public ConfigMaster getConfigMaster() {
@@ -64,7 +63,7 @@ public class DataConfigMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -77,32 +76,32 @@ public class DataConfigMasterResource extends AbstractDataResource {
 
   @GET
   @Path("metaData")
-  public Response metaData(@Context UriInfo uriInfo) {
-    ConfigMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, ConfigMetaDataRequest.class);
-    ConfigMetaDataResult result = getConfigMaster().metaData(request);
+  public Response metaData(@Context final UriInfo uriInfo) {
+    final ConfigMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, ConfigMetaDataRequest.class);
+    final ConfigMetaDataResult result = getConfigMaster().metaData(request);
     return responseOkObject(result);
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" }) // necessary to stop Jersey issuing warnings due to <?>
   @POST
   @Path("configSearches")
-  public Response search(ConfigSearchRequest request) {
-    ConfigSearchResult<?> result = getConfigMaster().search(request);
+  public Response search(final ConfigSearchRequest request) {
+    final ConfigSearchResult<?> result = getConfigMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("configs")
-  public Response add(@Context UriInfo uriInfo, ConfigDocument request) {
-    ConfigDocument result = getConfigMaster().add(request);
-    URI createdUri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final ConfigDocument request) {
+    final ConfigDocument result = getConfigMaster().add(request);
+    final URI createdUri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("configs/{configId}")
-  public DataConfigResource findConfig(@PathParam("configId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataConfigResource findConfig(@PathParam("configId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataConfigResource(this, id);
   }
 

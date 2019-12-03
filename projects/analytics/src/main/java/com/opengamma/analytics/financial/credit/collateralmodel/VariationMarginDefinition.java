@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.collateralmodel;
 
 /**
- * Class to define the characteristics of variation margin required by a CCP for a centrally cleared trade
+ * Class to define the characteristics of variation margin required by a CCP for a centrally cleared trade.
  */
 public class VariationMarginDefinition extends CollateralDefinition {
 

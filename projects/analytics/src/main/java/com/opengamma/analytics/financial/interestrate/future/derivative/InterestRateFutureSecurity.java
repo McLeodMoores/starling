@@ -9,6 +9,7 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -48,12 +49,14 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
   private final String _name;
   /**
    * The discounting curve name.
+   * 
    * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
    */
   @Deprecated
   private final String _discountingCurveName;
   /**
    * The name of the forward curve used in to estimate the fixing index.
+   * 
    * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
    */
   @Deprecated
@@ -61,20 +64,32 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Constructor from all the details.
-   * @param lastTradingTime Future last trading time.
-   * @param iborIndex Ibor index associated to the future.
-   * @param fixingPeriodStartTime Fixing period of the reference Ibor starting time.
-   * @param fixingPeriodEndTime Fixing period of the reference Ibor end time.
-   * @param fixingPeriodAccrualFactor Fixing period of the reference Ibor accrual factor.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param name Future name.
-   * @param discountingCurveName The discounting curve name.
-   * @param forwardCurveName The forward curve name.
+   * 
+   * @param lastTradingTime
+   *          Future last trading time.
+   * @param iborIndex
+   *          Ibor index associated to the future.
+   * @param fixingPeriodStartTime
+   *          Fixing period of the reference Ibor starting time.
+   * @param fixingPeriodEndTime
+   *          Fixing period of the reference Ibor end time.
+   * @param fixingPeriodAccrualFactor
+   *          Fixing period of the reference Ibor accrual factor.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          Future name.
+   * @param discountingCurveName
+   *          The discounting curve name.
+   * @param forwardCurveName
+   *          The forward curve name.
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public InterestRateFutureSecurity(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
+  public InterestRateFutureSecurity(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime,
       final double fixingPeriodAccrualFactor, final double notional, final double paymentAccrualFactor, final String name, final String discountingCurveName,
       final String forwardCurveName) {
     super(lastTradingTime);
@@ -95,16 +110,26 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Constructor from all the details.
-   * @param lastTradingTime Future last trading time.
-   * @param iborIndex Ibor index associated to the future.
-   * @param fixingPeriodStartTime Fixing period of the reference Ibor starting time.
-   * @param fixingPeriodEndTime Fixing period of the reference Ibor end time.
-   * @param fixingPeriodAccrualFactor Fixing period of the reference Ibor accrual factor.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param name Future name.
+   * 
+   * @param lastTradingTime
+   *          Future last trading time.
+   * @param iborIndex
+   *          Ibor index associated to the future.
+   * @param fixingPeriodStartTime
+   *          Fixing period of the reference Ibor starting time.
+   * @param fixingPeriodEndTime
+   *          Fixing period of the reference Ibor end time.
+   * @param fixingPeriodAccrualFactor
+   *          Fixing period of the reference Ibor accrual factor.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          Future name.
    */
-  public InterestRateFutureSecurity(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
+  public InterestRateFutureSecurity(final double lastTradingTime, final IborIndex iborIndex, final double fixingPeriodStartTime,
+      final double fixingPeriodEndTime,
       final double fixingPeriodAccrualFactor, final double notional, final double paymentAccrualFactor, final String name) {
     super(lastTradingTime);
     ArgumentChecker.notNull(iborIndex, "Ibor index");
@@ -122,6 +147,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the Ibor index associated to the future.
+   * 
    * @return The Ibor index.
    */
   public IborIndex getIborIndex() {
@@ -130,6 +156,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the fixing period of the reference Ibor starting time.
+   * 
    * @return The fixing period starting time.
    */
   public double getFixingPeriodStartTime() {
@@ -138,6 +165,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the fixing period of the reference Ibor end time.
+   * 
    * @return The fixing period end time.
    */
   public double getFixingPeriodEndTime() {
@@ -146,6 +174,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the fixing period of the reference Ibor accrual factor.
+   * 
    * @return The fixing period accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -154,6 +183,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -162,6 +192,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future payment accrual factor.
+   * 
    * @return The future payment accrual factor.
    */
   public double getPaymentAccrualFactor() {
@@ -170,6 +201,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the unit Amount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
+   * 
    * @return the point value
    */
   public double getUnitAmount() {
@@ -178,8 +210,9 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the discounting curve name.
+   *
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurveName() {
@@ -191,8 +224,9 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the forward curve name.
+   *
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getForwardCurveName() {
@@ -204,6 +238,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * Gets the future name.
+   * 
    * @return The name.
    */
   public String getName() {
@@ -212,6 +247,7 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
 
   /**
    * The future currency.
+   * 
    * @return The currency.
    */
   @Override
@@ -247,20 +283,20 @@ public class InterestRateFutureSecurity extends FuturesSecurity {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_forwardCurveName == null ? 0 : _forwardCurveName.hashCode());
     result = prime * result + (_discountingCurveName == null ? 0 : _discountingCurveName.hashCode());
     result = prime * result + _iborIndex.hashCode();
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _name.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

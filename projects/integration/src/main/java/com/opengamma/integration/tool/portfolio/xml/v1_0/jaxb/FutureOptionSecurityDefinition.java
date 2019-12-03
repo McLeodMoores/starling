@@ -35,8 +35,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
 
   public enum ListedFutureOptionType {
     @XmlEnumValue(value = "equityIndexFutureOption")
-    EQUITY_INDEX_FUTURE_OPTION,
-    @XmlEnumValue(value = "equityDividendFutureOption")
+    EQUITY_INDEX_FUTURE_OPTION, @XmlEnumValue(value = "equityDividendFutureOption")
     EQUITY_DIVIDEND_FUTURE_OPTION
   }
 
@@ -57,8 +56,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
   private YearMonth _futureExpiry;
 
   /**
-   * At some point we may want to allow mid curve future options where
-   * option expiry is significantly earlier than the underlying future
+   * At some point we may want to allow mid curve future options where option expiry is significantly earlier than the underlying future.
    */
   @XmlElement(name = "optionExpiry")
   @PropertyDefinition
@@ -72,6 +70,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
   @PropertyDefinition
   private boolean _isMargined;
 
+  @Override
   public ListedSecurityExtractor getSecurityExtractor() {
     return new ListedFutureOptionSecurityExtractor(this);
   }
@@ -197,8 +196,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets at some point we may want to allow mid curve future options where
-   * option expiry is significantly earlier than the underlying future
+   * Gets at some point we may want to allow mid curve future options where option expiry is significantly earlier than the underlying future.
    * @return the value of the property
    */
   public YearMonth getOptionExpiry() {
@@ -206,8 +204,7 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
   }
 
   /**
-   * Sets at some point we may want to allow mid curve future options where
-   * option expiry is significantly earlier than the underlying future
+   * Sets at some point we may want to allow mid curve future options where option expiry is significantly earlier than the underlying future.
    * @param optionExpiry  the new value of the property
    */
   public void setOptionExpiry(YearMonth optionExpiry) {
@@ -216,7 +213,6 @@ public class FutureOptionSecurityDefinition extends ListedSecurityDefinition {
 
   /**
    * Gets the the {@code optionExpiry} property.
-   * option expiry is significantly earlier than the underlying future
    * @return the property, not null
    */
   public final Property<YearMonth> optionExpiry() {

@@ -26,10 +26,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
- * The return format is ParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The computation is done
+ * by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves. The return format is
+ * ParameterSensitivity object. This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is
+ * irrelevant.
  */
 public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalculator {
 
@@ -43,11 +43,15 @@ public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalcula
   private final double _shift;
 
   /**
-   * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * Constructor.
+   *
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
-  public ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalculator(final InstrumentDerivativeVisitor<MulticurveForwardPointsProviderInterface, MultipleCurrencyAmount> valueCalculator,
+  public ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalculator(
+      final InstrumentDerivativeVisitor<MulticurveForwardPointsProviderInterface, MultipleCurrencyAmount> valueCalculator,
       final double shift) {
     ArgumentChecker.notNull(valueCalculator, "Calculator");
     _valueCalculator = valueCalculator;
@@ -55,13 +59,17 @@ public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalcula
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param multicurveFwdpoints The multi-curve and forward points provider.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param multicurveFwdpoints
+   *          The multi-curve and forward points provider.
    * @return The parameter sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final MulticurveForwardPointsProviderDiscount multicurveFwdpoints) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument,
+      final MulticurveForwardPointsProviderDiscount multicurveFwdpoints) {
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     final MultipleCurrencyAmount pvInit = instrument.accept(_valueCalculator, multicurveFwdpoints);
     final int nbCcy = pvInit.size();
@@ -82,17 +90,20 @@ public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalcula
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final MulticurveForwardPointsProviderDiscount marketDscBumpedPlus = new MulticurveForwardPointsProviderDiscount(multicurveFwdpoints.getMulticurveProvider().withDiscountFactor(ccy,
-            dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final MulticurveForwardPointsProviderDiscount marketDscBumpedPlus = new MulticurveForwardPointsProviderDiscount(
+            multicurveFwdpoints.getMulticurveProvider().withDiscountFactor(ccy,
+                dscBumpedPlus),
             multicurveFwdpoints.getForwardPointsCurve(), multicurveFwdpoints.getCurrencyPair());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketDscBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final MulticurveForwardPointsProviderDiscount marketDscBumpedMinus = new MulticurveForwardPointsProviderDiscount(multicurveFwdpoints.getMulticurveProvider().withDiscountFactor(ccy,
-            dscBumpedMinus),
+        final MulticurveForwardPointsProviderDiscount marketDscBumpedMinus = new MulticurveForwardPointsProviderDiscount(
+            multicurveFwdpoints.getMulticurveProvider().withDiscountFactor(ccy,
+                dscBumpedMinus),
             multicurveFwdpoints.getForwardPointsCurve(), multicurveFwdpoints.getCurrencyPair());
         final MultipleCurrencyAmount pvBumpedMinus = instrument.accept(_valueCalculator, marketDscBumpedMinus);
         final MultipleCurrencyAmount pvDiff = pvBumpedPlus.plus(pvBumpedMinus.multipliedBy(-1.0));
@@ -118,8 +129,10 @@ public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalcula
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final MulticurveForwardPointsProviderDiscount marketFwdBumpedPlus = new MulticurveForwardPointsProviderDiscount(multicurveFwdpoints.getMulticurveProvider().withForward(index, dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final MulticurveForwardPointsProviderDiscount marketFwdBumpedPlus = new MulticurveForwardPointsProviderDiscount(
+            multicurveFwdpoints.getMulticurveProvider().withForward(index, dscBumpedPlus),
             multicurveFwdpoints.getForwardPointsCurve(), multicurveFwdpoints.getCurrencyPair());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
@@ -153,8 +166,10 @@ public class ParameterSensitivityForexForwardPointsDiscountInterpolatedFDCalcula
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final MulticurveForwardPointsProviderDiscount marketFwdBumpedPlus = new MulticurveForwardPointsProviderDiscount(multicurveFwdpoints.getMulticurveProvider().withForward(index, dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final MulticurveForwardPointsProviderDiscount marketFwdBumpedPlus = new MulticurveForwardPointsProviderDiscount(
+            multicurveFwdpoints.getMulticurveProvider().withForward(index, dscBumpedPlus),
             multicurveFwdpoints.getForwardPointsCurve(), multicurveFwdpoints.getCurrencyPair());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();

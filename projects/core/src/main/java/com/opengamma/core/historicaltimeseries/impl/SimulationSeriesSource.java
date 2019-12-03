@@ -58,7 +58,7 @@ public interface SimulationSeriesSource extends ChangeProvider {
   LocalDate getCurrentSimulationExecutionDate();
 
   /**
-   * Update series point
+   * Update series point.
    *
    * @param uniqueId series unique id
    * @param simulationExecutionDate the simulation date
@@ -68,7 +68,7 @@ public interface SimulationSeriesSource extends ChangeProvider {
   void updateTimeSeriesPoint(UniqueId uniqueId, LocalDate simulationExecutionDate, LocalDate valueDate, double value);
 
   /**
-   * Update a series with the given points
+   * Update a series with the given points.
    *
    * @param uniqueId series unique id
    * @param simulationExecutionDate the simulation date
@@ -86,7 +86,7 @@ public interface SimulationSeriesSource extends ChangeProvider {
   void replaceTimeSeries(UniqueId uniqueId, LocalDate simulationExecutionDate, LocalDateDoubleTimeSeries timeSeries);
 
   /**
-   * Clear all series for a given date
+   * Clear all series for a given date.
    *
    * @param simulationExecutionDate the simulation date
    */

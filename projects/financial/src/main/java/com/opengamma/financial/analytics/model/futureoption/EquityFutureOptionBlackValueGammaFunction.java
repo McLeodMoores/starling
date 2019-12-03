@@ -31,7 +31,7 @@ public class EquityFutureOptionBlackValueGammaFunction extends EquityFutureOptio
   private static final ValueGreekCalculator CALCULATOR = ValueGammaCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBlackValueGammaFunction() {
     super(ValueRequirementNames.VALUE_GAMMA);

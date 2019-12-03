@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class UserMarketDataProviderFactory implements MarketDataProviderFactory {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UserMarketDataProviderFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserMarketDataProviderFactory.class);
 
   private final MarketDataSnapshotSource _snapshotSource;
 
@@ -41,7 +41,7 @@ public class UserMarketDataProviderFactory implements MarketDataProviderFactory 
   @Deprecated
   public UserMarketDataProviderFactory(final MarketDataSnapshotSource snapshotSource, final MarketDataAvailabilityFilter baseMarketDataAvailability) {
     this(snapshotSource);
-    s_logger.error("Call to deprecated constructor (see PLAT-1459)");
+    LOGGER.error("Call to deprecated constructor (see PLAT-1459)");
   }
 
   @Override

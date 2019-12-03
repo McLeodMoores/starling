@@ -8,21 +8,21 @@ package com.opengamma.engine.resource;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Default implementation of {@link EngineResourceReference}
- * 
+ * Default implementation of {@link EngineResourceReference}.
+ *
  * @param <T>  the type of resource
  */
 public class EngineResourceReferenceImpl<T extends EngineResource> implements EngineResourceReference<T> {
 
   private final EngineResourceManagerImpl<T> _manager;
   private final T _resource;
-  private AtomicBoolean _isReleased = new AtomicBoolean(false);
-  
-  public EngineResourceReferenceImpl(EngineResourceManagerImpl<T> manager, T resource) {
+  private final AtomicBoolean _isReleased = new AtomicBoolean(false);
+
+  public EngineResourceReferenceImpl(final EngineResourceManagerImpl<T> manager, final T resource) {
     _manager = manager;
     _resource = resource;
   }
-  
+
   @Override
   public T get() {
     assertNotReleased();
@@ -37,12 +37,12 @@ public class EngineResourceReferenceImpl<T extends EngineResource> implements En
     }
     _manager.decrementCycleReferenceCount(_resource.getUniqueId());
   }
-  
+
   //-------------------------------------------------------------------------
   private void assertNotReleased() {
     if (_isReleased.get()) {
       throw new IllegalStateException("The computation cycle reference has been been released");
     }
   }
-  
+
 }

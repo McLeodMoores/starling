@@ -17,14 +17,17 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Utilities for different converters (Node and securities)/
+ * Utilities for different converters (Node and securities).
  */
 public class ConverterUtils {
-  
+
   /**
    * Create an IndexON from the index name and the overnight index convention.
-   * @param name The name of the index.
-   * @param indexConvention The overnight index convention.
+   * 
+   * @param name
+   *          The name of the index.
+   * @param indexConvention
+   *          The overnight index convention.
    * @return The IndexON object.
    */
   public static IndexON indexON(final String name, final OvernightIndexConvention indexConvention) {
@@ -34,12 +37,16 @@ public class ConverterUtils {
     final IndexON indexON = new IndexON(name, currency, dayCount, publicationLag);
     return indexON;
   }
-  
+
   /**
    * Create a IborIndex object from the convention and the tenor.
-   * @param name The name of the index.
-   * @param indexConvention The index convention.
-   * @param indexTenor The index tenor.
+   * 
+   * @param name
+   *          The name of the index.
+   * @param indexConvention
+   *          The index convention.
+   * @param indexTenor
+   *          The index tenor.
    * @return The IborIndex object.
    */
   public static IborIndex indexIbor(final String name, final IborIndexConvention indexConvention, final Tenor indexTenor) {
@@ -51,11 +58,14 @@ public class ConverterUtils {
     final IborIndex iborIndex = new IborIndex(currency, indexTenor.getPeriod(), spotLag, dayCount, businessDayConvention, eomIndex, name);
     return iborIndex;
   }
-  
+
   /**
    * Create a IndexPrice object from the name and the convention.
-   * @param name The name of the index.
-   * @param indexConvention The index convention.
+   * 
+   * @param name
+   *          The name of the index.
+   * @param indexConvention
+   *          The index convention.
    * @return The IndexPrice object.
    */
   public static IndexPrice indexPrice(final String name, final PriceIndexConvention indexConvention) {

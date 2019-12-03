@@ -32,56 +32,45 @@ public class ConstantCubeAdditiveShiftFunction implements CubeShiftFunction<Cons
   }
 
   /**
-  * {@inheritDoc}
-  * @return Not supported
-  * @throws UnsupportedOperationException
-  */
+   * {@inheritDoc}
+   *
+   * @return Not supported
+   */
   @Override
-  public ConstantDoublesCube evaluate(ConstantDoublesCube cube, double x, double y, double z, double shift) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double x, final double y, final double z, final double shift) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(ConstantDoublesCube cube,
-      double x,
-      double y,
-      double z,
-      double shift,
-      String newName) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double x, final double y, final double z, final double shift,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(ConstantDoublesCube cube,
-      double[] xShift,
-      double[] yShift,
-      double[] zShift,
-      double[] shift) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift,
+      final double[] shift) {
     throw new UnsupportedOperationException();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
-  public ConstantDoublesCube evaluate(ConstantDoublesCube cube,
-      double[] xShift,
-      double[] yShift,
-      double[] zShift,
-      double[] shift,
-      String newName) {
+  public ConstantDoublesCube evaluate(final ConstantDoublesCube cube, final double[] xShift, final double[] yShift, final double[] zShift, final double[] shift,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 }

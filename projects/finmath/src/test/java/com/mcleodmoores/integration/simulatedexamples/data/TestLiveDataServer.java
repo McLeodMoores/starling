@@ -58,9 +58,9 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class TestLiveDataServer extends StandardLiveDataServer {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TestLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestLiveDataServer.class);
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final int NUM_FIELDS = 3;
   /**
    * Default scaling factor
@@ -105,7 +105,7 @@ public class TestLiveDataServer extends StandardLiveDataServer {
           continue;
         }
         if (line.length != NUM_FIELDS) {
-          s_logger.error("Not enough fields in CSV on line " + lineNum);
+          LOGGER.error("Not enough fields in CSV on line " + lineNum);
         } else {
           final String identifier = line[0];
           final String fieldName = line[1];
@@ -176,9 +176,9 @@ public class TestLiveDataServer extends StandardLiveDataServer {
     final FudgeMsg previousTicks = _marketValues.get(uniqueId);
     MutableFudgeMsg ticks = null;
     if (previousTicks == null) {
-      ticks = s_fudgeContext.newMessage();
+      ticks = FUDGE_CONTEXT.newMessage();
     } else {
-      ticks = s_fudgeContext.newMessage(previousTicks);
+      ticks = FUDGE_CONTEXT.newMessage(previousTicks);
       if (ticks.hasField(fieldName)) {
         ticks.remove(fieldName);
       }
@@ -191,7 +191,7 @@ public class TestLiveDataServer extends StandardLiveDataServer {
   @Override
   protected Map<String, Object> doSubscribe(final Collection<String> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "Subscriptions");
-    s_logger.debug("doSubscribe on {}", uniqueIds);
+    LOGGER.debug("doSubscribe on {}", uniqueIds);
 
     final Set<String> requestSubcriptions = Sets.newTreeSet(uniqueIds);
     final Set<String> validSubscriptions = Maps.filterKeys(_marketValues, Predicates.in(requestSubcriptions)).keySet();
@@ -204,21 +204,21 @@ public class TestLiveDataServer extends StandardLiveDataServer {
 
     requestSubcriptions.removeAll(validSubscriptions);
     if (!requestSubcriptions.isEmpty()) {
-      s_logger.warn("Could not subscribe for {}", requestSubcriptions);
+      LOGGER.warn("Could not subscribe for {}", requestSubcriptions);
     }
     return subscriptionHandles;
   }
 
   @Override
   protected void doUnsubscribe(final Collection<Object> subscriptionHandles) {
-    s_logger.debug("doUnsubscribe on {}", subscriptionHandles);
+    LOGGER.debug("doUnsubscribe on {}", subscriptionHandles);
     // No-op; don't maintain or forward any subscription state
   }
 
   @Override
   protected Map<String, FudgeMsg> doSnapshot(final Collection<String> uniqueIds) {
     ArgumentChecker.notNull(uniqueIds, "Unique IDs");
-    s_logger.debug("doSnapshot on {}", uniqueIds);
+    LOGGER.debug("doSnapshot on {}", uniqueIds);
     return new HashMap<>(Maps.filterKeys(_marketValues, Predicates.in(uniqueIds)));
   }
 
@@ -229,7 +229,7 @@ public class TestLiveDataServer extends StandardLiveDataServer {
 
   @Override
   protected void doConnect() {
-    s_logger.info("ExampleLiveDataServer connecting..");
+    LOGGER.info("ExampleLiveDataServer connecting..");
     _executorService.submit(_marketDataSimulatorJob);
   }
 
@@ -266,7 +266,7 @@ public class TestLiveDataServer extends StandardLiveDataServer {
           final FudgeMsg lastValues = _marketValues.get(identifier);
           final FudgeMsg baseValues = _baseValues.get(identifier);
           if (lastValues != null && baseValues != null) {
-            final MutableFudgeMsg nextValues = s_fudgeContext.newMessage();
+            final MutableFudgeMsg nextValues = FUDGE_CONTEXT.newMessage();
             for (final FudgeField field : lastValues) {
               final double lastValue = (Double) field.getValue();
               final double baseValue = baseValues.getDouble(field.getName());
@@ -280,16 +280,16 @@ public class TestLiveDataServer extends StandardLiveDataServer {
             }
             _marketValues.put(identifier, nextValues);
             liveDataReceived(identifier, nextValues);
-            s_logger.debug("{} lastValues: {} nextValues: {}", new Object[] {identifier, lastValues, nextValues});
+            LOGGER.debug("{} lastValues: {} nextValues: {}", new Object[] {identifier, lastValues, nextValues});
           } else {
-            s_logger.error("Active subscription for {} is missing in example market data server initial database", identifier);
+            LOGGER.error("Active subscription for {} is missing in example market data server initial database", identifier);
           }
         }
       }
       try {
         Thread.sleep(_random.nextInt(_maxMillisBetweenTicks));
       } catch (final InterruptedException e) {
-        s_logger.error("Sleep interrupted, finishing");
+        LOGGER.error("Sleep interrupted, finishing");
         Thread.interrupted();
       }
     }

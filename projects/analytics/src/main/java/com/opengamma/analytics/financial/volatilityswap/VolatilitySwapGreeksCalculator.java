@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -13,15 +13,19 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 public class VolatilitySwapGreeksCalculator {
 
   /**
-   * Greeks calculator for FX volatility swap based on result from Carr-Lee model
-   * @param result {@link VolatilitySwapCalculatorResultWithStrikes}
-   * @param swap The FX volatility swap 
-   * @param data The FX data for Carr-Lee
+   * Greeks calculator for FX volatility swap based on result from Carr-Lee model.
+   *
+   * @param result
+   *          {@link VolatilitySwapCalculatorResultWithStrikes}
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return Array of {delta, gamma, vega, theta}
    */
   public double[] getFXVolatilitySwapGreeks(final VolatilitySwapCalculatorResultWithStrikes result, final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -63,9 +67,12 @@ public class VolatilitySwapGreeksCalculator {
   }
 
   /**
-   * Greeks calculator for FX volatility swap using Carr-Lee model
-   * @param swap The FX volatility swap 
-   * @param data The FX data for Carr-Lee
+   * Greeks calculator for FX volatility swap using Carr-Lee model.
+   *
+   * @param swap
+   *          The FX volatility swap
+   * @param data
+   *          The FX data for Carr-Lee
    * @return Array of {delta, gamma, vega, theta}
    */
   public double[] getFXVolatilitySwapGreeks(final FXVolatilitySwap swap, final CarrLeeFXData data) {
@@ -77,7 +84,8 @@ public class VolatilitySwapGreeksCalculator {
     return getFXVolatilitySwapGreeks(result, swap, data);
   }
 
-  private double[] getGreeks(final VolatilitySwapCalculatorResult result, final double spot, final double[] putStrikes, final double[] callStrikes, final double timeToExpiry,
+  private double[] getGreeks(final VolatilitySwapCalculatorResult result, final double spot, final double[] putStrikes, final double[] callStrikes,
+      final double timeToExpiry,
       final double interestRate, final double dividend, final double[] putVols, final double stdVol, final double[] callVols) {
 
     final int nCalls = callStrikes.length;
@@ -105,7 +113,8 @@ public class VolatilitySwapGreeksCalculator {
     return res;
   }
 
-  private void getGreeksFraction(final double[] res, final double weight, final double spot, final double strike, final double timeToExpiry, final double volatility, final double interestRate,
+  private void getGreeksFraction(final double[] res, final double weight, final double spot, final double strike, final double timeToExpiry,
+      final double volatility, final double interestRate,
       final double costOfCarry, final boolean isCall) {
     res[0] += weight * BlackScholesFormulaRepository.delta(spot, strike, timeToExpiry, volatility, interestRate, costOfCarry, isCall);
     res[1] += weight * BlackScholesFormulaRepository.gamma(spot, strike, timeToExpiry, volatility, interestRate, costOfCarry);

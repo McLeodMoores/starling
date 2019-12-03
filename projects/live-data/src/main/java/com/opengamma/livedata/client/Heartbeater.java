@@ -26,7 +26,7 @@ public class Heartbeater {
    * If not specified, send heartbeats every <em>5 minutes</em>.
    */
   public static final long DEFAULT_PERIOD = 5 * 60 * 1000L;
-  private static final Logger s_logger = LoggerFactory.getLogger(Heartbeater.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Heartbeater.class);
   private final ValueDistributor _valueDistributor;
   private final LiveDataHeartbeat _heartbeat;
 
@@ -62,11 +62,11 @@ public class Heartbeater {
       if (liveDataSpecs.isEmpty()) {
         return;
       }
-      s_logger.debug("Sending heartbeat message with {} specs", liveDataSpecs.size());
+      LOGGER.debug("Sending heartbeat message with {} specs", liveDataSpecs.size());
       try {
         liveDataSpecs = getHeartbeat().heartbeat(liveDataSpecs);
       } catch (Exception e) {
-        s_logger.error("Unable to send heartbeat message", e);
+        LOGGER.error("Unable to send heartbeat message", e);
       }
       if ((liveDataSpecs == null) || liveDataSpecs.isEmpty()) {
         return;

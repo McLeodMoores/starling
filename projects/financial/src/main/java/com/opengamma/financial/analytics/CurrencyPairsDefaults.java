@@ -34,7 +34,8 @@ public class CurrencyPairsDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (CurrencyPairsFunction.CURRENCY_PAIRS_NAME.equals(propertyName)) {
       return Collections.singleton(_name);
     }

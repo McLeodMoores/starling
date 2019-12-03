@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.volatility.smile.fitting;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Simple container for European option price date - contains the price, strike, expiry and whether the option is a call or put
+ * Simple container for European option price date - contains the price, strike, expiry and whether the option is a call or put.
  */
 public class EuropeanOptionPrice {
 
@@ -29,6 +29,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the price.
+   * 
    * @return the price
    */
   public double getPrice() {
@@ -37,6 +38,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the strike.
+   * 
    * @return the strike
    */
   public double getStrike() {
@@ -45,6 +47,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the expiry.
+   * 
    * @return the expiry
    */
   public double getExpiry() {
@@ -53,6 +56,7 @@ public class EuropeanOptionPrice {
 
   /**
    * Gets the isCall.
+   * 
    * @return the isCall
    */
   public boolean isCall() {
@@ -81,17 +85,17 @@ public class EuropeanOptionPrice {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCall ? 1231 : 1237);
     temp = Double.doubleToLongBits(_price);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -101,7 +105,7 @@ public class EuropeanOptionPrice {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    EuropeanOptionPrice other = (EuropeanOptionPrice) obj;
+    final EuropeanOptionPrice other = (EuropeanOptionPrice) obj;
     if (Double.doubleToLongBits(_expiry) != Double.doubleToLongBits(other._expiry)) {
       return false;
     }

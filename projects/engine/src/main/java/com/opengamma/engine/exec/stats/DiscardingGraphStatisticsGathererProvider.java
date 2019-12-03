@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -19,17 +19,19 @@ public class DiscardingGraphStatisticsGathererProvider implements GraphExecutorS
   public static final GraphExecutorStatisticsGatherer GATHERER_INSTANCE = new GraphExecutorStatisticsGatherer() {
 
     @Override
-    public void graphExecuted(String calcConfig, int nodeCount, long executionTime, long duration) {
+    public void graphExecuted(final String calcConfig, final int nodeCount, final long executionTime, final long duration) {
       // No action
     }
 
     @Override
-    public void graphProcessed(String calcConfig, int totalJobs, double meanJobSize, double meanJobCycleCost, double meanJobIOCost) {
+    public void graphProcessed(final String calcConfig, final int totalJobs, final double meanJobSize, final double meanJobCycleCost,
+        final double meanJobIOCost) {
       // No action
     }
 
   };
 
+  @Override
   public GraphExecutorStatisticsGatherer getStatisticsGatherer(final UniqueId viewProcessId) {
     return GATHERER_INSTANCE;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -52,8 +52,8 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
   private final IdentifierMap _identifierMap;
   private final FudgeContext _fudgeContext;
 
-  private final ConcurrentMap<ViewComputationCacheKey, DefaultViewComputationCache> _cachesByKey = new ConcurrentHashMap<ViewComputationCacheKey, DefaultViewComputationCache>();
-  private final Map<UniqueId, List<ViewComputationCacheKey>> _activeCachesByCycle = new HashMap<UniqueId, List<ViewComputationCacheKey>>();
+  private final ConcurrentMap<ViewComputationCacheKey, DefaultViewComputationCache> _cachesByKey = new ConcurrentHashMap<>();
+  private final Map<UniqueId, List<ViewComputationCacheKey>> _activeCachesByCycle = new HashMap<>();
   private final ReentrantLock _cacheManagementLock = new ReentrantLock();
   private final FudgeMessageStoreFactory _privateDataStoreFactory;
   private final FudgeMessageStoreFactory _sharedDataStoreFactory;
@@ -95,19 +95,19 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
   }
 
   @Override
-  public ViewComputationCache cloneCache(UniqueId viewCycleId, String calculationConfigurationName) {
+  public ViewComputationCache cloneCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
     final ViewComputationCacheKey key = new ViewComputationCacheKey(viewCycleId, calculationConfigurationName);
     final DefaultViewComputationCache cache = _cachesByKey.get(key);
     final InMemoryIdentifierMap identifierMap = new InMemoryIdentifierMap();
     final FudgeMessageStore dataStore = new DefaultFudgeMessageStore(new InMemoryBinaryDataStore(), getFudgeContext());
-    for (Pair<ValueSpecification, FudgeMsg> value : cache) {
+    for (final Pair<ValueSpecification, FudgeMsg> value : cache) {
       dataStore.put(identifierMap.getIdentifier(value.getFirst()), value.getSecond());
     }
     return new DefaultViewComputationCache(identifierMap, dataStore, dataStore, getFudgeContext());
   }
 
   @Override
-  public DefaultViewComputationCache getCache(UniqueId viewCycleId, String calculationConfigurationName) {
+  public DefaultViewComputationCache getCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
     return getCache(new ViewComputationCacheKey(viewCycleId, calculationConfigurationName));
   }
 
@@ -119,7 +119,7 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
     return cache;
   }
 
-  protected DefaultViewComputationCache findCache(UniqueId viewCycleId, String calculationConfigurationName) {
+  protected DefaultViewComputationCache findCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
     return findCache(new ViewComputationCacheKey(viewCycleId, calculationConfigurationName));
   }
 
@@ -135,13 +135,13 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
       cache = findCache(key);
       if (cache == null) {
         final FudgeMessageStore privateDataStore = _privateDataStoreFactory.createMessageStore(key);
-        final FudgeMessageStore sharedDataStore = (_privateDataStoreFactory == _sharedDataStoreFactory) ? privateDataStore
+        final FudgeMessageStore sharedDataStore = _privateDataStoreFactory == _sharedDataStoreFactory ? privateDataStore
             : _sharedDataStoreFactory.createMessageStore(key);
         cache = createViewComputationCache(getIdentifierMap(), privateDataStore, sharedDataStore, getFudgeContext());
         _cachesByKey.put(key, cache);
         List<ViewComputationCacheKey> caches = _activeCachesByCycle.get(key.getViewCycleId());
         if (caches == null) {
-          caches = new LinkedList<ViewComputationCacheKey>();
+          caches = new LinkedList<>();
           _activeCachesByCycle.put(key.getViewCycleId(), caches);
         }
         caches.add(key);
@@ -155,7 +155,7 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
             }
 
             @Override
-            public Map<Long, FudgeMsg> findMissingValues(Collection<Long> identifiers) {
+            public Map<Long, FudgeMsg> findMissingValues(final Collection<Long> identifiers) {
               return loader.findMissingValues(key, identifiers);
             }
 
@@ -170,10 +170,10 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
 
   /**
    * Override this method if you need to create a different sub-class of {@link DefaultViewComputationCache}.
-   * 
+   *
    * @param identifierMap the identifier map
    * @param privateDataStore the message store for private values
-   * @param sharedDataStore the message store for shared values 
+   * @param sharedDataStore the message store for shared values
    * @param fudgeContext the Fudge context
    * @return a new {@link DefaultViewComputationCache} instance
    */
@@ -183,7 +183,7 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
   }
 
   @Override
-  public void releaseCaches(UniqueId viewCycleId) {
+  public void releaseCaches(final UniqueId viewCycleId) {
     ArgumentChecker.notNull(viewCycleId, "viewCycleId");
     final ReleaseCachesCallback callback = getReleaseCachesCallback();
     if (callback != null) {
@@ -198,13 +198,13 @@ public class DefaultViewComputationCacheSource implements ViewComputationCacheSo
       }
       caches = new DefaultViewComputationCache[cacheKeys.size()];
       int i = 0;
-      for (ViewComputationCacheKey key : cacheKeys) {
+      for (final ViewComputationCacheKey key : cacheKeys) {
         caches[i++] = _cachesByKey.remove(key);
       }
     } finally {
       _cacheManagementLock.unlock();
     }
-    for (DefaultViewComputationCache cache : caches) {
+    for (final DefaultViewComputationCache cache : caches) {
       cache.delete();
     }
   }

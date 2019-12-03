@@ -43,12 +43,13 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
    * The property this function will put on an output indicating the currency of the original value.
    */
   public static final String ORIGINAL_CURRENCY = "Original" + ValuePropertyNames.CURRENCY;
-  
+
   private static final String CONVERSION_METHOD_VALUE = "Single";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyConversionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConversionFunction.class);
 
-  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY).or(ComputationTargetType.TRADE);
+  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY)
+      .or(ComputationTargetType.TRADE);
 
   private final Set<String> _valueNames;
   private boolean _allowViewDefaultCurrency; // = false;
@@ -60,7 +61,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
 
   public CurrencyConversionFunction(final String... valueNames) {
     ArgumentChecker.notEmpty(valueNames, "valueNames");
-    _valueNames = new HashSet<String>(Arrays.asList(valueNames));
+    _valueNames = new HashSet<>(Arrays.asList(valueNames));
   }
 
   protected Set<String> getValueNames() {
@@ -76,24 +77,27 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   }
 
   private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
-    Builder properties = desiredValue.getConstraints().copy()
+    final Builder properties = desiredValue.getConstraints().copy()
         .withoutAny(DEFAULT_CURRENCY_INJECTION)
         .withoutAny(ValuePropertyNames.CONVERSION_METHOD)
         .withAny(ValuePropertyNames.CURRENCY).withoutAny(ORIGINAL_CURRENCY);
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, properties.get());
   }
 
-  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue, final String forceCurrency) {
+  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue,
+      final String forceCurrency) {
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, desiredValue.getConstraints().copy().withoutAny(ValuePropertyNames.CURRENCY).with(
         ValuePropertyNames.CURRENCY, forceCurrency).withoutAny(ORIGINAL_CURRENCY).withOptional(DEFAULT_CURRENCY_INJECTION).get());
   }
 
   /**
-   * Divides the value by the conversion rate. Override this in a subclass for anything more elaborate - e.g. if the value is in "somethings per currency unit foo" so needs multiplying by the rate
-   * instead.
-   * 
-   * @param value input value to convert
-   * @param conversionRate conversion rate to use
+   * Divides the value by the conversion rate. Override this in a subclass for anything more elaborate - e.g. if the value is in "somethings per currency unit
+   * foo" so needs multiplying by the rate instead.
+   *
+   * @param value
+   *          input value to convert
+   * @param conversionRate
+   *          conversion rate to use
    * @return the converted value
    */
   protected double convertDouble(final double value, final double conversionRate) {
@@ -114,10 +118,13 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
 
   /**
    * Delegates off to the other convert methods depending on the type of value.
-   * 
-   * @param inputValue input value to convert
-   * @param desiredValue requested value requirement
-   * @param conversionRate conversion rate to use
+   *
+   * @param inputValue
+   *          input value to convert
+   * @param desiredValue
+   *          requested value requirement
+   * @param conversionRate
+   *          conversion rate to use
    * @return the converted value
    */
   protected Object convertValue(final ComputedValue inputValue, final ValueRequirement desiredValue, final double conversionRate) {
@@ -127,13 +134,14 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     } else if (value instanceof DoubleLabelledMatrix1D) {
       return convertDoubleLabelledMatrix1D((DoubleLabelledMatrix1D) value, conversionRate);
     } else {
-      s_logger.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
+      LOGGER.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
       return null;
     }
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     ComputedValue inputValue = null;
     double exchangeRate = 0;
     for (final ComputedValue input : inputs.getAllValues()) {
@@ -156,37 +164,35 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     if (outputCurrency.equals(inputCurrency)) {
       // Don't think this should happen
       return Collections.singleton(inputValue);
-    } else {
-      s_logger.debug("Converting from {} to {}", inputCurrency, outputCurrency);
-      final Object converted = convertValue(inputValue, desiredValue, exchangeRate);
-      if (converted != null) {
-        return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
-      } else {
-        return null;
-      }
     }
+    LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
+    final Object converted = convertValue(inputValue, desiredValue, exchangeRate);
+    if (converted != null) {
+      return Collections.singleton(
+          new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
+    }
+    return null;
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> possibleCurrencies = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (possibleCurrencies == null) {
-      s_logger.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
+      LOGGER.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
       return null;
     } else if (possibleCurrencies.isEmpty()) {
       if (isAllowViewDefaultCurrency()) {
         // The original function may not have delivered a result because it had heterogeneous input currencies, so try forcing the view default
         final String defaultCurrencyISO = DefaultCurrencyFunction.getViewDefaultCurrencyISO(context);
         if (defaultCurrencyISO == null) {
-          s_logger.debug("No default currency from the view to inject");
+          LOGGER.debug("No default currency from the view to inject");
           return null;
         }
-        s_logger.debug("Injecting view default currency {}", defaultCurrencyISO);
+        LOGGER.debug("Injecting view default currency {}", defaultCurrencyISO);
         return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue, defaultCurrencyISO));
-      } else {
-        s_logger.debug("Cannot satisfy a wildcard currency constraint");
-        return null;
       }
+      LOGGER.debug("Cannot satisfy a wildcard currency constraint");
+      return null;
     } else {
       // Actual input requirement is desired requirement with the currency wild-carded
       return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue));
@@ -200,7 +206,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     if (getValueNames().size() == 1) {
       return Collections.singleton(new ValueSpecification(getValueNames().iterator().next(), targetSpec, ValueProperties.all()));
     }
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     for (final String valueName : getValueNames()) {
       result.add(new ValueSpecification(valueName, targetSpec, ValueProperties.all()));
     }
@@ -208,7 +214,8 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Map.Entry<ValueSpecification, ValueRequirement> input = inputs.entrySet().iterator().next();
     if (input.getValue().getConstraints().getValues(DEFAULT_CURRENCY_INJECTION) == null) {
       // Resolved output is the input with the currency wild-carded, and the function ID the same
@@ -239,9 +246,10 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
+  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+      final Set<ValueSpecification> inputs,
       final Set<ValueSpecification> outputs) {
-    s_logger.debug("FX requirements for {} -> {}", inputs, outputs);
+    LOGGER.debug("FX requirements for {} -> {}", inputs, outputs);
     final String inputCurrency = getCurrency(inputs);
     if (inputCurrency == null) {
       return null;

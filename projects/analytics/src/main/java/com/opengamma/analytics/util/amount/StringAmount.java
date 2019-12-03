@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.util.amount;
@@ -12,8 +12,8 @@ import java.util.Set;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Object to represent values linked to strings for which the values can be added or multiplied by a constant.
- * Used for different sensitivities (parallel curve sensitivity,...). The objects stored as a HashMap(String, Double).
+ * Object to represent values linked to strings for which the values can be added or multiplied by a constant. Used for different sensitivities (parallel curve
+ * sensitivity,...). The objects stored as a HashMap(String, Double).
  */
 public class StringAmount {
 
@@ -31,7 +31,9 @@ public class StringAmount {
 
   /**
    * Constructor from an existing map. The map is used in the new object (no new map is created).
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    */
   private StringAmount(final HashMap<String, Double> map) {
     ArgumentChecker.notNull(map, "Map");
@@ -40,8 +42,11 @@ public class StringAmount {
 
   /**
    * Builder from on point.
-   * @param point The surface point.
-   * @param value The associated value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The surface value.
    */
   public static StringAmount from(final String point, final Double value) {
@@ -53,7 +58,9 @@ public class StringAmount {
 
   /**
    * Builder from a map. A new map is created with the same values.
-   * @param map The map.
+   *
+   * @param map
+   *          The map.
    * @return The surface value.
    */
   public static StringAmount from(final Map<String, Double> map) {
@@ -65,7 +72,9 @@ public class StringAmount {
 
   /**
    * Builder from a StringValue. A new map is created with the same values.
-   * @param surface The StringValue
+   *
+   * @param surface
+   *          The StringValue
    * @return The surface value.
    */
   public static StringAmount from(final StringAmount surface) {
@@ -77,6 +86,7 @@ public class StringAmount {
 
   /**
    * Gets the underlying map.
+   *
    * @return The map.
    */
   public HashMap<String, Double> getMap() {
@@ -84,10 +94,13 @@ public class StringAmount {
   }
 
   /**
-   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing points of the object, the value is added to the existing value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Add a value to the object. The existing object is modified. If the point is not in the existing points of the object, it is put in the map. If a point is
+   * already in the existing points of the object, the value is added to the existing value.
+   *
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    */
   public void add(final String point, final Double value) {
     ArgumentChecker.notNull(point, "Point");
@@ -99,10 +112,13 @@ public class StringAmount {
   }
 
   /**
-   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value.
-   * If a point is on both surfaces, the values on that point are added.
-   * @param value1 The first "string value".
-   * @param value2 The second "string value".
+   * Create a new object containing the point of both initial objects. If a point is only on one surface, its value is the original value. If a point is on both
+   * surfaces, the values on that point are added.
+   *
+   * @param value1
+   *          The first "string value".
+   * @param value2
+   *          The second "string value".
    * @return The combined/sum "string value".
    */
   public static StringAmount plus(final StringAmount value1, final StringAmount value2) {
@@ -120,11 +136,15 @@ public class StringAmount {
   }
 
   /**
-   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in the map.
-   * If a point is already in the existing point of the object, the value is added to the existing value.
-   * @param stringValue The surface value.
-   * @param point The surface point.
-   * @param value The associated value.
+   * Create a new object containing the point of the initial object and the new point. If the point is not in the existing points of the object, it is put in
+   * the map. If a point is already in the existing point of the object, the value is added to the existing value.
+   *
+   * @param stringValue
+   *          The surface value.
+   * @param point
+   *          The surface point.
+   * @param value
+   *          The associated value.
    * @return The combined/sum surface value.
    */
   public static StringAmount plus(final StringAmount stringValue, final String point, final Double value) {
@@ -141,8 +161,11 @@ public class StringAmount {
 
   /**
    * Create a new object containing the point of the initial object with the all values multiplied by a given factor.
-   * @param stringValue The surface value.
-   * @param factor The multiplicative factor.
+   *
+   * @param stringValue
+   *          The surface value.
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied surface.
    */
   public static StringAmount multiplyBy(final StringAmount stringValue, final double factor) {
@@ -155,11 +178,15 @@ public class StringAmount {
   }
 
   /**
-   * Compare the values in two objects. The result is true if the list of strings are the same in both maps and the differences between the values associated of each of those strings are
-   * less than the tolerance.
-   * @param value1 The first "string value".
-   * @param value2 The second "string value".
-   * @param tolerance The tolerance.
+   * Compare the values in two objects. The result is true if the list of strings are the same in both maps and the differences between the values associated of
+   * each of those strings are less than the tolerance.
+   *
+   * @param value1
+   *          The first "string value".
+   * @param value2
+   *          The second "string value".
+   * @param tolerance
+   *          The tolerance.
    * @return The comparison flag.
    */
   public static boolean compare(final StringAmount value1, final StringAmount value2, final double tolerance) {

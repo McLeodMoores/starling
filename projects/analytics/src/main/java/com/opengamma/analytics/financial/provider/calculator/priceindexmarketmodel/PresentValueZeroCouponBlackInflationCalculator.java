@@ -17,7 +17,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  *
  */
-public final class PresentValueZeroCouponBlackInflationCalculator extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueZeroCouponBlackInflationCalculator
+extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -33,6 +34,7 @@ public final class PresentValueZeroCouponBlackInflationCalculator extends Instru
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueZeroCouponBlackInflationCalculator getInstance() {
@@ -42,18 +44,22 @@ public final class PresentValueZeroCouponBlackInflationCalculator extends Instru
   /**
    * Pricing methods.
    */
-  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
-  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod
+      .getInstance();
 
-  //-----     Cap/Floor Zero Coupon     -----
+  // ----- Cap/Floor Zero Coupon -----
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_INTERPOLATION.presentValue(cap, black);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_MONTHLY.presentValue(cap, black);
   }
 

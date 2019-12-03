@@ -62,6 +62,7 @@ public class OptionSecurityDefinition extends ListedSecurityDefinition {
   @PropertyDefinition
   private ExerciseType _exerciseType;
 
+  @Override
   public ListedSecurityExtractor getSecurityExtractor() {
     return new ListedOptionSecurityExtractor(this);
   }

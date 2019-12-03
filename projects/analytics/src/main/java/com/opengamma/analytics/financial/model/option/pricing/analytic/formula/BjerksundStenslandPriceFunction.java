@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic.formula;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BjerksundStenslandPriceFunction implements OptionPriceFunction<BlackFunctionData> {
   private static final ProbabilityDistribution<double[]> BIVARIATE_NORMAL = new BivariateNormalDistribution();
@@ -37,20 +37,20 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
             return k;
           }
           return -99999.;
-          //TODO
-          //          r -= b;
-          //          b *= -1;
-          //          final double temp = s;
-          //          s = k;
-          //          k = temp;
-          //          final YieldAndDiscountCurve curve = data.getInterestRateCurve().withParallelShift(-b);
-          //          newData = data.withInterestRateCurve(curve).withSpot(s);
+          // TODO
+          // r -= b;
+          // b *= -1;
+          // final double temp = s;
+          // s = k;
+          // k = temp;
+          // final YieldAndDiscountCurve curve = data.getInterestRateCurve().withParallelShift(-b);
+          // newData = data.withInterestRateCurve(curve).withSpot(s);
         }
-        //        if (b >= r) {
-        //          final OptionDefinition european = new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), definition.isCall());
-        //          final Function1D<StandardOptionDataBundle, Double> bsm = BSM.getPricingFunction(european);
-        //          return bsm.evaluate(newData);
-        //        }
+        // if (b >= r) {
+        // final OptionDefinition european = new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), definition.isCall());
+        // final Function1D<StandardOptionDataBundle, Double> bsm = BSM.getPricingFunction(european);
+        // return bsm.evaluate(newData);
+        // }
         final double r = -Math.log(df) / t;
         return getCallPrice(f, k, sigma, t, r, 0);
       }
@@ -73,10 +73,13 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     }
     final double alpha1 = getAlpha(x1, beta, k);
     final double alpha2 = getAlpha(x2, beta, k);
-    return alpha2 * Math.pow(f, beta) - alpha2 * getPhi(f, t1, beta, x2, x2, r, b, sigma) + getPhi(f, t1, 1, x2, x2, r, b, sigma) - getPhi(f, t1, 1, x1, x2, r, b, sigma)
+    return alpha2 * Math.pow(f, beta) - alpha2 * getPhi(f, t1, beta, x2, x2, r, b, sigma) + getPhi(f, t1, 1, x2, x2, r, b, sigma)
+        - getPhi(f, t1, 1, x1, x2, r, b, sigma)
         - k * getPhi(f, t1, 0, x2, x2, r, b, sigma) + k * getPhi(f, t1, 0, x1, x2, r, b, sigma) + alpha1 * getPhi(f, t1, beta, x1, x2, r, b, sigma) - alpha1
-        * getPsi(f, t1, t, beta, x1, x2, x1, r, b, sigma) + getPsi(f, t1, t, 1, x1, x2, x1, r, b, sigma) - getPsi(f, t1, t, 1, k, x2, x1, r, b, sigma) - k
-        * getPsi(f, t1, t, 0, x1, x2, x1, r, b, sigma) + k * getPsi(f, t1, t, 0, k, x2, x1, r, b, sigma);
+            * getPsi(f, t1, t, beta, x1, x2, x1, r, b, sigma)
+        + getPsi(f, t1, t, 1, x1, x2, x1, r, b, sigma) - getPsi(f, t1, t, 1, k, x2, x1, r, b, sigma) - k
+            * getPsi(f, t1, t, 0, x1, x2, x1, r, b, sigma)
+        + k * getPsi(f, t1, t, 0, k, x2, x1, r, b, sigma);
   }
 
   private double getH(final double b, final double t, final double sigma, final double k, final double b0, final double bInfinity) {
@@ -91,7 +94,8 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     return Math.pow(i, -beta) * (i - k);
   }
 
-  private double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b, final double sigma) {
+  private double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r,
+      final double b, final double sigma) {
     final double sigmaSq = sigma * sigma;
     final double denom = getDenom(t, sigma);
     final double lambda = getLambda(r, gamma, b, sigmaSq);
@@ -122,8 +126,10 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     final double rho = Math.sqrt(t1 / t2);
     return Math.exp(lambda * t2)
         * Math.pow(s, gamma)
-        * (BIVARIATE_NORMAL.getCDF(new double[] {d1, e1, rho}) - Math.pow(x2 / s, kappa) * BIVARIATE_NORMAL.getCDF(new double[] {d2, e2, rho}) - Math.pow(x1 / s, kappa)
-            * BIVARIATE_NORMAL.getCDF(new double[] {d3, e3, -rho}) + Math.pow(x1 / x2, kappa) * BIVARIATE_NORMAL.getCDF(new double[] {d4, e4, -rho}));
+        * (BIVARIATE_NORMAL.getCDF(new double[] { d1, e1, rho }) - Math.pow(x2 / s, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d2, e2, rho })
+            - Math.pow(x1 / s, kappa)
+                * BIVARIATE_NORMAL.getCDF(new double[] { d3, e3, -rho })
+            + Math.pow(x1 / x2, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d4, e4, -rho }));
   }
 
   private double getLambda(final double r, final double gamma, final double b, final double sigmaSq) {

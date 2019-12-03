@@ -22,15 +22,15 @@ public class MarketDataPointScalingManipulator implements StructureManipulator<D
 
   private final Double _scalingFactor;
 
-  public MarketDataPointScalingManipulator(Double scalingFactor) {
+  public MarketDataPointScalingManipulator(final Double scalingFactor) {
     ArgumentChecker.notNull(scalingFactor, "scalingFactor");
     _scalingFactor = scalingFactor;
   }
 
   @Override
-  public Double execute(Double structure,
-                        ValueSpecification valueSpecification,
-                        FunctionExecutionContext executionContext) {
+  public Double execute(final Double structure,
+                        final ValueSpecification valueSpecification,
+                        final FunctionExecutionContext executionContext) {
     return structure * _scalingFactor;
   }
 

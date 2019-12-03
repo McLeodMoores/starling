@@ -131,7 +131,8 @@ public final class EquityOptionBlackMethod {
   /**
    * @param derivative An EquityOption, the OG-Analytics form of the derivative
    * @param marketData A StaticReplicationDataBundle, containing a BlackVolatilitySurface, forward equity and funding curves
-   * @return The forward delta wrt the forward underlying, ie the sensitivity of the undiscounted price to the forward value of the underlying, d(PV/Z)/d(fwdUnderlying)
+   * @return The forward delta wrt the forward underlying, ie the sensitivity of the undiscounted price to the forward value of the underlying,
+   * d(PV/Z)/d(fwdUnderlying)
    */
   public double forwardDelta(final EquityOption derivative, final StaticReplicationDataBundle marketData) {
     ArgumentChecker.notNull(derivative, "derivative was null. Expecting EquityOption");
@@ -289,7 +290,7 @@ public final class EquityOptionBlackMethod {
   }
 
   /**
-   * Synonym for Vomma
+   * Synonym for Vomma.
    * @param derivative An EquityOption, the OG-Analytics form of the derivative
    * @param marketData A StaticReplicationDataBundle, containing a BlackVolatilitySurface, forward equity and funding curves
    * @return The spot Volga, ie the 2nd order sensitivity of the spot price to the implied vol,

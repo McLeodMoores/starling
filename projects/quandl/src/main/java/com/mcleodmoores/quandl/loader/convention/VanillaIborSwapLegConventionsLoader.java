@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -13,17 +13,17 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.time.Tenor;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Creates {@link VanillaIborLegConvention}s from a csv file called "vanilla-ibor-swap-leg-conventions.csv".
- * These conventions are used to construct the ibor leg of a vanilla fixed/ibor swap.
+ * Creates {@link VanillaIborLegConvention}s from a csv file called "vanilla-ibor-swap-leg-conventions.csv". These conventions are used to construct the ibor
+ * leg of a vanilla fixed/ibor swap.
  */
 public final class VanillaIborSwapLegConventionsLoader implements ConventionsLoader<VanillaIborLegConvention> {
   /** An instance of this loader. */
@@ -41,8 +41,10 @@ public final class VanillaIborSwapLegConventionsLoader implements ConventionsLoa
 
   /**
    * Generates {@link VanillaIborLegConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<VanillaIborLegConvention> loadConventionsFromFile() throws Exception {

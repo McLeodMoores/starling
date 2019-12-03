@@ -36,15 +36,15 @@ import com.opengamma.util.paging.Paging;
 
 /**
  * A simple, in-memory implementation of {@code LegalEntityMaster}.
- * <p/>
+ * <p>
  * This master does not support versioning of legalEntities.
- * <p/>
+ * <p>
  * This implementation does not copy stored elements, making it thread-hostile.
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryLegalEntityMaster
-    extends SimpleAbstractInMemoryMaster<LegalEntityDocument>
-    implements LegalEntityMaster {
+extends SimpleAbstractInMemoryMaster<LegalEntityDocument>
+implements LegalEntityMaster {
 
   /**
    * The default scheme used for each {@link com.opengamma.id.ObjectId}.
@@ -88,7 +88,7 @@ public class InMemoryLegalEntityMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(LegalEntityDocument document) {
+  protected void validateDocument(final LegalEntityDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getLegalEntity(), "document.legalentity");
   }
@@ -97,7 +97,7 @@ public class InMemoryLegalEntityMaster
   @Override
   public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
+    final LegalEntityMetaDataResult result = new LegalEntityMetaDataResult();
     return result;
   }
 
@@ -105,15 +105,15 @@ public class InMemoryLegalEntityMaster
   @Override
   public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<LegalEntityDocument> list = new ArrayList<LegalEntityDocument>();
-    for (LegalEntityDocument doc : _store.values()) {
+    final List<LegalEntityDocument> list = new ArrayList<>();
+    for (final LegalEntityDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
 
-    LegalEntitySearchResult result = new LegalEntitySearchResult();
+    final LegalEntitySearchResult result = new LegalEntitySearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -175,7 +175,7 @@ public class InMemoryLegalEntityMaster
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
     document.setUniqueId(uniqueId.withVersion(""));
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

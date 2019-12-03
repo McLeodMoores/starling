@@ -17,14 +17,17 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class ExpressionParserTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExpressionParserTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionParserTest.class);
 
   private static void parse(final String str, final String expected) {
-    s_logger.debug("Parsing {}", str);
+    LOGGER.debug("Parsing {}", str);
     final UserExpression expr = new ExpressionParser().parse(str);
     assertNotNull(expr);
     assertEquals(expr.toString(), expected);
@@ -32,12 +35,12 @@ public class ExpressionParserTest {
 
   @Test(expectedExceptions = {IllegalArgumentException.class })
   public void testEmptyString() {
-    final UserExpression expr = new ExpressionParser().parse("");
+    new ExpressionParser().parse("");
   }
 
   @Test(expectedExceptions = {IllegalArgumentException.class })
   public void testIllegalString() {
-    final UserExpression expr = new ExpressionParser().parse("Foo less \"Bar\"");
+    new ExpressionParser().parse("Foo less \"Bar\"");
   }
 
   @Test

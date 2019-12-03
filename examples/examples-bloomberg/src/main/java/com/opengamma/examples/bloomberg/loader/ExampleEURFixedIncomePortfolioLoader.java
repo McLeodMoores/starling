@@ -61,10 +61,8 @@ import com.opengamma.util.time.Expiry;
 /**
  * Example code to load a very simple EUR fixed-income portfolio.
  * <p>
- * This code is kept deliberately as simple as possible.
- * There are no checks for the securities or portfolios already existing, so if you run it
- * more than once you will get multiple copies portfolios and securities with the same names.
- * It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
+ * you will get multiple copies portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
  */
 @Scriptable
 public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<IntegrationToolContext> {
@@ -105,7 +103,7 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
   private static final DecimalFormat FORMATTER = new DecimalFormat("#.###");
   /** The scheme for the identifier */
   private static final String ID_SCHEME = "EUR_SWAP_GENERATOR";
-  /** The portfolio name */
+  /** The portfolio name. */
   public static final String PORTFOLIO_NAME = "EUR Swap Desk Portfolio";
 
   static {
@@ -116,25 +114,25 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
     MONTHS.put(Month.DECEMBER, "Z");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     try {
-      boolean success =
-          new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class) &&
-          new ExampleEURFixedIncomePortfolioLoader().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new ExampleTimeSeriesRatingLoader().initAndRun(args, IntegrationToolContext.class)
+          && new ExampleEURFixedIncomePortfolioLoader().initAndRun(args, IntegrationToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       ex.printStackTrace();
       ShutdownUtils.exit(-2);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final Random random = new Random(3457);
@@ -154,8 +152,10 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
     if (futures.isEmpty()) {
       throw new OpenGammaRuntimeException("No valid futures were generated");
     }
-//    persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps, futures), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps", "STIR Futures"), PORTFOLIO_NAME);    
-    persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps"), PORTFOLIO_NAME);
+    // persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps, futures), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis
+    // Swaps", "STIR Futures"), PORTFOLIO_NAME);
+    persistToPortfolio(Arrays.asList(vanillaSwaps, oisSwaps, basisSwaps), Arrays.asList("EUR Vanilla Swaps", "EUR OIS Swaps", "EUR 3m/6m Basis Swaps"),
+        PORTFOLIO_NAME);
   }
 
   private Collection<FinancialSecurity> getVanillaSwapSecurities(final Random random) {
@@ -180,7 +180,8 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
         euribor = EURIBOR_6M;
         frequencyLabel = "6m Euribor";
       }
-      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, euribor, FloatingRateType.IBOR);
+      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, euribor,
+          FloatingRateType.IBOR);
       final SwapSecurity swap;
       final String name;
       if (random.nextBoolean()) {
@@ -213,7 +214,8 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
       } else {
         frequency = SEMI_ANNUAL;
       }
-      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, EONIA, FloatingRateType.OIS);
+      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(ACT_360, frequency, REGION, MODIFIED_FOLLOWING, notional, false, EONIA,
+          FloatingRateType.OIS);
       final SwapSecurity swap;
       final String name;
       if (random.nextBoolean()) {
@@ -257,7 +259,8 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
         payRate = EURIBOR_6M;
         receiveRate = EURIBOR_3M;
         payLeg = new FloatingInterestRateLeg(ACT_360, payFrequency, REGION, MODIFIED_FOLLOWING, notional, false, payRate, FloatingRateType.IBOR);
-        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR, spread);
+        receiveLeg = new FloatingSpreadIRLeg(ACT_360, receiveFrequency, REGION, MODIFIED_FOLLOWING, notional, false, receiveRate, FloatingRateType.IBOR,
+            spread);
         frequencyLabel = "receive 3M Euribor + " + FORMATTER.format((int) (spread * 1000)) + "bp, pay 6M Euribor";
       }
       final SwapSecurity swap = new SwapSecurity(tradeDate, effectiveDate, maturityDate, COUNTERPARTY, payLeg, receiveLeg);
@@ -317,7 +320,7 @@ public class ExampleEURFixedIncomePortfolioLoader extends AbstractTool<Integrati
         securityMaster.add(securityToAddDoc);
         BigDecimal trades;
         if (security instanceof FutureSecurity) {
-          trades = new BigDecimal(1 + (random.nextInt(150) - 75));
+          trades = new BigDecimal(1 + random.nextInt(150) - 75);
         } else {
           trades = BigDecimal.ONE;
         }

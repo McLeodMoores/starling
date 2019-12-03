@@ -23,16 +23,15 @@ import com.opengamma.util.tuple.Triple;
 
 /**
  * Base class for steps that are based on iterating through a collection of candidate functions.
- * 
- * @param <T> the root iteration type
+ *
  */
 /* package */abstract class FunctionIterationStep extends ResolveTask.State {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionIterationStep.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionIterationStep.class);
 
   public abstract static class IterationBaseStep extends ResolveTask.State {
 
-    public IterationBaseStep(ResolveTask task) {
+    IterationBaseStep(final ResolveTask task) {
       super(task);
     }
 
@@ -40,10 +39,13 @@ import com.opengamma.util.tuple.Triple;
      * Attempts a function application.
      * <p>
      * The {@code resolvedOutput} value must be normalized.
-     * 
-     * @param context the graph building context, not null
-     * @param resolvedOutput the provisional resolved value specification, not null
-     * @param resolvedFunction the function to apply, containing the definition, satisfying maximal specification, and all maximal output specifications
+     *
+     * @param context
+     *          the graph building context, not null
+     * @param resolvedOutput
+     *          the provisional resolved value specification, not null
+     * @param resolvedFunction
+     *          the function to apply, containing the definition, satisfying maximal specification, and all maximal output specifications
      */
     protected void functionApplication(final GraphBuildingContext context, final ValueSpecification resolvedOutput,
         final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> resolvedFunction) {
@@ -52,22 +54,22 @@ import com.opengamma.util.tuple.Triple;
         final ResolvedValue existingValue = context.getProduction(resolvedOutput);
         if (existingValue == null) {
           // We're going to work on producing
-          s_logger.debug("Creating producer for {}", resolvedOutput);
+          LOGGER.debug("Creating producer for {}", resolvedOutput);
           setRunnableTaskState(new FunctionApplicationStep(getTask(), this, resolvedFunction, resolvedOutput), context);
         } else {
           // Value has already been produced
-          s_logger.debug("Using existing production of {}", resolvedOutput);
+          LOGGER.debug("Using existing production of {}", resolvedOutput);
           final ResolveTask.State state = new ExistingProductionStep(getTask(), this, resolvedFunction, resolvedOutput);
           if (setTaskState(state)) {
             if (!pushResult(context, existingValue, false)) {
-              s_logger.debug("Production not accepted - rescheduling");
+              LOGGER.debug("Production not accepted - rescheduling");
               state.setRunnableTaskState(this, context);
             }
           }
         }
       } else {
         // Other tasks are working on it, or have already worked on it
-        s_logger.debug("Delegating to existing producers for {}", resolvedOutput);
+        LOGGER.debug("Delegating to existing producers for {}", resolvedOutput);
         final ExistingResolutionsStep state = new ExistingResolutionsStep(getTask(), this, resolvedFunction, resolvedOutput);
         if (setTaskState(state)) {
           ResolvedValueProducer singleTask = null;
@@ -103,7 +105,7 @@ import com.opengamma.util.tuple.Triple;
               singleTask.release(context);
             } else {
               // Other threads haven't progressed to completion - try and produce the value ourselves
-              s_logger.debug("No suitable delegate found - creating producer");
+              LOGGER.debug("No suitable delegate found - creating producer");
               state.setRunnableTaskState(new FunctionApplicationStep(getTask(), this, resolvedFunction, resolvedOutput), context);
             }
           }
@@ -113,23 +115,27 @@ import com.opengamma.util.tuple.Triple;
 
     /**
      * Returns the desired value for the production. This might be a more constrained form than the value requirement being satisfied for graph construction.
-     * 
+     *
      * @return the desired value, not null
      */
     protected abstract ValueRequirement getDesiredValue();
 
     /**
-     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is composed, added to the set, and returned. All
-     * other output specifications are added to the output set unchanged.
+     * Resolves the output values declared by a function at late resolution against the current requirement. The one that satisfies the requirement is composed,
+     * added to the set, and returned. All other output specifications are added to the output set unchanged.
      * <p>
      * The returned specification must be normalized.
-     * 
-     * @param context the graph building context, not null
-     * @param newOutputValues the output values returned by the function, not null
-     * @param resolvedOutputValues the composed output values, not null
+     *
+     * @param context
+     *          the graph building context, not null
+     * @param newOutputValues
+     *          the output values returned by the function, not null
+     * @param resolvedOutputValues
+     *          the composed output values, not null
      * @return the satisfying resolved output, or null if none satisfy
      */
-    protected abstract ValueSpecification getResolvedOutputs(GraphBuildingContext context, Set<ValueSpecification> newOutputValues, Set<ValueSpecification> resolvedOutputValues);
+    protected abstract ValueSpecification getResolvedOutputs(GraphBuildingContext context, Set<ValueSpecification> newOutputValues,
+        Set<ValueSpecification> resolvedOutputValues);
 
     /**
      * For debugging/diagnostic reporting.
@@ -146,7 +152,7 @@ import com.opengamma.util.tuple.Triple;
 
   private final IterationBaseStep _base;
 
-  public FunctionIterationStep(final ResolveTask task, final IterationBaseStep base) {
+  FunctionIterationStep(final ResolveTask task, final IterationBaseStep base) {
     super(task);
     _base = base;
   }
@@ -167,18 +173,16 @@ import com.opengamma.util.tuple.Triple;
     final Collection<FunctionExclusionGroup> parentExclusion = getTask().getFunctionExclusion();
     if (parentExclusion != null) {
       return groups.withExclusion(parentExclusion, functionExclusion);
-    } else {
-      return Collections.singleton(functionExclusion);
     }
+    return Collections.singleton(functionExclusion);
   }
 
   @Override
   protected boolean run(final GraphBuildingContext context) {
     if (setTaskState(getIterationBase())) {
       return getIterationBase().run(context);
-    } else {
-      return true;
     }
+    return true;
   }
 
 }

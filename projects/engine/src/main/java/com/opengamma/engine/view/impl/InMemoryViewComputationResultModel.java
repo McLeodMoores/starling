@@ -22,7 +22,7 @@ public class InMemoryViewComputationResultModel extends InMemoryViewResultModel 
 
   private static final long serialVersionUID = 1L;
 
-  private final Map<ValueSpecification, ComputedValue> _allMarketData = new HashMap<ValueSpecification, ComputedValue>();
+  private final Map<ValueSpecification, ComputedValue> _allMarketData = new HashMap<>();
 
   public InMemoryViewComputationResultModel() {
     super();
@@ -34,23 +34,23 @@ public class InMemoryViewComputationResultModel extends InMemoryViewResultModel 
 
   public void update(final ViewComputationResultModel delta) {
     super.update(delta);
-    for (ComputedValue marketData : delta.getAllMarketData()) {
+    for (final ComputedValue marketData : delta.getAllMarketData()) {
       addMarketData(marketData);
     }
   }
 
   /**
    * Adds a market data value, replacing any previous item with the same value specification.
-   * 
+   *
    * @param marketData the market data value, not null
    */
-  public void addMarketData(ComputedValue marketData) {
+  public void addMarketData(final ComputedValue marketData) {
     _allMarketData.put(marketData.getSpecification(), marketData);
   }
 
   @Override
   public Set<ComputedValue> getAllMarketData() {
-    return new HashSet<ComputedValue>(_allMarketData.values());
+    return new HashSet<>(_allMarketData.values());
   }
 
 }

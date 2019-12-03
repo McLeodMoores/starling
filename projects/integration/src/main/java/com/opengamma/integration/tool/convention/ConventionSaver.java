@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.integration.tool.convention;
 
@@ -45,7 +45,8 @@ public class ConventionSaver {
     this(conventionMaster, names, types, verbose, ConventionSearchSortOrder.NAME_ASC);
   }
 
-  public ConventionSaver(final ConventionMaster conventionMaster, final List<String> names, final List<String> types, final boolean verbose, final ConventionSearchSortOrder order) {
+  public ConventionSaver(final ConventionMaster conventionMaster, final List<String> names, final List<String> types, final boolean verbose,
+      final ConventionSearchSortOrder order) {
     _conventionMaster = conventionMaster;
     _names = names;
     _types = types;
@@ -105,7 +106,7 @@ public class ConventionSaver {
     searchReq.setConventionType(type);
     final ConventionSearchResult searchResult = _conventionMaster.search(searchReq);
     if (_verbose) {
-      LOGGER.info("Found {} conventions of type {} called {}", new Object[] {searchResult.getDocuments().size(), type, name});
+      LOGGER.info("Found {} conventions of type {} called {}", new Object[] { searchResult.getDocuments().size(), type, name });
     }
     return docsToConventionEntries(searchResult);
   }
@@ -115,7 +116,7 @@ public class ConventionSaver {
     searchReq.setConventionType(type);
     final ConventionSearchResult searchResult = _conventionMaster.search(searchReq);
     if (_verbose) {
-      LOGGER.info("Found {} conventions of type {}", new Object[] {searchResult.getDocuments().size(), type});
+      LOGGER.info("Found {} conventions of type {}", new Object[] { searchResult.getDocuments().size(), type });
     }
     return docsToConventionEntries(searchResult);
   }
@@ -125,7 +126,7 @@ public class ConventionSaver {
     searchReq.setName(name);
     final ConventionSearchResult searchResult = _conventionMaster.search(searchReq);
     if (_verbose) {
-      LOGGER.info("Found {} conventions called {}", new Object[] {searchResult.getDocuments().size(), name});
+      LOGGER.info("Found {} conventions called {}", new Object[] { searchResult.getDocuments().size(), name });
     }
     return docsToConventionEntries(searchResult);
   }

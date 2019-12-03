@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.generator;
 
-import com.opengamma.financial.security.capfloor.CapFloorCMSSpreadSecurity;
-
 /**
  * Utility for constructing a random Cap/Floor CMS spread portfolio.
  */
@@ -20,7 +18,7 @@ public class CapFloorCMSSpreadPortfolioGeneratorTool extends AbstractPortfolioGe
   public PortfolioNodeGenerator createPortfolioNodeGenerator(final int size) {
     final CapFloorCMSSpreadSecurityGenerator securities = createCapFloorCMSSpreadSecurityGenerator();
     configure(securities);
-    final PositionGenerator positions = new SimplePositionGenerator<CapFloorCMSSpreadSecurity>(securities, getSecurityPersister(), getCounterPartyGenerator());
+    final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
     return new LeafPortfolioNodeGenerator(new StaticNameGenerator("Cap/Floor CMS Spread"), positions, size);
   }
 

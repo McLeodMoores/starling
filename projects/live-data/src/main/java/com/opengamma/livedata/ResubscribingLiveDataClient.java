@@ -25,47 +25,53 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
   private final LiveDataClient _delegate;
   private final Set<Subscription> _subscriptions = Collections.newSetFromMap(new ConcurrentHashMap<Subscription, Boolean>());
 
-  public ResubscribingLiveDataClient(LiveDataClient delegate) {
+  /**
+   * Creates a live data client.
+   *
+   * @param delegate
+   *          the underlying live data client, not null
+   */
+  public ResubscribingLiveDataClient(final LiveDataClient delegate) {
     _delegate = ArgumentChecker.notNull(delegate, "delegate");
   }
 
   @Override
-  public void subscribe(UserPrincipal user, LiveDataSpecification spec, LiveDataListener listener) {
+  public void subscribe(final UserPrincipal user, final LiveDataSpecification spec, final LiveDataListener listener) {
     _subscriptions.add(new Subscription(user, spec, listener));
     _delegate.subscribe(user, spec, listener);
   }
 
   @Override
-  public void subscribe(UserPrincipal user, Collection<LiveDataSpecification> specs, LiveDataListener listener) {
-    for (LiveDataSpecification spec : specs) {
+  public void subscribe(final UserPrincipal user, final Collection<LiveDataSpecification> specs, final LiveDataListener listener) {
+    for (final LiveDataSpecification spec : specs) {
       _subscriptions.add(new Subscription(user, spec, listener));
     }
     _delegate.subscribe(user, specs, listener);
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, LiveDataSpecification spec, LiveDataListener listener) {
+  public void unsubscribe(final UserPrincipal user, final LiveDataSpecification spec, final LiveDataListener listener) {
     _subscriptions.remove(new Subscription(user, spec, listener));
     _delegate.unsubscribe(user, spec, listener);
   }
 
   @Override
-  public void unsubscribe(UserPrincipal user, Collection<LiveDataSpecification> specs, LiveDataListener listener) {
-    for (LiveDataSpecification spec : specs) {
+  public void unsubscribe(final UserPrincipal user, final Collection<LiveDataSpecification> specs, final LiveDataListener listener) {
+    for (final LiveDataSpecification spec : specs) {
       _subscriptions.remove(new Subscription(user, spec, listener));
     }
     _delegate.unsubscribe(user, specs, listener);
   }
 
   @Override
-  public LiveDataSubscriptionResponse snapshot(UserPrincipal user, LiveDataSpecification spec, long timeout) {
+  public LiveDataSubscriptionResponse snapshot(final UserPrincipal user, final LiveDataSpecification spec, final long timeout) {
     return _delegate.snapshot(user, spec, timeout);
   }
 
   @Override
-  public Collection<LiveDataSubscriptionResponse> snapshot(UserPrincipal user,
-                                                           Collection<LiveDataSpecification> specs,
-                                                           long timeout) {
+  public Collection<LiveDataSubscriptionResponse> snapshot(final UserPrincipal user,
+      final Collection<LiveDataSpecification> specs,
+      final long timeout) {
     return _delegate.snapshot(user, specs, timeout);
   }
 
@@ -80,28 +86,31 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
   }
 
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification spec) {
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification spec) {
     return _delegate.isEntitled(user, spec);
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> specs) {
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> specs) {
     return _delegate.isEntitled(user, specs);
   }
 
+  /**
+   * Resubscribes each previous subscription.
+   */
   public void resubscribe() {
-    for (Subscription subscription : _subscriptions) {
+    for (final Subscription subscription : _subscriptions) {
       _delegate.subscribe(subscription._user, subscription._spec, subscription._listener);
     }
   }
-  
+
   private static final class Subscription {
-    
+
     private final UserPrincipal _user;
     private final LiveDataSpecification _spec;
     private final LiveDataListener _listener;
 
-    private Subscription(UserPrincipal user, LiveDataSpecification spec, LiveDataListener listener) {
+    private Subscription(final UserPrincipal user, final LiveDataSpecification spec, final LiveDataListener listener) {
       _user = user;
       _spec = spec;
       _listener = listener;
@@ -113,7 +122,7 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (this == obj) {
         return true;
       }
@@ -121,10 +130,10 @@ public class ResubscribingLiveDataClient implements LiveDataClient {
         return false;
       }
       final Subscription other = (Subscription) obj;
-      return 
-          Objects.equals(this._user, other._user) && 
-          Objects.equals(this._spec, other._spec) && 
-          Objects.equals(this._listener, other._listener);
+      return
+          Objects.equals(this._user, other._user)
+          && Objects.equals(this._spec, other._spec)
+          && Objects.equals(this._listener, other._listener);
     }
   }
 }

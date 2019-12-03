@@ -16,6 +16,7 @@ import org.threeten.bp.LocalDate;
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
@@ -33,12 +34,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.CashSecurityConverter;
-import com.opengamma.financial.analytics.conversion.FRASecurityConverterDeprecated;
+import com.opengamma.financial.analytics.conversion.FRASecurityConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.ForexSecurityConverter;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.SwapSecurityConverterDeprecated;
-import com.opengamma.financial.convention.ConventionBundleSource;
+import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverter;
+import com.opengamma.financial.analytics.conversion.SwapSecurityConverter;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
@@ -52,12 +52,15 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public abstract class FixedCashFlowFunction extends AbstractFunction {
   private final String _valueRequirementName;
   private final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> _cashFlowVisitor;
 
-  public FixedCashFlowFunction(final String valueRequirementName, final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> cashFlowVisitor) {
+  public FixedCashFlowFunction(final String valueRequirementName,
+      final InstrumentDefinitionVisitor<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> cashFlowVisitor) {
     ArgumentChecker.notNull(valueRequirementName, "value requirement name");
     ArgumentChecker.notNull(cashFlowVisitor, "cash-flow visitor");
     _valueRequirementName = valueRequirementName;
@@ -69,18 +72,21 @@ public abstract class FixedCashFlowFunction extends AbstractFunction {
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final CurrencyPairs baseQuotePairs = OpenGammaCompilationContext.getCurrencyPairsSource(context).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CashSecurityConverter cashConverter = new CashSecurityConverter(holidaySource, regionSource);
-    final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
-    final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
+    final FRASecurityConverter fraConverter = new FRASecurityConverter(securitySource, holidaySource, regionSource, conventionSource);
+    final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverter irFutureConverter = new InterestRateFutureSecurityConverter(securitySource, holidaySource, conventionSource,
+        regionSource);
     final ForexSecurityConverter fxConverter = new ForexSecurityConverter(baseQuotePairs);
-    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter)
-        .swapSecurityVisitor(swapConverter).interestRateFutureSecurityVisitor(irFutureConverter).bondSecurityVisitor(bondConverter).fxForwardVisitor(fxConverter)
-        .nonDeliverableFxForwardVisitor(fxConverter).create(), new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver));
+    return new Compiled(
+        FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter)
+            .swapSecurityVisitor(swapConverter).interestRateFutureSecurityVisitor(irFutureConverter).bondSecurityVisitor(bondConverter)
+            .fxForwardVisitor(fxConverter).nonDeliverableFxForwardVisitor(fxConverter).create(),
+        new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver));
   }
 
   /**
@@ -109,7 +115,8 @@ public abstract class FixedCashFlowFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
       final InstrumentDefinition<?> definition = security.accept(_visitor);
       return _definitionConverter.getConversionTimeSeriesRequirements(security, definition);
@@ -123,17 +130,17 @@ public abstract class FixedCashFlowFunction extends AbstractFunction {
       final InstrumentDefinition<?> definition = ((FinancialSecurity) target.getSecurity()).accept(_visitor);
       final Map<LocalDate, MultipleCurrencyAmount> cashFlows;
       if (inputs.getAllValues().isEmpty()) {
-        cashFlows = new TreeMap<LocalDate, MultipleCurrencyAmount>(definition.accept(_cashFlowVisitor));
+        cashFlows = new TreeMap<>(definition.accept(_cashFlowVisitor));
       } else {
         final HistoricalTimeSeries fixingSeries = (HistoricalTimeSeries) Iterables.getOnlyElement(inputs.getAllValues()).getValue();
         if (fixingSeries == null) {
-          cashFlows = new TreeMap<LocalDate, MultipleCurrencyAmount>(definition.accept(_cashFlowVisitor));
+          cashFlows = new TreeMap<>(definition.accept(_cashFlowVisitor));
         } else {
-          cashFlows = new TreeMap<LocalDate, MultipleCurrencyAmount>(definition.accept(_cashFlowVisitor, fixingSeries.getTimeSeries()));
+          cashFlows = new TreeMap<>(definition.accept(_cashFlowVisitor, fixingSeries.getTimeSeries()));
         }
       }
-      return Collections.singleton(new ComputedValue(new ValueSpecification(_valueRequirementName, target.toSpecification(), createValueProperties()
-          .get()), new FixedPaymentMatrix(cashFlows)));
+      return Collections.singleton(new ComputedValue(new ValueSpecification(_valueRequirementName, target.toSpecification(), createValueProperties().get()),
+          new FixedPaymentMatrix(cashFlows)));
     }
 
   }

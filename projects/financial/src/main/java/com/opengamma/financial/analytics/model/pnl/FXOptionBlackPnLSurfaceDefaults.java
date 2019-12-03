@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackPnLSurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackPnLSurfaceDefaults.class);
   private final String _interpolatorName;
   private final String _leftExtrapolatorName;
   private final String _rightExtrapolatorName;
@@ -54,7 +54,7 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
     _interpolatorName = interpolatorName;
     _leftExtrapolatorName = leftExtrapolatorName;
     _rightExtrapolatorName = rightExtrapolatorName;
-    _surfaceNameByCurrencyPair = new HashMap<Pair<String, String>, String>();
+    _surfaceNameByCurrencyPair = new HashMap<>();
     for (int i = 0; i < surfaceNameByCurrencyPair.length; i += 3) {
       final String firstCurrency = surfaceNameByCurrencyPair[i];
       final String secondCurrency = surfaceNameByCurrencyPair[i + 1];
@@ -70,11 +70,11 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
       return false;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
-    final boolean isFXOption = (security instanceof FXOptionSecurity
+    final boolean isFXOption = security instanceof FXOptionSecurity
         || security instanceof FXBarrierOptionSecurity
         || security instanceof FXDigitalOptionSecurity
         || security instanceof NonDeliverableFXOptionSecurity
-        || security instanceof NonDeliverableFXDigitalOptionSecurity);
+        || security instanceof NonDeliverableFXDigitalOptionSecurity;
     if (!isFXOption) {
       return false;
     }
@@ -96,7 +96,8 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (InterpolatedDataProperties.X_INTERPOLATOR_NAME.equals(propertyName)) {
       return Collections.singleton(_interpolatorName);
     }
@@ -118,7 +119,7 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
       if (_surfaceNameByCurrencyPair.containsKey(pair)) {
         return Collections.singleton(_surfaceNameByCurrencyPair.get(pair));
       }
-      s_logger.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
+      LOGGER.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
     }
     return null;
 

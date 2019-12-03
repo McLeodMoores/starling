@@ -76,35 +76,35 @@ public final class UniqueId
   /**
    * Obtains a {@code UniqueId} from a scheme and value indicating the latest version
    * of the identifier, also used for non-versioned identifiers.
-   * 
+   *
    * @param scheme  the scheme of the identifier, not empty, not null
    * @param value  the value of the identifier, not empty, not null
    * @return the unique identifier, not null
    */
-  public static UniqueId of(String scheme, String value) {
+  public static UniqueId of(final String scheme, final String value) {
     return of(scheme, value, null);
   }
 
   /**
    * Obtains a {@code UniqueId} from a scheme, value and version.
-   * 
+   *
    * @param scheme  the scheme of the identifier, not empty, not null
    * @param value  the value of the identifier, not empty, not null
    * @param version  the version of the identifier, empty treated as null, null treated as latest version
    * @return the unique identifier, not null
    */
-  public static UniqueId of(String scheme, String value, String version) {
+  public static UniqueId of(final String scheme, final String value, final String version) {
     return new UniqueId(scheme, value, version);
   }
 
   /**
    * Obtains a {@code UniqueId} from an {@code ObjectId} and a version.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param version  the version of the identifier, empty treated as null, null treated as latest version
    * @return the unique identifier, not null
    */
-  public static UniqueId of(ObjectId objectId, String version) {
+  public static UniqueId of(final ObjectId objectId, final String version) {
     ArgumentChecker.notNull(objectId, "objectId");
     return new UniqueId(objectId.getScheme(), objectId.getValue(), version);
   }
@@ -115,11 +115,12 @@ public final class UniqueId
    * This allows a unique identifier that was previously packaged as an
    * {@link ExternalId} to be converted back. See {@link #toExternalId()}.
    * In general, this approach should be avoided.
-   * 
+   *
    * @param externalId  the external identifier key, not null
    * @return the unique identifier, not null
    */
-  public static UniqueId of(ExternalId externalId) {
+  public static UniqueId of(final ExternalId externalId) {
+    ArgumentChecker.notNull(externalId, "externalId");
     if (externalId.isNotScheme(EXTERNAL_SCHEME)) {
       throw new IllegalArgumentException("ExternalId is not a valid UniqueId");
     }
@@ -131,35 +132,37 @@ public final class UniqueId
    * <p>
    * This parses the identifier from the form produced by {@code toString()}
    * which is {@code <SCHEME>~<VALUE>~<VERSION>}.
-   * 
+   *
    * @param str  the unique identifier to parse, not null
    * @return the unique identifier, not null
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static UniqueId parse(String str) {
+  public static UniqueId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    if (str.contains("~") == false) {
-      str = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    String s = str;
+    if (!s.contains("~")) {
+      s = StringUtils.replace(s, "::", "~");  // leniently parse old data
     }
-    String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(str, "~");
+    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(s, "~");
     switch (split.length) {
       case 2:
         return UniqueId.of(split[0], split[1], null);
       case 3:
         return UniqueId.of(split[0], split[1], split[2]);
+      default:
+        throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
-    throw new IllegalArgumentException("Invalid identifier format: " + str);
   }
 
   /**
    * Creates a unique instance.
-   * 
+   *
    * @param scheme  the scheme of the identifier, not empty, not null
    * @param value  the value of the identifier, not empty, not null
    * @param version  the version of the identifier, null if latest version
    */
-  private UniqueId(String scheme, String value, String version) {
+  private UniqueId(final String scheme, final String value, final String version) {
     ArgumentChecker.notEmpty(scheme, "scheme");
     ArgumentChecker.notEmpty(value, "value");
     _scheme = scheme;
@@ -173,7 +176,7 @@ public final class UniqueId
    * This is the first part of the unique identifier.
    * <p>
    * This is not expected to be the same as {@link ExternalScheme}.
-   * 
+   *
    * @return the scheme, not empty, not null
    */
   public String getScheme() {
@@ -183,7 +186,7 @@ public final class UniqueId
   /**
    * Gets the value of the identifier.
    * This is the second part of the unique identifier.
-   * 
+   *
    * @return the value, not empty, not null
    */
   public String getValue() {
@@ -193,7 +196,7 @@ public final class UniqueId
   /**
    * Gets the version of the identifier.
    * This is the third part of the unique identifier.
-   * 
+   *
    * @return the version, null if latest version
    */
   public String getVersion() {
@@ -203,7 +206,7 @@ public final class UniqueId
   //-------------------------------------------------------------------------
   /**
    * Returns a copy of this identifier with the specified scheme.
-   * 
+   *
    * @param scheme  the new scheme of the identifier, not empty, not null
    * @return an {@link ObjectId} based on this identifier with the specified scheme, not null
    */
@@ -213,7 +216,7 @@ public final class UniqueId
 
   /**
    * Returns a copy of this identifier with the specified value.
-   * 
+   *
    * @param value  the new value of the identifier, not empty, not null
    * @return an {@link ObjectId} based on this identifier with the specified value, not null
    */
@@ -223,7 +226,7 @@ public final class UniqueId
 
   /**
    * Returns a copy of this identifier with the specified version.
-   * 
+   *
    * @param version  the new version of the identifier, empty treated as null, null treated as latest version
    * @return the created identifier with the specified version, not null
    */
@@ -239,7 +242,7 @@ public final class UniqueId
    * Gets the object identifier.
    * <p>
    * All versions of the same object share the same object identifier.
-   * 
+   *
    * @return the scheme, not empty, not null
    */
   @Override
@@ -251,7 +254,7 @@ public final class UniqueId
    * Gets the unique identifier.
    * <p>
    * This method trivially returns {@code this}.
-   * 
+   *
    * @return {@code this}, not null
    */
   @Override
@@ -264,7 +267,7 @@ public final class UniqueId
    * Checks if this represents the latest version of the item.
    * <p>
    * This simply checks if the version is null.
-   * 
+   *
    * @return true if this is the latest version
    */
   public boolean isLatest() {
@@ -275,7 +278,7 @@ public final class UniqueId
    * Checks if this represents a versioned reference to the item.
    * <p>
    * This simply checks if the version is non null.
-   * 
+   *
    * @return true if this is a versioned reference
    */
   public boolean isVersioned() {
@@ -286,15 +289,14 @@ public final class UniqueId
    * Returns a unique identifier based on this with the version set to null.
    * <p>
    * The returned identifier will represent the latest version of the item.
-   * 
+   *
    * @return an identifier representing the latest version of the item, not null
    */
   public UniqueId toLatest() {
     if (isVersioned()) {
       return new UniqueId(_scheme, _value, null);
-    } else {
-      return this;
     }
+    return this;
   }
 
   /**
@@ -303,7 +305,7 @@ public final class UniqueId
    * This allows a unique identifier to be packaged and passed around
    * in the form of an external identifier. See {@link #of(ExternalId)}.
    * In general, this approach should be avoided.
-   * 
+   *
    * @return the external identifier, not null
    */
   public ExternalId toExternalId() {
@@ -315,28 +317,28 @@ public final class UniqueId
    * Compares this identifier to another based on the object identifier, ignoring the version.
    * <p>
    * This checks to see if two unique identifiers represent the same underlying object.
-   * 
+   *
    * @param other  the other identifier, null returns false
    * @return true if the object identifier are equal, ignoring the version
    */
-  public boolean equalObjectId(ObjectIdentifiable other) {
+  public boolean equalObjectId(final ObjectIdentifiable other) {
     if (other == null) {
       return false;
     }
-    ObjectId objectId = other.getObjectId();
-    return _scheme.equals(objectId.getScheme()) &&
-        _value.equals(objectId.getValue());
+    final ObjectId objectId = other.getObjectId();
+    return _scheme.equals(objectId.getScheme())
+        && _value.equals(objectId.getValue());
   }
 
   //-------------------------------------------------------------------------
   /**
    * Compares the unique identifiers, sorting alphabetically by scheme followed by value.
-   * 
+   *
    * @param other  the other unique identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(UniqueId other) {
+  public int compareTo(final UniqueId other) {
     int cmp = _scheme.compareTo(other._scheme);
     if (cmp != 0) {
       return cmp;
@@ -349,15 +351,15 @@ public final class UniqueId
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof UniqueId) {
-      UniqueId other = (UniqueId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value) &&
-          ObjectUtils.equals(_version, other._version);
+      final UniqueId other = (UniqueId) obj;
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value)
+          && ObjectUtils.equals(_version, other._version);
     }
     return false;
   }
@@ -371,13 +373,13 @@ public final class UniqueId
    * Returns the identifier in the form {@code <SCHEME>~<VALUE>~<VERSION>}.
    * <p>
    * If the version is null, the identifier will omit the colons and version.
-   * 
+   *
    * @return a parsable representation of the identifier, not null
    */
   @Override
   @ToString
   public String toString() {
-    StrBuilder buf = new StrBuilder()
+    final StrBuilder buf = new StrBuilder()
         .append(_scheme).append('~').append(_value);
     if (_version != null) {
       buf.append('~').append(_version);
@@ -389,7 +391,7 @@ public final class UniqueId
   /**
    * This is for more efficient code within the .proto representations of securities, allowing this class
    * to be used directly as a message type instead of through the serialization framework.
-   * 
+   *
    * @param serializer  the serializer, not null
    * @param msg  the message to populate, not null
    * @deprecated Use builder
@@ -402,7 +404,7 @@ public final class UniqueId
   /**
    * This is for more efficient code within the .proto representations of securities, allowing this class
    * to be used directly as a message type instead of through the serialization framework.
-   * 
+   *
    * @param deserializer  the deserializer, not null
    * @param msg  the message to decode, not null
    * @return the created object, not null

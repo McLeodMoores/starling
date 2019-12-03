@@ -38,11 +38,11 @@ public class AggregatorNamesResourceTest {
 
   @Test
   public void getAggregatorNamesOverHttp() throws Exception {
-    WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
+    WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
     Pair<Server, WebApplicationContext> serverAndContext =
-        _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/aggregatornamesresource-test.xml");
+        webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/aggregatornamesresource-test.xml");
     Server server = serverAndContext.getFirst();
-    JSONArray json = new JSONArray(_webPushTestUtils.readFromPath("/jax/aggregators"));
+    JSONArray json = new JSONArray(webPushTestUtils.readFromPath("/jax/aggregators"));
     assertEquals(2, json.length());
     assertEquals(AGGREGATOR1, json.get(0));
     assertEquals(AGGREGATOR2, json.get(1));

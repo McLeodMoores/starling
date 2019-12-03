@@ -25,13 +25,13 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public class SyntheticHistoricalDataNormalizer implements HistoricalTimeSeriesAdjuster {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SyntheticHistoricalDataNormalizer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SyntheticHistoricalDataNormalizer.class);
 
   private static final Integer HUNDRED = 100;
   private static final Integer ONE = 1;
 
-  private static final Pattern s_rates = Pattern.compile("[A-Z]{3}(CASH|SWAP|LIBOR|EURIBOR|OIS_SWAP|FRA|BB|BASIS_SWAP_.*)P[0-9]+[DMY]");
-  private static final Pattern s_futureRates = Pattern.compile("ER(H|M|U|Z)[0-9]{2}");
+  private static final Pattern RATES = Pattern.compile("[A-Z]{3}(CASH|SWAP|LIBOR|EURIBOR|OIS_SWAP|FRA|BB|BASIS_SWAP_.*)P[0-9]+[DMY]");
+  private static final Pattern FUTURE_RATES = Pattern.compile("ER(H|M|U|Z)[0-9]{2}");
   private final ConcurrentMap<String, Integer> _factors = new ConcurrentHashMap<>();
 
   public SyntheticHistoricalDataNormalizer() {
@@ -48,26 +48,26 @@ public class SyntheticHistoricalDataNormalizer implements HistoricalTimeSeriesAd
   private int getFactor(final ExternalIdBundle securityIdBundle) {
     final String ticker = securityIdBundle.getValue(ExternalSchemes.OG_SYNTHETIC_TICKER);
     if (ticker == null) {
-      s_logger.warn("Unable to classify security - no synthetic ticker found in {}", securityIdBundle);
+      LOGGER.warn("Unable to classify security - no synthetic ticker found in {}", securityIdBundle);
       return 1;
     }
     final Integer factor = _factors.get(ticker);
     if (factor != null) {
       return factor.intValue();
     }
-    Matcher matcher = s_rates.matcher(ticker);
+    Matcher matcher = RATES.matcher(ticker);
     if (matcher.matches()) {
-      s_logger.info("Using 100 for ticker {}", ticker);
+      LOGGER.info("Using 100 for ticker {}", ticker);
       _factors.putIfAbsent(ticker, HUNDRED);
       return 100;
     }
-    matcher = s_futureRates.matcher(ticker);
+    matcher = FUTURE_RATES.matcher(ticker);
     if (matcher.matches()) {
-      s_logger.info("Using 100 for ticker {}", ticker);
+      LOGGER.info("Using 100 for ticker {}", ticker);
       _factors.putIfAbsent(ticker, HUNDRED);
       return 100;
     }
-    s_logger.info("Assuming 1 for ticker {}", ticker);
+    LOGGER.info("Assuming 1 for ticker {}", ticker);
     _factors.putIfAbsent(ticker, ONE);
     return 1;
   }
@@ -76,11 +76,11 @@ public class SyntheticHistoricalDataNormalizer implements HistoricalTimeSeriesAd
   public HistoricalTimeSeries adjust(final ExternalIdBundle securityIdBundle, final HistoricalTimeSeries timeSeries) {
     final int factor = getFactor(securityIdBundle);
     if (factor == 1) {
-      s_logger.debug("Returning raw timeseries");
+      LOGGER.debug("Returning raw timeseries");
       return timeSeries;
     }
-    if (s_logger.isDebugEnabled()) {
-      s_logger.debug("Dividing timeseries by {}", factor);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Dividing timeseries by {}", factor);
     }
     return new SimpleHistoricalTimeSeries(timeSeries.getUniqueId(), timeSeries.getTimeSeries().divide(factor));
   }

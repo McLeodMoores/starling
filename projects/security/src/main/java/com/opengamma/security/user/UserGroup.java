@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.security.user;
@@ -24,19 +24,19 @@ public class UserGroup {
   /**
    * The users within the group.
    */
-  private Set<User> _users = new HashSet<User>();
+  private Set<User> _users = new HashSet<>();
   /**
    * The authorities controlled by the group.
    */
-  private Set<Authority> _authorities = new HashSet<Authority>();
+  private Set<Authority> _authorities = new HashSet<>();
 
   /**
    * Creates an instance of a user group.
    * @param id  the database id
    * @param name  the group name
    */
-  public UserGroup(Long id, String name) {
-    this(id, name, new HashSet<User>(), new HashSet<Authority>());    
+  public UserGroup(final Long id, final String name) {
+    this(id, name, new HashSet<User>(), new HashSet<Authority>());
   }
 
   /**
@@ -46,7 +46,7 @@ public class UserGroup {
    * @param users  the users
    * @param authorities  the authorities
    */
-  public UserGroup(Long id, String name, Set<User> users, Set<Authority> authorities) {
+  public UserGroup(final Long id, final String name, final Set<User> users, final Set<Authority> authorities) {
     _id = id;
     _name = name;
     _users = users;
@@ -60,41 +60,81 @@ public class UserGroup {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the user group id.
+   *
+   * @return  the id
+   */
   public Long getId() {
     return _id;
   }
 
-  public void setId(Long id) {
+  /**
+   * Sets the user group id.
+   *
+   * @param id  the id
+   */
+  public void setId(final Long id) {
     _id = id;
   }
 
+  /**
+   * Gets the name.
+   *
+   * @return  the name
+   */
   public String getName() {
     return _name;
   }
 
-  public void setName(String name) {
+  /**
+   * Sets the name.
+   *
+   * @param name  the name
+   */
+  public void setName(final String name) {
     this._name = name;
   }
 
+  /**
+   * Gets the users.
+   *
+   * @return  the users
+   */
   public Set<User> getUsers() {
     return _users;
   }
 
-  public void setUsers(Set<User> users) {
+  /**
+   * Sets the users.
+   *
+   * @param users  the users
+   */
+  public void setUsers(final Set<User> users) {
     this._users = users;
   }
 
+  /**
+   * Gets the authorities.
+   *
+   * @return  the authorities
+   */
   public Set<Authority> getAuthorities() {
     return _authorities;
   }
 
-  public void setAuthorities(Set<Authority> authorities) {
+  /**
+   * Sets the authorities.
+   *
+   * @param authorities  the authorities
+   */
+  public void setAuthorities(final Set<Authority> authorities) {
     this._authorities = authorities;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -104,7 +144,7 @@ public class UserGroup {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    UserGroup other = (UserGroup) obj;
+    final UserGroup other = (UserGroup) obj;
     if (_id == null) {
       if (other._id != null) {
         return false;
@@ -119,7 +159,7 @@ public class UserGroup {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+    result = prime * result + (_id == null ? 0 : _id.hashCode());
     return result;
   }
 

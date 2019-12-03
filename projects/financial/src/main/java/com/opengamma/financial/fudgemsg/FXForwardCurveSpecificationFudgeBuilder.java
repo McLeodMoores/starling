@@ -38,10 +38,12 @@ public class FXForwardCurveSpecificationFudgeBuilder implements FudgeBuilder<FXF
   public FXForwardCurveSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final UnorderedCurrencyPair target = deserializer.fieldValueToObject(UnorderedCurrencyPair.class, message.getByName("target"));
     final String name = message.getString("name");
-    final FXForwardCurveInstrumentProvider provider = deserializer.fieldValueToObject(FXForwardCurveInstrumentProvider.class, message.getByName("curveInstrumentProvider"));
+    final FXForwardCurveInstrumentProvider provider = deserializer.fieldValueToObject(FXForwardCurveInstrumentProvider.class,
+        message.getByName("curveInstrumentProvider"));
     if (message.hasField("quoteType")) {
       if (message.hasField("marketQuoteConvention")) {
-        return new FXForwardCurveSpecification(name, target, provider, QuoteType.valueOf(message.getString("quoteType")), message.getBoolean("marketQuoteConvention"));
+        return new FXForwardCurveSpecification(name, target, provider, QuoteType.valueOf(message.getString("quoteType")),
+            message.getBoolean("marketQuoteConvention"));
       }
       return new FXForwardCurveSpecification(name, target, provider, QuoteType.valueOf(message.getString("quoteType")));
     }

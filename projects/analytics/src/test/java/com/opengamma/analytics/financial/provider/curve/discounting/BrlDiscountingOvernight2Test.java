@@ -22,6 +22,7 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethod
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
@@ -56,14 +57,16 @@ import com.opengamma.util.tuple.Pair;
 @Test(groups = TestGroup.UNIT)
 public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** The interpolator used for the curve */
-  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   /** A calendar containing only Saturday and Sunday holidays */
-  private static final CalendarAdapter RIO = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final WorkingDayCalendar RIO = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** The base FX matrix */
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.BRL);
   /** Generates OIS swaps */
-  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL =
-      GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance().getGenerator("BRLCDI", RIO);
+  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL = GeneratorSwapFixedCompoundedONCompoundedMaster
+      .getInstance()
+      .getGenerator("BRLCDI", RIO);
   /** The CDI index */
   private static final IndexON CDI_INDEX = GENERATOR_OIS_BRL.getIndex();
   /** The curve construction date */
@@ -71,11 +74,11 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** The previous day */
   private static final ZonedDateTime PREVIOUS_DATE = NOW.minusDays(1);
   /** Fixing time series of overnight rates after today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITH_TODAY =
-      ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.0881, 0.0881 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.0881, 0.0881 });
   /** Fixing time series of overnight rates before today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITHOUT_TODAY =
-      ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] { PREVIOUS_DATE }, new double[] { 0.0881 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE }, new double[] { 0.0881 });
   /** Fixing time series created before the valuation date fixing is available */
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITHOUT_TODAY = new HashMap<>();
   /** Fixing time series created after the valuation date fixing is available */
@@ -87,21 +90,25 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** The curve name */
   private static final String CURVE_NAME_DSC_BRL = "BRL Dsc";
   /** Market values for the curve */
-  private static final double[] DSC_BRL_MARKET_QUOTES =
-      new double[] {0.092925, 0.09325, 0.09458, 0.09545, 0.09665, 0.09845, 0.1001, 0.10101, 0.10335, 0.10565, 0.10725, 0.10865, 0.1098,
-          0.11085, 0.1113, 0.11165, 0.11205, 0.1127 };
+  private static final double[] DSC_BRL_MARKET_QUOTES = new double[] { 0.092925, 0.09325, 0.09458, 0.09545, 0.09665, 0.09845, 0.1001,
+      0.10101, 0.10335, 0.10565,
+      0.10725, 0.10865, 0.1098, 0.11085, 0.1113, 0.11165, 0.11205, 0.1127 };
   /** Vanilla instrument generators */
   private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {
-    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
+      GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL };
   /** Attributes for the curve */
   private static final GeneratorAttributeIR[] DSC_BRL_ATTR;
   static {
-    final Period[] tenors = new Period[] {
-        Period.ofDays(23), Period.ofDays(54), Period.ofDays(85), Period.ofDays(117), Period.ofDays(174), Period.ofDays(267), Period.ofDays(357),
-        Period.ofDays(450), Period.ofDays(539), Period.ofDays(630), Period.ofDays(722), Period.ofDays(817), Period.ofDays(996), Period.ofDays(1090),
-        Period.ofDays(1181), Period.ofDays(1272), Period.ofDays(1363), Period.ofDays(1454) };
+    final Period[] tenors = new Period[] { Period.ofDays(23), Period.ofDays(54), Period.ofDays(85), Period.ofDays(117), Period.ofDays(174),
+        Period.ofDays(267),
+        Period.ofDays(357), Period.ofDays(450), Period.ofDays(539), Period.ofDays(630), Period.ofDays(722), Period.ofDays(817),
+        Period.ofDays(996),
+        Period.ofDays(1090), Period.ofDays(1181), Period.ofDays(1272), Period.ofDays(1363), Period.ofDays(1454) };
     DSC_BRL_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       DSC_BRL_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
@@ -110,8 +117,7 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** Already known market data - contains only an empty FX matrix */
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** The curve builder */
-  private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_BRL)
+  private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp().building(CURVE_NAME_DSC_BRL)
       .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   static {
@@ -143,31 +149,28 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
-        .getBuilder()
+        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
         .getDefinitionsForCurves(NOW);
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
-        .getBuilder()
+        .withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
         .getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
-        BEFORE_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
-    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL),
-        AFTER_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.BRL);
+    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL), BEFORE_TODAYS_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
+    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL), AFTER_TODAYS_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.BRL);
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the
-   * discounting curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve.
    */
   @Override
   @Test
   public void testFiniteDifferenceSensitivities() {
-    //TODO
-//    assertFiniteDifferenceSensitivities(BEFORE_TODAYS_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
-//        CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
-//    assertFiniteDifferenceSensitivities(AFTER_TODAYS_FIXING.getSecond(), FIXING_TS_WITH_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
-//        CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
+    // TODO
+    // assertFiniteDifferenceSensitivities(BEFORE_TODAYS_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
+    // CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
+    // assertFiniteDifferenceSensitivities(AFTER_TODAYS_FIXING.getSecond(), FIXING_TS_WITH_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
+    // CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
   }
 
   /**
@@ -200,7 +203,7 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /**
    * Analyzes the shape of the forward curve.
    */
-   @Test(enabled = false)
+  @Test(enabled = false)
   public void forwardAnalysis() {
     final MulticurveProviderInterface marketDsc = BEFORE_TODAYS_FIXING.getFirst();
     final int jump = 1;
@@ -219,11 +222,11 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
     try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
-        startTime2[i] = CDI_INDEX.getDayCount().getDayCountFraction(NOW, startDate, RIO);
+        startTime2[i] = CDI_INDEX.getDayCount().getDayCountFraction(NOW, startDate, CalendarAdapter.of(RIO));
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, CDI_INDEX.getPublicationLag(), RIO);
         final double endTime = TimeCalculator.getTimeBetween(NOW, endDate);
-        final double endTime2 = CDI_INDEX.getDayCount().getDayCountFraction(NOW, endDate, RIO);
-        accrualFactor[i] = CDI_INDEX.getDayCount().getDayCountFraction(startDate, endDate, RIO);
+        final double endTime2 = CDI_INDEX.getDayCount().getDayCountFraction(NOW, endDate, CalendarAdapter.of(RIO));
+        accrualFactor[i] = CDI_INDEX.getDayCount().getDayCountFraction(startDate, endDate, CalendarAdapter.of(RIO));
         accrualFactorActAct[i] = TimeCalculator.getTimeBetween(startDate, endDate);
         dscstart[i] = marketDsc.getDiscountFactor(Currency.BRL, startTime2[i]);
         dscend[i] = marketDsc.getDiscountFactor(Currency.BRL, endTime2);
@@ -231,7 +234,8 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
         rateDsc2[i] = marketDsc.getSimplyCompoundForwardRate(CDI_INDEX, startTime[i], endTime, accrualFactor[i]);
         rateDscNormal[i] = marketDsc.getSimplyCompoundForwardRate(CDI_INDEX, startTime[i], endTime, accrualFactorActAct[i]);
         startDate = ScheduleCalculator.getAdjustedDate(startDate, jump, RIO);
-        writer.append(0.0 + "," + startTime[i] + "," + dscstart[i] + "," + dscend[i] + "," + rateDsc[i] + "," + rateDsc2[i] + "," + rateDscNormal[i] + "\n");
+        writer.append(0.0 + "," + startTime[i] + "," + dscstart[i] + "," + dscend[i] + "," + rateDsc[i] + "," + rateDsc2[i] + ","
+            + rateDscNormal[i] + "\n");
       }
       writer.flush();
       writer.close();

@@ -31,7 +31,7 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
    */
   private final Set<MarketDataSelector> _underlyingSelectors;
 
-  private CompositeMarketDataSelector(Set<MarketDataSelector> underlyingSelectors) {
+  private CompositeMarketDataSelector(final Set<MarketDataSelector> underlyingSelectors) {
     ArgumentChecker.notNull(underlyingSelectors, "underlyingSpecifications");
     _underlyingSelectors = underlyingSelectors;
   }
@@ -42,7 +42,7 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
    * @param specifications the specifications to be combined, neither null nor empty
    * @return a specification combined all the underlying specifications, not null
    */
-  public static MarketDataSelector of(MarketDataSelector... specifications) {
+  public static MarketDataSelector of(final MarketDataSelector... specifications) {
     return new CompositeMarketDataSelector(ImmutableSet.copyOf(specifications));
   }
 
@@ -52,17 +52,17 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
    * @param specifications the specifications to be combined, neither null nor empty
    * @return a specification combined all the underlying specifications, not null
    */
-  public static MarketDataSelector of(Set<? extends MarketDataSelector> specifications) {
+  public static MarketDataSelector of(final Set<? extends MarketDataSelector> specifications) {
     return new CompositeMarketDataSelector(ImmutableSet.copyOf(specifications));
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calculationConfigurationName,
-                                                         SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+                                                         final String calculationConfigurationName,
+                                                         final SelectorResolver resolver) {
 
-    for (MarketDataSelector selector : _underlyingSelectors) {
-      DistinctMarketDataSelector matchingSelector =
+    for (final MarketDataSelector selector : _underlyingSelectors) {
+      final DistinctMarketDataSelector matchingSelector =
           selector.findMatchingSelector(valueSpecification, calculationConfigurationName, resolver);
       if (matchingSelector != null) {
         return matchingSelector;
@@ -74,7 +74,7 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
   @Override
   public boolean hasSelectionsDefined() {
 
-    for (MarketDataSelector specification : _underlyingSelectors) {
+    for (final MarketDataSelector specification : _underlyingSelectors) {
       if (specification.hasSelectionsDefined()) {
         return true;
       }
@@ -83,7 +83,7 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -91,7 +91,7 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
       return false;
     }
 
-    CompositeMarketDataSelector that = (CompositeMarketDataSelector) o;
+    final CompositeMarketDataSelector that = (CompositeMarketDataSelector) o;
     return _underlyingSelectors.equals(that._underlyingSelectors);
   }
 
@@ -101,17 +101,17 @@ public final class CompositeMarketDataSelector implements MarketDataSelector {
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    for (MarketDataSelector selector : _underlyingSelectors) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    for (final MarketDataSelector selector : _underlyingSelectors) {
       serializer.addToMessageWithClassHeaders(msg, SELECTORS, null, selector);
     }
     return msg;
   }
 
   public static MarketDataSelector fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    Set<MarketDataSelector> selectors = Sets.newHashSet();
-    for (FudgeField field : msg.getAllByName(SELECTORS)) {
-      MarketDataSelector selector = deserializer.fieldValueToObject(MarketDataSelector.class, field);
+    final Set<MarketDataSelector> selectors = Sets.newHashSet();
+    for (final FudgeField field : msg.getAllByName(SELECTORS)) {
+      final MarketDataSelector selector = deserializer.fieldValueToObject(MarketDataSelector.class, field);
       selectors.add(selector);
     }
     return of(selectors);

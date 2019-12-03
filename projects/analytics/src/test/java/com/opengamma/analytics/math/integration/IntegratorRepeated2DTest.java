@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.integration;
@@ -25,18 +25,18 @@ public class IntegratorRepeated2DTest {
   public void integrate() {
 
     // Test function.
-    Function2D<Double, Double> f = new Function2D<Double, Double>() {
+    final Function2D<Double, Double> f = new Function2D<Double, Double>() {
       @Override
-      public Double evaluate(Double x1, Double x2) {
+      public Double evaluate(final Double x1, final Double x2) {
         return x1 + Math.sin(x2);
       }
     };
 
-    double absTol = 1.0E-6;
-    double relTol = 1.0E-6;
-    int minSteps = 6;
-    RungeKuttaIntegrator1D integrator1D = new RungeKuttaIntegrator1D(absTol, relTol, minSteps);
-    IntegratorRepeated2D integrator2D = new IntegratorRepeated2D(integrator1D);
+    final double absTol = 1.0E-6;
+    final double relTol = 1.0E-6;
+    final int minSteps = 6;
+    final RungeKuttaIntegrator1D integrator1D = new RungeKuttaIntegrator1D(absTol, relTol, minSteps);
+    final IntegratorRepeated2D integrator2D = new IntegratorRepeated2D(integrator1D);
 
     Double[] lower;
     Double[] upper;

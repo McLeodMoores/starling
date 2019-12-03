@@ -21,20 +21,22 @@ import com.opengamma.financial.security.option.EquityIndexOptionSecurity;
 import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 
-/** Calculates the contract multiplier, or notional of a single contract. This is used for converting Mathematical Greeks to Position Greeks,
- * the former simply being the latter for a notional of 1.0/
+/**
+ * Calculates the contract multiplier, or notional of a single contract. This is used for converting Mathematical Greeks to Position Greeks, the former simply
+ * being the latter for a notional of 1.0/
  */
 public final class PositionGreekContractMultiplier extends FinancialSecurityVisitorAdapter<Double> {
 
   /** Static instance */
-  private static final PositionGreekContractMultiplier s_instance = new PositionGreekContractMultiplier();
+  private static final PositionGreekContractMultiplier INSTANCE = new PositionGreekContractMultiplier();
 
   /**
-   * Gets an instance of this calculator
+   * Gets an instance of this calculator.
+   * 
    * @return The (singleton) instance
    */
   public static PositionGreekContractMultiplier getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

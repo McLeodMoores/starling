@@ -26,14 +26,14 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
 
   private final double _shift;
 
-  public VolatilitySurfaceConstantMultiplicativeShift(double shift) {
+  public VolatilitySurfaceConstantMultiplicativeShift(final double shift) {
     _shift = shift;
   }
 
   @Override
-  public VolatilitySurface execute(VolatilitySurface surface,
-                                   ValueSpecification valueSpecification,
-                                   FunctionExecutionContext executionContext) {
+  public VolatilitySurface execute(final VolatilitySurface surface,
+      final ValueSpecification valueSpecification,
+      final FunctionExecutionContext executionContext) {
     return surface.withConstantMultiplicativeShift(_shift);
   }
 
@@ -43,13 +43,13 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
   }
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, SHIFT, null, _shift);
     return msg;
   }
 
-  public static VolatilitySurfaceConstantMultiplicativeShift fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
+  public static VolatilitySurfaceConstantMultiplicativeShift fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Double shift = deserializer.fieldValueToObject(Double.class, msg.getByName(SHIFT));
     return new VolatilitySurfaceConstantMultiplicativeShift(shift);
   }
 
@@ -59,7 +59,7 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -72,8 +72,8 @@ public class VolatilitySurfaceConstantMultiplicativeShift implements StructureMa
 
   @Override
   public String toString() {
-    return "VolatilitySurfaceConstantMultiplicativeShift [" +
-        "_shift=" + _shift +
-        "]";
+    return "VolatilitySurfaceConstantMultiplicativeShift ["
+        + "_shift=" + _shift
+        + "]";
   }
 }

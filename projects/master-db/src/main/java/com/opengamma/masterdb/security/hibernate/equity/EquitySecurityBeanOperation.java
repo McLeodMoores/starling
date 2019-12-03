@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.equity;
@@ -44,17 +44,17 @@ public final class EquitySecurityBeanOperation extends AbstractSecurityBeanOpera
     }
     final EquitySecurityBean bean = createBean(
         secMasterSession.getOrCreateExchangeBean(security.getExchangeCode(), security.getExchange()),
-          security.getCompanyName(),
-          secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()),
-          gicsCodeBean,
-          security.isPreferred());
+        security.getCompanyName(),
+        secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()),
+        gicsCodeBean,
+        security.isPreferred());
     bean.setShortName(security.getShortName());
     return bean;
   }
 
   public EquitySecurityBean createBean(
       final ExchangeBean exchange, final String companyName, final CurrencyBean currency,
-      final GICSCodeBean gicsCode, boolean preferred) {
+      final GICSCodeBean gicsCode, final boolean preferred) {
     final EquitySecurityBean equity = new EquitySecurityBean();
     equity.setExchange(exchange);
     equity.setCompanyName(companyName);
@@ -66,7 +66,8 @@ public final class EquitySecurityBeanOperation extends AbstractSecurityBeanOpera
 
   @Override
   public EquitySecurity createSecurity(final OperationContext context, final EquitySecurityBean bean) {
-    final EquitySecurity security = new EquitySecurity(bean.getExchange().getDescription(), bean.getExchange().getName(), bean.getCompanyName(), currencyBeanToCurrency(bean.getCurrency()));
+    final EquitySecurity security = new EquitySecurity(bean.getExchange().getDescription(), bean.getExchange().getName(), bean.getCompanyName(),
+        currencyBeanToCurrency(bean.getCurrency()));
     security.setShortName(bean.getShortName());
     security.setGicsCode(gicsCodeBeanToGICSCode(bean.getGicsCode()));
     security.setPreferred(bean.isPreferred());

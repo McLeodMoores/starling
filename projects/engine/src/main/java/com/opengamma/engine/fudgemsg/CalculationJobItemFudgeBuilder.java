@@ -23,7 +23,7 @@ import com.opengamma.engine.view.ExecutionLogMode;
 
 /**
  * Fudge message builder for {@code CalculationJobItem}.
- * 
+ *
  * <pre>
  * message CalculationJobItem extends ComputationTargetSpecification {
  *   optional int target;                    // index into target specification dictionary
@@ -46,8 +46,9 @@ public class CalculationJobItemFudgeBuilder implements FudgeBuilder<CalculationJ
   private static final String OUTPUT_IDENTIFIERS_FIELD_NAME = "output";
   private static final String LOG_MODE_FIELD_NAME = "logMode";
 
-  public static MutableFudgeMsg buildMessageImpl(final FudgeSerializer serializer, final CalculationJobItem object, final Map<ComputationTargetSpecification, Integer> targets,
-      final Map<String, Integer> functions, final Map<FunctionParameters, Integer> parameters) {
+  public static MutableFudgeMsg buildMessageImpl(final FudgeSerializer serializer, final CalculationJobItem object,
+      final Map<ComputationTargetSpecification, Integer> targets, final Map<String, Integer> functions,
+      final Map<FunctionParameters, Integer> parameters) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (targets != null) {
       Integer i = targets.get(object.getComputationTargetSpecification());
@@ -98,8 +99,9 @@ public class CalculationJobItemFudgeBuilder implements FudgeBuilder<CalculationJ
     return buildMessageImpl(serializer, object, null, null, null);
   }
 
-  public static CalculationJobItem buildObjectImpl(final FudgeDeserializer deserializer, final FudgeMsg message, final Map<Integer, ComputationTargetSpecification> targets,
-      final Map<Integer, String> functions, final Map<Integer, FunctionParameters> parameters) {
+  public static CalculationJobItem buildObjectImpl(final FudgeDeserializer deserializer, final FudgeMsg message,
+      final Map<Integer, ComputationTargetSpecification> targets, final Map<Integer, String> functions,
+      final Map<Integer, FunctionParameters> parameters) {
     FudgeField field = message.getByName(TARGET_FIELD_NAME);
     final ComputationTargetSpecification computationTargetSpecification;
     if (field != null) {

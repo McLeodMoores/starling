@@ -21,8 +21,6 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.PaymentFixedDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapMultileg;
@@ -42,6 +40,7 @@ public final class PresentValueCommodityDiscountingCalculator extends Instrument
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCommodityDiscountingCalculator getInstance() {
@@ -55,15 +54,16 @@ public final class PresentValueCommodityDiscountingCalculator extends Instrument
   }
 
   private static final CommodityFutureTransactionForwardMethod METHOD_COMMODITY_FUTURE = CommodityFutureTransactionForwardMethod.getInstance();
-  private static final CouponCommodityCashSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_CASH_COUPON = CouponCommodityCashSettleSecurityForwardMethod.getInstance();
-  private static final CouponCommodityPhysicalSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_PHYSICAL_COUPON = CouponCommodityPhysicalSettleSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON = ForwardCommodityCashSettleSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON = ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
+  private static final CouponCommodityCashSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_CASH_COUPON = CouponCommodityCashSettleSecurityForwardMethod
+      .getInstance();
+  private static final CouponCommodityPhysicalSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_PHYSICAL_COUPON =
+      CouponCommodityPhysicalSettleSecurityForwardMethod.getInstance();
+  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON = ForwardCommodityCashSettleSecurityForwardMethod
+      .getInstance();
+  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON =
+      ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
 
-  private static final PaymentFixedDiscountingMethod METHOD_PAY_FIXED = PaymentFixedDiscountingMethod.getInstance();
-  private static final CouponFixedDiscountingMethod METHOD_CPN_FIXED = CouponFixedDiscountingMethod.getInstance();
-
-  //-----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyAmount visitCouponCommodityCashSettle(final CouponCommodityCashSettle payment, final CommodityProviderInterface multicurve) {
@@ -85,7 +85,7 @@ public final class PresentValueCommodityDiscountingCalculator extends Instrument
     return METHOD_FWD_COMMODITY_PHYSICAL_COUPON.presentValue(payment, multicurve);
   }
 
-  //-----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyAmount visitGenericAnnuity(final Annuity<? extends Payment> annuity, final CommodityProviderInterface multicurve) {
@@ -103,7 +103,7 @@ public final class PresentValueCommodityDiscountingCalculator extends Instrument
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
+  // ----- Swap ------
 
   @Override
   public MultipleCurrencyAmount visitSwap(final Swap<?, ?> swap, final CommodityProviderInterface multicurve) {
@@ -127,7 +127,7 @@ public final class PresentValueCommodityDiscountingCalculator extends Instrument
     return pv;
   }
 
-  // -----     Futures     ------
+  // ----- Futures ------
 
   @Override
   public MultipleCurrencyAmount visitAgricultureFutureTransaction(final AgricultureFutureTransaction futures, final CommodityProviderInterface multicurves) {

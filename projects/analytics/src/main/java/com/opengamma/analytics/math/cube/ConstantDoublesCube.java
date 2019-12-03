@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.cube;
@@ -13,7 +13,8 @@ import com.opengamma.util.tuple.Triple;
 public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
-   * @param v Level (in fourth dimention) of the cube
+   * @param v
+   *          Level (in fourth dimension) of the cube
    * @return A constant cube with automatically-generated name
    */
   public static ConstantDoublesCube from(final double v) {
@@ -21,8 +22,10 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param v Level (in fourth dimention) of the cube
-   * @param name Name of the cube
+   * @param v
+   *          Level (in fourth dimension) of the cube
+   * @param name
+   *          Name of the cube
    * @return A constant cube
    */
   public static ConstantDoublesCube from(final double v, final String name) {
@@ -33,7 +36,8 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
   private Double[] _vArray;
 
   /**
-   * @param v The level of the cube
+   * @param v
+   *          The level of the cube
    */
   public ConstantDoublesCube(final double v) {
     super();
@@ -41,8 +45,10 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param v The level of the cube
-   * @param name The name of the cube
+   * @param v
+   *          The level of the cube
+   * @param name
+   *          The name of the cube
    */
   public ConstantDoublesCube(final double v, final String name) {
     super(name);
@@ -51,7 +57,6 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getXData() {
@@ -60,7 +65,6 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getYData() {
@@ -69,7 +73,6 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
 
   /**
    * @return Not supported
-   * @throws UnsupportedOperationException
    */
   @Override
   public Double[] getZData() {
@@ -84,7 +87,7 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
     if (_vArray != null) {
       return _vArray;
     }
-    _vArray = new Double[] {_v };
+    _vArray = new Double[] { _v };
     return _vArray;
   }
 
@@ -118,7 +121,7 @@ public class ConstantDoublesCube extends Cube<Double, Double, Double, Double> {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_v);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

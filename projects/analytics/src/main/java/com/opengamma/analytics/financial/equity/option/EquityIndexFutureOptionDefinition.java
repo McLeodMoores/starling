@@ -46,8 +46,8 @@ public class EquityIndexFutureOptionDefinition implements InstrumentDefinition<E
    * @param pointValue The point value
    * @param referencePrice TODO
    */
-  public EquityIndexFutureOptionDefinition(final ZonedDateTime expiryDate, final IndexFutureDefinition underlying, final double strike, final ExerciseDecisionType exerciseType,
-      final boolean isCall, final double pointValue, double referencePrice) {
+  public EquityIndexFutureOptionDefinition(final ZonedDateTime expiryDate, final IndexFutureDefinition underlying, final double strike,
+      final ExerciseDecisionType exerciseType, final boolean isCall, final double pointValue, final double referencePrice) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNegativeOrZero(strike, "strike");
@@ -94,7 +94,7 @@ public class EquityIndexFutureOptionDefinition implements InstrumentDefinition<E
   }
 
   /**
-   * Gets the option type (put or call)
+   * Gets the option type (put or call).
    * @return true if the option is a call, false if the option is a put
    */
   public boolean isCall() {
@@ -126,11 +126,11 @@ public class EquityIndexFutureOptionDefinition implements InstrumentDefinition<E
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_pointValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlying.hashCode();
     return result;
   }

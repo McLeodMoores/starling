@@ -43,18 +43,18 @@ public final class ArgumentChecker {
    * <pre>
    *  ArgumentChecker.isTrue(collection.contains("value"), "Collection must contain 'value'");
    * </pre>
-   * 
+   *
    * @param validIfTrue  a boolean resulting from testing an argument, may be null
    * @param message  the error message, not null
    * @throws IllegalArgumentException if the test value is false
    */
-  public static void isTrue(boolean validIfTrue, String message) {
+  public static void isTrue(final boolean validIfTrue, final String message) {
     // return void, not the parameter, as no need to check a boolean method parameter
     if (!validIfTrue) {
       throw new IllegalArgumentException(message);
     }
   }
-  
+
   /**
    * Checks that the specified boolean is true.
    * <p>
@@ -70,18 +70,18 @@ public final class ArgumentChecker {
    * <p>
    * Formatting of the error message uses placeholders as per SLF4J.
    * Each {} in the message is replaced by the next message argument.
-   * 
+   *
    * @param validIfTrue  a boolean resulting from testing an argument, may be null
    * @param message  the error message with {} placeholders, not null
    * @param arg  the message arguments
    * @throws IllegalArgumentException if the test value is false
    */
-  public static void isTrue(boolean validIfTrue, String message, Object... arg) {
+  public static void isTrue(final boolean validIfTrue, final String message, final Object... arg) {
     // return void, not the parameter, as no need to check a boolean method parameter
     if (!validIfTrue) {
       throw new IllegalArgumentException(MessageFormatter.arrayFormat(message, arg).getMessage());
     }
-  }  
+  }
 
   /**
    * Checks that the specified boolean is false.
@@ -95,12 +95,12 @@ public final class ArgumentChecker {
    * <p>
    * This returns {@code void}, and not the value being checked, as there is
    * never a good reason to validate a boolean parameter value.
-   * 
+   *
    * @param validIfFalse  a boolean resulting from testing an argument, may be null
    * @param message  the error message, not null
    * @throws IllegalArgumentException if the test value is true
    */
-  public static void isFalse(boolean validIfFalse, String message) {
+  public static void isFalse(final boolean validIfFalse, final String message) {
     // return void, not the parameter, as no need to check a boolean method parameter
     if (validIfFalse) {
       throw new IllegalArgumentException(message);
@@ -122,19 +122,19 @@ public final class ArgumentChecker {
    * <p>
    * Formatting of the error message uses placeholders as per SLF4J.
    * Each {} in the message is replaced by the next message argument.
-   * 
+   *
    * @param validIfFalse  a boolean resulting from testing an argument, may be null
    * @param message  the error message with {} placeholders, not null
    * @param arg  the message arguments
    * @throws IllegalArgumentException if the test value is true
    */
-  public static void isFalse(boolean validIfFalse, String message, Object... arg) {
+  public static void isFalse(final boolean validIfFalse, final String message, final Object... arg) {
     // return void, not the parameter, as no need to check a boolean method parameter
     if (validIfFalse) {
       throw new IllegalArgumentException(MessageFormatter.arrayFormat(message, arg).getMessage());
     }
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Checks that the specified parameter is non-null.
@@ -144,14 +144,14 @@ public final class ArgumentChecker {
    * <pre>
    *  _name = ArgumentChecker.notNull(name, "name");
    * </pre>
-   * 
+   *
    * @param <T>  the type of the input parameter reflected in the result
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null
    */
-  public static <T> T notNull(T parameter, String name) {
+  public static <T> T notNull(final T parameter, final String name) {
     if (parameter == null) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be null");
     }
@@ -165,14 +165,14 @@ public final class ArgumentChecker {
    * This is intended for parameters injected from configuration or similar.
    * As a convention, the name of the parameter should be the exact name that
    * you would provide in the configuration file.
-   * 
+   *
    * @param <T>  the type of the input parameter reflected in the result
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null
    */
-  public static <T> T notNullInjected(T parameter, String name) {
+  public static <T> T notNullInjected(final T parameter, final String name) {
     if (parameter == null) {
       throw new IllegalArgumentException("Injected input parameter '" + name + "' must not be null");
     }
@@ -190,22 +190,22 @@ public final class ArgumentChecker {
    *  _name = ArgumentChecker.notBlank(name, "name");
    * </pre>
    * <p>
-   * The parameter is trimmed using {@link StringUtils#strip()} before testing for length zero.
+   * The parameter is trimmed using {@link StringUtils#strip(String)} before testing for length zero.
    * This matches the definition of {@link StringUtils#isBlank(String)}.
    * The trimmed parameter is returned.
-   * 
+   *
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the trimmed input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or blank
    */
-  public static String notBlank(String parameter, String name) {
+  public static String notBlank(final String parameter, final String name) {
     notNull(parameter, name);
-    parameter = StringUtils.strip(parameter);
-    if (parameter.length() == 0) {
+    final String p = StringUtils.strip(parameter);
+    if (p.length() == 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be empty");
     }
-    return parameter;
+    return p;
   }
 
   //-------------------------------------------------------------------------
@@ -219,13 +219,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _name = ArgumentChecker.notEmpty(name, "name");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static String notEmpty(String parameter, String name) {
+  public static String notEmpty(final String parameter, final String name) {
     notNull(parameter, name);
     if (parameter.length() == 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be empty");
@@ -242,14 +242,14 @@ public final class ArgumentChecker {
    * <pre>
    *  _names = ArgumentChecker.notEmpty(names, "names");
    * </pre>
-   * 
+   *
    * @param <T>  the type of the input array reflected in the result
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static <T> T[] notEmpty(T[] parameter, String name) {
+  public static <T> T[] notEmpty(final T[] parameter, final String name) {
     notNull(parameter, name);
     if (parameter.length == 0) {
       throw new IllegalArgumentException("Input parameter array '" + name + "' must not be empty");
@@ -266,13 +266,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.notEmpty(values, "values");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static int[] notEmpty(int[] parameter, String name) {
+  public static int[] notEmpty(final int[] parameter, final String name) {
     notNull(parameter, name);
     if (parameter.length == 0) {
       throw new IllegalArgumentException("Input parameter array '" + name + "' must not be empty");
@@ -289,13 +289,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.notEmpty(values, "values");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static long[] notEmpty(long[] parameter, String name) {
+  public static long[] notEmpty(final long[] parameter, final String name) {
     notNull(parameter, name);
     if (parameter.length == 0) {
       throw new IllegalArgumentException("Input parameter array '" + name + "' must not be empty");
@@ -312,13 +312,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.notEmpty(values, "values");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static double[] notEmpty(double[] parameter, String name) {
+  public static double[] notEmpty(final double[] parameter, final String name) {
     notNull(parameter, name);
     if (parameter.length == 0) {
       throw new IllegalArgumentException("Input parameter array '" + name + "' must not be empty");
@@ -335,7 +335,7 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.notEmpty(values, "values");
    * </pre>
-   * 
+   *
    * @param <T>  the element type of the input iterable reflected in the result
    * @param <I>  the type of the input iterable, reflected in the result
    * @param parameter  the parameter to check, may be null
@@ -343,7 +343,7 @@ public final class ArgumentChecker {
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static <T, I extends Iterable<T>> I notEmpty(I parameter, String name) {
+  public static <T, I extends Iterable<T>> I notEmpty(final I parameter, final String name) {
     notNull(parameter, name);
     if (!parameter.iterator().hasNext()) {
       throw new IllegalArgumentException("Input parameter iterable '" + name + "' must not be empty");
@@ -368,7 +368,7 @@ public final class ArgumentChecker {
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static <T, C extends Collection<T>> C notEmpty(C parameter, String name) {
+  public static <T, C extends Collection<T>> C notEmpty(final C parameter, final String name) {
     notNull(parameter, name);
     if (parameter.isEmpty()) {
       throw new IllegalArgumentException("Input parameter collection '" + name + "' must not be empty");
@@ -385,7 +385,7 @@ public final class ArgumentChecker {
    * <pre>
    *  _keyValues = ArgumentChecker.notEmpty(keyValues, "keyValues");
    * </pre>
-   * 
+   *
    * @param <K>  the key type of the input map key, reflected in the result
    * @param <V>  the value type of the input map value, reflected in the result
    * @param <M>  the type of the input map, reflected in the result
@@ -394,7 +394,7 @@ public final class ArgumentChecker {
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or empty
    */
-  public static <K, V, M extends Map<K, V>> M notEmpty(M parameter, String name) {
+  public static <K, V, M extends Map<K, V>> M notEmpty(final M parameter, final String name) {
     notNull(parameter, name);
     if (parameter.isEmpty()) {
       throw new IllegalArgumentException("Input parameter map '" + name + "' must not be empty");
@@ -411,14 +411,14 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.noNulls(values, "values");
    * </pre>
-   * 
+   *
    * @param <T>  the type of the input array reflected in the result
    * @param parameter  the parameter to check, may be null
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or contains nulls
    */
-  public static <T> T[] noNulls(T[] parameter, String name) {
+  public static <T> T[] noNulls(final T[] parameter, final String name) {
     notNull(parameter, name);
     for (int i = 0; i < parameter.length; i++) {
       if (parameter[i] == null) {
@@ -436,7 +436,7 @@ public final class ArgumentChecker {
    * <pre>
    *  _values = ArgumentChecker.noNulls(values, "values");
    * </pre>
-   * 
+   *
    * @param <T>  the element type of the input iterable reflected in the result
    * @param <I>  the type of the input iterable, reflected in the result
    * @param parameter  the parameter to check, may be null
@@ -444,9 +444,9 @@ public final class ArgumentChecker {
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or contains nulls
    */
-  public static <T, I extends Iterable<T>> I noNulls(I parameter, String name) {
+  public static <T, I extends Iterable<T>> I noNulls(final I parameter, final String name) {
     notNull(parameter, name);
-    for (Object obj : parameter) {
+    for (final Object obj : parameter) {
       if (obj == null) {
         throw new IllegalArgumentException("Input parameter iterable '" + name + "' must not contain null");
       }
@@ -462,7 +462,7 @@ public final class ArgumentChecker {
    * <pre>
    *  _keyValues = ArgumentChecker.noNulls(keyValues, "keyValues");
    * </pre>
-   * 
+   *
    * @param <K>  the key type of the input map key, reflected in the result
    * @param <V>  the value type of the input map value, reflected in the result
    * @param <M>  the type of the input map, reflected in the result
@@ -471,9 +471,9 @@ public final class ArgumentChecker {
    * @return the input {@code parameter}, not null
    * @throws IllegalArgumentException if the input is null or contains nulls
    */
-  public static <K, V, M extends Map<K, V>> M noNulls(M parameter, String name) {
+  public static <K, V, M extends Map<K, V>> M noNulls(final M parameter, final String name) {
     notNull(parameter, name);
-    for (Entry<K, V> entry : parameter.entrySet()) {
+    for (final Entry<K, V> entry : parameter.entrySet()) {
       if (entry.getKey() == null) {
         throw new IllegalArgumentException("Input parameter map '" + name + "' must not contain a null key");
       }
@@ -493,13 +493,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegative(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative
    */
-  public static int notNegative(int parameter, String name) {
+  public static int notNegative(final int parameter, final String name) {
     if (parameter < 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative");
     }
@@ -514,13 +514,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegative(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative
    */
-  public static long notNegative(long parameter, String name) {
+  public static long notNegative(final long parameter, final String name) {
     if (parameter < 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative");
     }
@@ -535,13 +535,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegative(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative
    */
-  public static double notNegative(double parameter, String name) {
+  public static double notNegative(final double parameter, final String name) {
     if (parameter < 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative");
     }
@@ -557,13 +557,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegativeOrZero(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative or zero
    */
-  public static int notNegativeOrZero(int parameter, String name) {
+  public static int notNegativeOrZero(final int parameter, final String name) {
     if (parameter <= 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative or zero");
     }
@@ -578,13 +578,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegativeOrZero(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative or zero
    */
-  public static long notNegativeOrZero(long parameter, String name) {
+  public static long notNegativeOrZero(final long parameter, final String name) {
     if (parameter <= 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative or zero");
     }
@@ -599,13 +599,13 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegativeOrZero(amount, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the parameter to check
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the input is negative or zero
    */
-  public static double notNegativeOrZero(double parameter, String name) {
+  public static double notNegativeOrZero(final double parameter, final String name) {
     if (parameter <= 0) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be negative or zero");
     }
@@ -621,14 +621,14 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notNegativeOrZero(amount, 0.0001d, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the value to check
    * @param eps  the accuracy to use for zero
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the absolute value of the argument is less than eps
    */
-  public static double notNegativeOrZero(double parameter, double eps, String name) {
+  public static double notNegativeOrZero(final double parameter, final double eps, final String name) {
     if (CompareUtils.closeEquals(parameter, 0, eps)) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be zero");
     }
@@ -650,7 +650,7 @@ public final class ArgumentChecker {
    * <p>
    * Formatting of the error message uses placeholders as per SLF4J.
    * Each {} in the message is replaced by the next message argument.
-   * 
+   *
    * @param parameter  the value to check
    * @param eps  the accuracy to use for zero
    * @param message  the error message with {} placeholders, not null
@@ -660,7 +660,7 @@ public final class ArgumentChecker {
    * @deprecated no need for message arguments here
    */
   @Deprecated
-  public static double notNegativeOrZero(double parameter, double eps, String message, Object... args) {
+  public static double notNegativeOrZero(final double parameter, final double eps, final String message, final Object... args) {
     if (CompareUtils.closeEquals(parameter, 0, eps)) {
       throw new IllegalArgumentException(MessageFormatter.arrayFormat(message, args).getMessage());
     }
@@ -680,14 +680,14 @@ public final class ArgumentChecker {
    * <pre>
    *  _amount = ArgumentChecker.notZero(amount, 0.0001d, "amount");
    * </pre>
-   * 
+   *
    * @param parameter  the value to check
    * @param eps  the accuracy to use for zero
    * @param name  the name of the parameter to use in the error message, not null
    * @return the input {@code parameter}
    * @throws IllegalArgumentException if the absolute value of the argument is less than eps
    */
-  public static double notZero(double parameter, double eps, String name) {
+  public static double notZero(final double parameter, final double eps, final String name) {
     if (CompareUtils.closeEquals(parameter, 0d, eps)) {
       throw new IllegalArgumentException("Input parameter '" + name + "' must not be zero");
     }
@@ -699,14 +699,14 @@ public final class ArgumentChecker {
    * Checks a collection for null elements.
    * <p>
    * Given a collection, this returns true if any element is null.
-   * 
+   *
    * @param iterable  the collection to test, not null
    * @return true if the collection contains a null element
    * @throws IllegalArgumentException if the collection is null
    */
-  public static boolean hasNullElement(Iterable<?> iterable) {
+  public static boolean hasNullElement(final Iterable<?> iterable) {
     notNull(iterable, "iterable");
-    for (Object o : iterable) {
+    for (final Object o : iterable) {
       if (o == null) {
         return true;
       }
@@ -718,14 +718,14 @@ public final class ArgumentChecker {
    * Checks a collection of doubles for negative elements.
    * <p>
    * Given a collection, this returns true if any element is negative.
-   * 
+   *
    * @param iterable  the collection to test, not null
    * @return true if the collection contains a negative element
    * @throws IllegalArgumentException if the collection is null or any element is null
    */
-  public static boolean hasNegativeElement(Iterable<Double> iterable) {
+  public static boolean hasNegativeElement(final Iterable<Double> iterable) {
     notNull(iterable, "collection");
-    for (Double d : iterable) {
+    for (final Double d : iterable) {
       notNull(d, "collection element");
       if (d < 0) {
         return true;
@@ -740,14 +740,14 @@ public final class ArgumentChecker {
    * <p>
    * Given a value, this returns true if it is within the specified range
    * excluding the boundaries.
-   * 
+   *
    * @param low  the low value of the range
    * @param high  the high value of the range
    * @param value  the value
    * @return true if low &lt; x &lt; high
    */
-  public static boolean isInRangeExclusive(double low, double high, double value) {
-    return (value > low && value < high);
+  public static boolean isInRangeExclusive(final double low, final double high, final double value) {
+    return value > low && value < high;
   }
 
   /**
@@ -755,14 +755,14 @@ public final class ArgumentChecker {
    * <p>
    * Given a value, this returns true if it is within the specified range
    * including both boundaries.
-   * 
+   *
    * @param low  the low value of the range
    * @param high  the high value of the range
    * @param value  the value
    * @return true if low &lt;= x &lt;= high
    */
-  public static boolean isInRangeInclusive(double low, double high, double value) {
-    return (value >= low && value <= high);
+  public static boolean isInRangeInclusive(final double low, final double high, final double value) {
+    return value >= low && value <= high;
   }
 
   /**
@@ -770,15 +770,14 @@ public final class ArgumentChecker {
    * <p>
    * Given a value, this returns true if it is within the specified range
    * excluding the lower boundary but including the upper boundary.
-   * 
+   *
    * @param low  the low value of the range
    * @param high  the high value of the range
    * @param value  the value
    * @return true if low &lt; x &lt;= high
    */
-
-  public static boolean isInRangeExcludingLow(double low, double high, double value) {
-    return (value > low && value <= high);
+  public static boolean isInRangeExcludingLow(final double low, final double high, final double value) {
+    return value > low && value <= high;
   }
 
   /**
@@ -786,14 +785,14 @@ public final class ArgumentChecker {
    * <p>
    * Given a value, this returns true if it is within the specified range
    * excluding the upper boundary but including the lower boundary.
-   * 
+   *
    * @param low  the low value of the range
    * @param high  the high value of the range
    * @param value  the value
    * @return true if low &lt;= x &lt; high
    */
-  public static boolean isInRangeExcludingHigh(double low, double high, double value) {
-    return (value >= low && value < high);
+  public static boolean isInRangeExcludingHigh(final double low, final double high, final double value) {
+    return value >= low && value < high;
   }
 
   //-------------------------------------------------------------------------
@@ -802,7 +801,7 @@ public final class ArgumentChecker {
    * <p>
    * Given two comparable instances, this checks that the first is "lower than"
    * or "equal to" the second.
-   * 
+   *
    * @param <T>  the type
    * @param obj1  the first object, will be checked for not null
    * @param obj2  the second object, will be checked for not null
@@ -810,7 +809,7 @@ public final class ArgumentChecker {
    * @param param2  the second parameter name, not null
    * @throws IllegalArgumentException if either input is null or they are not in order
    */
-  public static <T> void inOrderOrEqual(Comparable<? super T> obj1, T obj2, String param1, String param2) {
+  public static <T> void inOrderOrEqual(final Comparable<? super T> obj1, final T obj2, final String param1, final String param2) {
     notNull(obj1, param1);
     notNull(obj2, param2);
     if (obj1.compareTo(obj2) > 0) {

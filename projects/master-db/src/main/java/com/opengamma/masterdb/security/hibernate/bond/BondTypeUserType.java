@@ -13,7 +13,7 @@ import com.opengamma.financial.security.bond.MunicipalBondSecurity;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the BondType enum
+ * Custom Hibernate usertype for the BondType enum.
  */
 public class BondTypeUserType extends EnumUserType<BondType> {
 
@@ -27,26 +27,26 @@ public class BondTypeUserType extends EnumUserType<BondType> {
   }
 
   @Override
-  protected String enumToStringNoCache(BondType value) {
+  protected String enumToStringNoCache(final BondType value) {
     return value.accept(new FinancialSecurityVisitorAdapter<String>() {
 
       @Override
-      public String visitCorporateBondSecurity(CorporateBondSecurity bond) {
+      public String visitCorporateBondSecurity(final CorporateBondSecurity bond) {
         return CORPORATE_BOND_TYPE;
       }
 
       @Override
-      public String visitGovernmentBondSecurity(GovernmentBondSecurity bond) {
+      public String visitGovernmentBondSecurity(final GovernmentBondSecurity bond) {
         return GOVERNMENT_BOND_TYPE;
       }
 
       @Override
-      public String visitMunicipalBondSecurity(MunicipalBondSecurity bond) {
+      public String visitMunicipalBondSecurity(final MunicipalBondSecurity bond) {
         return MUNICIPAL_BOND_TYPE;
       }
-      
+
       @Override
-      public String visitInflationBondSecurity(InflationBondSecurity bond) {
+      public String visitInflationBondSecurity(final InflationBondSecurity bond) {
         return INFLATION_BOND_TYPE;
       }
     });

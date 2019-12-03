@@ -27,14 +27,14 @@ import com.opengamma.id.UniqueIdFudgeSecondaryType;
 
 /**
  * Fudge builder for {@link FunctionBlacklistPolicy}.
- * 
+ *
  * <pre>
  * message FunctionBlacklistPolicy {
  *   required UniqueId uniqueId;                // unique identifier
  *   required string name;                      // symbolic name
  *   required long ttl;                         // default entry activation period
  *   repeated Entry entry;                      // entries
- *   
+ *
  *   message Entry {
  *     optional long ttl;                       // ttl if different to the policy
  *     optional indicator functionIdentifier;   // match on function identifier
@@ -43,7 +43,7 @@ import com.opengamma.id.UniqueIdFudgeSecondaryType;
  *     optional indicator inputs;               // match on function inputs
  *     optional indicator outputs;              // match on function outputs
  *   }
- *   
+ *
  * }
  * </pre>
  */
@@ -121,7 +121,7 @@ public class FunctionBlacklistPolicyFudgeBuilder implements FudgeBuilder<Functio
     msg.add("uniqueId", null, UniqueIdFudgeSecondaryType.INSTANCE, object.getUniqueId());
     msg.add("name", null, FudgeWireType.STRING, object.getName());
     msg.add("ttl", null, FudgeWireType.LONG, object.getDefaultEntryActivationPeriod());
-    for (Entry entry : object.getEntries()) {
+    for (final Entry entry : object.getEntries()) {
       final MutableFudgeMsg entryMsg = msg.addSubMessage("entry", null);
       EntryFudgeBuilder.buildMessageImpl(entryMsg, entry);
     }
@@ -134,8 +134,8 @@ public class FunctionBlacklistPolicyFudgeBuilder implements FudgeBuilder<Functio
     final String name = msg.getString("name");
     final int ttl = msg.getInt("ttl");
     final List<FudgeField> entryFields = msg.getAllByName("entry");
-    final List<Entry> entries = new ArrayList<Entry>(entryFields.size());
-    for (FudgeField entryField : entryFields) {
+    final List<Entry> entries = new ArrayList<>(entryFields.size());
+    for (final FudgeField entryField : entryFields) {
       entries.add(EntryFudgeBuilder.buildObjectImpl((FudgeMsg) entryField.getValue()));
     }
     return new DefaultFunctionBlacklistPolicy(uniqueId, name, ttl, entries);

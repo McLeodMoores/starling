@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Paymen
  */
 public abstract class BondTransaction<B extends BondSecurity<? extends Payment, ? extends Payment>> implements InstrumentDerivative {
   /**
-   * The bond underlying the transaction. All the nominal payment and coupon relevant to the transaction and only them are included in the bond. 
+   * The bond underlying the transaction. All the nominal payment and coupon relevant to the transaction and only them are included in the bond.
    * The bond may not be suitable for standard price and yield calculation (some coupon may be missing or added). In particular, the bond
    * may not have settlement meaningful spot time.
    */
@@ -47,7 +47,7 @@ public abstract class BondTransaction<B extends BondSecurity<? extends Payment, 
    * @param bondStandard Description of the underlying bond with standard settlement date.
    * @param notionalStandard The notional at the standard spot time.
    */
-  public BondTransaction(B bondPurchased, double quantity, double transactionPrice, B bondStandard, double notionalStandard) {
+  public BondTransaction(final B bondPurchased, final double quantity, final double transactionPrice, final B bondStandard, final double notionalStandard) {
     Validate.notNull(bondPurchased, "Bond underlying the transaction");
     Validate.notNull(transactionPrice, "Price");
     Validate.notNull(bondStandard, "Bond underlying with standard settlement date");
@@ -116,14 +116,14 @@ public abstract class BondTransaction<B extends BondSecurity<? extends Payment, 
     result = prime * result + _bondStandard.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notionalStandard);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_quantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -133,7 +133,7 @@ public abstract class BondTransaction<B extends BondSecurity<? extends Payment, 
     if (getClass() != obj.getClass()) {
       return false;
     }
-    BondTransaction<?> other = (BondTransaction<?>) obj;
+    final BondTransaction<?> other = (BondTransaction<?>) obj;
     if (!ObjectUtils.equals(_bondPurchased, other._bondPurchased)) {
       return false;
     }

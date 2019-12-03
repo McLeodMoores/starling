@@ -117,20 +117,6 @@
     </constructor-arg>
   </bean>
   
-  <!-- User Yield curves -->
-  <bean id="userInterpolatedYieldCurveDefinitionMaster" class="com.opengamma.financial.analytics.ircurve.InMemoryInterpolatedYieldCurveDefinitionMaster">
-    <property name="uniqueIdScheme" value="UserCurves" />
-  </bean>
-  <alias name="userInterpolatedYieldCurveDefinitionMaster" alias="userInterpolatedYieldCurveDefinitionSource" />
-  <bean id="combinedInterpolatedYieldCurveDefinitionSource" class="com.opengamma.financial.analytics.ircurve.AggregatingInterpolatedYieldCurveDefinitionSource">
-    <constructor-arg>
-      <list>
-        <ref bean="userInterpolatedYieldCurveDefinitionSource" />
-        <ref bean="sharedInterpolatedYieldCurveDefinitionSource" />
-      </list>
-    </constructor-arg>
-  </bean>
-
   <!-- User Vol Cubes-->
   <!-- TODO: this properly, user source and cacheing -->
   
@@ -177,8 +163,6 @@
     <property name="regionSource" ref="sharedRegionSource"/>
     <property name="configMaster" ref="sharedConfigSource" />
     <property name="conventionBundleSource" ref="sharedConventionBundleSource"/>
-    <property name="interpolatedYieldCurveDefinitionSource" ref="combinedInterpolatedYieldCurveDefinitionSource" />
-    <property name="interpolatedYieldCurveSpecificationBuilder" ref="sharedInterpolatedYieldCurveSpecificationBuilder" />
     <property name="volatilityCubeDefinitionSource" ref="combinedVolatilityCubeDefinitionSource" />
     <property name="currencyMatrixSource" ref="sharedCurrencyMatrixSource" />
     <property name="holidaySource" ref="sharedHolidaySource" />
@@ -362,7 +346,6 @@
     <property name="masters">
       <list>
         <ref bean="sharedConfigSource" />
-        <ref bean="userInterpolatedYieldCurveDefinitionSource" />
         <bean class="com.opengamma.financial.config.ConfigSourceChangeProvider">
           <constructor-arg ref="sharedConfigSource" />
         </bean>

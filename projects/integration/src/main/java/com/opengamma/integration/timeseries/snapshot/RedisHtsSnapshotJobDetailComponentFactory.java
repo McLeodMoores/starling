@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.timeseries.snapshot;
@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.springframework.scheduling.quartz.JobDetailBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
@@ -32,61 +32,61 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Component factory to setup a Redis Hts snapshotter job detail for quartz scheduler
+ * Component factory to setup a Redis Hts snapshotter job detail for quartz scheduler.
  */
 @BeanDefinition
 public class RedisHtsSnapshotJobDetailComponentFactory extends AbstractComponentFactory {
-  
+
   /**
    * The classifier that the factory should publish under.
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _name;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _baseDir;
-  
+
   @PropertyDefinition
   private String _group;
-  
+
   @PropertyDefinition(validate = "notNull")
   private Scheduler _scheduler;
-    
+
   @PropertyDefinition(validate = "notNull")
   private String _dataSource;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _normalizationRuleSetId;
-    
+
   @PropertyDefinition(validate = "notNull")
   private String _globalPrefix;
-  
+
   @PropertyDefinition(validate = "notNull")
   private HistoricalTimeSeriesMaster _htsMaster;
-  
+
   @PropertyDefinition(validate = "notNull")
   private RedisConnector _redisConnector;
-  
+
   @PropertyDefinition
   private String _schemeBlackList;
-  
+
   @PropertyDefinition
   private String _dataFieldBlackList;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    
-    ComponentInfo info = new ComponentInfo(JobDetail.class, getClassifier());
-    
-    JobDetailBean jobDetailBean = new JobDetailBean();
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+
+    final ComponentInfo info = new ComponentInfo(JobDetail.class, getClassifier());
+
+    final JobDetailFactoryBean jobDetailBean = new JobDetailFactoryBean();
     jobDetailBean.setBeanName(getName());
     jobDetailBean.setJobClass(QuartzRedisHtsSnapshotJob.class);
     if (getGroup() != null) {
       jobDetailBean.setGroup(getGroup());
-    }    
+    }
     final JobDataMap jobDataMap = jobDetailBean.getJobDataMap();
     jobDataMap.put("dataSource", getDataSource());
     jobDataMap.put("normalizationRuleSetId", getNormalizationRuleSetId());
@@ -100,18 +100,18 @@ public class RedisHtsSnapshotJobDetailComponentFactory extends AbstractComponent
     jobDataMap.put("htsMaster", getHtsMaster());
     jobDataMap.put("redisConnector", getRedisConnector());
     jobDataMap.put("baseDir", getBaseDir());
-    
+
     jobDetailBean.afterPropertiesSet();
-        
-    Scheduler scheduler = getScheduler();
-    scheduler.addJob(jobDetailBean, true);
-    
+
+    final Scheduler scheduler = getScheduler();
+    scheduler.addJob(jobDetailBean.getObject(), true);
+
     repo.registerComponent(info, jobDetailBean);
-    
+
   }
-  
-  private BlackList createBlackList(String blackList, String name) {
-    DefaultBlackList result = new DefaultBlackList();
+
+  private BlackList createBlackList(final String blackList, final String name) {
+    final DefaultBlackList result = new DefaultBlackList();
     result.setName(name);
     result.setBlackList(Arrays.asList(StringUtils.split(blackList.toUpperCase())));
     return result;

@@ -31,13 +31,13 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
   public static class AssetOrNothingPayoffStyleBuilder extends PayoffStyleFudgeBuilder implements FudgeBuilder<AssetOrNothingPayoffStyle>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, AssetOrNothingPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final AssetOrNothingPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public AssetOrNothingPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public AssetOrNothingPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new AssetOrNothingPayoffStyle();
     }
   }
@@ -52,15 +52,15 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String POWER_FIELD_NAME = "power";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, AsymmetricPoweredPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final AsymmetricPoweredPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, POWER_FIELD_NAME, object.getPower());
       return msg;
     }
 
     @Override
-    public AsymmetricPoweredPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double power = msg.getDouble(POWER_FIELD_NAME);
+    public AsymmetricPoweredPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double power = msg.getDouble(POWER_FIELD_NAME);
       return new AsymmetricPoweredPayoffStyle(power);
     }
   }
@@ -73,13 +73,13 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
   public static class BarrierPayoffStyleBuilder extends PayoffStyleFudgeBuilder implements FudgeBuilder<BarrierPayoffStyle>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, BarrierPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final BarrierPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public BarrierPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public BarrierPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new BarrierPayoffStyle();
     }
   }
@@ -96,7 +96,7 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String CAP_FIELD_NAME = "cap";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CappedPoweredPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CappedPoweredPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, POWER_FIELD_NAME, object.getPower());
       addToMessage(msg, CAP_FIELD_NAME, object.getCap());
@@ -104,9 +104,9 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public CappedPoweredPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double power = msg.getDouble(POWER_FIELD_NAME);
-      double cap = msg.getDouble(CAP_FIELD_NAME);
+    public CappedPoweredPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double power = msg.getDouble(POWER_FIELD_NAME);
+      final double cap = msg.getDouble(CAP_FIELD_NAME);
       return new CappedPoweredPayoffStyle(power, cap);
     }
   }
@@ -121,15 +121,15 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String PAYMENT_FIELD_NAME = "payment";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CashOrNothingPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CashOrNothingPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, PAYMENT_FIELD_NAME, object.getPayment());
       return msg;
     }
 
     @Override
-    public CashOrNothingPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double payment = msg.getDouble(PAYMENT_FIELD_NAME);
+    public CashOrNothingPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double payment = msg.getDouble(PAYMENT_FIELD_NAME);
       return new CashOrNothingPayoffStyle(payment);
     }
   }
@@ -146,7 +146,7 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String IS_REVERSE_FIELD_NAME = "isReverse";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExtremeSpreadPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExtremeSpreadPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, PERIOD_END_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getPeriodEnd()));
       addToMessage(msg, IS_REVERSE_FIELD_NAME, object.isReverse());
@@ -154,9 +154,9 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public ExtremeSpreadPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      ZonedDateTime periodEnd = ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(PERIOD_END_FIELD_NAME));
-      boolean reverse = msg.getBoolean(IS_REVERSE_FIELD_NAME);
+    public ExtremeSpreadPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final ZonedDateTime periodEnd = ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(PERIOD_END_FIELD_NAME));
+      final boolean reverse = msg.getBoolean(IS_REVERSE_FIELD_NAME);
       return new ExtremeSpreadPayoffStyle(periodEnd, reverse);
     }
   }
@@ -173,7 +173,7 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String UPPER_BOUND_FIELD_NAME = "upperBound";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FadeInPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FadeInPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, LOWER_BOUND_FIELD_NAME, object.getUpperBound());
       addToMessage(msg, UPPER_BOUND_FIELD_NAME, object.getLowerBound());
@@ -181,9 +181,9 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public FadeInPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double upperBound = msg.getDouble(LOWER_BOUND_FIELD_NAME);
-      double lowerBound = msg.getDouble(UPPER_BOUND_FIELD_NAME);
+    public FadeInPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double upperBound = msg.getDouble(LOWER_BOUND_FIELD_NAME);
+      final double lowerBound = msg.getDouble(UPPER_BOUND_FIELD_NAME);
       return new FadeInPayoffStyle(upperBound, lowerBound);
     }
   }
@@ -196,13 +196,13 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
   public static class FixedStrikeLookbackPayoffStyleBuilder extends PayoffStyleFudgeBuilder implements FudgeBuilder<FixedStrikeLookbackPayoffStyle>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FixedStrikeLookbackPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FixedStrikeLookbackPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public FixedStrikeLookbackPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public FixedStrikeLookbackPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new FixedStrikeLookbackPayoffStyle();
     }
   }
@@ -215,13 +215,13 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
   public static class FloatingStrikeLookbackPayoffStyleBuilder extends PayoffStyleFudgeBuilder implements FudgeBuilder<FloatingStrikeLookbackPayoffStyle>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FloatingStrikeLookbackPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FloatingStrikeLookbackPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public FloatingStrikeLookbackPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public FloatingStrikeLookbackPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new FloatingStrikeLookbackPayoffStyle();
     }
   }
@@ -236,15 +236,15 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String PAYMENT_FIELD_NAME = "payment";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, GapPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final GapPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, PAYMENT_FIELD_NAME, object.getPayment());
       return msg;
     }
 
     @Override
-    public GapPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double payment = msg.getDouble(PAYMENT_FIELD_NAME);
+    public GapPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double payment = msg.getDouble(PAYMENT_FIELD_NAME);
       return new GapPayoffStyle(payment);
     }
   }
@@ -259,15 +259,15 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String POWER_FIELD_NAME = "power";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, PoweredPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final PoweredPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, POWER_FIELD_NAME, object.getPower());
       return msg;
     }
 
     @Override
-    public PoweredPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double power = msg.getDouble(POWER_FIELD_NAME);
+    public PoweredPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double power = msg.getDouble(POWER_FIELD_NAME);
       return new PoweredPayoffStyle(power);
     }
   }
@@ -286,7 +286,7 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String UNDERLYING_EXPIRY_FIELD_NAME = "underlyingExpiry";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SimpleChooserPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SimpleChooserPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, CHOOSE_DATE_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getChooseDate()));
       addToMessage(msg, UNDERLYING_STRIKE_FIELD_NAME, object.getUnderlyingStrike());
@@ -295,10 +295,10 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public SimpleChooserPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      ZonedDateTime chooseDate = ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(CHOOSE_DATE_FIELD_NAME));
-      double strike = msg.getDouble(UNDERLYING_STRIKE_FIELD_NAME);
-      Expiry expiry = ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNDERLYING_EXPIRY_FIELD_NAME));
+    public SimpleChooserPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final ZonedDateTime chooseDate = ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(CHOOSE_DATE_FIELD_NAME));
+      final double strike = msg.getDouble(UNDERLYING_STRIKE_FIELD_NAME);
+      final Expiry expiry = ExpiryFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNDERLYING_EXPIRY_FIELD_NAME));
       return new SimpleChooserPayoffStyle(chooseDate, strike, expiry);
     }
   }
@@ -315,7 +315,7 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     public static final String UPPER_BOUND_FIELD_NAME = "upperBound";
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SupersharePayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SupersharePayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       addToMessage(msg, LOWER_BOUND_FIELD_NAME, object.getUpperBound());
       addToMessage(msg, UPPER_BOUND_FIELD_NAME, object.getLowerBound());
@@ -323,9 +323,9 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
     }
 
     @Override
-    public SupersharePayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-      double upperBound = msg.getDouble(LOWER_BOUND_FIELD_NAME);
-      double lowerBound = msg.getDouble(UPPER_BOUND_FIELD_NAME);
+    public SupersharePayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+      final double upperBound = msg.getDouble(LOWER_BOUND_FIELD_NAME);
+      final double lowerBound = msg.getDouble(UPPER_BOUND_FIELD_NAME);
       return new SupersharePayoffStyle(upperBound, lowerBound);
     }
   }
@@ -338,13 +338,13 @@ public class PayoffStyleFudgeBuilder extends AbstractFudgeBuilder {
   public static class VanillaPayoffStyleBuilder extends PayoffStyleFudgeBuilder implements FudgeBuilder<VanillaPayoffStyle>  {
 
     @Override
-    public MutableFudgeMsg buildMessage(FudgeSerializer serializer, VanillaPayoffStyle object) {
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final VanillaPayoffStyle object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       return msg;
     }
 
     @Override
-    public VanillaPayoffStyle buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+    public VanillaPayoffStyle buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
       return new VanillaPayoffStyle();
     }
   }

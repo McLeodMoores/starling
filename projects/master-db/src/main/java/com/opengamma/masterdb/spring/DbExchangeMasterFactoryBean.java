@@ -33,7 +33,7 @@ public class DbExchangeMasterFactoryBean extends AbstractDbMasterFactoryBean<DbE
   //-------------------------------------------------------------------------
   @Override
   protected DbExchangeMaster createObject() {
-    DbExchangeMaster master = new DbExchangeMaster(getDbConnector());
+    final DbExchangeMaster master = new DbExchangeMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbExchangeMasterFactoryBean extends AbstractDbMasterFactoryBean<DbE
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

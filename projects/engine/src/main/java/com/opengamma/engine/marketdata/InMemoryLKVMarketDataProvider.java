@@ -25,9 +25,9 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class InMemoryLKVMarketDataProvider extends AbstractMarketDataProvider implements MarketDataInjector {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InMemoryLKVMarketDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryLKVMarketDataProvider.class);
 
-  private final Map<ValueSpecification, Object> _lastKnownValues = new ConcurrentHashMap<ValueSpecification, Object>();
+  private final Map<ValueSpecification, Object> _lastKnownValues = new ConcurrentHashMap<>();
   private final FixedMarketDataAvailabilityProvider _availability = new FixedMarketDataAvailabilityProvider();
   private final MarketDataPermissionProvider _permissionProvider;
 
@@ -47,7 +47,7 @@ public class InMemoryLKVMarketDataProvider extends AbstractMarketDataProvider im
   @Override
   public void subscribe(final Set<ValueSpecification> valueSpecifications) {
     // No actual subscription to make, but we still need to acknowledge it.
-    s_logger.debug("Added subscriptions to {}", valueSpecifications);
+    LOGGER.debug("Added subscriptions to {}", valueSpecifications);
     subscriptionsSucceeded(valueSpecifications);
   }
 
@@ -59,7 +59,7 @@ public class InMemoryLKVMarketDataProvider extends AbstractMarketDataProvider im
   @Override
   public void unsubscribe(final Set<ValueSpecification> valueSpecifications) {
     // No actual unsubscription to make
-    s_logger.debug("Unsubscribed from {}", valueSpecifications);
+    LOGGER.debug("Unsubscribed from {}", valueSpecifications);
   }
 
   @Override

@@ -49,16 +49,16 @@ public abstract class AbstractAliasedComponentFactory extends AbstractComponentF
   //-------------------------------------------------------------------------
   /**
    * Registers the component and any aliases.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param type  the component type, not null
    * @param component  the component, not null
    */
-  protected void registerComponentAndAliases(ComponentRepository repo, Class<?> type, Object component) {
-    ComponentInfo info = new ComponentInfo(type, getClassifier());
+  protected void registerComponentAndAliases(final ComponentRepository repo, final Class<?> type, final Object component) {
+    final ComponentInfo info = new ComponentInfo(type, getClassifier());
     repo.registerComponent(info, component);
-    for (String alias : getClassifierAliases()) {
-      ComponentInfo aliasInfo = new ComponentInfo(type, alias);
+    for (final String alias : getClassifierAliases()) {
+      final ComponentInfo aliasInfo = new ComponentInfo(type, alias);
       repo.registerComponent(aliasInfo, component);
     }
   }

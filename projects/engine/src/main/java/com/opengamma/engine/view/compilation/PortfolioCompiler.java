@@ -13,8 +13,9 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Resolves the specified portfolio's securities and adds value requirements (targets) to the graph builder in the compilation context, thus triggering the compilation of the dependency graphs. The
- * identification of value requirements is done through a parallel traversal on the portfolio nodes using PortfolioCompilerTraversalCallback, which actually produces the value requirements and adds
+ * Resolves the specified portfolio's securities and adds value requirements (targets) to the graph builder in the compilation context,
+ * thus triggering the compilation of the dependency graphs. The identification of value requirements is done through a parallel traversal
+ * on the portfolio nodes using PortfolioCompilerTraversalCallback, which actually produces the value requirements and adds
  * them to the graph builder.
  */
 public final class PortfolioCompiler {
@@ -24,7 +25,7 @@ public final class PortfolioCompiler {
 
   /**
    * Resolves the securities in the portfolio at the latest version-correction.
-   * 
+   *
    * @param portfolio the portfolio to resolve, not null
    * @param executorService the threading service, not null
    * @param securitySource the security source, not null
@@ -37,7 +38,7 @@ public final class PortfolioCompiler {
 
   /**
    * Resolves the securities in the portfolio at the given version-correction.
-   * 
+   *
    * @param portfolio the portfolio to resolve, not null
    * @param executorService the threading service, not null
    * @param securitySource the security source, not null

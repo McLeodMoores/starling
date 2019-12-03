@@ -6,53 +6,55 @@
 package com.opengamma.financial.analytics.ircurve;
 
 /**
- * Temporary enum until we replace these with proper securities
+ * Temporary enum until we replace these with proper securities.
+ *
+ * @deprecated {@link FixedIncomeStrip}s are deprecated.
  */
 public enum StripInstrumentType {
-  /** Libor rate */
+  /** Libor rate. */
   LIBOR,
-  /** Cash rate */
+  /** Cash rate. */
   CASH,
-  /** Forward-rate agreement */
+  /** Forward-rate agreement. */
   FRA,
-  /** Interest-rate future */
+  /** Interest-rate future. */
   FUTURE,
-  /** Bankers acceptance */
+  /** Bankers acceptance. */
   BANKERS_ACCEPTANCE,
-  /** Swap rate */
+  /** Swap rate. */
   SWAP,
-  /** Tenor swap */
+  /** Tenor swap. */
   TENOR_SWAP,
-  /** Basis swap */
+  /** Basis swap. */
   BASIS_SWAP,
-  /** OIS swap */
+  /** OIS swap. */
   OIS_SWAP,
-  /** Euribor rate */
+  /** Euribor rate. */
   EURIBOR,
-  /** FRA (3m floating tenor) */
+  /** FRA (3m floating tenor). */
   FRA_3M,
-  /** FRA (6m floating tenor) */
+  /** FRA (6m floating tenor). */
   FRA_6M,
-  /** Fixed / float swap (3m floating leg reset tenor) */
+  /** Fixed / float swap (3m floating leg reset tenor). */
   SWAP_3M,
-  /** Fixed / float swap (6m floating leg reset tenor) */
+  /** Fixed / float swap (6m floating leg reset tenor). */
   SWAP_6M,
-  /** Fixed / float swap (12m floating leg reset tenor) */
+  /** Fixed / float swap (12m floating leg reset tenor). */
   SWAP_12M,
-  /** CDOR */
+  /** CDOR. */
   CDOR,
-  /** Cibor */
+  /** Cibor. */
   CIBOR,
-  /** Stibor */
+  /** Stibor. */
   STIBOR,
-  /** Simple zero deposit strip */
+  /** Simple zero deposit strip. */
   SIMPLE_ZERO_DEPOSIT,
-  /** Periodic zero deposit strip */
+  /** Periodic zero deposit strip. */
   PERIODIC_ZERO_DEPOSIT,
-  /** Continuous zero deposit strip */
+  /** Continuous zero deposit strip. */
   CONTINUOUS_ZERO_DEPOSIT,
-  /** Spread strip */
+  /** Spread strip. */
   SPREAD,
-  /** Fixed / float swap (28 day floating leg reset tenor) */
+  /** Fixed / float swap (28 day floating leg reset tenor). */
   SWAP_28D
 }

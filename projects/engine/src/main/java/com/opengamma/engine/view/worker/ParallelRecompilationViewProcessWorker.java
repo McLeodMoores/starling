@@ -33,14 +33,14 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Implementation of {@link ViewProcessWorker} that rolls work between two delegate workers to allow the secondary one to recompile a view while the first is still calculating values from the old
- * compilation.
+ * Implementation of {@link ViewProcessWorker} that rolls work between two delegate workers to allow the secondary one to recompile a view
+ * while the first is still calculating values from the old compilation.
  */
 public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ParallelRecompilationViewProcessWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParallelRecompilationViewProcessWorker.class);
 
-  private static enum WorkerAction {
+  private enum WorkerAction {
 
     TERMINATE,
 
@@ -50,7 +50,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
 
     BLOCK
 
-  };
+  }
 
   /**
    * Base class of the context used by the delegate workers.
@@ -98,66 +98,67 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
 
     /**
      * Called on a secondary context to indicate a primary is about to start a cycle.
-     * 
+     *
      * @return {@code TERMINATE} to terminate the primary (must unblock this one), or {@code PROCEED} to allow the primary to continue (and start calculating)
      */
     protected abstract WorkerAction primaryCycleStarted();
 
     /**
      * Called on a primary context to indicate a secondary is about to start a cycle.
-     * 
-     * @return {@code PROCEED} to allow the secondary to continue (may terminate this one), {@code IGNORE} to discard/defer the notification, or {@code BLOCK} to block the secondary
+     *
+     * @return {@code PROCEED} to allow the secondary to continue (may terminate this one), {@code IGNORE} to discard/defer the notification,
+     * or {@code BLOCK} to block the secondary
      */
     protected abstract WorkerAction secondaryCycleStarted();
 
     /**
      * Called on a secondary context to indicate a primary has completed a fragment.
-     * 
+     *
      * @return {@code TERMINATE} to terminate the primary (must unblock this one), or {@code PROCEED} to allow the primary to continue (and post its result)
      */
     protected abstract WorkerAction primaryCycleFragmentCompleted();
 
     /**
      * Called on a secondary context to indicate a primary has completed a cycle.
-     * 
+     *
      * @return {@code TERMINATE} to terminate the primary (must unblock this one), or {@code PROCEED} to allow the primary to continue (and post its result)
      */
     protected abstract WorkerAction primaryCycleCompleted();
 
     protected synchronized WorkerAction block() {
-      s_logger.debug("Blocking worker {}", this);
+      LOGGER.debug("Blocking worker {}", this);
       WorkerAction action = _action;
       while (action == null) {
         try {
           wait();
           action = _action;
-        } catch (InterruptedException e) {
-          s_logger.debug("Interrupted", e);
+        } catch (final InterruptedException e) {
+          LOGGER.debug("Interrupted", e);
           action = WorkerAction.TERMINATE;
         }
       }
       _action = null;
-      s_logger.debug("Unblocked {} with action {}", this, action);
+      LOGGER.debug("Unblocked {} with action {}", this, action);
       return action;
     }
 
     protected synchronized void unblock(final WorkerAction action) {
-      s_logger.debug("Unblocking worker {} with {}", this, action);
+      LOGGER.debug("Unblocking worker {} with {}", this, action);
       _action = action;
       notifyAll();
     }
 
     protected void terminate() {
-      s_logger.debug("Terminating delegate");
+      LOGGER.debug("Terminating delegate");
       if (!ParallelRecompilationViewProcessWorker.this.terminate(this)) {
-        s_logger.debug("Worker for {} already terminated", this);
+        LOGGER.debug("Worker for {} already terminated", this);
       }
     }
 
     protected void deferredActions() {
       if (_deferredCompilation != null) {
         try {
-          s_logger.debug("Notifying context of deferred compilation by {}", this);
+          LOGGER.debug("Notifying context of deferred compilation by {}", this);
           getContext().viewDefinitionCompiled(_deferredCompilation, _lastCompiled);
         } finally {
           _deferredCompilation = null;
@@ -165,7 +166,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       }
       if (_deferredCycleStarted != null) {
         try {
-          s_logger.debug("Notifying context of deferred cycle start by {}", this);
+          LOGGER.debug("Notifying context of deferred cycle start by {}", this);
           getContext().cycleStarted(_deferredCycleStarted);
         } finally {
           _deferredCycleStarted = null;
@@ -173,25 +174,25 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       }
     }
 
-    protected void notifyCycleStarted(ViewCycleMetadata cycleMetadata) {
+    protected void notifyCycleStarted(final ViewCycleMetadata cycleMetadata) {
       deferredActions();
-      s_logger.debug("Notifying context of cycle started by {}", this);
+      LOGGER.debug("Notifying context of cycle started by {}", this);
       getContext().cycleStarted(cycleMetadata);
     }
 
-    protected void notifyCycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+    protected void notifyCycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
       deferredActions();
-      s_logger.debug("Notifying context of cycle fragment completed by {}", this);
+      LOGGER.debug("Notifying context of cycle fragment completed by {}", this);
       getContext().cycleFragmentCompleted(result, viewDefinition);
     }
 
-    protected void notifyCycleCompleted(ViewCycle cycle) {
-      s_logger.debug("Notifying context of cycle completed by {}", this);
+    protected void notifyCycleCompleted(final ViewCycle cycle) {
+      LOGGER.debug("Notifying context of cycle completed by {}", this);
       getContext().cycleCompleted(cycle);
     }
 
-    protected void notifyCycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
-      s_logger.debug("Notifying context of cycle execution failed by {}", this);
+    protected void notifyCycleExecutionFailed(final ViewCycleExecutionOptions options, final Exception exception) {
+      LOGGER.debug("Notifying context of cycle execution failed by {}", this);
       getContext().cycleExecutionFailed(options, exception);
     }
 
@@ -203,7 +204,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void viewDefinitionCompiled(ViewExecutionDataProvider dataProvider, CompiledViewDefinitionWithGraphs compiled) {
+    public final void viewDefinitionCompiled(final ViewExecutionDataProvider dataProvider, final CompiledViewDefinitionWithGraphs compiled) {
       if (ParallelRecompilationViewProcessWorker.this.viewDefinitionCompiled(this, compiled)) {
         _deferredCompilation = dataProvider;
       } else {
@@ -212,8 +213,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void viewDefinitionCompilationFailed(Instant compilationTime, Exception exception) {
-      s_logger.info("View definition compilation failure");
+    public final void viewDefinitionCompilationFailed(final Instant compilationTime, final Exception exception) {
+      LOGGER.info("View definition compilation failure");
       try {
         getContext().viewDefinitionCompilationFailed(compilationTime, exception);
       } finally {
@@ -222,7 +223,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void cycleStarted(ViewCycleMetadata cycleMetadata) {
+    public final void cycleStarted(final ViewCycleMetadata cycleMetadata) {
       WorkerAction action = ParallelRecompilationViewProcessWorker.this.cycleStarted(this);
       while (action == WorkerAction.BLOCK) {
         action = block();
@@ -239,7 +240,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void cycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+    public final void cycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
       WorkerAction action = ParallelRecompilationViewProcessWorker.this.cycleFragmentCompleted(this);
       while (action == WorkerAction.BLOCK) {
         action = block();
@@ -254,7 +255,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void cycleCompleted(ViewCycle cycle) {
+    public final void cycleCompleted(final ViewCycle cycle) {
       WorkerAction action = ParallelRecompilationViewProcessWorker.this.cycleCompleted(this);
       while (action == WorkerAction.BLOCK) {
         action = block();
@@ -268,7 +269,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    public final void cycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
+    public final void cycleExecutionFailed(final ViewCycleExecutionOptions options, final Exception exception) {
       WorkerAction action = ParallelRecompilationViewProcessWorker.this.cycleExecutionFailed(this);
       while (action == WorkerAction.BLOCK) {
         action = block();
@@ -320,13 +321,13 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     }
 
     @Override
-    protected void notifyCycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+    protected void notifyCycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
       _resultsAvailable = true;
       super.notifyCycleFragmentCompleted(result, viewDefinition);
     }
 
     @Override
-    protected void notifyCycleCompleted(ViewCycle cycle) {
+    protected void notifyCycleCompleted(final ViewCycle cycle) {
       _resultsAvailable = true;
       super.notifyCycleCompleted(cycle);
     }
@@ -336,9 +337,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       // Allow primary to continue until we've got a result
       if (_resultsAvailable) {
         return WorkerAction.TERMINATE;
-      } else {
-        return WorkerAction.PROCEED;
       }
+      return WorkerAction.PROCEED;
     }
 
     @Override
@@ -352,9 +352,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       // Allow primary to continue until we've got a result
       if (_resultsAvailable) {
         return WorkerAction.TERMINATE;
-      } else {
-        return WorkerAction.PROCEED;
       }
+      return WorkerAction.PROCEED;
     }
 
     @Override
@@ -362,9 +361,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       // Allow primary to continue until we've got a result
       if (_resultsAvailable) {
         return WorkerAction.TERMINATE;
-      } else {
-        return WorkerAction.PROCEED;
       }
+      return WorkerAction.PROCEED;
     }
 
     // Object
@@ -398,10 +396,9 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
         // Terminate the primary worker, and unblock this one
         unblock(WorkerAction.PROCEED);
         return WorkerAction.TERMINATE;
-      } else {
-        // Allow the primary to continue until we've compiled ourselves
-        return WorkerAction.PROCEED;
       }
+      // Allow the primary to continue until we've compiled ourselves
+      return WorkerAction.PROCEED;
     }
 
     @Override
@@ -456,10 +453,9 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       if (isCompiled()) {
         // Terminate the primary worker
         return WorkerAction.TERMINATE;
-      } else {
-        // Allow the primary to continue until we've compiled ourselves
-        return WorkerAction.PROCEED;
       }
+      // Allow the primary to continue until we've compiled ourselves
+      return WorkerAction.PROCEED;
     }
 
     @Override
@@ -473,9 +469,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       if (isCompiled()) {
         // Terminate the primary worker
         return WorkerAction.TERMINATE;
-      } else {
-        return WorkerAction.PROCEED;
       }
+      return WorkerAction.PROCEED;
     }
 
     @Override
@@ -483,9 +478,8 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       if (isCompiled()) {
         // Terminate the primary worker
         return WorkerAction.TERMINATE;
-      } else {
-        return WorkerAction.PROCEED;
       }
+      return WorkerAction.PROCEED;
     }
 
     // Object
@@ -512,14 +506,14 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
 
   /**
    * Creates a new worker. The worker will not do anything; the caller must spawn a primary delegate.
-   * 
+   *
    * @param delegate the factory for spawning delegate workers, not null
    * @param context the context controlling this worker, not null
    * @param options the options for this worker (and its spawned workers), not null
    * @param viewDefinition the initial view definition, not null
    */
-  public ParallelRecompilationViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context, final ViewExecutionOptions options,
-      final ViewDefinition viewDefinition) {
+  public ParallelRecompilationViewProcessWorker(final ViewProcessWorkerFactory delegate, final ViewProcessWorkerContext context,
+      final ViewExecutionOptions options, final ViewDefinition viewDefinition) {
     ArgumentChecker.notNull(delegate, "delegate");
     ArgumentChecker.notNull(context, "context");
     ArgumentChecker.notNull(options, "options");
@@ -593,7 +587,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   }
 
   private void setPrimary(final AbstractViewProcessWorkerContext primary) {
-    if (_terminated || (_primary != null)) {
+    if (_terminated || _primary != null) {
       throw new IllegalStateException();
     }
     _primary = primary;
@@ -601,24 +595,24 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
 
   // caller must hold the monitor
   /* package */void startSecondaryWorker(final AbstractViewProcessWorkerContext primary, final ViewCycleExecutionSequence tailSequence) {
-    s_logger.info("Starting secondary worker");
+    LOGGER.info("Starting secondary worker");
     _secondary = primary.createSecondaryWorker(tailSequence);
   }
 
   /* package */void promoteSecondaryWorker() {
-    s_logger.info("Promoting secondary worker");
+    LOGGER.info("Promoting secondary worker");
     _primary = _secondary;
     _secondary = null;
   }
 
   // caller must hold the monitor
-  protected void checkForRecompilation(final AbstractViewProcessWorkerContext primary, CompiledViewDefinitionWithGraphs compiled) {
-    final ViewCycleExecutionSequence tailSequence = (getSecondary() == null) ? primary.getSequence().copy() : null;
+  protected void checkForRecompilation(final AbstractViewProcessWorkerContext primary, final CompiledViewDefinitionWithGraphs compiled) {
+    final ViewCycleExecutionSequence tailSequence = getSecondary() == null ? primary.getSequence().copy() : null;
     final ViewCycleExecutionOptions nextCycle = primary.getSequence().poll(getDefaultExecutionOptions());
     if (nextCycle != null) {
       final VersionCorrection vc = nextCycle.getResolverVersionCorrection();
       boolean changes = false;
-      if ((vc == null) || VersionCorrection.LATEST.equals(vc)) {
+      if (vc == null || VersionCorrection.LATEST.equals(vc)) {
         if (_resolverChanges == null) {
           _resolverChanges = new TargetResolverChangeListener() {
             @Override
@@ -626,7 +620,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
               // Something has changed; request a cycle on the primary and that may then do the necessary
               ViewProcessWorker worker = null;
               synchronized (this) {
-                if (!_terminated && (getPrimary() != null)) {
+                if (!_terminated && getPrimary() != null) {
                   worker = getPrimary()._worker;
                 }
               }
@@ -635,11 +629,12 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
               }
             }
           };
-          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().addChangeListener(_resolverChanges);
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+          .getRawComputationTargetResolver().changeManager().addChangeListener(_resolverChanges);
         }
         final Collection<UniqueId> uids = compiled.getResolvedIdentifiers().values();
         final Set<ObjectId> oids = Sets.newHashSetWithExpectedSize(uids.size());
-        for (UniqueId uid : uids) {
+        for (final UniqueId uid : uids) {
           final ObjectId oid = uid.getObjectId();
           if (tailSequence != null) {
             changes |= _resolverChanges.isChanged(oid);
@@ -649,16 +644,17 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
         _resolverChanges.watchOnly(oids);
       } else {
         if (_resolverChanges != null) {
-          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+          .getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
           _resolverChanges = null;
         }
       }
       if (tailSequence == null) {
         // Already got a secondary worker; just went this far to update any change listeners
-        s_logger.debug("Secondary worker already active");
+        LOGGER.debug("Secondary worker already active");
         return;
       }
-      if ((_resolverChanges == null) || changes) {
+      if (_resolverChanges == null || changes) {
         startSecondaryWorker(primary, tailSequence);
       }
     }
@@ -667,26 +663,25 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   protected synchronized boolean viewDefinitionCompiled(final AbstractViewProcessWorkerContext context, final CompiledViewDefinitionWithGraphs compiled) {
     if (!_terminated) {
       if (getPrimary() == context) {
-        s_logger.info("View definition compiled by primary worker");
+        LOGGER.info("View definition compiled by primary worker");
         getPrimary().setCompiled(compiled);
         checkForRecompilation(context, compiled);
         return true;
       }
       if (getSecondary() == context) {
-        s_logger.info("View definition compiled by secondary worker");
-        CompiledViewDefinitionWithGraphs primaryCompile = getPrimary()._lastCompiled;
+        LOGGER.info("View definition compiled by secondary worker");
+        final CompiledViewDefinitionWithGraphs primaryCompile = getPrimary()._lastCompiled;
         final Map<ComputationTargetReference, UniqueId> primaryResolutions = primaryCompile.getResolvedIdentifiers();
         final Map<ComputationTargetReference, UniqueId> secondaryResolutions = compiled.getResolvedIdentifiers();
         if (primaryResolutions.equals(secondaryResolutions)) {
           // Nothing has changed, the primary is still valid
-          s_logger.debug("Rejecting compilation from secondary worker");
+          LOGGER.debug("Rejecting compilation from secondary worker");
           _secondary = null;
           return false;
-        } else {
-          s_logger.debug("Secondary compilation valid");
-          getSecondary().setCompiled(compiled);
-          return true;
         }
+        LOGGER.debug("Secondary compilation valid");
+        getSecondary().setCompiled(compiled);
+        return true;
       }
     }
     return false;
@@ -695,7 +690,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   protected synchronized WorkerAction cycleStarted(final AbstractViewProcessWorkerContext context) {
     if (!_terminated) {
       if (getPrimary() == context) {
-        s_logger.info("Cycle started from primary worker");
+        LOGGER.info("Cycle started from primary worker");
         checkForRecompilation(context, context._lastCompiled);
         if (getSecondary() != null) {
           final WorkerAction action = getSecondary().primaryCycleStarted();
@@ -703,15 +698,14 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
             promoteSecondaryWorker();
           }
           return action;
-        } else {
-          return WorkerAction.PROCEED;
         }
+        return WorkerAction.PROCEED;
       }
       if (getSecondary() == context) {
-        s_logger.info("Cycle started from secondary worker");
+        LOGGER.info("Cycle started from secondary worker");
         final WorkerAction action = getPrimary().secondaryCycleStarted();
         if (action == WorkerAction.TERMINATE) {
-          s_logger.info("Terminating secondary worker");
+          LOGGER.info("Terminating secondary worker");
           _secondary = null;
         }
         return action;
@@ -723,19 +717,18 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   protected synchronized WorkerAction cycleFragmentCompleted(final AbstractViewProcessWorkerContext context) {
     if (!_terminated) {
       if (getPrimary() == context) {
-        s_logger.debug("Cycle fragment completed from primary worker");
+        LOGGER.debug("Cycle fragment completed from primary worker");
         if (getSecondary() != null) {
-          WorkerAction action = getSecondary().primaryCycleFragmentCompleted();
+          final WorkerAction action = getSecondary().primaryCycleFragmentCompleted();
           if (action == WorkerAction.TERMINATE) {
             promoteSecondaryWorker();
           }
           return action;
-        } else {
-          return WorkerAction.PROCEED;
         }
+        return WorkerAction.PROCEED;
       }
       if (getSecondary() == context) {
-        s_logger.debug("Cycle fragment completed from secondary worker");
+        LOGGER.debug("Cycle fragment completed from secondary worker");
         return WorkerAction.PROCEED;
       }
     }
@@ -745,19 +738,18 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   protected synchronized WorkerAction cycleCompleted(final AbstractViewProcessWorkerContext context) {
     if (!_terminated) {
       if (getPrimary() == context) {
-        s_logger.info("Cycle completed from primary worker");
+        LOGGER.info("Cycle completed from primary worker");
         if (getSecondary() != null) {
-          WorkerAction action = getSecondary().primaryCycleCompleted();
+          final WorkerAction action = getSecondary().primaryCycleCompleted();
           if (action == WorkerAction.TERMINATE) {
             promoteSecondaryWorker();
           }
           return action;
-        } else {
-          return WorkerAction.PROCEED;
         }
+        return WorkerAction.PROCEED;
       }
       if (getSecondary() == context) {
-        s_logger.info("Cycle completed from secondary worker");
+        LOGGER.info("Cycle completed from secondary worker");
         return WorkerAction.PROCEED;
       }
     }
@@ -767,17 +759,16 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
   protected synchronized WorkerAction cycleExecutionFailed(final AbstractViewProcessWorkerContext context) {
     if (!_terminated) {
       if (getPrimary() == context) {
-        s_logger.info("Cycle execution failed from primary worker");
+        LOGGER.info("Cycle execution failed from primary worker");
         if (getSecondary() != null) {
           promoteSecondaryWorker();
           return WorkerAction.TERMINATE;
-        } else {
-          return WorkerAction.PROCEED;
         }
+        return WorkerAction.PROCEED;
       }
       if (getSecondary() == context) {
-        s_logger.info("Cycle execution failed from secondary worker");
-        s_logger.info("Terminating secondary worker");
+        LOGGER.info("Cycle execution failed from secondary worker");
+        LOGGER.info("Terminating secondary worker");
         _secondary = null;
         return WorkerAction.TERMINATE;
       }
@@ -787,7 +778,7 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
 
   protected boolean workerCompleted(final AbstractViewProcessWorkerContext context) {
     if (!terminate(context)) {
-      s_logger.info("Worker for {} already terminated", context);
+      LOGGER.info("Worker for {} already terminated", context);
       return false;
     }
     synchronized (this) {
@@ -797,22 +788,22 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
           promoteSecondaryWorker();
           secondary.unblock(WorkerAction.PROCEED);
           return false;
-        } else {
-          s_logger.info("Primary worker completed - no secondary worker");
-          _primary = null;
-          if (_resolverChanges != null) {
-            getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext().getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
-            _resolverChanges = null;
-          }
-          return true;
         }
+        LOGGER.info("Primary worker completed - no secondary worker");
+        _primary = null;
+        if (_resolverChanges != null) {
+          getContext().getProcessContext().getFunctionCompilationService().getFunctionCompilationContext()
+          .getRawComputationTargetResolver().changeManager().removeChangeListener(_resolverChanges);
+          _resolverChanges = null;
+        }
+        return true;
       } else if (getSecondary() == context) {
         assert getPrimary() != null;
-        s_logger.info("Secondary worker completed");
+        LOGGER.info("Secondary worker completed");
         _secondary = null;
         return false;
       } else {
-        // E.g. a late or incorrect notification from a worker 
+        // E.g. a late or incorrect notification from a worker
         throw new IllegalStateException();
       }
     }
@@ -838,28 +829,26 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     do {
       ViewProcessWorker primary = null;
       synchronized (this) {
-        if (!_terminated && (getPrimary() != null)) {
+        if (!_terminated && getPrimary() != null) {
           primary = getPrimary()._worker;
         }
       }
       if (primary != null) {
-        s_logger.debug("Triggering cycle on primary worker {}", primary);
+        LOGGER.debug("Triggering cycle on primary worker {}", primary);
         if (primary.triggerCycle()) {
           return true;
-        } else {
-          synchronized (this) {
-            if (!_terminated && (getPrimary() != null) && (primary == getPrimary()._worker)) {
-              s_logger.debug("Primary worker unable to handle request");
-              return false;
-            }
-          }
-          s_logger.debug("Primary worker has terminated; repeating request");
-          continue;
         }
-      } else {
-        s_logger.debug("Ignoring triggerCycle on terminated worker");
-        return false;
+        synchronized (this) {
+          if (!_terminated && getPrimary() != null && primary == getPrimary()._worker) {
+            LOGGER.debug("Primary worker unable to handle request");
+            return false;
+          }
+        }
+        LOGGER.debug("Primary worker has terminated; repeating request");
+        continue;
       }
+      LOGGER.debug("Ignoring triggerCycle on terminated worker");
+      return false;
     } while (true);
   }
 
@@ -868,34 +857,32 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     do {
       ViewProcessWorker primary = null;
       synchronized (this) {
-        if (!_terminated && (getPrimary() != null)) {
+        if (!_terminated && getPrimary() != null) {
           primary = getPrimary()._worker;
         }
       }
       if (primary != null) {
-        s_logger.debug("Requesting cycle from primary worker {}", primary);
+        LOGGER.debug("Requesting cycle from primary worker {}", primary);
         if (primary.requestCycle()) {
           return true;
-        } else {
-          synchronized (this) {
-            if (!_terminated && (getPrimary() != null) && (primary == getPrimary()._worker)) {
-              s_logger.debug("Primary worker unable to handle request");
-              return false;
-            }
-          }
-          s_logger.debug("Primary worker has terminated; repeating request");
-          continue;
         }
-      } else {
-        s_logger.debug("Ignoring requestCycle on terminated worker");
-        return false;
+        synchronized (this) {
+          if (!_terminated && getPrimary() != null && primary == getPrimary()._worker) {
+            LOGGER.debug("Primary worker unable to handle request");
+            return false;
+          }
+        }
+        LOGGER.debug("Primary worker has terminated; repeating request");
+        continue;
       }
+      LOGGER.debug("Ignoring requestCycle on terminated worker");
+      return false;
     } while (true);
   }
 
   @Override
-  public void updateViewDefinition(ViewDefinition viewDefinition) {
-    s_logger.info("Updating view definition");
+  public void updateViewDefinition(final ViewDefinition viewDefinition) {
+    LOGGER.info("Updating view definition");
     ViewProcessWorker worker = null;
     synchronized (this) {
       _viewDefinition = viewDefinition;
@@ -907,37 +894,37 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
       }
     }
     if (worker != null) {
-      s_logger.info("Terminating previous secondary worker {}", worker);
+      LOGGER.info("Terminating previous secondary worker {}", worker);
       worker.terminate();
     }
   }
 
   @Override
   public void terminate() {
-    s_logger.info("Terminating worker(s)");
+    LOGGER.info("Terminating worker(s)");
     ViewProcessWorker primary, secondary;
     synchronized (this) {
       if (_terminated) {
-        s_logger.warn("Already terminated");
+        LOGGER.warn("Already terminated");
         return;
       }
-      primary = (getPrimary() != null) ? getPrimary()._worker : null;
-      secondary = (getSecondary() != null) ? getSecondary()._worker : null;
+      primary = getPrimary() != null ? getPrimary()._worker : null;
+      secondary = getSecondary() != null ? getSecondary()._worker : null;
       _terminated = true;
     }
     if (primary != null) {
-      s_logger.debug("Terminating primary worker {}", primary);
+      LOGGER.debug("Terminating primary worker {}", primary);
       primary.terminate();
     }
     if (secondary != null) {
-      s_logger.debug("Terminating secondary worker {}", secondary);
+      LOGGER.debug("Terminating secondary worker {}", secondary);
       secondary.terminate();
     }
   }
 
   @Override
   public void join() throws InterruptedException {
-    s_logger.info("Joining worker(s)");
+    LOGGER.info("Joining worker(s)");
     do {
       ViewProcessWorker primary;
       synchronized (this) {
@@ -946,31 +933,30 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
         }
         primary = getPrimary()._worker;
       }
-      s_logger.debug("Joining primary worker {}", primary);
+      LOGGER.debug("Joining primary worker {}", primary);
       primary.join();
       synchronized (this) {
         if (getPrimary() == null) {
           break;
-        } else {
-          if (getPrimary()._worker == primary) {
-            if (getSecondary() != null) {
-              promoteSecondaryWorker();
-            } else {
-              _primary = null;
-              break;
-            }
+        }
+        if (getPrimary()._worker == primary) {
+          if (getSecondary() != null) {
+            promoteSecondaryWorker();
           } else {
-            s_logger.debug("Primary worker {} changed to {} during wait", primary, getPrimary());
+            _primary = null;
+            break;
           }
+        } else {
+          LOGGER.debug("Primary worker {} changed to {} during wait", primary, getPrimary());
         }
       }
     } while (true);
-    s_logger.debug("Primary worker joined");
+    LOGGER.debug("Primary worker joined");
   }
 
   @Override
   public boolean join(final long timeout) throws InterruptedException {
-    s_logger.info("Joining worker(s)");
+    LOGGER.info("Joining worker(s)");
     final long waitUntil = System.currentTimeMillis() + timeout;
     do {
       ViewProcessWorker primary;
@@ -980,35 +966,34 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
         }
         primary = getPrimary()._worker;
       }
-      s_logger.debug("Joining primary worker {}", primary);
+      LOGGER.debug("Joining primary worker {}", primary);
       final long waitDuration = waitUntil - System.currentTimeMillis();
       if (waitDuration > 0) {
-        s_logger.debug("Waiting for {}ms for primary worker {}", waitDuration, primary);
+        LOGGER.debug("Waiting for {}ms for primary worker {}", waitDuration, primary);
         if (!primary.join(waitDuration)) {
           return false;
         }
       } else {
-        s_logger.debug("Timeout elapsed joining {}", primary);
+        LOGGER.debug("Timeout elapsed joining {}", primary);
         return false;
       }
       synchronized (this) {
         if (getPrimary() == null) {
           break;
-        } else {
-          if (getPrimary()._worker == primary) {
-            if (getSecondary() != null) {
-              promoteSecondaryWorker();
-            } else {
-              _primary = null;
-              break;
-            }
+        }
+        if (getPrimary()._worker == primary) {
+          if (getSecondary() != null) {
+            promoteSecondaryWorker();
           } else {
-            s_logger.debug("Primary worker {} changed to {} during wait", primary, getPrimary());
+            _primary = null;
+            break;
           }
+        } else {
+          LOGGER.debug("Primary worker {} changed to {} during wait", primary, getPrimary());
         }
       }
     } while (true);
-    s_logger.debug("Primary worker joined");
+    LOGGER.debug("Primary worker joined");
     return true;
   }
 
@@ -1023,11 +1008,11 @@ public class ParallelRecompilationViewProcessWorker implements ViewProcessWorker
     ViewProcessWorker secondary;
     synchronized (this) {
       if (_terminated) {
-        s_logger.warn("Already terminated");
+        LOGGER.warn("Already terminated");
         return;
       }
-      primary = (getPrimary() != null) ? getPrimary()._worker : null;
-      secondary = (getSecondary() != null) ? getSecondary()._worker : null;
+      primary = getPrimary() != null ? getPrimary()._worker : null;
+      secondary = getSecondary() != null ? getSecondary()._worker : null;
       _terminated = true;
     }
     if (primary != null) {

@@ -56,20 +56,20 @@ public class HistoricalShockMarketDataProviderTest {
 
   @Test
   public void permissionProvider() {
-    MarketDataProvider historicalProvider1 = mock(MarketDataProvider.class);
-    MarketDataProvider historicalProvider2 = mock(MarketDataProvider.class);
-    MarketDataProvider baseProvider = mock(MarketDataProvider.class);
-    MarketDataPermissionProvider pp1 = mock(MarketDataPermissionProvider.class);
-    MarketDataPermissionProvider pp2 = mock(MarketDataPermissionProvider.class);
-    MarketDataPermissionProvider pp3 = mock(MarketDataPermissionProvider.class);
+    final MarketDataProvider historicalProvider1 = mock(MarketDataProvider.class);
+    final MarketDataProvider historicalProvider2 = mock(MarketDataProvider.class);
+    final MarketDataProvider baseProvider = mock(MarketDataProvider.class);
+    final MarketDataPermissionProvider pp1 = mock(MarketDataPermissionProvider.class);
+    final MarketDataPermissionProvider pp2 = mock(MarketDataPermissionProvider.class);
+    final MarketDataPermissionProvider pp3 = mock(MarketDataPermissionProvider.class);
     when(historicalProvider1.getPermissionProvider()).thenReturn(pp1);
     when(historicalProvider2.getPermissionProvider()).thenReturn(pp2);
     when(baseProvider.getPermissionProvider()).thenReturn(pp3);
-    Set<ValueSpecification> specs = ImmutableSet.of(SPEC1, SPEC2, SPEC3, SPEC4);
+    final Set<ValueSpecification> specs = ImmutableSet.of(SPEC1, SPEC2, SPEC3, SPEC4);
     when(pp1.checkMarketDataPermissions(UserPrincipal.getTestUser(), specs)).thenReturn(Collections.singleton(SPEC1));
     when(pp2.checkMarketDataPermissions(UserPrincipal.getTestUser(), specs)).thenReturn(Collections.singleton(SPEC2));
     when(pp3.checkMarketDataPermissions(UserPrincipal.getTestUser(), specs)).thenReturn(Collections.singleton(SPEC3));
-    HistoricalShockMarketDataProvider provider =
+    final HistoricalShockMarketDataProvider provider =
         new HistoricalShockMarketDataProvider(historicalProvider1, historicalProvider2, baseProvider);
     assertEquals(ImmutableSet.of(SPEC1, SPEC2, SPEC3),
                  provider.getPermissionProvider().checkMarketDataPermissions(UserPrincipal.getTestUser(), specs));
@@ -77,11 +77,11 @@ public class HistoricalShockMarketDataProviderTest {
 
   @Test
   public void subscribe() {
-    Provider provider1 = new Provider();
-    Provider provider2 = new Provider();
-    Provider baseProvider = new Provider();
-    HistoricalShockMarketDataProvider shockProvider = new HistoricalShockMarketDataProvider(provider1, provider2, baseProvider);
-    MarketDataListener listener = mock(MarketDataListener.class);
+    final Provider provider1 = new Provider();
+    final Provider provider2 = new Provider();
+    final Provider baseProvider = new Provider();
+    final HistoricalShockMarketDataProvider shockProvider = new HistoricalShockMarketDataProvider(provider1, provider2, baseProvider);
+    final MarketDataListener listener = mock(MarketDataListener.class);
     shockProvider.addListener(listener);
     provider1.valueChanged(SPEC1);
     verify(listener).valuesChanged(Collections.singleton(SPEC1));
@@ -96,24 +96,24 @@ public class HistoricalShockMarketDataProviderTest {
     verifyNoMoreInteractions(listener);
   }
 
-  private static class Provider extends AbstractHistoricalMarketDataProvider {
+  private static final class Provider extends AbstractHistoricalMarketDataProvider {
 
     private Provider() {
       super(mock(HistoricalTimeSeriesSource.class), mock(HistoricalTimeSeriesResolver.class));
     }
 
     @Override
-    protected LocalDate getHistoricalResolutionDate(MarketDataSpecification marketDataSpec) {
+    protected LocalDate getHistoricalResolutionDate(final MarketDataSpecification marketDataSpec) {
       throw new UnsupportedOperationException("getHistoricalResolutionDate not implemented");
     }
 
     @Override
-    public MarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
+    public MarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
       throw new UnsupportedOperationException("snapshot not implemented");
     }
 
     @Override
-    public void valueChanged(ValueSpecification specification) {
+    public void valueChanged(final ValueSpecification specification) {
       super.valueChanged(specification);
     }
   }

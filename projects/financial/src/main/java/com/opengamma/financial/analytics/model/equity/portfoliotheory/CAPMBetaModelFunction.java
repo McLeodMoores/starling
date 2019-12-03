@@ -19,6 +19,7 @@ import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalc
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
 import com.opengamma.analytics.math.statistics.descriptive.StatisticsCalculatorFactory;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -35,9 +36,6 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
@@ -45,9 +43,10 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.TimeSeriesIntersector;
 
 /**
- * 
+ *
  */
 public class CAPMBetaModelFunction extends AbstractFunction.NonCompiledInvoker {
+  private static final ExternalId MARKET_QUOTE_TICKER = ExternalSchemes.syntheticSecurityId("SPX");
 
   private final ComputationTargetType _targetType;
   private final String _resolutionKey;
@@ -81,7 +80,7 @@ public class CAPMBetaModelFunction extends AbstractFunction.NonCompiledInvoker {
     final TimeSeriesReturnCalculator returnCalculator = getReturnCalculator(constraints.getValues(ValuePropertyNames.RETURN_CALCULATOR));
     DoubleTimeSeries<?> marketReturn = returnCalculator.evaluate(marketTSObject.getTimeSeries());
     DoubleTimeSeries<?> assetReturn = assetPnL.divide(fairValue);
-    DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturn, marketReturn);
+    final DoubleTimeSeries<?>[] series = TimeSeriesIntersector.intersect(assetReturn, marketReturn);
     assetReturn = series[0];
     marketReturn = series[1];
     final CAPMBetaCalculator calculator = getBetaCalculator(constraints.getValues(ValuePropertyNames.COVARIANCE_CALCULATOR),
@@ -117,10 +116,10 @@ public class CAPMBetaModelFunction extends AbstractFunction.NonCompiledInvoker {
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName.iterator().next())
         .with(ValuePropertyNames.RETURN_CALCULATOR, returnCalculatorName.iterator().next()).get());
     final ValueRequirement fairValueRequirement = new ValueRequirement(ValueRequirementNames.FAIR_VALUE, target.toSpecification());
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM")); //TODO country-specific
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(MARKET_QUOTE_TICKER.toBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE,
+        _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
@@ -168,10 +167,10 @@ public class CAPMBetaModelFunction extends AbstractFunction.NonCompiledInvoker {
     if (varianceCalculatorNames == null || varianceCalculatorNames.isEmpty() || varianceCalculatorNames.size() != 1) {
       throw new OpenGammaRuntimeException("Missing or non-unique variance calculator name: " + varianceCalculatorNames);
     }
-    final DoubleTimeSeriesStatisticsCalculator covarianceCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(covarianceCalculatorNames.iterator().next()));
-    final DoubleTimeSeriesStatisticsCalculator varianceCalculator =
-        new DoubleTimeSeriesStatisticsCalculator(StatisticsCalculatorFactory.getCalculator(varianceCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator covarianceCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(covarianceCalculatorNames.iterator().next()));
+    final DoubleTimeSeriesStatisticsCalculator varianceCalculator = new DoubleTimeSeriesStatisticsCalculator(
+        StatisticsCalculatorFactory.getCalculator(varianceCalculatorNames.iterator().next()));
     return new CAPMBetaCalculator(covarianceCalculator, varianceCalculator);
   }
 }

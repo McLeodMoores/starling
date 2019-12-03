@@ -43,11 +43,12 @@ import com.opengamma.util.money.Currency;
 public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final StandardOptionDataBundle data = getDataBundle(executionContext.getValuationClock(), option, inputs);
     final OptionDefinition definition = getOptionDefinition(option);
-    final Set<Greek> requiredGreeks = new HashSet<Greek>();
+    final Set<Greek> requiredGreeks = new HashSet<>();
     for (final ValueRequirement dV : desiredValues) {
       final Greek desiredGreek = AvailableGreeks.getGreekForValueRequirement(dV);
       if (desiredGreek == null) {
@@ -56,18 +57,20 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
       requiredGreeks.add(desiredGreek);
     }
     final GreekResultCollection greeks = getModel().getGreeks(definition, data, requiredGreeks);
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     for (final ValueRequirement dV : desiredValues) {
       final Greek greek = AvailableGreeks.getGreekForValueRequirement(dV);
       assert greek != null : "Should have thrown IllegalArgumentException above.";
       final Double greekResult = greeks.get(greek);
-      final ComputedValue resultValue = new ComputedValue(getResultSpecification(dV.getValueName(), target, option, dV.getConstraint(ValuePropertyNames.CURVE)), greekResult);
+      final ComputedValue resultValue = new ComputedValue(getResultSpecification(dV.getValueName(), target, option, dV.getConstraint(ValuePropertyNames.CURVE)),
+          greekResult);
       results.add(resultValue);
     }
     return results;
   }
 
-  protected ValueSpecification getResultSpecification(final String valueName, final ComputationTarget target, final EquityOptionSecurity security, final String curveName) {
+  protected ValueSpecification getResultSpecification(final String valueName, final ComputationTarget target, final EquityOptionSecurity security,
+      final String curveName) {
     // REVIEW 2010-10-28 Andrew -- Do all values produced have a currency? Aren't the derivitive greeks unitless?
     final ValueProperties.Builder properties = createValueProperties().with(ValuePropertyNames.CURRENCY, security.getCurrency().getCode());
     if (curveName != null) {
@@ -81,7 +84,7 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final EquityOptionSecurity security = (EquityOptionSecurity) target.getSecurity();
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       results.add(getResultSpecification(valueName, target, security, null));
     }
@@ -94,16 +97,19 @@ public abstract class AnalyticOptionModelFunction extends AbstractFunction.NonCo
   }
 
   protected ValueRequirement getYieldCurveMarketDataRequirement(final Currency currency, final String curveName) {
-    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency), ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
+    return new ValueRequirement(ValueRequirementNames.YIELD_CURVE, ComputationTargetSpecification.of(currency),
+        ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
   }
 
   protected ValueRequirement getCostOfCarryMarketDataRequirement(final UniqueId uid, final String curveName) {
-    return new ValueRequirement(ValueRequirementNames.COST_OF_CARRY, ComputationTargetType.SECURITY, uid, ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
+    return new ValueRequirement(ValueRequirementNames.COST_OF_CARRY, ComputationTargetType.SECURITY, uid,
+        ValueProperties.with(ValuePropertyNames.CURVE, curveName).get());
   }
 
   protected ValueRequirement getVolatilitySurfaceMarketDataRequirement(final EquityOptionSecurity security, final String curveName) {
-    return new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE, ComputationTargetType.SECURITY, security.getUniqueId(), ValueProperties.with(ValuePropertyNames.CURRENCY,
-        security.getCurrency().getCode()).with(ValuePropertyNames.CURVE, curveName).get());
+    return new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE, ComputationTargetType.SECURITY, security.getUniqueId(),
+        ValueProperties.with(ValuePropertyNames.CURRENCY,
+            security.getCurrency().getCode()).with(ValuePropertyNames.CURVE, curveName).get());
   }
 
   protected abstract <S extends OptionDefinition, T extends StandardOptionDataBundle> AnalyticOptionModel<S, T> getModel();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -19,7 +19,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /** The index on which the fixing is done. */
   private final IborIndex _index;
-  /** The fixing times of the index. The times are in increasing order. Only the times not yet fixed are in the array.*/
+  /** The fixing times of the index. The times are in increasing order. Only the times not yet fixed are in the array. */
   private final double[] _fixingTime;
   /** The weights or quantity used for each fixing. The total weight is not necessarily 1. Same size as _fixingTime. */
   private final double[] _weight;
@@ -32,21 +32,34 @@ public class CouponIborAverageFixingDates extends Coupon {
   private final double _amountAccrued;
 
   /**
-   * Constructor from all details
-   * @param currency The payment currency
-   * @param paymentTime Time (in years) up to the payment
-   * @param paymentAccrualFactor Accrual factor for the coupon payment
-   * @param notional Coupon notional
-   * @param index Ibor-like index
-   * @param fixingTime  Time (in years) up to fixing
-   * @param weight The weights
-   * @param fixingPeriodStartTime The fixing period start time (in years) of the index
-   * @param fixingPeriodEndTime The fixing period end time (in years) of the index
-   * @param fixingPeriodAccrualFactor The accrual factor of the fixing periods
-   * @param amountAccrued The interest amount accrued over the periods already fixed multiplied by the weights, i.e. the sum (w_i r_i).
+   * Constructor from all details.
+   *
+   * @param currency
+   *          The payment currency
+   * @param paymentTime
+   *          Time (in years) up to the payment
+   * @param paymentAccrualFactor
+   *          Accrual factor for the coupon payment
+   * @param notional
+   *          Coupon notional
+   * @param index
+   *          Ibor-like index
+   * @param fixingTime
+   *          Time (in years) up to fixing
+   * @param weight
+   *          The weights
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years) of the index
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years) of the index
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factor of the fixing periods
+   * @param amountAccrued
+   *          The interest amount accrued over the periods already fixed multiplied by the weights, i.e. the sum (w_i r_i).
    */
-  public CouponIborAverageFixingDates(final Currency currency, final double paymentTime, final double paymentAccrualFactor, final double notional, final IborIndex index, final double[] fixingTime,
-      final double[] weight, final double[] fixingPeriodStartTime, final double[] fixingPeriodEndTime, final double[] fixingPeriodAccrualFactor, final double amountAccrued) {
+  public CouponIborAverageFixingDates(final Currency currency, final double paymentTime, final double paymentAccrualFactor, final double notional,
+      final IborIndex index, final double[] fixingTime, final double[] weight, final double[] fixingPeriodStartTime, final double[] fixingPeriodEndTime,
+      final double[] fixingPeriodAccrualFactor, final double amountAccrued) {
     super(currency, paymentTime, paymentAccrualFactor, notional);
     final int nDates = fixingTime.length;
     ArgumentChecker.isTrue(nDates == weight.length, "weight length different from fixingTime length");
@@ -76,13 +89,14 @@ public class CouponIborAverageFixingDates extends Coupon {
   }
 
   @Override
-  public CouponIborAverageFixingDates withNotional(double notional) {
-    return new CouponIborAverageFixingDates(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getIndex(), getFixingTime(), getWeight(), getFixingPeriodStartTime(),
-        getFixingPeriodEndTime(), getFixingPeriodAccrualFactor(), _amountAccrued);
+  public CouponIborAverageFixingDates withNotional(final double notional) {
+    return new CouponIborAverageFixingDates(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getIndex(), getFixingTime(), getWeight(),
+        getFixingPeriodStartTime(), getFixingPeriodEndTime(), getFixingPeriodAccrualFactor(), _amountAccrued);
   }
 
   /**
    * Gets the fixingTime.
+   *
    * @return the fixingTime
    */
   public double[] getFixingTime() {
@@ -91,6 +105,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Gets the index.
+   *
    * @return the index
    */
   public IborIndex getIndex() {
@@ -99,6 +114,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Gets the weight.
+   *
    * @return the weight
    */
   public double[] getWeight() {
@@ -107,6 +123,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Gets the fixingPeriodStartTime.
+   *
    * @return the fixingPeriodStartTime
    */
   public double[] getFixingPeriodStartTime() {
@@ -115,6 +132,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Gets the fixingPeriodEndTime.
+   *
    * @return the fixingPeriodEndTime
    */
   public double[] getFixingPeriodEndTime() {
@@ -123,6 +141,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Gets the fixingPeriodAccrualFactor.
+   *
    * @return the fixingPeriodAccrualFactor
    */
   public double[] getFixingPeriodAccrualFactor() {
@@ -131,6 +150,7 @@ public class CouponIborAverageFixingDates extends Coupon {
 
   /**
    * Returns the accrued amount for the period already fixed.
+   *
    * @return The amount accrued.
    */
   public double getAmountAccrued() {
@@ -143,18 +163,18 @@ public class CouponIborAverageFixingDates extends Coupon {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amountAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_fixingPeriodAccrualFactor);
     result = prime * result + Arrays.hashCode(_fixingPeriodEndTime);
     result = prime * result + Arrays.hashCode(_fixingPeriodStartTime);
     result = prime * result + Arrays.hashCode(_fixingTime);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_weight);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -164,7 +184,7 @@ public class CouponIborAverageFixingDates extends Coupon {
     if (!(obj instanceof CouponIborAverageFixingDates)) {
       return false;
     }
-    CouponIborAverageFixingDates other = (CouponIborAverageFixingDates) obj;
+    final CouponIborAverageFixingDates other = (CouponIborAverageFixingDates) obj;
     if (Double.doubleToLongBits(_amountAccrued) != Double.doubleToLongBits(other._amountAccrued)) {
       return false;
     }

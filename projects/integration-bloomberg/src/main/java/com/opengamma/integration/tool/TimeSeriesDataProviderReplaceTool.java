@@ -33,28 +33,29 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Replaces given timeseries data provider with a given one
+ * Replaces given timeseries data provider with a given one.
  */
 @Scriptable
 public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(TimeSeriesDataProviderReplaceTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TimeSeriesDataProviderReplaceTool.class);
 
   private static final String REPLACE_WITH_PROVIDER_OPTION = "replaceWith";
   private static final String FIND_PROVIDER_OPTION = "find";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(final String[] args) { //CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new TimeSeriesDataProviderReplaceTool().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final CommandLine commandLine = getCommandLine();
@@ -67,13 +68,14 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
     final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(htsMaster, htsProvider,
         new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
 
-    for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(htsMaster, getHistoricalSearchRequest(findProvider))) {
+    for (final HistoricalTimeSeriesInfoDocument infoDoc : HistoricalTimeSeriesInfoSearchIterator.iterable(htsMaster,
+        getHistoricalSearchRequest(findProvider))) {
       final ExternalIdBundle bundle = infoDoc.getInfo().getExternalIdBundle().toBundle();
       final ExternalId buid = bundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
       final ExternalId ticker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);
       final String dataField = infoDoc.getInfo().getDataField();
       if (buid != null) {
-        s_logger.info("replacing {} {}", buid, ticker);
+        LOGGER.info("replacing {} {}", buid, ticker);
         try {
           final LocalDateDoubleTimeSeries hts = htsProvider.getHistoricalTimeSeries(ExternalIdBundle.of(buid),
               BLOOMBERG_DATA_SOURCE_NAME, replaceWithProvider, dataField);
@@ -81,11 +83,11 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
             final Map<ExternalId, UniqueId> addedTS = loader.loadTimeSeries(Sets.newHashSet(buid), replaceWithProvider, dataField, null, null);
             if (addedTS.get(buid) != null) {
               htsMaster.remove(infoDoc.getUniqueId());
-              s_logger.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] {buid, ticker, findProvider, dataField});
+              LOGGER.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] { buid, ticker, findProvider, dataField });
             }
           }
         } catch (final Exception ex) {
-          s_logger.warn("Error trying to load TS for " + buid, ex);
+          LOGGER.warn("Error trying to load TS for " + buid, ex);
         }
       }
     }

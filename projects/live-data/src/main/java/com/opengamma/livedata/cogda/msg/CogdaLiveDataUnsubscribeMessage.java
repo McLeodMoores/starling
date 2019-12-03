@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -16,7 +16,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
  * A client-side request to unsubscribe from a particular external ID.
- * There is not response for this message in the protocol. 
+ * There is not response for this message in the protocol.
  */
 @BeanDefinition
 public class CogdaLiveDataUnsubscribeMessage extends CogdaLiveDataCommandMessage {

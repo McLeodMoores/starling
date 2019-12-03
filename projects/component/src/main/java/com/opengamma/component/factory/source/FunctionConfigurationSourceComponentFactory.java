@@ -70,11 +70,11 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   @PropertyDefinition(validate = "notNull")
   private ConfigMaster _configMaster;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final FunctionConfigurationSource source = initSource();
-    //final RepositoryConfigurationSource source = sorted(initSource());
+    // final RepositoryConfigurationSource source = sorted(initSource());
 
     final ComponentInfo info = new ComponentInfo(FunctionConfigurationSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -85,14 +85,16 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataRepositoryConfigurationSourceResource(source));
-      // TODO: The REST resource will be incorrect; we should publish a facade of the ViewProcessor form so that calc nodes see the same version of the repository as the one last queried here
+      // TODO: The REST resource will be incorrect; we should publish a facade of the ViewProcessor form so that calc
+      // nodes see the same version of the repository as the one last queried here
     }
   }
 
   /**
    * Debug utility to sort a repository. This allows two to be compared more easily.
-   * 
-   * @param source the raw repository configuration source
+   *
+   * @param source
+   *          the raw repository configuration source
    * @return a source that return a sorted list of functions
    */
   protected FunctionConfigurationSource sorted(final FunctionConfigurationSource source) {
@@ -100,7 +102,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
       @Override
       public FunctionConfigurationBundle getFunctionConfiguration(final Instant version) {
-        final List<FunctionConfiguration> functions = new ArrayList<FunctionConfiguration>(source.getFunctionConfiguration(version).getFunctions());
+        final List<FunctionConfiguration> functions = new ArrayList<>(source.getFunctionConfiguration(version).getFunctions());
         Collections.sort(functions, new Comparator<FunctionConfiguration>() {
 
           @Override
@@ -127,7 +129,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
                   }
                 }
                 // Equal? Put a breakpoint here; we don't really want this to be happening.
-                //assert false;
+                // assert false;
                 return 0;
               } else if (o2 instanceof StaticFunctionConfiguration) {
                 // Static goes first
@@ -161,7 +163,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
    * Initializes the source.
    * <p>
    * Calls {@link #initSources()} and combines the result using {@link CombiningFunctionConfigurationSource}.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected FunctionConfigurationSource initSource() {
@@ -187,7 +189,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
   }
 
   protected FunctionConfigurationSource curveConfigurations() {
-    return CurveFunctions.providers(getConfigMaster());
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.providers(getConfigMaster()));
   }
 
   protected FunctionConfigurationSource curveParameterConfigurations() {
@@ -200,6 +202,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds volatility cube functions.
+   *
    * @return A source of volatility cube functions
    */
   protected FunctionConfigurationSource volatilityCubeConfigConfigurations() {
@@ -208,6 +211,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Adds surface functions.
+   *
    * @return A source of surface functions
    */
   protected FunctionConfigurationSource surfaceConfigConfigurations() {
@@ -216,7 +220,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Initializes the list of sources to be combined.
-   * 
+   *
    * @return the list of base sources to be combined, not null
    */
   protected List<FunctionConfigurationSource> initSources() {
@@ -230,7 +234,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of curve and surface function configuration sources.
-   * 
+   *
    * @return the curve and surface function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> curveAndSurfaceSources() {
@@ -246,6 +250,7 @@ public class FunctionConfigurationSourceComponentFactory extends AbstractCompone
 
   /**
    * Gets the list of cube function configuration sources.
+   *
    * @return The cube function configuration sources, not null
    */
   protected List<FunctionConfigurationSource> cubeSources() {

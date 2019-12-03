@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.portfolio.impl;
@@ -47,10 +47,10 @@ public class DataPortfolioMasterResource extends AbstractDataResource {
   DataPortfolioMasterResource() {
     _prtMaster = null;
   }
-  
+
   /**
    * Creates the resource, exposing the underlying master over REST.
-   * 
+   *
    * @param portfolioMaster  the underlying portfolio master, not null
    */
   public DataPortfolioMasterResource(final PortfolioMaster portfolioMaster) {
@@ -61,16 +61,16 @@ public class DataPortfolioMasterResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
-   * 
+   *
    * @return the portfolio master, not null
    */
   public PortfolioMaster getPortfolioMaster() {
     return _prtMaster;
   }
-  
+
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -83,29 +83,29 @@ public class DataPortfolioMasterResource extends AbstractDataResource {
 
   @POST
   @Path("portfolioSearches")
-  public Response search(PortfolioSearchRequest request) {
-    PortfolioSearchResult result = getPortfolioMaster().search(request);
+  public Response search(final PortfolioSearchRequest request) {
+    final PortfolioSearchResult result = getPortfolioMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("portfolios")
-  public Response add(@Context UriInfo uriInfo, PortfolioDocument request) {
-    PortfolioDocument result = getPortfolioMaster().add(request);
-    URI createdUri = (new DataPortfolioResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final PortfolioDocument request) {
+    final PortfolioDocument result = getPortfolioMaster().add(request);
+    final URI createdUri = new DataPortfolioResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("nodes/{nodeId}")
-  public DataPortfolioNodeResource findPortfolioNode(@PathParam("nodeId") String idStr) {
-    UniqueId id = UniqueId.parse(idStr);
+  public DataPortfolioNodeResource findPortfolioNode(@PathParam("nodeId") final String idStr) {
+    final UniqueId id = UniqueId.parse(idStr);
     return new DataPortfolioNodeResource(this, id);
   }
 
   @Path("portfolios/{portfolioId}")
-  public DataPortfolioResource findPortfolio(@PathParam("portfolioId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataPortfolioResource findPortfolio(@PathParam("portfolioId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataPortfolioResource(this, id);
   }
 

@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.bondcleanprice;
 import static com.opengamma.engine.value.ValueRequirementNames.CONVEXITY;
 
 import com.opengamma.analytics.financial.interestrate.bond.calculator.ConvexityFromCleanPriceCalculator;
-import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
  * Calculates the convexity of a bond from the clean price.
@@ -16,12 +15,11 @@ import com.opengamma.engine.value.ValueRequirementNames;
 public class BondConvexityFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#CONVEXITY}
-   * and the calculator to {@link ConvexityFromCleanPriceCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#CONVEXITY} and the calculator to
+   * {@link ConvexityFromCleanPriceCalculator}.
    */
   public BondConvexityFromCleanPriceFunction() {
     super(CONVEXITY, ConvexityFromCleanPriceCalculator.getInstance());
   }
-
 
 }

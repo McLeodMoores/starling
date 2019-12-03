@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.historical.normalization;
 
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -24,6 +22,8 @@ import com.opengamma.bbg.referencedata.ReferenceDataProvider;
 import com.opengamma.bbg.util.BloombergDataUtils;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
 import com.opengamma.util.spring.SpringFactoryBean;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Spring factory bean for {@link HistoricalTimeSeriesFieldAdjustmentMap}.
@@ -49,7 +49,7 @@ public class BloombergHistoricalTimeSeriesFieldAdjustmentMapFactoryBean extends 
     super(HistoricalTimeSeriesFieldAdjustmentMap.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesFieldAdjustmentMap createObject() {
     return BloombergDataUtils.createFieldAdjustmentMap(getReferenceDataProvider(), getCacheManager());

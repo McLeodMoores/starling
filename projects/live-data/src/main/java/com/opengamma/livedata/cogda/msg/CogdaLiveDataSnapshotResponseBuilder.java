@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -12,12 +12,12 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * 
+ *
  */
 public class CogdaLiveDataSnapshotResponseBuilder implements FudgeBuilder<CogdaLiveDataSnapshotResponseMessage> {
 
-  public static MutableFudgeMsg buildMessageStatic(FudgeSerializer serializer, CogdaLiveDataSnapshotResponseMessage response) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public static MutableFudgeMsg buildMessageStatic(final FudgeSerializer serializer, final CogdaLiveDataSnapshotResponseMessage response) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add("MESSAGE_TYPE", CogdaMessageType.SNAPSHOT_RESPONSE.name());
     CogdaLiveDataBuilderUtil.addResponseFields(msg, response);
     msg.add("values", response.getValues());
@@ -25,19 +25,19 @@ public class CogdaLiveDataSnapshotResponseBuilder implements FudgeBuilder<CogdaL
   }
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CogdaLiveDataSnapshotResponseMessage object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CogdaLiveDataSnapshotResponseMessage object) {
     return buildMessageStatic(serializer, object);
   }
 
-  public static CogdaLiveDataSnapshotResponseMessage buildObjectStatic(FudgeDeserializer deserializer, FudgeMsg message) {
-    CogdaLiveDataSnapshotResponseMessage response = new CogdaLiveDataSnapshotResponseMessage();
+  public static CogdaLiveDataSnapshotResponseMessage buildObjectStatic(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final CogdaLiveDataSnapshotResponseMessage response = new CogdaLiveDataSnapshotResponseMessage();
     CogdaLiveDataBuilderUtil.setResponseFields(message, response);
     response.setValues(message.getMessage("values"));
     return response;
   }
-  
+
   @Override
-  public CogdaLiveDataSnapshotResponseMessage buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public CogdaLiveDataSnapshotResponseMessage buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return buildObjectStatic(deserializer, message);
   }
 

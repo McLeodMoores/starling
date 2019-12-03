@@ -7,11 +7,9 @@ package com.opengamma.batch;
 
 import java.util.List;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.batch.domain.MarketData;
 import com.opengamma.batch.domain.MarketDataValue;
 import com.opengamma.batch.domain.RiskRun;
-import com.opengamma.batch.rest.BatchGetRequest;
 import com.opengamma.batch.rest.BatchRunSearchRequest;
 import com.opengamma.engine.view.ViewResultEntry;
 import com.opengamma.id.ObjectId;
@@ -29,71 +27,83 @@ public interface BatchMaster {
    */
   String BATCH_IDENTIFIER_SCHEME = "DbBat";
 
-
   /**
    * Searches for batches matching the specified search criteria.
    *
-   * @param request  the search request, not null
+   * @param request
+   *          the search request, not null
    * @return the search result, not null
-   * @throws IllegalArgumentException if the request is invalid
+   * @throws IllegalArgumentException
+   *           if the request is invalid
    */
   Pair<List<RiskRun>, Paging> searchRiskRun(BatchRunSearchRequest request);
 
   /**
    * Gets a batch document by unique identifier.
    * <p>
-   * This returns a single batch document by unique identifier.
-   * It will return all the risk data and the total count of the errors.
-   * For more control, use {@link #get(BatchGetRequest)}.
+   * This returns a single batch document by unique identifier. It will return all the risk data and the total count of the errors.
    *
-   * @param batchId  the unique identifier, not null
+   * @param batchId
+   *          the unique identifier, not null
    * @return the document, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no document with that unique identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no document with that unique identifier
    */
   RiskRun getRiskRun(ObjectId batchId);
 
-
   /**
    * Deletes a batch and all data related to it.
-   * @param batchId the uid of the batch, not null
+   * 
+   * @param batchId
+   *          the uid of the batch, not null
    */
   void deleteRiskRun(ObjectId batchId);
 
   /**
-   * Gets paged list of computed values belonging to given batch
-   * @param batchId the batch values belong to
-   * @param pagingRequest the paging request
+   * Gets paged list of computed values belonging to given batch.
+   * 
+   * @param batchId
+   *          the batch values belong to
+   * @param pagingRequest
+   *          the paging request
    * @return list of batch values
    */
-  Pair<List<ViewResultEntry>, Paging> getBatchValues(final ObjectId batchId, final PagingRequest pagingRequest);
-  
-  
+  Pair<List<ViewResultEntry>, Paging> getBatchValues(ObjectId batchId, PagingRequest pagingRequest);
+
   /**
    * Search batch data snapshots.
    *
-   * @param pagingRequest the paging request, limiting number of market data returned
+   * @param pagingRequest
+   *          the paging request, limiting number of market data returned
    * @return requested market data without actual values, not null
-   * @throws IllegalArgumentException if the request is invalid
+   * @throws IllegalArgumentException
+   *           if the request is invalid
    */
   Pair<List<MarketData>, Paging> getMarketData(PagingRequest pagingRequest);
 
   /**
    * Search market data by id.
    *
-   * @param marketDataId the id of the market data to get               
+   * @param marketDataId
+   *          the id of the market data to get
    * @return requested market data, not null
-   * @throws IllegalArgumentException if the request is invalid
+   * @throws IllegalArgumentException
+   *           if the request is invalid
    */
   MarketData getMarketDataById(ObjectId marketDataId);
 
   /**
-   * Gets market data values of given market data
+   * Gets market data values of given market data.
    *
-   * @param marketDataId the object id of the market data
-   * @param pagingRequest the paging request, limiting number of market data values returned
+   * @param marketDataId
+   *          the object id of the market data
+   * @param pagingRequest
+   *          the paging request, limiting number of market data values returned
    * @return requested market data values, not null
-   * @throws IllegalArgumentException if the request is invalid
+   * @throws IllegalArgumentException
+   *           if the request is invalid
    */
-  Pair<List<MarketDataValue>, Paging> getMarketDataValues(final ObjectId marketDataId, final PagingRequest pagingRequest);
+  Pair<List<MarketDataValue>, Paging> getMarketDataValues(ObjectId marketDataId, PagingRequest pagingRequest);
 }

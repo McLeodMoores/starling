@@ -55,56 +55,94 @@ public class WebRegionsResource extends AbstractWebRegionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates a HTML GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param name
+   *          the region name, not null
+   * @param classification
+   *          the classification, not null
+   * @param regionIdStrs
+   *          the identifiers of the region, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("name") String name,
-      @QueryParam("classification") RegionClassification classification,
-      @QueryParam("regionId") List<String> regionIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    FlexiBean out = createSearchResultData(pr, name, classification, regionIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("name") final String name,
+      @QueryParam("classification") final RegionClassification classification,
+      @QueryParam("regionId") final List<String> regionIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final FlexiBean out = createSearchResultData(pr, name, classification, regionIdStrs, uriInfo);
     return getFreemarker().build(HTML_DIR + "regions.ftl", out);
   }
 
+  /**
+   * Creates a JSON GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param name
+   *          the region name, not null
+   * @param classification
+   *          the classification, not null
+   * @param regionIdStrs
+   *          the identifiers of the region, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("name") String name,
-      @QueryParam("classification") RegionClassification classification,
-      @QueryParam("regionId") List<String> regionIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    FlexiBean out = createSearchResultData(pr, name, classification, regionIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("name") final String name,
+      @QueryParam("classification") final RegionClassification classification,
+      @QueryParam("regionId") final List<String> regionIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final FlexiBean out = createSearchResultData(pr, name, classification, regionIdStrs, uriInfo);
     return getFreemarker().build(JSON_DIR + "regions.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(PagingRequest pr, String name, RegionClassification classification,
-      List<String> regionIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    RegionSearchRequest searchRequest = new RegionSearchRequest();
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String name, final RegionClassification classification,
+      final List<String> regionIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final RegionSearchRequest searchRequest = new RegionSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setName(StringUtils.trimToNull(name));
     searchRequest.setClassification(classification);
-    MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
+    final MultivaluedMap<String, String> query = uriInfo.getQueryParameters();
     for (int i = 0; query.containsKey("idscheme." + i) && query.containsKey("idvalue." + i); i++) {
-      ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
+      final ExternalId id = ExternalId.of(query.getFirst("idscheme." + i), query.getFirst("idvalue." + i));
       searchRequest.addExternalId(id);
     }
-    for (String regionIdStr : regionIdStrs) {
+    for (final String regionIdStr : regionIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(regionIdStr));
     }
     out.put("searchRequest", searchRequest);
-    
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      RegionSearchResult searchResult = data().getRegionMaster().search(searchRequest);
+      final RegionSearchResult searchResult = data().getRegionMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
@@ -112,17 +150,26 @@ public class WebRegionsResource extends AbstractWebRegionResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a region by identifier. If the region is not present in the master,
+   * the latest version in the history is returned. If this is not available, an
+   * exception is thrown.
+   *
+   * @param idStr
+   *          the identifier
+   * @return the region resource
+   */
   @Path("{regionId}")
-  public WebRegionResource findRegion(@PathParam("regionId") String idStr) {
+  public WebRegionResource findRegion(@PathParam("regionId") final String idStr) {
     data().setUriRegionId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     try {
-      RegionDocument doc = data().getRegionMaster().get(oid);
+      final RegionDocument doc = data().getRegionMaster().get(oid);
       data().setRegion(doc);
-    } catch (DataNotFoundException ex) {
-      RegionHistoryRequest historyRequest = new RegionHistoryRequest(oid);
+    } catch (final DataNotFoundException ex) {
+      final RegionHistoryRequest historyRequest = new RegionHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      RegionHistoryResult historyResult = data().getRegionMaster().history(historyRequest);
+      final RegionHistoryResult historyResult = data().getRegionMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
@@ -136,9 +183,10 @@ public class WebRegionsResource extends AbstractWebRegionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    RegionSearchRequest searchRequest = new RegionSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final RegionSearchRequest searchRequest = new RegionSearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
@@ -149,7 +197,7 @@ public class WebRegionsResource extends AbstractWebRegionResource {
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebRegionData data) {
+  public static URI uri(final WebRegionData data) {
     return uri(data, null);
   }
 
@@ -159,12 +207,12 @@ public class WebRegionsResource extends AbstractWebRegionResource {
    * @param identifiers  the identifiers to search for, may be null
    * @return the URI, not null
    */
-  public static URI uri(WebRegionData data, ExternalIdBundle identifiers) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebRegionsResource.class);
+  public static URI uri(final WebRegionData data, final ExternalIdBundle identifiers) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebRegionsResource.class);
     if (identifiers != null) {
-      Iterator<ExternalId> it = identifiers.iterator();
+      final Iterator<ExternalId> it = identifiers.iterator();
       for (int i = 0; it.hasNext(); i++) {
-        ExternalId id = it.next();
+        final ExternalId id = it.next();
         builder.queryParam("idscheme." + i, id.getScheme().getName());
         builder.queryParam("idvalue." + i, id.getValue());
       }

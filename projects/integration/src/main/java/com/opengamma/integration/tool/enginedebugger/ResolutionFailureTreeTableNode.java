@@ -14,16 +14,16 @@ import com.opengamma.integration.tool.enginedebugger.node.TreeTableNode;
 public class ResolutionFailureTreeTableNode  implements TreeTableNode {
 
   private static final String NAME = "Failure";
-  private ResolutionFailureImpl _node;
-  private List<Object> _children;
+  private final ResolutionFailureImpl _node;
+  private final List<Object> _children;
 
-  public ResolutionFailureTreeTableNode(ResolutionFailureImpl node) {
+  public ResolutionFailureTreeTableNode(final ResolutionFailureImpl node) {
     _node = node;
-    _children = new ArrayList<Object>(node.accept(new ResolutionFailureChildNodeCreatingVisitor(node)));
+    _children = new ArrayList<>(node.accept(new ResolutionFailureChildNodeCreatingVisitor(node)));
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     return _children.get(index);
   }
 
@@ -33,12 +33,12 @@ public class ResolutionFailureTreeTableNode  implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     return _children.indexOf(child);
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     if (column == 0) {
       return NAME;
     }

@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Metal future commodity derivative
+ * Metal future commodity derivative.
  */
 public class MetalFuture extends CommodityFuture {
 
@@ -31,8 +31,9 @@ public class MetalFuture extends CommodityFuture {
    * @param referencePrice reference price
    * @param currency the currency
    */
-  public MetalFuture(final double expiry, final ExternalId underlying, final double unitAmount, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate,
-      final double amount, final String unitName, final SettlementType settlementType, final double settlement, final double referencePrice, final Currency currency) {
+  public MetalFuture(final double expiry, final ExternalId underlying, final double unitAmount, final ZonedDateTime firstDeliveryDate,
+      final ZonedDateTime lastDeliveryDate, final double amount, final String unitName, final SettlementType settlementType, final double settlement,
+      final double referencePrice, final Currency currency) {
     super(expiry, underlying, unitAmount, firstDeliveryDate, lastDeliveryDate, amount, unitName, settlementType, settlement, referencePrice, currency);
   }
 

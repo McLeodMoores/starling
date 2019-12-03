@@ -21,8 +21,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ProductOptionFunctionProviderTest {
 
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTri = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel MODEL_TRI = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {9900., 11500., 14000. };
   private static final double TIME = 4.2;
@@ -55,12 +55,12 @@ public class ProductOptionFunctionProviderTest {
                   final double rhoVols = rho * vol * sigma2;
                   double exactDiv = Math.exp(-interest * TIME) * BlackFormulaRepository.price(SPOT * spot2 * Math.exp((2 * interest - dividend - div2 + rhoVols) * TIME), strike, TIME,
                       Math.sqrt(vol * vol + sigma2 * sigma2 + 2. * rhoVols), isCall);
-                  final double resDiv = _model.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDiv = MODEL.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   final double refDiv = Math.max(exactDiv, 1.) * 1.e-2;
                   assertEquals(resDiv, exactDiv, refDiv);
 
                   final OptionFunctionProvider2D functionTri = new ProductOptionFunctionProvider(strike, TIME, nStepsTri, isCall);
-                  final double resDivTri = _modelTri.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDivTri = MODEL_TRI.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertEquals(resDivTri, exactDiv, refDiv);
                 }
               }
@@ -124,13 +124,13 @@ public class ProductOptionFunctionProviderTest {
                    * Poor approximation of theta
                    */
                   //                  final double[] ref = new double[] {price, delta1, delta2, theta, gamma1, gamma2, cross };
-                  final double[] res = _model.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] res = MODEL.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   final double[] refMod = new double[] {price, delta1, delta2, gamma1, gamma2, cross };
                   final double[] resMod = new double[] {res[0], res[1], res[2], res[4], res[5], res[6] };
                   assertGreeks(resMod, refMod, 1.e-2);
 
                   final OptionFunctionProvider2D functionTri = new ProductOptionFunctionProvider(strike, TIME, nStepsTri, isCall);
-                  final double[] resTri = _modelTri.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] resTri = MODEL_TRI.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   final double[] resTriMod = new double[] {resTri[0], resTri[1], resTri[2], resTri[4], resTri[5], resTri[6] };
                   assertGreeks(resTriMod, refMod, 1.e-1);
                 }

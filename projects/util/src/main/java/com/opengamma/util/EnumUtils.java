@@ -24,19 +24,19 @@ public final class EnumUtils {
    * <p>
    * This operates as per {@link Enum#valueOf(Class, String)} but returns null
    * if the name or class cannot be found.
-   * 
+   *
    * @param <T> the enum type
    * @param enumType  the enum class, null returns null
    * @param name  the enum name, null returns null
    * @return the corresponding enum, null if not found
    */
-  public static <T extends Enum<T>> T safeValueOf(Class<T> enumType, String name) {
+  public static <T extends Enum<T>> T safeValueOf(final Class<T> enumType, final String name) {
     if (enumType == null || name == null) {
       return null;
     }
     try {
       return Enum.valueOf(enumType, name.trim());
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       return null;
     }
   }

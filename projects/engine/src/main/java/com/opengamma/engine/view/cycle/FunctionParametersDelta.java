@@ -41,7 +41,7 @@ public final class FunctionParametersDelta {
 
   /**
    * Creates a delta of function parameterization between two cycle execution options.
-   * 
+   *
    * @param firstCycleOptions the options for the first cycle, not null
    * @param secondCycleOptions the options for the second cycle, not null
    * @return the delta, not null
@@ -52,7 +52,7 @@ public final class FunctionParametersDelta {
 
   /**
    * Creates a delta of function parameterizations.
-   * 
+   *
    * @param firstCycleParameters the parameterization for the first cycle, not null
    * @param secondCycleParameters the parameterization for the second cycle, not null
    * @return the delta, not null
@@ -63,62 +63,61 @@ public final class FunctionParametersDelta {
       if (secondCycleParameters.isEmpty()) {
         // No delta - no parameters
         return EMPTY;
-      } else {
-        // Delta is anything defined in the second parameter set
-        return FunctionParametersDelta.of(secondCycleParameters.keySet());
       }
-    } else {
-      if (secondCycleParameters.isEmpty()) {
-        // Delta is anything defined in the first parameter set
-        return FunctionParametersDelta.of(firstCycleParameters.keySet());
-      } else {
-        // Delta is the negative intersection of market data selectors, plus anything  in the union with different parameters
-        final ArrayList<DistinctMarketDataSelector> delta = new ArrayList<DistinctMarketDataSelector>(firstCycleParameters.size() + secondCycleParameters.size());
-        int union = 0;
-        for (Map.Entry<DistinctMarketDataSelector, FunctionParameters> first : firstCycleParameters.entrySet()) {
-          final FunctionParameters secondValue = secondCycleParameters.get(first.getKey());
-          if (secondValue != null) {
-            // Intersection - include if parameters are different
-            if (first.getValue().equals(secondValue)) {
-              union++;
-            } else {
-              delta.add(first.getKey());
-            }
-          } else {
-            // Left negative intersection - include
-            delta.add(first.getKey());
-          }
-        }
-        if (union != secondCycleParameters.size()) {
-          // Include the right negative intersection
-          for (DistinctMarketDataSelector secondKey : secondCycleParameters.keySet()) {
-            if (!firstCycleParameters.containsKey(secondKey)) {
-              delta.add(secondKey);
-            }
-          }
-        }
-        if (delta.isEmpty()) {
-          return EMPTY;
+      // Delta is anything defined in the second parameter set
+      return FunctionParametersDelta.of(secondCycleParameters.keySet());
+    }
+    if (secondCycleParameters.isEmpty()) {
+      // Delta is anything defined in the first parameter set
+      return FunctionParametersDelta.of(firstCycleParameters.keySet());
+    }
+    // Delta is the negative intersection of market data selectors, plus
+    // anything in the union with different parameters
+    final ArrayList<DistinctMarketDataSelector> delta = new ArrayList<>(firstCycleParameters.size() + secondCycleParameters.size());
+    int union = 0;
+    for (final Map.Entry<DistinctMarketDataSelector, FunctionParameters> first : firstCycleParameters.entrySet()) {
+      final FunctionParameters secondValue = secondCycleParameters.get(first.getKey());
+      if (secondValue != null) {
+        // Intersection - include if parameters are different
+        if (first.getValue().equals(secondValue)) {
+          union++;
         } else {
-          return new FunctionParametersDelta(delta);
+          delta.add(first.getKey());
+        }
+      } else {
+        // Left negative intersection - include
+        delta.add(first.getKey());
+      }
+    }
+    if (union != secondCycleParameters.size()) {
+      // Include the right negative intersection
+      for (final DistinctMarketDataSelector secondKey : secondCycleParameters.keySet()) {
+        if (!firstCycleParameters.containsKey(secondKey)) {
+          delta.add(secondKey);
         }
       }
     }
+    if (delta.isEmpty()) {
+      return EMPTY;
+    }
+    return new FunctionParametersDelta(delta);
   }
 
   /* package */static FunctionParametersDelta of(final Collection<DistinctMarketDataSelector> selectors) {
-    return new FunctionParametersDelta(new ArrayList<DistinctMarketDataSelector>(selectors));
+    return new FunctionParametersDelta(new ArrayList<>(selectors));
   }
 
   /**
-   * Returns the value specifications that are directly dirtied by this delta. The dependency graph must be used to determine any derived values that are also invalidated as a result of these.
-   * 
+   * Returns the value specifications that are directly dirtied by this delta. The dependency graph must be used to determine any
+   * derived values that are also invalidated as a result of these.
+   *
    * @param calcConfig the calculation configuration, not null
    * @param firstCycle the compiled view definition from the first cycle, not null
    * @param secondCycle the compiled view definition from the second cycle, not null
    * @return the dirty specifications, not null
    */
-  public Set<ValueSpecification> getValueSpecifications(final String calcConfig, final CompiledViewDefinition firstCycle, final CompiledViewDefinition secondCycle) {
+  public Set<ValueSpecification> getValueSpecifications(final String calcConfig, final CompiledViewDefinition firstCycle,
+      final CompiledViewDefinition secondCycle) {
     if (getSelectors() == null) {
       // Nothing in the delta
       return Collections.emptySet();
@@ -137,7 +136,7 @@ public final class FunctionParametersDelta {
   private Set<ValueSpecification> getValueSpecifications(final Map<DistinctMarketDataSelector, Set<ValueSpecification>> firstCycle,
       final Map<DistinctMarketDataSelector, Set<ValueSpecification>> secondCycle) {
     final Set<ValueSpecification> delta = Sets.newHashSetWithExpectedSize(getSelectors().size());
-    for (DistinctMarketDataSelector selector : getSelectors()) {
+    for (final DistinctMarketDataSelector selector : getSelectors()) {
       Set<ValueSpecification> specifications = firstCycle.get(selector);
       if (specifications != null) {
         // Specifications set on the first cycle might not be set on the second - mark dirty

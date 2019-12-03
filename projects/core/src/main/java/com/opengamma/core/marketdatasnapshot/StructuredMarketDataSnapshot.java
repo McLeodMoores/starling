@@ -22,21 +22,21 @@ public interface StructuredMarketDataSnapshot extends NamedSnapshot {
 
   /**
    * Gets the basis view name.
-   * 
+   *
    * @return the basis view name
    */
   String getBasisViewName(); // TODO we need to record version information
 
   /**
    * Gets the global set of values.
-   * 
+   *
    * @return the override values
    */
   UnstructuredMarketDataSnapshot getGlobalValues();
 
   /**
    * Gets the yield curves.
-   * 
+   *
    * @return the yield curves
    */
   Map<YieldCurveKey, YieldCurveSnapshot> getYieldCurves();
@@ -50,28 +50,28 @@ public interface StructuredMarketDataSnapshot extends NamedSnapshot {
 
   /**
    * Gets the volatility cubes.
-   * 
+   *
    * @return the volatility cubes
    */
   Map<VolatilityCubeKey, VolatilityCubeSnapshot> getVolatilityCubes();
 
   /**
    * Gets the volatility surfaces.
-   * 
+   *
    * @return the volatility surfaces
    */
   Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> getVolatilitySurfaces();
 
   /**
    * Gets the surfaces.
-   * 
+   *
    * @return the surfaces
    */
   Map<SurfaceKey, SurfaceSnapshot> getSurfaces();
 
   /**
-   * Gets the valuation time of the snapshot
-   * 
+   * Gets the valuation time of the snapshot.
+   *
    * @return the valuation time of the snapshot, or null if
    * no valuation time could be inferred from the snapshot
    */

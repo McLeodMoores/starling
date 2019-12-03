@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -21,7 +21,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.capfloor.CapFloorCMSSpreadSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.DayCountBean;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
@@ -30,7 +29,8 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link CapFloorCMSSpreadSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.capfloor.CapFloorCMSSpreadSecurity}.
  */
 @BeanDefinition
 public class CapFloorCMSSpreadSecurityBean extends SecurityBean {
@@ -56,14 +56,14 @@ public class CapFloorCMSSpreadSecurityBean extends SecurityBean {
   private ZonedDateTimeBean _startDate;
   @PropertyDefinition
   private double _strike;
-  
+
   //------------------------------------------------------------------------------
   @Override
   public boolean equals(final Object other) {
     if (!(other instanceof CapFloorCMSSpreadSecurityBean)) {
       return false;
     }
-    CapFloorCMSSpreadSecurityBean capFloor = (CapFloorCMSSpreadSecurityBean) other;
+    final CapFloorCMSSpreadSecurityBean capFloor = (CapFloorCMSSpreadSecurityBean) other;
     return new EqualsBuilder()
         .append(getId(), capFloor.getId())
         .append(getNotional(), capFloor.getNotional())
@@ -79,7 +79,7 @@ public class CapFloorCMSSpreadSecurityBean extends SecurityBean {
         .append(isPayer(), capFloor.isPayer())
         .isEquals();
   }
-  
+
   //------------------------------------------------------------------------------
   @Override
   public int hashCode() {

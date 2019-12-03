@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.loader;
@@ -66,12 +66,13 @@ public class SecurityLoaderComponentFactory extends AbstractSecurityLoaderCompon
    * Creates the loader, without registering it.
    * <p>
    * This implementation uses {@link DefaultSecurityLoader}.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the loader, not null
    */
-  protected SecurityLoader createSecurityLoader(ComponentRepository repo) {
-    List<SecurityEnhancer> enhancers = Lists.newArrayList();
+  @Override
+  protected SecurityLoader createSecurityLoader(final ComponentRepository repo) {
+    final List<SecurityEnhancer> enhancers = Lists.newArrayList();
     if (getSecurityEnhancer1() != null) {
       enhancers.add(getSecurityEnhancer1());
     }

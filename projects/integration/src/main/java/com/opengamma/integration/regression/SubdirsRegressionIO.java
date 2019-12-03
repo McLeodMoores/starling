@@ -27,11 +27,11 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public class SubdirsRegressionIO extends RegressionIO {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SubdirsRegressionIO.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubdirsRegressionIO.class);
 
   /**
    * Creates a new instance. If the supplied directory does not exist, it will be created.
-   * 
+   *
    * @param baseDir the directory to write the structures to - sub-directories will be created under this for each object type, not null
    * @param format the format to write each object in, not null
    * @param createIfAbsent true to create the folder if it doesn't exist (use this for writing, but probably not for reading)
@@ -48,14 +48,14 @@ public class SubdirsRegressionIO extends RegressionIO {
       }
     } else {
       if (createIfAbsent) {
-        boolean success = dir.mkdirs();
+        final boolean success = dir.mkdirs();
         if (success) {
-          s_logger.debug("Created directory {}", dir);
+          LOGGER.debug("Created directory {}", dir);
         } else {
           throw new OpenGammaRuntimeException("Failed to create directory " + dir);
         }
       } else {
-        s_logger.debug("Directory {} does not exist", dir);
+        LOGGER.debug("Directory {} does not exist", dir);
       }
     }
   }
@@ -63,14 +63,13 @@ public class SubdirsRegressionIO extends RegressionIO {
   protected File getTypeFolder(final String type, final boolean createIfAbsent) {
     if (type == null) {
       return getBaseFile();
-    } else {
-      final File outputDir = new File(getBaseFile(), type);
-      checkDirectory(outputDir, createIfAbsent);
-      return outputDir;
     }
+    final File outputDir = new File(getBaseFile(), type);
+    checkDirectory(outputDir, createIfAbsent);
+    return outputDir;
   }
 
-  
+
 
   // RegressionIO
 
@@ -95,28 +94,28 @@ public class SubdirsRegressionIO extends RegressionIO {
   public List<String> enumObjects(final String type) throws IOException {
     final File subDir = getTypeFolder(type, false);
     if (!subDir.exists()) {
-      s_logger.info("Directory {} doesn't exist", subDir);
+      LOGGER.info("Directory {} doesn't exist", subDir);
       return Collections.<String>emptyList();
     }
-    s_logger.info("Scanning {}", subDir.getAbsolutePath());
+    LOGGER.info("Scanning {}", subDir.getAbsolutePath());
     final File[] files = subDir.listFiles();
     if (files == null) {
       throw new OpenGammaRuntimeException("No files found in " + subDir);
     }
-    final List<String> identifiers = new ArrayList<String>(files.length);
-    for (File file : files) {
+    final List<String> identifiers = new ArrayList<>(files.length);
+    for (final File file : files) {
       if (file.isFile()) {
         final String name = file.getName();
         if (isIdentifierIncluded(name)) {
-          String identifier = stripIdentifierExtension(name);
+          final String identifier = stripIdentifierExtension(name);
           identifiers.add(identifier);
         }
       }
     }
-    s_logger.debug("Found {} objects", identifiers.size());
+    LOGGER.debug("Found {} objects", identifiers.size());
     return identifiers;
   }
-  
+
   // TODO: Bulk read operation
 
 }

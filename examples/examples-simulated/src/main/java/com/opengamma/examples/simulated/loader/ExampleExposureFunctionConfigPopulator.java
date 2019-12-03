@@ -32,7 +32,7 @@ import com.opengamma.util.money.Currency;
  *   <li> Bond OIS Exposures. Contains an example of using an OIS curve for bond pricing.
  * </ul>
  */
-public class ExampleExposureFunctionConfigPopulator {
+public final class ExampleExposureFunctionConfigPopulator {
 
   /**
    * Restricted constructor.

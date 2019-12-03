@@ -35,17 +35,24 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   public static final String IDENTIFIERS_FIELD_NAME = "identifiers";
   /** Field name. */
   public static final String ATTRIBUTES_FIELD_NAME = "attributes";
-  /** Field name */
+  /** Field name. */
   public static final String PERMISSIONS_FIELD_NAME = "permissions";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ManageableSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ManageableSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, ManageableSecurity security, final MutableFudgeMsg msg) {
+  /**
+   * Serializes a security.
+   *
+   * @param serializer  the serializer, not null
+   * @param security  the security, not null
+   * @param msg  the message to add the security message to
+   */
+  public static void toFudgeMsg(final FudgeSerializer serializer, final ManageableSecurity security, final MutableFudgeMsg msg) {
     addToMessage(msg, UNIQUE_ID_FIELD_NAME, UniqueIdFudgeBuilder.toFudgeMsg(serializer, security.getUniqueId()));
     addToMessage(msg, NAME_FIELD_NAME, security.getName());
     addToMessage(msg, SECURITY_TYPE_FIELD_NAME, security.getSecurityType());
@@ -57,14 +64,21 @@ public class ManageableSecurityFudgeBuilder extends AbstractFudgeBuilder impleme
   }
 
   @Override
-  public ManageableSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ManageableSecurity object = new ManageableSecurity(msg.getString(SECURITY_TYPE_FIELD_NAME));
+  public ManageableSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ManageableSecurity object = new ManageableSecurity(msg.getString(SECURITY_TYPE_FIELD_NAME));
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
+  /**
+   * Adds fields from a message to a security.
+   *
+   * @param deserializer  the deserializer, not null
+   * @param msg  the message, not null
+   * @param security  the security
+   */
   @SuppressWarnings("unchecked")
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, ManageableSecurity security) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final ManageableSecurity security) {
     security.setUniqueId(UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(UNIQUE_ID_FIELD_NAME)));
     security.setName(msg.getString(NAME_FIELD_NAME));
     security.setExternalIdBundle(ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(IDENTIFIERS_FIELD_NAME)));

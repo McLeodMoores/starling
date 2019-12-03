@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.frequency;
@@ -68,45 +68,44 @@ public final class PeriodFrequency implements Frequency, Serializable {
    */
   public static final PeriodFrequency CONTINUOUS = new PeriodFrequency(CONTINUOUS_NAME, Period.ZERO);
   /**
-   * A frequency with a period of four months
+   * A frequency with a period of four months.
    */
   public static final PeriodFrequency FOUR_MONTHS = new PeriodFrequency(FOUR_MONTH_NAME, Period.ofMonths(4));
   /**
-   * A frequency with a period of five months
+   * A frequency with a period of five months.
    */
   public static final PeriodFrequency FIVE_MONTHS = new PeriodFrequency(FIVE_MONTH_NAME, Period.ofMonths(5));
   /**
-   * A frequency with a period of seven months
+   * A frequency with a period of seven months.
    */
   public static final PeriodFrequency SEVEN_MONTHS = new PeriodFrequency(SEVEN_MONTH_NAME, Period.ofMonths(7));
   /**
-   * A frequency with a period of eight months
+   * A frequency with a period of eight months.
    */
   public static final PeriodFrequency EIGHT_MONTHS = new PeriodFrequency(EIGHT_MONTH_NAME, Period.ofMonths(8));
   /**
-   * A frequency with a period of nine months
+   * A frequency with a period of nine months.
    */
   public static final PeriodFrequency NINE_MONTHS = new PeriodFrequency(NINE_MONTH_NAME, Period.ofMonths(9));
   /**
-   * A frequency with a period of ten months
+   * A frequency with a period of ten months.
    */
   public static final PeriodFrequency TEN_MONTHS = new PeriodFrequency(TEN_MONTH_NAME, Period.ofMonths(10));
   /**
-   * A frequency with a period of eleven months
+   * A frequency with a period of eleven months.
    */
   public static final PeriodFrequency ELEVEN_MONTHS = new PeriodFrequency(ELEVEN_MONTH_NAME, Period.ofMonths(11));
   /**
-   * A frequency with a period of eighteen months
+   * A frequency with a period of eighteen months.
    */
   public static final PeriodFrequency EIGHTEEN_MONTHS = new PeriodFrequency(EIGHTEEN_MONTH_NAME, Period.ofMonths(18));
   /**
-   * A frequency with a period of never
+   * A frequency with a period of never.
    */
   public static final PeriodFrequency NEVER = new PeriodFrequency(NEVER_NAME, Period.ZERO);
 
-  /** A map containing all of the frequency */
-  public static final Map<PeriodFrequency, PeriodFrequency> s_cache =
-      ImmutableMap.<PeriodFrequency, PeriodFrequency>builder()
+  /** A map containing all of the frequency. */
+  public static final Map<PeriodFrequency, PeriodFrequency> CACHE = ImmutableMap.<PeriodFrequency, PeriodFrequency> builder()
       .put(ANNUAL, ANNUAL)
       .put(SEMI_ANNUAL, SEMI_ANNUAL)
       .put(QUARTERLY, QUARTERLY)
@@ -138,17 +137,18 @@ public final class PeriodFrequency implements Frequency, Serializable {
   /**
    * Gets a frequency from a string.
    * <p>
-   * This parses the known {@code PeriodFrequency} instances by name.
-   * Name matching is case insensitive.
-   * 
-   * @param name  the name of the convention, not null
+   * This parses the known {@code PeriodFrequency} instances by name. Name matching is case insensitive.
+   *
+   * @param name
+   *          the name of the convention, not null
    * @return the period frequency matching the name, not null
-   * @throws IllegalArgumentException if the name is unknown
+   * @throws IllegalArgumentException
+   *           if the name is unknown
    */
   @FromString
   public static PeriodFrequency of(final String name) {
-    String nameLower = name.toLowerCase(Locale.ENGLISH);
-    for (PeriodFrequency freq : s_cache.keySet()) {
+    final String nameLower = name.toLowerCase(Locale.ENGLISH);
+    for (final PeriodFrequency freq : CACHE.keySet()) {
       if (freq.getName().toLowerCase(Locale.ENGLISH).equals(nameLower)) {
         return freq;
       }
@@ -158,28 +158,31 @@ public final class PeriodFrequency implements Frequency, Serializable {
 
   /**
    * Obtains an instance.
-   * 
-   * @param name  the name of the convention, not null
-   * @param period  length of the period, not null
+   *
+   * @param name
+   *          the name of the convention, not null
+   * @param period
+   *          length of the period, not null
    * @return a period frequency, not null
    */
   public static PeriodFrequency of(final String name, final Period period) {
     final PeriodFrequency temp = new PeriodFrequency(name, period);
-    if (s_cache.containsKey(temp)) {
-      return s_cache.get(temp);
+    if (CACHE.containsKey(temp)) {
+      return CACHE.get(temp);
     }
     return temp;
   }
 
   /**
    * Constructs a frequency from a period.
-   * 
-   * @param period The period, not null
+   *
+   * @param period
+   *          The period, not null
    * @return a period frequency, not null
    */
   public static PeriodFrequency of(final Period period) {
     ArgumentChecker.notNull(period, "period");
-    for (final Map.Entry<PeriodFrequency, PeriodFrequency> entry : s_cache.entrySet()) {
+    for (final Map.Entry<PeriodFrequency, PeriodFrequency> entry : CACHE.entrySet()) {
       if (entry.getKey().getPeriod().normalized().equals(period.normalized())) {
         return entry.getValue();
       }
@@ -188,12 +191,14 @@ public final class PeriodFrequency implements Frequency, Serializable {
   }
 
   /**
-   * Given a {@link PeriodFrequency} or {@link SimpleFrequency}, returns a {@link PeriodFrequency}.
-   * If the input is already a {@link PeriodFrequency}, then the original object is returned.
-   * 
-   * @param frequency The frequency, not null
+   * Given a {@link PeriodFrequency} or {@link SimpleFrequency}, returns a {@link PeriodFrequency}. If the input is already a {@link PeriodFrequency}, then the
+   * original object is returned.
+   *
+   * @param frequency
+   *          The frequency, not null
    * @return A frequency based on {@link Period}
-   * @throws IllegalArgumentException if the input is not a {@link PeriodFrequency} or {@link SimpleFrequency}
+   * @throws IllegalArgumentException
+   *           if the input is not a {@link PeriodFrequency} or {@link SimpleFrequency}
    */
   public static PeriodFrequency convertToPeriodFrequency(final Frequency frequency) {
     ArgumentChecker.notNull(frequency, "frequency");
@@ -207,11 +212,13 @@ public final class PeriodFrequency implements Frequency, Serializable {
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the name of the convention, not null
-   * @param period  length of the period, not null
+   *
+   * @param name
+   *          the name of the convention, not null
+   * @param period
+   *          length of the period, not null
    */
-  /* package */PeriodFrequency(final String name, final Period period) {
+  /* package */ PeriodFrequency(final String name, final Period period) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(period, "period");
     _name = name;
@@ -233,9 +240,10 @@ public final class PeriodFrequency implements Frequency, Serializable {
   public String getName() {
     return _name;
   }
+
   /**
    * Gets the length of the period defining the convention.
-   * 
+   *
    * @return the length of the period, not null
    */
   public Period getPeriod() {
@@ -267,7 +275,7 @@ public final class PeriodFrequency implements Frequency, Serializable {
 
   /**
    * Converts this to a simple frequency.
-   * 
+   *
    * @return the simple frequency, not null
    */
   public SimpleFrequency toSimpleFrequency() {

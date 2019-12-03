@@ -12,12 +12,13 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class FXOptionDataBundle extends StandardOptionDataBundle {
   private final YieldAndDiscountCurve _foreignInterestRate;
 
-  public FXOptionDataBundle(final YieldAndDiscountCurve domesticInterestRate, final YieldAndDiscountCurve foreignInterestRate, final VolatilitySurface volatilitySurface, final double spot,
+  public FXOptionDataBundle(final YieldAndDiscountCurve domesticInterestRate, final YieldAndDiscountCurve foreignInterestRate,
+      final VolatilitySurface volatilitySurface, final double spot,
       final ZonedDateTime date) {
     super(domesticInterestRate, 0, volatilitySurface, spot, date);
     _foreignInterestRate = foreignInterestRate;
@@ -29,7 +30,7 @@ public class FXOptionDataBundle extends StandardOptionDataBundle {
 
   @Override
   public double getCostOfCarry() {
-    final double t = 0; //TODO this only works if the yield curve is constant - need to change when we have a cost of carry model
+    final double t = 0; // TODO this only works if the yield curve is constant - need to change when we have a cost of carry model
     return getInterestRate(t) - getForeignInterestRate(t);
   }
 
@@ -41,7 +42,7 @@ public class FXOptionDataBundle extends StandardOptionDataBundle {
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_foreignInterestRate == null) ? 0 : _foreignInterestRate.hashCode());
+    result = prime * result + (_foreignInterestRate == null ? 0 : _foreignInterestRate.hashCode());
     return result;
   }
 

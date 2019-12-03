@@ -23,71 +23,71 @@ import com.opengamma.util.test.TestGroup;
 public class QueryHolidayDbHolidayMasterWorkerGetTest extends AbstractDbHolidayMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryHolidayDbHolidayMasterWorkerGetTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryHolidayDbHolidayMasterWorkerGetTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryHolidayDbHolidayMasterWorkerGetTest(String databaseType, String databaseVersion) {
+  public QueryHolidayDbHolidayMasterWorkerGetTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getHoliday_nullUID() {
-    _holMaster.get((UniqueId)null);
+    _holMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getHoliday_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "0", "0");
     _holMaster.get(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getHoliday_versioned_notFoundVersion() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "101", "1");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101", "1");
     _holMaster.get(uniqueId);
   }
 
   @Test
   public void test_getHoliday_versioned_oneHolidayDate() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
-    HolidayDocument test = _holMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHol", "101", "0");
+    final HolidayDocument test = _holMaster.get(uniqueId);
     assert101(test);
   }
 
   @Test
   public void test_getHoliday_versioned_twoHolidayDates() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "102", "0");
-    HolidayDocument test = _holMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHol", "102", "0");
+    final HolidayDocument test = _holMaster.get(uniqueId);
     assert102(test);
   }
 
   @Test
   public void test_getHoliday_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "201", "0");
-    HolidayDocument test = _holMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHol", "201", "0");
+    final HolidayDocument test = _holMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_getHoliday_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "201", "1");
-    HolidayDocument test = _holMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbHol", "201", "1");
+    final HolidayDocument test = _holMaster.get(uniqueId);
     assert202(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getHoliday_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbHol", "0");
+    final UniqueId uniqueId = UniqueId.of("DbHol", "0");
     _holMaster.get(uniqueId);
   }
 
   @Test
   public void test_getHoliday_unversioned() {
-    UniqueId oid = UniqueId.of("DbHol", "201");
-    HolidayDocument test = _holMaster.get(oid);
+    final UniqueId oid = UniqueId.of("DbHol", "201");
+    final HolidayDocument test = _holMaster.get(oid);
     assert202(test);
   }
 

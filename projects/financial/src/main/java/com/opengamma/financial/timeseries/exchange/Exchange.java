@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.timeseries.exchange;
 
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * A simple definition of an exchange.
@@ -23,52 +23,52 @@ public class Exchange {
   /**
    * @param mic the mic to set
    */
-  protected void setMic(String mic) {
+  protected void setMic(final String mic) {
     _mic = mic;
   }
-  
+
   /**
    * @param description the description to set
    */
-  protected void setDescription(String description) {
+  protected void setDescription(final String description) {
     _description = description;
   }
-  
+
   /**
    * @param countryCode the countryCode to set
    */
-  protected void setCountryCode(String countryCode) {
+  protected void setCountryCode(final String countryCode) {
     _countryCode = countryCode;
   }
-  
+
   /**
    * @param country the country to set
    */
-  protected void setCountry(String country) {
+  protected void setCountry(final String country) {
     _country = country;
   }
-  
+
   /**
    * @param city the city to set
    */
-  protected void setCity(String city) {
+  protected void setCity(final String city) {
     _city = city;
   }
-  
+
   /**
    * @param acr the acr to set
    */
-  protected void setAcr(String acr) {
+  protected void setAcr(final String acr) {
     _acr = acr;
   }
-  
+
   /**
    * @param status the status to set
    */
-  protected void setStatus(String status) {
+  protected void setStatus(final String status) {
     _status = status;
   }
-  
+
   /**
    * @return the mic
    */
@@ -123,13 +123,13 @@ public class Exchange {
     final int prime = 31;
     int result = 1;
     result = prime * result
-        + ((_countryCode == null) ? 0 : _countryCode.hashCode());
-    result = prime * result + ((_mic == null) ? 0 : _mic.hashCode());
+        + (_countryCode == null ? 0 : _countryCode.hashCode());
+    result = prime * result + (_mic == null ? 0 : _mic.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -139,7 +139,7 @@ public class Exchange {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    Exchange other = (Exchange) obj;
+    final Exchange other = (Exchange) obj;
     if (_countryCode == null) {
       if (other._countryCode != null) {
         return false;
@@ -159,7 +159,7 @@ public class Exchange {
 
   @Override
   public String toString() {
-    return ReflectionToStringBuilder.reflectionToString(this);
+    return ToStringBuilder.reflectionToString(this);
   }
-  
+
 }

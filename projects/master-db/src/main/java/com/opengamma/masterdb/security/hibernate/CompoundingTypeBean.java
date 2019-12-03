@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate;
@@ -16,7 +16,7 @@ public class CompoundingTypeBean extends EnumBean {
   /**
    * @param compoundingTypeName The compoundingType
    */
-  public CompoundingTypeBean(String compoundingTypeName) {
+  public CompoundingTypeBean(final String compoundingTypeName) {
     super(compoundingTypeName);
   }
 

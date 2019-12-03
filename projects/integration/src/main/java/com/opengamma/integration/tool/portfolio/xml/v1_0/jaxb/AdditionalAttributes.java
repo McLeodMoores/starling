@@ -18,7 +18,7 @@ public class AdditionalAttributes {
     return _attributes;
   }
 
-  public void setAttributes(List<Attribute> attributes) {
+  public void setAttributes(final List<Attribute> attributes) {
     _attributes = attributes;
   }
 

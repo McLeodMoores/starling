@@ -21,7 +21,7 @@ public final class DependencyNodeFunctionImpl implements DependencyNodeFunction,
 
   private static final long serialVersionUID = 1L;
 
-  private static final WeakInstanceCache<DependencyNodeFunctionImpl> s_instances = new WeakInstanceCache<DependencyNodeFunctionImpl>();
+  private static final WeakInstanceCache<DependencyNodeFunctionImpl> INSTANCES = new WeakInstanceCache<>();
 
   private final String _functionId;
 
@@ -35,7 +35,7 @@ public final class DependencyNodeFunctionImpl implements DependencyNodeFunction,
   public static DependencyNodeFunction of(final String functionId, final FunctionParameters parameters) {
     ArgumentChecker.notNull(functionId, "functionId");
     ArgumentChecker.notNull(parameters, "parameters");
-    return s_instances.get(new DependencyNodeFunctionImpl(functionId, parameters));
+    return INSTANCES.get(new DependencyNodeFunctionImpl(functionId, parameters));
   }
 
   public static DependencyNodeFunction of(final FunctionDefinition function) {
@@ -81,7 +81,7 @@ public final class DependencyNodeFunctionImpl implements DependencyNodeFunction,
   // Serializable
 
   private Object readResolve() throws ObjectStreamException {
-    return s_instances.get(this);
+    return INSTANCES.get(this);
   }
 
 }

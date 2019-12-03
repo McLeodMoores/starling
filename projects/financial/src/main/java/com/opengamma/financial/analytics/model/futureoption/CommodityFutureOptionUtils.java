@@ -16,11 +16,12 @@ import com.opengamma.id.ExternalId;
 public class CommodityFutureOptionUtils {
 
   /**
-   * Commodity volatility surface uses ticker in name, extract that here
-   * Will be obsoleted when commodity surface has a proper target
+   * Commodity volatility surface uses ticker in name, extract that here. Will be obsoleted when commodity surface has a proper target
    *
-   * @param security the security the surface is for
-   * @param prefix beginning of the surface name
+   * @param security
+   *          the security the surface is for
+   * @param prefix
+   *          beginning of the surface name
    * @return the surface name
    */
   public static String getSurfaceName(final FinancialSecurity security, final String prefix) {

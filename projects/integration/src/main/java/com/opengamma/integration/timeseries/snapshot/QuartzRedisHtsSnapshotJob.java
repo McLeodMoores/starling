@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.timeseries.snapshot;
@@ -13,30 +13,31 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.util.redis.RedisConnector;
 
 /**
- * Quartz job that starts and executes Redis hts snaphotter
+ * Quartz job that starts and executes Redis hts snaphotter.
  */
 public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
-  
+
   private HistoricalTimeSeriesMaster _htsMaster;
-  
+
   private String _dataSource;
-  
+
   private String _normalizationRuleSetId;
-  
+
   private String _observationTime;
-  
+
   private RedisConnector _redisConnector;
-  
+
   private BlackList _schemeBlackList;
-  
+
   private BlackList _dataFieldBlackList;
-  
+
   private String _globalPrefix;
-  
+
   private String _baseDir;
-    
+
   /**
    * Gets the htsMaster.
+   * 
    * @return the htsMaster
    */
   public HistoricalTimeSeriesMaster getHtsMaster() {
@@ -45,14 +46,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the htsMaster.
-   * @param htsMaster  the htsMaster
+   * 
+   * @param htsMaster
+   *          the htsMaster
    */
-  public void setHtsMaster(HistoricalTimeSeriesMaster htsMaster) {
+  public void setHtsMaster(final HistoricalTimeSeriesMaster htsMaster) {
     _htsMaster = htsMaster;
   }
 
   /**
    * Gets the dataSource.
+   * 
    * @return the dataSource
    */
   public String getDataSource() {
@@ -61,14 +65,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the dataSource.
-   * @param dataSource  the dataSource
+   * 
+   * @param dataSource
+   *          the dataSource
    */
-  public void setDataSource(String dataSource) {
+  public void setDataSource(final String dataSource) {
     _dataSource = dataSource;
   }
 
   /**
    * Gets the normalizationRuleSetId.
+   * 
    * @return the normalizationRuleSetId
    */
   public String getNormalizationRuleSetId() {
@@ -77,14 +84,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the normalizationRuleSetId.
-   * @param normalizationRuleSetId  the normalizationRuleSetId
+   * 
+   * @param normalizationRuleSetId
+   *          the normalizationRuleSetId
    */
-  public void setNormalizationRuleSetId(String normalizationRuleSetId) {
+  public void setNormalizationRuleSetId(final String normalizationRuleSetId) {
     _normalizationRuleSetId = normalizationRuleSetId;
   }
 
   /**
    * Gets the observationTime.
+   * 
    * @return the observationTime
    */
   public String getObservationTime() {
@@ -93,14 +103,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the observationTime.
-   * @param observationTime  the observationTime
+   * 
+   * @param observationTime
+   *          the observationTime
    */
-  public void setObservationTime(String observationTime) {
+  public void setObservationTime(final String observationTime) {
     _observationTime = observationTime;
   }
 
   /**
    * Gets the redisConnector.
+   * 
    * @return the redisConnector
    */
   public RedisConnector getRedisConnector() {
@@ -109,14 +122,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the redisConnector.
-   * @param redisConnector  the redisConnector
+   * 
+   * @param redisConnector
+   *          the redisConnector
    */
-  public void setRedisConnector(RedisConnector redisConnector) {
+  public void setRedisConnector(final RedisConnector redisConnector) {
     _redisConnector = redisConnector;
   }
-  
+
   /**
    * Gets the schemeBlackList.
+   * 
    * @return the schemeBlackList
    */
   public BlackList getSchemeBlackList() {
@@ -125,14 +141,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the schemeBlackList.
-   * @param schemeBlackList  the schemeBlackList
+   * 
+   * @param schemeBlackList
+   *          the schemeBlackList
    */
-  public void setSchemeBlackList(BlackList schemeBlackList) {
+  public void setSchemeBlackList(final BlackList schemeBlackList) {
     _schemeBlackList = schemeBlackList;
   }
 
   /**
    * Gets the dataFieldBlackList.
+   * 
    * @return the dataFieldBlackList
    */
   public BlackList getDataFieldBlackList() {
@@ -141,14 +160,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the dataFieldBlackList.
-   * @param dataFieldBlackList  the dataFieldBlackList
+   * 
+   * @param dataFieldBlackList
+   *          the dataFieldBlackList
    */
-  public void setDataFieldBlackList(BlackList dataFieldBlackList) {
+  public void setDataFieldBlackList(final BlackList dataFieldBlackList) {
     _dataFieldBlackList = dataFieldBlackList;
   }
-  
+
   /**
    * Gets the globalPrefix.
+   * 
    * @return the globalPrefix
    */
   public String getGlobalPrefix() {
@@ -157,14 +179,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the globalPrefix.
-   * @param globalPrefix  the globalPrefix
+   * 
+   * @param globalPrefix
+   *          the globalPrefix
    */
-  public void setGlobalPrefix(String globalPrefix) {
+  public void setGlobalPrefix(final String globalPrefix) {
     _globalPrefix = globalPrefix;
   }
-  
+
   /**
    * Gets the baseDir.
+   * 
    * @return the baseDir
    */
   public String getBaseDir() {
@@ -173,15 +198,17 @@ public class QuartzRedisHtsSnapshotJob extends QuartzJobBean {
 
   /**
    * Sets the baseDir.
-   * @param baseDir  the baseDir
+   * 
+   * @param baseDir
+   *          the baseDir
    */
-  public void setBaseDir(String baseDir) {
+  public void setBaseDir(final String baseDir) {
     _baseDir = baseDir;
   }
 
   @Override
-  protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-    RedisHtsSnapshotJob job = new RedisHtsSnapshotJob();
+  protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
+    final RedisHtsSnapshotJob job = new RedisHtsSnapshotJob();
     job.setHistoricalTimeSeriesMaster(getHtsMaster());
     if (getGlobalPrefix() != null) {
       job.setGlobalPrefix(getGlobalPrefix());

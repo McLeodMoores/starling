@@ -16,7 +16,7 @@ import org.threeten.bp.temporal.TemporalAdjuster;
 public class NextMonthAdjuster implements TemporalAdjuster {
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     return temporal.plus(1, MONTHS);
   }
 

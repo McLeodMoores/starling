@@ -21,8 +21,9 @@ public class ConfigDBForwardSwapCurveSpecificationSource implements ForwardCurve
   private final ConfigSourceQuery<ForwardSwapCurveSpecification> _query;
 
   /**
-   * @param configSource the config source, not null
-   * @deprecated Use {@link ConfigDBForwardSwapCurveSpecificationSource(ConfigSource,VersionCorrection)} or {@link #init} instead.
+   * @param configSource
+   *          the config source, not null
+   * @deprecated Use the other constructor or {@link ConfigDBForwardSwapCurveSpecificationSource#init(FunctionCompilationContext, FunctionDefinition)} instead.
    */
   @Deprecated
   public ConfigDBForwardSwapCurveSpecificationSource(final ConfigSource configSource) {

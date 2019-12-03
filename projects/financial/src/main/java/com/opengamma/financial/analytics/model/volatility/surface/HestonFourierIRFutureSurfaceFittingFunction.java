@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +12,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
@@ -24,8 +20,9 @@ import com.opengamma.analytics.financial.model.volatility.smile.function.HestonV
 import com.opengamma.analytics.math.curve.NodalDoublesCurve;
 import com.opengamma.analytics.math.interpolation.FlatExtrapolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
-import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
@@ -50,23 +47,25 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.ObjectsPair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(HestonFourierIRFutureSurfaceFittingFunction.class);
   private static final double ERROR = 0.001;
   private static final HestonVolatilityFunction HESTON_FUNCTION = new HestonVolatilityFunction();
-  private static final DoubleMatrix1D HESTON_INITIAL_VALUES = new DoubleMatrix1D(new double[] {1.5, 0.1, 0.1, 0.5, 0.0});
-  private static final LinearInterpolator1D LINEAR = (LinearInterpolator1D) Interpolator1DFactory.getInterpolator(Interpolator1DFactory.LINEAR);
+  private static final DoubleMatrix1D HESTON_INITIAL_VALUES = new DoubleMatrix1D(new double[] { 1.5, 0.1, 0.1, 0.5, 0.0 });
+  private static final Interpolator1D LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME);
   private static final FlatExtrapolator1D FLAT = new FlatExtrapolator1D();
   private static final GridInterpolator2D INTERPOLATOR = new GridInterpolator2D(LINEAR, LINEAR, FLAT, FLAT);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
 
-    //currency
+    // currency
     final Currency currency = Currency.of(((UniqueId) target.getValue()).getValue());
 
     // future curve
@@ -85,7 +84,7 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
     @SuppressWarnings("unchecked")
     final VolatilitySurfaceData<Double, Double> volatilitySurfaceData = (VolatilitySurfaceData<Double, Double>) objectSurfaceData;
 
-    //assumes that the sorting is first x, then y
+    // assumes that the sorting is first x, then y
     if (volatilitySurfaceData.size() == 0) {
       throw new OpenGammaRuntimeException("Interest rate future option volatility surface definition name=" + futurePriceData.getName() + " contains no data");
     }
@@ -99,7 +98,7 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
     final DoubleArrayList omegaList = new DoubleArrayList();
     final DoubleArrayList rhoList = new DoubleArrayList();
     final DoubleArrayList chiSqList = new DoubleArrayList();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
     for (final Double t : x) {
       final List<ObjectsPair<Double, Double>> strip = volatilitySurfaceData.getYValuesForX(t);
       final int n = strip.size();
@@ -123,7 +122,8 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
           ArrayUtils.reverse(strikes);
           ArrayUtils.reverse(sigma);
           ArrayUtils.reverse(errors);
-          final LeastSquareResultsWithTransform fittedResult = new HestonModelFitter(forward, strikes, t, sigma, errors, HESTON_FUNCTION).solve(HESTON_INITIAL_VALUES);
+          final LeastSquareResultsWithTransform fittedResult = new HestonModelFitter(forward, strikes, t, sigma, errors, HESTON_FUNCTION)
+              .solve(HESTON_INITIAL_VALUES);
           final DoubleMatrix1D parameters = fittedResult.getModelParameters();
           fittedOptionExpiryList.add(t);
           futureDelayList.add(0);
@@ -137,7 +137,7 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
         }
       }
     }
-    if (fittedOptionExpiryList.size() < 5) { //don't have sufficient fits to construct a surface
+    if (fittedOptionExpiryList.size() < 5) { // don't have sufficient fits to construct a surface
       throw new OpenGammaRuntimeException("Could not construct Heston parameter surfaces; have under 5 surface points");
     }
     final double[] fittedOptionExpiry = fittedOptionExpiryList.toDoubleArray();
@@ -147,12 +147,16 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
     final double[] vol0 = vol0List.toDoubleArray();
     final double[] omega = omegaList.toDoubleArray();
     final double[] rho = rhoList.toDoubleArray();
-    final InterpolatedDoublesSurface kappaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, kappa, INTERPOLATOR, "Heston kappa surface");
-    final InterpolatedDoublesSurface thetaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, theta, INTERPOLATOR, "Heston theta surface");
+    final InterpolatedDoublesSurface kappaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, kappa, INTERPOLATOR,
+        "Heston kappa surface");
+    final InterpolatedDoublesSurface thetaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, theta, INTERPOLATOR,
+        "Heston theta surface");
     final InterpolatedDoublesSurface vol0Surface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, vol0, INTERPOLATOR, "Heston vol0 surface");
-    final InterpolatedDoublesSurface omegaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, omega, INTERPOLATOR, "Heston omega surface");
+    final InterpolatedDoublesSurface omegaSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, omega, INTERPOLATOR,
+        "Heston omega surface");
     final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(fittedOptionExpiry, futureDelay, rho, INTERPOLATOR, "Heston rho surface");
-    final HestonFittedSurfaces fittedSurfaces = new HestonFittedSurfaces(kappaSurface, thetaSurface, vol0Surface, omegaSurface, rhoSurface, inverseJacobians, currency);
+    final HestonFittedSurfaces fittedSurfaces = new HestonFittedSurfaces(kappaSurface, thetaSurface, vol0Surface, omegaSurface, rhoSurface, inverseJacobians,
+        currency);
     final ValueProperties resultProperties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency.getCode())
         .with(ValuePropertyNames.SURFACE, surfaceName)
@@ -175,10 +179,12 @@ public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunctio
     final String surfaceName = surfaceNames.iterator().next();
     final ValueProperties surfaceProperties = ValueProperties.with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_OPTION).get();
-    final ValueRequirement surfaceRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), surfaceProperties);
+    final ValueRequirement surfaceRequirement = new ValueRequirement(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        surfaceProperties);
     final ValueProperties futurePriceProperties = ValueProperties.with(ValuePropertyNames.CURVE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.IR_FUTURE_PRICE).get();
-    final ValueRequirement futurePriceRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), futurePriceProperties);
+    final ValueRequirement futurePriceRequirement = new ValueRequirement(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+        futurePriceProperties);
     return Sets.newHashSet(futurePriceRequirement, surfaceRequirement);
   }
 

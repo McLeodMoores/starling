@@ -28,7 +28,6 @@ import com.opengamma.master.legalentity.impl.DataLegalEntityMasterResource;
 import com.opengamma.master.legalentity.impl.EHCachingLegalEntityMaster;
 import com.opengamma.master.legalentity.impl.RemoteLegalEntityMaster;
 
-
 import net.sf.ehcache.CacheManager;
 
 /**
@@ -63,14 +62,14 @@ public class EHCachingLegalEntityMasterComponentFactory extends AbstractComponen
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
 
-    LegalEntityMaster master = new EHCachingLegalEntityMaster(getClassifier(),
+    final LegalEntityMaster master = new EHCachingLegalEntityMaster(getClassifier(),
                                                       getUnderlying(),
                                                       getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(LegalEntityMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(LegalEntityMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteLegalEntityMaster.class);

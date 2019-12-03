@@ -34,19 +34,19 @@ public class DataTrackingSecurityMasterComponentFactory extends AbstractComponen
 
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   @PropertyDefinition(validate = "notNull")
   private SecurityMaster _trackedMaster;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    
-    ComponentInfo componentInfo = new ComponentInfo(SecurityMaster.class, _classifier);
-    
-    DataTrackingSecurityMaster dataTrackingSecurityMaster = new DataTrackingSecurityMaster(_trackedMaster);
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+
+    final ComponentInfo componentInfo = new ComponentInfo(SecurityMaster.class, _classifier);
+
+    final DataTrackingSecurityMaster dataTrackingSecurityMaster = new DataTrackingSecurityMaster(_trackedMaster);
+
     repo.registerComponent(componentInfo, dataTrackingSecurityMaster);
-    
+
     repo.getRestComponents().publish(componentInfo, new DataSecurityMasterResource(_trackedMaster));
 
   }

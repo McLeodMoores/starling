@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.curve.inflation.generator;
@@ -21,19 +21,21 @@ public abstract class GeneratorPriceIndexCurve extends GeneratorCurve {
    * @param parameters The parameters.
    * @return The curve.
    */
-  abstract PriceIndexCurve generateCurve(final String name, final double[] parameters);
+  abstract PriceIndexCurve generateCurve(String name, double[] parameters);
 
   /**
-   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the generated curve depends on previous curves.
+   * Generate a curve using the parameters of a vector and an existing bundle.
+   * The existing bundle will be required if the generated curve depends on previous curves.
    * @param name The curve name.
    * @param inflation The multi-curves provider.
    * @param parameters The parameters.
    * @return The curve.
    */
-  public abstract PriceIndexCurve generateCurve(final String name, final InflationProviderInterface inflation, final double[] parameters);
+  public abstract PriceIndexCurve generateCurve(String name, InflationProviderInterface inflation, double[] parameters);
 
   /**
-   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the generated curve depends on previous curves.
+   * Generate a curve using the parameters of a vector and an existing bundle.
+   * The existing bundle will be required if the generated curve depends on previous curves.
    * @param name The curve name.
    * @param inflation The multi-curves provider.
    * @param parameters The parameters.
@@ -44,8 +46,8 @@ public abstract class GeneratorPriceIndexCurve extends GeneratorCurve {
   }
 
   /**
-   * Some generators require a two stage process. The generator with the general description (like interpolated) and 
-   * a specific one with all the details (like the node times for the interpolated). 
+   * Some generators require a two stage process. The generator with the general description (like interpolated) and
+   * a specific one with all the details (like the node times for the interpolated).
    * The method create the specific generator from the generic one.
    * @param data The additional data.
    * @return The final generator.

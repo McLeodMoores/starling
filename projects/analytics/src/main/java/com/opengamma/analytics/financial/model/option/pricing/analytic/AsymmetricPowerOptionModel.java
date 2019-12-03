@@ -15,38 +15,10 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 
 /**
  * Pricing model for asymmetric power options (see {@link com.opengamma.analytics.financial.model.option.definition.AsymmetricPowerOptionDefinition}).
- * <p>
- * The price of a call is given by:
- * $$
- * \begin{align*}
- * c = S^i e^{[(i-1)(r + \frac{i\sigma^2}{2}) - i(r-b)]T}N(d_1) - Ke^{-rT}N(d_2)
- * \end{align*}
- * $$
- * and of a put by:
- * $$
- * \begin{align*}
- * p = Ke^{-rT}N(-d_2) - S^i e^{[(i-1)(r + \frac{i\sigma^2}{2}) - i(r-b)]T}N(-d_1)
- * \end{align*}
- * $$
- * where 
- * $$
- * \begin{align*}
- * d_1 = \frac{\ln\left(\frac{S}{K^{\frac{1}{i}}}\right) + (b + (i - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * and
- * $$
- * \begin{align*}
- * d_2 = d_1 - i\sigma\sqrt{T}
- * \end{align*}
- * $$
  */
 public class AsymmetricPowerOptionModel extends AnalyticOptionModel<AsymmetricPowerOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Function1D<StandardOptionDataBundle, Double> getPricingFunction(final AsymmetricPowerOptionDefinition definition) {
     Validate.notNull(definition);

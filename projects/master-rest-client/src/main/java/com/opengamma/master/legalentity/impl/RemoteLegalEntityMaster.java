@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.legalentity.impl;
@@ -29,8 +29,8 @@ import com.sun.jersey.api.client.GenericType;
  * Provides access to a remote {@link LegalEntityMaster}.
  */
 public class RemoteLegalEntityMaster
-    extends AbstractRemoteDocumentMaster<LegalEntityDocument>
-    implements LegalEntityMaster {
+extends AbstractRemoteDocumentMaster<LegalEntityDocument>
+implements LegalEntityMaster {
 
   /**
    * Creates an instance.
@@ -47,16 +47,16 @@ public class RemoteLegalEntityMaster
    * @param baseUri       the base target URI for all RESTful web services, not null
    * @param changeManager the change manager, not null
    */
-  public RemoteLegalEntityMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteLegalEntityMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LegalEntityMetaDataResult metaData(LegalEntityMetaDataRequest request) {
+  public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataLegalEntityMasterUris.uriMetaData(getBaseUri(), request);
+    final URI uri = DataLegalEntityMasterUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(LegalEntityMetaDataResult.class);
   }
 
@@ -65,7 +65,7 @@ public class RemoteLegalEntityMaster
   public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataLegalEntityMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataLegalEntityMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(LegalEntitySearchResult.class, request);
   }
 
@@ -75,11 +75,10 @@ public class RemoteLegalEntityMaster
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uriVersion(getBaseUri(), uniqueId);
+      final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(LegalEntityDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
   //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ public class RemoteLegalEntityMaster
   public LegalEntityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(LegalEntityDocument.class);
   }
 
@@ -97,7 +96,7 @@ public class RemoteLegalEntityMaster
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getLegalEntity(), "document.legalentity");
 
-    URI uri = DataLegalEntityMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataLegalEntityMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(LegalEntityDocument.class, document);
   }
 
@@ -108,7 +107,7 @@ public class RemoteLegalEntityMaster
     ArgumentChecker.notNull(document.getLegalEntity(), "document.legalentity");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(LegalEntityDocument.class, document);
   }
 
@@ -117,7 +116,7 @@ public class RemoteLegalEntityMaster
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
@@ -127,7 +126,7 @@ public class RemoteLegalEntityMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uriVersions(getBaseUri(), request.getObjectId(), request);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriVersions(getBaseUri(), request.getObjectId(), request);
     return accessRemote(uri).get(LegalEntityHistoryResult.class);
   }
 
@@ -138,46 +137,46 @@ public class RemoteLegalEntityMaster
     ArgumentChecker.notNull(document.getLegalEntity(), "document.legalentity");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(LegalEntityDocument.class, document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<LegalEntityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<LegalEntityDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (LegalEntityDocument replacementDocument : replacementDocuments) {
+    for (final LegalEntityDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getLegalEntity(), "replacementDocument.legalentity");
     }
 
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uriVersion(getBaseUri(), uniqueId);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<LegalEntityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<LegalEntityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (LegalEntityDocument replacementDocument : replacementDocuments) {
+    for (final LegalEntityDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getLegalEntity(), "replacementDocument.legalentity");
     }
-    URI uri = (new com.opengamma.master.legalentity.impl.DataLegalEntityUris()).uriAll(getBaseUri(), objectId, null);
+    final URI uri = new com.opengamma.master.legalentity.impl.DataLegalEntityUris().uriAll(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<LegalEntityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<LegalEntityDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (LegalEntityDocument replacementDocument : replacementDocuments) {
+    for (final LegalEntityDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "replacementDocument");
       ArgumentChecker.notNull(replacementDocument.getLegalEntity(), "replacementDocument.legalentity");
     }
-    URI uri = (new DataLegalEntityUris()).uri(getBaseUri(), objectId, null);
+    final URI uri = new DataLegalEntityUris().uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

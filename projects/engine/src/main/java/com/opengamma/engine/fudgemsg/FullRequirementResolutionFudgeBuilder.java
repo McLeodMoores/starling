@@ -24,7 +24,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
 /**
  * Fudge builder for {@link FullRequirementResolution}.
- * 
+ *
  * <pre>
  * message FullRequirementResolution {
  *   required ValueRequirement requirement;       // the attempted resolution
@@ -45,12 +45,12 @@ public class FullRequirementResolutionFudgeBuilder implements FudgeBuilder<FullR
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FullRequirementResolution object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, REQUIREMENT_FIELD_NAME, null, object.getRequirement());
-    for (Collection<RequirementResolution> resolutions : object.getResolutions()) {
+    for (final Collection<RequirementResolution> resolutions : object.getResolutions()) {
       if (resolutions.size() == 1) {
         serializer.addToMessage(msg, RESOLUTION_FIELD_NAME, null, resolutions.iterator().next());
       } else if (resolutions.size() > 1) {
         final MutableFudgeMsg resolutionsMsg = msg.addSubMessage(RESOLUTION_FIELD_NAME, null);
-        for (RequirementResolution resolution : resolutions) {
+        for (final RequirementResolution resolution : resolutions) {
           if (resolution != null) {
             serializer.addToMessage(resolutionsMsg, null, null, resolution);
           } else {
@@ -64,13 +64,14 @@ public class FullRequirementResolutionFudgeBuilder implements FudgeBuilder<FullR
 
   @Override
   public FullRequirementResolution buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    final FullRequirementResolution result = new FullRequirementResolution(deserializer.fieldValueToObject(ValueRequirement.class, msg.getByName(REQUIREMENT_FIELD_NAME)));
+    final FullRequirementResolution result =
+        new FullRequirementResolution(deserializer.fieldValueToObject(ValueRequirement.class, msg.getByName(REQUIREMENT_FIELD_NAME)));
     final Collection<FudgeField> resolutionFields = msg.getAllByName(RESOLUTION_FIELD_NAME);
-    for (FudgeField resolutionField : resolutionFields) {
-      final FudgeMsg resolutionsMessage = ((FudgeMsg) resolutionField.getValue());
+    for (final FudgeField resolutionField : resolutionFields) {
+      final FudgeMsg resolutionsMessage = (FudgeMsg) resolutionField.getValue();
       if (resolutionsMessage.hasField((String) null)) {
-        final Collection<RequirementResolution> resolved = new ArrayList<RequirementResolution>(resolutionsMessage.getNumFields());
-        for (FudgeField resolutionField2 : resolutionsMessage) {
+        final Collection<RequirementResolution> resolved = new ArrayList<>(resolutionsMessage.getNumFields());
+        for (final FudgeField resolutionField2 : resolutionsMessage) {
           if (resolutionField2.getValue() instanceof IndicatorType) {
             resolved.add(null);
           } else {

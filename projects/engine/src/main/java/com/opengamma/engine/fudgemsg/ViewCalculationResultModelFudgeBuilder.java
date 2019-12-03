@@ -26,29 +26,29 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 @GenericFudgeBuilderFor(ViewCalculationResultModel.class)
 public class ViewCalculationResultModelFudgeBuilder implements FudgeBuilder<ViewCalculationResultModel> {
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ViewCalculationResultModel resultModel) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ViewCalculationResultModel resultModel) {
     final MutableFudgeMsg message = serializer.newMessage();
     final Collection<ComputationTargetSpecification> targets = resultModel.getAllTargets();
-    for (ComputationTargetSpecification target : targets) {
+    for (final ComputationTargetSpecification target : targets) {
       final Collection<ComputedValueResult> values = resultModel.getAllValues(target);
-      for (ComputedValueResult value : values) {
+      for (final ComputedValueResult value : values) {
         serializer.addToMessage(message, null, null, value);
       }
     }
     return message;
   }
-  
+
   @Override
-  public ViewCalculationResultModel buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ViewCalculationResultModel buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final Map<ComputationTargetSpecification, Map<Pair<String, ValueProperties>, ComputedValueResult>> mapNames =
-      new HashMap<ComputationTargetSpecification, Map<Pair<String, ValueProperties>, ComputedValueResult>>();
-    for (FudgeField field : message) {
+      new HashMap<>();
+    for (final FudgeField field : message) {
       final ComputedValueResult value = deserializer.fieldValueToObject(ComputedValueResult.class, field);
       final ComputationTargetSpecification target = value.getSpecification().getTargetSpecification();
       if (!mapNames.containsKey(target)) {
@@ -57,24 +57,24 @@ public class ViewCalculationResultModelFudgeBuilder implements FudgeBuilder<View
       mapNames.get(target).put(Pairs.of(value.getSpecification().getValueName(), value.getSpecification().getProperties()), value);
     }
     return new ViewCalculationResultModel() {
-      
+
       @Override
       public Collection<ComputationTargetSpecification> getAllTargets() {
         return mapNames.keySet();
       }
 
       @Override
-      public Map<Pair<String, ValueProperties>, ComputedValueResult> getValues(ComputationTargetSpecification target) {
+      public Map<Pair<String, ValueProperties>, ComputedValueResult> getValues(final ComputationTargetSpecification target) {
         return mapNames.get(target);
       }
-      
+
       @Override
-      public Collection<ComputedValueResult> getAllValues(ComputationTargetSpecification target) {
-        Map<Pair<String, ValueProperties>, ComputedValueResult> targetValuesMap = mapNames.get(target);
+      public Collection<ComputedValueResult> getAllValues(final ComputationTargetSpecification target) {
+        final Map<Pair<String, ValueProperties>, ComputedValueResult> targetValuesMap = mapNames.get(target);
         return targetValuesMap != null ? Collections.unmodifiableCollection(targetValuesMap.values()) : null;
       }
 
     };
   }
- 
+
 }

@@ -35,19 +35,19 @@ import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAn
 public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunction {
 
   /** The Black present value calculator */
-  private static final EquityOptionBlackPresentValueCalculator s_pvCalculator = EquityOptionBlackPresentValueCalculator.getInstance();
+  private static final EquityOptionBlackPresentValueCalculator PV_CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public EquityOptionBlackScenarioPnLFunction() {
     super(ValueRequirementNames.PNL);
   }
 
-  private static final String s_priceShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
-  private static final String s_volShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
-  private static final String s_priceShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
-  private static final String s_volShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
+  private static final String PRICE_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
+  private static final String VOL_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
+  private static final String PRICE_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
+  private static final String VOL_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionBlackScenarioPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionBlackScenarioPnLFunction.class);
 
   private String getValueRequirementName() {
     return ValueRequirementNames.PNL;
@@ -59,16 +59,15 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
       final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
 
     // Compute present value under current market
-    final double pvBase = derivative.accept(s_pvCalculator, market);
-
+    final double pvBase = derivative.accept(PV_CALCULATOR, market);
 
     // Form market scenario
     final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
 
     // Apply shift to forward price curve
     final ForwardCurve fwdCurveScen;
-    final String priceShiftTypeConstraint = constraints.getValues(s_priceShiftType).iterator().next();
-    final String stockConstraint = constraints.getValues(s_priceShift).iterator().next();
+    final String priceShiftTypeConstraint = constraints.getValues(PRICE_SHIFT_TYPE).iterator().next();
+    final String stockConstraint = constraints.getValues(PRICE_SHIFT).iterator().next();
 
     if (stockConstraint.equals("")) {
       fwdCurveScen = market.getForwardCurve(); // use base market prices
@@ -82,26 +81,27 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
         fractionalShift = Double.valueOf(stockConstraint);
       } else {
         fractionalShift = Double.valueOf(stockConstraint);
-        s_logger.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
       }
       fwdCurveScen = market.getForwardCurve().withFractionalShift(fractionalShift);
     }
 
     // Apply shift to vol surface curve
     final BlackVolatilitySurface<?> volSurfScen;
-    final String volConstraint = constraints.getValues(s_volShift).iterator().next();
+    final String volConstraint = constraints.getValues(VOL_SHIFT).iterator().next();
     if (volConstraint.equals("")) { // use base market vols
       volSurfScen = market.getVolatilitySurface();
     } else { // bump vol surface
       final Double shiftVol = Double.valueOf(volConstraint);
-      final String volShiftTypeConstraint = constraints.getValues(s_volShiftType).iterator().next();
+      final String volShiftTypeConstraint = constraints.getValues(VOL_SHIFT_TYPE).iterator().next();
       final boolean additiveShift;
       if (volShiftTypeConstraint.equalsIgnoreCase("Additive")) {
         additiveShift = true;
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        s_logger.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug(
+            "In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       volSurfScen = market.getVolatilitySurface().withShift(shiftVol, additiveShift);
@@ -110,7 +110,7 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
     final StaticReplicationDataBundle marketScen = new StaticReplicationDataBundle(volSurfScen, market.getDiscountCurve(), fwdCurveScen);
 
     // Compute present value under scenario
-    final double pvScen = derivative.accept(s_pvCalculator, marketScen);
+    final double pvScen = derivative.accept(PV_CALCULATOR, marketScen);
 
     // Return with spec
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
@@ -128,45 +128,45 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
     final ValueProperties constraints = desiredValue.getConstraints();
     ValueProperties.Builder scenarioDefaults = null;
 
-    final Set<String> priceShiftSet = constraints.getValues(s_priceShift);
+    final Set<String> priceShiftSet = constraints.getValues(PRICE_SHIFT);
     if (priceShiftSet == null || priceShiftSet.isEmpty()) {
-      scenarioDefaults = constraints.copy().withoutAny(s_priceShift).with(s_priceShift, "");
+      scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT).with(PRICE_SHIFT, "");
     }
-    final Set<String> priceShiftTypeSet = constraints.getValues(s_priceShiftType);
+    final Set<String> priceShiftTypeSet = constraints.getValues(PRICE_SHIFT_TYPE);
     if (priceShiftTypeSet == null || priceShiftTypeSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       }
     }
-    final Set<String> volShiftSet = constraints.getValues(s_volShift);
+    final Set<String> volShiftSet = constraints.getValues(VOL_SHIFT);
     if (volShiftSet == null || volShiftSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       }
     }
-    final Set<String> volShiftSetType = constraints.getValues(s_volShiftType);
+    final Set<String> volShiftSetType = constraints.getValues(VOL_SHIFT_TYPE);
     if (volShiftSetType == null || volShiftSetType.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       }
     }
 
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else {  // Scenarios are defined, so we're satisfied
-      return superReqs;
     }
+    return superReqs;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
       if (getValueRequirementName().equals(input.getValueName())) {
@@ -175,10 +175,10 @@ public class EquityOptionBlackScenarioPnLFunction extends EquityOptionBlackFunct
     }
     final ValueSpecification superSpec = super.getResults(context, target, inputs).iterator().next();
     final Builder properties = superSpec.getProperties().copy()
-        .withAny(s_priceShift)
-        .withAny(s_volShift)
-        .withAny(s_priceShiftType)
-        .withAny(s_volShiftType);
+        .withAny(PRICE_SHIFT)
+        .withAny(VOL_SHIFT)
+        .withAny(PRICE_SHIFT_TYPE)
+        .withAny(VOL_SHIFT_TYPE);
 
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties.get()));
   }

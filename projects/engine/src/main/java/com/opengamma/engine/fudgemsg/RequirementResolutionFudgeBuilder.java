@@ -27,7 +27,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /**
  * Fudge builder for {@link RequirementResolution}.
- * 
+ *
  * <pre>
  * message RequirementResolution {
  *   required ValueSpecification specification;   // the resolved specification
@@ -56,7 +56,7 @@ public class RequirementResolutionFudgeBuilder implements FudgeBuilder<Requireme
       serializer.addToMessageWithClassHeaders(msg, PARAMETERS_FIELD_NAME, null, object.getFunction().getParameters(), FunctionParameters.class);
     }
     final MutableFudgeMsg inputsMsg = msg.addSubMessage(INPUTS_FIELD_NAME, null);
-    for (FullRequirementResolution input : object.getInputs()) {
+    for (final FullRequirementResolution input : object.getInputs()) {
       serializer.addToMessage(inputsMsg, null, null, input);
     }
     return msg;
@@ -67,9 +67,8 @@ public class RequirementResolutionFudgeBuilder implements FudgeBuilder<Requireme
     final FudgeField parameters = msg.getByName(PARAMETERS_FIELD_NAME);
     if (parameters == null) {
       return DependencyNodeFunctionImpl.of(functionId, EmptyFunctionParameters.INSTANCE);
-    } else {
-      return DependencyNodeFunctionImpl.of(functionId, deserializer.fieldValueToObject(FunctionParameters.class, parameters));
     }
+    return DependencyNodeFunctionImpl.of(functionId, deserializer.fieldValueToObject(FunctionParameters.class, parameters));
   }
 
   private Collection<FullRequirementResolution> decodeInputs(final FudgeDeserializer deserializer, final FudgeMsg msg) {
@@ -77,8 +76,8 @@ public class RequirementResolutionFudgeBuilder implements FudgeBuilder<Requireme
     if (inputsMsg == null) {
       return ImmutableSet.of();
     }
-    final Collection<FullRequirementResolution> inputs = new ArrayList<FullRequirementResolution>(inputsMsg.getNumFields());
-    for (FudgeField inputField : inputsMsg) {
+    final Collection<FullRequirementResolution> inputs = new ArrayList<>(inputsMsg.getNumFields());
+    for (final FudgeField inputField : inputsMsg) {
       inputs.add(deserializer.fieldValueToObject(FullRequirementResolution.class, inputField));
     }
     return inputs;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -22,8 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Describes a way of executing a dependency graph - that is, a sequence of jobs that will produce the desired result.
  * <p>
- * An execution plan may be executed on an arbitrary node set, but is typically generated in such a way that it will perform best on a given configuration (for example it might have been created with
- * the intention of being used on {@code X} calculation nodes, each with {@code Y} available execution threads).
+ * An execution plan may be executed on an arbitrary node set, but is typically generated in such a way that it will perform
+ * best on a given configuration (for example it might have been created with the intention of being used on {@code X} calculation
+ * nodes, each with {@code Y} available execution threads).
  */
 public class GraphExecutionPlan implements Serializable {
 
@@ -39,7 +40,7 @@ public class GraphExecutionPlan implements Serializable {
 
   /**
    * Creates a new execution plan.
-   * 
+   *
    * @param calculationConfiguration the configuration name, not null - this will be used for constructing job specifications
    * @param functionInitializationId [PLAT-2241] this will go soon
    * @param leafJobs the jobs that will execute first, not null and not containing null - these will refer to other jobs that form part of the full plan
@@ -48,14 +49,14 @@ public class GraphExecutionPlan implements Serializable {
    * @param meanJobCycleCost the mean of each job's CPU cost
    * @param meanJobIOCost the mean of each job's I/O cost
    */
-  public GraphExecutionPlan(final String calculationConfiguration, final long functionInitializationId, final Collection<PlannedJob> leafJobs, final int totalJobs, final double meanJobSize,
-      final double meanJobCycleCost, final double meanJobIOCost) {
+  public GraphExecutionPlan(final String calculationConfiguration, final long functionInitializationId, final Collection<PlannedJob> leafJobs,
+      final int totalJobs, final double meanJobSize, final double meanJobCycleCost, final double meanJobIOCost) {
     ArgumentChecker.notNull(calculationConfiguration, "calculationConfiguration");
     ArgumentChecker.notNull(leafJobs, "leafJobs");
     assert !leafJobs.contains(null);
     _calculationConfiguration = calculationConfiguration;
     _functionInitializationId = functionInitializationId;
-    _leafJobs = new ArrayList<PlannedJob>(leafJobs);
+    _leafJobs = new ArrayList<>(leafJobs);
     _totalJobs = totalJobs;
     _meanJobSize = meanJobSize;
     _meanJobCycleCost = meanJobCycleCost;
@@ -75,7 +76,7 @@ public class GraphExecutionPlan implements Serializable {
 
   /**
    * Returns a copy with an altered calculation configuration name.
-   * 
+   *
    * @param calculationConfiguration the new calculation configuration name
    * @return this instance if the name matches, otherwise a new instance
    */
@@ -88,7 +89,7 @@ public class GraphExecutionPlan implements Serializable {
 
   /**
    * Returns the calculation configuration name.
-   * 
+   *
    * @return the configuration name, not null
    */
   public String getCalculationConfiguration() {
@@ -120,8 +121,9 @@ public class GraphExecutionPlan implements Serializable {
   }
 
   /**
-   * Creates an execution state from the plan. The state may be used to deliver executable jobs that can be used to evaluate the graph that this plan represents.
-   * 
+   * Creates an execution state from the plan. The state may be used to deliver executable jobs that can be used to evaluate
+   * the graph that this plan represents.
+   *
    * @param cycleId the view cycle identifier, not null - this will be used to construct job specifications
    * @param valuationTime the cycle valuation time, not null - this will be used to construct job specifications
    * @param resolverVersionCorrection the resolution timestamp, not null - this will be embedded in all jobs
@@ -137,8 +139,8 @@ public class GraphExecutionPlan implements Serializable {
 
   public void print(final PrintStream out) {
     out.println(getCalculationConfiguration() + ", " + getTotalJobs() + " job(s)");
-    final Map<PlannedJob, Integer> jobs = new HashMap<PlannedJob, Integer>();
-    for (PlannedJob job : getLeafJobs()) {
+    final Map<PlannedJob, Integer> jobs = new HashMap<>();
+    for (final PlannedJob job : getLeafJobs()) {
       job.print(out, "  ", jobs);
     }
   }

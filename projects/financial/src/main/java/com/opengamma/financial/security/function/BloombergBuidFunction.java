@@ -31,7 +31,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes.BLOOMBERG_BUID}
+ * If attached to security's ExternalIdBundle, displays its {@link ExternalSchemes#BLOOMBERG_BUID}.
  */
 public class BloombergBuidFunction extends BaseNonCompiledInvoker {
 
@@ -39,29 +39,28 @@ public class BloombergBuidFunction extends BaseNonCompiledInvoker {
   protected FunctionSignature functionSignature() {
 
     return function(this.getClass().getName(), ComputationTargetType.POSITION_OR_TRADE)
-      .outputs(
-          output(BLOOMBERG_BUID)
-              .targetSpec(originalTarget())
-              .properties(ValueProperties.all())
-      )
+        .outputs(
+            output(BLOOMBERG_BUID)
+                .targetSpec(originalTarget())
+                .properties(ValueProperties.all()))
         .inputs();
   }
-  
+
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext,
-                                    final FunctionInputs inputs,
-                                    ComputationTarget target,
-                                    Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    
-    ValueRequirement desiredValue = functional(desiredValues).first();
-    ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
-                                                                  target.toSpecification(),
-                                                                  desiredValue.getConstraints());
-    Security security = target.getPositionOrTrade().getSecurity();
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
+      final FunctionInputs inputs,
+      final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+
+    final ValueRequirement desiredValue = functional(desiredValues).first();
+    final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
+        target.toSpecification(),
+        desiredValue.getConstraints());
+    final Security security = target.getPositionOrTrade().getSecurity();
     if (security != null) {
-      ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
+      final ExternalIdBundle externalIdBundle = security.getExternalIdBundle();
       if (externalIdBundle != null) {
-        ExternalId externalId = externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
+        final ExternalId externalId = externalIdBundle.getExternalId(ExternalSchemes.BLOOMBERG_BUID);
         if (externalId != null) {
           return newHashSet(new ComputedValue(valueSpecification, externalId.getValue()));
         }

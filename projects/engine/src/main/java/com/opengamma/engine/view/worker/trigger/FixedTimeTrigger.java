@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.trigger;
@@ -12,9 +12,9 @@ public class FixedTimeTrigger implements ViewCycleTrigger {
 
   private long _triggerTimeNanos = Long.MAX_VALUE;
   private ViewCycleTriggerResult _nextResult;
-  
+
   @Override
-  public ViewCycleTriggerResult query(long cycleTimeNanos) {
+  public ViewCycleTriggerResult query(final long cycleTimeNanos) {
     if (cycleTimeNanos >= _triggerTimeNanos) {
       return _nextResult;
     }
@@ -22,15 +22,15 @@ public class FixedTimeTrigger implements ViewCycleTrigger {
   }
 
   @Override
-  public void cycleTriggered(long cycleTimeNanos, ViewCycleType cycleType) {
+  public void cycleTriggered(final long cycleTimeNanos, final ViewCycleType cycleType) {
   }
-  
+
   public void reset() {
     _triggerTimeNanos = Long.MAX_VALUE;
     _nextResult = null;
   }
-  
-  public void set(long triggerTimeNanos, ViewCycleTriggerResult nextResult) {
+
+  public void set(final long triggerTimeNanos, final ViewCycleTriggerResult nextResult) {
     _triggerTimeNanos = triggerTimeNanos;
     _nextResult = nextResult;
   }

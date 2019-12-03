@@ -50,7 +50,7 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ISDACreditSpreadCurveFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
 
   private CurveDefinitionSource _curveDefinitionSource;
   private CurveSpecificationBuilder _curveSpecificationBuilder;
@@ -72,13 +72,14 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
           final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
         final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
-        //TODO
+        // TODO
         CurveSpecification curveSpecification;
         final String idName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
         String curveName;
         try {
           curveName = "SAMEDAY_" + idName;
-          curveSpecification = CurveUtils.getCurveSpecification(now.toInstant(), _curveDefinitionSource, _curveSpecificationBuilder, now.toLocalDate(), curveName);
+          curveSpecification = CurveUtils.getCurveSpecification(now.toInstant(), _curveDefinitionSource, _curveSpecificationBuilder, now.toLocalDate(),
+              curveName);
         } catch (final Exception e) {
           curveName = idName;
           curveSpecification = CurveUtils.getCurveSpecification(now.toInstant(), _curveDefinitionSource, _curveSpecificationBuilder, now.toLocalDate(), idName);
@@ -87,12 +88,13 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
         final List<Tenor> tenors = new ArrayList<>();
         final List<Double> marketSpreads = new ArrayList<>();
         for (final CurveNodeWithIdentifier strip : curveSpecification.getNodes()) {
-          final Object marketSpreadObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, strip.getIdentifier()));
+          final Object marketSpreadObject = inputs
+              .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, strip.getIdentifier()));
           if (marketSpreadObject != null) {
             tenors.add(strip.getCurveNode().getResolvedMaturity());
             marketSpreads.add((Double) marketSpreadObject);
           } else {
-            s_logger.warn("Could not get spread data for {}, defaulting", strip.getIdentifier());
+            LOGGER.warn("Could not get spread data for {}, defaulting", strip.getIdentifier());
             tenors.add(strip.getCurveNode().getResolvedMaturity());
             throw new OpenGammaRuntimeException("Couldn't get spreads for " + strip.getIdentifier());
           }
@@ -119,17 +121,19 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
           return null;
         }
-        //TODO
+        // TODO
         String curveName = "SAMEDAY_" + Iterables.getOnlyElement(curveNames);
         final Set<ValueRequirement> requirements = new HashSet<>();
         try {
-          final CurveSpecification specification = CurveUtils.getCurveSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder, atZDT.toLocalDate(), curveName);
+          final CurveSpecification specification = CurveUtils.getCurveSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder,
+              atZDT.toLocalDate(), curveName);
           for (final CurveNodeWithIdentifier strip : specification.getNodes()) {
             if (strip.getCurveNode() instanceof CreditSpreadNode) {
               requirements.add(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, strip.getIdentifier()));
@@ -137,11 +141,12 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
           }
           return requirements;
         } catch (final Exception e) {
-          s_logger.error(e.getMessage());
-          //TODO backwards compatibility - remove when upstream functions select the correct prefix
+          LOGGER.error(e.getMessage());
+          // TODO backwards compatibility - remove when upstream functions select the correct prefix
           curveName = Iterables.getOnlyElement(curveNames);
           try {
-            final CurveSpecification specification = CurveUtils.getCurveSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder, atZDT.toLocalDate(), curveName);
+            final CurveSpecification specification = CurveUtils.getCurveSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder,
+                atZDT.toLocalDate(), curveName);
             for (final CurveNodeWithIdentifier strip : specification.getNodes()) {
               if (strip.getCurveNode() instanceof CreditSpreadNode) {
                 requirements.add(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, strip.getIdentifier()));
@@ -149,7 +154,7 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
             }
             return requirements;
           } catch (final Exception e1) {
-            s_logger.error(e1.getMessage());
+            LOGGER.error(e1.getMessage());
             return null;
           }
         }

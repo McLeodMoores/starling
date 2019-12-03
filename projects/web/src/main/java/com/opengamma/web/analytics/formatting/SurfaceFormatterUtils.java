@@ -34,19 +34,19 @@ import com.opengamma.web.server.conversion.LabelFormatter;
   static final String Y_TITLE = "yTitle";
   static final String VOL = "vol";
 
-  /* package */ static Object formatExpanded(Surface<Double, Double, Double> surface) {
+  /* package */ static Object formatExpanded(final Surface<Double, Double, Double> surface) {
     if (surface instanceof InterpolatedDoublesSurface) {
-      List<Double> vol = Lists.newArrayList();
+      final List<Double> vol = Lists.newArrayList();
       // the x and y values won't necessarily be unique and won't necessarily map to a rectangular grid
       // this projects them onto a grid with values at every point
-      Set<Double> xData = Sets.newTreeSet(Arrays.asList(surface.getXData()));
-      Set<Double> yData = Sets.newTreeSet(Arrays.asList(surface.getYData()));
-      for (Double y : yData) {
-        for (Double x : xData) {
+      final Set<Double> xData = Sets.newTreeSet(Arrays.asList(surface.getXData()));
+      final Set<Double> yData = Sets.newTreeSet(Arrays.asList(surface.getYData()));
+      for (final Double y : yData) {
+        for (final Double x : xData) {
           vol.add(surface.getZValue(x, y));
         }
       }
-      Map<String, Object> results = Maps.newHashMap();
+      final Map<String, Object> results = Maps.newHashMap();
       results.put(X_VALUES, xData);
       results.put(X_LABELS, SurfaceFormatterUtils.getAxisLabels(xData));
       results.put(X_TITLE, ""); // TODO use labels from VolatilitySurface once they exist
@@ -56,7 +56,7 @@ import com.opengamma.web.server.conversion.LabelFormatter;
       results.put(VOL, vol);
       return results;
     } else if (surface instanceof ConstantDoublesSurface) {
-      Map<String, Object> results = Maps.newHashMap();
+      final Map<String, Object> results = Maps.newHashMap();
       results.put(LabelledMatrix2DFormatter.X_LABELS, Collections.singletonList("All"));
       results.put(LabelledMatrix2DFormatter.Y_LABELS, Collections.singletonList("All"));
       results.put(LabelledMatrix2DFormatter.MATRIX, Collections.singletonList(surface.getZData()));
@@ -68,25 +68,23 @@ import com.opengamma.web.server.conversion.LabelFormatter;
     }
   }
 
-  /* package */ static DataType getDataType(Surface<Double, Double, Double> surface) {
+  /* package */ static DataType getDataType(final Surface<Double, Double, Double> surface) {
     if (surface instanceof InterpolatedDoublesSurface) {
       return DataType.SURFACE_DATA;
-    } else {
-      return DataType.LABELLED_MATRIX_2D;
     }
+    return DataType.LABELLED_MATRIX_2D;
   }
 
-  /* package */ static Object formatCell(Surface<Double, Double, Double> surface) {
+  /* package */ static Object formatCell(final Surface<Double, Double, Double> surface) {
     if (surface instanceof InterpolatedDoublesSurface || surface instanceof NodalDoublesSurface) {
       return "Volatility Surface (" + surface.getXData().length + " x " + surface.getYData().length + ")";
-    } else {
-      return "Volatility Surface";
     }
+    return "Volatility Surface";
   }
 
-  /* package */ static List<String> getAxisLabels(Collection<?> values) {
-    List<String> labels = Lists.newArrayListWithCapacity(values.size());
-    for (Object value : values) {
+  /* package */ static List<String> getAxisLabels(final Collection<?> values) {
+    final List<String> labels = Lists.newArrayListWithCapacity(values.size());
+    for (final Object value : values) {
       labels.add(LabelFormatter.format(value));
     }
     return labels;

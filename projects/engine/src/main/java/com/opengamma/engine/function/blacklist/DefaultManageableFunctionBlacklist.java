@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultManageableFunctionBlacklist extends AbstractManageableFunctionBlacklist {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultManageableFunctionBlacklist.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultManageableFunctionBlacklist.class);
   private static final int DEFAULT_TTL = 3600; // Blacklist for 1-hour
 
   private final FunctionBlacklistRuleSet _rules;
@@ -30,7 +30,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
   /**
    * Creates a new updateable blacklist.
-   * 
+   *
    * @param name the name of the blacklist
    * @param scheduler the scheduler to use for blacklist housekeeping
    * @param defaultTTL the default time to live
@@ -41,7 +41,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
       @Override
       protected void onAdd(final FunctionBlacklistRule rule) {
-        s_logger.debug("{} added to {}", rule, DefaultManageableFunctionBlacklist.this);
+        LOGGER.debug("{} added to {}", rule, DefaultManageableFunctionBlacklist.this);
         final boolean direct = beginUpdate();
         try {
           if (direct) {
@@ -51,7 +51,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
             // Listeners will be notified as a bulk operation when the re-entry ends
             synchronized (DefaultManageableFunctionBlacklist.this) {
               if (_added == null) {
-                _added = new LinkedList<FunctionBlacklistRule>();
+                _added = new LinkedList<>();
               }
               _added.add(rule);
             }
@@ -63,7 +63,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
       @Override
       protected void onRemove(final FunctionBlacklistRule rule) {
-        s_logger.debug("{} removed from {}", rule, DefaultManageableFunctionBlacklist.this);
+        LOGGER.debug("{} removed from {}", rule, DefaultManageableFunctionBlacklist.this);
         final boolean direct = beginUpdate();
         try {
           if (direct) {
@@ -73,7 +73,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
             // Listeners will be notified as a bulk operation when the re-entry ends
             synchronized (DefaultManageableFunctionBlacklist.this) {
               if (_removed == null) {
-                _removed = new LinkedList<FunctionBlacklistRule>();
+                _removed = new LinkedList<>();
               }
               _removed.add(rule);
             }

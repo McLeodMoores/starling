@@ -17,7 +17,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Maps particular columns to and from the combination of parameters
  * that make up the appropriate lookup components for that model.
- * <p/>
+ * <p>
  * Columns are:
  * <dl>
  *   <dt>0</dt>
@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pair;
  * @author kirk
  */
 public class ViewerColumnModel {
-  private final List<CalculationConfigurationRange> _calcConfigRanges = new ArrayList<CalculationConfigurationRange>();
+  private final List<CalculationConfigurationRange> _calcConfigRanges = new ArrayList<>();
   private int _columnCount;
 
   public ViewerColumnModel() {
@@ -41,18 +41,18 @@ public class ViewerColumnModel {
   /**
    * @param viewDefinition  the view definition
    */
-  public void init(ViewDefinition viewDefinition) {
+  public void init(final ViewDefinition viewDefinition) {
     ArgumentChecker.notNull(viewDefinition, "View definition");
-    
+
     // 0th column is for the trade definition.
     int currColumn = 1;
-    for (ViewCalculationConfiguration calcConfiguration : viewDefinition.getAllCalculationConfigurations()) {
-      CalculationConfigurationRange range = new CalculationConfigurationRange();
+    for (final ViewCalculationConfiguration calcConfiguration : viewDefinition.getAllCalculationConfigurations()) {
+      final CalculationConfigurationRange range = new CalculationConfigurationRange();
       _calcConfigRanges.add(range);
       range.setConfigName(calcConfiguration.getName());
       range.setStartColumn(currColumn);
 
-      for (Pair<String, ValueProperties> requirementName : calcConfiguration.getAllPortfolioRequirements()) {
+      for (final Pair<String, ValueProperties> requirementName : calcConfiguration.getAllPortfolioRequirements()) {
         range.getColumnRequirementNames().add(requirementName.getFirst());
         currColumn++;
       }
@@ -60,12 +60,12 @@ public class ViewerColumnModel {
     _columnCount = currColumn;
   }
 
-  private CalculationConfigurationRange getRange(int column) {
+  private CalculationConfigurationRange getRange(final int column) {
     if (column <= 0) {
       return null;
     }
-    for (CalculationConfigurationRange range : _calcConfigRanges) {
-      if (column >= (range.getStartColumn() + range.getColumnRequirementNames().size())) {
+    for (final CalculationConfigurationRange range : _calcConfigRanges) {
+      if (column >= range.getStartColumn() + range.getColumnRequirementNames().size()) {
         continue;
       }
       return range;
@@ -73,20 +73,20 @@ public class ViewerColumnModel {
     return null;
   }
 
-  public String getCalculationConfigurationName(int column) {
-    CalculationConfigurationRange range = getRange(column);
+  public String getCalculationConfigurationName(final int column) {
+    final CalculationConfigurationRange range = getRange(column);
     if (range == null) {
       return null;
     }
     return range.getConfigName();
   }
 
-  public String getRequirementName(int column) {
-    CalculationConfigurationRange range = getRange(column);
+  public String getRequirementName(final int column) {
+    final CalculationConfigurationRange range = getRange(column);
     if (range == null) {
       return null;
     }
-    int index = column - range.getStartColumn();
+    final int index = column - range.getStartColumn();
     return range.getColumnRequirementNames().get(index);
   }
 
@@ -97,7 +97,7 @@ public class ViewerColumnModel {
   private static class CalculationConfigurationRange {
     private String _configName;
     private int _startColumn;
-    private final List<String> _columnRequirementNames = new ArrayList<String>();
+    private final List<String> _columnRequirementNames = new ArrayList<>();
 
     public String getConfigName() {
       return _configName;

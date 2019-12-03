@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -51,8 +51,8 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Function to source time series data for each of the instruments in a {@link CurveSpecification} from a
- * {@link HistoricalTimeSeriesSource} attached to the execution context.
+ * Function to source time series data for each of the instruments in a {@link CurveSpecification} from a {@link HistoricalTimeSeriesSource} attached to the
+ * execution context.
  */
 public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
@@ -123,13 +123,13 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
           LOGGER.info("Couldn't get time series for {}", id);
         }
       }
-      //TODO this should all be replaced with a visitor once the same method adapter is available
+      // TODO this should all be replaced with a visitor once the same method adapter is available
       if (node.getCurveNode() instanceof ZeroCouponInflationNode) {
         final ZeroCouponInflationNode inflationNode = (ZeroCouponInflationNode) node.getCurveNode();
         final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
         final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
-        final InflationLegConvention inflationLegConvention =
-            conventionSource.getSingle(inflationNode.getInflationLegConvention(), InflationLegConvention.class);
+        final InflationLegConvention inflationLegConvention = conventionSource.getSingle(inflationNode.getInflationLegConvention(),
+            InflationLegConvention.class);
         final Security sec = securitySource.getSingle(inflationLegConvention.getPriceIndexConvention().toBundle());
         if (sec == null) {
           throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " was null");
@@ -138,7 +138,7 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
           throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " not of type PriceIndex");
         }
         final PriceIndex indexSecurity = (PriceIndex) sec;
-        final String priceIndexField = MarketDataRequirementNames.MARKET_VALUE; //TODO
+        final String priceIndexField = MarketDataRequirementNames.MARKET_VALUE; // TODO
         final HistoricalTimeSeries priceIndexSeries = timeSeriesSource.getHistoricalTimeSeries(priceIndexField, indexSecurity.getExternalIdBundle(),
             resolutionKey, startDate, includeStart, endDate, true);
         if (priceIndexSeries != null) {
@@ -158,7 +158,7 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
         if (!(node instanceof QuandlCurveNodeWithIdentifierAndUnderlying)) {
           LOGGER.warn("Curve node with identifier for Fed funds future did not contain information about the underlying: using Market_Value "
               + "and the identifier from the convention");
-          final Convention conventionRateFut =  ConventionLink.resolvable(nodeRateFut.getFutureConvention(), Convention.class).resolve();
+          final Convention conventionRateFut = ConventionLink.resolvable(nodeRateFut.getFutureConvention(), Convention.class).resolve();
           if (conventionRateFut instanceof FederalFundsFutureConvention) {
             final FederalFundsFutureConvention conventionFedFundFut = (FederalFundsFutureConvention) conventionRateFut;
             final ExternalId onIndexConventionId = conventionFedFundFut.getIndexConvention();
@@ -173,8 +173,8 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
               }
             } else {
               LOGGER.info("Couldn't get time series for {}, trying identifiers from index convention", onIndexConventionId);
-              final OvernightIndexConvention overnightIndexConvention =
-                  ConventionLink.resolvable(conventionFedFundFut.getIndexConvention(), OvernightIndexConvention.class).resolve();
+              final OvernightIndexConvention overnightIndexConvention = ConventionLink
+                  .resolvable(conventionFedFundFut.getIndexConvention(), OvernightIndexConvention.class).resolve();
               // try the external ids of the underlying convention in case the convention id used in the Fed funds convention
               // is not the overnight index ticker
               onIndexSeries = timeSeriesSource.getHistoricalTimeSeries(onIndexField, overnightIndexConvention.getExternalIdBundle(),
@@ -217,35 +217,35 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     ValueProperties.Builder constraints = null;
     Set<String> values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       constraints = desiredValue.getConstraints().copy().with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, "");
     } else if (values.size() > 1) {
       constraints = desiredValue.getConstraints().copy().withoutAny(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY, values.iterator().next());
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, "Null");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE);
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY);
-    if ((values == null) || values.isEmpty()) {
+    if (values == null || values.isEmpty()) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
       constraints.with(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY, "Now");
     }
     values = desiredValue.getConstraints().getValues(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY);
-    if ((values == null) || (values.size() != 1)) {
+    if (values == null || values.size() != 1) {
       if (constraints == null) {
         constraints = desiredValue.getConstraints().copy();
       }
@@ -270,7 +270,6 @@ public class QuandlCurveHistoricalTimeSeriesFunction extends AbstractFunction.No
     // We need to substitute ourselves with the adjusted constraints
     return Collections.singleton(new ValueRequirement(ValueRequirementNames.CURVE_HISTORICAL_TIME_SERIES, targetSpec, constraints.get()));
   }
-
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -14,9 +14,9 @@ import org.apache.commons.lang.ObjectUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * YieldAndDiscountCurve created by adding the zero-coupon continuously compounded rate of two curves. One curve is fixed and there is no sensitivity to that curve.
- * In general the fixed curve represent a static adjustment like a seasonality adjustment.
- * The term "fixed" for the second curve means that no parameter is associated to that curve.
+ * YieldAndDiscountCurve created by adding the zero-coupon continuously compounded rate of two curves. One curve is fixed and there is no sensitivity to that
+ * curve. In general the fixed curve represent a static adjustment like a seasonality adjustment. The term "fixed" for the second curve means that no parameter
+ * is associated to that curve.
  */
 public class YieldAndDiscountAddZeroFixedCurve extends YieldAndDiscountCurve {
 
@@ -34,14 +34,20 @@ public class YieldAndDiscountAddZeroFixedCurve extends YieldAndDiscountCurve {
   private final double _sign;
 
   /**
-   * Constructor from an array of curves.
-   * The new curve interest rate (zero-coupon continuously compounded) will be the sum (or the difference) of the different underlying curves.
-   * @param name The curve name.
-   * @param substract If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
-   * @param curve The main curve.
-   * @param curveFixed The fixed curve (as a spread).
+   * Constructor from an array of curves. The new curve interest rate (zero-coupon continuously compounded) will be the sum (or the difference) of the different
+   * underlying curves.
+   *
+   * @param name
+   *          The curve name.
+   * @param substract
+   *          If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
+   * @param curve
+   *          The main curve.
+   * @param curveFixed
+   *          The fixed curve (as a spread).
    */
-  public YieldAndDiscountAddZeroFixedCurve(final String name, final boolean substract, final YieldAndDiscountCurve curve, final YieldAndDiscountCurve curveFixed) {
+  public YieldAndDiscountAddZeroFixedCurve(final String name, final boolean substract, final YieldAndDiscountCurve curve,
+      final YieldAndDiscountCurve curveFixed) {
     super(name);
     ArgumentChecker.notNull(curve, "Curve");
     ArgumentChecker.notNull(curveFixed, "Curve fixed");
@@ -89,6 +95,7 @@ public class YieldAndDiscountAddZeroFixedCurve extends YieldAndDiscountCurve {
 
   /**
    * Gets of the curve.
+   *
    * @return The curves
    */
   public YieldAndDiscountCurve getCurve() {
@@ -97,6 +104,7 @@ public class YieldAndDiscountAddZeroFixedCurve extends YieldAndDiscountCurve {
 
   /**
    * Gets of the fixed curve.
+   *
    * @return The curves
    */
   public YieldAndDiscountCurve getCurveFixed() {
@@ -111,7 +119,7 @@ public class YieldAndDiscountAddZeroFixedCurve extends YieldAndDiscountCurve {
     result = prime * result + _curveFixed.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

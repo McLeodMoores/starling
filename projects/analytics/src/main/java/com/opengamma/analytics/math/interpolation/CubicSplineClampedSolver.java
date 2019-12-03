@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.math.interpolation;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Solves cubic spline problem with clamped endpoint conditions, where the first derivative is specified at endpoints
+ * Solves cubic spline problem with clamped endpoint conditions, where the first derivative is specified at endpoints.
  */
 public class CubicSplineClampedSolver extends CubicSplineSolver {
 
@@ -18,9 +18,12 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
   private double _finCondUse;
 
   /**
-   * Constructor for a one-dimensional problem
-   * @param iniCond Left endpoint condition
-   * @param finCond Right endpoint condition
+   * Constructor for a one-dimensional problem.
+   * 
+   * @param iniCond
+   *          Left endpoint condition
+   * @param finCond
+   *          Right endpoint condition
    */
   public CubicSplineClampedSolver(final double iniCond, final double finCond) {
 
@@ -29,9 +32,12 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
   }
 
   /**
-   * Constructor for a multi-dimensional problem
-   * @param iniConds Set of left endpoint conditions
-   * @param finConds Set of right endpoint conditions 
+   * Constructor for a multi-dimensional problem.
+   * 
+   * @param iniConds
+   *          Set of left endpoint conditions
+   * @param finConds
+   *          Set of right endpoint conditions
    */
   public CubicSplineClampedSolver(final double[] iniConds, final double[] finConds) {
 
@@ -60,7 +66,7 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
   @Override
   public DoubleMatrix2D[] solveMultiDim(final double[] xValues, final DoubleMatrix2D yValuesMatrix) {
     final int dim = yValuesMatrix.getNumberOfRows();
-    DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
 
     for (int i = 0; i < dim; ++i) {
       resetConds(i);
@@ -72,7 +78,8 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
 
   /**
    * Reset endpoint conditions
-   * @param i  
+   * 
+   * @param i
    */
   private void resetConds(final int i) {
     _iniCondUse = _iniConds[i];
@@ -81,7 +88,9 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Matrix A
    */
   private double[][] getMatrix(final double[] intervals) {
@@ -99,8 +108,11 @@ public class CubicSplineClampedSolver extends CubicSplineSolver {
 
   /**
    * Cubic spline is obtained by solving a linear problem Ax=b where A is a square matrix and x,b are vector
-   * @param yValues Y Values of data
-   * @param intervals {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
+   * 
+   * @param yValues
+   *          Y Values of data
+   * @param intervals
+   *          {xValues[1]-xValues[0], xValues[2]-xValues[1],...}
    * @return Vector b
    */
   private double[] getVector(final double[] yValues, final double[] intervals) {

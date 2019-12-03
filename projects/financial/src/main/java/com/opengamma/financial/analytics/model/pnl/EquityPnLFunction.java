@@ -5,6 +5,7 @@
  */
 package com.opengamma.financial.analytics.model.pnl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculator;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
+import com.opengamma.core.position.Trade;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
@@ -41,7 +43,13 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getPosition().getSecurity() instanceof EquitySecurity;
+    final Collection<Trade> trades = target.getPosition().getTrades();
+    for (final Trade trade : trades) {
+      if (!(trade.getSecurity() instanceof EquitySecurity)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override

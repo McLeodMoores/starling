@@ -21,10 +21,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method to compute present value and present value sensitivity for Ibor compounding coupon with spread and compounding type "Compounding treating spread as simple interest".
- * The definition of "Compounding treating spread as simple interest" is available in the ISDA document:
- * Reference (cash-flow description): Alternative compounding methods for over-the-counter derivative transactions (2009)
- * Reference (oricing method): Compounded Swaps in Multi-Curve Framework, OpenGamma documentation n. 19, version 1.1, August 2012.
+ * Method to compute present value and present value sensitivity for Ibor compounding coupon with spread and compounding type "Compounding treating spread as
+ * simple interest". The definition of "Compounding treating spread as simple interest" is available in the ISDA document: Reference (cash-flow description):
+ * Alternative compounding methods for over-the-counter derivative transactions (2009) Reference (oricing method): Compounded Swaps in Multi-Curve Framework,
+ * OpenGamma documentation n. 19, version 1.1, August 2012.
  */
 public final class CouponIborCompoundingSimpleSpreadDiscountingMethod {
 
@@ -35,6 +35,7 @@ public final class CouponIborCompoundingSimpleSpreadDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponIborCompoundingSimpleSpreadDiscountingMethod getInstance() {
@@ -49,8 +50,11 @@ public final class CouponIborCompoundingSimpleSpreadDiscountingMethod {
 
   /**
    * Compute the present value of a Ibor compounded coupon with compounding type "Compounding treating spread as simple interest" by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponIborCompoundingSimpleSpread coupon, final MulticurveProviderInterface multicurve) {
@@ -70,16 +74,20 @@ public final class CouponIborCompoundingSimpleSpreadDiscountingMethod {
 
   /**
    * Compute the present value sensitivity to rates of a Ibor compounded coupon with compounding type "Flat Compounding" by discounting.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   *
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompoundingSimpleSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponIborCompoundingSimpleSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "coupon");
     ArgumentChecker.notNull(multicurve, "multicurve");
-    int nbSubPeriod = coupon.getFixingTimes().length;
+    final int nbSubPeriod = coupon.getFixingTimes().length;
     double cpa = coupon.getCompoundingPeriodAmountAccumulated();
-    double[] investFactor = new double[nbSubPeriod];
+    final double[] investFactor = new double[nbSubPeriod];
     for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
       final double forward = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[loopsub],
           coupon.getFixingPeriodEndTimes()[loopsub], coupon.getFixingPeriodAccrualFactors()[loopsub]);
@@ -88,9 +96,9 @@ public final class CouponIborCompoundingSimpleSpreadDiscountingMethod {
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
-    double pvBar = 1.0;
-    double dfBar = (cpa - coupon.getNotional() + coupon.getNotional() * coupon.getPaymentYearFraction() * coupon.getSpread()) * pvBar;
-    double cpaBar = df * pvBar;
+    final double pvBar = 1.0;
+    final double dfBar = (cpa - coupon.getNotional() + coupon.getNotional() * coupon.getPaymentYearFraction() * coupon.getSpread()) * pvBar;
+    final double cpaBar = df * pvBar;
     final double[] forwardBar = new double[nbSubPeriod];
     for (int loopsub = nbSubPeriod - 1; loopsub >= 0; loopsub--) {
       forwardBar[loopsub] = cpa / investFactor[loopsub] * coupon.getPaymentPeriodAccrualFactors()[loopsub] * cpaBar;

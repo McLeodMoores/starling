@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
@@ -24,15 +24,15 @@ import com.opengamma.core.holiday.impl.NonVersionedRedisHolidaySource;
 import com.opengamma.core.holiday.impl.RemoteHolidaySource;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class NonVersionedRedisHolidaySourceComponentFactory extends AbstractNonVersionedRedisSourceComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    NonVersionedRedisHolidaySource source = new NonVersionedRedisHolidaySource(getRedisConnector().getJedisPool(), getRedisPrefix());
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final NonVersionedRedisHolidaySource source = new NonVersionedRedisHolidaySource(getRedisConnector().getJedisPool(), getRedisPrefix());
+
     ComponentInfo info = new ComponentInfo(HolidaySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {

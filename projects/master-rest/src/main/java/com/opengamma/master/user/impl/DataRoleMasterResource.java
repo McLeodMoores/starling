@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -49,14 +49,15 @@ public class DataRoleMasterResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying master over REST.
    *
-   * @param roleMaster  the underlying role master, not null
+   * @param roleMaster
+   *          the underlying role master, not null
    */
   public DataRoleMasterResource(final RoleMaster roleMaster) {
     ArgumentChecker.notNull(roleMaster, "roleMaster");
     _roleMaster = roleMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the role master.
@@ -67,9 +68,9 @@ public class DataRoleMasterResource extends AbstractDataResource {
     return _roleMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -82,122 +83,124 @@ public class DataRoleMasterResource extends AbstractDataResource {
 
   @POST
   @Path("roleSearches")
-  public Response search(RoleSearchRequest request) {
-    RoleSearchResult result = getRoleMaster().search(request);
+  public Response search(final RoleSearchRequest request) {
+    final RoleSearchResult result = getRoleMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("roles")
-  public Response add(@Context UriInfo uriInfo, ManageableRole role) {
-    UniqueId result = getRoleMaster().add(role);
-    URI createdUri = DataRoleMasterUris.uriRoleById(uriInfo.getBaseUri(), result);
+  public Response add(@Context final UriInfo uriInfo, final ManageableRole role) {
+    final UniqueId result = getRoleMaster().add(role);
+    final URI createdUri = DataRoleMasterUris.uriRoleById(uriInfo.getBaseUri(), result);
     return responseCreated(createdUri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("roles/{objectId}")
-  public Response getById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
-    ManageableRole result = getRoleMaster().getById(id);
+  public Response getById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
+    final ManageableRole result = getRoleMaster().getById(id);
     return responseOkObject(result);
   }
 
   @PUT
   @Path("roles/{objectId}")
-  public Response updateById(@Context UriInfo uriInfo, @PathParam("objectId") String idStr, ManageableRole role) {
-    ObjectId id = ObjectId.parse(idStr);
-    if (id.equals(role.getObjectId()) == false) {
+  public Response updateById(@Context final UriInfo uriInfo, @PathParam("objectId") final String idStr, final ManageableRole role) {
+    final ObjectId id = ObjectId.parse(idStr);
+    if (!id.equals(role.getObjectId())) {
       throw new IllegalArgumentException("ObjectId of role does not match URI");
     }
-    UniqueId result = getRoleMaster().update(role);
+    final UniqueId result = getRoleMaster().update(role);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("roles/{objectId}")
-  public void removeById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public void removeById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     getRoleMaster().removeById(id);
   }
 
   @GET
   @Path("roles/{objectId}/eventHistory")
-  public Response eventHistoryById(@PathParam("objectId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
-    RoleEventHistoryRequest request = new RoleEventHistoryRequest(id);
-    RoleEventHistoryResult result = getRoleMaster().eventHistory(request);
+  public Response eventHistoryById(@PathParam("objectId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
+    final RoleEventHistoryRequest request = new RoleEventHistoryRequest(id);
+    final RoleEventHistoryResult result = getRoleMaster().eventHistory(request);
     return responseOkObject(result);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("roles/exists/{roleName}")
-  public Response nameExists(@PathParam("roleName") String roleName) {
-    boolean exists = getRoleMaster().nameExists(roleName);
-    return (exists ? responseOk() : Response.status(Status.NOT_FOUND).build());
+  public Response nameExists(@PathParam("roleName") final String roleName) {
+    final boolean exists = getRoleMaster().nameExists(roleName);
+    return exists ? responseOk() : Response.status(Status.NOT_FOUND).build();
   }
 
   @GET
   @Path("roles/name/{roleName}")
-  public Response getByName(@PathParam("roleName") String roleName) {
-    ManageableRole result = getRoleMaster().getByName(roleName);
+  public Response getByName(@PathParam("roleName") final String roleName) {
+    final ManageableRole result = getRoleMaster().getByName(roleName);
     return responseOkObject(result);
   }
 
   @PUT
   @Path("roles/name/{roleName}")
-  public Response updateByName(@Context UriInfo uriInfo, @PathParam("roleName") String roleName, ManageableRole role) {
-    ManageableRole current = getRoleMaster().getByName(roleName);
-    if (current.getObjectId().equals(role.getObjectId()) == false) {
+  public Response updateByName(@Context final UriInfo uriInfo, @PathParam("roleName") final String roleName, final ManageableRole role) {
+    final ManageableRole current = getRoleMaster().getByName(roleName);
+    if (!current.getObjectId().equals(role.getObjectId())) {
       throw new IllegalArgumentException("Role does not match URI");
     }
-    UniqueId result = getRoleMaster().update(role);
+    final UniqueId result = getRoleMaster().update(role);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("roles/name/{roleName}")
-  public void removeByName(@PathParam("roleName") String roleName) {
+  public void removeByName(@PathParam("roleName") final String roleName) {
     getRoleMaster().removeByName(roleName);
   }
 
   @GET
   @Path("roles/name/{roleName}/eventHistory")
-  public Response eventHistoryByName(@PathParam("roleName") String roleName) {
-    RoleEventHistoryRequest request = new RoleEventHistoryRequest(roleName);
-    RoleEventHistoryResult result = getRoleMaster().eventHistory(request);
+  public Response eventHistoryByName(@PathParam("roleName") final String roleName) {
+    final RoleEventHistoryRequest request = new RoleEventHistoryRequest(roleName);
+    final RoleEventHistoryResult result = getRoleMaster().eventHistory(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("roles/account")
-  public Response accountByName(UserAccount account) {
-    UserAccount resolved = getRoleMaster().resolveAccount(account);
+  public Response accountByName(final UserAccount account) {
+    final UserAccount resolved = getRoleMaster().resolveAccount(account);
     return responseOkObject(resolved);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
+   * @param baseUri
+   *          the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("roleSearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("roleSearches");
     return bld.build();
   }
 
   /**
    * Builds a URI.
    *
-   * @param baseUri  the base URI, not null
+   * @param baseUri
+   *          the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("roles");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("roles");
     return bld.build();
   }
 

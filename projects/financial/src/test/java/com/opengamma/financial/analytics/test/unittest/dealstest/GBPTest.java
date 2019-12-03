@@ -18,7 +18,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class GBPTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(GBPTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GBPTest.class);
   private static final String CURRENCY = "GBP";
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -35,7 +35,7 @@ public class GBPTest {
       }
 
     }
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 
 }

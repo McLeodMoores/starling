@@ -27,10 +27,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
@@ -46,25 +46,25 @@ import com.opengamma.util.money.Currency;
  */
 public class SABRFittingPropertyUtils {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRFittingPropertyUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRFittingPropertyUtils.class);
 
   public static ValueProperties.Builder addNLSSFittingProperties(final ValueProperties.Builder properties) {
     return properties
-      .withAny(X_INTERPOLATOR_NAME)
-      .withAny(Y_INTERPOLATOR_NAME)
-      .withAny(LEFT_X_EXTRAPOLATOR_NAME)
-      .withAny(LEFT_Y_EXTRAPOLATOR_NAME)
-      .withAny(RIGHT_X_EXTRAPOLATOR_NAME)
-      .withAny(RIGHT_Y_EXTRAPOLATOR_NAME)
-      .withAny(PROPERTY_ALPHA)
-      .withAny(PROPERTY_BETA)
-      .withAny(PROPERTY_NU)
-      .withAny(PROPERTY_RHO)
-      .withAny(PROPERTY_USE_FIXED_ALPHA)
-      .withAny(PROPERTY_USE_FIXED_BETA)
-      .withAny(PROPERTY_USE_FIXED_NU)
-      .withAny(PROPERTY_USE_FIXED_RHO)
-      .withAny(PROPERTY_ERROR);
+        .withAny(X_INTERPOLATOR_NAME)
+        .withAny(Y_INTERPOLATOR_NAME)
+        .withAny(LEFT_X_EXTRAPOLATOR_NAME)
+        .withAny(LEFT_Y_EXTRAPOLATOR_NAME)
+        .withAny(RIGHT_X_EXTRAPOLATOR_NAME)
+        .withAny(RIGHT_Y_EXTRAPOLATOR_NAME)
+        .withAny(PROPERTY_ALPHA)
+        .withAny(PROPERTY_BETA)
+        .withAny(PROPERTY_NU)
+        .withAny(PROPERTY_RHO)
+        .withAny(PROPERTY_USE_FIXED_ALPHA)
+        .withAny(PROPERTY_USE_FIXED_BETA)
+        .withAny(PROPERTY_USE_FIXED_NU)
+        .withAny(PROPERTY_USE_FIXED_RHO)
+        .withAny(PROPERTY_ERROR);
   }
 
   public static boolean ensureNLSSFittingProperties(final ValueRequirement desiredValue) {
@@ -137,7 +137,7 @@ public class SABRFittingPropertyUtils {
     final ValueProperties constraints = desiredValue.getConstraints();
     final String fittingMethod = desiredValue.getConstraint(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD);
     if (fittingMethod == null) {
-      s_logger.error("No value set for SABR fitting method");
+      LOGGER.error("No value set for SABR fitting method");
       return null;
     }
     if (fittingMethod.equals(SmileFittingPropertyNamesAndValues.NON_LINEAR_LEAST_SQUARES)) {
@@ -150,13 +150,13 @@ public class SABRFittingPropertyUtils {
       for (final String constraint : constraints.getProperties()) {
         if (!constraints.getValues(constraint).isEmpty() && allProperties.get().getProperties().contains(constraint)) {
           allProperties
-              .withoutAny(constraint)
-              .with(constraint, constraints.getValues(constraint));
+          .withoutAny(constraint)
+          .with(constraint, constraints.getValues(constraint));
         }
       }
       return new ValueRequirement(ValueRequirementNames.SABR_SURFACES, ComputationTargetSpecification.of(currency), allProperties.get());
     }
-    s_logger.error("Could not handle fitting method {}", fittingMethod);
+    LOGGER.error("Could not handle fitting method {}", fittingMethod);
     return null;
   }
 
@@ -192,8 +192,8 @@ public class SABRFittingPropertyUtils {
     final String rightXExtrapolatorName = desiredValue.getConstraint(RIGHT_X_EXTRAPOLATOR_NAME);
     final String leftYExtrapolatorName = desiredValue.getConstraint(LEFT_Y_EXTRAPOLATOR_NAME);
     final String rightYExtrapolatorName = desiredValue.getConstraint(RIGHT_Y_EXTRAPOLATOR_NAME);
-    final Interpolator1D xInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(xInterpolatorName, leftXExtrapolatorName, rightXExtrapolatorName);
-    final Interpolator1D yInterpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(yInterpolatorName, leftYExtrapolatorName, rightYExtrapolatorName);
+    final Interpolator1D xInterpolator = NamedInterpolator1dFactory.of(xInterpolatorName, leftXExtrapolatorName, rightXExtrapolatorName);
+    final Interpolator1D yInterpolator = NamedInterpolator1dFactory.of(yInterpolatorName, leftYExtrapolatorName, rightYExtrapolatorName);
     return new GridInterpolator2D(xInterpolator, yInterpolator);
   }
 

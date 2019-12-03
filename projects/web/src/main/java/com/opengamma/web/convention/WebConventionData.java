@@ -90,16 +90,20 @@ public class WebConventionData extends WebPerRequestData {
 
   /**
    * Creates an instance.
-   * @param uriInfo  the URI information
+   * 
+   * @param uriInfo
+   *          the URI information
    */
   public WebConventionData(final UriInfo uriInfo) {
     setUriInfo(uriInfo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best available convention id.
-   * @param overrideId  the override id, null derives the result from the data
+   * 
+   * @param overrideId
+   *          the override id, null derives the result from the data
    * @return the id, may be null
    */
   public String getBestConventionUriId(final UniqueId overrideId) {

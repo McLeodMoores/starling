@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.MapMaker;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueSpecification;
@@ -35,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class WriteBehindViewComputationCache implements DeferredViewComputationCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WriteBehindViewComputationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WriteBehindViewComputationCache.class);
 
   private static final class Entry {
 
@@ -43,7 +44,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     private final DeferredStatistics _statistics;
     private final PendingLock _owner;
 
-    public Entry(final ComputedValue value, final DeferredStatistics statistics, final PendingLock owner) {
+    Entry(final ComputedValue value, final DeferredStatistics statistics, final PendingLock owner) {
       _value = value;
       _statistics = statistics;
       _owner = owner;
@@ -67,7 +68,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
     private final Collection<Entry> _underlying;
 
-    public ComputedValueCollection(final Collection<Entry> underlying) {
+    ComputedValueCollection(final Collection<Entry> underlying) {
       _underlying = underlying;
     }
 
@@ -107,7 +108,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     private int _count;
     private ResultCallback<Void> _callback;
 
-    public PendingLock(final int count) {
+    PendingLock(final int count) {
       _count = count;
     }
 
@@ -183,11 +184,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
   private final ViewComputationCache _underlying;
   private final ExecutorService _executorService;
   /**
-   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well as values that have been retrieved from the underlying. Use of a soft
-   * reference on the values will keep the values in memory for as long as possible so that the serialization/deserialization overhead of the underlying can probably be avoided for frequently used
-   * objects.
+   * The in memory map contains all entries that are in the queues and have not been written to the underlying yet as well as values that have been retrieved
+   * from the underlying. Use of a soft reference on the values will keep the values in memory for as long as possible so that the serialization/deserialization
+   * overhead of the underlying can probably be avoided for frequently used objects.
    */
-  private final Map<ValueSpecification, Object> _buffer = new MapMaker().softValues().makeMap();
+  private final Map<ValueSpecification, Object> _buffer = CacheBuilder.newBuilder().softValues().<ValueSpecification, Object> build()
+      .asMap();
   private final Queue<Entry> _pendingPrivateValues;
   private final Queue<Entry> _pendingSharedValues;
   private final ConcurrentMap<Thread, PendingLock> _pendingWrites = new MapMaker().weakKeys().makeMap();
@@ -202,7 +204,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
     private List<Entry> drain(final Queue<Entry> source) {
       // Make the list bigger than the source queue as writes will probably occur while we're draining it.
-      final List<Entry> dest = new ArrayList<Entry>(source.size() * 2);
+      final List<Entry> dest = new ArrayList<>(source.size() * 2);
       Entry value = source.poll();
       while (value != null) {
         dest.add(value);
@@ -238,9 +240,9 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       int count = 0;
       try {
         do {
-          s_logger.info("Write-behind thread running for {}", getUnderlying());
+          LOGGER.info("Write-behind thread running for {}", getUnderlying());
           do {
-            if ((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) {
+            if (_pendingSharedValues != null && !_pendingSharedValues.isEmpty()) {
               values = drain(_pendingSharedValues);
               if (values.size() > 1) {
                 getUnderlying().putSharedValues(new ComputedValueCollection(values));
@@ -254,7 +256,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
               }
               values = null;
             }
-            if ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty()) {
+            if (_pendingPrivateValues != null && !_pendingPrivateValues.isEmpty()) {
               values = drain(_pendingPrivateValues);
               if (values.size() > 1) {
                 getUnderlying().putPrivateValues(new ComputedValueCollection(values));
@@ -268,13 +270,14 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
               }
               values = null;
             }
-          } while (((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) || ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty()));
+          } while (_pendingSharedValues != null && !_pendingSharedValues.isEmpty()
+              || _pendingPrivateValues != null && !_pendingPrivateValues.isEmpty());
           _valueWriterActive.set(VALUE_WRITER_IDLE);
-        } while ((((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) || ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty())) &&
-            _valueWriterActive.compareAndSet(VALUE_WRITER_IDLE, VALUE_WRITER_RUNNING));
-        s_logger.info("Write-behind thread terminated after {} operations", count);
+        } while ((_pendingSharedValues != null && !_pendingSharedValues.isEmpty() || _pendingPrivateValues != null && !_pendingPrivateValues.isEmpty())
+            && _valueWriterActive.compareAndSet(VALUE_WRITER_IDLE, VALUE_WRITER_RUNNING));
+        LOGGER.info("Write-behind thread terminated after {} operations", count);
       } catch (final RuntimeException e) {
-        s_logger.warn("Write-behind thread failed after {} operations: {}", count, e.getMessage());
+        LOGGER.warn("Write-behind thread failed after {} operations: {}", count, e.getMessage());
         _valueWriterFault = e;
         _valueWriterActive.set(VALUE_WRITER_FAILED);
         if (values != null) {
@@ -286,13 +289,14 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
 
   };
 
-  public WriteBehindViewComputationCache(final ViewComputationCache underlying, final ExecutorService executorService, final boolean useShared, final boolean usePrivate) {
+  public WriteBehindViewComputationCache(final ViewComputationCache underlying, final ExecutorService executorService,
+      final boolean useShared, final boolean usePrivate) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(executorService, "executorService");
     _underlying = underlying;
     _executorService = executorService;
-    _pendingPrivateValues = usePrivate ? new ConcurrentLinkedQueue<Entry>() : null;
-    _pendingSharedValues = useShared ? new ConcurrentLinkedQueue<Entry>() : null;
+    _pendingPrivateValues = usePrivate ? new ConcurrentLinkedQueue<>() : null;
+    _pendingSharedValues = useShared ? new ConcurrentLinkedQueue<>() : null;
   }
 
   protected ViewComputationCache getUnderlying() {
@@ -327,13 +331,11 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (existing != null) {
         existing.increment(count);
         return existing;
-      } else {
-        return pending;
       }
-    } else {
-      pending.increment(count);
       return pending;
     }
+    pending.increment(count);
+    return pending;
   }
 
   private void failAll() {
@@ -359,13 +361,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     Object value = getBuffered(specification);
     if (value != null) {
       return value;
-    } else {
-      value = getUnderlying().getValue(specification);
-      if (value != null) {
-        putBuffered(specification, value);
-      }
-      return value;
     }
+    value = getUnderlying().getValue(specification);
+    if (value != null) {
+      putBuffered(specification, value);
+    }
+    return value;
   }
 
   @Override
@@ -373,13 +374,12 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     Object value = getBuffered(specification);
     if (value != null) {
       return value;
-    } else {
-      value = getUnderlying().getValue(specification, filter);
-      if (value != null) {
-        putBuffered(specification, value);
-      }
-      return value;
     }
+    value = getUnderlying().getValue(specification, filter);
+    if (value != null) {
+      putBuffered(specification, value);
+    }
+    return value;
   }
 
   @Override
@@ -390,8 +390,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (object != null) {
         // Found one in the pending set, so split the set into hits & misses
         int size = specifications.size();
-        final List<ValueSpecification> cacheMisses = new ArrayList<ValueSpecification>(size - 1);
-        result = new ArrayList<Pair<ValueSpecification, Object>>(size);
+        final List<ValueSpecification> cacheMisses = new ArrayList<>(size - 1);
+        result = new ArrayList<>(size);
         result.add(Pairs.of(specification, object));
         for (final ValueSpecification specification2 : specifications) {
           // Note the check below; if the write has since completed, the specification we originally hit may now be a miss
@@ -405,7 +405,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
           }
         }
         size = cacheMisses.size();
-        s_logger.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
+        LOGGER.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
         if (size == 1) {
           final ValueSpecification specification2 = cacheMisses.get(0);
           final Object value = getUnderlying().getValue(specification2);
@@ -437,8 +437,8 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       if (object != null) {
         // Found one in the pending set, so split the set into hits & misses
         int size = specifications.size();
-        final List<ValueSpecification> cacheMisses = new ArrayList<ValueSpecification>(size - 1);
-        result = new ArrayList<Pair<ValueSpecification, Object>>(size);
+        final List<ValueSpecification> cacheMisses = new ArrayList<>(size - 1);
+        result = new ArrayList<>(size);
         result.add(Pairs.of(specification, object));
         for (final ValueSpecification specification2 : specifications) {
           // Note the check below; if the write has since completed, the specification we originally hit may now be a miss
@@ -452,7 +452,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
           }
         }
         size = cacheMisses.size();
-        s_logger.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
+        LOGGER.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
         if (size == 1) {
           final ValueSpecification specification2 = cacheMisses.get(0);
           final Object value = getUnderlying().getValue(specification2, filter);
@@ -640,26 +640,27 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     switch (_valueWriterActive.get()) {
       case VALUE_WRITER_IDLE:
         // Writer is not running, so we must be done
-        s_logger.debug("Writer is idle");
+        LOGGER.debug("Writer is idle");
         return;
       case VALUE_WRITER_FAILED:
-        s_logger.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
+        LOGGER.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
         throw _valueWriterFault;
+      default:
     }
     final PendingLock write = _pendingWrites.remove(Thread.currentThread());
-    if ((write == null) || write.isZero()) {
+    if (write == null || write.isZero()) {
       // Haven't written anything (null) or have written everything asked for (zero)
-      s_logger.debug("Writer flushed");
+      LOGGER.debug("Writer flushed");
       return;
     }
     // Block until the writes from this thread have finished or failed
-    s_logger.debug("Deferring to asynchronous thread");
+    LOGGER.debug("Deferring to asynchronous thread");
     final AsynchronousOperation<Void> async = AsynchronousOperation.create(Void.class);
     if (write.setCallback(async.getCallback())) {
       // TODO: How far from completion are we? Will it be worth the asynchronous exception overhead or just block?
       async.getResult();
     } else {
-      s_logger.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
+      LOGGER.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
       throw _valueWriterFault;
     }
   }

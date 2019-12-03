@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.live;
@@ -20,12 +20,12 @@ public class LiveMarketDataProviderFactoryBean extends SingletonFactoryBean<Mark
   private LiveDataClient _liveDataClient;
   private SecuritySource _securitySource;
   private MarketDataAvailabilityProvider _availabilityProvider;
-  
+
   public LiveDataClient getLiveDataClient() {
     return _liveDataClient;
   }
-  
-  public void setLiveDataClient(LiveDataClient liveDataClient) {
+
+  public void setLiveDataClient(final LiveDataClient liveDataClient) {
     _liveDataClient = liveDataClient;
   }
 
@@ -33,7 +33,7 @@ public class LiveMarketDataProviderFactoryBean extends SingletonFactoryBean<Mark
     return _securitySource;
   }
 
-  public void setSecuritySource(SecuritySource securitySource) {
+  public void setSecuritySource(final SecuritySource securitySource) {
     _securitySource = securitySource;
   }
 
@@ -41,7 +41,7 @@ public class LiveMarketDataProviderFactoryBean extends SingletonFactoryBean<Mark
     return _availabilityProvider;
   }
 
-  public void setAvailabilityProvider(MarketDataAvailabilityProvider availabilityProvider) {
+  public void setAvailabilityProvider(final MarketDataAvailabilityProvider availabilityProvider) {
     _availabilityProvider = availabilityProvider;
   }
 

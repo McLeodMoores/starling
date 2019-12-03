@@ -43,6 +43,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class MoneynessLognormalVolatilityCubeConverterFunction extends StandardVolatilityCubeDataFunction {
 
+  @SuppressWarnings("unchecked")
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {

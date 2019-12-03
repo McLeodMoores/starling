@@ -16,14 +16,14 @@ public class DataFinancialClientManagerUris {
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriClient(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialUserManagerUris.uriUser(baseUri, userName)).path("clients/{clientName}");
+  public static URI uriClient(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialUserManagerUris.uriUser(baseUri, userName)).path("clients/{clientName}");
     return bld.build(clientName);
   }
 

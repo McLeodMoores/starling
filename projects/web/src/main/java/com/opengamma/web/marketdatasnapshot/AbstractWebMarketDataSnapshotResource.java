@@ -29,11 +29,11 @@ public abstract class AbstractWebMarketDataSnapshotResource
     extends AbstractPerRequestWebResource<WebMarketDataSnapshotData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "marketdatasnapshots/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "marketdatasnapshots/json/";
 
@@ -44,19 +44,31 @@ public abstract class AbstractWebMarketDataSnapshotResource
 
   /**
    * Creates the resource.
-   * 
-   * @param marketdataSnapshotMaster  the market data snapshot master, not null
-   * @param configMaster  the config master, not null
-   * @param liveMarketDataProviderFactory  the live market data provider factory, Either this or marketDataSpecificationRepository must be set
-   * @param marketDataSpecificationRepository  the market data specification repository, not null
-   * @param configSource  the config source, not null
-   * @param targetResolver  the computation target resolver, not null
-   * @param viewProcessor  the view processor, not null
-   * @param htsSource  the historical timeseries source, not null
-   * @param volatilityCubeDefinitionSource  the volatility cube definition source, not null
+   *
+   * @param marketdataSnapshotMaster
+   *          the market data snapshot master, not null
+   * @param configMaster
+   *          the config master, not null
+   * @param liveMarketDataProviderFactory
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
+   * @param marketDataSpecificationRepository
+   *          the market data specification repository, not null
+   * @param configSource
+   *          the config source, not null
+   * @param targetResolver
+   *          the computation target resolver, not null
+   * @param viewProcessor
+   *          the view processor, not null
+   * @param htsSource
+   *          the historical timeseries source, not null
+   * @param volatilityCubeDefinitionSource
+   *          the volatility cube definition source, not null
+   * @deprecated don't use the NamedMarketDataSpecificationRepository
    */
+  @Deprecated
   protected AbstractWebMarketDataSnapshotResource(final MarketDataSnapshotMaster marketdataSnapshotMaster, final ConfigMaster configMaster,
-      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository, final ConfigSource configSource,
+      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final ConfigSource configSource,
       final ComputationTargetResolver targetResolver, final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource,
       final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
     super(new WebMarketDataSnapshotData());
@@ -66,9 +78,10 @@ public abstract class AbstractWebMarketDataSnapshotResource
     ArgumentChecker.notNull(targetResolver, "targetResolver");
     ArgumentChecker.notNull(viewProcessor, "viewProcessor");
     ArgumentChecker.notNull(htsSource, "htsSource");
-    ArgumentChecker.isFalse(liveMarketDataProviderFactory == null && marketDataSpecificationRepository == null, "liveMarketDataProviderFactory or marketDataSpecificationRepository must be set");
+    ArgumentChecker.isFalse(liveMarketDataProviderFactory == null && marketDataSpecificationRepository == null,
+        "liveMarketDataProviderFactory or marketDataSpecificationRepository must be set");
     ArgumentChecker.notNull(volatilityCubeDefinitionSource, "volatilityCubeDefinitionSource");
-    
+
     data().setMarketDataSnapshotMaster(marketdataSnapshotMaster);
     data().setConfigMaster(configMaster);
     data().setMarketDataSpecificationRepository(marketDataSpecificationRepository);
@@ -83,31 +96,78 @@ public abstract class AbstractWebMarketDataSnapshotResource
 
   /**
    * Creates the resource.
-   * 
-   * @param parent  the parent resource, not null
+   *
+   * @param marketdataSnapshotMaster
+   *          the market data snapshot master, not null
+   * @param configMaster
+   *          the config master, not null
+   * @param liveMarketDataProviderFactory
+   *          the live market data provider factory, Either this or marketDataSpecificationRepository must be set
+   * @param configSource
+   *          the config source, not null
+   * @param targetResolver
+   *          the computation target resolver, not null
+   * @param viewProcessor
+   *          the view processor, not null
+   * @param htsSource
+   *          the historical timeseries source, not null
+   * @param volatilityCubeDefinitionSource
+   *          the volatility cube definition source, not null
+   */
+  protected AbstractWebMarketDataSnapshotResource(final MarketDataSnapshotMaster marketdataSnapshotMaster, final ConfigMaster configMaster,
+      final LiveMarketDataProviderFactory liveMarketDataProviderFactory, final ConfigSource configSource, final ComputationTargetResolver targetResolver,
+      final ViewProcessor viewProcessor, final HistoricalTimeSeriesSource htsSource, final VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
+    super(new WebMarketDataSnapshotData());
+    ArgumentChecker.notNull(marketdataSnapshotMaster, "marketdataSnapshotMaster");
+    ArgumentChecker.notNull(configMaster, "configMaster");
+    ArgumentChecker.notNull(configSource, "configSource");
+    ArgumentChecker.notNull(targetResolver, "targetResolver");
+    ArgumentChecker.notNull(viewProcessor, "viewProcessor");
+    ArgumentChecker.notNull(htsSource, "htsSource");
+    ArgumentChecker.notNull(liveMarketDataProviderFactory, "liveMarketDataProviderFactory");
+    ArgumentChecker.notNull(volatilityCubeDefinitionSource, "volatilityCubeDefinitionSource");
+
+    data().setMarketDataSnapshotMaster(marketdataSnapshotMaster);
+    data().setConfigMaster(configMaster);
+    data().setLiveMarketDataProviderFactory(liveMarketDataProviderFactory);
+    data().setConfigSource(configSource);
+    data().setComputationTargetResolver(targetResolver);
+    data().setViewProcessor(viewProcessor);
+    data().setViewProcessor(viewProcessor);
+    data().setHistoricalTimeSeriesSource(htsSource);
+    data().setVolatilityCubeDefinitionSource(volatilityCubeDefinitionSource);
+  }
+
+  /**
+   * Creates the resource.
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebMarketDataSnapshotResource(final AbstractWebMarketDataSnapshotResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebMarketDataSnapshotUris(data()));
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the fudgeContext.
+   *
    * @return the fudgeContext
    */
+  @Override
   public FudgeContext getFudgeContext() {
     return _fudgeContext;
   }

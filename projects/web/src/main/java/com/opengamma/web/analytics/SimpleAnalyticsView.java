@@ -39,15 +39,15 @@ import com.opengamma.util.GUIDGenerator;
 import com.opengamma.web.analytics.formatting.TypeFormatter;
 
 /**
- * Default implementation of {@link AnalyticsView}. This class isn't meant to be thread safe. A thread calling any method that mutates the state must have an exclusive lock. The get methods can safely
- * be called by multiple concurrent threads.
- * 
+ * Default implementation of {@link AnalyticsView}. This class isn't meant to be thread safe. A thread calling any method that mutates the state must have an
+ * exclusive lock. The get methods can safely be called by multiple concurrent threads.
+ *
  * @see LockingAnalyticsView
  * @see com.opengamma.web.analytics Package concurrency notes
  */
 /* package */class SimpleAnalyticsView implements AnalyticsView {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleAnalyticsView.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleAnalyticsView.class);
   private static final Portfolio EMPTY_PORTFOLIO = new SimplePortfolio("", new SimplePortfolioNode(UniqueId.of("EMPTY", "EMPTY"), ""));
 
   private final ResultsCache _cache = new ResultsCache();
@@ -68,20 +68,42 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private Portfolio _pendingPortfolio;
 
   /**
-   * @param viewId client ID of the view
-   * @param portfolioCallbackId ID that is passed to the listener when the structure of the portfolio grid changes. This class makes no assumptions about its value
-   * @param primitivesCallbackId ID that is passed to the listener when the structure of the primitives grid changes. This class makes no assumptions about its value
-   * @param targetResolver For looking up calculation targets by specification
-   * @param viewportListener Notified when any viewport is created, updated or deleted
-   * @param blotterColumnMapper For populating the blotter columns with details for each different security type
-   * @param portfolioSupplier Supplies an up to date version of the portfolio
-   * @param showBlotterColumns Whether the blotter columns should be shown in the portfolio analytics grid
-   * @param errorManager Holds information about errors that occur compiling and executing the view
+   * @param viewDefinitionId
+   *          the identifier of the view definition, not null
+   * @param primitivesOnly
+   *          true if the view only contains primitives
+   * @param versionCorrection
+   *          the version of the view definition, not null
+   * @param viewId
+   *          client ID of the view
+   * @param portfolioCallbackId
+   *          ID that is passed to the listener when the structure of the portfolio grid changes. This class makes no assumptions about its value
+   * @param primitivesCallbackId
+   *          ID that is passed to the listener when the structure of the primitives grid changes. This class makes no assumptions about its value
+   * @param targetResolver
+   *          For looking up calculation targets by specification
+   * @param functions
+   *          the function repository, not null
+   * @param viewportListener
+   *          Notified when any viewport is created, updated or deleted
+   * @param blotterColumnMapper
+   *          For populating the blotter columns with details for each different security type
+   * @param portfolioSupplier
+   *          Supplies an up to date version of the portfolio
+   * @param portfolioEntityExtractor
+   *          extracts the portfolio entities, not null
+   * @param showBlotterColumns
+   *          Whether the blotter columns should be shown in the portfolio analytics grid
+   * @param errorManager
+   *          Holds information about errors that occur compiling and executing the view
    */
-  /* package */SimpleAnalyticsView(UniqueId viewDefinitionId, boolean primitivesOnly, VersionCorrection versionCorrection, String viewId, String portfolioCallbackId,
-      String primitivesCallbackId, ComputationTargetResolver targetResolver, FunctionRepositoryFactory functions, ViewportListener viewportListener,
-      SecurityAttributeMapper blotterColumnMapper, Supplier<Portfolio> portfolioSupplier, PortfolioEntityExtractor portfolioEntityExtractor, boolean showBlotterColumns,
-      ErrorManager errorManager) {
+  /* package */ SimpleAnalyticsView(final UniqueId viewDefinitionId, final boolean primitivesOnly, final VersionCorrection versionCorrection,
+      final String viewId, final String portfolioCallbackId,
+      final String primitivesCallbackId, final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions,
+      final ViewportListener viewportListener,
+      final SecurityAttributeMapper blotterColumnMapper, final Supplier<Portfolio> portfolioSupplier, final PortfolioEntityExtractor portfolioEntityExtractor,
+      final boolean showBlotterColumns,
+      final ErrorManager errorManager) {
     ArgumentChecker.notNull(viewDefinitionId, "viewDefinitionId");
     ArgumentChecker.notEmpty(viewId, "viewId");
     ArgumentChecker.notEmpty(portfolioCallbackId, "portfolioCallbackId");
@@ -118,7 +140,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public List<String> updateStructure(CompiledViewDefinition compiledViewDefinition, Portfolio portfolio) {
+  public List<String> updateStructure(final CompiledViewDefinition compiledViewDefinition, final Portfolio portfolio) {
     if (_compiledViewDefinition != null) {
       // If we are between cycles then hold back the structure change until there's a set of results which use it,
       // allowing the user to continue browsing the current set of results in the meantime.
@@ -131,15 +153,15 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public String viewCompilationFailed(Throwable t) {
-    s_logger.warn("View compilation failed, adding error {}", t);
+  public String viewCompilationFailed(final Throwable t) {
+    LOGGER.warn("View compilation failed, adding error {}", t);
     return _errorManager.add(t);
   }
 
-  private void doUpdateStructure(CompiledViewDefinition compiledViewDefinition, Portfolio portfolio) {
+  private void doUpdateStructure(final CompiledViewDefinition compiledViewDefinition, final Portfolio portfolio) {
     _compiledViewDefinition = compiledViewDefinition;
     if (portfolio != null) {
-      List<UniqueIdentifiable> entities = PortfolioMapper.flatMap(portfolio.getRootNode(), _portfolioEntityExtractor);
+      final List<UniqueIdentifiable> entities = PortfolioMapper.flatMap(portfolio.getRootNode(), _portfolioEntityExtractor);
       _cache.put(entities);
     }
     _portfolioGrid = _portfolioGrid.withUpdatedStructure(_compiledViewDefinition, portfolio);
@@ -147,15 +169,15 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   private List<String> getGridIds() {
-    List<String> gridIds = Lists.newArrayList();
-    //callback ids for grid viewports
-    for (PortfolioGridViewport viewport : _portfolioGrid.getViewports().values()) {
+    final List<String> gridIds = Lists.newArrayList();
+    // callback ids for grid viewports
+    for (final PortfolioGridViewport viewport : _portfolioGrid.getViewports().values()) {
       gridIds.add(viewport.getStructureCallbackId());
       gridIds.add(viewport.getCallbackId());
     }
-    //callback ids for depgraph grid viewports
-    for (DependencyGraphGrid grid : _portfolioGrid.getDependencyGraphs().values()) {
-      for (DependencyGraphViewport viewport : grid.getViewports().values()) {
+    // callback ids for depgraph grid viewports
+    for (final DependencyGraphGrid grid : _portfolioGrid.getDependencyGraphs().values()) {
+      for (final DependencyGraphViewport viewport : grid.getViewports().values()) {
         gridIds.add(viewport.getStructureCallbackId());
         gridIds.add(viewport.getCallbackId());
       }
@@ -168,8 +190,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public List<String> updateResults(ViewResultModel results, ViewCycle viewCycle) {
-    List<String> updatedIds = Lists.newArrayList();
+  public List<String> updateResults(final ViewResultModel results, final ViewCycle viewCycle) {
+    final List<String> updatedIds = Lists.newArrayList();
     boolean structureUpdated;
     _cache.put(results);
     if (_pendingStructureChange != null) {
@@ -182,7 +204,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     }
     if (!structureUpdated) {
       // Individual cell updates
-      PortfolioAnalyticsGrid updatedPortfolioGrid = _portfolioGrid.withUpdatedTickAndPossiblyStructure(_cache);
+      final PortfolioAnalyticsGrid updatedPortfolioGrid = _portfolioGrid.withUpdatedTickAndPossiblyStructure(_cache);
       if (updatedPortfolioGrid == _portfolioGrid) {
         // no change to the grid structure, notify the data has changed
         updatedIds.addAll(_portfolioGrid.updateResults(_cache, viewCycle));
@@ -197,7 +219,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     return updatedIds;
   }
 
-  private MainAnalyticsGrid<?> getGrid(GridType gridType) {
+  private MainAnalyticsGrid<?> getGrid(final GridType gridType) {
     switch (gridType) {
       case PORTFOLIO:
         return _portfolioGrid;
@@ -209,115 +231,120 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int viewportId) {
-    GridStructure gridStructure = getGrid(gridType).getViewport(viewportId).getGridStructure();
-    s_logger.debug("Viewport {} and view {} returning grid structure for the {} grid: {}", viewportId, _viewId, gridType, gridStructure);
+  public GridStructure getGridStructure(final GridType gridType, final int viewportId) {
+    final GridStructure gridStructure = getGrid(gridType).getViewport(viewportId).getGridStructure();
+    LOGGER.debug("Viewport {} and view {} returning grid structure for the {} grid: {}", viewportId, _viewId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType) {
-    GridStructure gridStructure = getGrid(gridType).getGridStructure();
-    s_logger.debug("View {} returning grid structure for the {} grid: {}", _viewId, gridType, gridStructure);
+  public GridStructure getInitialGridStructure(final GridType gridType) {
+    final GridStructure gridStructure = getGrid(gridType).getGridStructure();
+    LOGGER.debug("View {} returning grid structure for the {} grid: {}", _viewId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
-  public boolean createViewport(int requestId, GridType gridType, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
-    boolean hasData = getGrid(gridType).createViewport(viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
-    s_logger.debug("View {} created viewport ID {} for the {} grid from {}", _viewId, viewportId, gridType, viewportDefinition);
+  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId,
+      final ViewportDefinition viewportDefinition) {
+    final boolean hasData = getGrid(gridType).createViewport(viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
+    LOGGER.debug("View {} created viewport ID {} for the {} grid from {}", _viewId, viewportId, gridType, viewportDefinition);
     return hasData;
   }
 
   @Override
-  public String updateViewport(GridType gridType, int viewportId, ViewportDefinition viewportDefinition) {
-    s_logger.debug("View {} updating viewport {} for {} grid to {}", _viewId, viewportId, gridType, viewportDefinition);
+  public String updateViewport(final GridType gridType, final int viewportId, final ViewportDefinition viewportDefinition) {
+    LOGGER.debug("View {} updating viewport {} for {} grid to {}", _viewId, viewportId, gridType, viewportDefinition);
     return getGrid(gridType).updateViewport(viewportId, viewportDefinition, _cache);
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int viewportId) {
-    s_logger.debug("View {} deleting viewport {} from the {} grid", _viewId, viewportId, gridType);
+  public void deleteViewport(final GridType gridType, final int viewportId) {
+    LOGGER.debug("View {} deleting viewport {} from the {} grid", _viewId, viewportId, gridType);
     getGrid(gridType).deleteViewport(viewportId);
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int viewportId) {
-    s_logger.debug("View {} getting data for viewport {} of the {} grid", _viewId, viewportId, gridType);
+  public ViewportResults getData(final GridType gridType, final int viewportId) {
+    LOGGER.debug("View {} getting data for viewport {} of the {} grid", _viewId, viewportId, gridType);
     return getGrid(gridType).getData(viewportId);
   }
 
   @Override
-  public void openDependencyGraph(int requestId, GridType gridType, int graphId, String callbackId, int row, int col) {
-    s_logger.debug("View {} opening dependency graph {} for cell ({}, {}) of the {} grid", _viewId, graphId, row, col, gridType);
+  public void openDependencyGraph(final int requestId, final GridType gridType, final int graphId, final String callbackId, final int row, final int col) {
+    LOGGER.debug("View {} opening dependency graph {} for cell ({}, {}) of the {} grid", _viewId, graphId, row, col, gridType);
     getGrid(gridType).openDependencyGraph(graphId, callbackId, row, col, _compiledViewDefinition, _viewportListener);
   }
 
   @Override
-  public void openDependencyGraph(int requestId, GridType gridType, int graphId, String callbackId, String calcConfigName, ValueRequirement valueRequirement) {
+  public void openDependencyGraph(final int requestId, final GridType gridType, final int graphId, final String callbackId, final String calcConfigName,
+      final ValueRequirement valueRequirement) {
     getGrid(gridType).openDependencyGraph(graphId, callbackId, calcConfigName, valueRequirement, _compiledViewDefinition, _viewportListener);
   }
 
   @Override
-  public void closeDependencyGraph(GridType gridType, int graphId) {
-    s_logger.debug("View {} closing dependency graph {} of the {} grid", _viewId, graphId, gridType);
+  public void closeDependencyGraph(final GridType gridType, final int graphId) {
+    LOGGER.debug("View {} closing dependency graph {} of the {} grid", _viewId, graphId, gridType);
     getGrid(gridType).closeDependencyGraph(graphId);
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int graphId, int viewportId) {
-    DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId, viewportId);
-    s_logger.debug("Viewport {} and view {} returning grid structure for dependency graph {} of the {} grid: {}", viewportId, _viewId, graphId, gridType, gridStructure);
+  public GridStructure getGridStructure(final GridType gridType, final int graphId, final int viewportId) {
+    final DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId, viewportId);
+    LOGGER.debug("Viewport {} and view {} returning grid structure for dependency graph {} of the {} grid: {}", viewportId, _viewId, graphId, gridType,
+        gridStructure);
     return gridStructure;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType, int graphId) {
-    DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId);
-    s_logger.debug("View {} returning grid structure for dependency graph {} of the {} grid: {}", _viewId, graphId, gridType, gridStructure);
+  public GridStructure getInitialGridStructure(final GridType gridType, final int graphId) {
+    final DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId);
+    LOGGER.debug("View {} returning grid structure for dependency graph {} of the {} grid: {}", _viewId, graphId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
-  public boolean createViewport(int requestId, GridType gridType, int graphId, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
-    boolean hasData = getGrid(gridType).createViewport(graphId, viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
-    s_logger.debug("View {} created viewport ID {} for dependency graph {} of the {} grid using {}", _viewId, viewportId, graphId, gridType, viewportDefinition);
+  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId,
+      final String structureCallbackId, final ViewportDefinition viewportDefinition) {
+    final boolean hasData = getGrid(gridType).createViewport(graphId, viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
+    LOGGER.debug("View {} created viewport ID {} for dependency graph {} of the {} grid using {}", _viewId, viewportId, graphId, gridType, viewportDefinition);
     return hasData;
   }
 
   @Override
-  public String updateViewport(GridType gridType, int graphId, int viewportId, ViewportDefinition viewportDefinition) {
-    s_logger.debug("View {} updating viewport for dependency graph {} of the {} grid using {}", _viewId, graphId, gridType, viewportDefinition);
+  public String updateViewport(final GridType gridType, final int graphId, final int viewportId, final ViewportDefinition viewportDefinition) {
+    LOGGER.debug("View {} updating viewport for dependency graph {} of the {} grid using {}", _viewId, graphId, gridType, viewportDefinition);
     return getGrid(gridType).updateViewport(graphId, viewportId, viewportDefinition, _cache);
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int graphId, int viewportId) {
-    s_logger.debug("View {} deleting viewport {} from dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
+  public void deleteViewport(final GridType gridType, final int graphId, final int viewportId) {
+    LOGGER.debug("View {} deleting viewport {} from dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
     getGrid(gridType).deleteViewport(graphId, viewportId);
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int graphId, int viewportId) {
-    s_logger.debug("View {} getting data for viewport {} of dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
+  public ViewportResults getData(final GridType gridType, final int graphId, final int viewportId) {
+    LOGGER.debug("View {} getting data for viewport {} of dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
     return getGrid(gridType).getData(graphId, viewportId);
   }
 
   @Override
   public List<String> portfolioChanged() {
-    Portfolio portfolio = _portfolioSupplier.get();
-    List<UniqueIdentifiable> entities = PortfolioMapper.flatMap(portfolio.getRootNode(), _portfolioEntityExtractor);
+    final Portfolio portfolio = _portfolioSupplier.get();
+    final List<UniqueIdentifiable> entities = PortfolioMapper.flatMap(portfolio.getRootNode(), _portfolioEntityExtractor);
     _cache.put(entities);
     // TODO ignore for now, causes problems when the view take a long time to recompile
-    /*_portfolioGrid = _portfolioGrid.withUpdatedRows(portfolio);
-    // TODO this is pretty conservative, refreshes all grids because the portfolio structure has changed
-    return getGridIds();*/
+    /*
+     * _portfolioGrid = _portfolioGrid.withUpdatedRows(portfolio); // TODO this is pretty conservative, refreshes all grids because the portfolio structure has
+     * changed return getGridIds();
+     */
     return Collections.emptyList();
   }
 
   @Override
-  public List<String> entityChanged(MasterChangeNotification<?> notification) {
-    ChangeEvent event = notification.getEvent();
+  public List<String> entityChanged(final MasterChangeNotification<?> notification) {
+    final ChangeEvent event = notification.getEvent();
     if (isChangeRelevant(event)) {
       if (event.getType() == ChangeType.REMOVED) {
         // TODO clean up trades from cache if this is a position that has been removed
@@ -326,40 +353,39 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
         // return the IDs of all grids because the portfolio structure has changed
         // TODO if we had separate IDs for rows and columns it would save the client rebuilding the column metadata
         return getGridIds();
-      } else {
-        UniqueIdentifiable entity = notification.getEntity();
-        _cache.put(entity);
-        List<ObjectId> entityIds = Lists.newArrayList(entity.getUniqueId().getObjectId());
-        // TODO get rid of this duplication when ManageablePosition implements Position
-        // TODO would it be nicer to have a getEntities() method on MasterChangeNotification?
-        // would need different impls for different entity types. probably not worth it
-        if (entity instanceof Position) {
-          for (Trade trade : ((Position) entity).getTrades()) {
-            entityIds.add(trade.getUniqueId().getObjectId());
-            _cache.put(trade);
-          }
-        } else if (entity instanceof ManageablePosition) {
-          for (Trade trade : ((ManageablePosition) entity).getTrades()) {
-            entityIds.add(trade.getUniqueId().getObjectId());
-            _cache.put(trade);
-          }
-        }
-        List<String> ids = _portfolioGrid.updateEntities(_cache, entityIds);
-        s_logger.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
-        return ids;
       }
-    } else {
-      return Collections.emptyList();
+      final UniqueIdentifiable entity = notification.getEntity();
+      _cache.put(entity);
+      final List<ObjectId> entityIds = Lists.newArrayList(entity.getUniqueId().getObjectId());
+      // TODO get rid of this duplication when ManageablePosition implements Position
+      // TODO would it be nicer to have a getEntities() method on MasterChangeNotification?
+      // would need different impls for different entity types. probably not worth it
+      if (entity instanceof Position) {
+        for (final Trade trade : ((Position) entity).getTrades()) {
+          entityIds.add(trade.getUniqueId().getObjectId());
+          _cache.put(trade);
+        }
+      } else if (entity instanceof ManageablePosition) {
+        for (final Trade trade : ((ManageablePosition) entity).getTrades()) {
+          entityIds.add(trade.getUniqueId().getObjectId());
+          _cache.put(trade);
+        }
+      }
+      final List<String> ids = _portfolioGrid.updateEntities(_cache, entityIds);
+      LOGGER.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
+      return ids;
     }
+    return Collections.emptyList();
   }
 
   /**
    * Returns true if a change event invalidates any of this view's portfolio, including trades, securities and positions it refers to.
-   * 
-   * @param event The event
+   *
+   * @param event
+   *          The event
    * @return true if the portfolio or positions, trades or securities it refers to have changed
    */
-  private boolean isChangeRelevant(ChangeEvent event) {
+  private boolean isChangeRelevant(final ChangeEvent event) {
     // if the correctedTo time is non-null then we're looking at corrections up to a fixed point in the past and
     // new corrections can't affect our version
     if (_versionCorrection.getCorrectedTo() != null) {
@@ -373,9 +399,9 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     if (_cache.getEntity(event.getObjectId()) == null) {
       return false;
     }
-    Instant versionInstant = _versionCorrection.getVersionAsOf();
-    Instant eventFrom = event.getVersionFrom();
-    Instant eventTo = event.getVersionTo();
+    final Instant versionInstant = _versionCorrection.getVersionAsOf();
+    final Instant eventFrom = event.getVersionFrom();
+    final Instant eventTo = event.getVersionTo();
     if (versionInstant == null) {
       // if the version time is null (latest) and eventTo is null (latest) then handle the change
       // if the version time is null (latest) and eventTo isn't null the event doesn't affect the latest version
@@ -392,21 +418,21 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public ViewportResults getAllGridData(GridType gridType, TypeFormatter.Format format) {
-    GridStructure gridStructure = getGrid(gridType).getGridStructure();
-    List<Integer> rows = Lists.newArrayList();
+  public ViewportResults getAllGridData(final GridType gridType, final TypeFormatter.Format format) {
+    final GridStructure gridStructure = getGrid(gridType).getGridStructure();
+    final List<Integer> rows = Lists.newArrayList();
     for (int i = 0; i < gridStructure.getRowCount(); i++) {
       rows.add(i);
     }
-    List<Integer> cols = Lists.newArrayList();
+    final List<Integer> cols = Lists.newArrayList();
     for (int i = 0; i < gridStructure.getColumnCount(); i++) {
       cols.add(i);
     }
-    ViewportDefinition viewportDefinition = ViewportDefinition.create(Integer.MIN_VALUE, rows, cols, Lists.<GridCell>newArrayList(), format, false);
+    final ViewportDefinition viewportDefinition = ViewportDefinition.create(Integer.MIN_VALUE, rows, cols, Lists.<GridCell> newArrayList(), format, false);
 
-    String callbackId = GUIDGenerator.generate().toString();
-    String structureCallbackId = GUIDGenerator.generate().toString();
-    MainGridViewport viewport = getGrid(gridType).createViewport(viewportDefinition, callbackId, structureCallbackId, _cache);
+    final String callbackId = GUIDGenerator.generate().toString();
+    final String structureCallbackId = GUIDGenerator.generate().toString();
+    final MainGridViewport viewport = getGrid(gridType).createViewport(viewportDefinition, callbackId, structureCallbackId, _cache);
     return viewport.getData();
   }
 
@@ -421,7 +447,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   }
 
   @Override
-  public void deleteError(long id) {
+  public void deleteError(final long id) {
     _errorManager.delete(id);
   }
 }

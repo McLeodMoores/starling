@@ -86,12 +86,35 @@ public class IRFutureOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private OptionType _optionType;
 
-  IRFutureOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  IRFutureOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public IRFutureOptionSecurity(String exchange, Expiry expiry, ExerciseType exerciseType, ExternalId underlyingIdentifier,
-      double pointValue, boolean margined, Currency currency, double strike, OptionType optionType) {
+  /**
+   * @param exchange
+   *          the exchange name, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying index, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param margined
+   *          true if the option is margined, false otherwise
+   * @param currency
+   *          the currency, not null
+   * @param strike
+   *          the strike
+   * @param optionType
+   *          the option type, not null
+   */
+  public IRFutureOptionSecurity(final String exchange, final Expiry expiry, final ExerciseType exerciseType, final ExternalId underlyingIdentifier,
+      final double pointValue, final boolean margined, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);
     setExchange(exchange);
     setExpiry(expiry);
@@ -106,7 +129,7 @@ public class IRFutureOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitIRFutureOptionSecurity(this);
   }
 

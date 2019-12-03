@@ -25,19 +25,21 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Converter used to create a bond future option OG-Analytics representation from an OG-Financial type from a trade. The trade
- * is needed for conversion to retrieve details such as last traded date and quantity that are only held on the trade itself.
+ * Converter used to create a bond future option OG-Analytics representation from an OG-Financial type from a trade. The trade is needed for conversion to
+ * retrieve details such as last traded date and quantity that are only held on the trade itself.
  */
 public class BondFutureOptionTradeConverter implements TradeConverter {
-  
+
   /**
    * Converter used to convert the bond future option of the trade.
    */
   private final BondFutureOptionSecurityConverter _securityConverter;
-  
+
   /**
    * Constructs a bond future option converter.
-   * @param securityConverter the bond future option converter, not null.
+   * 
+   * @param securityConverter
+   *          the bond future option converter, not null.
    */
   public BondFutureOptionTradeConverter(final BondFutureOptionSecurityConverter securityConverter) {
     _securityConverter = ArgumentChecker.notNull(securityConverter, "security converter");
@@ -47,23 +49,24 @@ public class BondFutureOptionTradeConverter implements TradeConverter {
   public InstrumentDefinition<?> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     ArgumentChecker.isTrue(trade.getSecurity() instanceof BondFutureOptionSecurity, "Can only handle trades with security type BondFutureOptionSecurity");
-    BondFutureOptionSecurity security = (BondFutureOptionSecurity) trade.getSecurity();
+    final BondFutureOptionSecurity security = (BondFutureOptionSecurity) trade.getSecurity();
     final InstrumentDefinition<?> securityDefinition = security.accept(_securityConverter);
-    ArgumentChecker.notNull(trade.getPremium(), "Bond future option trade must have a premium set. The interpretation of premium is the market price, without unit, i.e. not %");
-    //TODO fix the next two lines - it's here to avoid double-multiplying when stuff is scaled at the position level
+    ArgumentChecker.notNull(trade.getPremium(),
+        "Bond future option trade must have a premium set. The interpretation of premium is the market price, without unit, i.e. not %");
+    // TODO fix the next two lines - it's here to avoid double-multiplying when stuff is scaled at the position level
     final int quantity = 1;
     final double premium = -trade.getPremium() * Math.signum(trade.getQuantity().doubleValue());
     // Get DateTime of trade to add to Transaction. Handle case when time isn't available.
     final ZonedDateTime tradeDate;
-    LocalDate tradeDateLocal = trade.getTradeDate();
-    OffsetTime tradeTime = trade.getTradeTime();
+    final LocalDate tradeDateLocal = trade.getTradeDate();
+    final OffsetTime tradeTime = trade.getTradeTime();
     if (tradeDateLocal == null) {
-      throw new OpenGammaRuntimeException("Trade did not contain a tradeDate:" +  trade.getUniqueId());
+      throw new OpenGammaRuntimeException("Trade did not contain a tradeDate:" + trade.getUniqueId());
     } else if (tradeTime == null) {
-      s_logger.debug("Trade did not contain a tradeTime. Using noon UTC. " +  trade.getUniqueId()); 
+      LOGGER.debug("Trade did not contain a tradeTime. Using noon UTC. " + trade.getUniqueId());
       tradeDate = ZonedDateTime.of(tradeDateLocal, LocalTime.of(12, 0), ZoneId.of("UTC"));
     } else {
-      tradeDate = trade.getTradeDate().atTime(trade.getTradeTime()).atZoneSameInstant(ZoneOffset.UTC); //TODO get the real time zone    
+      tradeDate = trade.getTradeDate().atTime(trade.getTradeTime()).atZoneSameInstant(ZoneOffset.UTC); // TODO get the real time zone
     }
 
     if (security.isMargined()) {
@@ -73,6 +76,6 @@ public class BondFutureOptionTradeConverter implements TradeConverter {
     final BondFutureOptionPremiumSecurityDefinition underlyingOption = (BondFutureOptionPremiumSecurityDefinition) securityDefinition;
     return new BondFutureOptionPremiumTransactionDefinition(underlyingOption, quantity, tradeDate, premium);
   }
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionTradeConverter.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionTradeConverter.class);
 }

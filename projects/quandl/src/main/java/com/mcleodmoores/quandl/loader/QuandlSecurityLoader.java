@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader;
 
@@ -23,9 +23,6 @@ import org.joda.beans.ser.JodaBeanSer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-import cern.colt.Arrays;
-
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.convention.ConventionSource;
@@ -35,10 +32,12 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.SecurityMasterUtils;
 import com.opengamma.scripts.Scriptable;
 
+import au.com.bytecode.opencsv.CSVReader;
+import cern.colt.Arrays;
 
 /**
- * Creates securities from a csv file containing full details, or a csv file containing codes and a {@link ConventionSource},
- * and writes them as xml files or stores them in the security master, depending on the options used.
+ * Creates securities from a csv file containing full details, or a csv file containing codes and a {@link ConventionSource}, and writes them as xml files or
+ * stores them in the security master, depending on the options used.
  */
 @Scriptable
 public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
@@ -73,6 +72,7 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Create the option to save the securities to a file.
+   *
    * @return The option
    */
   private static Option createOutputFileOption() {
@@ -85,6 +85,7 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Creates the option to persist the securities to the security master.
+   *
    * @return The option
    */
   private static Option createPersistOption() {
@@ -97,6 +98,7 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Creates the option to supply an input file name.
+   *
    * @return The option
    */
   private static Option createInputFileOption() {
@@ -109,6 +111,7 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Creates the option to use a convention source to fill in fields in the securities.
+   *
    * @return The option
    */
   private static Option createUseConventionOption() {
@@ -133,12 +136,12 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
           return;
         }
         try (CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(resource)))) {
-          String[] line = reader.readNext(); //ignore headers
+          String[] line = reader.readNext(); // ignore headers
           while ((line = reader.readNext()) != null) {
             if (commandLine.hasOption(USE_CONVENTION_FLAG)) {
               LOGGER.warn("Generating securities from {} and the convention source", inputFileName);
               final ConventionSource conventionSource = toolContext.getConventionSource();
-              for (final String quandlCode : line) { //don't care if there's multiple elements on the same line
+              for (final String quandlCode : line) { // don't care if there's multiple elements on the same line
                 final ManageableSecurity generatedSecurity = createSecurity(conventionSource, quandlCode);
                 if (generatedSecurity != null) {
                   securities.add(generatedSecurity);
@@ -175,7 +178,7 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
           final Path path = Paths.get(fileName);
           final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(security).getBytes();
           System.err.println(Arrays.toString(xmlString));
-          try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+          try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
             out.write(xmlString);
           } catch (final IOException e) {
             LOGGER.warn(e.getMessage());
@@ -187,17 +190,21 @@ public abstract class QuandlSecurityLoader extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a security from an array of string inputs. If the security cannot be created,
-   * returns null
-   * @param inputs The inputs
+   * Creates a security from an array of string inputs. If the security cannot be created, returns null
+   *
+   * @param inputs
+   *          The inputs
    * @return The security, can be null
    */
   protected abstract ManageableSecurity createSecurity(String[] inputs);
 
   /**
    * Creates a security from a Quandl code using {@link com.opengamma.core.convention.Convention}.
-   * @param conventionSource The convention source, not null
-   * @param quandlCode The Quandl code
+   *
+   * @param conventionSource
+   *          The convention source, not null
+   * @param quandlCode
+   *          The Quandl code
    * @return The security, can be null
    */
   protected abstract ManageableSecurity createSecurity(ConventionSource conventionSource, String quandlCode);

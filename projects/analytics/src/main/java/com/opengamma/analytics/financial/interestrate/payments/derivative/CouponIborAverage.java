@@ -60,26 +60,41 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index1 The first Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime1 The fixing period start time (in years) of the first index.
-   * @param fixingPeriodEndTime1 The fixing period end time (in years) of the first index.
-   * @param fixingYearFraction1 The year fraction (or accrual factor) for the fixing period of the first index.
-   * @param index2 The second Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime2 The fixing period start time (in years) of the second index.
-   * @param fixingPeriodEndTime2 The fixing period end time (in years) of the second index.
-   * @param fixingYearFraction2 The year fraction (or accrual factor) for the fixing period of the second index.
-   * @param weight1 The weight of the first index.
-   * @param weight2 The weight of the second index.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index1
+   *          The first Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime1
+   *          The fixing period start time (in years) of the first index.
+   * @param fixingPeriodEndTime1
+   *          The fixing period end time (in years) of the first index.
+   * @param fixingYearFraction1
+   *          The year fraction (or accrual factor) for the fixing period of the first index.
+   * @param index2
+   *          The second Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime2
+   *          The fixing period start time (in years) of the second index.
+   * @param fixingPeriodEndTime2
+   *          The fixing period end time (in years) of the second index.
+   * @param fixingYearFraction2
+   *          The year fraction (or accrual factor) for the fixing period of the second index.
+   * @param weight1
+   *          The weight of the first index.
+   * @param weight2
+   *          The weight of the second index.
    */
   public CouponIborAverage(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime,
-      final IborIndex index1, final double fixingPeriodStartTime1, final double fixingPeriodEndTime1, final double fixingYearFraction1,
-      final IborIndex index2, final double fixingPeriodStartTime2, final double fixingPeriodEndTime2, final double fixingYearFraction2,
-      final double weight1, final double weight2) {
+      final IborIndex index1, final double fixingPeriodStartTime1, final double fixingPeriodEndTime1, final double fixingYearFraction1, final IborIndex index2,
+      final double fixingPeriodStartTime2, final double fixingPeriodEndTime2, final double fixingYearFraction2, final double weight1, final double weight2) {
     super(currency, paymentTime, paymentYearFraction, notional, fixingTime);
     ArgumentChecker.isTrue(fixingPeriodStartTime1 >= fixingTime, "fixing period start < fixing time");
     _fixingPeriodStartTime1 = fixingPeriodStartTime1;
@@ -105,6 +120,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the first Ibor index of the instrument.
+   * 
    * @return The first index.
    */
   public IborIndex getIndex1() {
@@ -113,6 +129,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the second Ibor index of the instrument.
+   * 
    * @return The second index.
    */
   public IborIndex getIndex2() {
@@ -121,6 +138,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the weight of the first index.
+   * 
    * @return The first weight.
    */
   public double getWeight1() {
@@ -129,6 +147,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the weight of the second index.
+   * 
    * @return The second weight.
    */
   public double getWeight2() {
@@ -137,6 +156,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the fixing period start time (in years) of the first index.
+   * 
    * @return The fixing period start time of the first index.
    */
   public double getFixingPeriodStartTime1() {
@@ -145,6 +165,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the fixing period end time (in years) of the first index.
+   * 
    * @return The fixing period end time of the first index.
    */
   public double getFixingPeriodEndTime1() {
@@ -153,6 +174,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the accrual factor for the fixing period of the first index.
+   * 
    * @return The accrual factor of the first index.
    */
   public double getFixingAccrualFactor1() {
@@ -161,6 +183,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the fixing period start time (in years) of the second index.
+   * 
    * @return The fixing period start time of the second index.
    */
   public double getFixingPeriodStartTime2() {
@@ -169,6 +192,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the fixing period end time (in years )of the second index.
+   * 
    * @return The fixing period end time of the second index.
    */
   public double getFixingPeriodEndTime2() {
@@ -177,6 +201,7 @@ public class CouponIborAverage extends CouponFloating {
 
   /**
    * Gets the accrual factor for the fixing period of the second index.
+   * 
    * @return The accrual factor of the second index.
    */
   public double getFixingAccrualFactor2() {
@@ -186,16 +211,15 @@ public class CouponIborAverage extends CouponFloating {
   @Override
   public CouponIborAverage withNotional(final double notional) {
     return new CouponIborAverage(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixingTime(), _index1, getFixingPeriodStartTime1(),
-        getFixingPeriodEndTime1(),
-        getFixingAccrualFactor1(), _index2, getFixingPeriodStartTime2(),
-        getFixingPeriodEndTime2(),
-        getFixingAccrualFactor2(), getWeight1(), getWeight2());
+        getFixingPeriodEndTime1(), getFixingAccrualFactor1(), _index2, getFixingPeriodStartTime2(), getFixingPeriodEndTime2(), getFixingAccrualFactor2(),
+        getWeight1(), getWeight2());
   }
 
   @Override
   public String toString() {
-    return "CouponIborAverage [_fixingPeriodStartTime1=" + _fixingPeriodStartTime1 + ", _fixingPeriodEndTime1=" + _fixingPeriodEndTime1 + ", _fixingAccrualFactor1=" + _fixingAccrualFactor1 +
-        ", _fixingPeriodStartTime2=" + _fixingPeriodStartTime2 + ", _fixingPeriodEndTime2=" + _fixingPeriodEndTime2 + ", _fixingAccrualFactor2=" + _fixingAccrualFactor2 + "]";
+    return "CouponIborAverage [_fixingPeriodStartTime1=" + _fixingPeriodStartTime1 + ", _fixingPeriodEndTime1=" + _fixingPeriodEndTime1
+        + ", _fixingAccrualFactor1=" + _fixingAccrualFactor1 + ", _fixingPeriodStartTime2=" + _fixingPeriodStartTime2 + ", _fixingPeriodEndTime2="
+        + _fixingPeriodEndTime2 + ", _fixingAccrualFactor2=" + _fixingAccrualFactor2 + "]";
   }
 
   @Override
@@ -204,23 +228,23 @@ public class CouponIborAverage extends CouponFloating {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingAccrualFactor1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingAccrualFactor2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodEndTime1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodEndTime2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_index1 == null) ? 0 : _index1.hashCode());
-    result = prime * result + ((_index2 == null) ? 0 : _index2.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_index1 == null ? 0 : _index1.hashCode());
+    result = prime * result + (_index2 == null ? 0 : _index2.hashCode());
     temp = Double.doubleToLongBits(_weight1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_weight2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -31,7 +31,7 @@ final class ServiceContextSnapshotLinkResolver<T extends NamedSnapshot>
    *
    * @param serviceContext the service context to use when resolving the link
    */
-  ServiceContextSnapshotLinkResolver(ServiceContext serviceContext) {
+  ServiceContextSnapshotLinkResolver(final ServiceContext serviceContext) {
     super(serviceContext);
   }
 
@@ -41,12 +41,12 @@ final class ServiceContextSnapshotLinkResolver<T extends NamedSnapshot>
   }
 
   @Override
-  protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+  protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
     return vcProvider.getConfigVersionCorrection();
   }
 
   @Override
-  protected T executeQuery(MarketDataSnapshotSource snapshotSource, Class<T> type,  String name, VersionCorrection versionCorrection) {
+  protected T executeQuery(final MarketDataSnapshotSource snapshotSource, final Class<T> type,  final String name, final VersionCorrection versionCorrection) {
     return snapshotSource.getSingle(type, name, versionCorrection);
   }
 }

@@ -17,7 +17,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  *
  */
-public final class PresentValueYearOnYearBlackNormalInflationCalculator extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationYearOnYearProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueYearOnYearBlackNormalInflationCalculator
+extends InstrumentDerivativeVisitorDelegate<BlackSmileCapInflationYearOnYearProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -33,6 +34,7 @@ public final class PresentValueYearOnYearBlackNormalInflationCalculator extends 
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueYearOnYearBlackNormalInflationCalculator getInstance() {
@@ -42,21 +44,25 @@ public final class PresentValueYearOnYearBlackNormalInflationCalculator extends 
   /**
    * Pricing methods.
    */
-  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod.getInstance();
-  private static final CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY = CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod.getInstance();
+  private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod.getInstance();
+  private static final CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY =
+      CapFloorInflationYearOnYearMonthlyBlackNormalSmileMethod.getInstance();
 
-  //-----     Caplet/Floorlet Year on Year     -----
+  // ----- Caplet/Floorlet Year on Year -----
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationYearOnYearInterpolation(final CapFloorInflationYearOnYearInterpolation cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationYearOnYearInterpolation(final CapFloorInflationYearOnYearInterpolation cap,
+      final BlackSmileCapInflationYearOnYearProviderInterface black) {
     return METHOD_CAPFLOOR_INTERPOLATION.presentValue(cap, black);
   }
 
   @Override
-  public MultipleCurrencyAmount visitCapFloorInflationYearOnYearMonthly(final CapFloorInflationYearOnYearMonthly cap, final BlackSmileCapInflationYearOnYearProviderInterface black) {
+  public MultipleCurrencyAmount visitCapFloorInflationYearOnYearMonthly(final CapFloorInflationYearOnYearMonthly cap,
+      final BlackSmileCapInflationYearOnYearProviderInterface black) {
     return METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY.presentValue(cap, black);
   }
 
-  //     -----      Cap/Floor Year on Year     -----
+  // ----- Cap/Floor Year on Year -----
   // TO DO
 }

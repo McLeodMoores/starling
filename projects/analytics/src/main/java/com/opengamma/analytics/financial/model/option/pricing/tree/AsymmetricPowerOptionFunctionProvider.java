@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,18 +9,23 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i > 0
+ * Payoff of asymmetric power option is max( S^i - K , 0 ) for call and max( K - S^i , 0 ) for put with i &gt; 0.
  */
 public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _power;
+  private final double _power;
 
   /**
-   * @param strike Strike price, K
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param power Power, i
+   * @param strike
+   *          Strike price, K
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param power
+   *          Power, i
    */
   public AsymmetricPowerOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double power) {
     super(strike, timeToExpiry, steps, isCall);
@@ -62,7 +67,8 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
   }
 
   /**
-   * Access power
+   * Access power.
+   * 
    * @return _power
    */
   public double getPower() {
@@ -75,12 +81,12 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_power);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -90,7 +96,7 @@ public class AsymmetricPowerOptionFunctionProvider extends OptionFunctionProvide
     if (!(obj instanceof AsymmetricPowerOptionFunctionProvider)) {
       return false;
     }
-    AsymmetricPowerOptionFunctionProvider other = (AsymmetricPowerOptionFunctionProvider) obj;
+    final AsymmetricPowerOptionFunctionProvider other = (AsymmetricPowerOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_power) != Double.doubleToLongBits(other._power)) {
       return false;
     }

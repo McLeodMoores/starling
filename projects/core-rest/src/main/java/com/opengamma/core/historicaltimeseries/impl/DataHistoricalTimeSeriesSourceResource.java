@@ -49,7 +49,7 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param htsSource  the underlying time-series source, not null
    */
   public DataHistoricalTimeSeriesSourceResource(final HistoricalTimeSeriesSource htsSource) {
@@ -60,7 +60,7 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
   //-------------------------------------------------------------------------
   /**
    * Gets the time-series source.
-   * 
+   *
    * @return the time-series source, not null
    */
   public HistoricalTimeSeriesSource getHistoricalTimeSeriesSource() {
@@ -69,23 +69,23 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("hts/{htsId}")
   public Response get(
-      @PathParam("htsId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("start") String startStr,
-      @QueryParam("includeStart")  boolean includeStart,
-      @QueryParam("end") String endStr,
-      @QueryParam("includeEnd") boolean includeEnd,
-      @QueryParam("maxPoints") Integer maxPoints) {
+      @PathParam("htsId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("start") final String startStr,
+      @QueryParam("includeStart") final  boolean includeStart,
+      @QueryParam("end") final String endStr,
+      @QueryParam("includeEnd") final boolean includeEnd,
+      @QueryParam("maxPoints") final Integer maxPoints) {
     final UniqueId uniqueId = ObjectId.parse(idStr).atVersion(version);
-    final LocalDate start = (startStr != null ? LocalDate.parse(startStr) : null);
-    final LocalDate end = (endStr != null ? LocalDate.parse(endStr) : null);
+    final LocalDate start = startStr != null ? LocalDate.parse(startStr) : null;
+    final LocalDate end = endStr != null ? LocalDate.parse(endStr) : null;
     final HistoricalTimeSeries result;
     if (start == null && end == null && maxPoints == null) {
       result = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(uniqueId);
@@ -96,12 +96,12 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
     }
     return responseOkObject(result);
   }
-  
+
   @GET
   @Path("htsMeta/externalIdBundle/{htsId}")
   public Response getExternalIdBundle(
-      @PathParam("htsId") String idStr,
-      @QueryParam("version") String version) {
+      @PathParam("htsId") final String idStr,
+      @QueryParam("version") final String version) {
     final UniqueId uniqueId = ObjectId.parse(idStr).atVersion(version);
     final ExternalIdBundle idBundle = getHistoricalTimeSeriesSource().getExternalIdBundle(uniqueId);
     return responseOkObject(idBundle);
@@ -110,22 +110,22 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
   @GET
   @Path("htsSearches/single")
   public Response searchSingle(
-      @QueryParam("id") List<String> idStrs,
-      @QueryParam("idValidityDate") String idValidityDateStr,
-      @QueryParam("dataSource") String dataSource,
-      @QueryParam("dataProvider") String dataProvider,
-      @QueryParam("dataField") String dataField,
-      @QueryParam("start") String startStr,
-      @QueryParam("includeStart")  boolean includeStart,
-      @QueryParam("end") String endStr,
-      @QueryParam("includeEnd") boolean includeEnd,
-      @QueryParam("maxPoints") Integer maxPoints) {
+      @QueryParam("id") final List<String> idStrs,
+      @QueryParam("idValidityDate") final String idValidityDateStr,
+      @QueryParam("dataSource") final String dataSource,
+      @QueryParam("dataProvider") final String dataProvider,
+      @QueryParam("dataField") final String dataField,
+      @QueryParam("start") final String startStr,
+      @QueryParam("includeStart") final  boolean includeStart,
+      @QueryParam("end") final String endStr,
+      @QueryParam("includeEnd") final boolean includeEnd,
+      @QueryParam("maxPoints") final Integer maxPoints) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(idStrs);
-    final LocalDate start = (startStr != null ? LocalDate.parse(startStr) : null);
-    final LocalDate end = (endStr != null ? LocalDate.parse(endStr) : null);
+    final LocalDate start = startStr != null ? LocalDate.parse(startStr) : null;
+    final LocalDate end = endStr != null ? LocalDate.parse(endStr) : null;
     final HistoricalTimeSeries result;
     if (idValidityDateStr != null) {
-      final LocalDate idValidityDate = ("ALL".equals(idValidityDateStr) ? null : LocalDate.parse(idValidityDateStr));
+      final LocalDate idValidityDate = "ALL".equals(idValidityDateStr) ? null : LocalDate.parse(idValidityDateStr);
       if (start == null && end == null && maxPoints == null) {
         result = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(
             bundle, idValidityDate, dataSource, dataProvider, dataField);
@@ -154,21 +154,21 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
   @GET
   @Path("htsSearches/resolve")
   public Response searchResolve(
-      @QueryParam("id") List<String> idStrs,
-      @QueryParam("idValidityDate") String idValidityDateStr,
-      @QueryParam("dataField") String dataField,
-      @QueryParam("resolutionKey") String resolutionKey,
-      @QueryParam("start") String startStr,
-      @QueryParam("includeStart")  boolean includeStart,
-      @QueryParam("end") String endStr,
-      @QueryParam("includeEnd") boolean includeEnd,
-      @QueryParam("maxPoints") Integer maxPoints) {
+      @QueryParam("id") final List<String> idStrs,
+      @QueryParam("idValidityDate") final String idValidityDateStr,
+      @QueryParam("dataField") final String dataField,
+      @QueryParam("resolutionKey") final String resolutionKey,
+      @QueryParam("start") final String startStr,
+      @QueryParam("includeStart") final  boolean includeStart,
+      @QueryParam("end") final String endStr,
+      @QueryParam("includeEnd") final boolean includeEnd,
+      @QueryParam("maxPoints") final Integer maxPoints) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(idStrs);
-    final LocalDate start = (startStr != null ? LocalDate.parse(startStr) : null);
-    final LocalDate end = (endStr != null ? LocalDate.parse(endStr) : null);
+    final LocalDate start = startStr != null ? LocalDate.parse(startStr) : null;
+    final LocalDate end = endStr != null ? LocalDate.parse(endStr) : null;
     final HistoricalTimeSeries result;
     if (idValidityDateStr != null) {
-      final LocalDate idValidityDate = ("ALL".equals(idValidityDateStr) ? null : LocalDate.parse(idValidityDateStr));
+      final LocalDate idValidityDate = "ALL".equals(idValidityDateStr) ? null : LocalDate.parse(idValidityDateStr);
       if (start == null && end == null && maxPoints == null) {
         result = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(
             dataField, bundle, idValidityDate, resolutionKey);
@@ -194,23 +194,22 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
     return responseOkObject(result);
   }
 
-  @SuppressWarnings("unchecked")
   @POST
   @Path("htsSearches/bulk")
-  public Response searchBulk(FudgeMsgEnvelope request) {
+  public Response searchBulk(final FudgeMsgEnvelope request) {
     // non-ideal variant using POST
-    FudgeMsg msg = request.getMessage();
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
-    Set<ExternalIdBundle> identifierSet = deserializationContext.fudgeMsgToObject(Set.class, msg.getMessage("id"));
-    String dataSource = msg.getString("dataSource");
-    String dataProvider = msg.getString("dataProvider");
-    String dataField = msg.getString("dataField");
-    LocalDate start = deserializationContext.fieldValueToObject(LocalDate.class, msg.getByName("start"));
-    boolean inclusiveStart = msg.getBoolean("includeStart");
-    LocalDate end = deserializationContext.fieldValueToObject(LocalDate.class, msg.getByName("end"));
-    boolean includeEnd = msg.getBoolean("includeEnd");
-    
-    Map<ExternalIdBundle, HistoricalTimeSeries> result = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(
+    final FudgeMsg msg = request.getMessage();
+    final FudgeDeserializer deserializationContext = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+    final Set<ExternalIdBundle> identifierSet = deserializationContext.fudgeMsgToObject(Set.class, msg.getMessage("id"));
+    final String dataSource = msg.getString("dataSource");
+    final String dataProvider = msg.getString("dataProvider");
+    final String dataField = msg.getString("dataField");
+    final LocalDate start = deserializationContext.fieldValueToObject(LocalDate.class, msg.getByName("start"));
+    final boolean inclusiveStart = msg.getBoolean("includeStart");
+    final LocalDate end = deserializationContext.fieldValueToObject(LocalDate.class, msg.getByName("end"));
+    final boolean includeEnd = msg.getBoolean("includeEnd");
+
+    final Map<ExternalIdBundle, HistoricalTimeSeries> result = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(
         identifierSet, dataSource, dataProvider, dataField, start, inclusiveStart, end, includeEnd);
     return responseOkObject(FudgeMapWrapper.of(result));
   }
@@ -218,7 +217,7 @@ public class DataHistoricalTimeSeriesSourceResource extends AbstractDataResource
   //-------------------------------------------------------------------------
   /**
    * For debugging purposes only.
-   * 
+   *
    * @return some debug information about the state of this resource object
    */
   @GET

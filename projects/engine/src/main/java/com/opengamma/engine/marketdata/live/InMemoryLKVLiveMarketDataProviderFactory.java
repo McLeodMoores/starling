@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.live;
@@ -28,15 +28,15 @@ public class InMemoryLKVLiveMarketDataProviderFactory implements LiveMarketDataP
   private final Map<String, LiveDataFactory> _namedFactories;
   private final List<String> _providerNames;
 
-  public InMemoryLKVLiveMarketDataProviderFactory(LiveDataFactory defaultFactory, Map<String, LiveDataFactory> namedFactories) {
+  public InMemoryLKVLiveMarketDataProviderFactory(final LiveDataFactory defaultFactory, final Map<String, LiveDataFactory> namedFactories) {
     ArgumentChecker.notNull(defaultFactory, "defaultFactory");
     ArgumentChecker.notNull(namedFactories, "namedFactories");
     _defaultFactory = defaultFactory;
     _namedFactories = ImmutableMap.copyOf(namedFactories);
-    
+
     String defaultFactoryName = null;
-    for (Map.Entry<String, LiveDataFactory> namedFactoryEntry : namedFactories.entrySet()) {
-      LiveDataFactory factory = namedFactoryEntry.getValue();
+    for (final Map.Entry<String, LiveDataFactory> namedFactoryEntry : namedFactories.entrySet()) {
+      final LiveDataFactory factory = namedFactoryEntry.getValue();
       if (defaultFactory == factory) {
         defaultFactoryName = namedFactoryEntry.getKey();
         continue;
@@ -46,7 +46,7 @@ public class InMemoryLKVLiveMarketDataProviderFactory implements LiveMarketDataP
       throw new OpenGammaRuntimeException("Default factory not found in named factories map");
     }
 
-    List<String> providerNames = new ArrayList<>(_namedFactories.keySet());
+    final List<String> providerNames = new ArrayList<>(_namedFactories.keySet());
     Collections.sort(providerNames);
     providerNames.remove(defaultFactoryName);
     providerNames.add(0, defaultFactoryName);
@@ -54,14 +54,14 @@ public class InMemoryLKVLiveMarketDataProviderFactory implements LiveMarketDataP
   }
 
   @Override
-  public MarketDataProvider create(UserPrincipal user, MarketDataSpecification marketDataSpec) {
+  public MarketDataProvider create(final UserPrincipal user, final MarketDataSpecification marketDataSpec) {
     ArgumentChecker.notNull(user, "user");
     ArgumentChecker.notNull(marketDataSpec, "marketDataSpec");
-    LiveMarketDataSpecification liveSpec = (LiveMarketDataSpecification) marketDataSpec;
+    final LiveMarketDataSpecification liveSpec = (LiveMarketDataSpecification) marketDataSpec;
     if (liveSpec.getDataSource() == null) {
       return _defaultFactory.create(user);
     }
-    LiveDataFactory liveDataFactory = _namedFactories.get(liveSpec.getDataSource());
+    final LiveDataFactory liveDataFactory = _namedFactories.get(liveSpec.getDataSource());
     if (liveDataFactory == null) {
       throw new IllegalArgumentException("No provider could be created for data source '" + liveSpec.getDataSource() + "'");
     }

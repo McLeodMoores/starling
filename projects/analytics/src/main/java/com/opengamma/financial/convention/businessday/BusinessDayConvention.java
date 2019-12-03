@@ -17,8 +17,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 /**
  * Convention for handling business days.
  * <p>
- * This provides a mechanism to handle working and non-working days allowing
- * a date to be adjusted when it falls on a non-working day.
+ * This provides a mechanism to handle working and non-working days allowing a date to be adjusted when it falls on a non-working day.
  */
 @FromStringFactory(factory = BusinessDayConventionFactory.class)
 public interface BusinessDayConvention extends NamedInstance {
@@ -26,8 +25,10 @@ public interface BusinessDayConvention extends NamedInstance {
   /**
    * Adjusts the specified date using the working day calendar.
    *
-   * @param workingDayCalendar  the working days, not null
-   * @param date  the date to adjust, not null
+   * @param workingDayCalendar
+   *          the working days, not null
+   * @param date
+   *          the date to adjust, not null
    * @return the adjusted date, not null
    */
   LocalDate adjustDate(Calendar workingDayCalendar, LocalDate date);
@@ -35,19 +36,22 @@ public interface BusinessDayConvention extends NamedInstance {
   /**
    * Adjusts the specified date-time using the working day calendar.
    *
-   * @param workingDayCalendar  the working days, not null
-   * @param dateTime  the date-time to adjust, not null
+   * @param workingDayCalendar
+   *          the working days, not null
+   * @param dateTime
+   *          the date-time to adjust, not null
    * @return the adjusted date-time, not null
    */
-  ZonedDateTime adjustDate(final Calendar workingDayCalendar, final ZonedDateTime dateTime);
+  ZonedDateTime adjustDate(Calendar workingDayCalendar, ZonedDateTime dateTime);
 
   /**
    * Converts this convention to a {@code TemporalAdjuster} using the specified working day calendar.
    *
-   * @param workingDayCalendar  the working days, not null
+   * @param workingDayCalendar
+   *          the working days, not null
    * @return the date adjuster, not null
    */
-  TemporalAdjuster getTemporalAdjuster(final Calendar workingDayCalendar);
+  TemporalAdjuster getTemporalAdjuster(Calendar workingDayCalendar);
 
   /**
    * Gets the name of the convention.

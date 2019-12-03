@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CapabilitySet {
 
-  private final Map<String, Capability> _capabilitiesById = new ConcurrentHashMap<String, Capability>();
+  private final Map<String, Capability> _capabilitiesById = new ConcurrentHashMap<>();
   private final AtomicInteger _changeId = new AtomicInteger();
   private volatile Wrapper _wrapper;
 
@@ -41,12 +41,12 @@ public class CapabilitySet {
     }
 
     @Override
-    public boolean add(Capability e) {
+    public boolean add(final Capability e) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean addAll(Collection<? extends Capability> c) {
+    public boolean addAll(final Collection<? extends Capability> c) {
       throw new UnsupportedOperationException();
     }
 
@@ -56,12 +56,12 @@ public class CapabilitySet {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
       return getUnderlying().contains(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
       return getUnderlying().containsAll(c);
     }
 
@@ -76,17 +76,17 @@ public class CapabilitySet {
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(final Object o) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
       throw new UnsupportedOperationException();
     }
 
@@ -101,7 +101,7 @@ public class CapabilitySet {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(final T[] a) {
       return getUnderlying().toArray(a);
     }
 
@@ -117,7 +117,7 @@ public class CapabilitySet {
 
   /**
    * Adds (or updates) a capability within the set. If there is an existing capability with the same identifier it will be replaced.
-   * 
+   *
    * @param capability the new capability, not null
    */
   public void addCapability(final Capability capability) {
@@ -137,7 +137,7 @@ public class CapabilitySet {
 
   public void addCapabilities(final Collection<Capability> capabilities) {
     ArgumentChecker.notNull(capabilities, "capabilities");
-    for (Capability capability : capabilities) {
+    for (final Capability capability : capabilities) {
       getCapabilitiesById().put(capability.getIdentifier(), capability);
     }
     _changeId.incrementAndGet();
@@ -146,7 +146,7 @@ public class CapabilitySet {
   public void setCapabilities(final Collection<Capability> capabilities) {
     ArgumentChecker.notNull(capabilities, "capabilities");
     getCapabilitiesById().clear();
-    for (Capability capability : capabilities) {
+    for (final Capability capability : capabilities) {
       getCapabilitiesById().put(capability.getIdentifier(), capability);
     }
     _changeId.incrementAndGet();
@@ -154,9 +154,9 @@ public class CapabilitySet {
 
   public void setParameterCapability(final String identifier, final double parameter) {
     ArgumentChecker.notNull(identifier, "identifier");
-    Capability capability = getCapabilitiesById().get(identifier);
+    final Capability capability = getCapabilitiesById().get(identifier);
     if (capability != null) {
-      if ((capability.getLowerBoundParameter() <= parameter) && (capability.getUpperBoundParameter() >= parameter)) {
+      if (capability.getLowerBoundParameter() <= parameter && capability.getUpperBoundParameter() >= parameter) {
         return;
       }
     }
@@ -167,11 +167,11 @@ public class CapabilitySet {
   /**
    * Returns a read-only view of the capabilities, backed by the main set. Whenever capabilities change,
    * the wrapper is reallocated. It's hashCode and equals are identity based comparisons.
-   * 
+   *
    * @return the capabilities
    */
   public Collection<Capability> getCapabilities() {
-    if ((_wrapper == null) || (_wrapper.getChangeId() != _changeId.get())) {
+    if (_wrapper == null || _wrapper.getChangeId() != _changeId.get()) {
       _wrapper = createWrapper();
     }
     return _wrapper;

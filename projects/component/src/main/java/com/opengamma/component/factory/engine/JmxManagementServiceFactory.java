@@ -55,7 +55,7 @@ public class JmxManagementServiceFactory extends AbstractSpringComponentFactory 
   private boolean _splitByViewProcessor;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
 
     if (_viewProcessor instanceof ViewProcessorImpl) {
       new ManagementService((ViewProcessorImpl) _viewProcessor,

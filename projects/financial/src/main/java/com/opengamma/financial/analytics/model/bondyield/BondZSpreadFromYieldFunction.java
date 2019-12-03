@@ -32,12 +32,10 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.tuple.Pair;
-
 
 /**
  * Calculates the z-spread of a bond from the clean price.
@@ -49,7 +47,7 @@ public class BondZSpreadFromYieldFunction extends BondFromYieldAndCurvesFunction
   private static final BillSecurityDiscountingMethod BILL_CALCULATOR = BillSecurityDiscountingMethod.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}.
    */
   public BondZSpreadFromYieldFunction() {
     super(Z_SPREAD);

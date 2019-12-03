@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
 package com.opengamma.masterdb.security.hibernate.swap;
 
-import com.opengamma.financial.security.swap.Notional;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.UniqueIdBean;
 
 /**
- * A Hibernate bean representation of {@link Notional}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.swap.Notional}.
  */
 public class NotionalBean {
 
@@ -41,7 +41,7 @@ public class NotionalBean {
    * Sets the currency field.
    * @param currency  the currency
    */
-  public void setCurrency(CurrencyBean currency) {
+  public void setCurrency(final CurrencyBean currency) {
     _currency = currency;
   }
 
@@ -57,7 +57,7 @@ public class NotionalBean {
    * Sets the amount field.
    * @param amount  the amount
    */
-  public void setAmount(double amount) {
+  public void setAmount(final double amount) {
     _amount = amount;
   }
 
@@ -73,7 +73,7 @@ public class NotionalBean {
    * Sets the identifier field.
    * @param identifier  the identifier
    */
-  public void setIdentifier(UniqueIdBean identifier) {
+  public void setIdentifier(final UniqueIdBean identifier) {
     _identifier = identifier;
   }
 

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.security.impl;
@@ -43,7 +43,7 @@ public class DataSecurityMasterResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying master over REST.
-   * 
+   *
    * @param securityMaster  the underlying security master, not null
    */
   public DataSecurityMasterResource(final SecurityMaster securityMaster) {
@@ -54,7 +54,7 @@ public class DataSecurityMasterResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the security master.
-   * 
+   *
    * @return the security master, not null
    */
   public SecurityMaster getSecurityMaster() {
@@ -63,7 +63,7 @@ public class DataSecurityMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -76,31 +76,31 @@ public class DataSecurityMasterResource extends AbstractDataResource {
 
   @GET
   @Path("metaData")
-  public Response metaData(@Context UriInfo uriInfo) {
-    SecurityMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, SecurityMetaDataRequest.class);
-    SecurityMetaDataResult result = getSecurityMaster().metaData(request);
+  public Response metaData(@Context final UriInfo uriInfo) {
+    final SecurityMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, SecurityMetaDataRequest.class);
+    final SecurityMetaDataResult result = getSecurityMaster().metaData(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("securitySearches")
-  public Response search(SecuritySearchRequest request) {
-    SecuritySearchResult result = getSecurityMaster().search(request);
+  public Response search(final SecuritySearchRequest request) {
+    final SecuritySearchResult result = getSecurityMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("securities")
-  public Response add(@Context UriInfo uriInfo, SecurityDocument request) {
-    SecurityDocument result = getSecurityMaster().add(request);
-    URI createdUri = (new DataSecurityResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final SecurityDocument request) {
+    final SecurityDocument result = getSecurityMaster().add(request);
+    final URI createdUri = new DataSecurityResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("securities/{securityId}")
-  public DataSecurityResource findSecurity(@PathParam("securityId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataSecurityResource findSecurity(@PathParam("securityId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataSecurityResource(this, id);
   }
 }

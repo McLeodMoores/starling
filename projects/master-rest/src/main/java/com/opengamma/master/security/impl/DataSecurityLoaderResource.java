@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.security.impl;
@@ -35,7 +35,7 @@ public class DataSecurityLoaderResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying loader over REST.
-   * 
+   *
    * @param securityLoader  the underlying loader, not null
    */
   public DataSecurityLoaderResource(final SecurityLoader securityLoader) {
@@ -46,7 +46,7 @@ public class DataSecurityLoaderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying security loader.
-   * 
+   *
    * @return the underlying security loader, not null
    */
   public SecurityLoader getSecurityLoader() {
@@ -55,7 +55,7 @@ public class DataSecurityLoaderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -68,8 +68,8 @@ public class DataSecurityLoaderResource extends AbstractDataResource {
 
   @POST  // should be a get, but query is too large
   @Path("securityLoad")
-  public Response loadSecurities(SecurityLoaderRequest request) {
-    SecurityLoaderResult result = getSecurityLoader().loadSecurities(request);
+  public Response loadSecurities(final SecurityLoaderRequest request) {
+    final SecurityLoaderResult result = getSecurityLoader().loadSecurities(request);
     return responseOkObject(result);
   }
 }

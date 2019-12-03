@@ -5,9 +5,11 @@
  */
 package com.opengamma.analytics.financial.provider.calculator.hullwhite;
 
-import cern.jet.random.engine.MersenneTwister;
-
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponIborRatchet;
+import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponIborRatchet.RatchetIborCalibrationType;
+import com.opengamma.analytics.financial.interestrate.annuity.provider.IborRatchetBasketCalibrator;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.montecarlo.provider.HullWhiteMonteCarloMethod;
@@ -21,10 +23,16 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+import cern.jet.random.engine.MersenneTwister;
+
 /**
  * Present value calculator for interest rate instruments using a Hull-White one factor model calibrated to SABR prices.
+ * <p>
+ * <b>The calculator is for test purposes only! It calibrates a Hull-White on an instrument priced with SABR and then price the same
+ * instrument in the Hull-White model by Monte Carlo. Do not use this calculator in production.</b>
  */
-public final class PresentValueSABRHullWhiteMonteCarloCalculator extends InstrumentDerivativeVisitorAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueSABRHullWhiteMonteCarloCalculator
+    extends InstrumentDerivativeVisitorAdapter<SABRSwaptionProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -39,6 +47,7 @@ public final class PresentValueSABRHullWhiteMonteCarloCalculator extends Instrum
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSABRHullWhiteMonteCarloCalculator getInstance() {
@@ -59,25 +68,54 @@ public final class PresentValueSABRHullWhiteMonteCarloCalculator extends Instrum
   private static final PresentValueSABRSwaptionCalculator PVSSC = PresentValueSABRSwaptionCalculator.getInstance();
 
   @Override
-  /**
-   * The calculator is for test purposes only! It calibrates a Hull-White on a swaption priced with SABR and then price the same swaption in the Hull-White model by Monte Carlo.
-   * Do not use this calculator in production.
-   */
-  public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
-    ArgumentChecker.notNull(swaption, "Swaption");
-    ArgumentChecker.notNull(sabrData, "SABR swaption provider");
+  public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
+    ArgumentChecker.notNull(swaption, "swaption");
+    ArgumentChecker.notNull(sabrData, "sabrData");
     final Currency ccy = swaption.getCurrency();
-    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(DEFAULT_MEAN_REVERSION, new double[] {0.01}, new double[0]);
-    final SuccessiveRootFinderHullWhiteCalibrationObjective objective = new SuccessiveRootFinderHullWhiteCalibrationObjective(hwParameters, ccy);
-    final SuccessiveRootFinderHullWhiteCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderHullWhiteCalibrationEngine<>(objective);
+    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(
+        DEFAULT_MEAN_REVERSION,
+        new double[] { 0.01 }, new double[0]);
+    final SuccessiveRootFinderHullWhiteCalibrationObjective objective = new SuccessiveRootFinderHullWhiteCalibrationObjective(hwParameters,
+        ccy);
+    final SuccessiveRootFinderHullWhiteCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderHullWhiteCalibrationEngine<>(
+        objective);
     // Calibration instruments
     calibrationEngine.addInstrument(swaption, PVSSC);
     // Calibration
     calibrationEngine.calibrate(sabrData);
     final HullWhiteOneFactorProvider hwMulticurves = new HullWhiteOneFactorProvider(sabrData.getMulticurveProvider(), hwParameters, ccy);
     // Pricing
-    final HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), DEFAULT_NB_PATH);
+    final HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(
+        new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), DEFAULT_NB_PATH);
     return methodMC.presentValue(swaption, ccy, hwMulticurves);
+  }
+
+  @Override
+  public MultipleCurrencyAmount visitAnnuityCouponIborRatchet(final AnnuityCouponIborRatchet annuity,
+      final SABRSwaptionProviderInterface sabrData) {
+    ArgumentChecker.notNull(annuity, "annuity");
+    ArgumentChecker.notNull(sabrData, "sabrData");
+    final Currency ccy = annuity.getCurrency();
+    final HullWhiteOneFactorPiecewiseConstantParameters hwParameters = new HullWhiteOneFactorPiecewiseConstantParameters(
+        DEFAULT_MEAN_REVERSION,
+        new double[] { 0.01 }, new double[0]);
+    final SuccessiveRootFinderHullWhiteCalibrationObjective objective = new SuccessiveRootFinderHullWhiteCalibrationObjective(hwParameters,
+        ccy);
+    final SuccessiveRootFinderHullWhiteCalibrationEngine<SABRSwaptionProviderInterface> calibrationEngine = new SuccessiveRootFinderHullWhiteCalibrationEngine<>(
+        objective);
+    // Calibration instruments
+    final InstrumentDerivative[] calibrationBasket = IborRatchetBasketCalibrator.INSTANCE
+        .calibrationBasket(annuity, RatchetIborCalibrationType.FORWARD_COUPON, sabrData.getMulticurveProvider());
+    // TODO: set a way to chose the calibration type.
+    calibrationEngine.addInstrument(calibrationBasket, PVSSC);
+    // Calibration
+    calibrationEngine.calibrate(sabrData);
+    final HullWhiteOneFactorProvider hwMulticurves = new HullWhiteOneFactorProvider(sabrData.getMulticurveProvider(), hwParameters, ccy);
+    // Pricing
+    final HullWhiteMonteCarloMethod methodMC = new HullWhiteMonteCarloMethod(
+        new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister()), DEFAULT_NB_PATH);
+    return methodMC.presentValue(annuity, ccy, hwMulticurves);
   }
 
 }

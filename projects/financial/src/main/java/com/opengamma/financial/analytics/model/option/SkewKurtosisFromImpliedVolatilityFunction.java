@@ -45,7 +45,8 @@ public class SkewKurtosisFromImpliedVolatilityFunction extends AbstractFunction.
   private static final Function2D<Double, Double> KURTOSIS_CALCULATOR = new LognormalPearsonKurtosisFromVolatilityCalculator();
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final EquityOptionSecurity option = (EquityOptionSecurity) target.getSecurity();
     final ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
     final Expiry expiry = option.getExpiry();
@@ -55,7 +56,7 @@ public class SkewKurtosisFromImpliedVolatilityFunction extends AbstractFunction.
     final double skew = SKEW_CALCULATOR.evaluate(volatility, t);
     final double pearson = KURTOSIS_CALCULATOR.evaluate(volatility, t);
     final double fisher = pearson - 3;
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.SKEW, targetSpec, properties), skew));
@@ -80,7 +81,7 @@ public class SkewKurtosisFromImpliedVolatilityFunction extends AbstractFunction.
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     results.add(new ValueSpecification(ValueRequirementNames.SKEW, targetSpec, properties));

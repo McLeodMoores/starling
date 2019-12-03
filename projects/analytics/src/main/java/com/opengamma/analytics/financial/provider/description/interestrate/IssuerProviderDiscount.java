@@ -59,16 +59,19 @@ public class IssuerProviderDiscount extends IssuerProvider {
    * @param fxMatrix The FX matrix, not null
    */
   public IssuerProviderDiscount(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
-      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves, final FXMatrix fxMatrix) {
+      final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves,
+      final FXMatrix fxMatrix) {
     super(discountingCurves, forwardIborCurves, forwardONCurves, issuerCurves, fxMatrix);
   }
 
   /**
-   * Constructor from exiting multi-curve provider and issuer map. The given provider and map are used for the new provider (the same maps are used, not copied).
+   * Constructor from exiting multi-curve provider and issuer map. The given provider and map are used for the new provider
+   * (the same maps are used, not copied).
    * @param multicurve The multi-curves provider.
    * @param issuerCurves The issuer specific curves.
    */
-  public IssuerProviderDiscount(final MulticurveProviderDiscount multicurve, final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
+  public IssuerProviderDiscount(final MulticurveProviderDiscount multicurve,
+      final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> issuerCurves) {
     super(multicurve, issuerCurves);
   }
 
@@ -101,9 +104,8 @@ public class IssuerProviderDiscount extends IssuerProvider {
         return getMulticurveProvider().getCurve(name);
       }
       return getIssuerProvider().getIssuerCurve(name);
-    } else {
-      throw new IllegalArgumentException("the following curve is not in the provider: " + name);
     }
+    throw new IllegalArgumentException("the following curve is not in the provider: " + name);
   }
 
   @Override

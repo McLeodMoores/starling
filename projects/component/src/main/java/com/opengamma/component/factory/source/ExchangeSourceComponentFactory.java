@@ -8,8 +8,6 @@ package com.opengamma.component.factory.source;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -31,6 +29,8 @@ import com.opengamma.core.exchange.impl.RemoteExchangeSource;
 import com.opengamma.master.exchange.ExchangeMaster;
 import com.opengamma.master.exchange.impl.EHCachingExchangeSource;
 import com.opengamma.master.exchange.impl.MasterExchangeSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@code ExchangeSource}.
@@ -63,15 +63,15 @@ public class ExchangeSourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the exchange source, setting up component information and REST.
    * Override using {@link #createExchangeSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ExchangeSource source = createExchangeSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(ExchangeSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ExchangeSource source = createExchangeSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(ExchangeSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteExchangeSource.class);
@@ -84,11 +84,11 @@ public class ExchangeSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the exchange source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the exchange source, not null
    */
-  protected ExchangeSource createExchangeSource(ComponentRepository repo) {
+  protected ExchangeSource createExchangeSource(final ComponentRepository repo) {
     ExchangeSource source = new MasterExchangeSource(getExchangeMaster());
     if (getCacheManager() != null) {
       source = new EHCachingExchangeSource(source, getCacheManager());

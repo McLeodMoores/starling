@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve.exposure;
 
@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  *
  */
-//TODO get rid of repeated code
+// TODO get rid of repeated code
 public class IdSchemeExposureFunction implements ExposureFunction {
 
   /**

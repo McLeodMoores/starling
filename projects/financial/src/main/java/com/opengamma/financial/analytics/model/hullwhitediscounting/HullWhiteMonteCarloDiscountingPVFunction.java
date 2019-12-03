@@ -14,9 +14,6 @@ import java.util.Set;
 
 import org.threeten.bp.Instant;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
@@ -32,23 +29,26 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+import cern.jet.random.engine.MersenneTwister;
+
 /**
  * Calculates the present value of instruments using curves constructed using the Hull-White one-factor discounting method.
  */
 public class HullWhiteMonteCarloDiscountingPVFunction extends HullWhiteDiscountingFunction {
   /** The present value calculator */
-  private static final HullWhiteMonteCarloMethod CALCULATOR = new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister64.DEFAULT_SEED)),
-      125000);
+  private static final HullWhiteMonteCarloMethod CALCULATOR =
+      new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister.DEFAULT_SEED)),
+          125000);
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirements to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public HullWhiteMonteCarloDiscountingPVFunction() {
     super(PRESENT_VALUE);
@@ -71,7 +71,7 @@ public class HullWhiteMonteCarloDiscountingPVFunction extends HullWhiteDiscounti
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.with(CALCULATION_METHOD, "Monte Carlo");
         }
         return properties;

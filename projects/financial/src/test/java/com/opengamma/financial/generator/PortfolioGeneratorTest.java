@@ -32,28 +32,28 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PortfolioGeneratorTest {
 
-  private PositionGenerator createSimplePositionGenerator(final InMemorySecuritySource source) {
-    return new SimplePositionGenerator<RawSecurity>(new StaticQuantityGenerator(10), new SecurityGenerator<RawSecurity>() {
+  private static PositionGenerator createSimplePositionGenerator(final InMemorySecuritySource source) {
+    return new SimplePositionGenerator<>(new StaticQuantityGenerator(10), new SecurityGenerator<RawSecurity>() {
       @Override
       public RawSecurity createSecurity() {
         return new RawSecurity();
       }
 
       @Override
-      public ManageableTrade createSecurityTrade(QuantityGenerator quantityGenerator, SecurityPersister securityPersister, NameGenerator counterPartyGenerator) {
+      public ManageableTrade createSecurityTrade(final QuantityGenerator quantityGenerator, final SecurityPersister securityPersister, final NameGenerator counterPartyGenerator) {
         ManageableTrade trade = null;
-        RawSecurity security = createSecurity();
-        ZonedDateTime tradeDate = ZonedDateTime.now();
+        final RawSecurity security = createSecurity();
+        final ZonedDateTime tradeDate = ZonedDateTime.now();
         trade = new ManageableTrade(quantityGenerator.createQuantity(), securityPersister.storeSecurity(security), tradeDate.toLocalDate(), tradeDate.toOffsetDateTime().toOffsetTime(),
             ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
         return trade;
       }
-      
+
     }, new InMemorySecurityPersister(source));
   }
 
-  private void testPositions(final Collection<Position> positions, final SecuritySource source) {
-    for (Position position : positions) {
+  private static void testPositions(final Collection<Position> positions, final SecuritySource source) {
+    for (final Position position : positions) {
       assertEquals(position.getQuantity().intValue(), 10);
       assertNull(position.getSecurity());
       assertNotNull(position.getSecurityLink().getExternalId());

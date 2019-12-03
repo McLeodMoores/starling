@@ -43,11 +43,11 @@ public class VarianceSwapWithDividendsTest {
   private static final boolean PRINT = false; //set to false for push
   private static final boolean ASSERT = true; //set to true for push
   private static final int N_SIMS = 10000; //put to 10,000 for push
-  final static int seed = 123;
+  private final static int SEED = 123;
   private static final double MC_SD = 4.0;
 
-  private static final EquityVarianceSwapMonteCarloCalculator MC_CALCULATOR = new EquityVarianceSwapMonteCarloCalculator(seed, true, true);
-  private static final VarianceSwapPureMonteCarloCalculator MC_CALCULATOR_PURE = new VarianceSwapPureMonteCarloCalculator(seed, true, true);
+  private static final EquityVarianceSwapMonteCarloCalculator MC_CALCULATOR = new EquityVarianceSwapMonteCarloCalculator(SEED, true, true);
+  private static final VarianceSwapPureMonteCarloCalculator MC_CALCULATOR_PURE = new VarianceSwapPureMonteCarloCalculator(SEED, true, true);
   private static final EquityVarianceSwapStaticReplication STATIC_REPLICATION = new EquityVarianceSwapStaticReplication();
   private static final EquityVarianceSwapForwardPurePDE PDE_FWD_SOLVER = new EquityVarianceSwapForwardPurePDE();
   private static final EquityVarianceSwapBackwardsPurePDE PDE_BKD_SOLVER = new EquityVarianceSwapBackwardsPurePDE();
@@ -144,7 +144,6 @@ public class VarianceSwapWithDividendsTest {
       public Double evaluate(final Double... x) {
         final double t = x[0];
         final double k = x[1];
-        @SuppressWarnings("synthetic-access")
         final double fwd = fwdCurve.getForward(t);
         final boolean isCall = k > fwd;
         final double price = w * BlackFormulaRepository.price(fwd, k, t, sigma1, isCall) + (1 - w) * BlackFormulaRepository.price(fwd, k, t, sigma2, isCall);
@@ -246,7 +245,7 @@ public class VarianceSwapWithDividendsTest {
     final double[] tau = dividends.getTau();
     final double dt = 1. / 252;
     for (int i = 0; i < n; i++) {
-      final int steps = (int) (Math.ceil(tau[i] * 252));
+      final int steps = (int) Math.ceil(tau[i] * 252);
       tau[i] = steps * dt;
     }
 

@@ -1,14 +1,12 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -34,6 +32,8 @@ import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.impl.DataConventionMasterResource;
 import com.opengamma.master.convention.impl.MasterConventionSource;
 import com.opengamma.master.convention.impl.RemoteConventionMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@link ConventionSource}.
@@ -66,15 +66,15 @@ public class ConventionSourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the convention source, setting up component information and REST.
    * Override using {@link #createConventionSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ConventionSource source = createConventionSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(ConventionSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ConventionSource source = createConventionSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(ConventionSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConventionSource.class);
@@ -87,7 +87,7 @@ public class ConventionSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the convention source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the convention source, not null
    */
@@ -101,12 +101,12 @@ public class ConventionSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates and registers the convention master.
-   * 
+   *
    * @param repo the component repository, only used to register secondary items like lifecycle, not null
    * @return the convention master, not null
    */
   protected ConventionMaster createConventionMaster(final ComponentRepository repo) {
-    ConventionMaster master = DefaultConventionMasterInitializer.createPopulated();
+    final ConventionMaster master = DefaultConventionMasterInitializer.createPopulated();
     final ComponentInfo info = new ComponentInfo(ConventionMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {

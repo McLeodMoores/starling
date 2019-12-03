@@ -19,6 +19,8 @@ public @interface VectorRootFinderType {
 
   /**
    * The name of the root finder.
+   * 
+   * @return the name
    */
   String name();
 }

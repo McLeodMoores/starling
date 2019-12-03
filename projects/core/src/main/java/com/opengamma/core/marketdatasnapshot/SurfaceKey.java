@@ -45,7 +45,7 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
 
   /**
    * Creates a named instance.
-   * 
+   *
    * @param name  the name
    * @return the surface key, not null
    */
@@ -67,7 +67,7 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
   //-------------------------------------------------------------------------
   /**
    * Compares this key to another by name.
-   * 
+   *
    * @param other  the other key, not null
    * @return the comparison value
    */
@@ -146,7 +146,7 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SurfaceKey other = (SurfaceKey) obj;
-      return JodaBeanUtils.equal(getName(), other.getName());
+      return JodaBeanUtils.equal(_name, other._name);
     }
     return false;
   }
@@ -154,7 +154,7 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
     return hash;
   }
 
@@ -162,7 +162,7 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("SurfaceKey{");
-    buf.append("name").append('=').append(JodaBeanUtils.toString(getName()));
+    buf.append("name").append('=').append(JodaBeanUtils.toString(_name));
     buf.append('}');
     return buf.toString();
   }
@@ -300,19 +300,31 @@ public final class SurfaceKey implements ImmutableBean, StructuredMarketDataKey,
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

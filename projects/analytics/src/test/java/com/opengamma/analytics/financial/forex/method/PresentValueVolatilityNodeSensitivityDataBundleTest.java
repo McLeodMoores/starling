@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.method;
@@ -45,111 +45,156 @@ public class PresentValueVolatilityNodeSensitivityDataBundleTest {
     }
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency1() {
     new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(null, CUR_2, NB_EXPIRY, NB_STRIKE);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency2() {
     new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, null, NB_EXPIRY, NB_STRIKE);
   }
 
+  /**
+   * Tests that the expiries cannot be negative.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeExpiries() {
     new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, -NB_STRIKE, NB_EXPIRY);
   }
 
+  /**
+   * Tests that the strikes cannot be negative.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeStrikes() {
     new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, NB_EXPIRY, -NB_STRIKE);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency3() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(null, CUR_2, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES), new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(null, CUR_2, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES),
+        new DoubleMatrix2D(VEGA));
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency4() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, null, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES), new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, null, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES),
+        new DoubleMatrix2D(VEGA));
   }
 
+  /**
+   * Tests that the expiries cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullExpiries() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, null, new DoubleMatrix1D(STRIKES), new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, null, new DoubleMatrix1D(STRIKES),
+        new DoubleMatrix2D(VEGA));
   }
 
+  /**
+   * Tests that the strikes cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullStrikes() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES), null, new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES), null,
+        new DoubleMatrix2D(VEGA));
   }
 
+  /**
+   * Tests that the vega cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullVega() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES), null);
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(STRIKES),
+        null);
   }
 
+  /**
+   * Tests that the number of expiries and number of results must match.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongExpiriesNumber() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(new double[] {1, 2}), new DoubleMatrix1D(STRIKES), new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(new double[] { 1, 2 }),
+        new DoubleMatrix1D(STRIKES), new DoubleMatrix2D(VEGA));
   }
 
+  /**
+   * Tests that the number of strikes and number of results must match.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongStrikesNumber() {
-    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES), new DoubleMatrix1D(new double[] {1, 2}), new DoubleMatrix2D(VEGA));
+    new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, new DoubleMatrix1D(EXPIRIES),
+        new DoubleMatrix1D(new double[] { 1, 2 }), new DoubleMatrix2D(VEGA));
   }
 
-  @Test
   /**
    * Tests the currency pair and matrix getters.
    */
+  @Test
   public void getter() {
     final Pair<Currency, Currency> pair = ObjectsPair.of(CUR_1, CUR_2);
     final DoubleMatrix1D expiries = new DoubleMatrix1D(EXPIRIES);
     final DoubleMatrix1D strikes = new DoubleMatrix1D(STRIKES);
     final DoubleMatrix2D vega = new DoubleMatrix2D(VEGA);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nodeSensi = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikes, vega);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nodeSensi = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(
+        CUR_1, CUR_2, expiries, strikes, vega);
     assertEquals("Currency pair", pair, nodeSensi.getCurrencyPair());
     assertEquals("Expiries", expiries, nodeSensi.getExpiries());
     assertEquals("Strikes", strikes, nodeSensi.getDelta());
     assertEquals("Vega", vega, nodeSensi.getVega());
   }
 
-  @Test
   /**
    * Tests the constructors.
    */
+  @Test
   public void constructor() {
     final DoubleMatrix2D vega = new DoubleMatrix2D(NB_EXPIRY, NB_STRIKE);
     final DoubleMatrix1D expiries = new DoubleMatrix1D(new double[NB_EXPIRY]);
     final DoubleMatrix1D strikes = new DoubleMatrix1D(new double[NB_STRIKE]);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi1 = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikes, vega);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi2 = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, NB_EXPIRY, NB_STRIKE);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi1 = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(
+        CUR_1, CUR_2, expiries, strikes, vega);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi2 = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(
+        CUR_1, CUR_2, NB_EXPIRY, NB_STRIKE);
     assertTrue(sensi1.equals(sensi2));
   }
 
-  @Test
   /**
    * Tests the equal and hash-code methods.
    */
+  @Test
   public void equalHash() {
     final DoubleMatrix1D expiries = new DoubleMatrix1D(EXPIRIES);
     final DoubleMatrix1D strikes = new DoubleMatrix1D(STRIKES);
     final DoubleMatrix2D vega = new DoubleMatrix2D(VEGA);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikes, vega);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle sensi = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(
+        CUR_1, CUR_2, expiries, strikes, vega);
     assertTrue(sensi.equals(sensi));
-    PresentValueForexBlackVolatilityNodeSensitivityDataBundle other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikes, vega);
+    PresentValueForexBlackVolatilityNodeSensitivityDataBundle other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1,
+        CUR_2, expiries, strikes, vega);
     assertTrue(other.equals(sensi));
     assertEquals(other.hashCode(), sensi.hashCode());
     final DoubleMatrix2D vegaModified = new DoubleMatrix2D(VEGA);
     vegaModified.getData()[0][1] = vegaModified.getData()[0][1] * 1000;
     other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikes, vegaModified);
     assertFalse(other.equals(sensi));
-    final DoubleMatrix1D expiriesModified = new DoubleMatrix1D(new double[] {5, 6, 7, 8});
+    final DoubleMatrix1D expiriesModified = new DoubleMatrix1D(new double[] { 5, 6, 7, 8 });
     other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiriesModified, strikes, vega);
     assertFalse(other.equals(sensi));
-    final DoubleMatrix1D strikesModified = new DoubleMatrix1D(new double[] {5, 6, 7, 8, 9});
+    final DoubleMatrix1D strikesModified = new DoubleMatrix1D(new double[] { 5, 6, 7, 8, 9 });
     other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_2, expiries, strikesModified, vega);
     assertFalse(other.equals(sensi));
     other = new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(CUR_1, CUR_3, expiries, strikes, vega);

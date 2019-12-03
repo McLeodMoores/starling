@@ -48,62 +48,80 @@ public class MasterLegalEntitySourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_1arg_nullMaster() throws Exception {
+  public void testConstructor1argNullMaster() {
     new MasterLegalEntitySource(null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_2arg_nullMaster() throws Exception {
+  public void testConstructor2argNullMaster() {
     new MasterLegalEntitySource(null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getLegalEntity_UniqueId_noOverride_found() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetLegalEntityUniqueIdNoOverrideFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
-    LegalEntityDocument doc = new LegalEntityDocument(example());
+    final LegalEntityDocument doc = new LegalEntityDocument(example());
     when(mock.get(UID)).thenReturn(doc);
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    LegalEntity testResult = test.get(UID);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final LegalEntity testResult = test.get(UID);
     verify(mock, times(1)).get(UID);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = com.opengamma.DataNotFoundException.class)
-  public void test_getLegalEntity_not_found() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  public void testGetLegalEntityNotFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
-    ArgumentCaptor<LegalEntitySearchRequest> searchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
-    LegalEntitySearchResult searchResult = mock(LegalEntitySearchResult.class);
+    final ArgumentCaptor<LegalEntitySearchRequest> searchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
+    final LegalEntitySearchResult searchResult = mock(LegalEntitySearchResult.class);
     when(mock.search(searchRequest.capture())).thenReturn(searchResult);
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    LegalEntity testResult = test.getSingle(ExternalId.of("b", "a"));
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final LegalEntity testResult = test.getSingle(ExternalId.of("b", "a"));
     assertEquals(example(), testResult);
   }
 
-  public void test_getLegalEntity_UniqueId_found() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  /**
+   *
+   */
+  public void testGetLegalEntityUniqueIdFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
-    LegalEntityDocument doc = new LegalEntityDocument(example());
+    final LegalEntityDocument doc = new LegalEntityDocument(example());
 
-    LegalEntitySearchResult result = new LegalEntitySearchResult();
+    final LegalEntitySearchResult result = new LegalEntitySearchResult();
     result.getDocuments().add(doc);
 
     when(mock.get(UID)).thenReturn(doc);
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    LegalEntity testResult = test.get(UID);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final LegalEntity testResult = test.get(UID);
     verify(mock, times(1)).get(UID);
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getLegalEntity_UniqueId_notFound() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  public void testGetLegalEntityUniqueIdNotFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
     when(mock.get(UID)).thenThrow(new DataNotFoundException(""));
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
     try {
       test.get(UID);
     } finally {
@@ -111,25 +129,31 @@ public class MasterLegalEntitySourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getLegalEntity_ObjectId_found() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetLegalEntityObjectIdFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
-    LegalEntityDocument doc = new LegalEntityDocument(example());
+    final LegalEntityDocument doc = new LegalEntityDocument(example());
     when(mock.get(OID, VC)).thenReturn(doc);
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    LegalEntity testResult = test.get(OID, VC);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final LegalEntity testResult = test.get(OID, VC);
     verify(mock, times(1)).get(OID, VC);
 
     assertEquals(example(), testResult);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getLegalEntity_ObjectId_notFound() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
+  public void testGetLegalEntityObjectIdNotFound() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
 
     when(mock.get(OID, VC)).thenThrow(new DataNotFoundException(""));
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
     try {
       test.get(OID, VC);
     } finally {
@@ -137,25 +161,27 @@ public class MasterLegalEntitySourceTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @SuppressWarnings("unchecked")
-  public void test_getLegalEntitiesByExternalIdBundle() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
-    LegalEntitySearchRequest request = new LegalEntitySearchRequest();
+  public void testGetLegalEntitiesByExternalIdBundle() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
+    final LegalEntitySearchRequest request = new LegalEntitySearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
     request.setVersionCorrection(VC);
-    ManageableLegalEntity legalentity = example();
-    LegalEntitySearchResult result = new LegalEntitySearchResult();
+    final ManageableLegalEntity legalentity = example();
+    final LegalEntitySearchResult result = new LegalEntitySearchResult();
     result.getDocuments().add(new LegalEntityDocument(legalentity));
 
+    when(mock.search(Matchers.<LegalEntitySearchRequest> argThat(Any.ANY))).thenReturn(result);
 
-    when(mock.search(Matchers.<LegalEntitySearchRequest>argThat(Any.ANY))).thenReturn(result);
+    final ArgumentCaptor<LegalEntitySearchRequest> legalEntitySearchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
 
-    ArgumentCaptor<LegalEntitySearchRequest> legalEntitySearchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
-
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    Collection<LegalEntity> testResult = test.get(BUNDLE);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final Collection<LegalEntity> testResult = test.get(BUNDLE);
     verify(mock, times(1)).search(legalEntitySearchRequest.capture());
     assertEquals(request.getAttributes(), legalEntitySearchRequest.getValue().getAttributes());
     assertEquals(request.getExternalIdSearch(), legalEntitySearchRequest.getValue().getExternalIdSearch());
@@ -164,29 +190,35 @@ public class MasterLegalEntitySourceTest {
     assertEquals("Test", testResult.iterator().next().getName());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @SuppressWarnings("unchecked")
-  public void test_getLegalEntity_ExternalId() throws Exception {
-    LegalEntityMaster mock = mock(LegalEntityMaster.class);
-    LegalEntitySearchRequest request = new LegalEntitySearchRequest();
+  public void testGetLegalEntityExternalId() {
+    final LegalEntityMaster mock = mock(LegalEntityMaster.class);
+    final LegalEntitySearchRequest request = new LegalEntitySearchRequest();
     request.addExternalId(ID1);
     request.addExternalId(ID2);
     request.setVersionCorrection(VC);
-    ManageableLegalEntity legalentity = example();
-    LegalEntitySearchResult result = new LegalEntitySearchResult();
+    final ManageableLegalEntity legalentity = example();
+    final LegalEntitySearchResult result = new LegalEntitySearchResult();
     result.getDocuments().add(new LegalEntityDocument(legalentity));
 
-    ArgumentCaptor<LegalEntitySearchRequest> legalEntitySearchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
-    when(mock.search(Matchers.<LegalEntitySearchRequest>argThat(Any.ANY))).thenReturn(result);
-    MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
-    LegalEntity testResult = test.getSingle(BUNDLE);
+    final ArgumentCaptor<LegalEntitySearchRequest> legalEntitySearchRequest = ArgumentCaptor.forClass(LegalEntitySearchRequest.class);
+    when(mock.search(Matchers.<LegalEntitySearchRequest> argThat(Any.ANY))).thenReturn(result);
+    final MasterLegalEntitySource test = new MasterLegalEntitySource(mock);
+    final LegalEntity testResult = test.getSingle(BUNDLE);
     verify(mock, times(1)).search(legalEntitySearchRequest.capture());
 
     assertEquals(UID, testResult.getUniqueId());
     assertEquals("Test", testResult.getName());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * @return an example legal entity
+   */
   protected ManageableLegalEntity example() {
     return new MockLegalEntity(UID, "Test", ExternalIdBundle.EMPTY, Currency.GBP);
   }

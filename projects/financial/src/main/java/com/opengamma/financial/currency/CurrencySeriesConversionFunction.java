@@ -48,9 +48,10 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   private static final String CONVERSION_METHOD_VALUE = "Series";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencySeriesConversionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencySeriesConversionFunction.class);
 
-  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY).or(ComputationTargetType.TRADE);
+  private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY)
+      .or(ComputationTargetType.TRADE);
 
   private final Set<String> _valueNames;
   private boolean _allowViewDefaultCurrency; // = false;
@@ -62,7 +63,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
 
   public CurrencySeriesConversionFunction(final String... valueNames) {
     ArgumentChecker.notEmpty(valueNames, "valueNames");
-    _valueNames = new HashSet<String>(Arrays.asList(valueNames));
+    _valueNames = new HashSet<>(Arrays.asList(valueNames));
   }
 
   protected Set<String> getValueNames() {
@@ -78,14 +79,15 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
-    Builder properties = desiredValue.getConstraints().copy()
+    final Builder properties = desiredValue.getConstraints().copy()
         .withoutAny(CURRENCY_INJECTION_PROPERTY)
         .withoutAny(ValuePropertyNames.CONVERSION_METHOD)
         .withAny(ValuePropertyNames.CURRENCY);
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, properties.get());
   }
 
-  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue, final String forceCurrency) {
+  private ValueRequirement getInputValueRequirement(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue,
+      final String forceCurrency) {
     return new ValueRequirement(desiredValue.getValueName(), targetSpec, desiredValue.getConstraints().copy().withoutAny(ValuePropertyNames.CURRENCY).with(
         ValuePropertyNames.CURRENCY, forceCurrency).withOptional(CURRENCY_INJECTION_PROPERTY).get());
   }
@@ -103,12 +105,14 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   @VisibleForTesting
-  /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1D convertLabelledMatrix(final LabelledObjectMatrix1D<Tenor, LocalDateDoubleTimeSeries, Period> values, final DoubleTimeSeries<LocalDate> conversionRates) {
-    LocalDateDoubleTimeSeries[] convertedValues = new LocalDateDoubleTimeSeries[values.size()];
+  /* package */ TenorLabelledLocalDateDoubleTimeSeriesMatrix1D convertLabelledMatrix(
+      final LabelledObjectMatrix1D<Tenor, LocalDateDoubleTimeSeries, Period> values, final DoubleTimeSeries<LocalDate> conversionRates) {
+    final LocalDateDoubleTimeSeries[] convertedValues = new LocalDateDoubleTimeSeries[values.size()];
     for (int i = 0; i < values.size(); i++) {
       convertedValues[i] = (LocalDateDoubleTimeSeries) convertTimeSeries(values.getValues()[i], conversionRates);
     }
-    return new TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(values.getKeys(), values.getLabels(), values.getLabelsTitle(), convertedValues, values.getValuesTitle());
+    return new TenorLabelledLocalDateDoubleTimeSeriesMatrix1D(values.getKeys(), values.getLabels(), values.getLabelsTitle(), convertedValues,
+        values.getValuesTitle());
   }
 
   protected DoubleTimeSeries<LocalDate> convertTimeSeries(final DoubleTimeSeries<LocalDate> values, final double conversionRate) {
@@ -122,12 +126,12 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
       return convertDouble((Double) value, conversionRates);
     } else if (value instanceof DoubleTimeSeries) {
       // TODO: Note the unchecked cast. We'll either get a zero intersection and empty result if the rates aren't the same type or a class cast exception.
-      return convertTimeSeries((DoubleTimeSeries) value, conversionRates);
+      return convertTimeSeries((DoubleTimeSeries<LocalDate>) value, conversionRates);
     } else if (value instanceof TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) {
       // Try to make this more generic
       return convertLabelledMatrix((TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) value, conversionRates);
     } else {
-      s_logger.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
+      LOGGER.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
       return null;
     }
   }
@@ -138,16 +142,17 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (value instanceof Double) {
       return convertDouble((Double) value, conversionRate);
     } else if (value instanceof DoubleTimeSeries) {
-      return convertTimeSeries((DoubleTimeSeries) value, conversionRate);
+      return convertTimeSeries((DoubleTimeSeries<LocalDate>) value, conversionRate);
     } else {
-      s_logger.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
+      LOGGER.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
       return null;
     }
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     ComputedValue inputValue = null;
     DoubleTimeSeries<LocalDate> exchangeRates = null;
     Double exchangeRate = null;
@@ -158,7 +163,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
           exchangeRate = (Double) input.getValue();
         } else if (input.getValue() instanceof DoubleTimeSeries) {
           // TODO: Note the unchecked cast. We'll either get a zero intersection and empty result if the values aren't the same type or a class cast exception.
-          exchangeRates = (DoubleTimeSeries) input.getValue();
+          exchangeRates = (DoubleTimeSeries<LocalDate>) input.getValue();
         } else {
           return null;
         }
@@ -175,44 +180,42 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (outputCurrency.equals(inputCurrency)) {
       // Don't think this should happen
       return Collections.singleton(inputValue);
-    } else {
-      s_logger.debug("Converting from {} to {}", inputCurrency, outputCurrency);
-      final Object converted;
-      if (exchangeRates != null) {
-        converted = convertValue(inputValue, desiredValue, exchangeRates);
-      } else if (exchangeRate != null) {
-        converted = convertValue(inputValue, desiredValue, exchangeRate);
-      } else {
-        return null;
-      }
-      if (converted != null) {
-        return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
-      } else {
-        return null;
-      }
     }
+    LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
+    final Object converted;
+    if (exchangeRates != null) {
+      converted = convertValue(inputValue, desiredValue, exchangeRates);
+    } else if (exchangeRate != null) {
+      converted = convertValue(inputValue, desiredValue, exchangeRate);
+    } else {
+      return null;
+    }
+    if (converted != null) {
+      return Collections.singleton(
+          new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
+    }
+    return null;
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> possibleCurrencies = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (possibleCurrencies == null) {
-      s_logger.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
+      LOGGER.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
       return null;
     } else if (possibleCurrencies.isEmpty()) {
       if (isAllowViewDefaultCurrency()) {
         // The original function may not have delivered a result because it had heterogeneous input currencies, so try forcing the view default
         final String defaultCurrencyISO = DefaultCurrencyFunction.getViewDefaultCurrencyISO(context);
         if (defaultCurrencyISO == null) {
-          s_logger.debug("No default currency from the view to inject");
+          LOGGER.debug("No default currency from the view to inject");
           return null;
         }
-        s_logger.debug("Injecting view default currency {}", defaultCurrencyISO);
+        LOGGER.debug("Injecting view default currency {}", defaultCurrencyISO);
         return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue, defaultCurrencyISO));
-      } else {
-        s_logger.debug("Cannot satisfy a wildcard currency constraint");
-        return null;
       }
+      LOGGER.debug("Cannot satisfy a wildcard currency constraint");
+      return null;
     } else {
       // Actual input requirement is desired requirement with the currency wild-carded
       return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue));
@@ -226,7 +229,7 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
     if (getValueNames().size() == 1) {
       return Collections.singleton(new ValueSpecification(getValueNames().iterator().next(), targetSpec, ValueProperties.all()));
     }
-    final Set<ValueSpecification> result = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> result = new HashSet<>();
     for (final String valueName : getValueNames()) {
       result.add(new ValueSpecification(valueName, targetSpec, ValueProperties.all()));
     }
@@ -234,13 +237,14 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Map.Entry<ValueSpecification, ValueRequirement> input = inputs.entrySet().iterator().next();
     if (input.getValue().getConstraints().getValues(CURRENCY_INJECTION_PROPERTY) == null) {
       // Resolved output is the input with the currency wild-carded, and the function ID the same (this is so that after composition the node might
       // be removed from the graph)
       final ValueSpecification value = input.getKey();
-      Builder properties = value.getProperties().copy()
+      final Builder properties = value.getProperties().copy()
           .withAny(ValuePropertyNames.CURRENCY)
           .with(ValuePropertyNames.CONVERSION_METHOD, CONVERSION_METHOD_VALUE);
       return Collections.singleton(new ValueSpecification(value.getValueName(), value.getTargetSpecification(), properties.get()));
@@ -252,16 +256,17 @@ public class CurrencySeriesConversionFunction extends AbstractFunction.NonCompil
   private String getCurrency(final Collection<ValueSpecification> specifications) {
     final ValueSpecification specification = specifications.iterator().next();
     final Set<String> currencies = specification.getProperties().getValues(ValuePropertyNames.CURRENCY);
-    if ((currencies == null) || (currencies.size() != 1)) {
+    if (currencies == null || currencies.size() != 1) {
       return null;
     }
     return currencies.iterator().next();
   }
 
   @Override
-  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
+  public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+      final Set<ValueSpecification> inputs,
       final Set<ValueSpecification> outputs) {
-    s_logger.debug("FX requirements for {} -> {}", inputs, outputs);
+    LOGGER.debug("FX requirements for {} -> {}", inputs, outputs);
     final String inputCurrency = getCurrency(inputs);
     if (inputCurrency == null) {
       return null;

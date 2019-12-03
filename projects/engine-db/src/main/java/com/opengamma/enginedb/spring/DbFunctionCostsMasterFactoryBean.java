@@ -44,7 +44,7 @@ public class DbFunctionCostsMasterFactoryBean extends SpringFactoryBean<DbFuncti
   //-------------------------------------------------------------------------
   @Override
   public DbFunctionCostsMaster createObject() {
-    DbFunctionCostsMaster master = new DbFunctionCostsMaster(getDbConnector());
+    final DbFunctionCostsMaster master = new DbFunctionCostsMaster(getDbConnector());
     return master;
   }
 

@@ -17,10 +17,10 @@ import com.opengamma.masterdb.bean.BeanMasterSearchRequest;
 
 /**
  * Callback used to configure the bean legal entity master.
- * <p/>
+ * <p>
  * Applications may subclass this class to change behavior.
  * Subclasses should have a no-argument public constructor.
- * <p/>
+ * <p>
  * If using standard OpenGamma legal entity classes, applications must extend {@link DefaultDbLegalEntityBeanMasterCallback}.
  * Otherwise applications must extend this class.
  */
@@ -42,27 +42,27 @@ public class DbLegalEntityBeanMasterCallback extends BeanMasterCallback<LegalEnt
   }
 
   @Override
-  protected LegalEntityDocument createDocument(ManageableLegalEntity value) {
+  protected LegalEntityDocument createDocument(final ManageableLegalEntity value) {
     return new LegalEntityDocument(value);
   }
 
   @Override
-  protected String getName(ManageableLegalEntity value) {
+  protected String getName(final ManageableLegalEntity value) {
     return value.getName();
   }
 
   @Override
-  protected ExternalIdBundle getExternalIdBundle(ManageableLegalEntity value) {
+  protected ExternalIdBundle getExternalIdBundle(final ManageableLegalEntity value) {
     return value.getExternalIdBundle();
   }
 
   @Override
-  protected Map<String, String> getAttributes(ManageableLegalEntity value) {
+  protected Map<String, String> getAttributes(final ManageableLegalEntity value) {
     return value.getAttributes();
   }
 
   @Override
-  protected Map<String, String> getIndexedProperties(ManageableLegalEntity value) {
+  protected Map<String, String> getIndexedProperties(final ManageableLegalEntity value) {
     return ImmutableMap.of();
   }
 
@@ -72,17 +72,17 @@ public class DbLegalEntityBeanMasterCallback extends BeanMasterCallback<LegalEnt
    * @param requestToBuild       the request to set search properties into, not null
    * @param requestToExtractFrom the request to extract indexed properties from, not null
    */
-  protected void buildIndexedPropertiesSearch(BeanMasterSearchRequest requestToBuild, AbstractSearchRequest requestToExtractFrom) {
+  protected void buildIndexedPropertiesSearch(final BeanMasterSearchRequest requestToBuild, final AbstractSearchRequest requestToExtractFrom) {
     return;
   }
 
   @Override
-  protected char getMainType(ManageableLegalEntity value) {
+  protected char getMainType(final ManageableLegalEntity value) {
     return 'L';
   }
 
   @Override
-  protected String getSubType(ManageableLegalEntity value) {
+  protected String getSubType(final ManageableLegalEntity value) {
     return "com.opengamma.core.legalentity.LegalEntity"; //TODO ask Stephen what to do with bean without subtypes
   }
 

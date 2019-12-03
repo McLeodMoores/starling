@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 public class OpenGammaComponentService extends OpenGammaComponentServer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(OpenGammaComponentService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OpenGammaComponentService.class);
   /** Logger. */
-  private static final Logger s_startupLogger = LoggerFactory.getLogger(ComponentManager.class);
+  private static final Logger STARTUP_LOGGER = LoggerFactory.getLogger(ComponentManager.class);
   /**
    * Single instance.
    */
@@ -38,27 +38,27 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
   /**
    * The component repository.
    */
-  private final AtomicReference<ComponentRepository> _repository = new AtomicReference<ComponentRepository>();
+  private final AtomicReference<ComponentRepository> _repository = new AtomicReference<>();
 
   //-------------------------------------------------------------------------
   /**
    * Starts the service, blocking until the stop signal is received.
-   * 
+   *
    * @param args the command line arguments, the last element is the service name
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Starting service {}", args[args.length - 1]);
+    LOGGER.info("Starting service {}", args[args.length - 1]);
     final String[] runArgs = new String[args.length - 1];
     System.arraycopy(args, 0, runArgs, 0, runArgs.length);
     try {
       if (!INSTANCE.run(runArgs)) {
-        s_logger.error("One or more errors occurred starting the service");
+        LOGGER.error("One or more errors occurred starting the service");
         System.exit(1);
         //} else {
         //System.exit(0);
       }
-    } catch (Throwable e) {
-      s_logger.error("Couldn't start service", e);
+    } catch (final Throwable e) {
+      LOGGER.error("Couldn't start service", e);
       System.exit(1);
     }
   }
@@ -67,20 +67,20 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
    * Stops the service.
    */
   public static void stop() {
-    s_logger.info("Stopping service");
+    LOGGER.info("Stopping service");
     INSTANCE.serverStopping();
-    s_logger.info("Service stopped");
+    LOGGER.info("Service stopped");
     // This is bad. Not everything currently responds nicely to the "stop" and non-daemon threads
     // keep the process alive. Remove this hack when there are no more non-daemon threads that can
     // outlive their components and prevent process termination when running as a service.
     int aliveCount = 0, nonDaemon = 0;
-    for (Map.Entry<Thread, StackTraceElement[]> active : Thread.getAllStackTraces().entrySet()) {
+    for (final Map.Entry<Thread, StackTraceElement[]> active : Thread.getAllStackTraces().entrySet()) {
       final Thread t = active.getKey();
       if (t.isAlive()) {
         if (!t.isDaemon()) {
-          s_logger.debug("Thread {} still active", t);
-          for (StackTraceElement stack : active.getValue()) {
-            s_logger.debug("Stack: {}", stack);
+          LOGGER.debug("Thread {} still active", t);
+          for (final StackTraceElement stack : active.getValue()) {
+            LOGGER.debug("Stack: {}", stack);
           }
           nonDaemon++;
         }
@@ -88,10 +88,10 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
       }
     }
     if (nonDaemon > 0) {
-      s_logger.error("{} non-daemon thread(s) (of {}) still active at shutdown, calling system.exit", nonDaemon, aliveCount);
+      LOGGER.error("{} non-daemon thread(s) (of {}) still active at shutdown, calling system.exit", nonDaemon, aliveCount);
       System.exit(1);
     } else {
-      s_logger.info("No non-daemon threads (of {}) active at shutdown", aliveCount);
+      LOGGER.info("No non-daemon threads (of {}) active at shutdown", aliveCount);
     }
   }
 
@@ -101,50 +101,53 @@ public class OpenGammaComponentService extends OpenGammaComponentServer {
     if (!super.run(args)) {
       return false;
     }
-    s_logger.info("Service started -- waiting for stop signal");
+    LOGGER.info("Service started -- waiting for stop signal");
     try {
       _stopNotify.await();
-      s_logger.info("Service stopped");
+      LOGGER.info("Service stopped");
       _stopConfirm.countDown();
       return true;
-    } catch (InterruptedException e) {
-      s_logger.warn("Service interrupted");
+    } catch (final InterruptedException e) {
+      LOGGER.warn("Service interrupted");
       return false;
     }
   }
 
   @Override
-  protected ComponentLogger createLogger(int verbosity) {
-    return new ComponentLogger.Slf4JLogger(s_startupLogger);
+  protected ComponentLogger createLogger(final int verbosity) {
+    return new ComponentLogger.Slf4JLogger(STARTUP_LOGGER);
   }
 
   @Override
   protected void serverStarting(final ComponentManager manager) {
-    s_logger.debug("Server starting - got component repository");
+    LOGGER.debug("Server starting - got component repository");
     final ComponentRepository previous = _repository.getAndSet(manager.getRepository());
-    assert (previous == null);
+    assert previous == null;
   }
 
+  /**
+   * Stops the components.
+   */
   protected void serverStopping() {
     final ComponentRepository repository = _repository.getAndSet(null);
     if (repository != null) {
-      s_logger.info("Stopping components");
+      LOGGER.info("Stopping components");
       try {
         repository.stop();
-      } catch (Throwable e) {
-        s_logger.error("Couldn't stop components", e);
+      } catch (final Throwable e) {
+        LOGGER.error("Couldn't stop components", e);
       }
-      s_logger.debug("Releasing main thread");
+      LOGGER.debug("Releasing main thread");
       _stopNotify.countDown();
-      s_logger.info("Waiting for confirmation signal");
+      LOGGER.info("Waiting for confirmation signal");
       try {
         _stopConfirm.await();
-      } catch (InterruptedException e) {
-        s_logger.warn("Service interrupted");
+      } catch (final InterruptedException e) {
+        LOGGER.warn("Service interrupted");
         System.exit(1);
       }
     } else {
-      s_logger.warn("Stop signal received before service startup completed");
+      LOGGER.warn("Stop signal received before service startup completed");
       System.exit(1);
     }
   }

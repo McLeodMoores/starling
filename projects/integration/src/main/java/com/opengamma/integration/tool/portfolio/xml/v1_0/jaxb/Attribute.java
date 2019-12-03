@@ -23,7 +23,7 @@ public class Attribute {
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
 
@@ -31,7 +31,7 @@ public class Attribute {
     return _value;
   }
 
-  public void setValue(String value) {
+  public void setValue(final String value) {
     _value = value;
   }
 }

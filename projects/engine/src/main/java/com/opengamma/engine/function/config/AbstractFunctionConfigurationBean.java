@@ -14,8 +14,8 @@ import com.opengamma.engine.function.FunctionDefinition;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * Factory bean template for creating a simple {@link FunctionConfigurationSource} which returns a static configuration. The configuration may be generated from additional parameters set on the bean
- * or entirely from static data.
+ * Factory bean template for creating a simple {@link FunctionConfigurationSource} which returns a static configuration.
+ * The configuration may be generated from additional parameters set on the bean or entirely from static data.
  */
 public abstract class AbstractFunctionConfigurationBean extends SingletonFactoryBean<FunctionConfigurationSource> {
 
@@ -29,10 +29,10 @@ public abstract class AbstractFunctionConfigurationBean extends SingletonFactory
     return new ParameterizedFunctionConfiguration(clazz.getName(), Arrays.asList(args));
   }
 
-  protected abstract void addAllConfigurations(final List<FunctionConfiguration> functions);
+  protected abstract void addAllConfigurations(List<FunctionConfiguration> functions);
 
   protected FunctionConfigurationBundle createRepositoryConfiguration() {
-    final List<FunctionConfiguration> functions = new LinkedList<FunctionConfiguration>();
+    final List<FunctionConfiguration> functions = new LinkedList<>();
     addAllConfigurations(functions);
     return new FunctionConfigurationBundle(functions);
   }

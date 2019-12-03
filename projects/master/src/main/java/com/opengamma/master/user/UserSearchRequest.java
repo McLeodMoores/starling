@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -30,7 +30,7 @@ import com.opengamma.util.RegexUtils;
 import com.opengamma.util.paging.PagingRequest;
 
 /**
- * Request for searching for users. 
+ * Request for searching for users.
  * <p>
  * Documents will be returned that match the search criteria.
  * This class provides the ability to page the results and to search
@@ -106,13 +106,13 @@ public class UserSearchRequest implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Adds a single user object identifier to the set.
-   * 
+   *
    * @param userId  the user object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable userId) {
+  public void addObjectId(final ObjectIdentifiable userId) {
     ArgumentChecker.notNull(userId, "userId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(userId.getObjectId());
   }
@@ -120,15 +120,15 @@ public class UserSearchRequest implements Bean {
   /**
    * Sets the set of user object identifiers, null to not limit by user object identifiers.
    * Note that an empty collection will return no securities.
-   * 
+   *
    * @param userIds  the new user identifiers, null clears the user id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> userIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> userIds) {
     if (userIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable userId : userIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable userId : userIds) {
         _objectIds.add(userId.getObjectId());
       }
     }
@@ -141,35 +141,35 @@ public class UserSearchRequest implements Bean {
    * @param user  the user to match, null returns false
    * @return true if matches
    */
-  public boolean matches(ManageableUser user) {
+  public boolean matches(final ManageableUser user) {
     if (user == null) {
       return false;
     }
-    if (getObjectIds() != null && getObjectIds().contains(user.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(user.getObjectId())) {
       return false;
     }
-    if (getUserName() != null && RegexUtils.wildcardMatch(getUserName(), user.getUserName()) == false) {
+    if (getUserName() != null && !RegexUtils.wildcardMatch(getUserName(), user.getUserName())) {
       return false;
     }
-    if (getDisplayName() != null && RegexUtils.wildcardMatch(getDisplayName(), user.getProfile().getDisplayName()) == false) {
+    if (getDisplayName() != null && !RegexUtils.wildcardMatch(getDisplayName(), user.getProfile().getDisplayName())) {
       return false;
     }
-    if (getEmailAddress() != null && RegexUtils.wildcardMatch(getEmailAddress(), user.getEmailAddress()) == false) {
+    if (getEmailAddress() != null && !RegexUtils.wildcardMatch(getEmailAddress(), user.getEmailAddress())) {
       return false;
     }
-    if (user.getAssociatedPermissions().contains(getAssociatedPermission()) == false) {
+    if (getAssociatedPermission() != null && !user.getAssociatedPermissions().contains(getAssociatedPermission())) {
       return false;
     }
     if (getAlternateIdValue() != null) {
-      for (ExternalId identifier : user.getAlternateIds()) {
-        if (RegexUtils.wildcardMatch(getAlternateIdValue(), identifier.getValue()) == false) {
+      for (final ExternalId identifier : user.getAlternateIds()) {
+        if (!RegexUtils.wildcardMatch(getAlternateIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getAlternateIdScheme() != null) {
-      for (ExternalId identifier : user.getAlternateIds()) {
-        if (RegexUtils.wildcardMatch(getAlternateIdScheme(), identifier.getScheme().getName()) == false) {
+      for (final ExternalId identifier : user.getAlternateIds()) {
+        if (!RegexUtils.wildcardMatch(getAlternateIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }

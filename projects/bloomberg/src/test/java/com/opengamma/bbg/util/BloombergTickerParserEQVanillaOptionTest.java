@@ -27,31 +27,31 @@ public class BloombergTickerParserEQVanillaOptionTest {
   //-------- BASIC CASES --------
   @Test
   public void testWithTickerIdentifier() {
-    BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(
+    final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption(
         ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "MSFT US 01/21/12 C17.5 Equity"));
     testImpl(parser, "MSFT", Month.JANUARY, 21, 2012, OptionType.CALL, 17.5);
   }
 
   @Test
   public void testWithTickerString() {
-    BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption("MSFT US 01/21/12 C17.5 Equity");
+    final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption("MSFT US 01/21/12 C17.5 Equity");
     testImpl(parser, "MSFT", Month.JANUARY, 21, 2012, OptionType.CALL, 17.5);
   }
 
   @Test
   public void testOtherTickerPatternBug() {
-    BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption("AAPL US 01/19/13 C135 Equity");
+    final BloombergTickerParserEQVanillaOption parser = new BloombergTickerParserEQVanillaOption("AAPL US 01/19/13 C135 Equity");
     testImpl(parser, "AAPL", Month.JANUARY, 19, 2013, OptionType.CALL, 135);
   }
 
   private void testImpl(
-      BloombergTickerParserEQVanillaOption parser, String symbol,
-      Month month, int day, int year,
-      OptionType optionType, double strike) {
+      final BloombergTickerParserEQVanillaOption parser, final String symbol,
+      final Month month, final int day, final int year,
+      final OptionType optionType, final double strike) {
     assertEquals("US", parser.getExchangeCode());
     assertEquals(symbol, parser.getSymbol());
 
-    LocalDate expiry = parser.getExpiry();
+    final LocalDate expiry = parser.getExpiry();
     assertEquals(month, expiry.getMonth());
     assertEquals(day, expiry.getDayOfMonth());
     assertEquals(year, expiry.getYear());

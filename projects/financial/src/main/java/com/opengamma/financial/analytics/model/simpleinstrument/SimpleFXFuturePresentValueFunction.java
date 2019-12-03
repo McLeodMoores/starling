@@ -58,7 +58,8 @@ public class SimpleFXFuturePresentValueFunction extends AbstractFunction.NonComp
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FXFutureSecurity security = (FXFutureSecurity) target.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -72,8 +73,10 @@ public class SimpleFXFuturePresentValueFunction extends AbstractFunction.NonComp
     if (receiveCurveObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + _receiveCurveName + " curve");
     }
-    // TODO: The convention is only looked up here so that we can convert the spot rate; would be better to request the spot rate using the correct currency pair in the first place
-    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    // TODO: The convention is only looked up here so that we can convert the spot rate; would be better to request the spot rate using the correct currency
+    // pair in the first place
+    final CurrencyPairs currencyPairs = OpenGammaExecutionContext.getCurrencyPairsSource(executionContext)
+        .getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CurrencyPair currencyPair = currencyPairs.getCurrencyPair(payCurrency, receiveCurrency);
     final Currency currencyBase = currencyPair.getBase();
     final Object spotObject = inputs.getValue(ValueRequirementNames.SPOT_RATE);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.portfolio.impl;
@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.joda.beans.JodaBeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
 import com.google.common.base.Supplier;
@@ -46,8 +44,6 @@ import com.opengamma.util.paging.Paging;
  * An in-memory implementation of a portfolio master.
  */
 public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<PortfolioDocument> implements PortfolioMaster {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryPortfolioMaster.class);
   /**
    * The default scheme used for each {@link UniqueId}.
    */
@@ -56,37 +52,37 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
   /**
    * A cache of portfolio nodes by identifier.
    */
-  private final ConcurrentMap<ObjectId, ManageablePortfolioNode> _storeNodes = new ConcurrentHashMap<ObjectId, ManageablePortfolioNode>();
-  private final ConcurrentMap<String, Set<PortfolioDocument>> _portfoliosByName = new ConcurrentHashMap<String, Set<PortfolioDocument>>();
-  
+  private final ConcurrentMap<ObjectId, ManageablePortfolioNode> _storeNodes = new ConcurrentHashMap<>();
+  private final ConcurrentMap<String, Set<PortfolioDocument>> _portfoliosByName = new ConcurrentHashMap<>();
+
   /**
    * Creates an instance.
    */
   public InMemoryPortfolioMaster() {
     this(new ObjectIdSupplier(DEFAULT_OID_SCHEME));
   }
-  
+
   /**
    * Creates an instance specifying the change manager.
-   * 
+   *
    * @param changeManager  the change manager, not null
    */
   public InMemoryPortfolioMaster(final ChangeManager changeManager) {
     this(new ObjectIdSupplier(DEFAULT_OID_SCHEME), changeManager);
   }
-  
+
   /**
    * Creates an instance specifying the supplier of object identifiers.
-   * 
+   *
    * @param objectIdSupplier  the supplier of object identifiers, not null
    */
   public InMemoryPortfolioMaster(final Supplier<ObjectId> objectIdSupplier) {
     this(objectIdSupplier, new BasicChangeManager());
   }
-  
+
   /**
    * Creates an instance specifying the supplier of object identifiers and change manager.
-   * 
+   *
    * @param objectIdSupplier  the supplier of object identifiers, not null
    * @param changeManager  the change manager, not null
    */
@@ -96,10 +92,10 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
 
   //-------------------------------------------------------------------------
   @Override
-  protected void updateCaches(ObjectIdentifiable replacedObject, PortfolioDocument updatedDocument) {
-    PortfolioDocument replacedPortfolio = (PortfolioDocument) replacedObject;
+  protected void updateCaches(final ObjectIdentifiable replacedObject, final PortfolioDocument updatedDocument) {
+    final PortfolioDocument replacedPortfolio = (PortfolioDocument) replacedObject;
     if (replacedPortfolio != null) {
-      Set<PortfolioDocument> docsWithName = _portfoliosByName.get(replacedPortfolio.getValue().getName());
+      final Set<PortfolioDocument> docsWithName = _portfoliosByName.get(replacedPortfolio.getValue().getName());
       if (docsWithName != null) {
         docsWithName.remove(replacedPortfolio);
       }
@@ -107,7 +103,7 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     if (updatedDocument != null) {
       Set<PortfolioDocument> docsWithName = _portfoliosByName.get(updatedDocument.getValue().getName());
       if (docsWithName == null) {
-        docsWithName = new HashSet<PortfolioDocument>();
+        docsWithName = new HashSet<>();
         _portfoliosByName.put(updatedDocument.getValue().getName(), docsWithName);
       }
       docsWithName.add(updatedDocument);
@@ -116,19 +112,19 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(PortfolioDocument document) {
+  protected void validateDocument(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getPortfolio(), "document.portfolio");
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public PortfolioDocument get(UniqueId uniqueId) {
+  public PortfolioDocument get(final UniqueId uniqueId) {
     return get(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
-  public PortfolioDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PortfolioDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final PortfolioDocument document = _store.get(objectId.getObjectId());
@@ -137,42 +133,40 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     }
     return clonePortfolioDocument(document);
   }
-  
-  private PortfolioDocument clonePortfolioDocument(PortfolioDocument document) {
+
+  private PortfolioDocument clonePortfolioDocument(final PortfolioDocument document) {
     if (isCloneResults()) {
-      PortfolioDocument clone = JodaBeanUtils.clone(document);
-      ManageablePortfolio portfolioClone = JodaBeanUtils.clone(document.getPortfolio());
+      final PortfolioDocument clone = JodaBeanUtils.clone(document);
+      final ManageablePortfolio portfolioClone = JodaBeanUtils.clone(document.getPortfolio());
       portfolioClone.setRootNode(clonePortfolioNode(portfolioClone.getRootNode()));
       clone.setPortfolio(portfolioClone);
       return clone;
-    } else {
-      return document;
     }
+    return document;
   }
-  
-  private ManageablePortfolioNode clonePortfolioNode(ManageablePortfolioNode node) {
+
+  private ManageablePortfolioNode clonePortfolioNode(final ManageablePortfolioNode node) {
     if (isCloneResults()) {
-      ManageablePortfolioNode clone = JodaBeanUtils.clone(node);
-      List<ManageablePortfolioNode> childNodes = new ArrayList<ManageablePortfolioNode>(node.getChildNodes().size());
-      for (ManageablePortfolioNode child : node.getChildNodes()) {
+      final ManageablePortfolioNode clone = JodaBeanUtils.clone(node);
+      final List<ManageablePortfolioNode> childNodes = new ArrayList<>(node.getChildNodes().size());
+      for (final ManageablePortfolioNode child : node.getChildNodes()) {
         childNodes.add(clonePortfolioNode(child));
       }
       clone.setChildNodes(childNodes);
       return clone;
-    } else {
-      return node;
     }
+    return node;
   }
 
   @Override
-  public PortfolioDocument add(PortfolioDocument document) {
+  public PortfolioDocument add(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getPortfolio(), "document.portfolio");
-    
+
     final ObjectId objectId = _objectIdSupplier.get();
     final UniqueId uniqueId = objectId.atVersion("");
     final Instant now = Instant.now();
-    
+
     final PortfolioDocument clonedDoc = clonePortfolioDocument(document);
     setDocumentId(document, clonedDoc, uniqueId);
     setVersionTimes(document, clonedDoc, now, null, now, null);
@@ -182,15 +176,16 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     updateCaches(null, clonedDoc);
     return document;
   }
-  
-  private void setDocumentId(final PortfolioDocument document, final PortfolioDocument clonedDoc, final UniqueId uniqueId) {
+
+  private static void setDocumentId(final PortfolioDocument document, final PortfolioDocument clonedDoc, final UniqueId uniqueId) {
     document.getPortfolio().setUniqueId(uniqueId);
     clonedDoc.getPortfolio().setUniqueId(uniqueId);
     document.setUniqueId(uniqueId);
     clonedDoc.setUniqueId(uniqueId);
   }
-  
-  private void storeNodes(final ManageablePortfolioNode clonedNode, final ManageablePortfolioNode origNode, final UniqueId portfolioId, final UniqueId parentNodeId) {
+
+  private void storeNodes(final ManageablePortfolioNode clonedNode, final ManageablePortfolioNode origNode, final UniqueId portfolioId,
+      final UniqueId parentNodeId) {
     final ObjectId objectId = _objectIdSupplier.get();
     final UniqueId uniqueId = objectId.atVersion("");
     clonedNode.setUniqueId(uniqueId);
@@ -204,43 +199,43 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
       storeNodes(clonedNode.getChildNodes().get(i), origNode.getChildNodes().get(i), portfolioId, uniqueId);
     }
   }
-  
-  private void setVersionTimes(PortfolioDocument document, final PortfolioDocument clonedDoc, 
+
+  private static void setVersionTimes(final PortfolioDocument document, final PortfolioDocument clonedDoc,
       final Instant versionFromInstant, final Instant versionToInstant, final Instant correctionFromInstant, final Instant correctionToInstant) {
-    
+
     clonedDoc.setVersionFromInstant(versionFromInstant);
     document.setVersionFromInstant(versionFromInstant);
-    
+
     clonedDoc.setVersionToInstant(versionToInstant);
     document.setVersionToInstant(versionToInstant);
-    
+
     clonedDoc.setCorrectionFromInstant(correctionFromInstant);
     document.setCorrectionFromInstant(correctionFromInstant);
-    
+
     clonedDoc.setCorrectionToInstant(correctionToInstant);
     document.setCorrectionToInstant(correctionToInstant);
   }
 
   @Override
-  public PortfolioDocument update(PortfolioDocument document) {
+  public PortfolioDocument update(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
     ArgumentChecker.notNull(document.getPortfolio(), "document.portfolio");
-    
+
     final UniqueId uniqueId = document.getUniqueId();
     final Instant now = Instant.now();
     final PortfolioDocument storedDocument = _store.get(uniqueId.getObjectId());
     if (storedDocument == null) {
       throw new DataNotFoundException("Portfolio not found: " + uniqueId);
     }
-    
+
     final PortfolioDocument clonedDoc = clonePortfolioDocument(document);
     setDocumentId(document, clonedDoc, uniqueId); // BUGFIX: could inject portfolio in document with unique id not set.
     removeNodes(storedDocument.getPortfolio().getRootNode());
-    
+
     setVersionTimes(document, clonedDoc, now, null, now, null);
-    
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc) == false) {
+
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, clonedDoc)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     storeNodes(clonedDoc.getPortfolio().getRootNode(), document.getPortfolio().getRootNode(), uniqueId, null);
@@ -249,19 +244,19 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     return document;
   }
 
-  private void removeNodes(ManageablePortfolioNode node) {
+  private void removeNodes(final ManageablePortfolioNode node) {
     if (_storeNodes.remove(node.getUniqueId().getObjectId()) == null) {
       throw new DataNotFoundException("Node not found: " + node.getUniqueId());
     }
-    for (ManageablePortfolioNode childNode : node.getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : node.getChildNodes()) {
       removeNodes(childNode);
     }
   }
-  
+
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
-    PortfolioDocument storedDocument = _store.remove(objectIdentifiable.getObjectId());
+    final PortfolioDocument storedDocument = _store.remove(objectIdentifiable.getObjectId());
     if (storedDocument == null) {
       throw new DataNotFoundException("Portfolio not found " + objectIdentifiable);
     }
@@ -271,16 +266,16 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
   }
 
   @Override
-  public PortfolioDocument correct(PortfolioDocument document) {
+  public PortfolioDocument correct(final PortfolioDocument document) {
     return update(document);
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest request) {
+  public PortfolioSearchResult search(final PortfolioSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     Collection<PortfolioDocument> docsToCheck = null;
-    
-    if ((request.getName() != null) && !RegexUtils.containsWildcard(request.getName())) {
+
+    if (request.getName() != null && !RegexUtils.containsWildcard(request.getName())) {
       docsToCheck = _portfoliosByName.get(request.getName());
     } else {
       docsToCheck = _store.values();
@@ -288,11 +283,11 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     if (docsToCheck == null) {
       docsToCheck = Collections.emptySet();
     }
-    
-    final List<PortfolioDocument> list = new ArrayList<PortfolioDocument>();
-    for (PortfolioDocument doc : docsToCheck) {
+
+    final List<PortfolioDocument> list = new ArrayList<>();
+    for (final PortfolioDocument doc : docsToCheck) {
       if (request.matches(doc)) {
-        PortfolioDocument docToAdd = isCloneResults() ? clonePortfolioDocument(doc) : doc;
+        final PortfolioDocument docToAdd = isCloneResults() ? clonePortfolioDocument(doc) : doc;
         list.add(docToAdd);
       }
     }
@@ -303,21 +298,20 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
   }
 
   @Override
-  public PortfolioHistoryResult history(PortfolioHistoryRequest request) {
+  public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
     throw new UnsupportedOperationException("History request not supported by " + getClass().getSimpleName());
   }
 
   @Override
-  public ManageablePortfolioNode getNode(UniqueId nodeId) {
+  public ManageablePortfolioNode getNode(final UniqueId nodeId) {
     ArgumentChecker.notNull(nodeId, "nodeId");
-    ManageablePortfolioNode node = _storeNodes.get(nodeId.getObjectId());
+    final ManageablePortfolioNode node = _storeNodes.get(nodeId.getObjectId());
     if (node == null) {
       throw new DataNotFoundException("Node not found: " + nodeId);
     }
     if (isCloneResults()) {
       return clonePortfolioNode(node);
-    } else {
-      return node;
     }
+    return node;
   }
 }

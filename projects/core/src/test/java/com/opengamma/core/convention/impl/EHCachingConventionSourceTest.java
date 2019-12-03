@@ -8,7 +8,6 @@ package com.opengamma.core.convention.impl;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.AssertJUnit.fail;
-import net.sf.ehcache.CacheManager;
 
 import org.mockito.Mockito;
 import org.testng.annotations.AfterClass;
@@ -29,10 +28,12 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * Tests the {@link EHCachingConventionSource} class
+ * Tests the {@link EHCachingConventionSource} class.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache" })
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingConventionSourceTest {
 
   private static final UniqueId UID = UniqueId.of("Convention", "Test", "1");
@@ -41,24 +42,33 @@ public class EHCachingConventionSourceTest {
   private static final ObjectId OID_MISS = ObjectId.of("Convention", "Miss");
   private static final ExternalIdBundle BUNDLE = ExternalIdBundle.of(ExternalId.of("Test", "Foo"), ExternalId.of("Test", "Bar"));
   private static final ExternalIdBundle BUNDLE_MISS = ExternalIdBundle.of(ExternalId.of("Test", "Blas"), ExternalId.of("Test", "Bar"));
-  private static final VersionCorrection VERSION_CORRECTION = VersionCorrection.of(
-      Instant.now().truncatedTo(ChronoUnit.HOURS).minusSeconds(3600), Instant.now().truncatedTo(ChronoUnit.HOURS));
+  private static final VersionCorrection VERSION_CORRECTION = VersionCorrection.of(Instant.now().truncatedTo(ChronoUnit.HOURS).minusSeconds(3600),
+      Instant.now().truncatedTo(ChronoUnit.HOURS));
 
   private CacheManager _cacheManager;
   private Convention _convention;
   private ConventionSource _underlying;
   private EHCachingConventionSource _source;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(getClass());
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     EHCacheUtils.clear(_cacheManager);
@@ -69,19 +79,25 @@ public class EHCachingConventionSourceTest {
     _source.emptyFrontCache();
   }
 
-  //-------------------------------------------------------------------------
-  public void test_get_byUniqueId_notFound() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetByUniqueIdNotFound() {
     Mockito.when(_underlying.get(UID_MISS)).thenThrow(new DataNotFoundException("Not found"));
     try {
       assertEquals(_source.get(UID_MISS), null);
       Mockito.verify(_underlying, Mockito.times(1)).get(UID_MISS);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }
 
-  public void test_get_byUniqueId_found() {
+  /**
+   *
+   */
+  public void testGetByUniqueIdFound() {
     Mockito.when(_underlying.get(UID)).thenReturn(_convention);
     // hit underlying
     assertSame(_source.get(UID), _convention);
@@ -95,19 +111,25 @@ public class EHCachingConventionSourceTest {
     Mockito.verifyNoMoreInteractions(_underlying);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_get_byObjectIdVC_notFound() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetByObjectIdVCNotFound() {
     Mockito.when(_underlying.get(OID_MISS, VERSION_CORRECTION)).thenThrow(new DataNotFoundException("Not found"));
     try {
       assertEquals(_source.get(OID_MISS, VERSION_CORRECTION), null);
       Mockito.verify(_underlying, Mockito.times(1)).get(OID_MISS, VERSION_CORRECTION);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }
 
-  public void test_get_byObjectIdVC_found() {
+  /**
+   *
+   */
+  public void testGetByObjectIdVCFound() {
     Mockito.when(_underlying.get(OID, VERSION_CORRECTION)).thenReturn(_convention);
     // hit underlying
     assertSame(_source.get(OID, VERSION_CORRECTION), _convention);
@@ -125,19 +147,25 @@ public class EHCachingConventionSourceTest {
     Mockito.verifyNoMoreInteractions(_underlying);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_get_byBundleVC_notFound() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetByBundleVCNotFound() {
     Mockito.when(_underlying.getSingle(BUNDLE_MISS, VERSION_CORRECTION)).thenThrow(new DataNotFoundException("Not found"));
     try {
       assertEquals(_source.getSingle(BUNDLE_MISS, VERSION_CORRECTION), null);
       Mockito.verify(_underlying, Mockito.times(1)).getSingle(BUNDLE_MISS, VERSION_CORRECTION);
       fail();
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       // expected
     }
   }
 
-  public void test_get_byBundleVC_found() {
+  /**
+   *
+   */
+  public void testGetByBundleVCFound() {
     Mockito.when(_underlying.getSingle(BUNDLE, VERSION_CORRECTION)).thenReturn(_convention);
     // hit underlying
     assertSame(_source.getSingle(BUNDLE, VERSION_CORRECTION), _convention);
@@ -155,8 +183,11 @@ public class EHCachingConventionSourceTest {
     Mockito.verifyNoMoreInteractions(_underlying);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_get_byBundleLatest_noCache() {
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetByBundleLatestNoCache() {
     Mockito.when(_underlying.getSingle(BUNDLE, VersionCorrection.LATEST)).thenReturn(_convention);
     // hit underlying
     assertSame(_source.getSingle(BUNDLE, VersionCorrection.LATEST), _convention);

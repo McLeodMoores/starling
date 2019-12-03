@@ -11,12 +11,13 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * @deprecated probably not needed any more
  */
+@Deprecated
 /* package */ class ProviderWithSpec {
 
   private final MarketDataProvider _provider;
   private final MarketDataSpecification _specification;
 
-  /* package */ ProviderWithSpec(MarketDataProvider provider, MarketDataSpecification specification) {
+  /* package */ ProviderWithSpec(final MarketDataProvider provider, final MarketDataSpecification specification) {
     ArgumentChecker.notNull(provider, "provider");
     ArgumentChecker.notNull(specification, "specification");
     _provider = provider;

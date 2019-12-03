@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
 
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -27,6 +25,8 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.provider.HistoricalTimeSeriesProviderComponentFactory;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 import com.opengamma.provider.historicaltimeseries.impl.EHCachingHistoricalTimeSeriesProvider;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the Bloomberg time-series provider.
@@ -48,8 +48,8 @@ public class BloombergHistoricalTimeSeriesProviderComponentFactory extends Histo
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesProvider initHistoricalTimeSeriesProvider(ComponentRepository repo) {
-    BloombergHistoricalTimeSeriesProvider provider = new BloombergHistoricalTimeSeriesProvider(getBloombergConnector());
+  protected HistoricalTimeSeriesProvider initHistoricalTimeSeriesProvider(final ComponentRepository repo) {
+    final BloombergHistoricalTimeSeriesProvider provider = new BloombergHistoricalTimeSeriesProvider(getBloombergConnector());
     if (getCacheManager() == null) {
       return provider;
     }

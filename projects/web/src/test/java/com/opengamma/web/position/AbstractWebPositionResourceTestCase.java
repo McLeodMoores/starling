@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.position;
@@ -25,6 +25,7 @@ import org.threeten.bp.LocalTime;
 import org.threeten.bp.OffsetTime;
 import org.threeten.bp.ZoneOffset;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.id.ExternalSchemes;
@@ -32,6 +33,7 @@ import com.opengamma.core.position.Counterparty;
 import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.id.ExternalId;
+import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.id.ObjectIdSupplier;
 import com.opengamma.id.UniqueId;
@@ -101,8 +103,18 @@ public abstract class AbstractWebPositionResourceTestCase {
     _securitySource = new InMemorySecuritySource();
     _secLoader = new AbstractSecurityLoader() {
       @Override
-      protected SecurityLoaderResult doBulkLoad(SecurityLoaderRequest request) {
-        throw new UnsupportedOperationException("load security not supported");
+      protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
+        return null;
+      }
+
+      @Override
+      public UniqueId loadSecurity(final ExternalIdBundle externalIdBundle) {
+        final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundle);
+        final SecurityLoaderResult result = loadSecurities(request);
+        if (result == null || result.getResultMap().size() == 0) {
+          return null;
+        }
+        return Iterables.getOnlyElement(result.getResultMap().values());
       }
     };
     populateSecMaster();

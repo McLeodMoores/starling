@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance;
@@ -23,55 +23,62 @@ public class RealizedVarianceTest {
 
   // -------------------------------- SETUP ------------------------------------------
 
-  final RealizedVariance realVariance = new RealizedVariance();
+  private static final RealizedVariance REALIZED_VARIANCE = new RealizedVariance();
 
   // The derivative
-  private static final double varStrike = 0.05;
-  private static final double varNotional = 3150;
-  private static final double expiry = 5;
-  private static final int nObsExpected = 750;
-  private static final int noMktDisruptions = 0;
-  private static final double annualizationFactor = 252;
+  private static final double VAR_STRIKE = 0.05;
+  private static final double VAR_NOTIONAL = 3150;
+  private static final double EXPIRY = 5;
+  private static final int N_OBS_EXPECTED = 750;
+  private static final int NO_MKT_DISRUPTIONS = 0;
+  private static final double ANNUALIZATION_FACTOR = 252;
 
-  double[] noObs = {};
-  double[] defaultWeights = {};
-  final VarianceSwap swapNull = new VarianceSwap(0, expiry, expiry, varStrike, varNotional, Currency.EUR, annualizationFactor, nObsExpected, noMktDisruptions, noObs, defaultWeights);
-  double[] oneObs = {100.0 };
-  final VarianceSwap swapOneObs = new VarianceSwap(0, expiry, expiry, varStrike, varNotional, Currency.EUR, annualizationFactor, nObsExpected, noMktDisruptions, oneObs, defaultWeights);
+  private static final double[] NO_OBS = {};
+  private static final double[] DEFAULT_WEIGHTS = {};
+  private static final VarianceSwap SWAP_NULL =
+      new VarianceSwap(0, EXPIRY, EXPIRY, VAR_STRIKE, VAR_NOTIONAL, Currency.EUR, ANNUALIZATION_FACTOR, N_OBS_EXPECTED,
+          NO_MKT_DISRUPTIONS, NO_OBS, DEFAULT_WEIGHTS);
+  private static final double[] ONE_OBS = {100.0 };
+  private static final VarianceSwap SWAP_ONE_OBS =
+      new VarianceSwap(0, EXPIRY, EXPIRY, VAR_STRIKE, VAR_NOTIONAL, Currency.EUR, ANNUALIZATION_FACTOR, N_OBS_EXPECTED,
+          NO_MKT_DISRUPTIONS, ONE_OBS, DEFAULT_WEIGHTS);
 
-  double[] twoObs = {100.0, 150.0 };
-  final VarianceSwap swapTwoObs = new VarianceSwap(0, expiry, expiry, varStrike, varNotional, Currency.EUR, annualizationFactor, 1, noMktDisruptions, twoObs, defaultWeights);
+  private static final double[] TWO_OBS = {100.0, 150.0 };
+  private static final VarianceSwap SWAP_TWO_OBS = new VarianceSwap(0, EXPIRY, EXPIRY, VAR_STRIKE, VAR_NOTIONAL,
+      Currency.EUR, ANNUALIZATION_FACTOR, 1, NO_MKT_DISRUPTIONS, TWO_OBS, DEFAULT_WEIGHTS);
 
-  double[] threeObs = {100.0, 150.0, 100.0 };
-  final VarianceSwap swapThreeObs = new VarianceSwap(0, expiry, expiry, varStrike, varNotional, Currency.EUR, annualizationFactor, 2, noMktDisruptions, threeObs, defaultWeights);
+  private static final double[] THREE_OBS = {100.0, 150.0, 100.0 };
+  private static final VarianceSwap SWAP_THREE_OBS = new VarianceSwap(0, EXPIRY, EXPIRY, VAR_STRIKE, VAR_NOTIONAL,
+      Currency.EUR, ANNUALIZATION_FACTOR, 2, NO_MKT_DISRUPTIONS, THREE_OBS, DEFAULT_WEIGHTS);
 
-  double[] obsWithZero = {100.0, 150.0, 0.0 };
-  final VarianceSwap swapWithZeroObs = new VarianceSwap(0, expiry, expiry, varStrike, varNotional, Currency.EUR, annualizationFactor, 2, noMktDisruptions, obsWithZero, defaultWeights);
+  private static final double[] OBS_WITH_ZERO = {100.0, 150.0, 0.0 };
+  private static final VarianceSwap SWAP_WITH_ZERO_OBS = new VarianceSwap(0, EXPIRY, EXPIRY, VAR_STRIKE, VAR_NOTIONAL,
+      Currency.EUR, ANNUALIZATION_FACTOR, 2, NO_MKT_DISRUPTIONS, OBS_WITH_ZERO, DEFAULT_WEIGHTS);
 
   // -------------------------------- TESTS ------------------------------------------
 
   @Test
   public void testNullObs() {
-    assertEquals(realVariance.evaluate(swapNull), 0.0, 1e-9);
+    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_NULL), 0.0, 1e-9);
   }
 
   @Test
   public void testOneObs() {
-    assertEquals(realVariance.evaluate(swapOneObs), 0.0, 1e-9);
+    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_ONE_OBS), 0.0, 1e-9);
   }
 
   @Test
   public void testTwoObs() {
-    assertEquals(realVariance.evaluate(swapTwoObs), annualizationFactor * FunctionUtils.square(Math.log(1.5)), 1e-9);
+    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_TWO_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
   }
 
   @Test
   public void testThreeObs() {
-    assertEquals(realVariance.evaluate(swapThreeObs), annualizationFactor * FunctionUtils.square(Math.log(1.5)), 1e-9);
+    assertEquals(REALIZED_VARIANCE.evaluate(SWAP_THREE_OBS), ANNUALIZATION_FACTOR * FunctionUtils.square(Math.log(1.5)), 1e-9);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testZeroInTimeSeries() {
-    realVariance.evaluate(swapWithZeroObs);
+    REALIZED_VARIANCE.evaluate(SWAP_WITH_ZERO_OBS);
   }
 }

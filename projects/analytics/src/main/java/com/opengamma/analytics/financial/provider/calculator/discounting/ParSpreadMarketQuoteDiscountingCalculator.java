@@ -29,8 +29,8 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Compute the spread to be added to the market standard quote of the instrument for which the present value of the instrument is zero.
- * The notion of "market quote" will depend of each instrument.
+ * Compute the spread to be added to the market standard quote of the instrument for which the present value of the instrument is zero. The notion of "market
+ * quote" will depend of each instrument.
  */
 public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Double> {
 
@@ -41,6 +41,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteDiscountingCalculator getInstance() {
@@ -66,7 +67,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final FederalFundsFutureSecurityDiscountingMethod METHOD_FED_FUNDS = FederalFundsFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public Double visitCash(final Cash deposit, final MulticurveProviderInterface multicurve) {
@@ -78,21 +79,24 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
     return METHOD_DEPOSIT_IBOR.parSpread(deposit, multicurve);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public Double visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface multicurve) {
     return METHOD_FRA.parSpread(fra, multicurve);
   }
 
-  //     -----     Swaps     -----
+  // ----- Swaps -----
 
   /**
-   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-   * It is computed as the opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point
-   * of the first leg (as computed by the PresentValueMarketQuoteSensitivityDiscountingCalculator).
-   * @param swap The swap.
-   * @param multicurves The multi-curves provider.
+   * For swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the opposite of the
+   * present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
+   * PresentValueMarketQuoteSensitivityDiscountingCalculator).
+   * 
+   * @param swap
+   *          The swap.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The par spread.
    */
   @Override
@@ -103,7 +107,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
     // Implementation note: if the swap is an On compounded (ie Brazilian like), the parspread formula is not the same.
     if (swap.getSecondLeg().getNthPayment(0) instanceof CouponONCompounded && swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedAccruedCompounding &&
         swap.getFirstLeg().getNumberOfPayments() == 1) {
-      // Implementation note: check if the swap is a Brazilian swap. 
+      // Implementation note: check if the swap is a Brazilian swap.
       final CouponFixedAccruedCompounding cpnFixed = (CouponFixedAccruedCompounding) swap.getFirstLeg().getNthPayment(0);
       final double pvONLeg = swap.getSecondLeg().accept(PVDC, multicurves).getAmount(swap.getSecondLeg().getCurrency());
       final double discountFactor = multicurves.getDiscountFactor(swap.getFirstLeg().getCurrency(), cpnFixed.getPaymentTime());
@@ -111,7 +115,8 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
       final double notional = ((CouponONCompounded) swap.getSecondLeg().getNthPayment(0)).getNotional();
       return Math.pow(pvONLeg / discountFactor / notional, 1 / paymentYearFraction) - 1 - cpnFixed.getFixedRate();
     }
-    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves), swap.getFirstLeg().getCurrency()).getAmount() / swap.getFirstLeg().accept(PVMQSC, multicurves);
+    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves), swap.getFirstLeg().getCurrency()).getAmount()
+        / swap.getFirstLeg().accept(PVMQSC, multicurves);
   }
 
   @Override
@@ -120,21 +125,25 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
   }
 
   /**
-   * For multiple legs swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero.
-   * It is computed as the opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point
-   * of the first leg (as computed by the PresentValueMarketQuoteSensitivityDiscountingCalculator).
-   * @param swap The swap with multiple legs.
-   * @param multicurves The multi-curve provider.
+   * For multiple legs swaps the ParSpread is the spread to be added on each coupon of the first leg to obtain a present value of zero. It is computed as the
+   * opposite of the present value of the swap in currency of the first leg divided by the present value of a basis point of the first leg (as computed by the
+   * PresentValueMarketQuoteSensitivityDiscountingCalculator).
+   * 
+   * @param swap
+   *          The swap with multiple legs.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The par spread.
    */
   @Override
   public Double visitSwapMultileg(final SwapMultileg swap, final MulticurveProviderInterface multicurves) {
     ArgumentChecker.notNull(multicurves, "Market");
     ArgumentChecker.notNull(swap, "Swap");
-    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves), swap.getLegs()[0].getCurrency()).getAmount() / swap.getLegs()[0].accept(PVMQSC, multicurves);
+    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves), swap.getLegs()[0].getCurrency()).getAmount()
+        / swap.getLegs()[0].accept(PVMQSC, multicurves);
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final MulticurveProviderInterface multicurves) {
@@ -146,7 +155,7 @@ public final class ParSpreadMarketQuoteDiscountingCalculator extends InstrumentD
     return METHOD_FED_FUNDS.price(future.getUnderlyingSecurity(), multicurve) - future.getReferencePrice();
   }
 
-  //     -----     Forex     -----
+  // ----- Forex -----
 
   @Override
   public Double visitForexSwap(final ForexSwap fx, final MulticurveProviderInterface multicurves) {

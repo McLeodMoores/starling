@@ -13,7 +13,7 @@ public class DayCountBean extends EnumBean {
   protected DayCountBean() {
   }
 
-  public DayCountBean(String conventionName) {
+  public DayCountBean(final String conventionName) {
     super(conventionName);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -32,53 +32,53 @@ public class MutableExecutionLog implements ExecutionLog {
   private String _exceptionMessage;
   private String _exceptionStackTrace;
 
-  public MutableExecutionLog(ExecutionLogMode logMode) {
+  public MutableExecutionLog(final ExecutionLogMode logMode) {
     ArgumentChecker.notNull(logMode, "logMode");
     _events = logMode == ExecutionLogMode.FULL ? new LinkedList<LogEvent>() : null;
     _logMode = logMode;
   }
 
-  public MutableExecutionLog(ExecutionLog copyFrom) {
+  public MutableExecutionLog(final ExecutionLog copyFrom) {
     _logMode = ExecutionLogMode.FULL;
     _logLevels.addAll(copyFrom.getLogLevels());
     if (copyFrom.getEvents() != null) {
-      _events = new LinkedList<LogEvent>(copyFrom.getEvents());
+      _events = new LinkedList<>(copyFrom.getEvents());
     } else {
-      _events = new LinkedList<LogEvent>();
+      _events = new LinkedList<>();
     }
     _exceptionClass = copyFrom.getExceptionClass();
     _exceptionMessage = copyFrom.getExceptionMessage();
     _exceptionStackTrace = copyFrom.getExceptionStackTrace();
   }
 
-  public static ExecutionLog single(LogEvent logEvent, ExecutionLogMode logMode) {
-    MutableExecutionLog log = new MutableExecutionLog(logMode);
+  public static ExecutionLog single(final LogEvent logEvent, final ExecutionLogMode logMode) {
+    final MutableExecutionLog log = new MutableExecutionLog(logMode);
     log.add(logEvent);
     return log;
   }
 
   //-------------------------------------------------------------------------
-  public void add(LogEvent logEvent) {
+  public void add(final LogEvent logEvent) {
     ArgumentChecker.notNull(logEvent, "logEvent");
-    LogLevel level = logEvent.getLevel();
+    final LogLevel level = logEvent.getLevel();
     _logLevels.add(level);
     if (_logMode == ExecutionLogMode.FULL) {
       _events.add(new SimpleLogEvent(level, logEvent.getMessage()));
     }
   }
 
-  public void setException(Throwable exception) {
+  public void setException(final Throwable exception) {
     _exceptionClass = exception.getClass().getName();
     _exceptionMessage = exception.getMessage();
     final StringBuilder buffer = new StringBuilder();
-    for (StackTraceElement element : exception.getStackTrace()) {
+    for (final StackTraceElement element : exception.getStackTrace()) {
       buffer.append(element.toString()).append("\n");
     }
     _exceptionStackTrace = buffer.toString();
     _logLevels.add(LogLevel.WARN);
   }
 
-  public void setException(String exceptionClass, String exceptionMessage) {
+  public void setException(final String exceptionClass, final String exceptionMessage) {
     ArgumentChecker.notNull(exceptionClass, "exceptionClass");
     _exceptionClass = exceptionClass;
     _exceptionMessage = exceptionMessage;
@@ -130,17 +130,17 @@ public class MutableExecutionLog implements ExecutionLog {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_events == null) ? 0 : _events.hashCode());
-    result = prime * result + ((_exceptionClass == null) ? 0 : _exceptionClass.hashCode());
-    result = prime * result + ((_exceptionMessage == null) ? 0 : _exceptionMessage.hashCode());
-    result = prime * result + ((_exceptionStackTrace == null) ? 0 : _exceptionStackTrace.hashCode());
-    result = prime * result + ((_logLevels == null) ? 0 : _logLevels.hashCode());
-    result = prime * result + ((_logMode == null) ? 0 : _logMode.hashCode());
+    result = prime * result + (_events == null ? 0 : _events.hashCode());
+    result = prime * result + (_exceptionClass == null ? 0 : _exceptionClass.hashCode());
+    result = prime * result + (_exceptionMessage == null ? 0 : _exceptionMessage.hashCode());
+    result = prime * result + (_exceptionStackTrace == null ? 0 : _exceptionStackTrace.hashCode());
+    result = prime * result + (_logLevels == null ? 0 : _logLevels.hashCode());
+    result = prime * result + (_logMode == null ? 0 : _logMode.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -150,7 +150,7 @@ public class MutableExecutionLog implements ExecutionLog {
     if (!(obj instanceof MutableExecutionLog)) {
       return false;
     }
-    MutableExecutionLog other = (MutableExecutionLog) obj;
+    final MutableExecutionLog other = (MutableExecutionLog) obj;
     return ObjectUtils.equals(_events, other._events)
         && ObjectUtils.equals(_exceptionClass, other._exceptionClass)
         && ObjectUtils.equals(_exceptionMessage, other._exceptionMessage)
@@ -161,8 +161,8 @@ public class MutableExecutionLog implements ExecutionLog {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    ToStringStyle style = ToStringStyle.SHORT_PREFIX_STYLE;
+    final StringBuffer sb = new StringBuffer();
+    final ToStringStyle style = ToStringStyle.SHORT_PREFIX_STYLE;
     style.appendStart(sb, this);
     if (hasException()) {
       style.append(sb, "exception", getExceptionClass(), null);

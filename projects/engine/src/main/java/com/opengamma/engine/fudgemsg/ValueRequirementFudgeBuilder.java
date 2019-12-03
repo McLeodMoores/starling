@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -19,7 +19,7 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(ValueRequirement.class)
 public class ValueRequirementFudgeBuilder implements FudgeBuilder<ValueRequirement> {
@@ -33,9 +33,9 @@ public class ValueRequirementFudgeBuilder implements FudgeBuilder<ValueRequireme
   public static final String CONSTRAINTS_FIELD_NAME = "constraints";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ValueRequirement object) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    String valueName = object.getValueName();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ValueRequirement object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    final String valueName = object.getValueName();
     msg.add(VALUE_NAME_FIELD_NAME, valueName);
     ComputationTargetReferenceFudgeBuilder.buildMessageImpl(serializer, msg, object.getTargetReference());
     if (!object.getConstraints().isEmpty()) {
@@ -45,16 +45,15 @@ public class ValueRequirementFudgeBuilder implements FudgeBuilder<ValueRequireme
   }
 
   @Override
-  public ValueRequirement buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    String valueName = message.getString(VALUE_NAME_FIELD_NAME);
+  public ValueRequirement buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final String valueName = message.getString(VALUE_NAME_FIELD_NAME);
     Validate.notNull(valueName, "Fudge message is not a ValueRequirement - field 'valueName' is not present");
-    ComputationTargetReference targetReference = ComputationTargetReferenceFudgeBuilder.buildObjectImpl(deserializer, message);
-    FudgeField constraints = message.getByName(CONSTRAINTS_FIELD_NAME);
+    final ComputationTargetReference targetReference = ComputationTargetReferenceFudgeBuilder.buildObjectImpl(deserializer, message);
+    final FudgeField constraints = message.getByName(CONSTRAINTS_FIELD_NAME);
     if (constraints != null) {
       return new ValueRequirement(valueName, targetReference, deserializer.fieldValueToObject(ValueProperties.class, constraints));
-    } else {
-      return new ValueRequirement(valueName, targetReference);
     }
+    return new ValueRequirement(valueName, targetReference);
   }
 
 }

@@ -33,7 +33,7 @@ public class SecurityEntryDataFudgeBuilder extends AbstractFudgeBuilder implemen
   private static final String EXTERNAL_ID_FIELD_NAME = "id";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, SecurityEntryData object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final SecurityEntryData object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessage(msg, EXTERNAL_ID_FIELD_NAME, null, object.getId());
     serializer.addToMessage(msg, CURRENCY_FIELD_NAME, null, object.getCurrency());
@@ -43,13 +43,13 @@ public class SecurityEntryDataFudgeBuilder extends AbstractFudgeBuilder implemen
   }
 
   @Override
-  public SecurityEntryData buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    ExternalId id = ExternalId.parse(msg.getString(EXTERNAL_ID_FIELD_NAME));
-    Currency currency = Currency.of(msg.getString(CURRENCY_FIELD_NAME));
-    LocalDate maturityDate = msg.getValue(LocalDate.class, MATURITY_DATE_FIELD_NAME);
-    ExternalId factorSetId = ExternalId.parse(msg.getString(FACTOR_SET_EXTERNAL_ID_FIELD_NAME));
-    
-    SecurityEntryData data = new SecurityEntryData(id, currency, maturityDate, factorSetId);
+  public SecurityEntryData buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final ExternalId id = ExternalId.parse(msg.getString(EXTERNAL_ID_FIELD_NAME));
+    final Currency currency = Currency.of(msg.getString(CURRENCY_FIELD_NAME));
+    final LocalDate maturityDate = msg.getValue(LocalDate.class, MATURITY_DATE_FIELD_NAME);
+    final ExternalId factorSetId = ExternalId.parse(msg.getString(FACTOR_SET_EXTERNAL_ID_FIELD_NAME));
+
+    final SecurityEntryData data = new SecurityEntryData(id, currency, maturityDate, factorSetId);
     return data;
   }
 

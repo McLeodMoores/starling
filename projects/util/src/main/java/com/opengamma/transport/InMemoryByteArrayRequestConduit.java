@@ -8,14 +8,14 @@ package com.opengamma.transport;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  *
  * @author kirk
  */
 public class InMemoryByteArrayRequestConduit implements ByteArrayRequestSender {
   private final ByteArrayRequestReceiver _receiver;
-  
-  public InMemoryByteArrayRequestConduit(ByteArrayRequestReceiver receiver) {
+
+  public InMemoryByteArrayRequestConduit(final ByteArrayRequestReceiver receiver) {
     ArgumentChecker.notNull(receiver, "receiver");
     _receiver = receiver;
   }
@@ -28,9 +28,9 @@ public class InMemoryByteArrayRequestConduit implements ByteArrayRequestSender {
   }
 
   @Override
-  public void sendRequest(byte[] request,
-      ByteArrayMessageReceiver responseReceiver) {
-    byte[] responseBytes = getReceiver().requestReceived(request);
+  public void sendRequest(final byte[] request,
+      final ByteArrayMessageReceiver responseReceiver) {
+    final byte[] responseBytes = getReceiver().requestReceived(request);
     responseReceiver.messageReceived(responseBytes);
   }
 

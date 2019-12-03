@@ -10,10 +10,11 @@ import java.io.Serializable;
 import org.apache.commons.lang.ObjectUtils;
 import org.fudgemsg.FudgeMsg;
 
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
 
 /**
- * A simple implementation of a market data update sent from server to client. 
+ * A simple implementation of a market data update sent from server to client.
  */
 @PublicAPI
 public class LiveDataValueUpdateBean implements LiveDataValueUpdate, Serializable {
@@ -36,16 +37,18 @@ public class LiveDataValueUpdateBean implements LiveDataValueUpdate, Serializabl
 
   /**
    * Creates an instance.
-   * 
-   * @param sequenceNumber  the sequence number
-   * @param specification  the specification
-   * @param fieldContainer  the fields held as a Fudge message
+   *
+   * @param sequenceNumber
+   *          the sequence number, greater than or equal to zero
+   * @param specification
+   *          the specification, not null
+   * @param fieldContainer
+   *          the fields held as a Fudge message, not null
    */
-  public LiveDataValueUpdateBean(long sequenceNumber, LiveDataSpecification specification, FudgeMsg fieldContainer) {
-    // TODO kirk 2009-09-29 -- Check Inputs.
-    _sequenceNumber = sequenceNumber;
-    _specification = specification;
-    _fieldContainer = fieldContainer;
+  public LiveDataValueUpdateBean(final long sequenceNumber, final LiveDataSpecification specification, final FudgeMsg fieldContainer) {
+    _sequenceNumber = ArgumentChecker.notNegative(sequenceNumber, "sequenceNumber");
+    _specification = ArgumentChecker.notNull(specification, "specification");
+    _fieldContainer = ArgumentChecker.notNull(fieldContainer, "fieldContainer");
   }
 
   //-------------------------------------------------------------------------
@@ -66,27 +69,27 @@ public class LiveDataValueUpdateBean implements LiveDataValueUpdate, Serializabl
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof LiveDataValueUpdateBean) {
-      LiveDataValueUpdateBean other = (LiveDataValueUpdateBean) obj;
-      return _sequenceNumber == other._sequenceNumber &&
-          ObjectUtils.equals(_specification, other._specification) &&
-          ObjectUtils.equals(_fieldContainer, other._fieldContainer);
+      final LiveDataValueUpdateBean other = (LiveDataValueUpdateBean) obj;
+      return _sequenceNumber == other._sequenceNumber
+          && ObjectUtils.equals(_specification, other._specification)
+          && ObjectUtils.equals(_fieldContainer, other._fieldContainer);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return ((int) (_sequenceNumber ^ (_sequenceNumber >>> 32))) ^ ObjectUtils.hashCode(_specification) ^ ObjectUtils.hashCode(_fieldContainer);
+    return (int) (_sequenceNumber ^ _sequenceNumber >>> 32) ^ ObjectUtils.hashCode(_specification) ^ ObjectUtils.hashCode(_fieldContainer);
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     buf.append("LiveDataValueUpdateBean[");
     buf.append(_sequenceNumber);
     buf.append(", ");

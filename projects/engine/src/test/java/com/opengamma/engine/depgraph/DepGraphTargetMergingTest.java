@@ -39,7 +39,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DepGraphTargetMergingTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepGraphTargetMergingTest.class);
 
   private static final class MergeableFunction extends AbstractFunction.NonCompiled {
 
@@ -62,7 +62,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       if (target.getUniqueId().getValue().startsWith("0")) {
         return Collections.emptySet();
       } else if (target.getUniqueId().getValue().startsWith("1")) {
@@ -102,7 +103,8 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.singleton(new ValueRequirement("Foo", target.toSpecification()));
     }
 
@@ -140,22 +142,22 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       }
 
       @Override
-      public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
-        s_logger.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
-        if ((function instanceof MergeableFunction) && (a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0))) {
-          final Set<String> idSet = new HashSet<String>();
+      public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+          final ComputationTargetSpecification b) {
+        LOGGER.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
+        if (function instanceof MergeableFunction && a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0)) {
+          final Set<String> idSet = new HashSet<>();
           add(idSet, a);
           add(idSet, b);
-          final List<String> idList = new ArrayList<String>(idSet);
+          final List<String> idList = new ArrayList<>(idSet);
           Collections.sort(idList);
           final StringBuilder sb = new StringBuilder();
           for (final String id : idList) {
             sb.append(id);
           }
           return a.replaceIdentifier(UniqueId.of("Test", sb.toString()));
-        } else {
-          return null;
         }
+        return null;
       }
 
     });
@@ -163,7 +165,7 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
   }
 
   private Set<String> getTargets(final DependencyGraph graph) {
-    final Set<String> identifiers = new HashSet<String>();
+    final Set<String> identifiers = new HashSet<>();
     final Iterator<DependencyNode> itr = graph.nodeIterator();
     while (itr.hasNext()) {
       final DependencyNode node = itr.next();
@@ -250,9 +252,12 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
       builder.addTarget(new ValueRequirement("Foo", ComputationTargetSpecification.of(UniqueId.of("Test", "3B"))));
       builder.addTarget(new ValueRequirement("Bar", ComputationTargetSpecification.of(UniqueId.of("Test", "3C"))));
       final DependencyGraph graph = builder.getDependencyGraph();
-      assertEquals(graph.getSize(), 12); // Foo(0A0B0C) -> Bar(0B), Req1 -> Foo(1A1B1C) -> { Bar(1A), Bar(1C) }, Req2 -> Foo(2A2B2C) -> Bar(2B), { Req1, Req2 } -> Foo(3A3B3C) -> { Bar(3A), Bar (3C) }
+      // Foo(0A0B0C) -> Bar(0B), Req1 -> Foo(1A1B1C) -> { Bar(1A), Bar(1C) }, Req2 -> Foo(2A2B2C) -> Bar(2B), { Req1, Req2 }
+      // -> Foo(3A3B3C) -> { Bar(3A), Bar (3C) }
+      assertEquals(graph.getSize(), 12);
       assertEquals(getTargets(graph),
-          ImmutableSet.of("0A0B0C", "1A1B1C", "2A2B2C", "3A3B3C", helper.getTarget().toSpecification().getUniqueId().getValue(), "0B", "1A", "1C", "2B", "3A", "3C"));
+          ImmutableSet.of("0A0B0C", "1A1B1C", "2A2B2C", "3A3B3C", helper.getTarget().toSpecification().getUniqueId().getValue(),
+              "0B", "1A", "1C", "2B", "3A", "3C"));
     } finally {
       TestLifecycle.end();
     }

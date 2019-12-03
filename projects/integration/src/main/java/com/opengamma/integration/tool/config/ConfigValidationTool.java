@@ -28,7 +28,7 @@ import com.opengamma.scripts.Scriptable;
  */
 @Scriptable
 public class ConfigValidationTool extends AbstractTool<ToolContext> {
-  
+
   private static final String ERRORS_PARTIAL_GRAPH_OPTION = "errors-partial-graph";
   private static final String ERRORS_FULL_GRAPH_OPTION = "errors-full-graph";
   private static final String VERBOSE_OPTION = "verbose";
@@ -36,26 +36,26 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new ConfigValidationTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    ToolContext toolContext = getToolContext();
-    ConfigMaster configMaster = toolContext.getConfigMaster();
-    ConfigSource configSource = toolContext.getConfigSource();
-    ConventionSource conventionSource = toolContext.getConventionSource();
-    RegionSource regionSource = toolContext.getRegionSource();
-    SecuritySource securitySource = toolContext.getSecuritySource();
-    HolidayMaster holidayMaster = toolContext.getHolidayMaster();
-    CommandLine commandLine = getCommandLine();
-    CurveValidator curveValidator = new CurveValidator(configMaster, configSource, conventionSource, regionSource, securitySource, holidayMaster);
-    boolean verbose = commandLine.hasOption(VERBOSE_OPTION);
+    final ToolContext toolContext = getToolContext();
+    final ConfigMaster configMaster = toolContext.getConfigMaster();
+    final ConfigSource configSource = toolContext.getConfigSource();
+    final ConventionSource conventionSource = toolContext.getConventionSource();
+    final RegionSource regionSource = toolContext.getRegionSource();
+    final SecuritySource securitySource = toolContext.getSecuritySource();
+    final HolidayMaster holidayMaster = toolContext.getHolidayMaster();
+    final CommandLine commandLine = getCommandLine();
+    final CurveValidator curveValidator = new CurveValidator(configMaster, configSource, conventionSource, regionSource, securitySource, holidayMaster);
+    final boolean verbose = commandLine.hasOption(VERBOSE_OPTION);
     if (verbose) {
       System.out.println("Starting validation...");
     }
@@ -64,8 +64,8 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
       System.out.println("CurveConstructionConfiguration and linked objects");
       System.out.println("-------------------------------------------------");
     }
-    List<ValidationNode> validateNewCurveSetup = curveValidator.getCurveConstructionConfigResults();
-    for (ValidationNode node : validateNewCurveSetup) {
+    final List<ValidationNode> validateNewCurveSetup = curveValidator.getCurveConstructionConfigResults();
+    for (final ValidationNode node : validateNewCurveSetup) {
       if (verbose) {
         if (ValidationTreeUtils.containsErrorsOrWarnings(node)) {
           System.out.println("Curve construction configuration " + node.getName() + " has errors and/or warnings");
@@ -82,17 +82,17 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
       } else if (commandLine.hasOption(ERRORS_FULL_GRAPH_OPTION)) {
         if (ValidationTreeUtils.containsErrorsOrWarnings(node)) {
           System.out.println(ValidationTextFormatter.formatTree(node));
-        }        
+        }
       } else {
         System.out.println(ValidationTextFormatter.formatTree(node));
-      }     
+      }
     }
     if (verbose) {
       System.out.println("ExposureFunctions");
       System.out.println("-----------------");
     }
-    List<ValidationNode> validateExposureConfigs = curveValidator.getExposureFunctionsConfigResults();
-    for (ValidationNode node : validateExposureConfigs) {
+    final List<ValidationNode> validateExposureConfigs = curveValidator.getExposureFunctionsConfigResults();
+    for (final ValidationNode node : validateExposureConfigs) {
       if (verbose) {
         if (ValidationTreeUtils.containsErrorsOrWarnings(node)) {
           System.out.println("Exposure functions configuration " + node.getName() + " has errors and/or warnings");
@@ -109,19 +109,19 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
       } else if (commandLine.hasOption(ERRORS_FULL_GRAPH_OPTION)) {
         if (ValidationTreeUtils.containsErrorsOrWarnings(node)) {
           System.out.println(ValidationTextFormatter.formatTree(node));
-        }        
+        }
       } else {
         System.out.println(ValidationTextFormatter.formatTree(node));
-      }     
-    }    
+      }
+    }
     if (verbose) {
       System.out.println("Finished validation");
     }
   }
-  
+
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
-    Options options = super.createOptions(mandatoryConfig);
+  protected Options createOptions(final boolean mandatoryConfig) {
+    final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createErrorsGraphOnlyOption());
     options.addOption(createErrorsOnlyOption());
     options.addOption(createVerboseOption());
@@ -132,12 +132,12 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
   protected Option createErrorsGraphOnlyOption() {
     return OptionBuilder.withDescription("Only print parts of config graph with errors").withLongOpt(ERRORS_PARTIAL_GRAPH_OPTION).create("p");
   }
-  
+
   @SuppressWarnings("static-access")
   protected Option createErrorsOnlyOption() {
     return OptionBuilder.withDescription("Print full config graph only for configs containing errors").withLongOpt(ERRORS_FULL_GRAPH_OPTION).create("f");
   }
-  
+
   @SuppressWarnings("static-access")
   protected Option createVerboseOption() {
     return OptionBuilder.withDescription("Print extra progress messages").withLongOpt(VERBOSE_OPTION).create("v");
@@ -149,8 +149,8 @@ public class ConfigValidationTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected void usage(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("config-validation-tool.sh [file...]", options, true);
   }

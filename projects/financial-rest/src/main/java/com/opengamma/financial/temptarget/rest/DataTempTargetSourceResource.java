@@ -5,14 +5,11 @@
  */
 package com.opengamma.financial.temptarget.rest;
 
-import java.net.URI;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.fudgemsg.mapping.FudgeSerializer;
 
@@ -24,7 +21,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link TempTargetSource}
+ * RESTful resource for a {@link TempTargetSource}.
  */
 @Path("tempTarget")
 public class DataTempTargetSourceResource extends AbstractDataResource {
@@ -34,7 +31,8 @@ public class DataTempTargetSourceResource extends AbstractDataResource {
   /**
    * Creates the resource, exposing the underlying source over REST.
    *
-   * @param underlying the underlying source, not null
+   * @param underlying
+   *          the underlying source, not null
    */
   public DataTempTargetSourceResource(final TempTargetSource underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
@@ -44,7 +42,7 @@ public class DataTempTargetSourceResource extends AbstractDataResource {
   protected TempTargetSource getUnderlying() {
     return _underlying;
   }
-  
+
   @GET
   @Path("target/{uid}")
   public Response get(@PathParam("uid") final String uid) {

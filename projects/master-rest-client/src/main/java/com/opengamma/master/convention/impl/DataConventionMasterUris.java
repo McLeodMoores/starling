@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.convention.impl;
@@ -19,13 +19,13 @@ import com.opengamma.util.rest.RestUtils;
 public class DataConventionMasterUris {
   /**
    * Builds a URI for security meta-data.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param request  the request, may be null
    * @return the URI, not null
    */
-  public static URI uriMetaData(URI baseUri, ConventionMetaDataRequest request) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("metaData");
+  public static URI uriMetaData(final URI baseUri, final ConventionMetaDataRequest request) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("metaData");
     if (request != null) {
       RestUtils.encodeQueryParams(bld, request);
     }
@@ -38,8 +38,8 @@ public class DataConventionMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventionSearches");
     return bld.build();
   }
 
@@ -49,8 +49,8 @@ public class DataConventionMasterUris {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("conventions");
     return bld.build();
   }
 

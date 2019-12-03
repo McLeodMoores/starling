@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.marketdatasnapshot;
@@ -23,23 +23,23 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A key which specifies a point in volatility space
+ * A key which specifies a point in volatility space.
  */
 @BeanDefinition
 public class VolatilityPoint extends DirectBean {
 
   /**
-   * The swap tenor
+   * The swap tenor.
    */
   @PropertyDefinition
   private Tenor _swapTenor;
   /**
-   * The option expiry
+   * The option expiry.
    */
   @PropertyDefinition
   private Tenor _optionExpiry;
   /**
-   * The strike relative to at the money, in Bps
+   * The strike relative to at the money, in Bps.
    */
   @PropertyDefinition
   private double _relativeStrike;
@@ -52,12 +52,15 @@ public class VolatilityPoint extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
-   * @param swapTenor  the swap tenor
-   * @param optionExpiry  the option expiry
-   * @param relativeStrike  the relative strike
+   *
+   * @param swapTenor
+   *          the swap tenor
+   * @param optionExpiry
+   *          the option expiry
+   * @param relativeStrike
+   *          the relative strike
    */
-  public VolatilityPoint(Tenor swapTenor, Tenor optionExpiry, double relativeStrike) {
+  public VolatilityPoint(final Tenor swapTenor, final Tenor optionExpiry, final double relativeStrike) {
     super();
     _swapTenor = swapTenor;
     _optionExpiry = optionExpiry;
@@ -85,7 +88,7 @@ public class VolatilityPoint extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the swap tenor
+   * Gets the swap tenor.
    * @return the value of the property
    */
   public Tenor getSwapTenor() {
@@ -93,7 +96,7 @@ public class VolatilityPoint extends DirectBean {
   }
 
   /**
-   * Sets the swap tenor
+   * Sets the swap tenor.
    * @param swapTenor  the new value of the property
    */
   public void setSwapTenor(Tenor swapTenor) {
@@ -110,7 +113,7 @@ public class VolatilityPoint extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the option expiry
+   * Gets the option expiry.
    * @return the value of the property
    */
   public Tenor getOptionExpiry() {
@@ -118,7 +121,7 @@ public class VolatilityPoint extends DirectBean {
   }
 
   /**
-   * Sets the option expiry
+   * Sets the option expiry.
    * @param optionExpiry  the new value of the property
    */
   public void setOptionExpiry(Tenor optionExpiry) {
@@ -135,7 +138,7 @@ public class VolatilityPoint extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the strike relative to at the money, in Bps
+   * Gets the strike relative to at the money, in Bps.
    * @return the value of the property
    */
   public double getRelativeStrike() {
@@ -143,7 +146,7 @@ public class VolatilityPoint extends DirectBean {
   }
 
   /**
-   * Sets the strike relative to at the money, in Bps
+   * Sets the strike relative to at the money, in Bps.
    * @param relativeStrike  the new value of the property
    */
   public void setRelativeStrike(double relativeStrike) {

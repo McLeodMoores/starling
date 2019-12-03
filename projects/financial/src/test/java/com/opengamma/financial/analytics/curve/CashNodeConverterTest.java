@@ -7,7 +7,8 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Collections;
 
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -118,14 +119,6 @@ public class CashNodeConverterTest {
   /** 30/360 Libor convention */
   private static final IborIndexConvention LIBOR_30_360 = new IborIndexConvention(USDLIBOR_30_360_CONVENTION_NAME, ExternalIdBundle.of(USDLIBOR_30_360_ID),
       DayCounts.THIRTY_360, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
-  /** A security source */
-  private static final InMemorySecuritySource SECURITY_SOURCE = new InMemorySecuritySource();
-  /** A convention source */
-  private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
-  /** A holiday source */
-  private static final InMemoryHolidaySource HOLIDAY_SOURCE = new InMemoryHolidaySource();
-  /** A region source */
-  private static final InMemoryRegionSource REGION_SOURCE = new InMemoryRegionSource();
   /** The valuation date */
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2013, 5, 1);
   /** The market data id */
@@ -139,31 +132,24 @@ public class CashNodeConverterTest {
     USDLIBOR3M.addExternalId(USDLIBOR3M_ID);
     USDLIBOR6M.addExternalId(USDLIBOR6M_ID);
     USD_FEDFUND_INDEX.addExternalId(USD_FEDFUND_INDEX_ID);
-
-    CONVENTION_SOURCE.addConvention(DEPOSIT_1D);
-    CONVENTION_SOURCE.addConvention(DEPOSIT_1M);
-    CONVENTION_SOURCE.addConvention(USDLIBOR_ACT_360);
-    CONVENTION_SOURCE.addConvention(LIBOR_30_360);
-    CONVENTION_SOURCE.addConvention(USD_OVERNIGHT_CONVENTION);
-
-    HOLIDAY_SOURCE.addHoliday(US, WEEKEND_ONLY_HOLIDAYS);
-
-    final SimpleRegion usRegion = new SimpleRegion();
-    usRegion.addExternalId(US);
-    REGION_SOURCE.addRegion(usRegion);
-
-    SECURITY_SOURCE.addSecurity(USDLIBOR3M);
-    SECURITY_SOURCE.addSecurity(USDLIBOR6M);
-    SECURITY_SOURCE.addSecurity(USD_FEDFUND_INDEX);
-
     MARKET_VALUES.setDataPoint(MARKET_DATA_ID, RATE);
   }
+  /** A security source */
+  private InMemorySecuritySource _securitySource;
+  /** A convention source */
+  private InMemoryConventionSource _conventionSource;
+  /** A holiday source */
+  private InMemoryHolidaySource _holidaySource;
+  /** A region source */
+  private InMemoryRegionSource _regionSource;
+  /** The service context */
+  private ServiceContext _serviceContext;
 
   /**
-   * Sets up the service context.
+   * Sets up the service context and populates the sources.
    */
-  @BeforeSuite
-  public static void setUp() {
+  @BeforeMethod
+  public void setUp() {
     final VersionCorrectionProvider versionCorrectionProvider = new VersionCorrectionProvider() {
       @Override
       public VersionCorrection getPortfolioVersionCorrection() {
@@ -175,19 +161,54 @@ public class CashNodeConverterTest {
         return VersionCorrection.LATEST;
       }
     };
-    final ServiceContext serviceContext = ServiceContext.of(VersionCorrectionProvider.class, versionCorrectionProvider)
-        .with(ConventionSource.class, CONVENTION_SOURCE)
-        .with(SecuritySource.class, SECURITY_SOURCE);
-    ThreadLocalServiceContext.init(serviceContext);
+    _securitySource = new InMemorySecuritySource();
+    _conventionSource = new InMemoryConventionSource();
+    _holidaySource = new InMemoryHolidaySource();
+    _regionSource = new InMemoryRegionSource();
+    _serviceContext = ServiceContext.of(VersionCorrectionProvider.class, versionCorrectionProvider)
+        .with(ConventionSource.class, _conventionSource).with(SecuritySource.class, _securitySource);
+    ThreadLocalServiceContext.init(_serviceContext);
+
+
+    // clone to avoid UIDs being set on objects
+    _conventionSource.addConvention(DEPOSIT_1D.clone());
+    _conventionSource.addConvention(DEPOSIT_1M.clone());
+    _conventionSource.addConvention(USDLIBOR_ACT_360.clone());
+    _conventionSource.addConvention(LIBOR_30_360.clone());
+    _conventionSource.addConvention(USD_OVERNIGHT_CONVENTION.clone());
+
+    _holidaySource.addHoliday(US, WEEKEND_ONLY_HOLIDAYS.clone());
+
+    final SimpleRegion usRegion = new SimpleRegion();
+    usRegion.addExternalId(US);
+    _regionSource.addRegion(usRegion.clone());
+
+    _securitySource.addSecurity(USDLIBOR3M.clone());
+    _securitySource.addSecurity(USDLIBOR6M.clone());
+    _securitySource.addSecurity(USD_FEDFUND_INDEX.clone());
+
   }
 
- /**
-  * Tests the behaviour when neither a convention nor security for a cash node cannot be found.
-  */
+  /**
+   * Cleans up the sources and service context.
+   */
+  @AfterMethod
+  public void tearDown() {
+    _securitySource = null;
+    _conventionSource = null;
+    _holidaySource = null;
+    _regionSource = null;
+    _serviceContext = null;
+  }
+
+  /**
+   * Tests the behaviour when neither a convention nor security for a cash node
+   * cannot be found.
+   */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoConventionForCash() {
     final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, ExternalId.of(SCHEME, "Test"), MAPPER);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(_securitySource, _holidaySource, _regionSource,
         MARKET_VALUES, MARKET_DATA_ID, NOW);
     node.accept(converter);
   }
@@ -203,7 +224,7 @@ public class CashNodeConverterTest {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     conventionSource.addConvention(convention);
     final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, swapConventionId, MAPPER);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(_securitySource, _holidaySource, _regionSource,
         MARKET_VALUES, MARKET_DATA_ID, NOW);
     node.accept(converter);
   }
@@ -221,7 +242,7 @@ public class CashNodeConverterTest {
     securitySource.addSecurity(equitySecurity);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, equityId, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(securitySource, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     node.accept(converter);
   }
 
@@ -234,7 +255,7 @@ public class CashNodeConverterTest {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, USD_FEDFUND_INDEX_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected =
         new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, RATE, 1. / 360);
@@ -250,7 +271,7 @@ public class CashNodeConverterTest {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, USD_OVERNIGHT_CONVENTION_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected =
         new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, RATE, 1. / 360);
@@ -266,7 +287,7 @@ public class CashNodeConverterTest {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR3M_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final IborIndex index = ConverterUtils.indexIbor(USDLIBOR_ACT_360_CONVENTION_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
     final DepositIborDefinition expected =
@@ -283,7 +304,7 @@ public class CashNodeConverterTest {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final IborIndex index = ConverterUtils.indexIbor(USDLIBOR_ACT_360_CONVENTION_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
     final DepositIborDefinition expected =
@@ -299,7 +320,7 @@ public class CashNodeConverterTest {
   public void test6mLiborFromSecurity() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-       new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.SIX_MONTHS, USDLIBOR6M_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final IborIndex index = ConverterUtils.indexIbor(USDLIBOR_ACT_360_CONVENTION_NAME, USDLIBOR_ACT_360, Tenor.SIX_MONTHS);
@@ -316,7 +337,7 @@ public class CashNodeConverterTest {
   public void test6mLiborFromConvention() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-       new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.SIX_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final IborIndex index = ConverterUtils.indexIbor(USDLIBOR_ACT_360_CONVENTION_NAME, USDLIBOR_ACT_360, Tenor.SIX_MONTHS);
@@ -333,7 +354,7 @@ public class CashNodeConverterTest {
   public void test3mCompoundedLiborFromSecurity() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR6M_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final IborIndex index = ConverterUtils.indexIbor(USDLIBOR_ACT_360_CONVENTION_NAME, USDLIBOR_ACT_360, Tenor.SIX_MONTHS);
@@ -349,7 +370,7 @@ public class CashNodeConverterTest {
   public void testOneDayDeposit() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_DAY, DEPOSIT_1D_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, RATE, 1. / 360);
@@ -363,7 +384,7 @@ public class CashNodeConverterTest {
   public void testOvernightDeposit() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, DEPOSIT_1D_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected =
@@ -379,7 +400,7 @@ public class CashNodeConverterTest {
   public void testOneDayForwardOvernightDeposit() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CurveNode node = new CashNode(Tenor.ONE_DAY, Tenor.ON, DEPOSIT_1D_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected =
@@ -387,19 +408,19 @@ public class CashNodeConverterTest {
     assertEquals(definition, expected);
   }
 
- /**
-  * Tests that a cash definition is created with the correct dates from a tom/next deposit node.
-  */
+  /**
+   * Tests that a cash definition is created with the correct dates from a tom/next deposit node.
+   */
   @Test
   public void testTomNextDeposit() {
-   final ZonedDateTime now = DateUtils.getUTCDate(2013, 12, 20);
-   final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-       new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
-   final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.TN, DEPOSIT_1D_ID, MAPPER);
-   final InstrumentDefinition<?> definition = node.accept(converter);
-   final CashDefinition expected =
-       new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 12, 20), DateUtils.getUTCDate(2013, 12, 24), 1, RATE, 4. / 360);
-   assertEquals(definition, expected);
+    final ZonedDateTime now = DateUtils.getUTCDate(2013, 12, 20);
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter =
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
+    final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.TN, DEPOSIT_1D_ID, MAPPER);
+    final InstrumentDefinition<?> definition = node.accept(converter);
+    final CashDefinition expected =
+        new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 12, 20), DateUtils.getUTCDate(2013, 12, 24), 1, RATE, 4. / 360);
+    assertEquals(definition, expected);
   }
 
   /**
@@ -410,7 +431,7 @@ public class CashNodeConverterTest {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
-        new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+        new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 3, 6), 1, RATE, 28. / 360);
     assertEquals(definition, expected);
@@ -423,21 +444,21 @@ public class CashNodeConverterTest {
   @Test
   public void testOneMonthDepositWeekendMaturity() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 2);
-    final CashNodeConverter converter = new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+    final CashNodeConverter converter = new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 6), DateUtils.getUTCDate(2013, 6, 6), 1, RATE, 31. / 360);
     assertEquals(definition, expected);
   }
 
- /**
-  * Tests that a cash definition is created with the correct dates from a three month deposit that
-  * starts one month forward.
-  */
+  /**
+   * Tests that a cash definition is created with the correct dates from a three month deposit that
+   * starts one month forward.
+   */
   @Test
   public void testOneMonthForwardThreeMonthDeposit() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 7);
-    final CashNodeConverter converter = new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
+    final CashNodeConverter converter = new CashNodeConverter(_securitySource, _holidaySource, _regionSource, MARKET_VALUES, MARKET_DATA_ID, now);
     final CashNode node = new CashNode(Tenor.ONE_MONTH, Tenor.THREE_MONTHS, DEPOSIT_1M_ID, MAPPER);
     final InstrumentDefinition<?> definition = node.accept(converter);
     final CashDefinition expected = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 6, 10), DateUtils.getUTCDate(2013, 9, 10), 1, RATE, 92. / 360);

@@ -40,13 +40,13 @@ public class WebFunctionData extends WebPerRequestData {
    */
   @PropertyDefinition
   private String _uriFunctionName;
-  
+
   /**
    * The function.
    */
   @PropertyDefinition
   private FunctionConfiguration _functionConfiguration;
-  
+
   /**
    * Creates an instance.
    */

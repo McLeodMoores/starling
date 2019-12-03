@@ -33,11 +33,11 @@ public abstract class FinancialConvention extends ManageableConvention {
 
   /**
    * Creates a convention specifying the values of the main fields.
-   * 
+   *
    * @param name  the name of the convention, for display purposes, not null
    * @param externalIdBundle  the bundle of identifiers that define the convention, not null
    */
-  protected FinancialConvention(String name, ExternalIdBundle externalIdBundle) {
+  protected FinancialConvention(final String name, final ExternalIdBundle externalIdBundle) {
     super(name, externalIdBundle);
   }
 
@@ -50,7 +50,7 @@ public abstract class FinancialConvention extends ManageableConvention {
    * @return the result, this implementation throws IllegalStateException
    * @throws IllegalStateException This method must be overridden in subclasses to be used.
    */
-  public <T> T accept(FinancialConventionVisitor<T> visitor) {
+  public <T> T accept(final FinancialConventionVisitor<T> visitor) {
     throw new IllegalStateException("Unknown Convention type " + getClass());
   }
 

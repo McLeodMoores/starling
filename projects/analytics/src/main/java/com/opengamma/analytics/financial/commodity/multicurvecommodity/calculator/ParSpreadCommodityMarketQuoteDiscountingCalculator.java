@@ -44,11 +44,16 @@ public final class ParSpreadCommodityMarketQuoteDiscountingCalculator extends In
   private ParSpreadCommodityMarketQuoteDiscountingCalculator() {
   }
 
-  private static final PresentValueCommodityDiscountingCalculator PVDC = PresentValueCommodityDiscountingCalculator.getInstance();
-  private static final PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator PVMQSC = PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator.getInstance();
-  private static final CommodityFutureSecurityForwardMethod METHOD_COMMODITY_FUTURE = CommodityFutureSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON = ForwardCommodityCashSettleSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON = ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
+  private static final PresentValueCommodityDiscountingCalculator PVDC =
+      PresentValueCommodityDiscountingCalculator.getInstance();
+  private static final PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator PVMQSC =
+      PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator.getInstance();
+  private static final CommodityFutureSecurityForwardMethod METHOD_COMMODITY_FUTURE =
+      CommodityFutureSecurityForwardMethod.getInstance();
+  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON =
+      ForwardCommodityCashSettleSecurityForwardMethod.getInstance();
+  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON =
+      ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
 
   //-----     Payment/Coupon     ------
 
@@ -77,7 +82,8 @@ public final class ParSpreadCommodityMarketQuoteDiscountingCalculator extends In
     ArgumentChecker.notNull(multicurves, "Market");
     ArgumentChecker.notNull(swap, "Swap");
 
-    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves), swap.getFirstLeg().getCurrency()).getAmount() / swap.getFirstLeg().accept(PVMQSC, multicurves);
+    return -multicurves.getFxRates().convert(swap.accept(PVDC, multicurves),
+        swap.getFirstLeg().getCurrency()).getAmount() / swap.getFirstLeg().accept(PVMQSC, multicurves);
   }
 
   @Override

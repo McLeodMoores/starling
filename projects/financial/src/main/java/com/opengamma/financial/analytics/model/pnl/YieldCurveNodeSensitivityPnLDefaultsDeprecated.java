@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -72,7 +72,8 @@ public class YieldCurveNodeSensitivityPnLDefaultsDeprecated extends DefaultPrope
     if (security instanceof SwapSecurity) {
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security);
-        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD && type != InterestRateInstrumentType.SWAP_IBOR_IBOR) {
+        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+            && type != InterestRateInstrumentType.SWAP_IBOR_IBOR) {
           return false;
         }
       } catch (final OpenGammaRuntimeException ogre) {

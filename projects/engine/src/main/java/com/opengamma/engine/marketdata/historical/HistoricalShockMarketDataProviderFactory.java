@@ -22,24 +22,24 @@ public class HistoricalShockMarketDataProviderFactory implements MarketDataProvi
 
   private final MarketDataProviderResolver _resolver;
 
-  public HistoricalShockMarketDataProviderFactory(MarketDataProviderResolver resolver) {
+  public HistoricalShockMarketDataProviderFactory(final MarketDataProviderResolver resolver) {
     ArgumentChecker.notNull(resolver, "resolver");
     _resolver = resolver;
   }
 
   @Override
-  public HistoricalShockMarketDataProvider create(UserPrincipal user, MarketDataSpecification marketDataSpec) {
+  public HistoricalShockMarketDataProvider create(final UserPrincipal user, final MarketDataSpecification marketDataSpec) {
     if (!(marketDataSpec instanceof HistoricalShockMarketDataSpecification)) {
       throw new IllegalArgumentException("Market data spec must be a HistoricalShockMarketDataSpecification: " + marketDataSpec);
     }
-    HistoricalShockMarketDataSpecification shockSpec = (HistoricalShockMarketDataSpecification) marketDataSpec;
-    MarketDataProvider provider1 = resolve(user, shockSpec.getHistoricalSpecification1());
-    MarketDataProvider provider2 = resolve(user, shockSpec.getHistoricalSpecification2());
-    MarketDataProvider baseProvider = resolve(user, shockSpec.getBaseSpecification());
+    final HistoricalShockMarketDataSpecification shockSpec = (HistoricalShockMarketDataSpecification) marketDataSpec;
+    final MarketDataProvider provider1 = resolve(user, shockSpec.getHistoricalSpecification1());
+    final MarketDataProvider provider2 = resolve(user, shockSpec.getHistoricalSpecification2());
+    final MarketDataProvider baseProvider = resolve(user, shockSpec.getBaseSpecification());
     return new HistoricalShockMarketDataProvider(provider1, provider2, baseProvider);
   }
 
-  private MarketDataProvider resolve(UserPrincipal user, MarketDataSpecification spec) {
+  private MarketDataProvider resolve(final UserPrincipal user, final MarketDataSpecification spec) {
     return Objects.requireNonNull(_resolver.resolve(user, spec));
   }
 }

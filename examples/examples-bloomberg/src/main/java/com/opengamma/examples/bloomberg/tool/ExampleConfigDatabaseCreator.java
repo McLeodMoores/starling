@@ -26,7 +26,7 @@ import com.opengamma.util.db.tool.DbTool;
 public class ExampleConfigDatabaseCreator {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleConfigDatabaseCreator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleConfigDatabaseCreator.class);
 
   /** Shared database URL. */
   private static final String KEY_SHARED_URL = "db.standard.url";
@@ -68,7 +68,7 @@ public class ExampleConfigDatabaseCreator {
       new ExampleConfigDatabaseCreator().run(args[0]);
       System.exit(0);
     } catch (final Exception ex) {
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
       System.exit(1);
     }
@@ -86,7 +86,7 @@ public class ExampleConfigDatabaseCreator {
     }
 
     // create main database
-    s_logger.info("Creating main database...");
+    LOGGER.info("Creating main database...");
     final DbTool dbTool = new DbTool();
     dbTool.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     dbTool.setUser(props.getProperty(KEY_SHARED_USER_NAME, ""));
@@ -98,7 +98,7 @@ public class ExampleConfigDatabaseCreator {
     dbTool.execute();
 
     // create user database
-    s_logger.info("Creating user database...");
+    LOGGER.info("Creating user database...");
     final DbTool dbToolUser = new DbTool();
     dbToolUser.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_USERFINANCIAL_URL)));
     dbToolUser.setUser(props.getProperty(KEY_USERFINANCIAL_USER_NAME, ""));
@@ -110,10 +110,10 @@ public class ExampleConfigDatabaseCreator {
     dbToolUser.execute();
 
     // populate the database
-    s_logger.info("Populating main database...");
+    LOGGER.info("Populating main database...");
     new ExampleConfigDatabasePopulator().run(ResourceUtils.toResourceLocator(res), IntegrationToolContext.class);
 
-    s_logger.info("Successfully created example databases");
+    LOGGER.info("Successfully created example databases");
   }
 
 }

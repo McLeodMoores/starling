@@ -34,7 +34,7 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.id.ExternalId;
 
 /**
- * Visitor to obtain the id of an underlying, null if not applicable
+ * Visitor to obtain the id of an underlying, null if not applicable.
  */
 public class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<ExternalId> {
 
@@ -51,7 +51,8 @@ public class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<
   /**
    * Returns the underlying id of a security (e.g. the id of the equity underlying an equity future).
    *
-   * @param security The security, not null
+   * @param security
+   *          The security, not null
    * @return The id of the underlying of a security, where it is possible to identify this, or null
    */
   public static ExternalId getUnderlyingId(final Security security) {
@@ -61,7 +62,6 @@ public class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<
     }
     return null;
   }
-
 
   @Override
   public ExternalId visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
@@ -179,7 +179,7 @@ public class UnderlyingVisitor extends FinancialSecurityVisitorSameValueAdapter<
   }
 
   @Override
-  public ExternalId visitIndexCDSSecurity(IndexCDSSecurity security) {
+  public ExternalId visitIndexCDSSecurity(final IndexCDSSecurity security) {
     return security.getUnderlyingIndex().resolve().getExternalIdBundle().iterator().next();
   }
 }

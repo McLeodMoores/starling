@@ -30,19 +30,21 @@ import com.opengamma.financial.security.equity.EquityVarianceSwapSecurity;
  *
  */
 public class EquityVarianceSwapStaticReplicationVegaFunction extends EquityVarianceSwapStaticReplicationFunction {
-  private static final EquityDerivativeSensitivityCalculator CALCULATOR = new EquityDerivativeSensitivityCalculator(VarianceSwapPresentValueCalculator.getInstance());
+  private static final EquityDerivativeSensitivityCalculator CALCULATOR = new EquityDerivativeSensitivityCalculator(
+      VarianceSwapPresentValueCalculator.getInstance());
 
   public EquityVarianceSwapStaticReplicationVegaFunction() {
     super(ValueRequirementNames.VEGA_QUOTE_MATRIX);
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative, final StaticReplicationDataBundle market) {
+  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative,
+      final StaticReplicationDataBundle market) {
     final NodalDoublesSurface vegaSurface = CALCULATOR.calcBlackVegaForEntireSurface(derivative, market);
     final Double[] xValues = vegaSurface.getXData();
     final Double[] yValues = vegaSurface.getYData();
-    final Set<Double> xSet = new HashSet<Double>(Arrays.asList(xValues));
-    final Set<Double> ySet = new HashSet<Double>(Arrays.asList(yValues));
+    final Set<Double> xSet = new HashSet<>(Arrays.asList(xValues));
+    final Set<Double> ySet = new HashSet<>(Arrays.asList(yValues));
     final Double[] uniqueX = xSet.toArray(new Double[0]);
     final Double[] uniqueY = ySet.toArray(new Double[0]);
     final double[][] values = new double[ySet.size()][xSet.size()];
@@ -79,7 +81,8 @@ public class EquityVarianceSwapStaticReplicationVegaFunction extends EquityVaria
   }
 
   @Override
-  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig, final String surfaceName) {
+  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig,
+      final String surfaceName) {
     final EquityVarianceSwapSecurity security = (EquityVarianceSwapSecurity) target.getSecurity();
     final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, security.getCurrency().getCode())

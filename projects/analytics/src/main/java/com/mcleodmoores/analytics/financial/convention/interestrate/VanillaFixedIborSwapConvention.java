@@ -34,6 +34,7 @@ import com.opengamma.util.time.Tenor;
  *  <li> The underlying index - this is used to generate the floating leg.
  * </ul>
  */
+@SuppressWarnings("deprecation")
 public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapFixedIborDefinition> {
 
   /**
@@ -157,7 +158,6 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
     _fixedLegDayCount = fixedLegDayCount;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public SwapFixedIborDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional,
       final double fixedRate) {
@@ -166,7 +166,7 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
     final ZonedDateTime settlementDate =
         ScheduleCalculator.getAdjustedDate(spot, startTenor, _index.getBusinessDayConvention(), _calendar, _index.isEndOfMonth());
     final ZonedDateTime maturityDate = TenorUtils.adjustDateByTenor(settlementDate, endTenor);
-    final Calendar holidays = new CalendarAdapter(_calendar);
+    final Calendar holidays = CalendarAdapter.of(_calendar);
     final AnnuityCouponFixedDefinition fixedLeg =
         AnnuityCouponFixedDefinition.from(_index.getCurrency(), settlementDate, maturityDate, _fixedLegPaymentTenor.getPeriod(),
         holidays, _fixedLegDayCount, _index.getBusinessDayConvention(), _index.isEndOfMonth(), notional, fixedRate, true, _stubType);

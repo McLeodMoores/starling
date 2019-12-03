@@ -42,11 +42,11 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param value  the value
    */
   @ImmutableConstructor
-  SuccessResult(T value) {
+  SuccessResult(final T value) {
     _value = ArgumentChecker.notNull(value, "value");
   }
 
@@ -57,12 +57,12 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
   }
 
   @Override
-  public <U> Result<U> ifSuccess(Function<T, Result<U>> function) {
+  public <U> Result<U> ifSuccess(final Function<T, Result<U>> function) {
     return function.apply(_value);
   }
 
   @Override
-  public <U, V> Result<V> combineWith(Result<U> other, Function2<T, U, Result<V>> function) {
+  public <U, V> Result<V> combineWith(final Result<U> other, final Function2<T, U, Result<V>> function) {
     ArgumentChecker.notNull(other, "other");
 
     if (!other.isSuccess()) {
@@ -163,7 +163,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SuccessResult<?> other = (SuccessResult<?>) obj;
-      return JodaBeanUtils.equal(getValue(), other.getValue());
+      return JodaBeanUtils.equal(_value, other._value);
     }
     return false;
   }
@@ -171,7 +171,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_value);
     return hash;
   }
 
@@ -179,7 +179,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("SuccessResult{");
-    buf.append("value").append('=').append(JodaBeanUtils.toString(getValue()));
+    buf.append("value").append('=').append(JodaBeanUtils.toString(_value));
     buf.append('}');
     return buf.toString();
   }
@@ -323,19 +323,31 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

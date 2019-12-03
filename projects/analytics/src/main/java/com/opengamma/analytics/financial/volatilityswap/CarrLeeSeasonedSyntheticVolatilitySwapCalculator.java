@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.volatilityswap;
@@ -14,28 +14,39 @@ import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * "Realized Volatility and Variance: Options via Swaps", 
- * Peter Carr and Roger Lee, Oct. 26, 2007
+ * "Realized Volatility and Variance: Options via Swaps", Peter Carr and Roger Lee, Oct. 26, 2007
  */
 public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
   private static final Integrator1D<Double, Double> INTEGRATOR = new AdaptiveCompositeIntegrator1D(new RungeKuttaIntegrator1D());
   private static final double EPS = 1.e-12;
 
   /**
-   * The respective strikes should be sorted in ascending order
-   * @param spot The spot 
-   * @param putStrikes The strikes for put options
-   * @param callStrikes The strikes for call options
-   * @param timeToExpiry The time to expiry
-   * @param timeFromInception The time after the inception date
-   * @param interestRate The interest rate
-   * @param dividend The dividend
-   * @param putVols The volatilities for put options
-   * @param callVols The volatilities for call options
-   * @param rvReturns The realized variance of log returns
-   * @return  {@link VolatilitySwapCalculatorResult}
+   * The respective strikes should be sorted in ascending order.
+   *
+   * @param spot
+   *          The spot
+   * @param putStrikes
+   *          The strikes for put options
+   * @param callStrikes
+   *          The strikes for call options
+   * @param timeToExpiry
+   *          The time to expiry
+   * @param timeFromInception
+   *          The time after the inception date
+   * @param interestRate
+   *          The interest rate
+   * @param dividend
+   *          The dividend
+   * @param putVols
+   *          The volatilities for put options
+   * @param callVols
+   *          The volatilities for call options
+   * @param rvReturns
+   *          The realized variance of log returns
+   * @return {@link VolatilitySwapCalculatorResult}
    */
-  public VolatilitySwapCalculatorResult evaluate(final double spot, final double[] putStrikes, final double[] callStrikes, final double timeToExpiry, final double timeFromInception,
+  public VolatilitySwapCalculatorResult evaluate(final double spot, final double[] putStrikes, final double[] callStrikes, final double timeToExpiry,
+      final double timeFromInception,
       final double interestRate, final double dividend, final double[] putVols, final double[] callVols, final double rvReturns) {
     ArgumentChecker.notNull(callStrikes, "callStrikes");
     ArgumentChecker.notNull(putStrikes, "putStrikes");
@@ -80,7 +91,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
 
     final double rate = interestRate - dividend;
     final double forward = spot * Math.exp(rate * timeToExpiry);
-    ArgumentChecker.isTrue((callStrikes[0] >= forward && putStrikes[nPuts - 1] <= forward), "Max(putStrikes) <= forward <= Min(callStrikes) should hold");
+    ArgumentChecker.isTrue(callStrikes[0] >= forward && putStrikes[nPuts - 1] <= forward, "Max(putStrikes) <= forward <= Min(callStrikes) should hold");
 
     final double u = 100. / Math.sqrt(timeToExpiry + timeFromInception);
     final double us = 100. / Math.sqrt(timeFromInception);
@@ -123,7 +134,8 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculator {
         final double bound = 50. / Math.sqrt(resRV);
         final Function1D<Double, Double> funcFin = integrandFin(logKF, resRV);
         final Function1D<Double, Double> funcInf = integrandInf(logKF, resRV);
-        res[i] = reFac * Math.exp(0.5 * logKF) * (INTEGRATOR.integrate(funcFin, 0., 0.5 * Math.PI) + INTEGRATOR.integrate(funcInf, 0., bound)) / strikes[i] / strikes[i];
+        res[i] = reFac * Math.exp(0.5 * logKF) * (INTEGRATOR.integrate(funcFin, 0., 0.5 * Math.PI) + INTEGRATOR.integrate(funcInf, 0., bound)) / strikes[i]
+            / strikes[i];
       }
     }
 

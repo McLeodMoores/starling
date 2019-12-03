@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.infrastructure;
@@ -19,16 +19,16 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Protocol;
-
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.util.redis.RedisConnector;
 
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
+
 /**
- * Component factory for {@code RedisConnector}. 
+ * Component factory for {@code RedisConnector}.
  * <p>
  * This class is designed to allow protected methods to be overridden.
  */
@@ -63,21 +63,20 @@ public class RedisConnectorComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    RedisConnector redisConnector = createRedisConnector(repo);
-    ComponentInfo info = new ComponentInfo(RedisConnector.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final RedisConnector redisConnector = createRedisConnector(repo);
+    final ComponentInfo info = new ComponentInfo(RedisConnector.class, getClassifier());
     repo.registerComponent(info, redisConnector);
   }
 
   /**
    * Creates the Redis connector without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the Redis connector, not null
    */
-  protected RedisConnector createRedisConnector(ComponentRepository repo) {
-    JedisPoolConfig poolConfig = new JedisPoolConfig();
-    poolConfig.setMaxActive(Runtime.getRuntime().availableProcessors() + 5);
+  protected RedisConnector createRedisConnector(final ComponentRepository repo) {
+    final JedisPoolConfig poolConfig = new JedisPoolConfig();
     return new RedisConnector(getClassifier(), getHostName(), getRedisPort(), getPassword(), poolConfig, getTimeOut());
   }
 

@@ -15,14 +15,15 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Agriculture future options definition
+ * Agriculture future options definition.
  */
 public class AgricultureFutureOptionDefinition extends CommodityFutureOptionDefinition<AgricultureFutureDefinition, AgricultureFutureOption> {
 
   /**
-   * Constructor for option
+   * Constructor for option.
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  underlying future
    * @param strike  strike price
    * @param exerciseType  exercise type - European or American

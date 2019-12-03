@@ -17,8 +17,8 @@ import com.opengamma.util.PublicSPI;
 public interface MarketDataInjector {
 
   /**
-   * Injects a live data value by {@link ValueRequirement}. The requirement will be resolved using the same logic as the related {@link MarketDataAvailabilityProvider} to determine the
-   * {@link ValueSpecification} that describes the injected data.
+   * Injects a live data value by {@link ValueRequirement}. The requirement will be resolved using the same logic as the related
+   * {@link MarketDataAvailabilityProvider} to determine the {@link ValueSpecification} that describes the injected data.
    *
    * @param valueRequirement the value requirement, not null
    * @param value the value to add
@@ -34,9 +34,9 @@ public interface MarketDataInjector {
   void addValue(ValueSpecification valueSpecification, Object value);
 
   /**
-   * Removes a previously-added live data value by {@link ValueRequirement}. The requirement will be resolved using the same logic as the related {@link MarketDataAvailabilityProvider} to determine
-   * the {@link ValueSpecification} that describes the injected data to be removed. It does not need to be the same as the original value requirement that added the data, as long as it resolves to the
-   * same value specification.
+   * Removes a previously-added live data value by {@link ValueRequirement}. The requirement will be resolved using the same logic as the
+   * related {@link MarketDataAvailabilityProvider} to determine the {@link ValueSpecification} that describes the injected data to be removed.
+   * It does not need to be the same as the original value requirement that added the data, as long as it resolves to the same value specification.
    *
    * @param valueRequirement the value requirement, not null
    */

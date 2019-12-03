@@ -5,18 +5,23 @@
  */
 package com.opengamma.analytics.financial.horizon;
 
+import com.opengamma.analytics.financial.horizon.rolldown.YieldCurveForwardSlideRolldown;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Produces a yield curve that has been shifted forward in time.
+ *
+ * @deprecated Use {@link YieldCurveForwardSlideRolldown}.
  */
+@Deprecated
 public final class ForwardSlideYieldCurveRolldownFunction implements RolldownFunction<YieldAndDiscountCurve> {
   /** The singleton instance */
   private static final ForwardSlideYieldCurveRolldownFunction INSTANCE = new ForwardSlideYieldCurveRolldownFunction();
 
   /**
    * Gets the singleton instance.
+   *
    * @return The instance.
    */
   public static ForwardSlideYieldCurveRolldownFunction getInstance() {

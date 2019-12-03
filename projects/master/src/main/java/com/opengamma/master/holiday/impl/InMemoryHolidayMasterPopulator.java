@@ -17,8 +17,6 @@ import java.util.ResourceBundle;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.google.common.collect.Maps;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.holiday.HolidayType;
@@ -28,6 +26,8 @@ import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.holiday.ManageableHoliday;
 import com.opengamma.util.ResourceUtils;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
  *  Populate a holiday master with holidays - can load from a csv in the classpath.
  */
@@ -35,9 +35,9 @@ public class InMemoryHolidayMasterPopulator {
 
   private static final DateTimeFormatter US_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-  public static void populate(final HolidayMaster holidayMaster, Map<String, ManageableHoliday> holidays) {
-    for (Map.Entry<String, ManageableHoliday> entry : holidays.entrySet()) {
-      HolidayDocument doc = new HolidayDocument();
+  public static void populate(final HolidayMaster holidayMaster, final Map<String, ManageableHoliday> holidays) {
+    for (final Map.Entry<String, ManageableHoliday> entry : holidays.entrySet()) {
+      final HolidayDocument doc = new HolidayDocument();
       doc.setName(entry.getKey());
       doc.setHoliday(entry.getValue());
       holidayMaster.add(doc);
@@ -70,9 +70,9 @@ public class InMemoryHolidayMasterPopulator {
       try {
         final File filepath = ResourceUtils.createResource(file).getFile();
         csvReader = new CSVReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(filepath))));
-      } catch (FileNotFoundException ex) {
+      } catch (final FileNotFoundException ex) {
         throw new OpenGammaRuntimeException("file not found: " + file);
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("IO Exception: " + ex);
       }
       String[] currLine;
@@ -81,20 +81,20 @@ public class InMemoryHolidayMasterPopulator {
       //csvReader.readNext();
       try {
         while ((currLine = csvReader.readNext()) != null) {
-          String dateInUSFormat = currLine[0].trim();
+          final String dateInUSFormat = currLine[0].trim();
           if (dateInUSFormat.startsWith("#")) {
             continue;
           }
 
-          LocalDate date = LocalDate.parse(dateInUSFormat, US_FORMATTER);
+          final LocalDate date = LocalDate.parse(dateInUSFormat, US_FORMATTER);
           holiday.getHolidayDates().add(date);
         }
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("IOError: " + ex);
       } finally {
         try {
           csvReader.close();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
           throw new OpenGammaRuntimeException("IOError on closing: " + ex);
         }
       }

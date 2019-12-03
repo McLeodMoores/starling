@@ -22,7 +22,7 @@ public class NoEnhancementSecurityEnhancer extends AbstractSecurityEnhancer {
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityEnhancerResult doBulkEnhance(SecurityEnhancerRequest request) {
+  protected SecurityEnhancerResult doBulkEnhance(final SecurityEnhancerRequest request) {
     return new SecurityEnhancerResult(request.getSecurities());
   }
 

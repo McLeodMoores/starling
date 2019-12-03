@@ -11,11 +11,13 @@ import org.testng.annotations.Test;
 
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaParameters;
 import com.opengamma.analytics.financial.model.volatility.VolatilityAndBucketedSensitivities;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.TimeSquareInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Triple;
 
@@ -38,10 +40,10 @@ public class SmileDeltaTermStructureParametersStrikeInterpolationTest {
       VOLATILITY_TERM[loopexp] = new SmileDeltaParameters(TIME_TO_EXPIRY[loopexp], ATM[loopexp], DELTA, RISK_REVERSAL[loopexp], STRANGLE[loopexp]);
     }
   }
-  private static final Interpolator1D INTERPOLATOR_STRIKE = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
-  private static final Interpolator1D INTERPOLATOR_TIME = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.TIME_SQUARE, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR_STRIKE = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR_TIME = NamedInterpolator1dFactory.of(TimeSquareInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final SmileDeltaTermStructureParametersStrikeInterpolation SMILE_TERM = new SmileDeltaTermStructureParametersStrikeInterpolation(VOLATILITY_TERM, INTERPOLATOR_STRIKE);
 
   private static final double TOLERANCE_VOL = 1.0E-10;
@@ -148,7 +150,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolationTest {
     final double[] vol100 = SMILE_TERM.getVolatilityTerm()[3].getVolatility();
     final double[] vol = new double[vol050.length];
     for (int loopvol = 0; loopvol < vol050.length; loopvol++) {
-      vol[loopvol] = Math.sqrt(((vol050[loopvol] * vol050[loopvol] * TIME_TO_EXPIRY[2] + vol100[loopvol] * vol100[loopvol] * TIME_TO_EXPIRY[3]) / 2.0) / timeToExpiration);
+      vol[loopvol] = Math.sqrt((vol050[loopvol] * vol050[loopvol] * TIME_TO_EXPIRY[2] + vol100[loopvol] * vol100[loopvol] * TIME_TO_EXPIRY[3]) / 2.0 / timeToExpiration);
     }
     final SmileDeltaParameters smile = new SmileDeltaParameters(timeToExpiration, DELTA, vol);
     final double[] strikes = smile.getStrike(forward);
@@ -157,7 +159,7 @@ public class SmileDeltaTermStructureParametersStrikeInterpolationTest {
     final double volExpected = interpolator.interpolate(volatilityInterpolation, strike);
     final double volComputed = SMILE_TERM.getVolatility(timeToExpiration, strike, forward);
     assertEquals("Smile by delta term structure: volatility interpolation on strike", volExpected, volComputed, TOLERANCE_VOL);
-    final double volTriple = SMILE_TERM.getVolatility(new Triple<>(timeToExpiration, strike, forward));
+    final double volTriple = SMILE_TERM.getVolatility(Triple.of(timeToExpiration, strike, forward));
     assertEquals("Smile by delta term structure: volatility interpolation on strike", volComputed, volTriple, TOLERANCE_VOL);
     final SmileDeltaTermStructureParametersStrikeInterpolation smileTerm2 = new SmileDeltaTermStructureParametersStrikeInterpolation(TIME_TO_EXPIRY, DELTA, ATM, RISK_REVERSAL, STRANGLE,
         INTERPOLATOR_STRIKE, INTERPOLATOR_TIME);

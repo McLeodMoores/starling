@@ -29,17 +29,17 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
   @AfterClass
   public void tearDown() {
     if (total > 0 && number > 0) {
-      System.out.println("Average: " + (((double) total) / number));
+      System.out.println("Average: " + (double) total / number);
     }
   }
 
   @Override
-  protected <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security) {
+  protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
 //    count = 0;
 //    long start;
 //    long end;
 //    Object obj;
-//    
+//
 ////    //============
 ////    // Joda xml write
 ////    String jodaXml = null;
@@ -60,7 +60,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 ////    end = System.nanoTime();
 ////    long diffJodaWrite = (end - start) / 1_000_000;
 ////    assert count == 1000;
-////    
+////
 ////    // Joda xml read
 ////    count = 0;
 ////    obj = null;
@@ -78,7 +78,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 ////    total += diffJodaRead;
 ////    number++;
 ////    assert count == 1000;
-////    
+////
 //    //============
 //    // Joda bin write
 //    count = 0;
@@ -93,7 +93,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 //    end = System.nanoTime();
 //    long diffJodaBinWrite = (end - start) / 1_000_000;
 //    assert count == 1000;
-//    
+//
 //    // Joda xml read
 //    count = 0;
 //    obj = null;
@@ -109,7 +109,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 //    total += diffJodaBinRead;
 //    number++;
 //    assert count == 1000;
-//    
+//
 //    //============
 //    // Fudge write
 //    count = 0;
@@ -137,7 +137,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 //    end = System.nanoTime();
 //    long diffFudgeWrite = (end - start) / 1_000_000;
 //    assert count == 1000;
-//    
+//
 //    // Fudge read
 //    count = 0;
 //    obj = null;
@@ -161,7 +161,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 //    end = System.nanoTime();
 //    long diffFudgeRead = (end - start) / 1_000_000;
 //    assert count == 1000;
-//    
+//
 //    //============
 ////    // Fudge XML write
 ////    FudgeContext fc = OpenGammaFudgeContext.getInstance();
@@ -173,7 +173,7 @@ public class SecuritiesJodaBeanXmlPerformanceTest extends SecurityTestCase {
 ////    fudgeMsgWriter.writeMessage(msg);
 ////    fudgeMsgWriter.close();
 ////    String fudgeXml = strWr.toString();
-//    
+//
 //    // output
 ////    System.out.println(securityClass.getSimpleName() + " JodaWrite:" + diffJodaWrite + " JodaRead:" + diffJodaRead +
 ////        " FudgeWrite:" + diffFudgeWrite + " FudgeRead:" + diffFudgeRead);

@@ -54,11 +54,11 @@ public class UserSearchResult implements Bean {
 
   /**
    * Creates an instance from a collection of users.
-   * 
+   *
    * @param paging  the paging information, not null
    * @param users  the collection of users to add, not null
    */
-  public UserSearchResult(Paging paging, Collection<ManageableUser> users) {
+  public UserSearchResult(final Paging paging, final Collection<ManageableUser> users) {
     _paging = ArgumentChecker.notNull(paging, "paging");
     _users.addAll(ArgumentChecker.notNull(users, "users"));
   }

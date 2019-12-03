@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
@@ -24,10 +24,12 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
   /**
    * The method unique instance.
    */
-  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE = new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
+  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE =
+      new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod getInstance() {
@@ -55,8 +57,11 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param hullWhite The Hull-White parameters and the curves.
+   *
+   * @param swaption
+   *          The swaption.
+   * @param hullWhite
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -98,10 +103,13 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
 
     /**
      * Constructor to the integrant function.
-     * @param discountedCashFlow The discounted cash flows.
-     * @param alpha The bond volatilities.
+     *
+     * @param discountedCashFlow
+     *          The discounted cash flows.
+     * @param alpha
+     *          The bond volatilities.
      */
-    public SwaptionIntegrant(final double[] discountedCashFlow, final double[] alpha) {
+    SwaptionIntegrant(final double[] discountedCashFlow, final double[] alpha) {
       _discountedCashFlow = discountedCashFlow;
       _alpha = alpha;
     }

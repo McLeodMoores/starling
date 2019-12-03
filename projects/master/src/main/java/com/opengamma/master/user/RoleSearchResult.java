@@ -54,11 +54,11 @@ public class RoleSearchResult implements Bean {
 
   /**
    * Creates an instance from a collection of roles.
-   * 
+   *
    * @param paging  the paging information, not null
    * @param roles  the collection of roles to add, not null
    */
-  public RoleSearchResult(Paging paging, Collection<ManageableRole> roles) {
+  public RoleSearchResult(final Paging paging, final Collection<ManageableRole> roles) {
     _paging = ArgumentChecker.notNull(paging, "paging");
     _roles.addAll(ArgumentChecker.notNull(roles, "roles"));
   }

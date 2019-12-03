@@ -15,36 +15,47 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For an instrument, computes the sensitivity of a multiple currency value (often the present value) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.) and also on the way
- * the parameters sensitivities are aggregated (the same parameter can be used in several curves).
- * @param <DATA_TYPE> Data type.
+ * For an instrument, computes the sensitivity of a multiple currency value (often the present value) to the parameters used in the curve. The meaning of
+ * "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.) and also on the way the parameters sensitivities are
+ * aggregated (the same parameter can be used in several curves).
+ * 
+ * @param <DATA_TYPE>
+ *          Data type.
  */
 public abstract class AbstractParameterSensitivityParameterCalculator<DATA_TYPE extends ParameterProviderInterface> {
 
   /**
-   * The sensitivity calculator to compute the sensitivity of the value with respect to the zero-coupon continuously compounded rates at different times (discounting) or forward rates.
+   * The sensitivity calculator to compute the sensitivity of the value with respect to the zero-coupon continuously compounded rates at different times
+   * (discounting) or forward rates.
    */
   private final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyMulticurveSensitivity> _curveSensitivityCalculator;
 
   /**
    * The constructor from a curve sensitivity calculator.
-   * @param curveSensitivityCalculator The calculator.
+   * 
+   * @param curveSensitivityCalculator
+   *          The calculator.
    */
-  public AbstractParameterSensitivityParameterCalculator(final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyMulticurveSensitivity> curveSensitivityCalculator) {
+  public AbstractParameterSensitivityParameterCalculator(
+      final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyMulticurveSensitivity> curveSensitivityCalculator) {
     ArgumentChecker.notNull(curveSensitivityCalculator, "curve sensitivity calculator");
     _curveSensitivityCalculator = curveSensitivityCalculator;
   }
 
   /**
    * Computes the sensitivity with respect to the parameters for the supplied curve names.
-   * @param instrument The instrument. Not null.
-   * @param parameterMulticurves The parameters and multi-curves provider.
-   * @param curvesSet The set of curves for which the sensitivity will be computed. The multi-curve may contain more curves and other curves can be in the
-   * instrument sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
+   * 
+   * @param instrument
+   *          The instrument. Not null.
+   * @param parameterMulticurves
+   *          The parameters and multi-curves provider.
+   * @param curvesSet
+   *          The set of curves for which the sensitivity will be computed. The multi-curve may contain more curves and other curves can be in the instrument
+   *          sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
    * @return The sensitivity (as a ParameterSensitivity).
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final DATA_TYPE parameterMulticurves, final Set<String> curvesSet) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final DATA_TYPE parameterMulticurves,
+      final Set<String> curvesSet) {
     ArgumentChecker.notNull(instrument, "derivative");
     ArgumentChecker.notNull(parameterMulticurves, "Black data");
     ArgumentChecker.notNull(curvesSet, "curves");
@@ -54,8 +65,11 @@ public abstract class AbstractParameterSensitivityParameterCalculator<DATA_TYPE 
 
   /**
    * Computes the sensitivity with respect to the parameters for all curves.
-   * @param instrument The instrument. Not null.
-   * @param parameterMulticurves The parameters and multi-curves provider.
+   * 
+   * @param instrument
+   *          The instrument. Not null.
+   * @param parameterMulticurves
+   *          The parameters and multi-curves provider.
    * @return The sensitivity (as a ParameterSensitivity).
    */
   public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final DATA_TYPE parameterMulticurves) {
@@ -66,23 +80,31 @@ public abstract class AbstractParameterSensitivityParameterCalculator<DATA_TYPE 
   }
 
   /**
-   * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate for the
-   * supplied curve names.
-   * @param sensitivity The point sensitivity.
-   * @param parameterMulticurves The parameters and multi-curves provider.
-   * @param curvesSet The set of curves for which the sensitivity will be computed. The multi-curve may contain more curves and other curves can be in the
-   * instrument sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
+   * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate for the supplied curve names.
+   * 
+   * @param sensitivity
+   *          The point sensitivity.
+   * @param parameterMulticurves
+   *          The parameters and multi-curves provider.
+   * @param curvesSet
+   *          The set of curves for which the sensitivity will be computed. The multi-curve may contain more curves and other curves can be in the instrument
+   *          sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
    * @return The sensitivity (as a ParameterSensitivity).
    */
-  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity, final DATA_TYPE parameterMulticurves,
-      final Set<String> curvesSet);
+  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(MultipleCurrencyMulticurveSensitivity sensitivity,
+      DATA_TYPE parameterMulticurves,
+      Set<String> curvesSet);
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate for all curves.
-   * @param sensitivity The point sensitivity.
-   * @param parameterMulticurves The parameters and multi-curves provider.
-   * instrument sensitivity but only the one in the set will be in the output. The curve order in the output is the set order.
+   * 
+   * @param sensitivity
+   *          The point sensitivity.
+   * @param parameterMulticurves
+   *          The parameters and multi-curves provider. instrument sensitivity but only the one in the set will be in the output. The curve order in the output
+   *          is the set order.
    * @return The sensitivity (as a ParameterSensitivity).
    */
-  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity, final DATA_TYPE parameterMulticurves);
+  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(MultipleCurrencyMulticurveSensitivity sensitivity,
+      DATA_TYPE parameterMulticurves);
 }

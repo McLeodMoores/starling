@@ -15,7 +15,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
+import com.opengamma.financial.analytics.model.FutureOptionExpiries;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.ArgumentChecker;
@@ -49,7 +49,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   /**
-   * @param futurePrefix The future prefix, not null
+   * @param futurePrefix
+   *          The future prefix, not null
    */
   public SyntheticFutureCurveInstrumentProvider(final String futurePrefix) {
     ArgumentChecker.notNull(futurePrefix, "future prefix");
@@ -73,6 +74,7 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
 
   /**
    * Gets the future prefix.
+   *
    * @return The future prefix
    */
   public String getFuturePrefix() {
@@ -100,7 +102,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   @Override
-  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType, final IndexType receiveIndexType) {
+  public ExternalId getInstrument(final LocalDate curveDate, final Tenor tenor, final Tenor payTenor, final Tenor receiveTenor, final IndexType payIndexType,
+      final IndexType receiveIndexType) {
     throw new OpenGammaRuntimeException("Only futures supported");
   }
 
@@ -114,7 +117,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
     throw new UnsupportedOperationException("Only futures supported");
   }
 
-  private static ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor, final String prefix) {
+  private static ExternalId createQuarterlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numQuartlyFuturesFromTenor,
+      final String prefix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());
@@ -123,7 +127,8 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
     return ExternalId.of(SCHEME, futureCode.toString());
   }
 
-  private static ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor, final String prefix) {
+  private static ExternalId createMonthlyIRFutureStrips(final LocalDate curveDate, final Tenor tenor, final int numMonthlyFuturesFromTenor,
+      final String prefix) {
     final StringBuilder futureCode = new StringBuilder();
     futureCode.append(prefix);
     final LocalDate curveFutureStartDate = curveDate.plus(tenor.getPeriod());
@@ -133,14 +138,14 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   private static String getQuarterlyExpiryCodeForFutures(final int nthFuture, final LocalDate curveDate) {
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureQuarterlyExpiry(nthFuture, curveDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getExpiry(nthFuture, curveDate, Tenor.THREE_MONTHS);
     final StringBuilder result = new StringBuilder(MONTH_CODE.get(expiry.getMonth()).toString());
     result.append(expiry.getYear() % 1000);
     return result.toString();
   }
 
   private static String getMonthlyExpiryCodeForFutures(final int nthFuture, final LocalDate curveDate) {
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureMonth(nthFuture, curveDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getExpiry(nthFuture, curveDate, Tenor.ONE_MONTH);
     final StringBuilder result = new StringBuilder(MONTH_CODE.get(expiry.getMonth()));
     result.append(expiry.getYear() % 1000);
     return result.toString();

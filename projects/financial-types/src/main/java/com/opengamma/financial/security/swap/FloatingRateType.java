@@ -4,61 +4,62 @@
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
+
 /**
  * The Floating rate type.
  */
 public enum FloatingRateType {
   /**
-   * Ibor
+   * Ibor.
    */
   IBOR,
   /**
-   * Cms
+   * CMS.
    */
   CMS,
   /**
-   * Ois
+   * OIS.
    */
   OIS,
   /**
-   * Overnight arithmetic average
+   * Overnight arithmetic average.
    */
   OVERNIGHT_ARITHMETIC_AVERAGE;
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Checks if the type is "IBOR".
-   * 
+   *
    * @return true if IBOR, false otherwise.
    */
   public boolean isIbor() {
     return this == IBOR;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Checks if the type is "CMS".
-   * 
+   *
    * @return true if CMS, false otherwise.
    */
   public boolean isCms() {
     return this == CMS;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Checks if the type is "OIS".
-   * 
+   *
    * @return true if OIS, false otherwise.
    */
   public boolean isOis() {
     return this == OIS;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Checks if the type is "OVERNIGHT_ARITHMETIC_AVERAGE".
-   * 
+   *
    * @return true if overnight arithmetic average, false otherwise.
    */
   public boolean isOvernightArithmeticAverage() {

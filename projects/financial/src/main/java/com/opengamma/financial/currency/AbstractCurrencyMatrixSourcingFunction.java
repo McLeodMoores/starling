@@ -77,15 +77,16 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final Collection<Currency> sourceCurrencies = matrix.getSourceCurrencies();
     final Collection<Currency> targetCurrencies = matrix.getTargetCurrencies();
-    final Set<ValueSpecification> results = Sets.<ValueSpecification>newHashSetWithExpectedSize(sourceCurrencies.size() * targetCurrencies.size());
+    final Set<ValueSpecification> results = Sets.<ValueSpecification> newHashSetWithExpectedSize(sourceCurrencies.size() * targetCurrencies.size());
     final ValueProperties.Builder properties = createValueProperties();
-    for (Currency sourceCurrency : sourceCurrencies) {
+    for (final Currency sourceCurrency : sourceCurrencies) {
       properties.withoutAny(SOURCE_CURRENCY_PROPERTY).with(SOURCE_CURRENCY_PROPERTY, sourceCurrency.getCode());
-      for (Currency targetCurrency : targetCurrencies) {
+      for (final Currency targetCurrency : targetCurrencies) {
         if (!targetCurrency.equals(sourceCurrency)) {
           final CurrencyMatrixValue conversion = matrix.getConversion(sourceCurrency, targetCurrency);
           if (conversion != null) {
-            results.add(new ValueSpecification(valueRequirementName, targetSpec, properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
+            results.add(new ValueSpecification(valueRequirementName, targetSpec,
+                properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
           }
         }
       }
@@ -94,11 +95,13 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
   }
 
   protected ValueRequirement tagInput(final ValueRequirement requirement, final Currency source, final Currency target) {
-    return new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(), requirement.getConstraints().copy().with(SOURCE_CURRENCY_TAG, source.getCode())
-        .withOptional(SOURCE_CURRENCY_TAG).with(TARGET_CURRENCY_TAG, target.getCode()).withOptional(TARGET_CURRENCY_TAG).get());
+    return new ValueRequirement(requirement.getValueName(), requirement.getTargetReference(),
+        requirement.getConstraints().copy().with(SOURCE_CURRENCY_TAG, source.getCode())
+            .withOptional(SOURCE_CURRENCY_TAG).with(TARGET_CURRENCY_TAG, target.getCode()).withOptional(TARGET_CURRENCY_TAG).get());
   }
 
-  protected abstract boolean getRequirements(FunctionCompilationContext context, ValueRequirement desiredValue, CurrencyMatrix matrix, Set<ValueRequirement> requirements, Currency source,
+  protected abstract boolean getRequirements(FunctionCompilationContext context, ValueRequirement desiredValue, CurrencyMatrix matrix,
+      Set<ValueRequirement> requirements, Currency source,
       Currency target);
 
   @Override
@@ -106,12 +109,11 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final Currency sourceCurrency = Currency.of(desiredValue.getConstraint(SOURCE_CURRENCY_PROPERTY));
     final Currency targetCurrency = Currency.of(desiredValue.getConstraint(TARGET_CURRENCY_PROPERTY));
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     if (getRequirements(context, desiredValue, matrix, requirements, sourceCurrency, targetCurrency)) {
       return requirements;
-    } else {
-      return null;
     }
+    return null;
   }
 
   private static final class DetermineResults implements CurrencyMatrixValueVisitor<Boolean> {
@@ -124,7 +126,7 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     private Currency _currentSourceCurrency;
     private Currency _currentTargetCurrency;
 
-    public DetermineResults(final CurrencyMatrix matrix) {
+    DetermineResults(final CurrencyMatrix matrix) {
       _matrix = matrix;
       _sourceCurrencies = _matrix.getSourceCurrencies();
       _targetCurrencies = _matrix.getTargetCurrencies();
@@ -152,9 +154,9 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
       if (source.equals(target)) {
         return false;
       }
-      Map<Currency, Boolean> target2status = _valid.get(source);
+      final Map<Currency, Boolean> target2status = _valid.get(source);
       if (target2status != null) {
-        Boolean status = target2status.get(target);
+        final Boolean status = target2status.get(target);
         if (status != null) {
           return status;
         }
@@ -172,23 +174,23 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     // CurrentMatrixVisitor
 
     @Override
-    public Boolean visitFixed(CurrencyMatrixFixed fixedValue) {
+    public Boolean visitFixed(final CurrencyMatrixFixed fixedValue) {
       present(_currentSourceCurrency, _currentTargetCurrency);
       return Boolean.TRUE;
     }
 
     @Override
-    public Boolean visitValueRequirement(CurrencyMatrixValueRequirement uniqueId) {
+    public Boolean visitValueRequirement(final CurrencyMatrixValueRequirement uniqueId) {
       return Boolean.FALSE;
     }
 
     @Override
-    public Boolean visitCross(CurrencyMatrixCross cross) {
+    public Boolean visitCross(final CurrencyMatrixCross cross) {
       final Currency sourceCurrency = _currentSourceCurrency;
       final Currency targetCurrency = _currentTargetCurrency;
       // Declare as missing to avoid a loop forming
       missing(sourceCurrency, targetCurrency);
-      boolean result = hasInputFor(sourceCurrency, cross.getCrossCurrency()) && hasInputFor(cross.getCrossCurrency(), targetCurrency);
+      final boolean result = hasInputFor(sourceCurrency, cross.getCrossCurrency()) && hasInputFor(cross.getCrossCurrency(), targetCurrency);
       if (result) {
         // Is present after all
         present(sourceCurrency, targetCurrency);
@@ -199,23 +201,25 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final String valueRequirementName = getValueRequirementName();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final DetermineResults resultBuilder = new DetermineResults(matrix);
-    for (ValueRequirement input : inputs.values()) {
+    for (final ValueRequirement input : inputs.values()) {
       final Currency sourceCurrency = Currency.of(input.getConstraint(SOURCE_CURRENCY_TAG));
       final Currency targetCurrency = Currency.of(input.getConstraint(TARGET_CURRENCY_TAG));
       resultBuilder.present(sourceCurrency, targetCurrency);
     }
     final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(resultBuilder._sourceCurrencies.size() * resultBuilder._targetCurrencies.size());
     final ValueProperties.Builder properties = createValueProperties();
-    for (Currency sourceCurrency : resultBuilder._sourceCurrencies) {
+    for (final Currency sourceCurrency : resultBuilder._sourceCurrencies) {
       properties.withoutAny(SOURCE_CURRENCY_PROPERTY).with(SOURCE_CURRENCY_PROPERTY, sourceCurrency.getCode());
-      for (Currency targetCurrency : resultBuilder._targetCurrencies) {
+      for (final Currency targetCurrency : resultBuilder._targetCurrencies) {
         if (resultBuilder.hasInputFor(sourceCurrency, targetCurrency)) {
-          results.add(new ValueSpecification(valueRequirementName, targetSpec, properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
+          results.add(new ValueSpecification(valueRequirementName, targetSpec,
+              properties.withoutAny(TARGET_CURRENCY_PROPERTY).with(TARGET_CURRENCY_PROPERTY, targetCurrency.getCode()).get()));
         }
       }
     }
@@ -227,13 +231,15 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
     return true;
   }
 
-  protected abstract Object getRate(CurrencyMatrix matrix, ValueRequirement desiredValue, FunctionExecutionContext executionContext, FunctionInputs inputs, Currency source, Currency target);
+  protected abstract Object getRate(CurrencyMatrix matrix, ValueRequirement desiredValue, FunctionExecutionContext executionContext, FunctionInputs inputs,
+      Currency source, Currency target);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final CurrencyMatrix matrix = (CurrencyMatrix) target.getValue();
     final Set<ComputedValue> result = Sets.newHashSetWithExpectedSize(desiredValues.size());
-    for (ValueRequirement desiredValue : desiredValues) {
+    for (final ValueRequirement desiredValue : desiredValues) {
       final Currency sourceCurrency = Currency.of(desiredValue.getConstraint(SOURCE_CURRENCY_PROPERTY));
       final Currency targetCurrency = Currency.of(desiredValue.getConstraint(TARGET_CURRENCY_PROPERTY));
       final ValueSpecification valueSpec = new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints());
@@ -246,7 +252,7 @@ public abstract class AbstractCurrencyMatrixSourcingFunction extends AbstractFun
   }
 
   protected static Object createCrossRate(final Object r1, final Object r2) {
-    if ((r1 == null) || (r2 == null)) {
+    if (r1 == null || r2 == null) {
       // Missing input case; reported elsewhere
       return null;
     }

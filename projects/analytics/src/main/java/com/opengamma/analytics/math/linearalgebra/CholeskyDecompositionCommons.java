@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -15,8 +15,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/CholeskyDecompositionImpl.html">Commons Math library implementation</a> 
- * of Cholesky decomposition.
+ * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/CholeskyDecompositionImpl.html">Commons Math
+ * library implementation</a> of Cholesky decomposition.
  */
 public class CholeskyDecompositionCommons extends Decomposition<CholeskyDecompositionResult> {
 
@@ -30,7 +30,7 @@ public class CholeskyDecompositionCommons extends Decomposition<CholeskyDecompos
     CholeskyDecomposition cholesky;
     try {
       cholesky = new CholeskyDecompositionImpl(temp);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new MathException(e.toString());
     }
     return new CholeskyDecompositionCommonsResult(cholesky);

@@ -26,10 +26,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
- * The return format is ParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The computation is done
+ * by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves. The return format is
+ * ParameterSensitivity object. This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is
+ * irrelevant.
  */
 public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator {
 
@@ -43,11 +43,15 @@ public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator
   private final double _shift;
 
   /**
-   * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * Constructor.
+   *
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
-  public ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator(final InstrumentDerivativeVisitor<SABRSTIRFuturesProviderInterface, MultipleCurrencyAmount> valueCalculator,
+  public ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator(
+      final InstrumentDerivativeVisitor<SABRSTIRFuturesProviderInterface, MultipleCurrencyAmount> valueCalculator,
       final double shift) {
     ArgumentChecker.notNull(valueCalculator, "Calculator");
     _valueCalculator = valueCalculator;
@@ -55,10 +59,13 @@ public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param sabr The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param sabr
+   *          The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
   public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final SABRSTIRFuturesProviderDiscount sabr) {
@@ -82,15 +89,18 @@ public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketDscBumpedPlus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedPlus), sabr.getSABRParameters(),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final SABRSTIRFuturesProviderDiscount marketDscBumpedPlus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedPlus), sabr.getSABRParameters(),
             sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketDscBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketDscBumpedMinus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedMinus),
+        final SABRSTIRFuturesProviderDiscount marketDscBumpedMinus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedMinus),
             sabr.getSABRParameters(), sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedMinus = instrument.accept(_valueCalculator, marketDscBumpedMinus);
         final MultipleCurrencyAmount pvDiff = pvBumpedPlus.plus(pvBumpedMinus.multipliedBy(-1.0));
@@ -116,15 +126,18 @@ public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketFwdBumpedPlus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withForward(index, dscBumpedPlus), sabr.getSABRParameters(),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final SABRSTIRFuturesProviderDiscount marketFwdBumpedPlus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withForward(index, dscBumpedPlus), sabr.getSABRParameters(),
             sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketFwdBumpedMinus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withForward(index, dscBumpedMinus), sabr.getSABRParameters(),
+        final SABRSTIRFuturesProviderDiscount marketFwdBumpedMinus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withForward(index, dscBumpedMinus), sabr.getSABRParameters(),
             sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedMinus = instrument.accept(_valueCalculator, marketFwdBumpedMinus);
         final MultipleCurrencyAmount pvDiff = pvBumpedPlus.plus(pvBumpedMinus.multipliedBy(-1.0));
@@ -150,15 +163,18 @@ public class ParameterSensitivitySABRSTIRFuturesDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketFwdBumpedPlus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withForward(index, dscBumpedPlus), sabr.getSABRParameters(),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final SABRSTIRFuturesProviderDiscount marketFwdBumpedPlus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withForward(index, dscBumpedPlus), sabr.getSABRParameters(),
             sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final SABRSTIRFuturesProviderDiscount marketFwdBumpedMinus = new SABRSTIRFuturesProviderDiscount(sabr.getMulticurveProvider().withForward(index, dscBumpedMinus), sabr.getSABRParameters(),
+        final SABRSTIRFuturesProviderDiscount marketFwdBumpedMinus = new SABRSTIRFuturesProviderDiscount(
+            sabr.getMulticurveProvider().withForward(index, dscBumpedMinus), sabr.getSABRParameters(),
             sabr.getSABRIndex());
         final MultipleCurrencyAmount pvBumpedMinus = instrument.accept(_valueCalculator, marketFwdBumpedMinus);
         final MultipleCurrencyAmount pvDiff = pvBumpedPlus.plus(pvBumpedMinus.multipliedBy(-1.0));

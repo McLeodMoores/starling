@@ -33,19 +33,21 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebExchangeVersionsResource(final AbstractWebExchangeResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    ExchangeHistoryRequest request = new ExchangeHistoryRequest(data().getExchange().getUniqueId());
-    ExchangeHistoryResult result = data().getExchangeMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final ExchangeHistoryRequest request = new ExchangeHistoryRequest(data().getExchange().getUniqueId());
+    final ExchangeHistoryResult result = data().getExchangeMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getExchanges());
     return getFreemarker().build(HTML_DIR + "exchangeversions.ftl", out);
@@ -54,44 +56,46 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ExchangeHistoryRequest request = new ExchangeHistoryRequest(data().getExchange().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ExchangeHistoryRequest request = new ExchangeHistoryRequest(data().getExchange().getUniqueId());
     request.setPagingRequest(pr);
-    ExchangeHistoryResult result = data().getExchangeMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final ExchangeHistoryResult result = data().getExchangeMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getExchanges());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "exchangeversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "exchangeversions.ftl", out);
     return Response.ok(json).build();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ExchangeDocument doc = data().getExchange();
+    final FlexiBean out = super.createRootData();
+    final ExchangeDocument doc = data().getExchange();
     out.put("exchangeDoc", doc);
     out.put("exchange", doc.getExchange());
     out.put("deleted", !doc.isLatest());
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebExchangeVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebExchangeVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    ExchangeDocument doc = data().getExchange();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
-      ExchangeDocument versioned = data().getExchangeMaster().get(combined);
+    final ExchangeDocument doc = data().getExchange();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    if (!doc.getUniqueId().equals(combined)) {
+      final ExchangeDocument versioned = data().getExchangeMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -99,14 +103,16 @@ public class WebExchangeVersionsResource extends AbstractWebExchangeResource {
     return new WebExchangeVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebExchangeData data) {
-    String exchangeId = data.getBestExchangeUriId(null);
+    final String exchangeId = data.getBestExchangeUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebExchangeVersionsResource.class).build(exchangeId);
   }
 

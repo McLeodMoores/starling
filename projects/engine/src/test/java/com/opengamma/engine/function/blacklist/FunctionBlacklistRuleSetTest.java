@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -78,7 +78,7 @@ public class FunctionBlacklistRuleSetTest {
     try {
       final FunctionBlacklistRuleSet bl = new FunctionBlacklistRuleSet(executor);
       bl.add(new FunctionBlacklistRule());
-      final List<FunctionBlacklistRule> rules = new ArrayList<FunctionBlacklistRule>(10);
+      final List<FunctionBlacklistRule> rules = new ArrayList<>(10);
       for (int i = 0; i < 10; i++) {
         final FunctionBlacklistRule rule = new FunctionBlacklistRule();
         rule.setFunctionIdentifier("F" + i);

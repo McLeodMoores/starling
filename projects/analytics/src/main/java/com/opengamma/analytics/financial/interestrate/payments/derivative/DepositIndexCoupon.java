@@ -11,22 +11,70 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Interface for coupons with deposit-like indices.
- * 
- * @param <I> The index type.
+ *
+ * @param <I>
+ *          The index type.
  */
 public interface DepositIndexCoupon<I extends IndexDeposit> {
-  
-  Currency getCurrency();
-  
-  double getNotional();
-  
-  double getPaymentTime();
-  
-  double getPaymentYearFraction();
-  
-  I getIndex();
-  
-  <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data);
 
-  <T> T accept(final InstrumentDerivativeVisitor<?, T> visitor);
+  /**
+   * Gets the currency.
+   *
+   * @return the currency
+   */
+  Currency getCurrency();
+
+  /**
+   * Gets the notional.
+   *
+   * @return the notional
+   */
+  double getNotional();
+
+  /**
+   * Gets the payment time in years.
+   *
+   * @return the payment time
+   */
+  double getPaymentTime();
+
+  /**
+   * Gets the payment year fraction (as defined by a day-count convention).
+   *
+   * @return the payment year fraction
+   */
+  double getPaymentYearFraction();
+
+  /**
+   * Gets the reference index.
+   *
+   * @return the index
+   */
+  I getIndex();
+
+  /**
+   * Accepts a visitor.
+   *
+   * @param <S>
+   *          the type of the data
+   * @param <T>
+   *          the type of the result
+   * @param visitor
+   *          the visitor, not null
+   * @param data
+   *          any data required
+   * @return the result
+   */
+  <S, T> T accept(InstrumentDerivativeVisitor<S, T> visitor, S data);
+
+  /**
+   * Accepts a visitor.
+   *
+   * @param <T>
+   *          the type of the result
+   * @param visitor
+   *          the visitor, not null
+   * @return the result
+   */
+  <T> T accept(InstrumentDerivativeVisitor<?, T> visitor);
 }

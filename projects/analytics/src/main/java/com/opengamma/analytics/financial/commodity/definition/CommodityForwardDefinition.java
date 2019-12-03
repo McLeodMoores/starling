@@ -46,7 +46,8 @@ public abstract class CommodityForwardDefinition<T extends InstrumentDerivative>
   /**
    * Constructor for forwards with delivery dates (i.e. physical settlement)
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a forward contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a forward contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param firstDeliveryDate  date of first delivery - PHYSICAL settlement
@@ -58,8 +59,9 @@ public abstract class CommodityForwardDefinition<T extends InstrumentDerivative>
    * @param currency currency
    * @param settlementDate settlement date
    */
-  public CommodityForwardDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate,
-      final double amount, final String unitName, final SettlementType settlementType, final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
+  public CommodityForwardDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount,
+      final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate, final double amount, final String unitName,
+      final SettlementType settlementType, final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
     ArgumentChecker.notNull(expiryDate, "expiry time");
     ArgumentChecker.notNull(underlying, "underlying");
 
@@ -90,7 +92,8 @@ public abstract class CommodityForwardDefinition<T extends InstrumentDerivative>
   /**
    * Constructor for forward without delivery dates (e.g. cash settlement)
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param amount  number of units
@@ -210,17 +213,17 @@ public abstract class CommodityForwardDefinition<T extends InstrumentDerivative>
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

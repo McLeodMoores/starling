@@ -24,23 +24,24 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 @Deprecated
 public class ForexLocalVolatilityPDEPresentValueResultCollection {
-  /** Label for pips PV quotes calculated using local volatility */
+  /** Label for pips PV quotes calculated using local volatility. */
   public static final String LV_PIPS = "Local Volatility Pips";
-  /** Label for put PV quotes calculated using local volatility */
+  /** Label for put PV quotes calculated using local volatility. */
   public static final String LV_PUT_PV = "Local Volatility Put Present Value";
-  /** Label for call PV quotes calculated using local volatility */
+  /** Label for call PV quotes calculated using local volatility. */
   public static final String LV_CALL_PV = "Local Volatility Call Present Value";
-  /** Label for pips PV quotes calculated using the Black model */
+  /** Label for pips PV quotes calculated using the Black model. */
   public static final String BLACK_PIPS = "Black Pips";
-  /** Label for put PV quotes calculated using the Black model */
+  /** Label for put PV quotes calculated using the Black model. */
   public static final String BLACK_PUT_PV = "Black Put Present Value";
-  /** Label for call PV quotes calculated using the Black model */
+  /** Label for call PV quotes calculated using the Black model. */
   public static final String BLACK_CALL_PV = "Black Call Present Value";
-  private final Map<String, double[]> _pvDataMap = new TreeMap<String, double[]>();
+  private final Map<String, double[]> _pvDataMap = new TreeMap<>();
   private final double[] _strikes;
   private final int _n;
 
-  public ForexLocalVolatilityPDEPresentValueResultCollection(final double[] strikes, final double[] lvPutPips, final double[] blackPutPips, final double spotFX, final Currency putCurrency,
+  public ForexLocalVolatilityPDEPresentValueResultCollection(final double[] strikes, final double[] lvPutPips, final double[] blackPutPips, final double spotFX,
+      final Currency putCurrency,
       final Currency callCurrency, final double putAmount, final double callAmount) {
     ArgumentChecker.notNull(strikes, "strikes");
     ArgumentChecker.notNull(lvPutPips, "LV put pips");
@@ -58,10 +59,12 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
     final double[] blackPutPV = new double[_n];
     final double[] blackCallPV = new double[_n];
     for (int i = 0; i < _n; i++) {
-      MultipleCurrencyAmount mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(lvPutPips[i], spotFX, putCurrency, callCurrency, putAmount, callAmount);
+      MultipleCurrencyAmount mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(lvPutPips[i], spotFX, putCurrency, callCurrency,
+          putAmount, callAmount);
       lvPutPV[i] = mca.getAmount(callCurrency);
       lvCallPV[i] = mca.getAmount(putCurrency);
-      mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(blackPutPips[i], spotFX, putCurrency, callCurrency, putAmount, callAmount);
+      mca = ForexDomesticPipsToPresentValueConverter.convertDomesticPipsToFXPresentValue(blackPutPips[i], spotFX, putCurrency, callCurrency, putAmount,
+          callAmount);
       blackPutPV[i] = mca.getAmount(callCurrency);
       blackCallPV[i] = mca.getAmount(putCurrency);
     }
@@ -87,7 +90,7 @@ public class ForexLocalVolatilityPDEPresentValueResultCollection {
   public Double getPointPV(final String name, final double strike, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(interpolator, "interpolator");
-    if (!(_pvDataMap.containsKey(name)) || _pvDataMap.get(name) == null) {
+    if (!_pvDataMap.containsKey(name) || _pvDataMap.get(name) == null) {
       return null;
     }
     final Interpolator1DDataBundle data = interpolator.getDataBundle(_strikes, _pvDataMap.get(name));

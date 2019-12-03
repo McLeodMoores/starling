@@ -24,8 +24,8 @@ public class ComponentRepositoryBeanPostProcessor implements BeanFactoryPostProc
 
   //-------------------------------------------------------------------------
   @Override
-  public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-    ComponentRepository repo = ComponentRepository.getThreadLocal();
+  public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    final ComponentRepository repo = ComponentRepository.getThreadLocal();
     SpringComponentUtils.publishComponentRepository(repo, beanFactory);
   }
 

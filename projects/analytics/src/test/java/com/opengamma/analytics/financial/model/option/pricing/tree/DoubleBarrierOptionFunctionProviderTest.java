@@ -25,8 +25,8 @@ import com.opengamma.util.test.TestGroup;
 public class DoubleBarrierOptionFunctionProviderTest {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTrinomial = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {97., 105., 114. };
   private static final double TIME = 4.2;
@@ -55,7 +55,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
               final OptionFunctionProvider1D function = new DoubleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, lower, upper,
                   DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
               double exact = price(SPOT, strike, TIME, vol, interest, dividend, isCall, lower, upper);
-              final double res = _modelTrinomial.getPrice(lattice, function, SPOT, vol, interest, dividend);
+              final double res = TRINOMIAL.getPrice(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res, exact, Math.max(exact, .1) * 1.e-1);
             }
           }
@@ -94,7 +94,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
               final double gamma = 0.5 * (deltaSpotUp - deltaSpotDown) / eps;
               final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
 
-              final GreekResultCollection res = _modelTrinomial.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+              final GreekResultCollection res = TRINOMIAL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, .1) * 1.e-1);
               assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, .1) * 1.e-1);
               assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, .1) * 1.e-1);
@@ -126,8 +126,8 @@ public class DoubleBarrierOptionFunctionProviderTest {
         for (final double vol : VOLS) {
           for (final double dividend : DIVIDENDS) {
             for (final LatticeSpecification lattice : lattices) {
-              final GreekResultCollection greekCall = _model.getGreeks(lattice, functionCall, SPOT, vol, interest, dividend);
-              final GreekResultCollection greekPut = _model.getGreeks(lattice, functionPut, SPOT, vol, dividend, interest);
+              final GreekResultCollection greekCall = MODEL.getGreeks(lattice, functionCall, SPOT, vol, interest, dividend);
+              final GreekResultCollection greekPut = MODEL.getGreeks(lattice, functionPut, SPOT, vol, dividend, interest);
               final double priceCall = greekCall.get(Greek.FAIR_PRICE);
               final double thetaCall = greekCall.get(Greek.THETA);
               final double pricePut = greekPut.get(Greek.FAIR_PRICE);
@@ -167,7 +167,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
               final OptionFunctionProvider1D function = new DoubleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, lower, upper,
                   DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
               double exact = price(SPOT, strike, TIME, vol, interest, dividend, isCall, lower, upper);
-              final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+              final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res, exact, Math.max(exact, .1) * 1.e-1);
             }
           }
@@ -197,7 +197,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
             for (int i = 0; i < lower.length; ++i) {
               final OptionFunctionProvider1D function = new DoubleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, lower[i], upper[i],
                   DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
-              final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+              final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res, 0.);
             }
           }
@@ -239,7 +239,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
               final double gamma = 0.5 * (deltaSpotUp - deltaSpotDown) / eps;
               final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
 
-              final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+              final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, .1) * 1.e-1);
               assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, .1) * 1.e-1);
               assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, .1) * 1.e-1);
@@ -285,7 +285,7 @@ public class DoubleBarrierOptionFunctionProviderTest {
               final double gamma = 0.5 * (deltaSpotUp - deltaSpotDown) / eps;
               final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
 
-              final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+              final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
               assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-3);
               assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-3);
               assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-3);
@@ -323,16 +323,16 @@ public class DoubleBarrierOptionFunctionProviderTest {
           for (int i = 0; i < lower.length; ++i) {
             final OptionFunctionProvider1D function = new DoubleBarrierOptionFunctionProvider(strike, TIME, steps, isCall, lower[i], upper[i],
                 DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf("DoubleKnockOut"));
-            final double priceCash = _model.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
-            final double priceProp = _model.getPrice(lattice, function, SPOT, vol, interest, propDividend);
-            final GreekResultCollection resCash = _model.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
-            final GreekResultCollection resProp = _model.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
+            final double priceCash = MODEL.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
+            final double priceProp = MODEL.getPrice(lattice, function, SPOT, vol, interest, propDividend);
+            final GreekResultCollection resCash = MODEL.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
+            final GreekResultCollection resProp = MODEL.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
             final OptionFunctionProvider1D functionTri = new DoubleBarrierOptionFunctionProvider(strike, TIME, stepsTri, isCall, lower[i], upper[i],
                 DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf("DoubleKnockOut"));
-            final double priceCashTrinomial = _modelTrinomial.getPrice(lattice, functionTri, SPOT, vol, interest, cashDividend);
-            final double pricePropTrinomial = _modelTrinomial.getPrice(lattice, functionTri, SPOT, vol, interest, propDividend);
-            final GreekResultCollection resCashTrinomial = _modelTrinomial.getGreeks(lattice, functionTri, SPOT, vol, interest, cashDividend);
-            final GreekResultCollection resPropTrinomial = _modelTrinomial.getGreeks(lattice, functionTri, SPOT, vol, interest, propDividend);
+            final double priceCashTrinomial = TRINOMIAL.getPrice(lattice, functionTri, SPOT, vol, interest, cashDividend);
+            final double pricePropTrinomial = TRINOMIAL.getPrice(lattice, functionTri, SPOT, vol, interest, propDividend);
+            final GreekResultCollection resCashTrinomial = TRINOMIAL.getGreeks(lattice, functionTri, SPOT, vol, interest, cashDividend);
+            final GreekResultCollection resPropTrinomial = TRINOMIAL.getGreeks(lattice, functionTri, SPOT, vol, interest, propDividend);
 
             assertEquals(resCash.get(Greek.FAIR_PRICE), priceCash, 1.e-14);
             assertEquals(resCashTrinomial.get(Greek.FAIR_PRICE), priceCashTrinomial, 1.e-14);
@@ -395,11 +395,11 @@ public class DoubleBarrierOptionFunctionProviderTest {
         for (int i = 0; i < lower.length; ++i) {
           final OptionFunctionProvider1D functionVanilla = new DoubleBarrierOptionFunctionProvider(strike, TIME, steps, isCall, lower[i], upper[i],
               DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf("DoubleKnockOut"));
-          final double resPrice = _model.getPrice(functionVanilla, SPOT, vol, rate, dividend);
-          final GreekResultCollection resGreeks = _model.getGreeks(functionVanilla, SPOT, vol, rate, dividend);
+          final double resPrice = MODEL.getPrice(functionVanilla, SPOT, vol, rate, dividend);
+          final GreekResultCollection resGreeks = MODEL.getGreeks(functionVanilla, SPOT, vol, rate, dividend);
 
-          final double resPriceConst = _model.getPrice(lattice1, functionVanilla, SPOT, volRef, rateRef, dividend[0]);
-          final GreekResultCollection resGreeksConst = _model.getGreeks(lattice1, functionVanilla, SPOT, volRef, rateRef, dividend[0]);
+          final double resPriceConst = MODEL.getPrice(lattice1, functionVanilla, SPOT, volRef, rateRef, dividend[0]);
+          final GreekResultCollection resGreeksConst = MODEL.getGreeks(lattice1, functionVanilla, SPOT, volRef, rateRef, dividend[0]);
           assertEquals(resPrice, resPriceConst, Math.max(Math.abs(resPriceConst), .1) * 1.e-1);
           assertEquals(resGreeks.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
           assertEquals(resGreeks.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 0.1) * 0.1);
@@ -408,9 +408,9 @@ public class DoubleBarrierOptionFunctionProviderTest {
 
           final OptionFunctionProvider1D functionTri = new DoubleBarrierOptionFunctionProvider(strike, TIME, stepsTri, isCall, lower[i], upper[i],
               DoubleBarrierOptionFunctionProvider.BarrierTypes.valueOf("DoubleKnockOut"));
-          final double resPriceTrinomial = _modelTrinomial.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final double resPriceTrinomial = TRINOMIAL.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resPriceTrinomial, resPriceConst, Math.max(Math.abs(resPriceConst), 1.) * 1.e-1);
-          final GreekResultCollection resGreeksTrinomial = _modelTrinomial.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final GreekResultCollection resGreeksTrinomial = TRINOMIAL.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resGreeksTrinomial.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 1.) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 1.) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.GAMMA), resGreeksConst.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConst.get(Greek.GAMMA)), 1.) * 0.1);

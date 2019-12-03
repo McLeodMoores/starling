@@ -54,18 +54,18 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
    * @param type the type of the linked object, not null
    * @param linkResolver the resolver used to resolve the link when requested, not null
    */
-  /* package */ ResolvableSecurityLink(ExternalIdBundle identifier, Class<T> type,
-                                       LinkResolver<ExternalIdBundle, T> linkResolver) {
+  /* package */ ResolvableSecurityLink(final ExternalIdBundle identifier, final Class<T> type,
+                                       final LinkResolver<ExternalIdBundle, T> linkResolver) {
     this(LinkIdentifier.of(identifier, type), linkResolver);
   }
 
   @ImmutableConstructor
-  private ResolvableSecurityLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
+  private ResolvableSecurityLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier) {
     this(linkIdentifier, new ServiceContextSecurityLinkResolver<T>());
   }
 
-  private ResolvableSecurityLink(LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
-                                 LinkResolver<ExternalIdBundle, T> linkResolver) {
+  private ResolvableSecurityLink(final LinkIdentifier<ExternalIdBundle, T> linkIdentifier,
+                                 final LinkResolver<ExternalIdBundle, T> linkResolver) {
     _linkIdentifier = linkIdentifier;
     _resolver = ArgumentChecker.notNull(linkResolver, "linkResolver");
   }
@@ -161,7 +161,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvableSecurityLink<?> other = (ResolvableSecurityLink<?>) obj;
-      return JodaBeanUtils.equal(getLinkIdentifier(), other.getLinkIdentifier());
+      return JodaBeanUtils.equal(_linkIdentifier, other._linkIdentifier);
     }
     return false;
   }
@@ -169,7 +169,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getLinkIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_linkIdentifier);
     return hash;
   }
 
@@ -177,7 +177,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ResolvableSecurityLink{");
-    buf.append("linkIdentifier").append('=').append(JodaBeanUtils.toString(getLinkIdentifier()));
+    buf.append("linkIdentifier").append('=').append(JodaBeanUtils.toString(_linkIdentifier));
     buf.append('}');
     return buf.toString();
   }
@@ -321,19 +321,31 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

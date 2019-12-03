@@ -26,6 +26,7 @@ import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.model.volatility.surface.BlackVolatilitySurface;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.holiday.HolidaySource;
@@ -47,17 +48,15 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.analytics.conversion.BondFutureSecurityConverter;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.EquityOptionsConverter;
-import com.opengamma.financial.analytics.conversion.FutureSecurityConverterDeprecated;
+import com.opengamma.financial.analytics.conversion.FutureSecurityConverter;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
 import com.opengamma.financial.analytics.model.equity.EquitySecurityUtils;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -74,7 +73,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionFunction.class);
-  //TODO the next three properties should be moved from this class after checking that there's no others that match
+  // TODO the next three properties should be moved from this class after checking that there's no others that match
   /**
    * Property name for the discounting curve.
    */
@@ -91,7 +90,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   private static final ComputationTargetType TYPE = FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY.or(FinancialSecurityTypes.EQUITY_OPTION_SECURITY);
 
   /**
-   * @param valueRequirementNames A list of value requirement names, not null or empty
+   * @param valueRequirementNames
+   *          A list of value requirement names, not null or empty
    */
   public EquityOptionFunction(final String... valueRequirementNames) {
     ArgumentChecker.notEmpty(valueRequirementNames, "value requirement names");
@@ -102,11 +102,10 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   public void init(final FunctionCompilationContext context) {
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
-    final FutureSecurityConverterDeprecated futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);
+    final FutureSecurityConverter futureSecurityConverter = new FutureSecurityConverter();
     _converter = new EquityOptionsConverter(futureSecurityConverter, securitySource);
   }
 
@@ -138,14 +137,19 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   /**
    * Constructs a market data bundle.
    *
-   * @param underlyingId The underlying id of the index option
-   * @param executionContext The execution context
-   * @param inputs The market data inputs
-   * @param target The target
-   * @param desiredValues The desired values of the function
+   * @param underlyingId
+   *          The underlying id of the index option
+   * @param executionContext
+   *          The execution context
+   * @param inputs
+   *          The market data inputs
+   * @param target
+   *          The target
+   * @param desiredValues
+   *          The desired values of the function
    * @return The market data bundle used in pricing
    */
-  // buildMarketBundle is re-used by EquityIndexVanillaBarrierOptionFunction, hence is available to call  */
+  // buildMarketBundle is re-used by EquityIndexVanillaBarrierOptionFunction, hence is available to call */
   protected StaticReplicationDataBundle buildMarketBundle(final ExternalId underlyingId, final FunctionExecutionContext executionContext,
       final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
 
@@ -154,7 +158,7 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     if (discountingObject == null) {
       throw new OpenGammaRuntimeException("Could not get discounting curve");
     }
-    if (!(discountingObject instanceof YieldCurve)) { //TODO: make it more generic
+    if (!(discountingObject instanceof YieldCurve)) { // TODO: make it more generic
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }
     final YieldCurve discountingCurve = (YieldCurve) discountingObject;
@@ -180,17 +184,23 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   /**
    * Calculates the result.
    *
-   * @param derivative The derivative
-   * @param market The market data bundle
-   * @param inputs The market data inputs
-   * @param desiredValues The desired values
-   * @param targetSpec The target specification of the result
-   * @param resultProperties The result properties
+   * @param derivative
+   *          The derivative
+   * @param market
+   *          The market data bundle
+   * @param inputs
+   *          The market data inputs
+   * @param desiredValues
+   *          The desired values
+   * @param targetSpec
+   *          The target specification of the result
+   * @param resultProperties
+   *          The result properties
    * @return The result of the calculation
    */
-  protected abstract Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market,
-      final FunctionInputs inputs, final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec,
-      final ValueProperties resultProperties);
+  protected abstract Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market,
+      FunctionInputs inputs, Set<ValueRequirement> desiredValues, ComputationTargetSpecification targetSpec,
+      ValueProperties resultProperties);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -300,8 +310,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
 
     // Get security and its underlying's ExternalId.
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final HistoricalTimeSeriesSource tsSource =
-        OpenGammaCompilationContext.getHistoricalTimeSeriesSource(context); // TODO: Do we still require tsSource? Was used to access id bundles
+    final HistoricalTimeSeriesSource tsSource = OpenGammaCompilationContext.getHistoricalTimeSeriesSource(context); // TODO: Do we still require tsSource? Was
+                                                                                                                    // used to access id bundles
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final ExternalId underlyingId = getWeakUnderlyingId(FinancialSecurityUtils.getUnderlyingId(security), tsSource, securitySource,
         context.getComputationTargetResolver().getVersionCorrection(), surfaceName);
@@ -326,19 +336,22 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Adjusts the properties of the function inputs: <p>
+   * Adjusts the properties of the function inputs:
    * <ul>
-   *   <li> {@link ValueRequirementNames#YIELD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
-   *   {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
-   *   <li> {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} removes the {@link ValuePropertyNames#FUNCTION} and
-   *   {@link InstrumentTypeProperties#PROPERTY_SURFACE_INSTRUMENT_TYPE} properties.
-   *   <li> {@link ValueRequirementNames#FORWARD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
+   * <li>{@link ValueRequirementNames#YIELD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY} properties and
+   * remaps {@link ValuePropertyNames#CURVE} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
+   * {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
+   * <li>{@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} removes the {@link ValuePropertyNames#FUNCTION} and
+   * {@link InstrumentTypeProperties#PROPERTY_SURFACE_INSTRUMENT_TYPE} properties.
+   * <li>{@link ValueRequirementNames#FORWARD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY} properties and
+   * remaps {@link ValuePropertyNames#CURVE} -&gt; {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
    * </ul>
    * <p>
-   * @param input The resolved input
-   * @param properties The properties to be adjusted
+   *
+   * @param input
+   *          The resolved input
+   * @param properties
+   *          The properties to be adjusted
    */
   protected void extractInputProperties(final ValueSpecification input, final ValueProperties.Builder properties) {
     final String inputName = input.getValueName();
@@ -349,8 +362,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
           .withoutAny(ValuePropertyNames.CURRENCY)
           .get();
       properties
-      .with(PROPERTY_DISCOUNTING_CURVE_NAME, input.getProperty(ValuePropertyNames.CURVE))
-      .with(PROPERTY_DISCOUNTING_CURVE_CONFIG, input.getProperty(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
+          .with(PROPERTY_DISCOUNTING_CURVE_NAME, input.getProperty(ValuePropertyNames.CURVE))
+          .with(PROPERTY_DISCOUNTING_CURVE_CONFIG, input.getProperty(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
       for (final String property : curveProperties.getProperties()) {
         properties.with(property, curveProperties.getValues(property));
       }
@@ -401,7 +414,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   /**
    * Converts result properties with a currency property to one without.
    *
-   * @param resultsWithCurrency The set of results with the currency property set
+   * @param resultsWithCurrency
+   *          The set of results with the currency property set
    * @return A set of results without a currency property
    */
   protected Set<ValueSpecification> getResultsWithoutCurrency(final Set<ValueSpecification> resultsWithCurrency) {
@@ -419,10 +433,15 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Gets the discounting curve requirement
-   * @param fundingCurveName The discounting curve name
-   * @param curveCalculationConfigName The curve calculation configuration name
-   * @param security The security
-   * @param additionalConstraints The additional constraints
+   *
+   * @param fundingCurveName
+   *          The discounting curve name
+   * @param curveCalculationConfigName
+   *          The curve calculation configuration name
+   * @param security
+   *          The security
+   * @param additionalConstraints
+   *          The additional constraints
    * @return The discounting curve requirement
    */
   private static ValueRequirement getDiscountCurveRequirement(final String fundingCurveName, final String curveCalculationConfigName, final Security security,
@@ -436,10 +455,15 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
 
   /**
    * Gets the forward curve requirement
-   * @param forwardCurveName The forward curve name
-   * @param forwardCurveCalculationMethod The curve calculation method
-   * @param underlyingBuid The underlying id of the security
-   * @param additionalConstraints The additional constraints
+   *
+   * @param forwardCurveName
+   *          The forward curve name
+   * @param forwardCurveCalculationMethod
+   *          The curve calculation method
+   * @param underlyingBuid
+   *          The underlying id of the security
+   * @param additionalConstraints
+   *          The additional constraints
    * @return The forward curve requirement
    */
   private static ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod,
@@ -448,21 +472,32 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
         .with(ValuePropertyNames.CURVE, forwardCurveName)
         .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
         .get();
-    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a target type of SECURITY, and shift the logic into the reference resolver?
+    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a target type of SECURITY, and shift the
+    // logic into the reference resolver?
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, ComputationTargetType.PRIMITIVE, underlyingBuid, properties);
   }
 
   /**
    * Gets the volatility surface requirement.
-   * @param tsSource The time series source
-   * @param securitySource The security source
-   * @param desiredValue The desired value
-   * @param security The security
-   * @param surfaceName The volatility surface name
-   * @param forwardCurveName The forward curve name
-   * @param surfaceCalculationMethod The surface calculation method
-   * @param underlyingBuid The underlying id of the seucirty
-   * @param additionalConstraints The additional requirements
+   *
+   * @param tsSource
+   *          The time series source
+   * @param securitySource
+   *          The security source
+   * @param desiredValue
+   *          The desired value
+   * @param security
+   *          The security
+   * @param surfaceName
+   *          The volatility surface name
+   * @param forwardCurveName
+   *          The forward curve name
+   * @param surfaceCalculationMethod
+   *          The surface calculation method
+   * @param underlyingBuid
+   *          The underlying id of the seucirty
+   * @param additionalConstraints
+   *          The additional requirements
    * @return The volatility surface requirement
    */
   protected ValueRequirement getVolatilitySurfaceRequirement(final HistoricalTimeSeriesSource tsSource, final SecuritySource securitySource,
@@ -474,18 +509,23 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName, forwardCurveName,
         InstrumentTypeProperties.EQUITY_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);
     // TODO Casey - Replace above with below - ie pass additional constraints [PLAT-5524]
-    //return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, additionalConstraints, surfaceName, forwardCurveName,
-    //InstrumentTypeProperties.EQUITY_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);
+    // return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, additionalConstraints, surfaceName, forwardCurveName,
+    // InstrumentTypeProperties.EQUITY_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);
   }
 
   /**
-   * Remaps the scheme of the underlying (e .g. from a Bloomberg ticker to a Bloomberg weak ticker) to match that
-   * of the volatility surface
-   * @param underlyingId The underlying id
-   * @param tsSource The time series source
-   * @param securitySource The security source
-   * @param versionCorrection The version correction
-   * @param surfaceName The surface name
+   * Remaps the scheme of the underlying (e .g. from a Bloomberg ticker to a Bloomberg weak ticker) to match that of the volatility surface
+   *
+   * @param underlyingId
+   *          The underlying id
+   * @param tsSource
+   *          The time series source
+   * @param securitySource
+   *          The security source
+   * @param versionCorrection
+   *          The version correction
+   * @param surfaceName
+   *          The surface name
    * @return The weak underlying id.
    */
   private static ExternalId getWeakUnderlyingId(final ExternalId underlyingId, final HistoricalTimeSeriesSource tsSource, final SecuritySource securitySource,

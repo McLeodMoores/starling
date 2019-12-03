@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -49,7 +49,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   /**
-   * Gets the growth factor curve
+   * Gets the growth factor curve.
    * @return the growth factor curve
    */
   public Function1D<Double, Double> getR() {
@@ -57,7 +57,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   /**
-   * Gets the growth factor discounted cash dividends curve
+   * Gets the growth factor discounted cash dividends curve.
    * @return the growth factor discounted cash dividends curve
    */
   public Function1D<Double, Double> getD() {
@@ -65,7 +65,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   /**
-   * Gets the forward value
+   * Gets the forward value.
    * @param t time
    * @return the forward value
    */
@@ -74,7 +74,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   /**
-   * Gets the Growth Factor value
+   * Gets the Growth Factor value.
    * @param t time
    * @return the growth factor value
    */
@@ -83,7 +83,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   /**
-   * Gets the growth factor discounted cash dividends value
+   * Gets the growth factor discounted cash dividends value.
    * @param t time
    * @return the growth factor discounted cash dividends value
    */
@@ -102,7 +102,7 @@ public class EquityDividendsCurvesBundle {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -112,7 +112,7 @@ public class EquityDividendsCurvesBundle {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    EquityDividendsCurvesBundle other = (EquityDividendsCurvesBundle) obj;
+    final EquityDividendsCurvesBundle other = (EquityDividendsCurvesBundle) obj;
     if (!ObjectUtils.equals(_d, other._d)) {
       return false;
     }
@@ -125,12 +125,13 @@ public class EquityDividendsCurvesBundle {
     return true;
   }
 
-  private static Function1D<Double, Double> getForwardCurve(final double spot, final Function1D<Double, Double> growthFactorCurve, final AffineDividends dividends) {
+  private static Function1D<Double, Double> getForwardCurve(final double spot, final Function1D<Double, Double> growthFactorCurve,
+      final AffineDividends dividends) {
 
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(Double t) {
+        public Double evaluate(final Double t) {
           return spot * growthFactorCurve.evaluate(t);
         }
       };
@@ -147,24 +148,25 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         if (t < dividends.getTau(0)) {
           return spot * growthFactorCurve.evaluate(t);
         }
-        int index = getLowerBoundIndex(dividends.getTau(), t);
-        double total = accum[index];
+        final int index = getLowerBoundIndex(dividends.getTau(), t);
+        final double total = accum[index];
         return growthFactorCurve.evaluate(t) * (spot - total);
       }
     };
 
   }
 
-  private static Function1D<Double, Double> getDiscountedCashDividendsCurve(final Function1D<Double, Double> growthFactorCurve, final AffineDividends dividends) {
+  private static Function1D<Double, Double> getDiscountedCashDividendsCurve(final Function1D<Double, Double> growthFactorCurve,
+      final AffineDividends dividends) {
 
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(Double t) {
+        public Double evaluate(final Double t) {
           return 0.0;
         }
       };
@@ -181,15 +183,15 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         if (t >= dividends.getTau(n - 1)) {
           return 0.0;
         }
         if (t < dividends.getTau(0)) {
           return growthFactorCurve.evaluate(t) * accum[0];
         }
-        int index = getLowerBoundIndex(dividends.getTau(), t) + 1;
-        double total = accum[index];
+        final int index = getLowerBoundIndex(dividends.getTau(), t) + 1;
+        final double total = accum[index];
         return growthFactorCurve.evaluate(t) * total;
       }
     };
@@ -201,28 +203,28 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double evaluate(Double t) {
+        public Double evaluate(final Double t) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }
       };
     }
     final int n = dividends.getNumberOfDividends();
     final double[] accum = new double[n];
-    double prod = (1 - dividends.getBeta(0));
+    double prod = 1 - dividends.getBeta(0);
     accum[0] = prod;
     for (int i = 1; i < n; i++) {
-      prod *= (1 - dividends.getBeta(i));
+      prod *= 1 - dividends.getBeta(i);
       accum[i] = prod;
     }
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         if (t < dividends.getTau(0)) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }
-        int index = getLowerBoundIndex(dividends.getTau(), t);
-        double total = accum[index];
+        final int index = getLowerBoundIndex(dividends.getTau(), t);
+        final double total = accum[index];
         return total / discCurve.getDiscountFactor(t);
       }
     };

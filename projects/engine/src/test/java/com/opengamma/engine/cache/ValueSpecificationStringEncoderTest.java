@@ -21,28 +21,30 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link ValueSpecificationStringEncoder} class
+ * Tests the {@link ValueSpecificationStringEncoder} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class ValueSpecificationStringEncoderTest {
 
   public void testBasic() {
-    final ValueSpecification spec = new ValueSpecification("Value1", new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Sec", "A", "V1")), ValueProperties.with(
-        ValuePropertyNames.FUNCTION, "Test").get());
+    final ValueSpecification spec = new ValueSpecification("Value1",
+        new ComputationTargetSpecification(ComputationTargetType.SECURITY, UniqueId.of("Sec", "A", "V1")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get());
     final String str = ValueSpecificationStringEncoder.encodeAsString(spec);
     assertEquals(str, "Value1,{Function=[Test]},(Sec~A~V1,com.opengamma.core.security.Security)");
   }
 
   public void testNullType() {
-    final ValueSpecification spec = new ValueSpecification("Value2", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get());
+    final ValueSpecification spec = new ValueSpecification("Value2", ComputationTargetSpecification.NULL,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get());
     final String str = ValueSpecificationStringEncoder.encodeAsString(spec);
     assertEquals(str, "Value2,{Function=[Test]},(NULL,NULL)");
   }
 
   public void testMultipleTypes() {
     final ValueSpecification spec = new ValueSpecification("Value3",
-        new ComputationTargetSpecification(ComputationTargetType.SECURITY.or(ComputationTargetType.POSITION), UniqueId.of("Obj", "A", "V1")), ValueProperties.with(ValuePropertyNames.FUNCTION, "Test")
-            .get());
+        new ComputationTargetSpecification(ComputationTargetType.SECURITY.or(ComputationTargetType.POSITION), UniqueId.of("Obj", "A", "V1")),
+        ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get());
     final String str = ValueSpecificationStringEncoder.encodeAsString(spec);
     assertEquals(str, "Value3,{Function=[Test]},(Obj~A~V1,{com.opengamma.core.position.Position,com.opengamma.core.security.Security})");
   }
@@ -53,7 +55,8 @@ public class ValueSpecificationStringEncoderTest {
     final ComputationTargetSpecification c = b.containing(ComputationTargetType.PRIMITIVE, UniqueId.of("Foo", "Bar"));
     final ValueSpecification spec = new ValueSpecification("Value4", c, ValueProperties.with(ValuePropertyNames.FUNCTION, "Test").get());
     final String str = ValueSpecificationStringEncoder.encodeAsString(spec);
-    assertEquals(str, "Value4,{Function=[Test]},(Pos~12,Bundle[A~1, B~2],Foo~Bar,[com.opengamma.core.position.Position,com.opengamma.core.security.Security,com.opengamma.engine.target.Primitive])");
+    assertEquals(str, "Value4,{Function=[Test]},(Pos~12,Bundle[A~1, B~2],"
+        + "Foo~Bar,[com.opengamma.core.position.Position,com.opengamma.core.security.Security,com.opengamma.engine.target.Primitive])");
   }
 
 }

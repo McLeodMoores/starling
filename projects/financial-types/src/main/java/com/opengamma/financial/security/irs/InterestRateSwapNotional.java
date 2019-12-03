@@ -27,10 +27,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Notional that can handle a schedule. Currency must be constant throughout.
- * Expects to be handed a list of dates and the notional (absolute or delta) taking effect in that period.
- * Can be passed a single amount for a constant notional.
- * Dates provided may be business day adjusted during analytics calculations.
+ * Notional that can handle a schedule. Currency must be constant throughout. Expects to be handed a list of dates and the notional (absolute or delta) taking
+ * effect in that period. Can be passed a single amount for a constant notional. Dates provided may be business day adjusted during analytics calculations.
  */
 @BeanDefinition
 public final class InterestRateSwapNotional extends InterestRateNotional {
@@ -54,13 +52,13 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   @PropertyDefinition
   private List<Rate.ShiftType> _shiftTypes;
 
-  //@Override
-  public <T> T accept(InterestRateSwapNotionalVisitor<LocalDate, T> visitor, LocalDate period) {
+  // @Override
+  public <T> T accept(final InterestRateSwapNotionalVisitor<LocalDate, T> visitor, final LocalDate period) {
     return visitor.visitInterestRateSwapNotional(this, period);
   }
 
-  //@Override
-  public <T> T accept(InterestRateSwapNotionalVisitor<Object , T> visitor) {
+  // @Override
+  public <T> T accept(final InterestRateSwapNotionalVisitor<Object, T> visitor) {
     return visitor.visitInterestRateSwapNotional(this);
   }
 
@@ -86,13 +84,14 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   }
 
   /**
-  * Get the notional as of a given date
-  *
-  * @param date the (business day adjusted) date you want the notional for.
-  * @return the notional
-  */
+   * Get the notional as of a given date.
+   *
+   * @param date
+   *          the (business day adjusted) date you want the notional for.
+   * @return the notional
+   */
   public double getAmount(final LocalDate date) {
-    if (getDates().size() == 0 || date.isBefore(getDates().get(0))) {  // constant notional or before schedule begins
+    if (getDates().size() == 0 || date.isBefore(getDates().get(0))) { // constant notional or before schedule begins
       return super.getAmount();
     }
     final int index = Collections.binarySearch(_dates, date);
@@ -117,20 +116,24 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   /**
    * Create a variable notional schedule.
    *
-   * @param ccy the currency
-   * @param dates the dates the provided values take effect (unadjusted for business days)
-   * @param notionals the notional values (or shifts to the previous notional) that take effect
-   * @param types the shift types for each step in the schedule
+   * @param ccy
+   *          the currency
+   * @param dates
+   *          the dates the provided values take effect (unadjusted for business days)
+   * @param notionals
+   *          the notional values (or shifts to the previous notional) that take effect
+   * @param types
+   *          the shift types for each step in the schedule
    * @return the notional schedule
    */
-  public static InterestRateSwapNotional of(Currency ccy, final List<LocalDate> dates, final List<Double> notionals, List<Rate.ShiftType> types) {
+  public static InterestRateSwapNotional of(final Currency ccy, final List<LocalDate> dates, final List<Double> notionals, final List<Rate.ShiftType> types) {
     ArgumentChecker.noNulls(dates, "dates");
     ArgumentChecker.noNulls(notionals, "notionals");
     ArgumentChecker.noNulls(types, "types");
     ArgumentChecker.isTrue(dates.size() == notionals.size(), "Different numbers of overrides & notionals");
     ArgumentChecker.isTrue(dates.size() == types.size(), "Different numbers of overrides & notionals");
     ArgumentChecker.isTrue(notionals.size() > 0, "Require at least one notional");
-    if (notionals.size() == 1) {      // constant notional
+    if (notionals.size() == 1) { // constant notional
       return new InterestRateSwapNotional(ccy, notionals.get(0));
     }
     ArgumentChecker.isTrue(types.get(0) == Rate.ShiftType.OUTRIGHT, "First notional in schedule must be an OUTRIGHT quote");
@@ -140,13 +143,16 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   /**
    * Create a variable notional schedule.
    *
-   * @param ccy the currency
-   * @param dates the dates the provided values take effect (unadjusted for business days)
-   * @param notionals the notional values that take effect
+   * @param ccy
+   *          the currency
+   * @param dates
+   *          the dates the provided values take effect (unadjusted for business days)
+   * @param notionals
+   *          the notional values that take effect
    * @return the notional schedule
    */
-  public static InterestRateSwapNotional of(Currency ccy, final List<LocalDate> dates, final List<Double> notionals) {
-    List<Rate.ShiftType> types = Lists.newArrayListWithExpectedSize(notionals.size());
+  public static InterestRateSwapNotional of(final Currency ccy, final List<LocalDate> dates, final List<Double> notionals) {
+    final List<Rate.ShiftType> types = Lists.newArrayListWithExpectedSize(notionals.size());
     for (int i = 0; i < dates.size(); i++) {
       types.add(Rate.ShiftType.OUTRIGHT);
     }
@@ -154,17 +160,19 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   }
 
   /**
-   * Create a constant notional
+   * Create a constant notional.
    *
-   * @param ccy the currency
-   * @param notional the notional value
+   * @param ccy
+   *          the currency
+   * @param notional
+   *          the notional value
    * @return the constant notional
    */
-  public static InterestRateSwapNotional of(Currency ccy, final double notional) {
+  public static InterestRateSwapNotional of(final Currency ccy, final double notional) {
     return new InterestRateSwapNotional(ccy, notional);
   }
 
-  private InterestRateSwapNotional(Currency ccy, List<LocalDate> overridePeriods, List<Double> notionals, List<Rate.ShiftType> types) {
+  private InterestRateSwapNotional(final Currency ccy, final List<LocalDate> overridePeriods, final List<Double> notionals, final List<Rate.ShiftType> types) {
     super(ccy, ArgumentChecker.notEmpty(notionals, "notionals").iterator().next());
     ArgumentChecker.isTrue(overridePeriods.size() == notionals.size(), "Different overrides & notionals");
     ArgumentChecker.isTrue(overridePeriods.size() == types.size(), "Different overrides & adjustment types");
@@ -174,10 +182,12 @@ public final class InterestRateSwapNotional extends InterestRateNotional {
   }
 
   /**
-   * Create a constant notional
+   * Create a constant notional.
    *
-   * @param ccy the currency
-   * @param notional the notional value
+   * @param ccy
+   *          the currency
+   * @param notional
+   *          the notional value
    */
   public InterestRateSwapNotional(final Currency ccy, final double notional) {
     super(ccy, notional);

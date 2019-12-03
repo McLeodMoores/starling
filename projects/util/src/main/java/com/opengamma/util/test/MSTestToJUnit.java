@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -32,19 +32,17 @@ public class MSTestToJUnit extends AbstractJUnitResults {
       while (reader.read() != '>') { // CSIGNORE
       }
       return factory.createXMLStreamReader(reader);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Couldn't open file", e);
     }
   }
-
   private static double parseTime(final String time) {
     if (time == null) {
       return 0;
-    } else {
-      final String[] times = time.split(":");
-      return (double) (((Integer.parseInt(times[0]) * 60) + Integer.parseInt(times[1])) * 60)
-          + Double.parseDouble(times[2]);
     }
+    final String[] times = time.split(":");
+    return (Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1])) * 60
+        + Double.parseDouble(times[2]);
   }
 
   @Override
@@ -102,7 +100,7 @@ public class MSTestToJUnit extends AbstractJUnitResults {
       } finally {
         reader.close();
       }
-    } catch (XMLStreamException e) {
+    } catch (final XMLStreamException e) {
       throw new IOException("XMLStreamException", e);
     }
   }

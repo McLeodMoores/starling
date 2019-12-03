@@ -19,20 +19,20 @@ public class DataVersionException extends OpenGammaRuntimeException {
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    */
-  public DataVersionException(String message) {
+  public DataVersionException(final String message) {
     super(message);
   }
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    * @param cause  the underlying cause, may be null
    */
-  public DataVersionException(String message, Throwable cause) {
+  public DataVersionException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

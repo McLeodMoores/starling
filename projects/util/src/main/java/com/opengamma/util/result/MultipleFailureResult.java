@@ -6,7 +6,6 @@
 package com.opengamma.util.result;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +32,12 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A result indicating a failure with multiple underlying causes.
  * <p>
- * An example of this might be a function calling several other functions when
- * there is no market data available, causing them all to fail.
- * If all underlying results have the same status this result will use that status.
- * If they have different statues the status of this result will be {@link FailureStatus#MULTIPLE}.
+ * An example of this might be a function calling several other functions when there is no market data available, causing them all to fail. If all underlying
+ * results have the same status this result will use that status. If they have different statues the status of this result will be
+ * {@link FailureStatus#MULTIPLE}.
  *
- * @param <T> the type of the underlying result for a successful invocation
+ * @param <T>
+ *          the type of the underlying result for a successful invocation
  * @deprecated {@link FailureResult} can deal with multiple failures
  */
 @Deprecated
@@ -55,19 +54,23 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   private final String _message;
 
   /**
-   * @param failures the failures, must contain at least two elements
+   * @param failures
+   *          the failures, must contain at least two elements
+   * @return the result
+   * @param <U>
+   *          the type of the underlying result
    */
-  static <U> Result<U> of(List<Failure> failures) {
+  static <U> Result<U> of(final List<Failure> failures) {
     ArgumentChecker.notNull(failures, "failures");
-    
+
     if (failures.size() < 2) {
       throw new IllegalArgumentException("At least two failures are required");
     }
     ResultStatus status = failures.get(0).getStatus();
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
-    for (Iterator<Failure> itr = failures.iterator(); itr.hasNext(); ) {
-      Failure failure = itr.next();
+    for (final Iterator<Failure> itr = failures.iterator(); itr.hasNext();) {
+      final Failure failure = itr.next();
       builder.append(failure.getMessage());
 
       if (itr.hasNext()) {
@@ -81,7 +84,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   }
 
   @ImmutableConstructor
-  private MultipleFailureResult(Collection<Failure> failures, FailureStatus status, String message) {
+  private MultipleFailureResult(final Collection<Failure> failures, final FailureStatus status, final String message) {
     _failures = ImmutableSet.copyOf(ArgumentChecker.notEmpty(failures, "failures"));
     _status = ArgumentChecker.notNull(status, "status");
     _message = ArgumentChecker.notEmpty(message, "message");
@@ -94,17 +97,16 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   }
 
   @Override
-  public <U> Result<U> ifSuccess(Function<T, Result<U>> function) {
+  public <U> Result<U> ifSuccess(final Function<T, Result<U>> function) {
     return this.propagateFailure();
   }
 
   @Override
-  public <U, V> Result<V> combineWith(Result<U> other, Function2<T, U, Result<V>> function) {
+  public <U, V> Result<V> combineWith(final Result<U> other, final Function2<T, U, Result<V>> function) {
     if (other.isSuccess()) {
       return Result.failure(this);
-    } else {
-      return Result.failure(this, other);
     }
+    return Result.failure(this, other);
   }
 
   /**
@@ -115,7 +117,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     return false;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public T getValue() {
     throw new IllegalStateException("Unable to get a value from a failure result");
@@ -131,6 +133,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     return _message;
   }
 
+  @Override
   public ImmutableSet<Failure> getFailures() {
     return _failures;
   }
@@ -211,9 +214,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       MultipleFailureResult<?> other = (MultipleFailureResult<?>) obj;
-      return JodaBeanUtils.equal(getFailures(), other.getFailures()) &&
-          JodaBeanUtils.equal(getStatus(), other.getStatus()) &&
-          JodaBeanUtils.equal(getMessage(), other.getMessage());
+      return JodaBeanUtils.equal(_failures, other._failures) &&
+          JodaBeanUtils.equal(_status, other._status) &&
+          JodaBeanUtils.equal(_message, other._message);
     }
     return false;
   }
@@ -221,9 +224,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFailures());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_failures);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_status);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_message);
     return hash;
   }
 
@@ -231,9 +234,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("MultipleFailureResult{");
-    buf.append("failures").append('=').append(getFailures()).append(',').append(' ');
-    buf.append("status").append('=').append(getStatus()).append(',').append(' ');
-    buf.append("message").append('=').append(JodaBeanUtils.toString(getMessage()));
+    buf.append("failures").append('=').append(_failures).append(',').append(' ');
+    buf.append("status").append('=').append(_status).append(',').append(' ');
+    buf.append("message").append('=').append(JodaBeanUtils.toString(_message));
     buf.append('}');
     return buf.toString();
   }
@@ -427,19 +430,31 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<T> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

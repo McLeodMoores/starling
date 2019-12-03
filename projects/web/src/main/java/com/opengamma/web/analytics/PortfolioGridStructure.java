@@ -54,25 +54,25 @@ public class PortfolioGridStructure extends MainGridStructure {
   /** Rows in the grid. */
   private final List<PortfolioGridRow> _rows;
 
-  /* package */ PortfolioGridStructure(List<PortfolioGridRow> rows,
-                                       GridColumnGroup fixedColumns,
-                                       GridColumnGroups nonFixedColumns,
-                                       AnalyticsNode rootNode,
-                                       TargetLookup targetLookup,
-                                       UnversionedValueMappings valueMappings,
-                                       ViewDefinition viewDef) {
+  /* package */ PortfolioGridStructure(final List<PortfolioGridRow> rows,
+      final GridColumnGroup fixedColumns,
+      final GridColumnGroups nonFixedColumns,
+      final AnalyticsNode rootNode,
+      final TargetLookup targetLookup,
+      final UnversionedValueMappings valueMappings,
+      final ViewDefinition viewDef) {
     this(rows, fixedColumns, nonFixedColumns, rootNode, targetLookup, valueMappings, viewDef,
-         Collections.<ColumnSpecification, SortedSet<ColumnMeta>>emptyMap());
+        Collections.<ColumnSpecification, SortedSet<ColumnMeta>>emptyMap());
   }
 
-  /* package */ PortfolioGridStructure(List<PortfolioGridRow> rows,
-                                       GridColumnGroup fixedColumns,
-                                       GridColumnGroups nonFixedColumns,
-                                       AnalyticsNode rootNode,
-                                       TargetLookup targetLookup,
-                                       UnversionedValueMappings valueMappings,
-                                       ViewDefinition viewDef,
-                                       Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta) {
+  /* package */ PortfolioGridStructure(final List<PortfolioGridRow> rows,
+      final GridColumnGroup fixedColumns,
+      final GridColumnGroups nonFixedColumns,
+      final AnalyticsNode rootNode,
+      final TargetLookup targetLookup,
+      final UnversionedValueMappings valueMappings,
+      final ViewDefinition viewDef,
+      final Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta) {
     super(fixedColumns, nonFixedColumns, targetLookup, rootNode, valueMappings);
     ArgumentChecker.notNull(rows, "rows");
     ArgumentChecker.notNull(inlineColumnMeta, "inlineColumnCounts");
@@ -81,58 +81,58 @@ public class PortfolioGridStructure extends MainGridStructure {
     _viewDef = viewDef;
   }
 
-  /* package */ static PortfolioGridStructure create(Portfolio portfolio, UnversionedValueMappings valueMappings) {
+  /* package */ static PortfolioGridStructure create(final Portfolio portfolio, final UnversionedValueMappings valueMappings) {
     ArgumentChecker.notNull(valueMappings, "valueMappings");
     // TODO these can be empty, not used any more
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
-    AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
+    final AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
     return new PortfolioGridStructure(rows,
-                                      GridColumnGroup.empty(),
-                                      GridColumnGroups.empty(),
-                                      rootNode,
-                                      targetLookup,
-                                      valueMappings,
-                                      new ViewDefinition("empty", "dummy"));
+        GridColumnGroup.empty(),
+        GridColumnGroups.empty(),
+        rootNode,
+        targetLookup,
+        valueMappings,
+        new ViewDefinition("empty", "dummy"));
   }
 
-  /* package */ PortfolioGridStructure withUpdatedRows(Portfolio portfolio) {
-    AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    GridColumnGroup fixedColumns = buildFixedColumns(rows);
-    TargetLookup targetLookup = new TargetLookup(super.getValueMappings(), rows);
-    List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(_viewDef, targetLookup);
-    GridColumnGroups nonFixedColumns = new GridColumnGroups(analyticsColumns);
+  /* package */ PortfolioGridStructure withUpdatedRows(final Portfolio portfolio) {
+    final AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final GridColumnGroup fixedColumns = buildFixedColumns(rows);
+    final TargetLookup targetLookup = new TargetLookup(super.getValueMappings(), rows);
+    final List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(_viewDef, targetLookup);
+    final GridColumnGroups nonFixedColumns = new GridColumnGroups(analyticsColumns);
     return new PortfolioGridStructure(rows, fixedColumns, nonFixedColumns, rootNode, targetLookup,
-                                      super.getValueMappings(), _viewDef);
+        super.getValueMappings(), _viewDef);
   }
 
-  /* package */ PortfolioGridStructure withUpdatedStructure(CompiledViewDefinition compiledViewDef, Portfolio portfolio) {
-    AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    GridColumnGroup fixedColumns = buildFixedColumns(rows);
-    UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
-    TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
-    ViewDefinition viewDef = compiledViewDef.getViewDefinition();
-    List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(viewDef, targetLookup);
-    GridColumnGroups nonFixedColumns = new GridColumnGroups(analyticsColumns);
+  /* package */ PortfolioGridStructure withUpdatedStructure(final CompiledViewDefinition compiledViewDef, final Portfolio portfolio) {
+    final AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final GridColumnGroup fixedColumns = buildFixedColumns(rows);
+    final UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
+    final TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
+    final ViewDefinition viewDef = compiledViewDef.getViewDefinition();
+    final List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(viewDef, targetLookup);
+    final GridColumnGroups nonFixedColumns = new GridColumnGroups(analyticsColumns);
     return new PortfolioGridStructure(rows, fixedColumns, nonFixedColumns, rootNode, targetLookup, valueMappings, viewDef);
   }
 
-  /* package */ PortfolioGridStructure withUpdatedStructure(ResultsCache cache) {
-    Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta = Maps.newHashMap();
-    for (GridColumn column : getColumnStructure().getColumns()) {
-      ColumnSpecification colSpec = column.getSpecification();
+  /* package */ PortfolioGridStructure withUpdatedStructure(final ResultsCache cache) {
+    final Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta = Maps.newHashMap();
+    for (final GridColumn column : getColumnStructure().getColumns()) {
+      final ColumnSpecification colSpec = column.getSpecification();
       if (Inliner.isDisplayableInline(column.getUnderlyingType(), column.getSpecification())) {
         // ordered set of the union of the column metadata for the whole set. need this to figure out how many unique
         // columns are required
-        SortedSet<ColumnMeta> allColumnMeta = Sets.newTreeSet();
+        final SortedSet<ColumnMeta> allColumnMeta = Sets.newTreeSet();
         // traverse every result in the column and get the column metadata
-        for (Iterator<Pair<String, ValueSpecification>> it = getTargetLookup().getTargetsForColumn(colSpec); it.hasNext(); ) {
-          Pair<String, ValueSpecification> target = it.next();
+        for (final Iterator<Pair<String, ValueSpecification>> it = getTargetLookup().getTargetsForColumn(colSpec); it.hasNext();) {
+          final Pair<String, ValueSpecification> target = it.next();
           if (target != null) {
-            ResultsCache.Result result = cache.getResult(target.getFirst(), target.getSecond(), column.getType());
-            Object value = result.getValue();
+            final ResultsCache.Result result = cache.getResult(target.getFirst(), target.getSecond(), column.getType());
+            final Object value = result.getValue();
             allColumnMeta.addAll(Inliner.columnMeta(value));
           }
         }
@@ -143,70 +143,75 @@ public class PortfolioGridStructure extends MainGridStructure {
     }
     // TODO implement equals() and always return a new instance? conceptually a bit neater but less efficient
     if (!inlineColumnMeta.equals(_inlineColumnMeta)) {
-      List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(_viewDef, getTargetLookup(), inlineColumnMeta);
+      final List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(_viewDef, getTargetLookup(), inlineColumnMeta);
       return new PortfolioGridStructure(_rows,
-                                        buildFixedColumns(_rows),
-                                        new GridColumnGroups(analyticsColumns),
-                                        getRootNode(),
-                                        getTargetLookup(),
-                                        getValueMappings(),
-                                        _viewDef,
-                                        inlineColumnMeta);
-    } else {
-      return this;
+          buildFixedColumns(_rows),
+          new GridColumnGroups(analyticsColumns),
+          getRootNode(),
+          getTargetLookup(),
+          getValueMappings(),
+          _viewDef,
+          inlineColumnMeta);
     }
+    return this;
   }
 
-  /* package */ PortfolioGridStructure withNode(AnalyticsNode node) {
+  /* package */ PortfolioGridStructure withNode(final AnalyticsNode node) {
     return new PortfolioGridStructure(_rows, getFixedColumns(), getNonFixedColumns(), node, getTargetLookup(),
-                                      super.getValueMappings(), _viewDef);
+        super.getValueMappings(), _viewDef);
   }
 
-  /* package */ static GridColumnGroup buildFixedColumns(List<PortfolioGridRow> rows) {
-    GridColumn labelColumn = new GridColumn("Name", "", null, new PortfolioLabelRenderer(rows));
+  /* package */ static GridColumnGroup buildFixedColumns(final List<PortfolioGridRow> rows) {
+    final GridColumn labelColumn = new GridColumn("Name", "", null, new PortfolioLabelRenderer(rows));
     return new GridColumnGroup("fixed", ImmutableList.of(labelColumn), false);
   }
 
-  /* package */ static List<GridColumnGroup> buildAnalyticsColumns(ViewDefinition viewDef, TargetLookup targetLookup) {
+  /* package */ static List<GridColumnGroup> buildAnalyticsColumns(final ViewDefinition viewDef, final TargetLookup targetLookup) {
     return buildAnalyticsColumns(viewDef, targetLookup, Collections.<ColumnSpecification, SortedSet<ColumnMeta>>emptyMap());
   }
 
   /**
-   * @param viewDef The view definition
-   * @return Columns for displaying calculated analytics data, one group per calculation configuration
+   * @param viewDef
+   *          The view definition
+   * @param targetLookup
+   *          looks up the target
+   * @param inlineColumnMeta
+   *          inline column metadata
+   * @return Columns for displaying calculated analytics data, one group per
+   *         calculation configuration
    */
-  /* package */ static List<GridColumnGroup> buildAnalyticsColumns(ViewDefinition viewDef,
-                                                                   TargetLookup targetLookup,
-                                                                   Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta) {
-    List<GridColumnGroup> columnGroups = Lists.newArrayList();
-    Set<Triple<String, String, ValueProperties>> columnSpecs = Sets.newHashSet();
-    for (ViewCalculationConfiguration calcConfig : viewDef.getAllCalculationConfigurations()) {
-      List<ColumnSpecification> allSpecs = Lists.newArrayList();
-      for (ViewCalculationConfiguration.Column column : calcConfig.getColumns()) {
+  /* package */ static List<GridColumnGroup> buildAnalyticsColumns(final ViewDefinition viewDef,
+      final TargetLookup targetLookup,
+      final Map<ColumnSpecification, SortedSet<ColumnMeta>> inlineColumnMeta) {
+    final List<GridColumnGroup> columnGroups = Lists.newArrayList();
+    final Set<Triple<String, String, ValueProperties>> columnSpecs = Sets.newHashSet();
+    for (final ViewCalculationConfiguration calcConfig : viewDef.getAllCalculationConfigurations()) {
+      final List<ColumnSpecification> allSpecs = Lists.newArrayList();
+      for (final ViewCalculationConfiguration.Column column : calcConfig.getColumns()) {
         allSpecs.add(new ColumnSpecification(calcConfig.getName(),
-                                             column.getValueName(),
-                                             column.getProperties(),
-                                             column.getHeader()));
+            column.getValueName(),
+            column.getProperties(),
+            column.getHeader()));
       }
-      for (Pair<String, ValueProperties> output : calcConfig.getAllPortfolioRequirements()) {
+      for (final Pair<String, ValueProperties> output : calcConfig.getAllPortfolioRequirements()) {
         allSpecs.add(new ColumnSpecification(calcConfig.getName(), output.getFirst(), output.getSecond()));
       }
-      for (MergedOutput output : calcConfig.getMergedOutputs()) {
-        ValueProperties constraints = ValueProperties.with(ValuePropertyNames.NAME, output.getMergedOutputName()).get();
+      for (final MergedOutput output : calcConfig.getMergedOutputs()) {
+        final ValueProperties constraints = ValueProperties.with(ValuePropertyNames.NAME, output.getMergedOutputName()).get();
         allSpecs.add(new ColumnSpecification(calcConfig.getName(), ValueRequirementNames.MERGED_OUTPUT, constraints, output.getMergedOutputName()));
       }
-      List<GridColumn> columns = Lists.newArrayList();
-      for (ColumnSpecification columnSpec : allSpecs) {
-        Class<?> columnType = ValueTypes.getTypeForValueName(columnSpec.getValueName());
+      final List<GridColumn> columns = Lists.newArrayList();
+      for (final ColumnSpecification columnSpec : allSpecs) {
+        final Class<?> columnType = ValueTypes.getTypeForValueName(columnSpec.getValueName());
         // ensure column isn't a duplicate. can't use a set of col specs because we need to treat columns as duplicates
         // even if they have different headers
         if (columnSpecs.add(Triple.of(columnSpec.getCalcConfigName(), columnSpec.getValueName(), columnSpec.getValueProperties()))) {
-          SortedSet<ColumnMeta> meta = inlineColumnMeta.get(columnSpec);
+          final SortedSet<ColumnMeta> meta = inlineColumnMeta.get(columnSpec);
           if (meta == null) { // column can't be inlined
             columns.add(GridColumn.forSpec(columnSpec, columnType, targetLookup));
           } else {
             int inlineIndex = 0;
-            for (ColumnMeta columnMeta : meta) {
+            for (final ColumnMeta columnMeta : meta) {
               String header;
               if (inlineIndex++ == 0) {
                 header = columnSpec.getHeader() + " / " + columnMeta.getHeader();
@@ -214,12 +219,12 @@ public class PortfolioGridStructure extends MainGridStructure {
                 header = columnMeta.getHeader();
               }
               columns.add(GridColumn.forSpec(header,
-                                             columnSpec,
-                                             columnMeta.getType(),
-                                             columnMeta.getUnderlyingType(),
-                                             targetLookup,
-                                             columnMeta.getKey(),
-                                             inlineIndex));
+                  columnSpec,
+                  columnMeta.getType(),
+                  columnMeta.getUnderlyingType(),
+                  targetLookup,
+                  columnMeta.getKey(),
+                  inlineIndex));
             }
           }
         }
@@ -235,11 +240,11 @@ public class PortfolioGridStructure extends MainGridStructure {
     if (portfolio == null) {
       return Collections.emptyList();
     }
-    PortfolioMapperFunction<List<PortfolioGridRow>> targetFn = new PortfolioMapperFunction<List<PortfolioGridRow>>() {
+    final PortfolioMapperFunction<List<PortfolioGridRow>> targetFn = new PortfolioMapperFunction<List<PortfolioGridRow>>() {
 
       @Override
-      public List<PortfolioGridRow> apply(PortfolioNode node) {
-        ComputationTargetSpecification target =
+      public List<PortfolioGridRow> apply(final PortfolioNode node) {
+        final ComputationTargetSpecification target =
             new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, node.getUniqueId());
         String nodeName;
         // if the parent ID is null it's the root node
@@ -253,41 +258,41 @@ public class PortfolioGridStructure extends MainGridStructure {
       }
 
       @Override
-      public List<PortfolioGridRow> apply(PortfolioNode parentNode, Position position) {
-        ComputationTargetSpecification nodeSpec = ComputationTargetSpecification.of(parentNode);
+      public List<PortfolioGridRow> apply(final PortfolioNode parentNode, final Position position) {
+        final ComputationTargetSpecification nodeSpec = ComputationTargetSpecification.of(parentNode);
         // TODO I don't think toLatest() will do long term. resolution time available on the result model
-        UniqueId positionId = position.getUniqueId();
-        ComputationTargetSpecification target = nodeSpec.containing(ComputationTargetType.POSITION,
-                                                                    positionId.toLatest());
-        Security security = position.getSecurity();
-        List<PortfolioGridRow> rows = Lists.newArrayList();
-        UniqueId nodeId = parentNode.getUniqueId();
+        final UniqueId positionId = position.getUniqueId();
+        final ComputationTargetSpecification target = nodeSpec.containing(ComputationTargetType.POSITION,
+            positionId.toLatest());
+        final Security security = position.getSecurity();
+        final List<PortfolioGridRow> rows = Lists.newArrayList();
+        final UniqueId nodeId = parentNode.getUniqueId();
         if (isFungible(position.getSecurity())) {
           rows.add(new PortfolioGridRow(target, security.getName(), security.getUniqueId(), nodeId, positionId));
-          for (Trade trade : position.getTrades()) {
-            String tradeDate = trade.getTradeDate().toString();
+          for (final Trade trade : position.getTrades()) {
+            final String tradeDate = trade.getTradeDate().toString();
             rows.add(new PortfolioGridRow(ComputationTargetSpecification.of(trade),
-                                          tradeDate,
-                                          security.getUniqueId(),
-                                          nodeId,
-                                          positionId,
-                                          trade.getUniqueId()));
+                tradeDate,
+                security.getUniqueId(),
+                nodeId,
+                positionId,
+                trade.getUniqueId()));
           }
         } else {
-          Collection<Trade> trades = position.getTrades();
+          final Collection<Trade> trades = position.getTrades();
           if (trades.isEmpty()) {
             rows.add(new PortfolioGridRow(target, security.getName(), security.getUniqueId(), nodeId, positionId));
           } else {
             // there is never more than one trade on a position in an OTC security
-            UniqueId tradeId = trades.iterator().next().getUniqueId();
+            final UniqueId tradeId = trades.iterator().next().getUniqueId();
             rows.add(new PortfolioGridRow(target, security.getName(), security.getUniqueId(), nodeId, positionId, tradeId));
           }
         }
         return rows;
       }
     };
-    List<List<PortfolioGridRow>> rows = PortfolioMapper.map(portfolio.getRootNode(), targetFn);
-    Iterable<PortfolioGridRow> flattenedRows = Iterables.concat(rows);
+    final List<List<PortfolioGridRow>> rows = PortfolioMapper.map(portfolio.getRootNode(), targetFn);
+    final Iterable<PortfolioGridRow> flattenedRows = Iterables.concat(rows);
     return Lists.newArrayList(flattenedRows);
   }
 
@@ -295,11 +300,10 @@ public class PortfolioGridStructure extends MainGridStructure {
    * @param security A security
    * @return true if the security is fungible, false if OTC
    */
-  private static boolean isFungible(Security security) {
+  private static boolean isFungible(final Security security) {
     if (security instanceof FinancialSecurity) {
       return !((FinancialSecurity) security).accept(new OtcSecurityVisitor());
-    } else {
-      return false;
     }
+    return false;
   }
 }

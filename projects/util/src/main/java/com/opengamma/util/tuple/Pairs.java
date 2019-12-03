@@ -26,7 +26,7 @@ public final class Pairs {
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of null {@code Object}s inferring the types.
-   * 
+   *
    * @param <A> the first element type
    * @param <B> the second element type
    * @return a pair of two nulls, not null
@@ -37,7 +37,7 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Object}s optimizing the storage type.
-   * 
+   *
    * @param <A> the first element type
    * @param <B> the second element type
    * @param first  the first element, may be null
@@ -45,7 +45,7 @@ public final class Pairs {
    * @return a pair formed from the two parameters, not null
    */
   @SuppressWarnings("unchecked")
-  public static <A, B> Pair<A, B> ofOptimized(A first, B second) {
+  public static <A, B> Pair<A, B> ofOptimized(final A first, final B second) {
     if (second instanceof Double) {
       if (first instanceof Double) {
         return (Pair<A, B>) DoublesPair.of(((Double) first).doubleValue(), ((Double) second).doubleValue());
@@ -65,40 +65,40 @@ public final class Pairs {
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Object}s inferring the types.
-   * 
+   *
    * @param <A> the first element type
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <A, B> Pair<A, B> of(A first, B second) {
+  public static <A, B> Pair<A, B> of(final A first, final B second) {
     return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Double}s.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Double, Double> of(Double first, Double second) {
+  public static Pair<Double, Double> of(final Double first, final Double second) {
     if (first != null && second != null) {
       return DoublesPair.of(first.doubleValue(), second.doubleValue());
     }
-    return ObjectsPair.of(first, (Double) second);
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Double}s.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Double, Double> of(Double first, double second) {
+  public static Pair<Double, Double> of(final Double first, final double second) {
     if (first != null) {
       return DoublesPair.of(first.doubleValue(), second);
     }
@@ -107,12 +107,12 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Double}s.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Double, Double> of(double first, Double second) {
+  public static Pair<Double, Double> of(final double first, final Double second) {
     if (second != null) {
       return DoublesPair.of(first, second.doubleValue());
     }
@@ -121,25 +121,25 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Double}s.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Double, Double> of(double first, double second) {
+  public static Pair<Double, Double> of(final double first, final double second) {
     return DoublesPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Integer} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Integer, B> of(Integer first, B second) {
+  public static <B> Pair<Integer, B> of(final Integer first, final B second) {
     if (first != null) {
       return IntObjectPair.of(first.intValue(), second);
     }
@@ -148,12 +148,12 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Integer} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Double> of(Integer first, Double second) {
+  public static Pair<Integer, Double> of(final Integer first, final Double second) {
     if (first != null && second != null) {
       return IntDoublePair.of(first.intValue(), second.doubleValue());
     }
@@ -162,12 +162,12 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Integer} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Double> of(Integer first, double second) {
+  public static Pair<Integer, Double> of(final Integer first, final double second) {
     if (first != null) {
       return IntDoublePair.of(first.intValue(), second);
     }
@@ -176,58 +176,58 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Integer} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Integer> of(Integer first, int second) {
+  public static Pair<Integer, Integer> of(final Integer first, final int second) {
     return ObjectsPair.of(first, (Integer) second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Long> of(Integer first, long second) {
+  public static Pair<Integer, Long> of(final Integer first, final long second) {
     return ObjectsPair.of(first, (Long) second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Boolean> of(Integer first, boolean second) {
-    return ObjectsPair.of(first, (Boolean) second);
+  public static Pair<Integer, Boolean> of(final Integer first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Integer} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Integer, B> of(int first, B second) {
+  public static <B> Pair<Integer, B> of(final int first, final B second) {
     return IntObjectPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Double> of(int first, Double second) {
+  public static Pair<Integer, Double> of(final int first, final Double second) {
     if (second != null) {
       return IntDoublePair.of(first, second.doubleValue());
     }
@@ -236,58 +236,58 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Integer} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Double> of(int first, double second) {
+  public static Pair<Integer, Double> of(final int first, final double second) {
     return IntDoublePair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Integer> of(int first, int second) {
+  public static Pair<Integer, Integer> of(final int first, final int second) {
     return ObjectsPair.of((Integer) first, (Integer) second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Long> of(int first, long second) {
+  public static Pair<Integer, Long> of(final int first, final long second) {
     return ObjectsPair.of((Integer) first, (Long) second);
   }
 
   /**
    * Creates a pair of {@code Integer} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Integer, Boolean> of(int first, boolean second) {
-    return ObjectsPair.of((Integer) first, (Boolean) second);
+  public static Pair<Integer, Boolean> of(final int first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Long} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Long, B> of(Long first, B second) {
+  public static <B> Pair<Long, B> of(final Long first, final B second) {
     if (first != null) {
       return LongObjectPair.of(first.longValue(), second);
     }
@@ -296,12 +296,12 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Long} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Double> of(Long first, Double second) {
+  public static Pair<Long, Double> of(final Long first, final Double second) {
     if (first != null && second != null) {
       return LongDoublePair.of(first.longValue(), second.doubleValue());
     }
@@ -310,12 +310,12 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Long} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Double> of(Long first, double second) {
+  public static Pair<Long, Double> of(final Long first, final double second) {
     if (first != null) {
       return LongDoublePair.of(first.longValue(), second);
     }
@@ -324,58 +324,58 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Long} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Integer> of(Long first, int second) {
+  public static Pair<Long, Integer> of(final Long first, final int second) {
     return ObjectsPair.of(first, (Integer) second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Long> of(Long first, long second) {
+  public static Pair<Long, Long> of(final Long first, final long second) {
     return ObjectsPair.of(first, (Long) second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Boolean> of(Long first, boolean second) {
-    return ObjectsPair.of(first, (Boolean) second);
+  public static Pair<Long, Boolean> of(final Long first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Long} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Long, B> of(long first, B second) {
+  public static <B> Pair<Long, B> of(final long first, final B second) {
     return LongObjectPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Double> of(long first, Double second) {
+  public static Pair<Long, Double> of(final long first, final Double second) {
     if (second != null) {
       return LongDoublePair.of(first, second.doubleValue());
     }
@@ -384,182 +384,182 @@ public final class Pairs {
 
   /**
    * Creates a pair of {@code Long} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Double> of(long first, double second) {
+  public static Pair<Long, Double> of(final long first, final double second) {
     return LongDoublePair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Integer> of(long first, int second) {
+  public static Pair<Long, Integer> of(final long first, final int second) {
     return ObjectsPair.of((Long) first, (Integer) second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Long> of(long first, long second) {
+  public static Pair<Long, Long> of(final long first, final long second) {
     return ObjectsPair.of((Long) first, (Long) second);
   }
 
   /**
    * Creates a pair of {@code Long} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Long, Boolean> of(long first, boolean second) {
-    return ObjectsPair.of((Long) first, (Boolean) second);
+  public static Pair<Long, Boolean> of(final long first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Boolean} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Boolean, B> of(Boolean first, B second) {
+  public static <B> Pair<Boolean, B> of(final Boolean first, final B second) {
     return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Double> of(Boolean first, Double second) {
+  public static Pair<Boolean, Double> of(final Boolean first, final Double second) {
     return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Double> of(Boolean first, double second) {
-    return ObjectsPair.of(first, (Double) second);
+  public static Pair<Boolean, Double> of(final Boolean first, final double second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Integer> of(Boolean first, int second) {
-    return ObjectsPair.of(first, (Integer) second);
+  public static Pair<Boolean, Integer> of(final Boolean first, final int second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Long> of(Boolean first, long second) {
-    return ObjectsPair.of(first, (Long) second);
+  public static Pair<Boolean, Long> of(final Boolean first, final long second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Boolean> of(Boolean first, boolean second) {
-    return ObjectsPair.of(first, (Boolean) second);
+  public static Pair<Boolean, Boolean> of(final Boolean first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a pair of {@code Boolean} to {@code Object}.
-   * 
+   *
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <B> Pair<Boolean, B> of(boolean first, B second) {
-    return ObjectsPair.of((Boolean) first, second);
+  public static <B> Pair<Boolean, B> of(final boolean first, final B second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Double> of(boolean first, Double second) {
-    return ObjectsPair.of((Boolean) first, second);
+  public static Pair<Boolean, Double> of(final boolean first, final Double second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Double}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Double> of(boolean first, double second) {
-    return ObjectsPair.of((Boolean) first, (Double) second);
+  public static Pair<Boolean, Double> of(final boolean first, final double second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Integer}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Integer> of(boolean first, int second) {
-    return ObjectsPair.of((Boolean) first, (Integer) second);
+  public static Pair<Boolean, Integer> of(final boolean first, final int second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Long}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Long> of(boolean first, long second) {
-    return ObjectsPair.of((Boolean) first, (Long) second);
+  public static Pair<Boolean, Long> of(final boolean first, final long second) {
+    return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Boolean} to {@code Boolean}.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static Pair<Boolean, Boolean> of(boolean first, boolean second) {
-    return ObjectsPair.of((Boolean) first, (Boolean) second);
+  public static Pair<Boolean, Boolean> of(final boolean first, final boolean second) {
+    return ObjectsPair.of(first, second);
   }
 
   //-------------------------------------------------------------------------

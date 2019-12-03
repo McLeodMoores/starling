@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.curve.multicurve;
@@ -47,14 +47,21 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   private final MulticurveProviderDiscount _knownData;
 
   /**
-   * Constructor
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param generatorsMap The generators map.
+   * Constructor.
+   *
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param generatorsMap
+   *          The generators map.
    */
-  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+      final LinkedHashMap<String, IborIndex[]> forwardIborMap,
       final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
     ArgumentChecker.notNull(forwardIborMap, "Forward curves names map");
@@ -68,6 +75,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
 
   /**
    * Gets the know data.
+   *
    * @return The known data.
    */
   public MulticurveProviderDiscount getKnownData() {
@@ -76,6 +84,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
 
   /**
    * Gets the set of curves. The set order is the order in which they are build.
+   *
    * @return The set.
    */
   public Set<String> getCurvesList() {
@@ -83,28 +92,28 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   }
 
   @Override
-  public MulticurveProviderDiscount evaluate(DoubleMatrix1D x) {
-    MulticurveProviderDiscount provider = _knownData.copy();
-    Set<String> nameSet = _generatorsMap.keySet();
+  public MulticurveProviderDiscount evaluate(final DoubleMatrix1D x) {
+    final MulticurveProviderDiscount provider = _knownData.copy();
+    final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;
-    for (String name : nameSet) {
-      GeneratorYDCurve gen = _generatorsMap.get(name);
-      double[] paramCurve = Arrays.copyOfRange(x.getData(), indexParam, indexParam + gen.getNumberOfParameter());
+    for (final String name : nameSet) {
+      final GeneratorYDCurve gen = _generatorsMap.get(name);
+      final double[] paramCurve = Arrays.copyOfRange(x.getData(), indexParam, indexParam + gen.getNumberOfParameter());
       indexParam += gen.getNumberOfParameter();
-      YieldAndDiscountCurve curve = gen.generateCurve(name, provider, paramCurve);
+      final YieldAndDiscountCurve curve = gen.generateCurve(name, provider, paramCurve);
       if (_discountingMap.containsKey(name)) {
         provider.setOrReplaceCurve(_discountingMap.get(name), curve);
       }
       if (_forwardIborMap.containsKey(name)) {
-        IborIndex[] indexes = _forwardIborMap.get(name);
-        for (int loopindex = 0; loopindex < indexes.length; loopindex++) {
-          provider.setOrReplaceCurve(indexes[loopindex], curve);
+        final IborIndex[] indexes = _forwardIborMap.get(name);
+        for (final IborIndex indexe : indexes) {
+          provider.setOrReplaceCurve(indexe, curve);
         }
       }
       if (_forwardONMap.containsKey(name)) {
-        IndexON[] indexes = _forwardONMap.get(name);
-        for (int loopindex = 0; loopindex < indexes.length; loopindex++) {
-          provider.setOrReplaceCurve(indexes[loopindex], curve);
+        final IndexON[] indexes = _forwardONMap.get(name);
+        for (final IndexON indexe : indexes) {
+          provider.setOrReplaceCurve(indexe, curve);
         }
       }
       // TODO: Do we need to check that the curve is used at least once?

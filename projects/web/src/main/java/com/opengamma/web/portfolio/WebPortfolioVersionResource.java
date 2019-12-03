@@ -33,30 +33,32 @@ public class WebPortfolioVersionResource extends WebPortfolioResource {
   public WebPortfolioVersionResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
-    
+
   //-------------------------------------------------------------------------
+  @Override
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createPortfolioData();
+    final FlexiBean out = createPortfolioData();
     return getFreemarker().build(HTML_DIR + "portfolio.ftl", out);
   }
 
+  @Override
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON() {
-    FlexiBean out = createPortfolioData();
+    final FlexiBean out = createPortfolioData();
     return Response.ok(getFreemarker().build(JSON_DIR + "portfolio.ftl", out)).build();
   }
 
   private FlexiBean createPortfolioData() {
-    PortfolioDocument doc = data().getVersioned();
-    PositionSearchRequest positionSearch = new PositionSearchRequest();
+    final PortfolioDocument doc = data().getVersioned();
+    final PositionSearchRequest positionSearch = new PositionSearchRequest();
     positionSearch.setPositionObjectIds(doc.getPortfolio().getRootNode().getPositionIds());
-    PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
+    final PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
     resolveSecurities(positionsResult.getPositions());
 
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     out.put("positionsResult", positionsResult);
     out.put("positions", positionsResult.getPositions());
     return out;
@@ -67,9 +69,10 @@ public class WebPortfolioVersionResource extends WebPortfolioResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    PortfolioDocument doc = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final PortfolioDocument doc = data().getVersioned();
     out.put("portfolioDoc", doc);
     out.put("portfolio", doc.getPortfolio());
     out.put("childNodes", doc.getPortfolio().getRootNode().getChildNodes());
@@ -79,6 +82,7 @@ public class WebPortfolioVersionResource extends WebPortfolioResource {
   }
 
   //-------------------------------------------------------------------------
+  @Override
   @Path("nodes")
   public WebPortfolioNodesResource findNodes() {
     return new WebPortfolioVersionNodesResource(this);
@@ -101,7 +105,7 @@ public class WebPortfolioVersionResource extends WebPortfolioResource {
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overridePortfolioId) {
-    String portfolioId = data.getBestPortfolioUriId(overridePortfolioId);
+    final String portfolioId = data.getBestPortfolioUriId(overridePortfolioId);
     return data.getUriInfo().getBaseUriBuilder().path(WebPortfolioResource.class).build(portfolioId);
   }
 

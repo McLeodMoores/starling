@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.capletstripping;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BasisSplineVolatilityTermStructureProvider implements VolatilityTermStructureProvider<DoubleMatrix1D> {
 
@@ -33,12 +33,12 @@ public class BasisSplineVolatilityTermStructureProvider implements VolatilityTer
   }
 
   @Override
-  public VolatilityTermStructure evaluate(DoubleMatrix1D data) {
+  public VolatilityTermStructure evaluate(final DoubleMatrix1D data) {
     final Function1D<Double, Double> func = new BasisFunctionAggregation<>(_bSplines, data.getData());
     return new VolatilityTermStructure() {
 
       @Override
-      public Double getVolatility(Double t) {
+      public Double getVolatility(final Double t) {
         return func.evaluate(t);
       }
     };

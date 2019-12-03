@@ -59,7 +59,7 @@ import com.opengamma.util.time.Tenor;
 public class DefaultSecurityLoader extends AbstractSecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultSecurityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSecurityLoader.class);
 
   /**
    * The security master to load into.
@@ -164,7 +164,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
         missing.put(requestedBundle, null);
       } else {
         if (searchResult.getDocuments().size() > 1) {
-          s_logger.warn("Multiple securities matched bundle {}", requestedBundle);
+          LOGGER.warn("Multiple securities matched bundle {}", requestedBundle);
           // consistent order for duplicates was selected by the sort order
         }
         final ManageableSecurity sec = searchResult.getFirstSecurity();
@@ -194,7 +194,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
   protected Map<ExternalIdBundle, Security> loadUnderlyings(final Map<ExternalIdBundle, Security> providedMap) {
     // find and load dependencies
     final Set<ExternalIdBundle> underlyingIds = Sets.newHashSet();
-    final Set<Index> indices = new HashSet<Index>();
+    final Set<Index> indices = new HashSet<>();
     final UnderlyingExternalIdVisitor visitor = new UnderlyingExternalIdVisitor();
     for (final Entry<ExternalIdBundle, Security> entry : providedMap.entrySet()) {
       final Security security = entry.getValue();
@@ -234,7 +234,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
     return underlyingProvidedMap;
   }
 
-  private enum Source { EXISTING, TO_ADD, SEC_SOURCE };
+  private enum Source { EXISTING, TO_ADD, SEC_SOURCE }
 
   private void processIndices(final Set<Index> indices) {
     final SecuritySource secSource = new MasterSecuritySource(_securityMaster);
@@ -293,7 +293,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
         final ExternalId preferred = preferredExternalId(index.getExternalIdBundle());
         indexFamily.setName(index.getIndexFamilyId().getValue());
         indexFamily.setExternalIdBundle(familyBundle);
-        final SortedMap<Tenor, ExternalId> entries = new TreeMap<Tenor, ExternalId>();
+        final SortedMap<Tenor, ExternalId> entries = new TreeMap<>();
         entries.put(tenor, preferred);
         indexFamily.setMembers(entries);
         toAdd.put(familyBundle, indexFamily);
@@ -304,7 +304,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
     storeIndexFamilies(existing, toAdd);
   }
 
-  private static final ExternalIdDisplayComparator s_comparator = new ExternalIdDisplayComparator();
+  private static final ExternalIdDisplayComparator COMPARATOR = new ExternalIdDisplayComparator();
 
   private ExternalId preferredExternalId(final ExternalIdBundle bundle) {
     ExternalId preferred = null;
@@ -312,7 +312,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
       if (preferred == null) {
         preferred = current;
       } else {
-        if (s_comparator.compare(preferred, current) > 0) {
+        if (COMPARATOR.compare(preferred, current) > 0) {
           preferred = current;
         }
       }

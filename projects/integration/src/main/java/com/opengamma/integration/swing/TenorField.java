@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.integration.swing;
 
 import java.lang.reflect.Field;
@@ -13,30 +18,30 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Class for implementing a Tenor component
+ * Class for implementing a Tenor component.
  */
 public class TenorField extends JTextField {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TenorField.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TenorField.class);
+
   public TenorField() {
     super();
-    //ListDataIntelliHints<Tenor> intelliHints = new ListDataIntelliHints<>(this, getAllTenors());
   }
 
   private List<Tenor> getAllTenors() {
-    List<Tenor> tenors = new ArrayList<>();
-    Field[] fields = Tenor.class.getFields();
-    for (Field field : fields) {
+    final List<Tenor> tenors = new ArrayList<>();
+    final Field[] fields = Tenor.class.getFields();
+    for (final Field field : fields) {
       if (field.isAccessible() && field.getType().isAssignableFrom(Tenor.class)) {
         try {
           tenors.add((Tenor) field.get(field));
         } catch (IllegalArgumentException | IllegalAccessException ex) {
           // TODO Auto-generated catch block
-          s_logger.debug("problem accessing Tenor field {}", field);
+          LOGGER.debug("problem accessing Tenor field {}", field);
         }
       }
     }
     return tenors;
   }
-  
+
 }

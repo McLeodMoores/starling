@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,17 +35,22 @@ import com.opengamma.util.map.WeakValueHashMap2;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 /**
  * A cache decorating a {@code PositionSource}.
  * <p>
  * The cache is implemented using {@code EHCache}.
  * <p>
- * Any requests with a "latest" version/correction or unversioned unique identifier are not cached and will always hit the underlying. This should not be an issue in practice as the engine components
- * which use the position source will always specify an exact version/correction and versioned unique identifiers.
+ * Any requests with a "latest" version/correction or unversioned unique identifier are not cached and will always hit the underlying.
+ * This should not be an issue in practice as the engine components which use the position source will always specify an exact
+ * version/correction and versioned unique identifiers.
  */
 public class EHCachingPositionSource implements PositionSource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingPositionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingPositionSource.class);
 
   /**
    * Cache key for portfolios.
@@ -100,7 +101,7 @@ public class EHCachingPositionSource implements PositionSource {
     private final PortfolioNode _rootNode;
     private final String _name;
 
-    public CachedPortfolio(final Portfolio original, final PortfolioNode replacementRoot) {
+    CachedPortfolio(final Portfolio original, final PortfolioNode replacementRoot) {
       _attributes = original.getAttributes();
       _uniqueId = original.getUniqueId();
       _rootNode = replacementRoot;
@@ -113,12 +114,12 @@ public class EHCachingPositionSource implements PositionSource {
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
       throw new UnsupportedOperationException();
     }
 
@@ -140,8 +141,8 @@ public class EHCachingPositionSource implements PositionSource {
   }
 
   private final ConcurrentMap<UniqueId, Object> _frontPositionOrTradeCache = new MapMaker().weakValues().makeMap();
-  private final Map2<VersionCorrection, UniqueId, Object> _frontCacheByUID = new WeakValueHashMap2<VersionCorrection, UniqueId, Object>(HashMap2.STRONG_KEYS);
-  private final Map2<VersionCorrection, ObjectId, Object> _frontCacheByOID = new WeakValueHashMap2<VersionCorrection, ObjectId, Object>(HashMap2.STRONG_KEYS);
+  private final Map2<VersionCorrection, UniqueId, Object> _frontCacheByUID = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
+  private final Map2<VersionCorrection, ObjectId, Object> _frontCacheByOID = new WeakValueHashMap2<>(HashMap2.STRONG_KEYS);
 
   private final VersionCorrectionLockListener _frontCacheCleaner = new VersionCorrectionLockListener() {
     @Override
@@ -151,11 +152,11 @@ public class EHCachingPositionSource implements PositionSource {
     }
   };
 
-  private final WeakInstanceCache<PortfolioNode> _nodes = new WeakInstanceCache<PortfolioNode>();
+  private final WeakInstanceCache<PortfolioNode> _nodes = new WeakInstanceCache<>();
 
   /**
    * Creates the cache around an underlying position source.
-   * 
+   *
    * @param underlying the underlying data, not null
    * @param cacheManager the cache manager, not null
    */
@@ -178,7 +179,7 @@ public class EHCachingPositionSource implements PositionSource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying source of positions.
-   * 
+   *
    * @return the underlying source of positions, not null
    */
   protected PositionSource getUnderlying() {
@@ -187,23 +188,25 @@ public class EHCachingPositionSource implements PositionSource {
 
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   protected CacheManager getCacheManager() {
     return _cacheManager;
   }
 
-  protected Position addToFrontCache(Position position, final VersionCorrection versionCorrection) {
-    final Object f = _frontPositionOrTradeCache.putIfAbsent(position.getUniqueId(), position);
+  protected Position addToFrontCache(final Position position, final VersionCorrection versionCorrection) {
+    Position p = position;
+    final Object f = _frontPositionOrTradeCache.putIfAbsent(p.getUniqueId(), p);
     if (f instanceof Position) {
-      position = (Position) f;
+      p = (Position) f;
     }
-    _frontCacheByOID.put(versionCorrection, position.getUniqueId().getObjectId(), position);
-    return position;
+    _frontCacheByOID.put(versionCorrection, p.getUniqueId().getObjectId(), p);
+    return p;
   }
 
-  protected PortfolioNode addToFrontCache(PortfolioNode node, final VersionCorrection versionCorrection) {
+  protected PortfolioNode addToFrontCache(final PortfolioNode portfolioNode, final VersionCorrection versionCorrection) {
+    PortfolioNode node = portfolioNode;
     final List<Position> nodePositions = node.getPositions();
     List<Position> newPositions = null;
     for (int i = 0; i < nodePositions.size(); i++) {
@@ -211,7 +214,7 @@ public class EHCachingPositionSource implements PositionSource {
       final Position newPosition = addToFrontCache(nodePosition, versionCorrection);
       if (newPosition != nodePosition) {
         if (newPositions == null) {
-          newPositions = new ArrayList<Position>(nodePositions.size());
+          newPositions = new ArrayList<>(nodePositions.size());
           for (int j = 0; j < i; j++) {
             newPositions.add(nodePositions.get(j));
           }
@@ -230,7 +233,7 @@ public class EHCachingPositionSource implements PositionSource {
       final PortfolioNode newChild = addToFrontCache(nodeChild, versionCorrection);
       if (newChild != nodeChild) {
         if (newChildren == null) {
-          newChildren = new ArrayList<PortfolioNode>(nodeChildren.size());
+          newChildren = new ArrayList<>(nodeChildren.size());
           for (int j = 0; j < i; j++) {
             newChildren.add(nodeChildren.get(j));
           }
@@ -242,11 +245,11 @@ public class EHCachingPositionSource implements PositionSource {
         }
       }
     }
-    if ((newPositions != null) || (newChildren != null)) {
+    if (newPositions != null || newChildren != null) {
       final SimplePortfolioNode newNode = new SimplePortfolioNode(node.getUniqueId(), node.getName());
       newNode.setParentNodeId(node.getParentNodeId());
-      newNode.addPositions((newPositions != null) ? newPositions : node.getPositions());
-      newNode.addChildNodes((newChildren != null) ? newChildren : node.getChildNodes());
+      newNode.addPositions(newPositions != null ? newPositions : node.getPositions());
+      newNode.addChildNodes(newChildren != null ? newChildren : node.getChildNodes());
       node = newNode;
     }
     node = _nodes.get(node);
@@ -257,20 +260,19 @@ public class EHCachingPositionSource implements PositionSource {
     return node;
   }
 
-  protected Portfolio addToFrontCache(Portfolio portfolio, final VersionCorrection versionCorrection) {
+  protected Portfolio addToFrontCache(final Portfolio portfolio, final VersionCorrection versionCorrection) {
     final PortfolioNode newRoot = addToFrontCache(portfolio.getRootNode(), versionCorrection);
     if (newRoot != portfolio.getRootNode()) {
       final Portfolio newPortfolio = new CachedPortfolio(portfolio, newRoot);
       return newPortfolio;
-    } else {
-      return portfolio;
     }
+    return portfolio;
   }
 
   @Override
   public Portfolio getPortfolio(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
-      s_logger.debug("getPortfolioByUniqueId: Skipping cache for {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioByUniqueId: Skipping cache for {}/{}", uniqueId, versionCorrection);
       return getUnderlying().getPortfolio(uniqueId, versionCorrection);
     }
     Object f;
@@ -278,32 +280,31 @@ public class EHCachingPositionSource implements PositionSource {
     if (uniqueId.isVersioned()) {
       f = _frontCacheByUID.get(versionCorrection, uniqueId);
       if (f instanceof Portfolio) {
-        s_logger.debug("getPortfolioByUniqueId: Front cache hit on {}/{}", uniqueId, versionCorrection);
+        LOGGER.debug("getPortfolioByUniqueId: Front cache hit on {}/{}", uniqueId, versionCorrection);
         return (Portfolio) f;
       }
       key = Pairs.of(uniqueId, versionCorrection);
       final Element e = _portfolioCache.get(key);
       if (e != null) {
-        s_logger.debug("getPortfolioByUniqueId: EHCache hit on {}/{}", uniqueId, versionCorrection);
+        LOGGER.debug("getPortfolioByUniqueId: EHCache hit on {}/{}", uniqueId, versionCorrection);
         Portfolio portfolio = (Portfolio) e.getObjectValue();
         f = _frontCacheByUID.putIfAbsent(versionCorrection, uniqueId, portfolio);
         if (f instanceof Portfolio) {
-          s_logger.debug("getPortfolioByUniqueId: Late front cache hit on {}/{}", uniqueId, versionCorrection);
+          LOGGER.debug("getPortfolioByUniqueId: Late front cache hit on {}/{}", uniqueId, versionCorrection);
           return (Portfolio) f;
         }
         portfolio = addToFrontCache(portfolio, versionCorrection);
         return portfolio;
-      } else {
-        s_logger.debug("getPortfolioByUniqueId: Cache miss on {}/{}", uniqueId, versionCorrection);
       }
+      LOGGER.debug("getPortfolioByUniqueId: Cache miss on {}/{}", uniqueId, versionCorrection);
     } else {
-      s_logger.debug("getPortfolioByUniqueId: Pass through on {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioByUniqueId: Pass through on {}/{}", uniqueId, versionCorrection);
       key = null;
     }
     Portfolio portfolio = getUnderlying().getPortfolio(uniqueId, versionCorrection);
     f = _frontCacheByUID.putIfAbsent(versionCorrection, portfolio.getUniqueId(), portfolio);
     if (f instanceof Portfolio) {
-      s_logger.debug("getPortfolioByUniqueId: Late front cache hit on {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioByUniqueId: Late front cache hit on {}/{}", uniqueId, versionCorrection);
       return (Portfolio) f;
     }
     portfolio = addToFrontCache(portfolio, versionCorrection);
@@ -318,53 +319,50 @@ public class EHCachingPositionSource implements PositionSource {
   @Override
   public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
-      s_logger.debug("getPortfolioByObjectId: Skipping cache for {}/{}", objectId, versionCorrection);
+      LOGGER.debug("getPortfolioByObjectId: Skipping cache for {}/{}", objectId, versionCorrection);
       return getUnderlying().getPortfolio(objectId, versionCorrection);
     }
     Object f = _frontCacheByOID.get(versionCorrection, objectId);
     if (f instanceof Portfolio) {
-      s_logger.debug("getPortfolioByObjectId: Front cache hit on {}/{}", objectId, versionCorrection);
+      LOGGER.debug("getPortfolioByObjectId: Front cache hit on {}/{}", objectId, versionCorrection);
       return (Portfolio) f;
     }
     final Pair<ObjectId, VersionCorrection> key = Pairs.of(objectId, versionCorrection);
     final Element e = _portfolioCache.get(key);
     if (e != null) {
-      s_logger.debug("getPortfolioByObjectId: EHCache hit on {}/{}", objectId, versionCorrection);
+      LOGGER.debug("getPortfolioByObjectId: EHCache hit on {}/{}", objectId, versionCorrection);
       Portfolio portfolio = (Portfolio) e.getObjectValue();
       f = _frontCacheByUID.putIfAbsent(versionCorrection, portfolio.getUniqueId(), portfolio);
       if (f instanceof Portfolio) {
-        s_logger.debug("getPortfolioByObjectId: Late front cache hit on {}/{}", objectId, versionCorrection);
+        LOGGER.debug("getPortfolioByObjectId: Late front cache hit on {}/{}", objectId, versionCorrection);
         portfolio = (Portfolio) f;
         _frontCacheByOID.put(versionCorrection, objectId, portfolio);
         return portfolio;
-      } else {
-        portfolio = addToFrontCache(portfolio, versionCorrection);
-        _frontCacheByOID.put(versionCorrection, objectId, portfolio);
-        return portfolio;
       }
-    } else {
-      s_logger.debug("getPortfolioByObjectId: Cache miss on {}/{}", objectId, versionCorrection);
-      Portfolio portfolio = getUnderlying().getPortfolio(objectId, versionCorrection);
-      f = _frontCacheByUID.putIfAbsent(versionCorrection, portfolio.getUniqueId(), portfolio);
-      if (f instanceof Portfolio) {
-        s_logger.debug("getPortfolioByObjectId: Late front cache hit on {}/{}", objectId, versionCorrection);
-        portfolio = (Portfolio) f;
-        _frontCacheByOID.put(versionCorrection, objectId, portfolio);
-        return portfolio;
-      } else {
-        portfolio = addToFrontCache(portfolio, versionCorrection);
-        _frontCacheByOID.put(versionCorrection, objectId, portfolio);
-        _portfolioCache.put(new Element(key, portfolio));
-        _portfolioCache.put(new Element(Pairs.of(portfolio.getUniqueId(), versionCorrection), portfolio));
-        return portfolio;
-      }
+      portfolio = addToFrontCache(portfolio, versionCorrection);
+      _frontCacheByOID.put(versionCorrection, objectId, portfolio);
+      return portfolio;
     }
+    LOGGER.debug("getPortfolioByObjectId: Cache miss on {}/{}", objectId, versionCorrection);
+    Portfolio portfolio = getUnderlying().getPortfolio(objectId, versionCorrection);
+    f = _frontCacheByUID.putIfAbsent(versionCorrection, portfolio.getUniqueId(), portfolio);
+    if (f instanceof Portfolio) {
+      LOGGER.debug("getPortfolioByObjectId: Late front cache hit on {}/{}", objectId, versionCorrection);
+      portfolio = (Portfolio) f;
+      _frontCacheByOID.put(versionCorrection, objectId, portfolio);
+      return portfolio;
+    }
+    portfolio = addToFrontCache(portfolio, versionCorrection);
+    _frontCacheByOID.put(versionCorrection, objectId, portfolio);
+    _portfolioCache.put(new Element(key, portfolio));
+    _portfolioCache.put(new Element(Pairs.of(portfolio.getUniqueId(), versionCorrection), portfolio));
+    return portfolio;
   }
 
   @Override
   public PortfolioNode getPortfolioNode(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
-      s_logger.debug("getPortfolioNode: Skipping cache for {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioNode: Skipping cache for {}/{}", uniqueId, versionCorrection);
       return getUnderlying().getPortfolioNode(uniqueId, versionCorrection);
     }
     Object f;
@@ -372,26 +370,25 @@ public class EHCachingPositionSource implements PositionSource {
     if (uniqueId.isVersioned()) {
       f = _frontCacheByUID.get(versionCorrection, uniqueId);
       if (f instanceof PortfolioNode) {
-        s_logger.debug("getPortfolioNode: Front cache hit on {}/{}", uniqueId, versionCorrection);
+        LOGGER.debug("getPortfolioNode: Front cache hit on {}/{}", uniqueId, versionCorrection);
         return (PortfolioNode) f;
       }
       key = Pairs.of(uniqueId, versionCorrection);
       final Element e = _portfolioNodeCache.get(key);
       if (e != null) {
-        s_logger.debug("getPortfolioNode: EHCache hit on {}/{}", uniqueId, versionCorrection);
+        LOGGER.debug("getPortfolioNode: EHCache hit on {}/{}", uniqueId, versionCorrection);
         final PortfolioNode node = (PortfolioNode) e.getObjectValue();
         return addToFrontCache(node, versionCorrection);
-      } else {
-        s_logger.debug("getPortfolioNode: EHCache miss on {}/{}", uniqueId, versionCorrection);
       }
+      LOGGER.debug("getPortfolioNode: EHCache miss on {}/{}", uniqueId, versionCorrection);
     } else {
-      s_logger.debug("getPortfolioNode: Pass through on {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioNode: Pass through on {}/{}", uniqueId, versionCorrection);
       key = null;
     }
     final PortfolioNode node = getUnderlying().getPortfolioNode(uniqueId, versionCorrection);
     f = addToFrontCache(node, versionCorrection);
     if (f != node) {
-      s_logger.debug("getPortfolioNode: Late front cache hit on {}/{}", uniqueId, versionCorrection);
+      LOGGER.debug("getPortfolioNode: Late front cache hit on {}/{}", uniqueId, versionCorrection);
       return (PortfolioNode) f;
     }
     if (key != null) {
@@ -408,28 +405,27 @@ public class EHCachingPositionSource implements PositionSource {
     if (uniqueId.isVersioned()) {
       f = _frontPositionOrTradeCache.get(uniqueId);
       if (f instanceof Position) {
-        s_logger.debug("getPositionByUniqueId: Front cache hit on {}", uniqueId);
+        LOGGER.debug("getPositionByUniqueId: Front cache hit on {}", uniqueId);
         return (Position) f;
       }
       final Element e = _positionCache.get(uniqueId);
       if (e != null) {
-        s_logger.debug("getPositionByUniqueId: EHCache hit on {}", uniqueId);
+        LOGGER.debug("getPositionByUniqueId: EHCache hit on {}", uniqueId);
         final Position position = (Position) e.getObjectValue();
         f = _frontPositionOrTradeCache.putIfAbsent(uniqueId, position);
         if (f instanceof Position) {
-          s_logger.debug("getPositionByUniqueId: Late front cache hit on {}", uniqueId);
+          LOGGER.debug("getPositionByUniqueId: Late front cache hit on {}", uniqueId);
           return (Position) f;
-        } else {
-          return position;
         }
+        return position;
       }
     } else {
-      s_logger.debug("getPositionByUniqueId: Pass through on {}", uniqueId);
+      LOGGER.debug("getPositionByUniqueId: Pass through on {}", uniqueId);
     }
     final Position position = getUnderlying().getPosition(uniqueId);
     f = _frontPositionOrTradeCache.putIfAbsent(position.getUniqueId(), position);
     if (f instanceof Position) {
-      s_logger.debug("getPositionByUniqueId: Late front cache hit on {}", uniqueId);
+      LOGGER.debug("getPositionByUniqueId: Late front cache hit on {}", uniqueId);
       return (Position) f;
     }
     _positionCache.put(new Element(position.getUniqueId(), position));
@@ -439,41 +435,38 @@ public class EHCachingPositionSource implements PositionSource {
   @Override
   public Position getPosition(final ObjectId positionId, final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
-      s_logger.debug("getPositionByObjectId: Skipping cache for {}/{}", positionId, versionCorrection);
+      LOGGER.debug("getPositionByObjectId: Skipping cache for {}/{}", positionId, versionCorrection);
       return getUnderlying().getPosition(positionId, versionCorrection);
     }
     Object f = _frontCacheByOID.get(versionCorrection, positionId);
     if (f instanceof Position) {
-      s_logger.debug("getPositionByObjectId: Front cache hit on {}/{}", positionId, versionCorrection);
+      LOGGER.debug("getPositionByObjectId: Front cache hit on {}/{}", positionId, versionCorrection);
       return (Position) f;
     }
     final Pair<ObjectId, VersionCorrection> key = Pairs.of(positionId, versionCorrection);
     final Element e = _positionCache.get(key);
     if (e != null) {
-      s_logger.debug("getPositionByObjectId: EHCache hit on {}/{}", positionId, versionCorrection);
+      LOGGER.debug("getPositionByObjectId: EHCache hit on {}/{}", positionId, versionCorrection);
       final Position position = (Position) e.getObjectValue();
       f = _frontCacheByOID.putIfAbsent(versionCorrection, positionId, position);
       if (f instanceof Position) {
-        s_logger.debug("getPositionByObjectId: Late front cache hit on {}/{}", positionId, versionCorrection);
+        LOGGER.debug("getPositionByObjectId: Late front cache hit on {}/{}", positionId, versionCorrection);
         return (Position) f;
-      } else {
-        return position;
       }
-    } else {
-      s_logger.debug("getPositionByObjectId: Cache miss on {}/{}", positionId, versionCorrection);
-      final Position position = getUnderlying().getPosition(positionId, versionCorrection);
-      f = _frontPositionOrTradeCache.putIfAbsent(position.getUniqueId(), position);
-      if (f instanceof Position) {
-        s_logger.debug("getPositionByObjectId: Late front cache hit on {}/{}", positionId, versionCorrection);
-        _frontCacheByOID.put(versionCorrection, positionId, f);
-        return (Position) f;
-      } else {
-        _frontCacheByOID.put(versionCorrection, positionId, position);
-        _positionCache.put(new Element(key, position));
-        _positionCache.put(new Element(position.getUniqueId(), position));
-        return position;
-      }
+      return position;
     }
+    LOGGER.debug("getPositionByObjectId: Cache miss on {}/{}", positionId, versionCorrection);
+    final Position position = getUnderlying().getPosition(positionId, versionCorrection);
+    f = _frontPositionOrTradeCache.putIfAbsent(position.getUniqueId(), position);
+    if (f instanceof Position) {
+      LOGGER.debug("getPositionByObjectId: Late front cache hit on {}/{}", positionId, versionCorrection);
+      _frontCacheByOID.put(versionCorrection, positionId, f);
+      return (Position) f;
+    }
+    _frontCacheByOID.put(versionCorrection, positionId, position);
+    _positionCache.put(new Element(key, position));
+    _positionCache.put(new Element(position.getUniqueId(), position));
+    return position;
   }
 
   @Override
@@ -482,30 +475,28 @@ public class EHCachingPositionSource implements PositionSource {
     if (uniqueId.isVersioned()) {
       f = _frontPositionOrTradeCache.get(uniqueId);
       if (f instanceof Trade) {
-        s_logger.debug("getTradeByUniqueId: Front cache hit on {}", uniqueId);
+        LOGGER.debug("getTradeByUniqueId: Front cache hit on {}", uniqueId);
         return (Trade) f;
       }
       final Element e = _tradeCache.get(uniqueId);
       if (e != null) {
-        s_logger.debug("getTradeByUniqueId: EHCache hit on {}", uniqueId);
+        LOGGER.debug("getTradeByUniqueId: EHCache hit on {}", uniqueId);
         final Trade trade = (Trade) e.getObjectValue();
         f = _frontPositionOrTradeCache.putIfAbsent(uniqueId, trade);
         if (f instanceof Trade) {
-          s_logger.debug("getTradeByUniqueId: Late front cache hit on {}", uniqueId);
+          LOGGER.debug("getTradeByUniqueId: Late front cache hit on {}", uniqueId);
           return (Trade) f;
-        } else {
-          return trade;
         }
-      } else {
-        s_logger.debug("getTradeByUniqueId: Cache miss on {}", uniqueId);
+        return trade;
       }
+      LOGGER.debug("getTradeByUniqueId: Cache miss on {}", uniqueId);
     } else {
-      s_logger.debug("getTradeByUniqueId: Pass through on {}", uniqueId);
+      LOGGER.debug("getTradeByUniqueId: Pass through on {}", uniqueId);
     }
     final Trade trade = getUnderlying().getTrade(uniqueId);
     f = _frontPositionOrTradeCache.putIfAbsent(trade.getUniqueId(), trade);
     if (f instanceof Trade) {
-      s_logger.debug("getTradeByUniqueId: Late front cache hit on {}", uniqueId);
+      LOGGER.debug("getTradeByUniqueId: Late front cache hit on {}", uniqueId);
       return (Trade) f;
     }
     _tradeCache.put(new Element(trade.getUniqueId(), trade));

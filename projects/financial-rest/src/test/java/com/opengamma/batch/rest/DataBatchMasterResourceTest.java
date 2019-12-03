@@ -49,98 +49,98 @@ import com.opengamma.util.tuple.Pairs;
 public class DataBatchMasterResourceTest extends AbstractFudgeBuilderTestCase {
 
   @Mock
-  private BatchMasterWriter batchMaster;
+  private BatchMasterWriter _batchMaster;
 
-  private DataBatchMasterResource batchMasterResource;
+  private DataBatchMasterResource _batchMasterResource;
 
-  private RiskRun riskRun = new RiskRun(       
+  private final RiskRun _riskRun = new RiskRun(
     new MarketData(UniqueId.of(BatchMaster.BATCH_IDENTIFIER_SCHEME, "market-data")),
     Instant.now(),
     Instant.now(),
-    0, 
+    0,
     newHashSet(new CalculationConfiguration("calc-config")),
     newHashSet(new RiskRunProperty()),
     false,
-    VersionCorrection.LATEST, 
+    VersionCorrection.LATEST,
     UniqueId.of("Scheme", "view-def"),
     "cyclename"
   );
 
   @BeforeMethod
   public void setUp() throws Exception {
-    List<RiskRun> list = newArrayList(riskRun);
-    Pair<List<RiskRun>, Paging> batchSearchResult = Pairs.of(list, Paging.ofAll(Collections.emptyList()));
-    
+    final List<RiskRun> list = newArrayList(_riskRun);
+    final Pair<List<RiskRun>, Paging> batchSearchResult = Pairs.of(list, Paging.ofAll(Collections.emptyList()));
+
     initMocks(this);
-    batchMasterResource = new DataBatchMasterResource(batchMaster);
-    when(batchMaster.searchRiskRun((BatchRunSearchRequest) any())).thenReturn(batchSearchResult);
-    when(batchMaster.getRiskRun((ObjectId) any())).thenReturn(riskRun);
+    _batchMasterResource = new DataBatchMasterResource(_batchMaster);
+    when(_batchMaster.searchRiskRun((BatchRunSearchRequest) any())).thenReturn(batchSearchResult);
+    when(_batchMaster.getRiskRun((ObjectId) any())).thenReturn(_riskRun);
   }
 
   @SuppressWarnings("unchecked")
   @Test
   public void testSearch() throws Exception {
-    BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
-    
-    Object entity = batchMasterResource.searchBatchRuns(batchRunSearchRequest).getEntity();
+    final BatchRunSearchRequest batchRunSearchRequest = new BatchRunSearchRequest();
+
+    Object entity = _batchMasterResource.searchBatchRuns(batchRunSearchRequest).getEntity();
     entity = FudgeResponse.unwrap(entity);
-    Pair<List<RiskRun>, Paging> result = (Pair<List<RiskRun>, Paging>) entity;
-    
+    final Pair<List<RiskRun>, Paging> result = (Pair<List<RiskRun>, Paging>) entity;
+
     assertTrue(result.getFirst().size() > 0);
-    RiskRun run = result.getFirst().get(0);
-    assertEquals(run, riskRun);
+    final RiskRun run = result.getFirst().get(0);
+    assertEquals(run, _riskRun);
   }
 
   @Test
   public void testBatchRun() throws Exception {
-    String batchUid = "Scheme~MockUniqueId";
-    DataBatchRunResource batchRunResource = batchMasterResource.batchRuns(batchUid);
-    
-    batchRunResource.deleteBatchRun();    
-    
-    Response response = batchRunResource.get();
-    assertEquals(response.getEntity(), riskRun);
+    final String batchUid = "Scheme~MockUniqueId";
+    final DataBatchRunResource batchRunResource = _batchMasterResource.batchRuns(batchUid);
+
+    batchRunResource.deleteBatchRun();
+
+    final Response response = batchRunResource.get();
+    assertEquals(response.getEntity(), _riskRun);
   }
 
   @SuppressWarnings("unchecked")
   @Test(expectedExceptions = com.opengamma.DataNotFoundException.class)
   public void testBatchRunDataNotFound() throws Exception {
-    BatchMasterWriter batchMaster = mock(BatchMasterWriter.class);
+    final BatchMasterWriter batchMaster = mock(BatchMasterWriter.class);
     when(batchMaster.getRiskRun((ObjectId) any())).thenThrow(DataNotFoundException.class);
-    
-    DataBatchMasterResource batchMasterResource = new DataBatchMasterResource(batchMaster);    
-    
-    String batchUid = "Scheme~MockUniqueId";
-    DataBatchRunResource batchRunResource = batchMasterResource.batchRuns(batchUid);
-    
+
+    final DataBatchMasterResource batchMasterResource = new DataBatchMasterResource(batchMaster);
+
+    final String batchUid = "Scheme~MockUniqueId";
+    final DataBatchRunResource batchRunResource = batchMasterResource.batchRuns(batchUid);
+
     batchRunResource.get();
   }
 
   @Test
   public void testSnapshots() throws Exception {
-    ObjectId snapshotId = riskRun.getMarketData().getObjectId();
-    
-    when(batchMaster.getMarketDataById((ObjectId) any())).thenReturn(riskRun.getMarketData());
-    
-    DataMarketDataResource marketDataResource = batchMasterResource.getMarketData(snapshotId.toString());
-    
-    MarketData marketData = (MarketData) marketDataResource.get().getEntity();
-    assertEquals(marketData.getObjectId(), snapshotId);   
+    final ObjectId snapshotId = _riskRun.getMarketData().getObjectId();
+
+    when(_batchMaster.getMarketDataById((ObjectId) any())).thenReturn(_riskRun.getMarketData());
+
+    final DataMarketDataResource marketDataResource = _batchMasterResource.getMarketData(snapshotId.toString());
+
+    final MarketData marketData = (MarketData) marketDataResource.get().getEntity();
+    assertEquals(marketData.getObjectId(), snapshotId);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void testSearchSnapshots() throws Exception {
-    PagingRequest pagingRequest = PagingRequest.FIRST_PAGE;
-    
-    List<MarketData> marketDataList = newArrayList(riskRun.getMarketData());
-    Paging paging = Paging.of(pagingRequest, marketDataList);
-      
-    when(batchMaster.getMarketData((PagingRequest) any())).thenReturn(Pairs.of(marketDataList, paging));
-    
-    Object entity = batchMasterResource.searchMarketData(pagingRequest).getEntity();
+    final PagingRequest pagingRequest = PagingRequest.FIRST_PAGE;
+
+    final List<MarketData> marketDataList = newArrayList(_riskRun.getMarketData());
+    final Paging paging = Paging.of(pagingRequest, marketDataList);
+
+    when(_batchMaster.getMarketData((PagingRequest) any())).thenReturn(Pairs.of(marketDataList, paging));
+
+    Object entity = _batchMasterResource.searchMarketData(pagingRequest).getEntity();
     entity = FudgeResponse.unwrap(entity);
-    Pair<List<MarketData>, Paging> response = (Pair<List<MarketData>, Paging>) entity;
+    final Pair<List<MarketData>, Paging> response = (Pair<List<MarketData>, Paging>) entity;
 
     assertEquals(response.getFirst().size(), 1);
     assertEquals(response.getSecond(), paging);

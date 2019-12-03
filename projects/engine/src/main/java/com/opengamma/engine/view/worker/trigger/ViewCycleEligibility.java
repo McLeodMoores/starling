@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.trigger;
@@ -14,19 +14,19 @@ public enum ViewCycleEligibility {
    * Indicates that a view cycle is eligible to be performed if necessary.
    */
   ELIGIBLE,
-  
+
   /**
    * Indicates that no view cycle should be performed.
    */
   PREVENT,
-  
+
   /**
    * Indicates that a view cycle should be performed.
    */
   FORCE;
-  
+
   //-------------------------------------------------------------------------
-  public static ViewCycleEligibility merge(ViewCycleEligibility a, ViewCycleEligibility b) {
+  public static ViewCycleEligibility merge(final ViewCycleEligibility a, final ViewCycleEligibility b) {
     if (a == null) {
       return b;
     }
@@ -36,5 +36,5 @@ public enum ViewCycleEligibility {
     // Declared in increasing order of importance
     return values()[Math.max(a.ordinal(), b.ordinal())];
   }
-  
+
 }

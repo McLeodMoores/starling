@@ -46,8 +46,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryConventionMaster
-    extends SimpleAbstractInMemoryMaster<ConventionDocument>
-    implements ConventionMaster {
+extends SimpleAbstractInMemoryMaster<ConventionDocument>
+implements ConventionMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -91,7 +91,7 @@ public class InMemoryConventionMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(ConventionDocument document) {
+  protected void validateDocument(final ConventionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getConvention(), "document.convention");
   }
@@ -100,10 +100,10 @@ public class InMemoryConventionMaster
   @Override
   public ConventionMetaDataResult metaData(final ConventionMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    ConventionMetaDataResult result = new ConventionMetaDataResult();
+    final ConventionMetaDataResult result = new ConventionMetaDataResult();
     if (request.isConventionTypes()) {
-      Set<ConventionType> types = new HashSet<>();
-      for (ConventionDocument doc : _store.values()) {
+      final Set<ConventionType> types = new HashSet<>();
+      for (final ConventionDocument doc : _store.values()) {
         types.add(doc.getConvention().getConventionType());
       }
       result.getConventionTypes().addAll(types);
@@ -115,15 +115,15 @@ public class InMemoryConventionMaster
   @Override
   public ConventionSearchResult search(final ConventionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<ConventionDocument> list = new ArrayList<ConventionDocument>();
-    for (ConventionDocument doc : _store.values()) {
+    final List<ConventionDocument> list = new ArrayList<>();
+    for (final ConventionDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    
-    ConventionSearchResult result = new ConventionSearchResult();
+
+    final ConventionSearchResult result = new ConventionSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -185,7 +185,7 @@ public class InMemoryConventionMaster
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
     document.setUniqueId(uniqueId.withVersion(""));
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

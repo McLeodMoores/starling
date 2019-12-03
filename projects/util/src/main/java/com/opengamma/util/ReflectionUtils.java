@@ -36,7 +36,7 @@ public final class ReflectionUtils {
    * <p>
    * This uses Spring's {@link org.springframework.util.ClassUtils#forName(String, ClassLoader)}
    * passing null for the class loader.
-   * 
+   *
    * @param <T> the auto-cast class
    * @param className  the class name, not null
    * @return the class, not null
@@ -46,7 +46,7 @@ public final class ReflectionUtils {
   public static <T> Class<T> loadClass(final String className) {
     try {
       return (Class<T>) ClassUtils.forName(className, null);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Class not found: " + className, ex);
     }
   }
@@ -57,7 +57,7 @@ public final class ReflectionUtils {
    * This uses Spring's {@link org.springframework.util.ClassUtils#forName(String, ClassLoader)}
    * passing null for the class loader.
    * If that fails, it calls the same method with the class loader
-   * 
+   *
    * @param <T> the auto-cast class
    * @param className  the class name, not null
    * @param fallbackClassLoader  a suitable class loader, may be null
@@ -68,10 +68,10 @@ public final class ReflectionUtils {
   public static <T> Class<T> loadClassWithFallbackLoader(final String className, final ClassLoader fallbackClassLoader) {
     try {
       return (Class<T>) ClassUtils.forName(className, null);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       try {
         return (Class<T>) ClassUtils.forName(className, fallbackClassLoader);
-      } catch (ClassNotFoundException ex2) {
+      } catch (final ClassNotFoundException ex2) {
         throw new OpenGammaRuntimeException("Class not found: " + className, ex2);
       }
     }
@@ -80,7 +80,7 @@ public final class ReflectionUtils {
   //-------------------------------------------------------------------------
   /**
    * Finds a constructor from a Class.
-   * 
+   *
    * @param <T> the type
    * @param type  the type to create, not null
    * @param arguments  the arguments, not null
@@ -89,12 +89,12 @@ public final class ReflectionUtils {
    */
   @SuppressWarnings("unchecked")
   public static <T> Constructor<T> findConstructorByArguments(final Class<T> type, final Object... arguments) {
-    Class<?>[] paramTypes = new Class<?>[arguments.length];
+    final Class<?>[] paramTypes = new Class<?>[arguments.length];
     for (int i = 0; i < arguments.length; i++) {
-      paramTypes[i] = (arguments[i] != null ? arguments[i].getClass() : null);
+      paramTypes[i] = arguments[i] != null ? arguments[i].getClass() : null;
     }
     Constructor<?> matched = null;
-    for (Constructor<?> constructor : type.getConstructors()) {
+    for (final Constructor<?> constructor : type.getConstructors()) {
       if (org.apache.commons.lang.ClassUtils.isAssignable(paramTypes, constructor.getParameterTypes())) {
         if (matched == null) {
           matched = constructor;
@@ -112,7 +112,7 @@ public final class ReflectionUtils {
   //-------------------------------------------------------------------------
   /**
    * Finds a constructor from a Class.
-   * 
+   *
    * @param <T> the type
    * @param type  the type to create, not null
    * @param paramTypes  the parameter types, not null
@@ -122,7 +122,7 @@ public final class ReflectionUtils {
   public static <T> Constructor<T> findConstructor(final Class<T> type, final Class<?>... paramTypes) {
     try {
       return type.getConstructor(paramTypes);
-    } catch (NoSuchMethodException ex) {
+    } catch (final NoSuchMethodException ex) {
       throw new OpenGammaRuntimeException(ex.getMessage(), ex);
     }
   }
@@ -130,7 +130,7 @@ public final class ReflectionUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance of a class from a constructor.
-   * 
+   *
    * @param <T> the type
    * @param constructor  the constructor to call, not null
    * @param args  the arguments, not null
@@ -140,11 +140,11 @@ public final class ReflectionUtils {
   public static <T> T newInstance(final Constructor<T> constructor, final Object... args) {
     try {
       return constructor.newInstance(args);
-    } catch (InstantiationException ex) {
+    } catch (final InstantiationException ex) {
       throw new OpenGammaRuntimeException(ex.getMessage(), ex);
-    } catch (IllegalAccessException ex) {
+    } catch (final IllegalAccessException ex) {
       throw new OpenGammaRuntimeException(ex.getMessage(), ex);
-    } catch (InvocationTargetException ex) {
+    } catch (final InvocationTargetException ex) {
       if (ex.getCause() instanceof RuntimeException) {
         throw (RuntimeException) ex.getCause();
       }
@@ -157,7 +157,7 @@ public final class ReflectionUtils {
    * Checks if the class is closeable.
    * <p>
    * This invokes the close method if it is present.
-   * 
+   *
    * @param type  the type, not null
    * @return true if closeable
    */
@@ -170,23 +170,23 @@ public final class ReflectionUtils {
       return true;
     }
     try {
-      Method method = type.getMethod("close");
-      if (Modifier.isPublic(method.getModifiers()) && method.isSynthetic() == false) {
+      final Method method = type.getMethod("close");
+      if (Modifier.isPublic(method.getModifiers()) && !method.isSynthetic()) {
         return true;
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       try {
-        Method method = type.getMethod("stop");
-        if (Modifier.isPublic(method.getModifiers()) && method.isSynthetic() == false) {
+        final Method method = type.getMethod("stop");
+        if (Modifier.isPublic(method.getModifiers()) && !method.isSynthetic()) {
           return true;
         }
-      } catch (Exception ex2) {
+      } catch (final Exception ex2) {
         try {
-          Method method = type.getMethod("shutdown");
-          if (Modifier.isPublic(method.getModifiers()) && method.isSynthetic() == false) {
+          final Method method = type.getMethod("shutdown");
+          if (Modifier.isPublic(method.getModifiers()) && !method.isSynthetic()) {
             return true;
           }
-        } catch (Exception ex3) {
+        } catch (final Exception ex3) {
           // ignored
         }
       }
@@ -198,7 +198,7 @@ public final class ReflectionUtils {
    * Tries to "close" an object.
    * <p>
    * This invokes the close method if it is present.
-   * 
+   *
    * @param obj  the object, null ignored
    */
   public static void close(final Object obj) {
@@ -215,7 +215,7 @@ public final class ReflectionUtils {
           invokeNoArgsNoException(obj, "stop");
           invokeNoArgsNoException(obj, "shutdown");
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         // ignored
       }
     }
@@ -223,7 +223,7 @@ public final class ReflectionUtils {
 
   /**
    * Invokes a no-args method on an object, throwing no errors.
-   * 
+   *
    * @param obj  the object, null ignored
    * @param methodName  the method name, not null
    */
@@ -231,7 +231,7 @@ public final class ReflectionUtils {
     if (obj != null) {
       try {
         obj.getClass().getMethod(methodName).invoke(obj);
-      } catch (Exception ex2) {
+      } catch (final Exception ex2) {
         // ignored
       }
     }

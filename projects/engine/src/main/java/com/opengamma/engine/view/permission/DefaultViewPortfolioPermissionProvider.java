@@ -9,9 +9,7 @@ import com.opengamma.engine.view.client.PortfolioFilter;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * Default portfolio permission provider which implements the
- * ViewPortfolioPermissionProvider interface but does not enforce
- * any permission checks.
+ * Default portfolio permission provider which implements the ViewPortfolioPermissionProvider interface but does not enforce any permission checks.
  */
 public class DefaultViewPortfolioPermissionProvider implements ViewPortfolioPermissionProvider {
 
@@ -21,13 +19,14 @@ public class DefaultViewPortfolioPermissionProvider implements ViewPortfolioPerm
   public static final NoOpPortfolioFilter PORTFOLIO_FILTER = new NoOpPortfolioFilter();
 
   /**
-   * Create a portfolio filter which will just return the passed portfolio unaltered
+   * Create a portfolio filter which will just return the passed portfolio unaltered.
    *
-   * @param user the user of the portfolio
+   * @param user
+   *          the user of the portfolio
    * @return the unaltered portfolio
    */
   @Override
-  public PortfolioFilter createPortfolioFilter(UserPrincipal user) {
+  public PortfolioFilter createPortfolioFilter(final UserPrincipal user) {
     return PORTFOLIO_FILTER;
   }
 }

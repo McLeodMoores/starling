@@ -20,7 +20,7 @@ import org.apache.commons.math.linear.SingularValueDecompositionImpl;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * Provides matrix algebra by using the <a href = "http://commons.apache.org/math/api-2.1/index.html">Commons library</a>. 
+ * Provides matrix algebra by using the <a href = "http://commons.apache.org/math/api-2.1/index.html">Commons library</a>.
  */
 public class CommonsMatrixAlgebra extends MatrixAlgebra {
 
@@ -133,7 +133,7 @@ public class CommonsMatrixAlgebra extends MatrixAlgebra {
       return temp.getLInfNorm();
     } else if (m instanceof DoubleMatrix2D) {
       final RealMatrix temp = CommonsMathWrapper.wrap((DoubleMatrix2D) m);
-      //REVIEW Commons getNorm() is wrong - it returns the column norm
+      // REVIEW Commons getNorm() is wrong - it returns the column norm
       // TODO find if commons implements this anywhere, so we are not doing it
       // by hand
       double max = 0.0;
@@ -170,10 +170,13 @@ public class CommonsMatrixAlgebra extends MatrixAlgebra {
   }
 
   /**
-   * Returns a real matrix raised to some real power 
-   * Currently this method is limited to symmetric matrices only as Commons Math does not support the diagonalization of asymmetric matrices  
-   * @param m The <strong>symmetric</strong> matrix to take the power of. 
-   * @param p The power to raise to matrix to
+   * Returns a real matrix raised to some real power. Currently this method is limited to symmetric matrices only as Commons Math does not support the
+   * diagonalization of asymmetric matrices
+   * 
+   * @param m
+   *          The <strong>symmetric</strong> matrix to take the power of.
+   * @param p
+   *          The power to raise to matrix to
    * @return The result
    */
   @Override
@@ -191,7 +194,7 @@ public class CommonsMatrixAlgebra extends MatrixAlgebra {
           throw new NotImplementedException("Cannot handle complex eigenvalues in getPower");
         }
       }
-      final RealMatrix res = eigen.getV().multiply((new Array2DRowRealMatrix(d)).multiply(eigen.getVT()));
+      final RealMatrix res = eigen.getV().multiply(new Array2DRowRealMatrix(d).multiply(eigen.getVT()));
       return CommonsMathWrapper.unwrap(res);
     }
     throw new IllegalArgumentException("Can only find pow of DoubleMatrix2D; have " + m.getClass());
@@ -224,11 +227,10 @@ public class CommonsMatrixAlgebra extends MatrixAlgebra {
   }
 
   /**
-   * {@inheritDoc}
-   * The following combinations of input matrices m1 and m2 are allowed:
+   * {@inheritDoc} The following combinations of input matrices m1 and m2 are allowed:
    * <ul>
-   * <li> m1 = 2-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = \mathbf{AB}$
-   * <li> m1 = 2-D matrix, m2 = 1-D matrix, returns $\mathbf{C} = \mathbf{A}b$
+   * <li>m1 = 2-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = \mathbf{AB}$
+   * <li>m1 = 2-D matrix, m2 = 1-D matrix, returns $\mathbf{C} = \mathbf{A}b$
    * </ul>
    */
   @Override

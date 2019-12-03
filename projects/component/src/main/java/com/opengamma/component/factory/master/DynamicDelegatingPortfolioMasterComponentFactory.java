@@ -8,6 +8,7 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -27,17 +28,13 @@ import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.master.portfolio.impl.DataPortfolioMasterResource;
 import com.opengamma.master.portfolio.impl.DynamicDelegatingPortfolioMaster;
 import com.opengamma.master.portfolio.impl.RemotePortfolioMaster;
-import org.joda.beans.Bean;
 
 /**
- * Component factory for delegating master that maintains a map of delegate masters
- * <p/>
- * Register as both a generic PortfolioMaster as well as the concrete type
- * DynamicDelegatingPortfolioMasterComponentFactory, to allow command processor
- * to access out of band methods like:
- * {@link DynamicDelegatingPortfolioMaster#register(String, PortfolioMaster)},
- * {@link DynamicDelegatingPortfolioMaster#deregister(String)} and
- * {@link DynamicDelegatingPortfolioMaster#add(String, PortfolioDocument)}
+ * Component factory for delegating master that maintains a map of delegate masters.
+ * <p>
+ * Register as both a generic PortfolioMaster as well as the concrete type DynamicDelegatingPortfolioMasterComponentFactory, to allow command processor to
+ * access out of band methods like: {@link DynamicDelegatingPortfolioMaster#register(String, PortfolioMaster)},
+ * {@link DynamicDelegatingPortfolioMaster#deregister(String)} and {@link DynamicDelegatingPortfolioMaster#add(String, PortfolioDocument)}
  */
 @BeanDefinition
 public class DynamicDelegatingPortfolioMasterComponentFactory extends AbstractComponentFactory {

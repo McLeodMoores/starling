@@ -43,10 +43,8 @@ import com.opengamma.util.money.Currency;
 /**
  * Request for searching for regions.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link RegionHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link RegionHistoryRequest} for more details on how history works.
  */
 @PublicSPI
 @BeanDefinition
@@ -56,8 +54,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   private static final long serialVersionUID = 1L;
 
   /**
-   * The set of region object identifiers, null to not limit by region object identifiers.
-   * Note that an empty set will return no regions.
+   * The set of region object identifiers, null to not limit by region object identifiers. Note that an empty set will return no regions.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -77,14 +74,12 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   @PropertyDefinition
   private RegionClassification _classification;
   /**
-   * The data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
+   * The data provider identifier to match, null to not match on provider. This field is useful when receiving updates from the same provider.
    */
   @PropertyDefinition
   private ExternalId _providerId;
   /**
-   * The unique identifier to get children of, null to not retrieve based on children.
-   * Only the immediate children of the identifier will be matched.
+   * The unique identifier to get children of, null to not retrieve based on children. Only the immediate children of the identifier will be matched.
    */
   @PropertyDefinition
   private UniqueId _childrenOfId;
@@ -97,74 +92,77 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Creates an instance using a single search identifier.
-   * 
-   * @param regionId  the region external identifier to search for, not null
+   *
+   * @param regionId
+   *          the region external identifier to search for, not null
    */
-  public RegionSearchRequest(ExternalId regionId) {
+  public RegionSearchRequest(final ExternalId regionId) {
     addExternalId(regionId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
-   * @param regionBundle  the region bundle to search for, not null
+   *
+   * @param regionBundle
+   *          the region bundle to search for, not null
    */
-  public RegionSearchRequest(ExternalIdBundle regionBundle) {
+  public RegionSearchRequest(final ExternalIdBundle regionBundle) {
     addExternalIds(regionBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single region object identifier to the set.
-   * 
-   * @param regionId  the region object identifier to add, not null
+   *
+   * @param regionId
+   *          the region object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable regionId) {
+  public void addObjectId(final ObjectIdentifiable regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(regionId.getObjectId());
   }
 
   /**
-   * Sets the set of region object identifiers, null to not limit by region object identifiers.
-   * Note that an empty set will return no regions.
-   * 
-   * @param regionIds  the new region identifiers, null clears the region id search
+   * Sets the set of region object identifiers, null to not limit by region object identifiers. Note that an empty set will return no regions.
+   *
+   * @param regionIds
+   *          the new region identifiers, null clears the region id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> regionIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> regionIds) {
     if (regionIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable regionId : regionIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable regionId : regionIds) {
         _objectIds.add(regionId.getObjectId());
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Adds a single region external identifier to the collection to search for.
-   * Unless customized, the search will match 
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param regionId  the region key identifier to add, not null
+   * Adds a single region external identifier to the collection to search for. Unless customized, the search will match {@link ExternalIdSearchType#ANY any} of
+   * the identifiers.
+   *
+   * @param regionId
+   *          the region key identifier to add, not null
    */
-  public void addExternalId(ExternalId regionId) {
+  public void addExternalId(final ExternalId regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     addExternalIds(Arrays.asList(regionId));
   }
 
   /**
-   * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param regionIds  the region key identifiers to add, not null
+   * Adds a collection of region external identifiers to the collection to search for. Unless customized, the search will match {@link ExternalIdSearchType#ANY
+   * any} of the identifiers.
+   *
+   * @param regionIds
+   *          the region key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... regionIds) {
+  public void addExternalIds(final ExternalId... regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -174,13 +172,13 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   }
 
   /**
-   * Adds a collection of region external identifiers to the collection to search for.
-   * Unless customized, the search will match 
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param regionIds  the region key identifiers to add, not null
+   * Adds a collection of region external identifiers to the collection to search for. Unless customized, the search will match {@link ExternalIdSearchType#ANY
+   * any} of the identifiers.
+   *
+   * @param regionIds
+   *          the region key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> regionIds) {
+  public void addExternalIds(final Iterable<ExternalId> regionIds) {
     ArgumentChecker.notNull(regionIds, "regionIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(regionIds));
@@ -191,10 +189,11 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
-   * @param type  the type to set, not null
+   *
+   * @param type
+   *          the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -202,61 +201,64 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a search for a currency by adding the matching bundle.
-   * 
-   * @param country  the country to search for, not null
+   *
+   * @param country
+   *          the country to search for, not null
    */
-  public void addCountry(Country country) {
+  public void addCountry(final Country country) {
     ArgumentChecker.notNull(country, "country");
     addExternalId(ExternalSchemes.countryRegionId(country));
   }
 
   /**
    * Adds a search for a currency by adding the matching bundle.
-   * 
-   * @param currency  the currency to search for, not null
+   *
+   * @param currency
+   *          the currency to search for, not null
    */
-  public void addCurrency(Currency currency) {
+  public void addCurrency(final Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
     addExternalId(ExternalSchemes.currencyRegionId(currency));
   }
 
   /**
    * Adds a search for a time-zone by adding the matching bundle.
-   * 
-   * @param timeZone  the time-zone to search for, not null
+   *
+   * @param timeZone
+   *          the time-zone to search for, not null
    */
-  public void addTimeZone(ZoneId timeZone) {
+  public void addTimeZone(final ZoneId timeZone) {
     ArgumentChecker.notNull(timeZone, "timeZone");
     addExternalId(ExternalSchemes.timeZoneRegionId(timeZone));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean matches(final AbstractDocument obj) {
-    if (obj instanceof RegionDocument == false) {
+    if (!(obj instanceof RegionDocument)) {
       return false;
     }
     final RegionDocument document = (RegionDocument) obj;
     final ManageableRegion region = document.getRegion();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(region.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(region.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), region.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), region.getName())) {
       return false;
     }
     if (getClassification() != null && getClassification() != region.getClassification()) {
       return false;
     }
-    if (getProviderId() != null && getProviderId().equals(document.getProviderId()) == false) {
+    if (getProviderId() != null && !getProviderId().equals(document.getProviderId())) {
       return false;
     }
-    if (getChildrenOfId() != null && region.getParentRegionIds().contains(getChildrenOfId()) == false) {
+    if (getChildrenOfId() != null && !region.getParentRegionIds().contains(getChildrenOfId())) {
       return false;
     }
     return true;
@@ -283,8 +285,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of region object identifiers, null to not limit by region object identifiers.
-   * Note that an empty set will return no regions.
+   * Gets the set of region object identifiers, null to not limit by region object identifiers. Note that an empty set will return no regions.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -293,7 +294,6 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty set will return no regions.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -377,8 +377,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
+   * Gets the data provider identifier to match, null to not match on provider. This field is useful when receiving updates from the same provider.
    * @return the value of the property
    */
   public ExternalId getProviderId() {
@@ -386,8 +385,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   }
 
   /**
-   * Sets the data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
+   * Sets the data provider identifier to match, null to not match on provider. This field is useful when receiving updates from the same provider.
    * @param providerId  the new value of the property
    */
   public void setProviderId(ExternalId providerId) {
@@ -396,7 +394,6 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Gets the the {@code providerId} property.
-   * This field is useful when receiving updates from the same provider.
    * @return the property, not null
    */
   public final Property<ExternalId> providerId() {
@@ -405,8 +402,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier to get children of, null to not retrieve based on children.
-   * Only the immediate children of the identifier will be matched.
+   * Gets the unique identifier to get children of, null to not retrieve based on children. Only the immediate children of the identifier will be matched.
    * @return the value of the property
    */
   public UniqueId getChildrenOfId() {
@@ -414,8 +410,7 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
   }
 
   /**
-   * Sets the unique identifier to get children of, null to not retrieve based on children.
-   * Only the immediate children of the identifier will be matched.
+   * Sets the unique identifier to get children of, null to not retrieve based on children. Only the immediate children of the identifier will be matched.
    * @param childrenOfId  the new value of the property
    */
   public void setChildrenOfId(UniqueId childrenOfId) {
@@ -424,7 +419,6 @@ public class RegionSearchRequest extends AbstractSearchRequest implements Serial
 
   /**
    * Gets the the {@code childrenOfId} property.
-   * Only the immediate children of the identifier will be matched.
    * @return the property, not null
    */
   public final Property<UniqueId> childrenOfId() {

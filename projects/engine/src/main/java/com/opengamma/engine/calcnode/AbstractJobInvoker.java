@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -20,7 +20,7 @@ public abstract class AbstractJobInvoker implements JobInvoker {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param identifier  the identifier, not null
    */
   protected AbstractJobInvoker(final String identifier) {
@@ -29,7 +29,7 @@ public abstract class AbstractJobInvoker implements JobInvoker {
 
   /**
    * Default implementation that returns an empty set.
-   * 
+   *
    * @return the capabilities, not null
    */
   @Override
@@ -43,8 +43,8 @@ public abstract class AbstractJobInvoker implements JobInvoker {
   }
 
   /**
-   * Default implementation that does nothing
-   * 
+   * Default implementation that does nothing.
+   *
    * @param jobs the jobs to cancel, ignored
    */
   @Override
@@ -54,17 +54,17 @@ public abstract class AbstractJobInvoker implements JobInvoker {
 
   /**
    * Default implementation that does nothing.
-   * 
+   *
    * @param job the jobs to cancel, ignored
    */
   @Override
-  public void cancel(CalculationJobSpecification job) {
+  public void cancel(final CalculationJobSpecification job) {
     // do nothing
   }
 
   /**
    * Default implementation that always returns true.
-   * 
+   *
    * @param jobs the jobs to query, ignored
    * @return true always
    */
@@ -75,7 +75,7 @@ public abstract class AbstractJobInvoker implements JobInvoker {
 
   /**
    * Defaults implementation that always returns true.
-   * 
+   *
    * @param job the job to query, ignored
    * @return true always
    */

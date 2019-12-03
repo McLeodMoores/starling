@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -20,7 +20,7 @@ public interface FunctionCostsMaster {
    * <p>
    * This will load the last stored version of the function costs before the specified
    * instant, where null means the current latest version.
-   * 
+   *
    * @param configurationName  the configuration key, not null
    * @param functionId  the function id, not null
    * @param versionAsOf  the optional instant to retrieve data as of, null means latest
@@ -33,10 +33,10 @@ public interface FunctionCostsMaster {
    * <p>
    * All fields except version must be set on input.
    * The version will be set to the current instant by this call.
-   * 
+   *
    * @param costs  the function costs to store, not null
    * @return the updated input function costs, not null
    */
-  FunctionCostsDocument store(final FunctionCostsDocument costs);
+  FunctionCostsDocument store(FunctionCostsDocument costs);
 
 }
