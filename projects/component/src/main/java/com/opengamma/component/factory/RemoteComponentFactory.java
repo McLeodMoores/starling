@@ -19,6 +19,8 @@ import com.opengamma.component.ComponentServer;
 import com.opengamma.component.rest.RemoteComponentServer;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.RemoteConfigSource;
+import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.core.convention.impl.RemoteConventionSource;
 import com.opengamma.core.exchange.ExchangeSource;
 import com.opengamma.core.exchange.impl.RemoteExchangeSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
@@ -97,7 +99,8 @@ public class RemoteComponentFactory {
   /**
    * Constructs an instance.
    *
-   * @param componentServerUri  the URI of the remote component server, not null
+   * @param componentServerUri
+   *          the URI of the remote component server, not null
    */
   public RemoteComponentFactory(final String componentServerUri) {
     this(URI.create(componentServerUri));
@@ -106,7 +109,8 @@ public class RemoteComponentFactory {
   /**
    * Constructs an instance.
    *
-   * @param componentServerUri  the URI of the remote component server, not null
+   * @param componentServerUri
+   *          the URI of the remote component server, not null
    */
   public RemoteComponentFactory(final URI componentServerUri) {
     ArgumentChecker.notNull(componentServerUri, "componentServerUri");
@@ -115,7 +119,7 @@ public class RemoteComponentFactory {
     _componentServer = remoteComponentServer.getComponentServer();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the base URI.
    *
@@ -142,7 +146,7 @@ public class RemoteComponentFactory {
     return componentInfos.size() == 0 ? null : componentInfos.get(0);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public RemoteViewProcessor getViewProcessor(final String vpId) {
     final ComponentInfo info = getComponentServer().getComponentInfo(ViewProcessor.class, "main");
     final URI uri = info.getUri();
@@ -161,10 +165,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Configs
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public ConfigMaster getConfigMaster(final List<String> preferredClassifiers) {
@@ -173,7 +178,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public ConfigMaster getConfigMaster(final String name) {
@@ -192,9 +198,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching master available
    */
   public ConfigSource getConfigSource(final List<String> preferredClassifiers) {
@@ -203,7 +210,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public ConfigSource getConfigSource(final String name) {
@@ -222,10 +230,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Portfolios
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public PortfolioMaster getPortfolioMaster(final String name) {
@@ -234,7 +243,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public PortfolioMaster getPortfolioMaster(final List<String> preferredClassifiers) {
@@ -253,10 +263,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Positions
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public PositionMaster getPositionMaster(final String name) {
@@ -265,7 +276,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public PositionMaster getPositionMaster(final List<String> preferredClassifiers) {
@@ -284,9 +296,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public PositionSource getPositionSource(final String name) {
@@ -295,7 +308,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public PositionSource getPositionSource(final List<String> preferredClassifiers) {
@@ -314,10 +328,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Securities
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public SecuritySource getSecuritySource(final String name) {
@@ -326,7 +341,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public SecuritySource getSecuritySource(final List<String> preferredClassifiers) {
@@ -345,9 +361,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public SecurityMaster getSecurityMaster(final String name) {
@@ -356,7 +373,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public SecurityMaster getSecurityMaster(final List<String> preferredClassifiers) {
@@ -375,10 +393,43 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Conventions
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
+   * @return the interface requested, or null if not present
+   */
+  public ConventionSource getConventionSource(final String name) {
+    final URI uri = getComponentServer().getComponentInfo(ConventionSource.class, name).getUri();
+    return new RemoteConventionSource(uri);
+  }
+
+  /**
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
+   * @return the best matching interface available
+   */
+  public ConventionSource getConventionSource(final List<String> preferredClassifiers) {
+    final URI uri = getTopLevelComponent(preferredClassifiers, ConventionSource.class).getUri();
+    return new RemoteConventionSource(uri);
+  }
+
+  /**
+   * @return a map of classifier names to requested interface type
+   */
+  public Map<String, ConventionSource> getConventionSources() {
+    final Map<String, ConventionSource> result = new LinkedHashMap<>();
+    for (final ComponentInfo info : getComponentServer().getComponentInfos(LegalEntitySource.class)) {
+      result.put(info.getClassifier(), new RemoteConventionSource(info.getUri()));
+    }
+    return result;
+  }
+  // -------------------------------------------------------------------------
+
+  /**
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public ConventionMaster getConventionMaster(final String name) {
@@ -387,7 +438,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public ConventionMaster getConventionMaster(final List<String> preferredClassifiers) {
@@ -406,10 +458,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Organizations/Obligors
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public LegalEntitySource getLegalEntitySource(final String name) {
@@ -418,7 +471,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public LegalEntitySource getLegalEntitySource(final List<String> preferredClassifiers) {
@@ -436,10 +490,11 @@ public class RemoteComponentFactory {
     }
     return result;
   }
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public LegalEntityMaster getLegalEntityMaster(final String name) {
@@ -448,7 +503,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public LegalEntityMaster getLegalEntityMaster(final List<String> preferredClassifiers) {
@@ -467,9 +523,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public SecurityLoader getSecurityLoader(final String name) {
@@ -478,7 +535,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public SecurityLoader getSecurityLoader(final List<String> preferredClassifiers) {
@@ -497,10 +555,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Market Data Snapshots
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public MarketDataSnapshotMaster getMarketDataSnapshotMaster(final String name) {
@@ -509,7 +568,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public MarketDataSnapshotMaster getMarketDataSnapshotMaster(final List<String> preferredClassifiers) {
@@ -528,9 +588,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public MarketDataSnapshotSource getMarketDataSnapshotSource(final String name) {
@@ -539,7 +600,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public MarketDataSnapshotSource getMarketDataSnapshotSource(final List<String> preferredClassifiers) {
@@ -558,10 +620,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Historical Time Series
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public HistoricalTimeSeriesSource getHistoricalTimeSeriesSource(final String name) {
@@ -570,7 +633,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public HistoricalTimeSeriesSource getHistoricalTimeSeriesSource(final List<String> preferredClassifiers) {
@@ -589,9 +653,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public HistoricalTimeSeriesMaster getHistoricalTimeSeriesMaster(final String name) {
@@ -600,7 +665,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public HistoricalTimeSeriesMaster getHistoricalTimeSeriesMaster(final List<String> preferredClassifiers) {
@@ -619,9 +685,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public HistoricalTimeSeriesLoader getHistoricalTimeSeriesLoader(final String name) {
@@ -630,7 +697,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public HistoricalTimeSeriesLoader getHistoricalTimeSeriesLoader(final List<String> preferredClassifiers) {
@@ -649,10 +717,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Currency Matrices
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public CurrencyMatrixSource getCurrencyMatrixSource(final String name) {
@@ -661,7 +730,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public CurrencyMatrixSource getCurrencyMatrixSource(final List<String> preferredClassifiers) {
@@ -680,10 +750,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Function Configurations
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public FunctionConfigurationSource getFunctionConfigurationSource(final String name) {
@@ -692,7 +763,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public FunctionConfigurationSource getFunctionConfigurationSource(final List<String> preferredClassifiers) {
@@ -711,10 +783,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Exchanges
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public ExchangeSource getExchangeSource(final String name) {
@@ -723,7 +796,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public ExchangeSource getExchangeSource(final List<String> preferredClassifiers) {
@@ -742,9 +816,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public ExchangeMaster getExchangeMaster(final String name) {
@@ -753,7 +828,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public ExchangeMaster getExchangeMaster(final List<String> preferredClassifiers) {
@@ -772,10 +848,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Regions
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public RegionSource getRegionSource(final String name) {
@@ -784,7 +861,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public RegionSource getRegionSource(final List<String> preferredClassifiers) {
@@ -803,9 +881,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public RegionMaster getRegionMaster(final String name) {
@@ -814,7 +893,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public RegionMaster getRegionMaster(final List<String> preferredClassifiers) {
@@ -833,10 +913,11 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Holidays
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public HolidaySource getHolidaySource(final String name) {
@@ -845,7 +926,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public HolidaySource getHolidaySource(final List<String> preferredClassifiers) {
@@ -864,9 +946,10 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public HolidayMaster getHolidayMaster(final String name) {
@@ -875,7 +958,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public HolidayMaster getHolidayMaster(final List<String> preferredClassifiers) {
@@ -894,11 +978,12 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Interpolated Yield Curve Definitions
   /* REVIEW: jim 28-May-2012 -- Why are we not just using the config source for this stuff? */
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public InterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource(final String name) {
@@ -907,7 +992,8 @@ public class RemoteComponentFactory {
   }
 
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public InterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource(final List<String> preferredClassifiers) {
@@ -931,11 +1017,12 @@ public class RemoteComponentFactory {
     return new RemoteInterpolatedYieldCurveDefinitionMaster(uri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // Interpolated Yield Curve Specification Builders
   /* REVIEW: jim 28-May-2012 -- What on earth is this stuff - this is a data structure, not a service! */
   /**
-   * @param name the classifier name of the object you want to retrieve
+   * @param name
+   *          the classifier name of the object you want to retrieve
    * @return the interface requested, or null if not present
    */
   public InterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder(final String name) {
@@ -945,7 +1032,8 @@ public class RemoteComponentFactory {
 
   /* REVIEW: jim 28-May-2012 -- What on earth is this stuff - this is a data structure, not a service! */
   /**
-   * @param preferredClassifiers a list of names of classifiers in order of preference (most preferred first), or null
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
    * @return the best matching interface available
    */
   public InterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder(final List<String> preferredClassifiers) {
@@ -965,13 +1053,13 @@ public class RemoteComponentFactory {
     return result;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   public AvailableOutputsProvider getAvailableOutputs(final String name) {
     final URI uri = getComponentServer().getComponentInfo(AvailableOutputsProvider.class, name).getUri();
     return new RemoteAvailableOutputsProvider(uri);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private JmsConnector getJmsConnector(final URI activeMQBrokerUri) {
     final ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(activeMQBrokerUri);
     final JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();

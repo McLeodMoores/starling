@@ -16,8 +16,8 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Function repository configuration source for the functions contained in this package.
- * Currently not referenced from StandardFunctionConfiguration or its children.
+ * Function repository configuration source for the functions contained in this package. Currently not referenced from StandardFunctionConfiguration or its
+ * children.
  */
 public class DividendYieldFuturesFunctions extends AbstractFunctionConfigurationBean {
 

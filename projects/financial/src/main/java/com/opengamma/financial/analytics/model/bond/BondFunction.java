@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.engine.ComputationTarget;
@@ -21,7 +22,6 @@ import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.bond.BondSecurity;
 
@@ -53,7 +53,7 @@ public abstract class BondFunction<T> extends AbstractFunction.NonCompiledInvoke
   @Override
   public void init(final FunctionCompilationContext context) {
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     _visitor = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
   }

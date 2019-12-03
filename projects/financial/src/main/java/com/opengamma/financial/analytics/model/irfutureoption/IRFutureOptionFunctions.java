@@ -14,7 +14,6 @@ import org.springframework.beans.factory.InitializingBean;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
-import com.opengamma.financial.analytics.model.horizon.InterestRateFutureOptionBlackThetaDefaults;
 import com.opengamma.financial.analytics.model.volatility.SmileFittingPropertyNamesAndValues;
 import com.opengamma.util.ArgumentChecker;
 
@@ -33,7 +32,7 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @return  the functions
+   * @return the functions
    */
   public static FunctionConfigurationSource deprecated() {
     return new Deprecated().getObjectCreating();
@@ -125,94 +124,8 @@ public class IRFutureOptionFunctions extends AbstractFunctionConfigurationBean {
       return _perCurrencyInfo.get(currency);
     }
 
-    protected void addIRFutureOptionBlackDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 3];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getSurfaceName();
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionBlackDefaults.class, args));
-    }
-
-    // TODO Needs improvement: defaultNumberOfDaysForward should not be hardcoded here
-    protected void addIRFutureOptionBlackThetaDefaults(final List<FunctionConfiguration> functions) {
-
-      final int defaultNumberOfDaysForward = 1;       // TODO !!! Hardcode
-
-      final String[] daysPlusBlackArgs = new String[getPerCurrencyInfo().size() * 3 + 1];
-      int i = 0;
-      daysPlusBlackArgs[i++] = Integer.toString(defaultNumberOfDaysForward);
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        daysPlusBlackArgs[i++] = e.getKey();
-        daysPlusBlackArgs[i++] = e.getValue().getCurveConfiguration();
-        daysPlusBlackArgs[i++] = e.getValue().getSurfaceName();
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionBlackThetaDefaults.class, daysPlusBlackArgs));
-    }
-
-    // TODO Default is hardcoded here. Where should this be done?
-    protected void addIRFutureOptionBlackPositionDeltaGammaScaleDefaults(final List<FunctionConfiguration> functions) {
-
-      final double defaultScaleFactor = 0.0001; // scale to basis point moves in underlying
-
-      final String[] scalePlusBlackArgs = new String[getPerCurrencyInfo().size() * 3 + 1];
-      int i = 0;
-      scalePlusBlackArgs[i++] = Double.toString(defaultScaleFactor);
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        scalePlusBlackArgs[i++] = e.getKey();
-        scalePlusBlackArgs[i++] = e.getValue().getCurveConfiguration();
-        scalePlusBlackArgs[i++] = e.getValue().getSurfaceName();
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionBlackPositionDeltaGammaScaleDefaults.class, scalePlusBlackArgs));
-    }
-
-    protected void addIRFutureOptionBlackCurveSpecificDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 4];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveName();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getSurfaceName();
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionBlackCurveSpecificDefaults.class, args));
-    }
-
-    protected void addIRFutureOptionSABRDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 4];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getSurfaceName();
-        args[i++] = e.getValue().getSmileFittingMethod();
-      }
-      functions.add(functionConfiguration(IRFutureOptionSABRDefaults.class, args));
-    }
-
-    protected void addIRFutureOptionHestonDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 3];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getSurfaceName();
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionHestonDefaults.class, args));
-    }
-
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      if (!getPerCurrencyInfo().isEmpty()) {
-        addIRFutureOptionBlackDefaults(functions);
-        addIRFutureOptionBlackCurveSpecificDefaults(functions);
-        addIRFutureOptionBlackThetaDefaults(functions);
-        addIRFutureOptionBlackPositionDeltaGammaScaleDefaults(functions);
-        addIRFutureOptionSABRDefaults(functions);
-        addIRFutureOptionHestonDefaults(functions);
-      }
     }
 
   }

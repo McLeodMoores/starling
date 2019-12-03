@@ -8,7 +8,6 @@ package com.opengamma.examples.simulated.loader;
 
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -18,17 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
-
-import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
-import com.opengamma.financial.tool.ToolContext;
-import com.opengamma.id.ExternalId;
-import com.opengamma.master.security.RawSecurity;
-import com.opengamma.master.security.SecurityDocument;
-import com.opengamma.master.security.SecurityMaster;
-import com.opengamma.util.money.Currency;
 
 /**
  *
@@ -127,38 +115,4 @@ public class PortfolioLoaderHelper {
     return LocalDate.parse(getWithException(fieldValueMap, fieldName), CSV_DATE_FORMATTER);
   }
 
-  public static void persistLiborRawSecurities(final Set<Currency> currencies, final ToolContext toolContext) {
-    final SecurityMaster securityMaster = toolContext.getSecurityMaster();
-    final byte[] rawData = new byte[] { 0 };
-    final StringBuilder sb = new StringBuilder();
-    sb.append("Created ").append(currencies.size()).append(" libor securities:\n");
-    for (final Currency ccy : currencies) {
-      final ConventionBundle swapConvention = getSwapConventionBundle(ccy, toolContext.getConventionBundleSource());
-      final ConventionBundle liborConvention = getLiborConventionBundle(swapConvention, toolContext.getConventionBundleSource());
-      sb.append("\t").append(liborConvention.getIdentifiers()).append("\n");
-      final RawSecurity rawSecurity = new RawSecurity(LIBOR_RATE_SECURITY_TYPE, rawData);
-      rawSecurity.setExternalIdBundle(liborConvention.getIdentifiers());
-      final SecurityDocument secDoc = new SecurityDocument();
-      secDoc.setSecurity(rawSecurity);
-      securityMaster.add(secDoc);
-    }
-    LOGGER.info(sb.toString());
-  }
-
-  private static ConventionBundle getSwapConventionBundle(final Currency ccy, final ConventionBundleSource conventionSource) {
-    final ConventionBundle swapConvention = conventionSource
-        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
-    if (swapConvention == null) {
-      throw new OpenGammaRuntimeException("Couldn't get swap convention for " + ccy.getCode());
-    }
-    return swapConvention;
-  }
-
-  private static ConventionBundle getLiborConventionBundle(final ConventionBundle swapConvention, final ConventionBundleSource conventionSource) {
-    final ConventionBundle liborConvention = conventionSource.getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
-    if (liborConvention == null) {
-      throw new OpenGammaRuntimeException("Couldn't get libor convention for " + swapConvention.getSwapFloatingLegInitialRate());
-    }
-    return liborConvention;
-  }
 }

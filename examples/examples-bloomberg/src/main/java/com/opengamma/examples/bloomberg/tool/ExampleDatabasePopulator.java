@@ -20,7 +20,6 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
 import com.opengamma.examples.bloomberg.generator.BloombergExamplePortfolioGeneratorTool;
-import com.opengamma.examples.bloomberg.loader.CurveNodeHistoricalDataLoader;
 import com.opengamma.examples.bloomberg.loader.DemoEquityOptionCollarPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleAUDSwapPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleCurveAndSurfaceDefinitionLoader;
@@ -30,12 +29,10 @@ import com.opengamma.examples.bloomberg.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleFunctionConfigurationPopulator;
 import com.opengamma.examples.bloomberg.loader.ExampleFxForwardPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleMixedCMCapFloorPortfolioLoader;
-import com.opengamma.examples.bloomberg.loader.ExampleMultiCurrencySwapPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleSwaptionPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleTimeSeriesRatingLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleVanillaFxOptionPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleViewsPopulator;
-import com.opengamma.examples.bloomberg.loader.FXSpotRateHistoricalDataLoader;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.convention.initializer.DefaultConventionMasterInitializer;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
@@ -103,7 +100,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     loadCurrencyConfiguration();
     loadCurveAndSurfaceDefinitions();
     loadCurveCalculationConfigurations();
-    loadCurveNodeHistoricalData();
     loadFutures();
     loadEquityOptionPortfolio();
     loadEquityPortfolio();
@@ -111,7 +107,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     // Note: historical time series need to be loaded before swap, swaption and FX portfolios can be created.
     loadHistoricalData();
     loadVolSurfaceData();
-    loadMultiCurrencySwapPortfolio();
     loadEquityOptionPortfolio();
     loadFXForwardPortfolio();
     loadVanillaFXOptionPortfolio();
@@ -224,24 +219,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     }
   }
 
-  @SuppressWarnings("synthetic-access")
-  private void loadCurveNodeHistoricalData() {
-    final Log log = new Log("Loading historical and futures data");
-    try {
-      final CurveNodeHistoricalDataLoader curveNodeHistoricalDataLoader = new CurveNodeHistoricalDataLoader();
-      final FXSpotRateHistoricalDataLoader fxSpotRateHistoricalDataLoader = new FXSpotRateHistoricalDataLoader();
-      curveNodeHistoricalDataLoader.run(getToolContext());
-      fxSpotRateHistoricalDataLoader.run(getToolContext());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getCurveNodesExternalIds());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getInitialRateExternalIds());
-      _historicalDataToLoad.addAll(fxSpotRateHistoricalDataLoader.getFXSpotRateExternalIds());
-      _futuresToLoad.addAll(curveNodeHistoricalDataLoader.getFuturesExternalIds());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
   private void loadVolSurfaceData() {
     final Log log = new Log("Creating volatility surface configurations");
     try {
@@ -280,10 +257,8 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
   private void loadHistoricalData() {
     final Log log = new Log("Loading historical reference data");
     try {
-      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-          getToolContext().getHistoricalTimeSeriesMaster(),
-          getToolContext().getHistoricalTimeSeriesProvider(),
-          new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
+          getToolContext().getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
       for (final SecurityDocument doc : readEquitySecurities()) {
         final Security security = doc.getSecurity();
         loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST",
@@ -310,17 +285,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
       final ExampleEquityPortfolioLoader equityLoader = new ExampleEquityPortfolioLoader();
       equityLoader.run(getToolContext());
       _historicalDataToLoad.add(ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "SPX Index"));
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  private void loadMultiCurrencySwapPortfolio() {
-    final Log log = new Log("Creating example multi-currency swap portfolio");
-    try {
-      final ExampleMultiCurrencySwapPortfolioLoader multiCurrSwapLoader = new ExampleMultiCurrencySwapPortfolioLoader();
-      multiCurrSwapLoader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);

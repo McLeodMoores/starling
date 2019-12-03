@@ -11,6 +11,7 @@ import java.util.Set;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.engine.ComputationTarget;
@@ -25,7 +26,6 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.time.DateUtils;
@@ -45,8 +45,8 @@ public class BondTenorFunction extends NonCompiledInvoker {
       final Set<ValueRequirement> desiredValues) {
     final BondSecurity security = target.getValue(FinancialSecurityTypes.BOND_SECURITY);
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
-    final ConventionBundleSource conventionSource = OpenGammaExecutionContext
-        .getConventionBundleSource(executionContext);
+    final ConventionSource conventionSource = OpenGammaExecutionContext
+        .getConventionSource(executionContext);
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(executionContext);
     final BondSecurityConverter visitor = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFixedSecurityDefinition bond = (BondFixedSecurityDefinition) security.accept(visitor);

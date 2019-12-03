@@ -15,7 +15,7 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
+import com.opengamma.financial.analytics.model.FutureOptionExpiries;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.ArgumentChecker;
@@ -138,14 +138,14 @@ public class SyntheticFutureCurveInstrumentProvider implements CurveInstrumentPr
   }
 
   private static String getQuarterlyExpiryCodeForFutures(final int nthFuture, final LocalDate curveDate) {
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureQuarterlyExpiry(nthFuture, curveDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getExpiry(nthFuture, curveDate, Tenor.THREE_MONTHS);
     final StringBuilder result = new StringBuilder(MONTH_CODE.get(expiry.getMonth()).toString());
     result.append(expiry.getYear() % 1000);
     return result.toString();
   }
 
   private static String getMonthlyExpiryCodeForFutures(final int nthFuture, final LocalDate curveDate) {
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureMonth(nthFuture, curveDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getExpiry(nthFuture, curveDate, Tenor.ONE_MONTH);
     final StringBuilder result = new StringBuilder(MONTH_CODE.get(expiry.getMonth()));
     result.append(expiry.getYear() % 1000);
     return result.toString();

@@ -41,8 +41,8 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
+import com.opengamma.financial.analytics.model.FutureOptionExpiries;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.expirycalc.ExchangeTradedInstrumentExpiryCalculator;
@@ -194,7 +194,7 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
     final LocalDate today = now.toLocalDate();
     for (final Object xObj : optionVolatilities.getXs()) {
       final Number x = (Number) xObj;
-      final Double t = FutureOptionUtils.getIRFutureOptionTtm(x.intValue(), today, calendar);
+      final Double t = FutureOptionExpiries.IR.getFutureOptionTtm(x.intValue(), today);
       final Object[] ys = optionVolatilities.getYs();
       for (final Object yObj : ys) {
         final Double y = (Double) yObj;

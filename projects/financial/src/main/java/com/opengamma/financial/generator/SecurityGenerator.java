@@ -55,7 +55,6 @@ import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveD
 import com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.analytics.model.forex.FXUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyMatrixSource;
 import com.opengamma.financial.currency.ConfigDBCurrencyPairsSource;
 import com.opengamma.financial.currency.CurrencyMatrixResolver;
@@ -113,7 +112,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   protected static final double YEAR_LENGTH = 365.25;
 
   private Random _random = new Random();
-  private ConventionBundleSource _conventionBundleSource;
   private ConfigSource _configSource;
   private ConfigMaster _configMaster;
   private HolidaySource _holidaySource;
@@ -162,14 +160,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
   protected double getRandom(final double[] xs) {
     return xs[getRandom(xs.length)];
-  }
-
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  public void setConventionBundleSource(final ConventionBundleSource conventionBundleSource) {
-    _conventionBundleSource = conventionBundleSource;
   }
 
   public ConventionSource getConventionSource() {
@@ -302,7 +292,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     context.setComputationTargetResolver(new DefaultComputationTargetResolver(context.getSecuritySource()).atVersionCorrection(VersionCorrection.LATEST));
     OpenGammaExecutionContext.setHolidaySource(context, getHolidaySource());
     OpenGammaExecutionContext.setRegionSource(context, getRegionSource());
-    OpenGammaExecutionContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaExecutionContext.setConventionSource(context, getConventionSource());
     OpenGammaExecutionContext.setSecuritySource(context, new MasterSecuritySource(getSecurityMaster()));
     OpenGammaExecutionContext.setHistoricalTimeSeriesSource(context, getHistoricalSource());
@@ -320,7 +309,6 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     OpenGammaCompilationContext.setHolidaySource(context, getHolidaySource());
     OpenGammaCompilationContext.setRegionSource(context, getRegionSource());
     OpenGammaCompilationContext.setLegalEntitySource(context, getLegalEntitySource());
-    OpenGammaCompilationContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaCompilationContext.setConventionSource(context, getConventionSource());
     OpenGammaCompilationContext.setSecuritySource(context, new MasterSecuritySource(getSecurityMaster()));
     OpenGammaCompilationContext.setHistoricalTimeSeriesResolver(context,
@@ -388,10 +376,23 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   }
 
   protected Double getApproxFXRate(final LocalDate date, final Pair<Currency, Currency> currencies) {
-    double rate = 1;
-    if (!FXUtils.isInBaseQuoteOrder(currencies.getFirst(), currencies.getSecond())) {
-      rate = 1 / rate;
+    final Currency payCurrency;
+    final Currency receiveCurrency;
+    if (FXUtils.isInBaseQuoteOrder(currencies.getFirst(), currencies.getSecond())) {
+      payCurrency = currencies.getFirst();
+      receiveCurrency = currencies.getSecond();
+    } else {
+      payCurrency = currencies.getSecond();
+      receiveCurrency = currencies.getFirst();
     }
+    final ExternalId spotRateIdentifier = getSpotRateIdentifier().execute(payCurrency, receiveCurrency);
+    final Pair<LocalDate, Double> spotRate = getHistoricalSource().getLatestDataPoint(MarketDataRequirementNames.MARKET_VALUE, spotRateIdentifier.toBundle(),
+        null);
+    if (spotRate == null) {
+      LOGGER.debug("No spot rate for {}", spotRateIdentifier);
+      return null;
+    }
+    final double rate = 1;
     LOGGER.debug("Calculated rate {} for {} on {}", new Object[] { rate, currencies, date });
     return rate;
   }

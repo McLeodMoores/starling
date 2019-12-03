@@ -18,9 +18,7 @@ import com.opengamma.analytics.financial.commodity.definition.MetalFutureDefinit
 import com.opengamma.analytics.financial.commodity.definition.MetalFutureOptionDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.ExerciseTypeAnalyticsVisitorAdapter;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.future.AgricultureFutureSecurity;
@@ -39,22 +37,20 @@ public class CommodityFutureOptionConverter extends FinancialSecurityVisitorAdap
 
   /** security source */
   private final SecuritySource _securitySource;
+
   /** Converter to get underlying future */
-  private final FutureSecurityConverterDeprecated _futureSecurityConverter;
+  private final FutureSecurityConverter _futureSecurityConverter;
 
   /**
-   * @param securitySource The security source, not null
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param holidaySource
+   *          The holiday source, not null
    */
-  public CommodityFutureOptionConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final ConventionBundleSource conventionSource,
-      final RegionSource regionSource) {
+  public CommodityFutureOptionConverter(final SecuritySource securitySource, final HolidaySource holidaySource) {
     ArgumentChecker.notNull(securitySource, "security source");
     _securitySource = securitySource;
-    final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
-    _futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);
+    _futureSecurityConverter = new FutureSecurityConverter();
   }
 
   @Override

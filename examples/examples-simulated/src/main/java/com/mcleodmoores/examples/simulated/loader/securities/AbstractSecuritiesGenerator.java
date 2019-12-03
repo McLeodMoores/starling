@@ -236,7 +236,6 @@ public abstract class AbstractSecuritiesGenerator {
       ArgumentChecker.notNull(securityGenerator, "securityGenerator");
       securityGenerator.setConfigSource(getToolContext().getConfigSource());
       securityGenerator.setConventionSource(getToolContext().getConventionSource());
-      securityGenerator.setConventionBundleSource(getToolContext().getConventionBundleSource());
       securityGenerator.setHolidaySource(getToolContext().getHolidaySource());
       securityGenerator.setHistoricalSource(getToolContext().getHistoricalTimeSeriesSource());
       securityGenerator.setExchangeMaster(getToolContext().getExchangeMaster());

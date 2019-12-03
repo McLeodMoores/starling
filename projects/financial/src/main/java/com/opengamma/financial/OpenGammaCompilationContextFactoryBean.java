@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial;
@@ -20,7 +20,6 @@ import com.opengamma.engine.function.PortfolioStructure;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.SingletonFactoryBean;
 
@@ -34,7 +33,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
   private PositionSource _positionSource;
   private RegionSource _regionSource;
   private LegalEntitySource _legalEntitySource;
-  private ConventionBundleSource _conventionBundleSource;
   private InterpolatedYieldCurveDefinitionSource _interpolatedYieldCurveDefinitionSource;
   private InterpolatedYieldCurveSpecificationBuilder _interpolatedYieldCurveSpecificationBuilder;
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
@@ -85,14 +83,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     return _regionSource;
   }
 
-  public void setConventionBundleSource(final ConventionBundleSource conventionBundleSource) {
-    _conventionBundleSource = conventionBundleSource;
-  }
-
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
   public void setConventionSource(final ConventionSource conventionSource) {
     _conventionSource = conventionSource;
   }
@@ -113,8 +103,7 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     return _interpolatedYieldCurveDefinitionSource;
   }
 
-  public void setInterpolatedYieldCurveDefinitionSource(
-      final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
+  public void setInterpolatedYieldCurveDefinitionSource(final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
     _interpolatedYieldCurveDefinitionSource = interpolatedYieldCurveDefinitionSource;
   }
 
@@ -122,8 +111,7 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     return _interpolatedYieldCurveSpecificationBuilder;
   }
 
-  public void setInterpolatedYieldCurveSpecificationBuilder(
-      final InterpolatedYieldCurveSpecificationBuilder interpolatedYieldCurveSpecificationBuilder) {
+  public void setInterpolatedYieldCurveSpecificationBuilder(final InterpolatedYieldCurveSpecificationBuilder interpolatedYieldCurveSpecificationBuilder) {
     _interpolatedYieldCurveSpecificationBuilder = interpolatedYieldCurveSpecificationBuilder;
   }
 
@@ -173,9 +161,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     }
     if (getRegionSource() != null) {
       OpenGammaCompilationContext.setRegionSource(context, getRegionSource());
-    }
-    if (getConventionBundleSource() != null) {
-      OpenGammaCompilationContext.setConventionBundleSource(context, getConventionBundleSource());
     }
     if (getConventionSource() != null) {
       OpenGammaCompilationContext.setConventionSource(context, getConventionSource());

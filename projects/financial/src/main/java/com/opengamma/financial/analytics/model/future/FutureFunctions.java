@@ -20,7 +20,6 @@ import com.opengamma.financial.analytics.model.bondcurves.future.BondFutureNetBa
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRatingFieldNames;
 import com.opengamma.util.ArgumentChecker;
 
-
 /**
  * Function repository configuration source for the functions contained in this package.
  */

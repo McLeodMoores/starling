@@ -148,35 +148,19 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(ExampleViewsPopulator.class);
   /** A list of currencies. */
-  private static final Currency[] SWAP_CURRENCIES = new Currency[] {
-      Currency.USD,
-      Currency.GBP,
-      Currency.EUR,
-      Currency.JPY,
-      Currency.CHF };
+  private static final Currency[] SWAP_CURRENCIES = new Currency[] { Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF };
   /** A list of OIS currencies */
-  private static final Currency[] OIS_CURRENCIES = new Currency[] {
-      Currency.USD,
-      Currency.GBP,
-      Currency.EUR,
-      Currency.JPY };
+  private static final Currency[] OIS_CURRENCIES = new Currency[] { Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY };
   /** A list of curve configuration names. */
-  private static final String[] CURVE_CONFIG_NAMES = new String[] {
-      "DefaultTwoCurveUSDConfig",
-      "DefaultTwoCurveGBPConfig",
+  private static final String[] CURVE_CONFIG_NAMES = new String[] { "DefaultTwoCurveUSDConfig", "DefaultTwoCurveGBPConfig",
       "DefaultTwoCurveEURConfig",
-      "DefaultTwoCurveJPYConfig",
-      "DefaultTwoCurveCHFConfig"
-  };
+      "DefaultTwoCurveJPYConfig", "DefaultTwoCurveCHFConfig" };
   /** A list of currency pairs. */
   public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] {
       UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
-      UnorderedCurrencyPair.of(Currency.USD, Currency.CHF),
-      UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
-      UnorderedCurrencyPair.of(Currency.USD, Currency.GBP),
-      UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
-      UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR),
-      UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
+      UnorderedCurrencyPair.of(Currency.USD, Currency.CHF), UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
+      UnorderedCurrencyPair.of(Currency.USD, Currency.GBP), UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
+      UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR), UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
   /** Map of currencies to swaption surface / cube names. */
   public static final Map<Currency, String> SWAPTION_CURRENCY_CONFIGS = new HashMap<>();
   /** Map of countries to swaption surface / cube names. */
@@ -274,13 +258,7 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMaxDeltaCalculationPeriod(maxPeriod);
 
     final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final String[] valueRequirementNames = new String[] {
-        FAIR_VALUE,
-        CAPM_BETA,
-        HISTORICAL_VAR,
-        SHARPE_RATIO,
-        TREYNOR_RATIO,
-        JENSENS_ALPHA,
+    final String[] valueRequirementNames = new String[] { FAIR_VALUE, CAPM_BETA, HISTORICAL_VAR, SHARPE_RATIO, TREYNOR_RATIO, JENSENS_ALPHA,
         TOTAL_RISK_ALPHA,
         PNL };
     addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, valueRequirementNames);
@@ -430,10 +408,8 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     final Set<Currency> ccysAdded = new HashSet<>();
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(pair.getUniqueId());
-      final ValueProperties surfaceProperties = ValueProperties.builder()
-          .with(SURFACE, "DEFAULT")
-          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX)
-          .get();
+      final ValueProperties surfaceProperties = ValueProperties.builder().with(SURFACE, "DEFAULT")
+          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX).get();
       defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, surfaceProperties));
       defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_QUOTE_MATRIX, surfaceProperties);
       defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_MATRIX, surfaceProperties);
@@ -488,9 +464,7 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
-    final ValueProperties vegaProperty = currencyProperty.copy()
-        .with(SCALE, "100.")
-        .get();
+    final ValueProperties vegaProperty = currencyProperty.copy().with(SCALE, "100.").get();
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_DELTA, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_VEGA, vegaProperty);
@@ -528,20 +502,14 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(pair.getUniqueId());
-      final ValueProperties properties = ValueProperties.builder()
-          .with(SURFACE, "DEFAULT")
-          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX)
+      final ValueProperties properties = ValueProperties.builder().with(SURFACE, "DEFAULT").with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX)
           .get();
       defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, properties));
     }
-    final ValueProperties properties = ValueProperties.builder()
-        .with(SURFACE, "DEFAULT")
+    final ValueProperties properties = ValueProperties.builder().with(SURFACE, "DEFAULT")
         .with(X_INTERPOLATOR_NAME, LinearInterpolator1dAdapter.NAME)
-        .with(LEFT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME)
-        .with(RIGHT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME)
-        .with(PROPERTY_REALIZED_VARIANCE_METHOD, HISTORICAL_REALIZED_VARIANCE)
-        .with(CURVE_EXPOSURES, "Exposures")
-        .get();
+        .with(LEFT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME).with(RIGHT_X_EXTRAPOLATOR_NAME, LinearExtrapolator1dAdapter.NAME)
+        .with(PROPERTY_REALIZED_VARIANCE_METHOD, HISTORICAL_REALIZED_VARIANCE).with(CURVE_EXPOSURES, "Exposures").get();
     defaultCalculationConfig.addPortfolioRequirement(FXVolatilitySwapSecurity.SECURITY_TYPE, FAIR_VALUE, properties);
     viewDefinition.addViewCalculationConfiguration(defaultCalculationConfig);
     return viewDefinition;
@@ -703,26 +671,20 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     for (final Map.Entry<Currency, String> entry : SWAPTION_CURRENCY_CONFIGS.entrySet()) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(entry.getKey().getUniqueId());
-      final ValueProperties surfaceProperties = ValueProperties.builder()
-          .with(SURFACE, entry.getValue())
+      final ValueProperties surfaceProperties = ValueProperties.builder().with(SURFACE, entry.getValue())
           .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, SWAPTION_ATM)
           .get();
       defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, surfaceProperties));
     }
     for (final Map.Entry<Currency, Pair<String, String>> entry : SWAPTION_CURVES.entrySet()) {
-      ValueProperties properties = ValueProperties.builder()
-          .with(CURVE, entry.getValue().getFirst())
+      ValueProperties properties = ValueProperties.builder().with(CURVE, entry.getValue().getFirst())
           .with(CURVE_CURRENCY, entry.getKey().getCode())
-          .with(CALCULATION_METHOD, BLACK_METHOD)
-          .get();
+          .with(CALCULATION_METHOD, BLACK_METHOD).get();
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, BUCKETED_PV01, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PV01, properties);
-      properties = ValueProperties.builder()
-          .with(CURVE, entry.getValue().getSecond())
-          .with(CURVE_CURRENCY, entry.getKey().getCode())
-          .with(CALCULATION_METHOD, BLACK_METHOD)
-          .get();
+      properties = ValueProperties.builder().with(CURVE, entry.getValue().getSecond()).with(CURVE_CURRENCY, entry.getKey().getCode())
+          .with(CALCULATION_METHOD, BLACK_METHOD).get();
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PV01, properties);
     }
@@ -853,12 +815,8 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calculationConfig1 = new ViewCalculationConfiguration(viewDefinition, "FX Implied Curves");
     final ViewCalculationConfiguration calculationConfig2 = new ViewCalculationConfiguration(viewDefinition, "FX Forward Points");
-    final ValueProperties discountingProperties = ValueProperties.builder()
-        .with(CALCULATION_METHOD, DISCOUNTING)
-        .get();
-    final ValueProperties forwardPointsProperties = ValueProperties.builder()
-        .with(CALCULATION_METHOD, FORWARD_POINTS)
-        .get();
+    final ValueProperties discountingProperties = ValueProperties.builder().with(CALCULATION_METHOD, DISCOUNTING).get();
+    final ValueProperties forwardPointsProperties = ValueProperties.builder().with(CALCULATION_METHOD, FORWARD_POINTS).get();
     calculationConfig1.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE,
         discountingProperties.copy().with(CURRENCY, "USD").get());
     calculationConfig2.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE,
@@ -1002,11 +960,8 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     ViewCalculationConfiguration config = new ViewCalculationConfiguration(viewDefinition, "Bond Curves");
-    ValueProperties properties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
-        .with(CURVE_EXPOSURES, "Bond Exposures")
-        .with(CALCULATION_METHOD, "Curves")
-        .get();
+    ValueProperties properties = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, "Discounting").with(CURVE_EXPOSURES, "Bond Exposures")
+        .with(CALCULATION_METHOD, "Curves").get();
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, properties);
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CONVEXITY, properties);
@@ -1017,42 +972,27 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, GAMMA_PV01, properties);
     final String[] curveNames = new String[] { "USD Discounting", "US Government Bond" };
     for (final String curveName : curveNames) {
-      final ValueProperties curveProperties = properties.copy()
-          .with(CURVE, curveName)
-          .get();
+      final ValueProperties curveProperties = properties.copy().with(CURVE, curveName).get();
       config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PV01, curveProperties);
       config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
     }
-    final ValueProperties thetaProperties = properties.copy()
-        .with(PROPERTY_DAYS_TO_MOVE_FORWARD, "1")
-        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
-        .get();
+    final ValueProperties thetaProperties = properties.copy().with(PROPERTY_DAYS_TO_MOVE_FORWARD, "1")
+        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD).get();
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, VALUE_THETA, thetaProperties);
-    final ValueProperties zSpreadProperties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
+    final ValueProperties zSpreadProperties = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, "Discounting")
         .with(CURVE_EXPOSURES, "Bond Exposures")
-        .with(CALCULATION_METHOD, "Yield")
-        .with(CURVE, "US Government Bond")
-        .get();
+        .with(CALCULATION_METHOD, "Yield").with(CURVE, "US Government Bond").get();
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, Z_SPREAD, zSpreadProperties);
-    ValueProperties curveProperties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
-        .with(CURVE, "US Government Bond")
-        .with(CURVE_CONSTRUCTION_CONFIG, "US Government Bond Configuration")
-        .get();
+    ValueProperties curveProperties = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, "Discounting").with(CURVE, "US Government Bond")
+        .with(CURVE_CONSTRUCTION_CONFIG, "US Government Bond Configuration").get();
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
     viewDefinition.addViewCalculationConfiguration(config);
     config = new ViewCalculationConfiguration(viewDefinition, "OIS Curves");
-    properties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
-        .with(CURVE_EXPOSURES, "Bond OIS Exposures")
-        .with(CALCULATION_METHOD, "Curves")
-        .get();
-    curveProperties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
+    properties = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, "Discounting").with(CURVE_EXPOSURES, "Bond OIS Exposures")
+        .with(CALCULATION_METHOD, "Curves").get();
+    curveProperties = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, "Discounting")
         .with(CURVE_CONSTRUCTION_CONFIG, "Default USD Curves")
-        .with(CURVE, "USD Discounting")
-        .get();
+        .with(CURVE, "USD Discounting").get();
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
     config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
     viewDefinition.addViewCalculationConfiguration(config);

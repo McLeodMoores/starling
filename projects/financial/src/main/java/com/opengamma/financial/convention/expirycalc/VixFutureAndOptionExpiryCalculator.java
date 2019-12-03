@@ -14,10 +14,10 @@ import org.threeten.bp.Month;
 import org.threeten.bp.temporal.TemporalAdjuster;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.analytics.ircurve.NextQuarterAdjuster;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
@@ -66,7 +66,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
    *          The date from which to start
    * @param holidayCalendar
    *          holiday information
-   * 
+   *
    * @return the expiry date of the nth option
    */
   @Deprecated
@@ -100,7 +100,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
 
   @Override
   public LocalDate getExpiryMonth(final int n, final LocalDate today) {
-    return getExpiryDate(n, today, FutureOptionUtils.WEEKDAYS);
+    return getExpiryDate(n, today, WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   }
 
   /**

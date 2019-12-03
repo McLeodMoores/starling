@@ -128,9 +128,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(HistoricalTimeSeriesLatestSecurityValueFunction.class));
     functions.add(functionConfiguration(HistoricalTimeSeriesLatestValueFunction.class));
     functions.add(functionConfiguration(HistoricalValuationFunction.class));
-    functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesFunction.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunction.class));
-    functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesFunctionDeprecated.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunctionDeprecated.class));
     functions.add(functionConfiguration(VolatilityWeightedFXReturnSeriesFunction.class));
   }

@@ -29,6 +29,7 @@ import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -50,10 +51,9 @@ import com.opengamma.financial.analytics.forwardcurve.ConfigDBForwardSwapCurveSp
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveDefinition;
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveInstrumentProvider;
 import com.opengamma.financial.analytics.forwardcurve.ForwardSwapCurveSpecification;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.id.ExternalId;
@@ -134,7 +134,7 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) {
-        final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
+        final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
         final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
         final Clock snapshotClock = executionContext.getValuationClock();
         final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -162,20 +162,11 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         final String leftExtrapolatorName = desiredValue.getConstraint(PROPERTY_FORWARD_CURVE_LEFT_EXTRAPOLATOR);
         final String rightExtrapolatorName = desiredValue.getConstraint(PROPERTY_FORWARD_CURVE_RIGHT_EXTRAPOLATOR);
         final String forwardTenorName = desiredValue.getConstraint(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR);
-        final String conventionName = currency.getCode() + "_SWAP";
-        final ConventionBundle convention = conventionSource
-            .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
-        if (convention == null) {
-          throw new OpenGammaRuntimeException("Could not get convention named " + conventionName);
-        }
-        final DayCount dayCount = convention.getSwapFloatingLegDayCount();
-        if (dayCount == null) {
-          throw new OpenGammaRuntimeException("Could not get daycount");
-        }
-        final Integer settlementDays = convention.getSwapFloatingLegSettlementDays();
-        if (settlementDays == null) {
-          throw new OpenGammaRuntimeException("Could not get number of settlement days");
-        }
+        final VanillaIborLegConvention convention = conventionSource.getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()),
+            VanillaIborLegConvention.class);
+        final IborIndexConvention underlyingConvention = conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
+        final DayCount dayCount = underlyingConvention.getDayCount();
+        final Integer settlementDays = convention.getSettlementDays();
         final Calendar calendar = new HolidaySourceCalendarAdapter(holidaySource, currency);
         final LocalDate localNow = now.toLocalDate();
         final Period forwardPeriod = Period.parse(forwardTenorName);
